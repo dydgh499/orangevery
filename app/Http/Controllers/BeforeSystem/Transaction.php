@@ -208,7 +208,7 @@ class Transaction
                                 'created_at' => $this->current_time,
                                 'updated_at' => $this->current_time,
                             ];
-                            $item['settle_dt'] = SettleDateCalculator::getSettleDate($brand_id, $item['is_cancel'] ? $item['cxl_dt'] : $item['trx_dt'], $item['mcht_settle_type']+1, 1);
+                            $item['settle_dt'] = SettleDateCalculator::getSettleDate($brand_id, $item['is_cancel'] ? $item['cxl_dt'] : $item['trx_dt'], $item['mcht_settle_type'], 1);
                             $item['trx_at'] = $item['is_cancel'] ? ($item['cxl_dt']." ".$item['cxl_tm']) : ($item['trx_dt']." ".$item['trx_tm']);
                             if(strpos(date($item['trx_at']), '1970-01-01 09:00:00') === false)
                                 $items[] = $item;                            

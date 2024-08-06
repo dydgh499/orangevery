@@ -22,7 +22,8 @@ const disable_types = <Options[]>[
             <VCol cols="12">
                 <VRow no-gutters>
                     <VSelect v-model="props.item.disable_type" :items="disable_types" prepend-inner-icon="tabler:world-cancel"
-                        label="제한타입 설정" item-title="title" item-value="id" single-line />
+                        label="제한타입 설정" item-title="title" item-value="id" single-line 
+                        style="min-width: 10em;"/>
                 </VRow>
             </VCol>
         </td>

@@ -460,15 +460,18 @@ const filterPgs = computed(() => {
                         <VRow no-gutters style="align-items: center;">
                             <VCol md="4" cols="12">결제금지 시간</VCol>
                             <VCol md="8">
-                                <div class="batch-container">
-                                    <VTextField v-model="pay_module.pay_disable_s_tm" type="time" style="margin-right: 0.1em;"/>
-                                    <span class="text-center mx-auto">~</span>
-                                    <VTextField v-model="pay_module.pay_disable_e_tm" type="time" style="margin-left: 0.1em;"/>
+                                <VCol md="6">
+                                    <VTextField v-model="pay_module.pay_disable_s_tm" type="time" label="시작시간"/>
+                                </VCol>
+                                <VCol>
+                                    <VTextField v-model="pay_module.pay_disable_e_tm" type="time" label="종료시간"/>
+                                </VCol>
+                                <VCol>
                                     <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setForbiddenPayTime()">
                                         즉시적용
                                         <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
-                                </div>
+                                </VCol>
                             </VCol>
                         </VRow>
                     </VCol>

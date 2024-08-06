@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+import ProfileDialog from '@/layouts/dialogs/users/ProfileDialog.vue'
 import FileInput from '@/layouts/utils/FileInput.vue'
 import type { UserPropertie } from '@/views/types'
-import { banks, getOnlyNumber, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore'
+import { avatars, banks, getOnlyNumber, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore'
 import { axios, getUserLevel, isAbleModiy } from '@axios'
 import corp from '@corp'
 
@@ -14,6 +15,7 @@ const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
+const profileDlg = ref()
 const is_show = ref(false)
 const is_resident_num_back_show = ref(false)
 
@@ -40,6 +42,11 @@ const ownerCheck = async () => {
     }
 }
 
+const modifyProfleimage = () => {
+    if(isAbleModiy(props.item.id))
+        profileDlg.value.show()
+}
+
 const idRules = computed(() => {
     return getUserIdValidate(props.is_mcht ? 0 : 1, props.item.user_name)
 })
@@ -63,7 +70,12 @@ watchEffect(() => {
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
                                 <VCol>
-                                    <label>* 아이디</label>
+                                    <label>* 아이디
+                                        <VAvatar class="cursor-pointer" color="primary preview" variant="tonal"
+                                            @click="modifyProfleimage()">
+                                            <VImg :src="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]" />
+                                        </VAvatar>
+                                    </label>
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField type='text' v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
@@ -315,23 +327,7 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                 </VCardItem>
-                <!--
-                <VCardItem>
-                    <VCardTitle>프로필 이미지</VCardTitle>
-                    <VRow class="pt-5">
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <SwiperPreview :items="avatars"
-                                    :preview="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]"
-                                    :label="'프로필'" :lmd="9" :rmd="3" @update:file="props.item.profile_file = $event"
-                                    @update:path="props.item.profile_img = $event">
-                                </SwiperPreview>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                </VCardItem>
-                -->
-                <template v-if="corp.pv_options.paid.use_syslink">
+                <template v-if="corp.pv_options.paid.use_syslink && props.is_mcht">
                     <div style="display: flex; margin-left: 2em;">
                         <span>SYSLINK 연동여부</span>
                         <span style="margin-left: 1em;">
@@ -339,7 +335,7 @@ watchEffect(() => {
                         </span>
 
                     </div>
-                    <VCardItem v-if="props.is_mcht && props.id">
+                    <VCardItem v-if="props.id">
                         <VCardTitle>SYSLINK 연동정보</VCardTitle>
                         <span :class="props.item?.syslink?.code === 'SUCCESS' ? 'text-success' : 'text-error'">{{ props.item?.syslink?.message }}</span>
                     </VCardItem>
@@ -347,6 +343,7 @@ watchEffect(() => {
                 </template>
             </VCard>
         </VCol>
+        <ProfileDialog ref="profileDlg" :item="props.item" :key="props.item.profile_img"/>
     </VRow>
 </template>
 <style scoped>

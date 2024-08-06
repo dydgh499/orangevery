@@ -525,7 +525,7 @@ watchEffect(() => {
                                 <VRow>
                                     <VCol :md="6" :cols="12">
                                         <VRow no-gutters style="align-items: center;">
-                                            <VCol>지급보류 시작일</VCol>
+                                            <VCol cols="5">지급보류 시작일</VCol>
                                             <VCol md="6">
                                                 <div class="batch-container">                                                    
                                                     <VTextField type="date" v-model="props.item.settle_hold_s_dt"

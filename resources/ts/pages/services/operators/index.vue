@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import OperatorDialog from '@/layouts/dialogs/users/OperatorDialog.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
 import PhoneNum2FAVertifyDialog from '@/layouts/dialogs/users/PhoneNum2FAVertifyDialog.vue'
 import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
@@ -11,6 +12,7 @@ import { DateFilters } from '@core/enums'
 const { store, head, exporter } = useSearchStore()
 const password = ref()
 const imageDialog = ref()
+const operatorDialog = ref()
 const phoneNum2FAVertifyDialog = ref()
 
 provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
@@ -18,6 +20,7 @@ provide('password', password)
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+provide('imageDialog', imageDialog)
 
 const showAvatar = (preview: string) => {
     imageDialog.value.show(preview)
@@ -25,10 +28,13 @@ const showAvatar = (preview: string) => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="ID 및 성명 검색" :metas="[]" :add="getUserLevel() > 35 ? true : false" add_name="운영자" :date_filter_type="DateFilters.NOT_USE">
+        <BaseIndexView placeholder="ID 및 성명 검색" :metas="[]" :add="false" add_name="운영자" :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
             </template>
             <template #index_extra_field>
+                <VBtn prepend-icon="tabler:user-cog" @click="operatorDialog.show({id:0})" size="small" v-if="getUserLevel() > 35">
+                    운영자 추가
+                </VBtn>
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                     :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
                 <div>
@@ -52,7 +58,7 @@ const showAvatar = (preview: string) => {
                         </template>
                         <template v-else>
                             <td v-show="_header.visible" class='list-square'>
-                                <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
+                                <span v-if="_key == `id`" class="edit-link" @click="operatorDialog.show(item)">
                                     #{{ item[_key] }}
                                 </span>
                                 <span v-else-if="_key == `level`">
@@ -88,5 +94,6 @@ const showAvatar = (preview: string) => {
         <PasswordChangeDialog ref="password" />
         <PhoneNum2FAVertifyDialog ref="phoneNum2FAVertifyDialog"/>
         <ImageDialog ref="imageDialog" :style="`inline-size:20em !important;`"/>
+        <OperatorDialog ref="operatorDialog" />
     </div>
 </template>

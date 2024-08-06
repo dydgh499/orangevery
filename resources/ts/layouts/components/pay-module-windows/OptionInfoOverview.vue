@@ -98,15 +98,14 @@ const props = defineProps<Props>()
             </VRow>
         </template>
         <VRow v-if="corp.pv_options.paid.use_forb_pay_time && props.item.module_type != 0">
-            <VCol md="5" cols="4">
+            <VCol md="7" cols="7">
                 <BaseQuestionTooltip :location="'top'" :text="'결제금지 시간'"
                     :content="'해당 시간대에는 <b>온라인 결제</b>를 발생시킬 수 없습니다.'"/>
             </VCol>
-            <VCol md="7">
-                <div class="d-flex align-items-center flex-column">
-                    <VTextField v-model="props.item.pay_disable_s_tm" type="time" />
-                    <span class="text-center mx-auto">~</span>
-                    <VTextField v-model="props.item.pay_disable_e_tm" type="time" />
+            <VCol md="5">
+                <div class="d-flex flex-column">
+                    <VTextField v-model="props.item.pay_disable_s_tm" type="time" label="시작시간" style="width: 9em; margin-bottom: 1em;"/>
+                    <VTextField v-model="props.item.pay_disable_e_tm" type="time" label="종료시간" style="width: 9em;"/>
                 </div>
             </VCol>
         </VRow>

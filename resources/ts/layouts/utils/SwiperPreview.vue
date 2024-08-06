@@ -61,8 +61,16 @@ watchEffect(() => {
     <VCol cols="12" :md="props.lmd" style="padding: 0 2.5em;">
         <template v-if="isAbleModiy(0)">
             <div class="coverflow-example">
-                <Swiper class="swiper" :modules="modules" :pagination="true" :effect="'coverflow'" :grab-cursor="true" :navigation="true" 
-                    :centered-slides="true" :slides-per-view="'auto'" @swiper="getRef" :coverflow-effect="{
+                <Swiper class="swiper" 
+                :modules="modules" 
+                :pagination="{type: 'progressbar', clickable: true}" 
+                :effect="'coverflow'" 
+                :grab-cursor="true" 
+                :navigation="true" 
+                :centered-slides="true" 
+                :slides-per-view="'auto'" 
+                @swiper="getRef" 
+                :coverflow-effect="{
                         rotate: 50,
                         stretch: 0,
                         depth: 100,
@@ -82,7 +90,7 @@ watchEffect(() => {
         </template>
         <span v-else>{{ label+' 이미지' }}</span>
     </VCol>
-    <VCol cols="12" :md="props.rmd">
+    <VCol cols="12" :md="props.rmd" style="max-width: 13em;margin-right: auto;margin-left: auto;">
         <Preview :preview="preview" :style="`inline-size:20em !important;`" :preview-style="previewStyle" class="preview" :ext="ext" />
         <VFileInput accept="image/*" show-size v-model="files" :label="label+' 이미지'"
             prepend-icon=""
@@ -98,8 +106,8 @@ watchEffect(() => {
     </VCol>
 </template>
 <style lang="scss" scoped>
-.coverflow-example {
-  position: relative;
+.swiper-wrapper {
+  margin-block-start: 1em;
 }
 
 .swiper {

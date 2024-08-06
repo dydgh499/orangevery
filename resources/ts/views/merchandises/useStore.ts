@@ -102,36 +102,40 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 
-    const metas = ref([
-        {
-            icon: 'tabler-user-check',
-            color: 'primary',
-            title: '금월 추가된 가맹점',
-            stats: '0',
-            percentage: 0,
-        },
-        {
-            icon: 'tabler-user-exclamation',
-            color: 'error',
-            title: '금월 감소한 가맹점',
-            percentage: 0,
-            stats: '0',
-        },
-        {
-            icon: 'tabler-user-check',
-            color: 'primary',
-            title: '금주 추가된 가맹점',
-            percentage: 0,
-            stats: '0',
-        },
-        {
-            icon: 'tabler-user-exclamation',
-            color: 'error',
-            title: '금주 감소한 가맹점',
-            percentage: 0,
-            stats: '0',
-        },
-    ])
+    const metas = ref(<any>([]))
+    if (getUserLevel() > 10) {
+        metas.value = [
+            {
+                icon: 'tabler-user-check',
+                color: 'primary',
+                title: '금월 추가된 가맹점',
+                stats: '0',
+                percentage: 0,
+            },
+            {
+                icon: 'tabler-user-exclamation',
+                color: 'error',
+                title: '금월 감소한 가맹점',
+                percentage: 0,
+                stats: '0',
+            },
+            {
+                icon: 'tabler-user-check',
+                color: 'primary',
+                title: '금주 추가된 가맹점',
+                percentage: 0,
+                stats: '0',
+            },
+            {
+                icon: 'tabler-user-exclamation',
+                color: 'error',
+                title: '금주 감소한 가맹점',
+                percentage: 0,
+                stats: '0',
+            },
+        ]
+    }
+    
     const getSettleTypes = (types: any[]) => {
         return types.map(id => settle_types.find(obj => obj.id === id)?.name)
     }
