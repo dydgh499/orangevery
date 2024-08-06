@@ -84,7 +84,14 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold">아이디</VCol>
+                                <VCol class="font-weight-bold">
+                                    <label>
+                                        아이디
+                                        <VAvatar class="cursor-pointer" color="primary preview" variant="tonal">
+                                            <VImg :src="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]" />
+                                        </VAvatar>
+                                    </label>
+                                </VCol>
                                 <VCol md="8"><span>{{ props.item.user_name }}</span></VCol>
                             </VRow>
                         </VCol>

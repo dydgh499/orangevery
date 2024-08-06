@@ -32,7 +32,8 @@ const showAvatar = (preview: string) => {
             <template #filter>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="tabler:user-cog" @click="operatorDialog.show({id:0})" size="small" v-if="getUserLevel() > 35">
+                <VBtn prepend-icon="tabler:user-cog" @click="operatorDialog.show({id:0})" size="small" 
+                    v-if="getUserLevel() > 35">
                     운영자 추가
                 </VBtn>
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
