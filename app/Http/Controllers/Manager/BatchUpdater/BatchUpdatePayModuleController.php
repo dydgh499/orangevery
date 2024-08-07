@@ -51,7 +51,14 @@ class BatchUpdatePayModuleController extends Controller
                 $filter_request->setUserResolver(function () use ($request) {
                     return $request->user();
                 });
-                return resolve(PaymentModuleController::class)->commonSelect($filter_request);
+                $query = resolve(PaymentModuleController::class)->commonSelect($filter_request);
+                if($request->total_selected_count !== (clone $query)->count())
+                {
+                    print_r(json_encode(['code'=>1999, 'message'=>'변경할 개수와 조회 개수가 같지 않습니다.', 'data'=>[]], JSON_UNESCAPED_UNICODE));
+                    exit;
+                }
+                return $query;
+
             }
             else
             {

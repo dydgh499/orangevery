@@ -68,6 +68,11 @@ class BatchUpdateMchtController extends Controller
                     $query = $inst->byNormalIndex($filter_request, false);
 
                 $mcht_ids = $query->pluck('merchandises.id')->all();
+                if($request->total_selected_count !== count($mcht_ids))
+                {
+                    print_r(json_encode(['code'=>1999, 'message'=>'변경할 개수와 조회 개수가 같지 않습니다.', 'data'=>[]], JSON_UNESCAPED_UNICODE));
+                    exit;
+                }
                 return $this->merchandises->whereIn('id', $mcht_ids);
             }
             else

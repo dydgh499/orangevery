@@ -69,6 +69,8 @@ const getCommonParams = async (params: any, method: string, type: string) => {
                 Object.assign(params, {
                     filter: store.params
                 })
+                params.filter.search = (document.getElementById('search') as HTMLInputElement)?.value
+                params.total_selected_count = store.pagenation.total_count
             }
             return [true, params]
         }
