@@ -37,6 +37,8 @@ class Ablilty
             return true;
         else
         {
+            return self::isSalesforce($request);
+
             $sales_ids = UnderSalesforce::getSalesIds($request);
             return in_array($id, $sales_ids);    
         }
