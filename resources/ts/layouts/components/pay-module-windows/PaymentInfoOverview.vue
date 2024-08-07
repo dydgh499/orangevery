@@ -17,6 +17,8 @@ const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 const midCreateDlg = <any>(inject('midCreateDlg'))
 const is_readonly_fin_trx_delay = ref(false)
+const occuerred_sale_load = ref(false)
+
 const { pgs, finance_vans } = useStore()
 
 const tidCreate = async() => {
@@ -76,13 +78,20 @@ const signKeyCreate = async() => {
 }
 
 const useCollectWithdrawTrxFinDelayValidate = () => {
-    if (corp.pv_options.paid.use_collect_withdraw && props.item.use_realtime_deposit && props.item.id) {
-        axios.get('/api/v1/bf/occuerred-sale', {params: {mcht_id:props.item.mcht_id}}).then( r => {
-                is_readonly_fin_trx_delay.value = r.data.exist
-            }).catch(e => {})
+    if (isAbleModiy(props.item.id) && props.item.use_realtime_deposit && props.item.id) {
+        axios.get('/api/v1/bf/occuerred-sale', {params: {
+            mcht_id: props.item.mcht_id,
+            pmod_id: props.item.id
+        }}).then( r => {
+            is_readonly_fin_trx_delay.value = r.data.exist
+            occuerred_sale_load.value = true
+        }).catch(e => {})
     }
 }
-useCollectWithdrawTrxFinDelayValidate()
+watchEffect(() => {
+    if(occuerred_sale_load.value === false)
+        useCollectWithdrawTrxFinDelayValidate()
+})
 
 </script>
 <template>

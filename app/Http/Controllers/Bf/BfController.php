@@ -352,11 +352,13 @@ class BfController extends Controller
     }
 
     /*
-    * 매출이 발생했는지 확인 (픽스플러스 전용)
+    * 매출이 발생했는지 확인
     */
     public function occuerredSale(Request $request)
     {
-        $exist = Transaction::where('mcht_id', $request->mcht_id)->exists();
+        $exist = Transaction::where('mcht_id', $request->mcht_id)
+            ->where('pmod_id', $request->pmod_id)
+            ->exists();
         return $this->response(0, ['exist'=>$exist]);
     }
 }

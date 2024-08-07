@@ -1,11 +1,13 @@
 
 
 <script lang="ts" setup>
+import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
+import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { abnormal_trans_limits, installments } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { axios } from '@axios'
+import { axios, getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -16,14 +18,21 @@ interface Props {
 const props = defineProps<Props>() 
 const emits = defineEmits(['update:select_idxs'])
 
+const store = <any>(inject('store'))
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
+
+const checkAgreeDialog = ref()
+const passwordAuthDialog = ref()
+
 const is_realtime_deposit_use = [{id:0, title:'미사용'}, {id:1, title:'사용'}]
 const is_payview_open = [{id:0, title:'숨김'}, {id:1, title:'노출'}]
 
 const { request } = useRequestStore()
 const { pgs, pss, settle_types, terminals, finance_vans, psFilter, setFee } = useStore()
+
+const selected_all = ref(0)
 const pay_module = reactive<any>({
     abnormal_trans_limit: 0,
     pay_dupe_limit: 0,
@@ -52,22 +61,71 @@ const pay_module = reactive<any>({
     ps_id: null,
 })
 
-const post = async (page: string, params: any) => {
-    try {
-        if (props.selected_idxs.length || (props.selected_sales_id && props.selected_level)) {
-            if (await alert.value.show('정말 일괄적용하시겠습니까?')) {
-                Object.assign(params, { 
-                    selected_idxs: props.selected_idxs,
-                    selected_sales_id: props.selected_sales_id,
-                    selected_level: props.selected_level, 
-                })
-                const r = await axios.post('/api/v1/manager/merchandises/pay-modules/batch-updaters/' + page, params)
-                snackbar.value.show('성공하였습니다.', 'success')
-                emits('update:select_idxs', [])
+
+const getCommonParams = async (params: any, method: string) => {
+    if (props.selected_idxs.length || (props.selected_sales_id && props.selected_level) || selected_all.value) {
+        if(selected_all.value) {
+            const agree = await checkAgreeDialog.value.show(store.pagenation.total_count, method, '결제모듈')
+            if (agree === false)
+                return [false, params]
+            else {
+                if(corp.pv_options.paid.use_head_office_withdraw) {
+                    let phone_num = user_info.value.phone_num
+                    if(phone_num) {
+                        phone_num = phone_num.replaceAll(' ', '').replaceAll('-', '')
+                        const token = await passwordAuthDialog.value.show(phone_num)
+                        if(token !== '') {
+                            
+                        }
+                        else
+                            return [false, params]
+                    }
+                    else {
+                        snackbar.value.show('로그인한 계정의 휴대폰번호를 업데이트한 후 다시 시도해주세요.', 'error')
+                        return [false, params]
+                    }
+                }
             }
         }
-        else
-            snackbar.value.show('결제모듈은 1개이상 선택해주세요.', 'error')
+
+        if (await alert.value.show(`정말 일괄${method}하시겠습니까?`)) {
+            Object.assign(params, { 
+                selected_idxs: props.selected_idxs,
+                selected_sales_id: props.selected_sales_id,
+                selected_level: props.selected_level, 
+                selected_all: selected_all.value,
+            })
+            if(selected_all.value) {
+                Object.assign(params, {
+                    filter: store.params
+                })
+            }
+            return [true, params]
+        }
+        return [false, params]
+    }
+    else {
+        snackbar.value.show('결제모듈을 1개이상 선택해주세요.', 'error')
+        return [false, params]
+    }
+}
+
+const batchRemove = async () => {
+    const [result, params] = await getCommonParams({}, '삭제')
+    if(result) {
+        const r = await request({ url: `/api/v1/manager/merchandises/pay-modules/batch-updaters/remove`, method: 'delete', data: params }, true)
+        emits('update:select_idxs', [])
+    }
+}
+
+const post = async (page: string, _params: any) => {
+    try {
+        const [result, params] = await getCommonParams(_params, '수정')
+        if(result) {
+            const r = await axios.post('/api/v1/manager/merchandises/pay-modules/batch-updaters/' + page, params)
+            snackbar.value.show(r.data.message, 'success')
+            emits('update:select_idxs', [])
+        }
     }
     catch (e: any) {
         console.log(e)
@@ -173,19 +231,6 @@ const setPaymentTermMin = () => {
     })
 }
 
-const batchRemove = async () => {
-    const count = props.selected_idxs.length
-    if(count === 0)
-        snackbar.value.show('결제모듈을 1개이상 선택해주세요.', 'error')
-    else {
-        if (await alert.value.show('정말 ' + count + '개의 결제모듈을 일괄삭제 하시겠습니까?')) {
-            const params = { selected_idxs: props.selected_idxs }
-            const r = await request({ url: `/api/v1/manager/merchandises/pay-modules/batch-updaters/remove`, method: 'delete', data: params }, true)
-            emits('update:select_idxs', [])
-        }
-    }
-}
-
 const filterPgs = computed(() => {
     const filter = pss.filter(item => { return item.pg_id == pay_module.pg_id })
     pay_module.ps_id = psFilter(filter, pay_module.ps_id)
@@ -198,7 +243,18 @@ const filterPgs = computed(() => {
         <VCardText>
             <template v-if="props.selected_sales_id === 0 && props.selected_level === 0">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <b>선택된 결제모듈 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
+                    <VRadioGroup v-model="selected_all">
+                        <VRadio :value="0">
+                            <template #label>
+                                <b>선택된 결제모듈 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
+                            </template>
+                        </VRadio>
+                        <VRadio :value="1" v-if="getUserLevel() >= 35">
+                            <template #label>
+                                <b>전체모듈: {{ store.pagenation.total_count }}개</b>
+                            </template>
+                        </VRadio>
+                    </VRadioGroup>
                     <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small">
                         일괄삭제
                         <VIcon size="18" icon="tabler-trash" />
@@ -535,5 +591,7 @@ const filterPgs = computed(() => {
                 </template>
             </div>
         </VCardText>
+        <CheckAgreeDialog ref="checkAgreeDialog"/>
+        <PasswordAuthDialog ref="passwordAuthDialog"/>
     </VCard>
 </template>

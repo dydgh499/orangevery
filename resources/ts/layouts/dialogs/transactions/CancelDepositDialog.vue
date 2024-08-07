@@ -34,8 +34,9 @@ const closeDialog = () => {
 }
 
 const cancelDepositUpdate = async(_cancel_deposit: CancelDeposit) => {
+    const is_insert = _cancel_deposit.id === 0 ? true : false
     const res = await update('/transactions/settle/merchandises/cancel-deposits', _cancel_deposit, vForm.value, false)
-    if(res.status == 201) {
+    if(res.status == 201 && is_insert) {
         trans.value?.cancel_deposits?.unshift(cloneDeep(cancel_deposit.value))
         init(cancel_deposit.value.trans_id)
     }
@@ -52,9 +53,9 @@ const cancelDepositRemove = async(_cancel_deposit: CancelDeposit) => {
 
 const totalSettleAmount = computed(() => {
     const total_cancel_deposit = trans.value?.cancel_deposits?.reduce((sum, item) => {
-        return parseInt(sum) + (item.deposit_amount ? parseInt(item.deposit_amount) : 0)
+        return sum + (item.deposit_amount ? item.deposit_amount : 0)
     }, 0) 
-    return parseInt(trans.value?.profit) + parseInt(total_cancel_deposit)
+    return parseInt(trans.value?.profit) + parseInt(total_cancel_deposit) + parseInt(cancel_deposit.value.deposit_amount ? cancel_deposit.value.deposit_amount : 0)
 })
 defineExpose({
     show
@@ -85,13 +86,13 @@ onMounted(() => {
                         <tr>
                             <td class='list-square'>{{ trans?.mcht_name }}</td>
                             <td class='list-square'>
-                                <VTextField v-model="cancel_deposit.deposit_dt" type="date" />
+                                <VTextField v-model="cancel_deposit.deposit_dt" type="date" style="min-width: 10em;"/>
                             </td>
                             <td class='list-square'>
-                                <VTextField v-model="cancel_deposit.deposit_amount" type="number" />
+                                <VTextField v-model="cancel_deposit.deposit_amount" type="number" style="min-width: 10em;" />
                             </td>
                             <td class='list-square'>
-                                <VTextField v-model="cancel_deposit.deposit_history" type="string" />
+                                <VTextField v-model="cancel_deposit.deposit_history" type="string" style="min-width: 10em;" />
                             </td>
                             <td class="text-center">
                                 <VCol class="d-flex gap-4">

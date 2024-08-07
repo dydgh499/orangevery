@@ -58,18 +58,19 @@ class PaymentModuleController extends Controller
         return $this->response(0, ChartFormat::default($data));
     }
 
-    private function commonSelect($request, $is_all=false)
+    public function commonSelect($request, $is_all=false)
     {
         $search = $request->input('search', '');
         $query = $this->pay_modules
             ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
             ->where('payment_modules.brand_id', $request->user()->brand_id);
+
         if($is_all == false) 
         {
             $query = $query->where('merchandises.is_delete', false)
             ->where('payment_modules.is_delete', false);
         }
-            
+
         $query = globalPGFilter($query, $request, 'payment_modules');
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
@@ -78,7 +79,6 @@ class PaymentModuleController extends Controller
             $query = $query->where('payment_modules.mcht_id', $request->mcht_id);
         if($request->has('module_type'))
             $query = $query->where('payment_modules.module_type', $request->module_type);
-
         if($request->un_use)
             $query = $query->notUseLastMonth($request->user()->brand_id);
 

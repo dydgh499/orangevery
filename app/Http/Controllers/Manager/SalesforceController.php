@@ -70,7 +70,7 @@ class SalesforceController extends Controller
         return $this->response(0, ChartFormat::default($data));    
     }
 
-    private function commonSelect($request, $is_all=false)
+    public function commonSelect($request, $is_all=false)
     {
         $search = $request->input('search', '');
         $query = $this->salesforces

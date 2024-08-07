@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { UnderAutoSetting } from '@/views/types'
+import type { UnderAutoSetting } from '@/views/types';
 
 const visible = ref(false)
 const under_auto_settings = ref(<UnderAutoSetting[]>([]))
@@ -27,7 +27,6 @@ defineExpose({
 <template>
     <VDialog v-model="visible" persistent class="v-dialog-sm">
         <DialogCloseBtn @click="selected(-1)" />
-        <!-- Dialog Content -->
         <VCard title="적용할 영업점 자동세팅 포멧을 선택해주세요.">
             <VCardText>
                     <VTable style="width: 100%; margin-bottom: 1em;text-align: center;">

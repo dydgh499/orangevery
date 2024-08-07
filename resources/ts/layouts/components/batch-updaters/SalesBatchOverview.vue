@@ -1,11 +1,14 @@
 
 
 <script lang="ts" setup>
+import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
+import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
 import { useRequestStore } from '@/views/request'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import { Salesforce } from '@/views/types'
 import { banks } from '@/views/users/useStore'
-import { axios } from '@axios'
+import { axios, user_info } from '@axios'
+import corp from '@corp'
 
 interface Props {
     selected_idxs: number[],
@@ -18,26 +21,81 @@ const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
 const is_ables = [{id:0, title:'불가능'}, {id:1, title:'가능'}]
-const view_types = [{id:0, title:'간편보기'}, {id:1, title:'상세보'}]
+const view_types = [{id:0, title:'간편보기'}, {id:1, title:'상세보기'}]
 
 const { request } = useRequestStore()
 
+const store = <any>(inject('store'))
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 
-const post = async (page: string, params: any) => {
-    try {
-        if (props.selected_idxs.length) {
-            if (await alert.value.show('정말 일괄적용하시겠습니까?')) {
-                Object.assign(params, { 'selected_idxs': props.selected_idxs })
-                const r = await axios.post('/api/v1/manager/salesforces/batch-updaters/' + page, params)
-                snackbar.value.show('성공하였습니다.', 'success')
-                emits('update:select_idxs', [])
+const checkAgreeDialog = ref()
+const passwordAuthDialog = ref()
+
+const getCommonParams = async (params: any, method: string, type: string) => {
+    if (props.selected_idxs.length || selected_all.value) {
+        if(selected_all.value) {
+            const agree = await checkAgreeDialog.value.show(store.pagenation.total_count, method, '영업점')
+            if (agree === false)
+                return [false, params]
+            else
+            {
+                if(corp.pv_options.paid.use_head_office_withdraw) {
+                    let phone_num = user_info.value.phone_num
+                    if(phone_num) {
+                        phone_num = phone_num.replaceAll(' ', '').replaceAll('-', '')
+                        const token = await passwordAuthDialog.value.show(phone_num)
+                        if(token !== '') {
+                            
+                        }
+                        else
+                            return [false, params]
+                    }
+                    else {
+                        snackbar.value.show('로그인한 계정의 휴대폰번호를 업데이트한 후 다시 시도해주세요.', 'error')
+                        return [false, params]
+                    }
+                }
             }
         }
-        else
-            snackbar.value.show('영업점을 1개이상 선택해주세요.', 'error')
+
+        if (await alert.value.show(`정말 ${type}${method}하시겠습니까?`)) {
+            Object.assign(params, { 
+                selected_idxs: props.selected_idxs,
+                selected_all: selected_all.value,
+            })
+            if(selected_all.value) {
+                Object.assign(params, {
+                    filter: store.params
+                })
+            }
+            return [true, params]
+        }
+        return [false, params]
+    }
+    else {
+        snackbar.value.show('영업점을 1개이상 선택해주세요.', 'error')
+        return [false, params]
+    }
+}
+
+const batchRemove = async () => {
+    const [result, params] = await getCommonParams({}, '삭제', '일괄')
+    if(result) {
+        const r = await request({ url: `/api/v1/manager/salesforces/batch-updaters/remove`, method: 'delete', data: params }, true)
+        emits('update:select_idxs', [])
+    }
+}
+
+const post = async (page: string, _params: any, type='일괄') => {
+    try {
+        const [result, params] = await getCommonParams(_params, '수정', type)
+        if(result) {
+            const r = await axios.post('/api/v1/manager/salesforces/batch-updaters/' + page, params)
+            snackbar.value.show(r.data.message, 'success')
+            emits('update:select_idxs', [])
+        }
     }
     catch (e: any) {
         snackbar.value.show(e.response.data.message, 'error')
@@ -45,6 +103,7 @@ const post = async (page: string, params: any) => {
     }
 }
 
+const selected_all = ref(0)
 const salesforces = reactive<Salesforce>({
     settle_tax_type: 0,
     settle_cycle: 0,
@@ -52,7 +111,6 @@ const salesforces = reactive<Salesforce>({
     is_able_modify_mcht: 0,
     view_type: 0,
     note: '',
-
     acct_num: "",
     acct_name: "",
     bank: { code: null, title: '선택안함' },
@@ -104,25 +162,25 @@ const setNote = () => {
     })
 }
 
-const batchRemove = async () => {
-    const count = props.selected_idxs.length
-    if(count === 0)
-        snackbar.value.show('영업점을 1개이상 선택해주세요.', 'error')
-    else {
-        if (await alert.value.show('정말 ' + count + '개의 영업점을 일괄삭제 하시겠습니까?')) {
-            const params = { selected_idxs: props.selected_idxs }
-            const r = await request({ url: `/api/v1/manager/salesforces/batch-updaters/remove`, method: 'delete', data: params }, true)
-            emits('update:select_idxs', [])
-        }
-    }
-}
 
 </script>
 <template>
+    <section>
         <VCard title="영업점 일괄 작업" style="max-height: 55em !important;overflow-y: auto !important;">
             <VCardText>
                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <b>선택된 영업점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
+                    <VRadioGroup v-model="selected_all">
+                        <VRadio :value="0" @click="">
+                            <template #label>
+                                <b>선택된 영업점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
+                            </template>
+                        </VRadio>
+                        <VRadio :value="1" @click="" v-if="corp.pv_options.paid.sales_parent_structure === false">
+                            <template #label>
+                                <b>전체모듈: {{ store.pagenation.total_count }}개</b>
+                            </template>
+                        </VRadio>
+                    </VRadioGroup>
                     <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small">
                         일괄삭제
                         <VIcon size="18" icon="tabler-trash" />
@@ -264,4 +322,7 @@ const batchRemove = async () => {
                 </div>
             </VCardText>
         </VCard>
+        <CheckAgreeDialog ref="checkAgreeDialog"/>
+        <PasswordAuthDialog ref="passwordAuthDialog"/>
+    </section>
 </template>

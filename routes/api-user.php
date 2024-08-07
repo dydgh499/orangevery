@@ -81,17 +81,12 @@ Route::prefix('merchandises')->group(function() {
     //FIXPLUS
     Route::middleware(['is.edit.able'])->group(function() {
         Route::post('fee-change-histories/{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
-        Route::prefix('batch-updaters')->group(function() {
-            Route::post('mcht-fee-direct-apply', [BatchUpdateMchtController::class, 'setMchtFeeDirect']);
-            Route::post('mcht-fee-book-apply', [BatchUpdateMchtController::class, 'setMchtFeeBooking']);    
-        });
+        Route::post('batch-updaters/{user}/{type}', [BatchUpdateMchtController::class, 'feeApply']);
     });
 
     Route::middleware(['is.operate'])->group(function() {
         Route::middleware(['is.edit.able'])->group(function() {
             Route::prefix('batch-updaters')->group(function() {
-                Route::post('sales-fee-direct-apply', [BatchUpdateMchtController::class, 'setSalesFeeDirect']);
-                Route::post('sales-fee-book-apply', [BatchUpdateMchtController::class, 'setSalesFeeBooking']);
                 Route::post('set-noti-url', [BatchUpdateMchtController::class, 'setNotiUrl']);
                 Route::post('set-enabled', [BatchUpdateMchtController::class, 'setEnabled']);
                 Route::post('set-custom-filter', [BatchUpdateMchtController::class, 'setCustomFilter']);

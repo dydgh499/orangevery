@@ -2,13 +2,15 @@
 
 <script lang="ts" setup>
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
+import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
+import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Options } from '@/views/types'
 import { banks, getOnlyNumber } from '@/views/users/useStore'
-import { axios, getIndexByLevel, getLevelByIndex, getUserLevel } from '@axios'
+import { axios, getIndexByLevel, getLevelByIndex, getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -20,10 +22,14 @@ interface Props {
 const props = defineProps<Props>()
 const emits = defineEmits(['update:select_idxs'])
 
+const store = <any>(inject('store'))
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 const formatDate = <any>(inject('$formatDate'))
+
+const checkAgreeDialog = ref()
+const passwordAuthDialog = ref()
 
 const { cus_filters } = useStore()
 const { request } = useRequestStore()
@@ -33,9 +39,10 @@ const feeBookDialog = ref()
 
 const levels = corp.pv_options.auth.levels
 const show_fees = <Options[]>([{id:0, title:"숨김"}, {id:1, title:"노출"}])
+const selected_all = ref(0)
 const merchandise = reactive<any>({
     custom_id: null,
-    mcht_fee: 0,
+    trx_fee: 0,
     hold_fee: 0,
     sales5_fee: 0,
     sales4_fee: 0,
@@ -57,26 +64,71 @@ const noti = reactive<any>({
     noti_status: true,
 })
 
-const getCommonParams = () => {
-    return {
-        'selected_idxs': props.selected_idxs,
-        'selected_sales_id': props.selected_sales_id,
-        'selected_level': props.selected_level,
+const getCommonParams = async (params: any, method: string, type: string) => {
+    if (props.selected_idxs.length || (props.selected_sales_id && props.selected_level) || selected_all.value) {
+        if(selected_all.value) {
+            const agree = await checkAgreeDialog.value.show(store.pagenation.total_count, method, '가맹점')
+            if (agree === false)
+                return [false, params]
+            else {
+                if(corp.pv_options.paid.use_head_office_withdraw) {
+                    let phone_num = user_info.value.phone_num
+                    if(phone_num) {
+                        phone_num = phone_num.replaceAll(' ', '').replaceAll('-', '')
+                        const token = await passwordAuthDialog.value.show(phone_num)
+                        if(token !== '') {
+                            
+                        }
+                        else
+                            return [false, params]
+                    }
+                    else {
+                        snackbar.value.show('로그인한 계정의 휴대폰번호를 업데이트한 후 다시 시도해주세요.', 'error')
+                        return [false, params]
+                    }
+                }
+            }
+
+        }
+
+        if (await alert.value.show(`정말 ${type}${method}하시겠습니까?`)) {
+            Object.assign(params, { 
+                selected_idxs: props.selected_idxs,
+                selected_sales_id: props.selected_sales_id,
+                selected_level: props.selected_level, 
+                selected_all: selected_all.value,
+            })
+            if(selected_all.value) {
+                Object.assign(params, {
+                    filter: store.params
+                })
+            }
+            return [true, params]
+        }
+        return [false, params]
+    }
+    else {
+        snackbar.value.show('가맹점을 1개이상 선택해주세요.', 'error')
+        return [false, params]
     }
 }
 
-const post = async (page: string, params: any) => {
+const batchRemove = async () => {
+    const [result, params] = await getCommonParams({}, '삭제', '일괄')
+    if(result) {
+        const r = await request({ url: `/api/v1/manager/merchandises/batch-updaters/remove`, method: 'delete', data: params }, true)
+        emits('update:select_idxs', [])
+    }
+}
+
+const post = async (page: string, _params: any, type='일괄') => {
     try {
-        if (props.selected_idxs.length || (props.selected_sales_id && props.selected_level)) {
-            if (await alert.value.show('정말 일괄적용하시겠습니까?')) {
-                Object.assign(params, getCommonParams())
-                const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/' + page, params)
-                snackbar.value.show('성공하였습니다.', 'success')
-                emits('update:select_idxs', [])
-            }
+        const [result, params] = await getCommonParams(_params, '수정', type)
+        if(result) {
+            const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/' + page, params)
+            snackbar.value.show(r.data.message, 'success')
+            emits('update:select_idxs', [])
         }
-        else
-            snackbar.value.show('가맹점은 1개이상 선택해주세요.', 'error')
     }
     catch (e: any) {
         snackbar.value.show(e.response.data.message, 'error')
@@ -84,52 +136,39 @@ const post = async (page: string, params: any) => {
     }
 }
 
-const setSalesFee = (sales_idx: number) => {
-    post('sales-fee-direct-apply', {
-        'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
-        'sales_id': merchandise['sales' + sales_idx + "_id"],
-        'level': getIndexByLevel(sales_idx),
-        'apply_dt': formatDate(new Date),
-    })
+const getApplyDt = async (type: string) => {
+    let apply_dt = ''
+    if(type === 'direct-apply')
+        apply_dt = formatDate(new Date)
+    else 
+        apply_dt = await feeBookDialog.value.show()
+    return apply_dt
 }
 
-const setSalesFeeBooking = async (sales_idx: number) => {
-    const apply_dt = await feeBookDialog.value.show()
+const setSalesFee = async (sales_idx: number, type: string) => {
+    const fee_type = type === 'direct-apply' ? '일괄' : '예약'
+    const apply_dt = await getApplyDt(type)
+
     if(apply_dt !== '') {
-        if (await alert.value.show('정말 예약적용하시겠습니까?')) {
-            const params = {
-                'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
-                'sales_id': merchandise['sales' + sales_idx + "_id"],
-                'level': getIndexByLevel(sales_idx),
-                'apply_dt': apply_dt,
-            }
-            const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/sales-fee-book-apply', Object.assign(params, getCommonParams()))
-            snackbar.value.show('성공하였습니다.', 'success')
-            emits('update:select_idxs', [])
-        }
+        post(`salesforces/${type}`, {
+            'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
+            'sales_id': merchandise['sales' + sales_idx + "_id"],
+            'level': getIndexByLevel(sales_idx),
+            'apply_dt': apply_dt,
+        }, fee_type)
     }
 }
 
-const setMchtFee = () => {
-    post('mcht-fee-direct-apply', {
-        'mcht_fee': parseFloat(merchandise.mcht_fee),
-        'hold_fee': parseFloat(merchandise.hold_fee),
-        'apply_dt': formatDate(new Date),
-    })
-}
+const setMchtFee = async (type: string) => {
+    const fee_type = type === 'direct-apply' ? '일괄' : '예약'
+    const apply_dt = await getApplyDt(type)
 
-const setMchtFeeBooking = async () => {
-    const apply_dt = await feeBookDialog.value.show()
     if(apply_dt !== '') {
-        if (await alert.value.show('정말 예약적용하시겠습니까?')) {
-            const params = {
-                'mcht_fee': parseFloat(merchandise.mcht_fee),
-                'hold_fee': parseFloat(merchandise.hold_fee),
-                'apply_dt': apply_dt,
-            }
-            const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/mcht-fee-book-apply', Object.assign(params, getCommonParams()))
-            snackbar.value.show('성공하였습니다.', 'success')
-        }
+        post(`merchandises/${type}`, {
+            'trx_fee': parseFloat(merchandise.trx_fee),
+            'hold_fee': parseFloat(merchandise.hold_fee),
+            'apply_dt': formatDate(new Date),
+        }, fee_type)
     }
 }
 
@@ -174,20 +213,6 @@ const setNotiUrl = () => {
     })
 }
 
-
-const batchRemove = async () => {
-    const count = props.selected_idxs.length
-    if(count === 0)
-        snackbar.value.show('가맹점을 1개이상 선택해주세요.', 'error')
-    else {
-        if (await alert.value.show('정말 ' + count + '개의 가맹점을 일괄삭제 하시겠습니까?<br><h5>결제모듈 등 하위 정보들도 같이 삭제됩니다.</h5>')) {
-            const params = { selected_idxs: props.selected_idxs }
-            const r = await request({ url: `/api/v1/manager/merchandises/batch-updaters/remove`, method: 'delete', data: params }, true)
-            emits('update:select_idxs', [])
-        }
-    }
-}
-
 initAllSales()
 
 watchEffect(() => {
@@ -204,7 +229,18 @@ watchEffect(() => {
             <VCardText>
                 <template v-if="props.selected_sales_id === 0 && props.selected_level === 0">
                     <div style=" display: flex;align-items: center; justify-content: space-between;">
-                        <b>선택된 가맹점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
+                        <VRadioGroup v-model="selected_all">
+                            <VRadio :value="0">
+                                <template #label>
+                                    <b>선택된 가맹점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
+                                </template>
+                            </VRadio>
+                            <VRadio :value="1" v-if="getUserLevel() >= 35">
+                                <template #label>
+                                    <b>가맹점: {{ store.pagenation.total_count }}개</b>
+                                </template>
+                            </VRadio>
+                        </VRadioGroup>
                         <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small">
                             일괄삭제
                             <VIcon size="18" icon="tabler-trash" />
@@ -235,11 +271,11 @@ watchEffect(() => {
                             </VCol>
                             <VCol md="4" cols="12" style="padding: 0.25em;">
                                 <div style="float: inline-end;">
-                                    <VBtn variant="tonal" size="small" @click="setSalesFee(6 - i)" style='margin-left: 0.5em;'>
+                                    <VBtn variant="tonal" size="small" @click="setSalesFee(6 - i, 'direct-apply')" style='margin-left: 0.5em;'>
                                         즉시적용
                                         <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
-                                    <VBtn variant="tonal" size="small" color="secondary" @click="setSalesFeeBooking(6 - i)"
+                                    <VBtn variant="tonal" size="small" color="secondary" @click="setSalesFee(6 - i, 'book-apply')"
                                         style='margin-left: 0.5em;'>
                                         예약적용
                                         <VIcon end size="18" icon="tabler-clock-up" />
@@ -254,18 +290,18 @@ watchEffect(() => {
                             거래/유보금 수수료율
                         </VCol>
                         <VCol md="3" cols="6" style="padding: 0.25em;">
-                            <VTextField v-model="merchandise.mcht_fee" type="number" suffix="%"/>
+                            <VTextField v-model="merchandise.trx_fee" type="number" suffix="%"/>
                         </VCol>
                         <VCol md="2" cols="6" style="padding: 0.25em;">
                             <VTextField v-model="merchandise.hold_fee" type="number" suffix="%"/>
                         </VCol>
                         <VCol md="4" cols="12" style="padding: 0.25em;">
                             <div style="float: inline-end;">
-                                <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setMchtFee()">
+                                <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setMchtFee('direct-apply')">
                                     즉시적용
                                     <VIcon end size="18" icon="tabler-direction-sign" />
                                 </VBtn>
-                                <VBtn variant="tonal" size="small" color="secondary" @click="setMchtFeeBooking()"
+                                <VBtn variant="tonal" size="small" color="secondary" @click="setMchtFee('book-apply')"
                                     style='margin-left: 0.5em;'>
                                     예약적용
                                     <VIcon end size="18" icon="tabler-clock-up" />
@@ -396,5 +432,7 @@ watchEffect(() => {
             </VCardText>
         </VCard>
         <FeeBookDialog ref="feeBookDialog"/>
+        <CheckAgreeDialog ref="checkAgreeDialog"/>
+        <PasswordAuthDialog ref="passwordAuthDialog"/>
     </section>
 </template>

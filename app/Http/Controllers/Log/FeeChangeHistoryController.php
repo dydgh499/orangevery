@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Log;
 
+use App\Http\Controllers\Manager\BatchUpdater\MerchandiseFeeUpdater;
+
 use App\Models\Log\MchtFeeChangeHistory;
 use App\Models\Log\SfFeeChangeHistory;
 use App\Models\Merchandise;
@@ -12,8 +14,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Auth\AuthOperatorIP;
+
+use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
 use App\Enums\HistoryType;
@@ -26,7 +31,7 @@ use Carbon\Carbon;
  */
 class FeeChangeHistoryController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $mcht_fee_histories;
     protected $sf_fee_histories;
 
@@ -52,11 +57,11 @@ class FeeChangeHistoryController extends Controller
         foreach($sf_histories as $sf_history)
         {
             DB::transaction(function () use($sf_history, $date) {
-                $idx = globalLevelByIndex($sf_history->level);
+                $sales_key = MerchandiseFeeUpdater::getSalesKeys($sf_history->level);
                 Merchandise::where('id', $sf_history->mcht_id)
                     ->update([
-                        'sales'.$idx.'_id'  => $sf_history->aft_sales_id,
-                        'sales'.$idx.'_fee' => $sf_history->aft_trx_fee/100,
+                        $sales_key['sales_id'] => $sf_history->aft_sales_id,
+                        $sales_key['sales_fee'] => $sf_history->aft_trx_fee/100,
                     ]);
                 $sf_history->change_status = true;
                 $sf_history->updated_at = $date;
@@ -138,68 +143,9 @@ class FeeChangeHistoryController extends Controller
         return $this->deleteHistory($this->sf_fee_histories, '영업점 수수료율', $id);
     }
 
-    private function getMchtResource($request, $mcht, $data)
-    {
-        $udpt_data = [];
-        $bf_trx_fee = $mcht->trx_fee;
-        $aft_trx_fee = round($request->trx_fee/100, 7);
-        $bf_hold_fee = $mcht->hold_fee;
-        $aft_hold_fee = round($request->hold_fee/100, 7);
-
-        $data['apply_dt']    = $request->apply_dt;
-        $data['bf_trx_fee']  = $bf_trx_fee;
-        $data['aft_trx_fee'] = $aft_trx_fee;
-        $udpt_data['trx_fee'] = $aft_trx_fee;
-
-        $data['bf_hold_fee'] = $bf_hold_fee;
-        $data['aft_hold_fee'] = $aft_hold_fee;
-        $udpt_data['hold_fee'] = $aft_hold_fee;
-
-        return [
-            'history' => $data,
-            'update'  => $udpt_data,
-            'before'  => [
-                'trx_fee' => $bf_trx_fee,
-                'hold_fee' => $bf_hold_fee,
-            ]
-        ];
-    }
-
-    private function getSalesResource($request, $mcht, $data)
-    {
-        $udpt_data  = [];
-        $data['level'] = $request->level;
-        $idx  = globalLevelByIndex($data['level']);
-        $mcht = json_decode(json_encode($mcht), true);
-        $sales_key = [
-            'sales_fee' => 'sales'.$idx.'_fee',
-            'sales_id'  => 'sales'.$idx.'_id',
-        ];
-        
-        $bf_trx_fee = $mcht[$sales_key['sales_fee']];
-        $aft_trx_fee = round($request->sales_fee/100, 7);
-        $bf_sales_id = $mcht[$sales_key['sales_id']];
-        $aft_sales_id = $request->sales_id;
-
-        $data['apply_dt']       = $request->apply_dt;
-        $data['bf_trx_fee']     = $bf_trx_fee;
-        $data['aft_trx_fee']    = $aft_trx_fee;
-        $udpt_data[$sales_key['sales_fee']] = $aft_trx_fee;
-
-        $data['bf_sales_id'] = $bf_sales_id;
-        $data['aft_sales_id'] = $aft_sales_id;
-        $udpt_data[$sales_key['sales_id']] = $aft_sales_id;
-        
-        return [
-            'history' => $data,
-            'update'  => $udpt_data,
-            'before'  => [
-                $sales_key['sales_id']=> $bf_sales_id,
-                $sales_key['sales_fee'] => $bf_trx_fee,
-            ]
-        ];
-    }
-
+    /**
+     * 가맹점/영업점 수수료율 즉시/예약적용 
+     */
     public function apply(Request $request, $user, $type)
     {
         $cond_1 = (Ablilty::isOperator($request) && AuthOperatorIP::valiate($request->user()->brand_id, $request->ip())) || Ablilty::isDevLogin($request);
@@ -207,45 +153,38 @@ class FeeChangeHistoryController extends Controller
 
         if($cond_1 || $cond_2)
         {
-            $change_status = $type == 'direct-apply' ? 1 : 0;
-            $data = [
-                'mcht_id'   => $request->mcht_id,
-                'brand_id'  => $request->user()->brand_id,
-                'change_status' => $change_status,
-            ];
-            $mchts  = new Merchandise();
-            $mcht   = $mchts->where('id', $request->mcht_id)->first();
-            if($mcht)
+            $query = Merchandise::where('id', $request->mcht_id);
+            $mcht = (clone $query)->first();
+
+            if(Ablilty::isBrandCheck($request, $mcht->brand_id) === false)
+                return $this->response(951);
+            else
             {
-                if($user == 'merchandises')
+                $row = MerchandiseFeeUpdater::apply($request, $user, $type, $query);
+                if($row)
                 {
-                    $resource = $this->getMchtResource($request, $mcht, $data);
-                    $orm = $this->mcht_fee_histories;
-                    $target = '가맹점 수수료율';
-                }
-                else
-                {
-                    $resource = $this->getSalesResource($request, $mcht, $data);
-                    $orm = $this->sf_fee_histories;
-                    $target = '영업점 수수료율';
-                }
-                
-                $res = DB::transaction(function () use($orm, $resource, $mcht, $mchts, $target) {
-                    $res = $orm->create($resource['history']);
-                    if($resource['history']['change_status'] == true)
+                    if($user == 'merchandises')
                     {
-                        $res = $mchts->where('id', $resource['history']['mcht_id'])->update($resource['update']);
-                        operLogging(HistoryType::UPDATE, $target, $resource['before'], $resource['update'], $mcht->mcht_name);
+                        $before    = MerchandiseFeeUpdater::getMchtBeforeFee($mcht);
+                        $after     = MerchandiseFeeUpdater::getMchtAfterFee($request);
+                        $target = '가맹점 수수료율';
                     }
                     else
-                        operLogging(HistoryType::BOOK, $target, $resource['before'], $resource['update'], $mcht->mcht_name);
+                    {
+                        $before    = MerchandiseFeeUpdater::getSalesBeforeFee($mcht, $request->level);
+                        $after     = MerchandiseFeeUpdater::getSalesAfterFee($request);
+                        $target = '영업점 수수료율';
+                    }
+                    if($type === 'direct-apply')
+                        operLogging(HistoryType::UPDATE, $target, $before, $after, $mcht->mcht_name);
+                    else
+                        operLogging(HistoryType::BOOK, $target, $before, $after, $mcht->mcht_name);
     
-                    return true;
-                }, 3);
-                return $this->response(0);
+                    return $this->response(0);
+                }
+                else
+                    return $this->response(1000);                
             }
-            else
-                return $this->response(1000);    
         }
         else
             return $this->response(951);

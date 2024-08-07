@@ -43,6 +43,7 @@ defineExpose({
                         <template #input>
                             <VTextField v-model="apply_dt" type="date" :rules="[requiredValidatorV2(apply_dt, '적용일')]"                            
                             @keydown.enter="handleEvent"
+                            style="max-width: 10em;"
                             />
                         </template>
                     </CreateHalfVCol>

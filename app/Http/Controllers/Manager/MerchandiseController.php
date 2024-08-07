@@ -76,7 +76,7 @@ class MerchandiseController extends Controller
         return $this->response(0, ChartFormat::default($data));
     }
 
-    private function byPayModules($request, $is_all)
+    public function byPayModules($request, $is_all)
     {
         $query = $this->merchandises
             ->join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
@@ -84,15 +84,12 @@ class MerchandiseController extends Controller
             ->distinct('payment_modules.mcht_id');
 
         $query = globalPGFilter($query, $request, 'payment_modules');
-        $query = $this->mchtCommonFilter($query, $request, 'merchandises', $is_all);
-        return $this->getIndexData($request, $query, 'merchandises.id', ['merchandises.*'], 'merchandises.id', false);
+        return $this->mchtCommonFilter($query, $request, 'merchandises', $is_all);
     }
 
-    private function byNormalIndex($request, $is_all)
+    public function byNormalIndex($request, $is_all)
     {
-        $query = $this->merchandises;
-        $query = $this->mchtCommonFilter($query, $request, 'merchandises', $is_all);
-        return $this->getIndexData($request, $query, 'id', [], 'id', false);
+        return $this->mchtCommonFilter($this->merchandises, $request, 'merchandises', $is_all);
     }
 
     private function mchtCommonFilter($query, $request, $parent, $is_all)
@@ -141,17 +138,29 @@ class MerchandiseController extends Controller
         return $data;
     }
 
-    private function commonSelect($request, $is_all=false)
+    public function isByPayModule($request)
     {
         $cond_1 = $request->pg_id || $request->ps_id || $request->terminal_id;
         $cond_2 = $request->settle_type !== null || $request->mcht_settle_type !== null || $request->module_type != null;
-        if($cond_1 || $cond_2)
-            $data = $this->byPayModules($request, $is_all);
+
+        return $cond_1 || $cond_2;
+    }
+
+    public function commonSelect($request, $is_all=false)
+    {
+        if($this->isByPayModule($request))
+        {
+            $query = $this->byPayModules($request, $is_all);
+            $data = $this->getIndexData($request, $query, 'merchandises.id', ['merchandises.*'], 'merchandises.id', false);
+        }
         else 
-            $data = $this->byNormalIndex($request, $is_all);
-        
-        // payment modules sections
+        {
+            $query = $this->byNormalIndex($request, $is_all);
+            $data = $this->getIndexData($request, $query, 'id', [], 'id', false);
+
+        }
         $mcht_ids = collect($data['content'])->sortByDesc('id')->pluck('id')->all();
+
         $pay_modules = $this->pay_modules
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)

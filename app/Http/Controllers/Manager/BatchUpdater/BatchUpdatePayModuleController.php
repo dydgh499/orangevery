@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Manager\BatchUpdater;
 
+use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
+use App\Http\Controllers\Manager\BatchUpdater\MerchandiseFeeUpdater;
+
 use App\Models\Merchandise\PaymentModule;
-use App\Models\Log\MchtFeeChangeHistory;
-use App\Models\Log\SfFeeChangeHistory;
-use App\Models\Log\SfFeeApplyHistory;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -29,29 +29,50 @@ class BatchUpdatePayModuleController extends Controller
         $this->pay_modules = $pay_modules;
     }
 
+    private function batchResponse($row)
+    {
+        return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 업데이트되었습니다.' : '업데이트된 결제모듈이 존재하지 않습니다.');
+    }
     /**
      * 결제모듈 가져오기
      */
     private function payModuleBatch($request)
     {
-        if(count($request->selected_idxs) == 0 && ($request->selected_sales_id == 0 && $request->selected_level == 0))
+        $cond_1 = count($request->selected_idxs);
+        $cond_2 = ($request->selected_sales_id && $request->selected_level);
+        $cond_3 = ($request->selected_all && $request->filter['page_size']);  //전체 변경
+        
+        if($cond_1 || $cond_2 || $cond_3)
         {
-            logging([], '잘못된 접근');
-            return null;
+            if($cond_3)
+            {
+                $filter_request = new Request();
+                $filter_request->merge($request->filter);
+                $filter_request->setUserResolver(function () use ($request) {
+                    return $request->user();
+                });
+                return resolve(PaymentModuleController::class)->commonSelect($filter_request);
+            }
+            else
+            {
+                $query = $this->pay_modules->where('payment_modules.brand_id', $request->user()->brand_id);
+                if(count($request->selected_idxs))
+                    $query = $query->whereIn('id', $request->selected_idxs);
+                if($request->selected_sales_id && $request->selected_level)
+                {
+                    $idx    = globalLevelByIndex($request->selected_level);
+                    $query  = $query
+                        ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+                        ->where('merchandises.sales'.$idx.'_id', $request->selected_sales_id);
+                }
+                return $query;
+            }
         }
         else
         {
-            $query = $this->pay_modules->where('payment_modules.brand_id', $request->user()->brand_id);
-            if(count($request->selected_idxs))
-                $query = $query->whereIn('id', $request->selected_idxs);
-            if($request->selected_sales_id && $request->selected_level)
-            {
-                $idx    = globalLevelByIndex($request->selected_level);
-                $query  = $query
-                    ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-                    ->where('merchandises.sales'.$idx.'_id', $request->selected_sales_id);
-            }
-            return $query;    
+            logging([], '잘못된 접근');
+            echo "wrong access";
+            return null;
         }
     }
     
@@ -62,7 +83,7 @@ class BatchUpdatePayModuleController extends Controller
     {
         $cols = ['pg_id' => $request->pg_id, 'ps_id' => $request->ps_id];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -72,7 +93,7 @@ class BatchUpdatePayModuleController extends Controller
     {
         $cols = ['abnormal_trans_limit' => $request->abnormal_trans_limit];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -82,7 +103,7 @@ class BatchUpdatePayModuleController extends Controller
     {
         $cols = ['pay_dupe_limit' => $request->pay_dupe_limit];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -92,7 +113,7 @@ class BatchUpdatePayModuleController extends Controller
     {
         $cols = ['pay_dupe_least' => $request->pay_dupe_least];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -112,7 +133,7 @@ class BatchUpdatePayModuleController extends Controller
         
         $cols = [$type => $limit];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -125,7 +146,7 @@ class BatchUpdatePayModuleController extends Controller
             'pay_disable_e_tm' => $request->pay_disable_e_tm,
         ];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -135,7 +156,7 @@ class BatchUpdatePayModuleController extends Controller
     {
         $cols = ['show_pay_view' => $request->show_pay_view];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -146,7 +167,7 @@ class BatchUpdatePayModuleController extends Controller
     {
         $cols = ['mid' => $request->mid];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -157,7 +178,7 @@ class BatchUpdatePayModuleController extends Controller
     {
         $cols = ['tid' => $request->tid];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -168,7 +189,7 @@ class BatchUpdatePayModuleController extends Controller
     {
         $cols = ['api_key' => $request->api_key];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -179,14 +200,14 @@ class BatchUpdatePayModuleController extends Controller
     {
         $cols = ['sub_key' => $request->sub_key];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     public function setInstallment(Request $request)
     {
         $cols = ['installment' => $request->installment];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -197,7 +218,7 @@ class BatchUpdatePayModuleController extends Controller
     {
         $cols = ['note' => $request->note];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -208,7 +229,7 @@ class BatchUpdatePayModuleController extends Controller
     {
         $cols = ['use_realtime_deposit' => $request->use_realtime_deposit];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -219,7 +240,7 @@ class BatchUpdatePayModuleController extends Controller
     {
         $cols = ['fin_id' => $request->fin_id];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
     
 
@@ -231,7 +252,7 @@ class BatchUpdatePayModuleController extends Controller
     {
         $cols = ['payment_term_min' => $request->payment_term_min];
         $row = $this->payModuleBatch($request)->update($cols);
-        return $this->response(1);
+        return $this->batchResponse($row);
     }
 
     /**
@@ -239,7 +260,7 @@ class BatchUpdatePayModuleController extends Controller
      */
     public function batchRemove(Request $request)
     {
-        $res = $this->payModuleBatch($request)->update(['is_delete' => true]);
-        return $this->response($res ? 1 : 990);
+        $row = $this->payModuleBatch($request)->update(['payment_modules.is_delete' => true]);
+        return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 결제모듈이 존재하지 않습니다.');
     }
 }
