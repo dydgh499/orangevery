@@ -27,7 +27,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $apis = ['bf', 'buddy-pay', 'ezpg'];
+        $apis = ['bf', 'ezpg'];
         $this->configureRateLimiting();
         $this->routes(function () use($apis) {
             foreach($apis as $api) {

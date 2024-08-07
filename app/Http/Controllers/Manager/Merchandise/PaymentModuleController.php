@@ -65,16 +65,12 @@ class PaymentModuleController extends Controller
             ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
             ->where('payment_modules.brand_id', $request->user()->brand_id);
 
-        if($is_all == false) 
-        {
-            $query = $query->where('merchandises.is_delete', false)
-            ->where('payment_modules.is_delete', false);
-        }
-
         $query = globalPGFilter($query, $request, 'payment_modules');
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
 
+        if($is_all == false) 
+            $query = $query->where('merchandises.is_delete', false)->where('payment_modules.is_delete', false);
         if($request->has('mcht_id'))
             $query = $query->where('payment_modules.mcht_id', $request->mcht_id);
         if($request->has('module_type'))

@@ -193,12 +193,34 @@
         Log::critical($msg, $logs);
     }
 
+    function s3ImageLinkConvert($before_history_detail) 
+    {
+        if(env('FILESYSTEM_DISK') === 's3')
+        {
+            $params = [
+                'contract_img', 'id_img', 'passbook_img', 'bsin_lic_img', 
+                'profile_img', 'favicon_img', 'og_img', 'login_img', 'logo_img'
+            ];
+            foreach($params as $param)
+            {
+                if($before_history_detail[$param] && strpos($before_history_detail[$param], '?X-Amz-Content-Sha256') !== false)
+                {
+                    $idx = strpos($before_history_detail[$param], '?X-Amz-Content-Sha256');
+                    $before_history_detail[$param] = substr($before_history_detail[$param], 0, $idx);
+                }    
+            }    
+        }
+        return $before_history_detail;
+    }
+
     function operLogging(HistoryType $history_type, $history_target, $before_history_detail, $after_history_detail, $history_title='', $brand_id='', $oper_id='')
     {
         $cond_1 = $history_type == HistoryType::LOGIN;
         $cond_2 = $history_type != HistoryType::LOGIN && Ablilty::isOperator(request());
+
         if($cond_1 || $cond_2)
         {
+            $before_history_detail = s3ImageLinkConvert($before_history_detail);
             $request = request()->merge([
                 'history_type' => $history_type->value,
                 'history_target' => $history_target,
