@@ -235,7 +235,7 @@ watchEffect(() => {
                                     <b>선택된 가맹점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
                                 </template>
                             </VRadio>
-                            <VRadio :value="1" v-if="getUserLevel() >= 35">
+                            <VRadio :value="1" v-if="getUserLevel() === 40">
                                 <template #label>
                                     <b>가맹점: {{ store.pagenation.total_count }}개</b>
                                 </template>

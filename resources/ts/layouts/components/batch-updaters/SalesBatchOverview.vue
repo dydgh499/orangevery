@@ -7,7 +7,7 @@ import { useRequestStore } from '@/views/request'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import { Salesforce } from '@/views/types'
 import { banks } from '@/views/users/useStore'
-import { axios, user_info } from '@axios'
+import { axios, getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -175,7 +175,7 @@ const setNote = () => {
                                 <b>선택된 영업점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
                             </template>
                         </VRadio>
-                        <VRadio :value="1" @click="" v-if="corp.pv_options.paid.sales_parent_structure === false">
+                        <VRadio :value="1" @click="" v-if="corp.pv_options.paid.sales_parent_structure === false && getUserLevel() === 40">
                             <template #label>
                                 <b>전체모듈: {{ store.pagenation.total_count }}개</b>
                             </template>
