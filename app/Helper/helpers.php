@@ -203,7 +203,7 @@
             ];
             foreach($params as $param)
             {
-                if($before_history_detail[$param] && strpos($before_history_detail[$param], '?X-Amz-Content-Sha256') !== false)
+                if(isset($before_history_detail[$param]) && strpos($before_history_detail[$param], '?X-Amz-Content-Sha256') !== false)
                 {
                     $idx = strpos($before_history_detail[$param], '?X-Amz-Content-Sha256');
                     $before_history_detail[$param] = substr($before_history_detail[$param], 0, $idx);
