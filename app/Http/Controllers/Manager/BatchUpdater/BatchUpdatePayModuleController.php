@@ -223,7 +223,7 @@ class BatchUpdatePayModuleController extends Controller
      */
     public function setNote(Request $request)
     {
-        $cols = ['note' => $request->note];
+        $cols = ['payment_modules.note' => $request->note];
         $row = $this->payModuleBatch($request)->update($cols);
         return $this->batchResponse($row);
     }
