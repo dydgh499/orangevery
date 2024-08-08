@@ -91,7 +91,7 @@ class Settle
         $query = PaymentModule::terminalSettle($request->level);
         if(count($mcht_ids))
             $query = PaymentModule::whereIn('mcht_id', $mcht_ids);
-
+        //union all?
         $query->get([
             'payment_modules.begin_dt',
             'payment_modules.comm_settle_type',
