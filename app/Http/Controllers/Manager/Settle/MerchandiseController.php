@@ -89,7 +89,7 @@ class MerchandiseController extends Controller
             $query = $query->where('id', $request->mcht_id);
 
         $with = ['deducts', 'settlePayModules', 'transactions'];
-        $data = $this->getIndexData($request, $query->with($with), 'id', $cols, "created_at", false);
+        $data = $this->getIndexData($request, $query->with($with), 'id', $cols, "id", false);
         $data = $this->getSettleInformation($data, $target_settle_amount);
         $data = $this->setTerminalCost($data, $request->s_dt, $request->e_dt, 'mcht_id');
         // set total settle
