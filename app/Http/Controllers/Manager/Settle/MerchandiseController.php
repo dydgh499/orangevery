@@ -73,7 +73,9 @@ class MerchandiseController extends Controller
             $cols = array_merge($cols, ['settle_hold_s_dt', 'settle_hold_reason']);
 
         // ----- 가맹점 목록 조회 ---------
-        $mcht_ids = $this->getExistTransUserIds('mcht_id', 'mcht_settle_id');
+        $mcht_ids = $this->getExistTransUserIds($target_id, $target_settle_id);
+        if($request->user()->brand_id === 14)
+            logging($mcht_ids);
         $terminal_settle_ids = $this->getTerminalSettleIds($request, 10, 'id');
 
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
