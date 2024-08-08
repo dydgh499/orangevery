@@ -175,23 +175,23 @@ watchEffect(() => {
                     <VRow class="pt-3">
                         <VCol cols="12" :md="getUserLevel() === 10 ? 6: 12">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol>
+                                <VCol md="2" cols="4">
                                     <label>계좌번호</label>
                                 </VCol>
                                 <VCol md="10">
                                     <VTextField id="acctNumHorizontalIcons" v-model="props.item.acct_num"
-                                prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" persistent-placeholder maxlength="20" 
-                                :rules="[requiredValidatorV2(props.item.acct_num, '계좌번호')]"/>
+                                        prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" persistent-placeholder maxlength="20" 
+                                        :rules="[requiredValidatorV2(props.item.acct_num, '계좌번호')]"/>
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold">계좌번호</VCol>
+                                <VCol class="font-weight-bold" cols="4">계좌번호</VCol>
                                 <VCol md="8"><span>{{ props.item.acct_num }}</span></VCol>
                             </VRow>
                         </VCol>
                         <VCol md="6" v-if="getUserLevel() === 10">
                             <VRow>
-                                <VCol class="font-weight-bold">은행코드</VCol>
+                                <VCol class="font-weight-bold" cols="4">은행코드</VCol>
                                 <VCol md="8"><span>{{ props.item.acct_bank_code }}</span></VCol>
                             </VRow>
                         </VCol>
@@ -199,7 +199,7 @@ watchEffect(() => {
                     <VRow>
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol>
+                                <VCol md="4" cols="5">
                                     <label>* 예금주</label>
                                 </VCol>
                                 <VCol md="8">
@@ -215,15 +215,19 @@ watchEffect(() => {
                         </VCol>
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol>
+                                <VCol md="2" cols="5">
                                     <label>은행</label>
                                 </VCol>
-                                <VCol md="8">
+                                <VCol md="6">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.acct_bank_code"
                                     :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
                                     label="은행 선택" item-title="title" item-value="code" persistent-hint single-line
-                                    :hint="`${props.item.acct_bank_name}, 은행 코드: ${props.item.acct_bank_code ? props.item.acct_bank_code : '000'} `"
                                     :rules="[requiredValidatorV2(props.item.acct_bank_code, '은행')]" @update:modelValue="setAcctBankName()" />
+                                </VCol>
+                                <VCol md="4" cols="12" :style="$vuetify.display.smAndDown ? 'text-align: end;' : ''">
+                                    <h5 style="margin-top: 0.5em; margin-left: 0.5em;">
+                                        {{ `은행 코드: ${props.item.acct_bank_code ? props.item.acct_bank_code : '000'} ` }}
+                                    </h5>
                                 </VCol>
                             </VRow>
                             <VRow v-else>
@@ -256,7 +260,7 @@ watchEffect(() => {
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                    <VRow no-gutters v-if="isAbleModiy(props.item.id)">
                                         <VCol>* 가맹점 상호</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.mcht_name" prepend-inner-icon="tabler-building-store"
@@ -278,8 +282,8 @@ watchEffect(() => {
                             <template v-for="i in 6" :key="i">
                                 <VCol cols="12" v-if="levels['sales'+(6-i)+'_use']">
                                     <VRow v-if="isAbleModiy(props.item.id)">
-                                        <VCol cols="12" md="3">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
-                                        <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                        <VCol cols="12" md="3" style="margin-bottom: auto;">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
+                                        <VCol cols="6" :md="props.item.id ? 3 : 4" style="margin-bottom: auto;">
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6-i)+'_id']"
                                                 :items="sales[6-i].value"
                                                 :label="levels['sales'+(6-i)+'_name'] + '선택'"
@@ -290,18 +294,16 @@ watchEffect(() => {
                                                     {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
                                                 </VTooltip>
                                         </VCol>
-                                        <VCol cols="12" :md="props.item.id ? 2 : 3">
+                                        <VCol cols="6" :md="props.item.id ? 3 : 3">
                                             <VTextField v-model="props.item['sales'+(6-i)+'_fee']" type="number" suffix="%"
                                                 :rules="[requiredValidatorV2(props.item['sales'+(6-i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]"                                                 
                                                 @update:modelValue="validateSalesFee(6-i)"
                                             />
-
-                                            <div style="font-size: 0.8em;">
-                                                <span style="font-weight: bold;">{{ hintSalesSettleFee(props.item, 6-i) }}</span>
+                                            <div style="font-size: 0.8em; font-weight: bold; text-align: center;" v-if="props.item['sales'+(6-i)+'_id']">
+                                                <span>{{ hintSalesSettleFee(props.item, 6-i) }}</span>
                                             </div>
                                         </VCol>
-                                        <FeeChangeBtn :level=getIndexByLevel(6-i) :item="props.item">
-                                        </FeeChangeBtn>
+                                        <FeeChangeBtn :level=getIndexByLevel(6-i) :item="props.item" style="margin-bottom: auto;"/>
                                     </VRow>
                                     <VRow v-else>
                                         <VCol md="3" class="font-weight-bold">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
@@ -324,14 +326,13 @@ watchEffect(() => {
                                 <VCol cols="12" md="3">
                                     가맹점 수수료율
                                 </VCol>
-                                    <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                        <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
-                                            :rules="[requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]" v-if="isAbleModiy(props.item.id)"/>
-                                    </VCol>
-                                    <VCol cols="12" :md="props.item.id ? 2 : 3">
-                                    </VCol>
-                                    <FeeChangeBtn v-if="props.item.id && isAbleModiy(props.item.id)" :level=-1 :item="props.item">
-                                    </FeeChangeBtn>
+                                <VCol cols="6" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
+                                        :rules="[requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]" v-if="isAbleModiy(props.item.id)"/>
+                                </VCol>
+                                <VCol cols="6" :md="props.item.id ? 2 : 3">
+                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id && isAbleModiy(props.item.id)" :level=-1 :item="props.item"/>
                             </VRow>
                             <VRow v-else>
                                 <VCol md="3" class="font-weight-bold">가맹점 수수료율</VCol>
@@ -353,3 +354,8 @@ watchEffect(() => {
         <FeeBookDialog ref="feeBookDialog"/>
     </VRow>
 </template>
+<style scoped>
+:deep(.v-row) {
+  align-items: center;
+}
+</style>

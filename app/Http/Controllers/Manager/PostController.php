@@ -131,6 +131,22 @@ class PostController extends Controller
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
+    private function toS3PrivateLink($link)
+    {
+        $client = Storage::disk('s3')->getClient();
+        $command = $client->getCommand('GetObject', [
+            'Bucket' => Config::get('filesystems.disks.s3.bucket'),
+            'Key'    => str_replace(Config::get('filesystems.disks.s3.url').'/', '', $link)
+        ]);
+        $request = $client->createPresignedRequest($command, '+365 days');
+        return $request->getUri();
+    }
+
+    private function isS3Img($value)
+    {
+        return env('FILESYSTEM_DISK') === 's3' && strpos($value, 'amazonaws.com') !== false;
+    }
+
     /**
      * 이미지 단일 업로드
      *
@@ -151,6 +167,7 @@ class PostController extends Controller
                 'sizes'     => [ 1980],
             ];
             $data = $this->saveImages($request, $data, $imgs);
+            $data['url'] = $this->isS3Img($data['url']) ? $this->toS3PrivateLink($data['url']) : $data['url'];
             return $this->response(0, $data);    
         }
         else

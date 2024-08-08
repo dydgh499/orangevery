@@ -29,7 +29,7 @@ const getChildDepth = computed(() => {
 </script>
 
 <template>
-    <tr :style="(depth+1)%2 === 0 ? 'background: rgba(var(--v-theme-primary), 20%);' : ''">
+    <tr :style="(depth+1)%2 === 0 ? 'background: rgba(var(--v-theme-primary), 10%);' : ''">
         <template v-for="(header, key, idx) in head.headers" :key="idx">
             <td v-show="header.visible" :class="key == 'title' ? 'list-square title' : 'list-square'">
                 <span v-if="key == 'id'">

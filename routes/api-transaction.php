@@ -72,6 +72,7 @@ Route::prefix('transactions')->group(function() {
         Route::apiResource('collect-withdraws', CollectWithdrawController::class);
         
         Route::prefix('merchandises')->group(function() {
+            #Route::get('/test', [MchtSettleController::class, 'test']);
             Route::get('/', [MchtSettleController::class, 'index']);
             Route::get('/chart', [MchtSettleController::class, 'chart']);
             Route::post('/deduct', [MchtSettleController::class, 'deduct']);

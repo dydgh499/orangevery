@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import MchtBatchOverview from '@/layouts/components/batch-updaters/MchtBatchOverview.vue'
-import PayModuleBatchOverview from '@/layouts/components/batch-updaters/PayModuleBatchOverview.vue'
+import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import type { Options, Salesforce } from '@/views/types'
-import { banks } from '@/views/users/useStore'
+import { banks, getOnlyNumber } from '@/views/users/useStore'
+import { ItemTypes } from '@core/enums'
 
 import { autoUpdateSalesforceInfo, isDistMchtFeeModifyAble } from '@/plugins/fixplus'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
@@ -26,8 +26,9 @@ const { sales, all_sales } = useSalesFilterStore()
 
 const is_show = ref(false)
 const is_resident_num_back_show = ref(false)
-const mchtBatchOverview = ref()
-const payModuleBatchOverview = ref()
+
+const mchtBatchDialog = ref()
+const pmodBatchDialog = ref()
 
 const setMchtFee = async () => {
     const getCommonParams = () => {
@@ -137,7 +138,20 @@ watchEffect(() => {
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>기본정보</VCardTitle>
+                    <VCardTitle>
+                        <div style="display: flex;align-items: center;justify-content: space-between;">
+                            <span style="margin-right: 1em;">기본정보</span>
+                            <div v-if="getUserLevel() >= 35 && props.item.id"
+                                :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
+                                <VBtn style='margin: 0.25em;' variant="tonal" size="small" @click="mchtBatchDialog.show()">
+                                    하위 가맹점 일괄 작업
+                                </VBtn>
+                                <VBtn style='margin: 0.25em;' variant="tonal" size="small" color="error" @click="pmodBatchDialog.show()">
+                                    하위 결제모듈 일괄 작업
+                                </VBtn>
+                            </div>
+                        </div>
+                    </VCardTitle>
                     <VRow class="pt-3">
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
@@ -254,22 +268,24 @@ watchEffect(() => {
                     <VRow>
                         <VCol cols="12">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol>
+                                <VCol md=2 cols="12">
                                     <label>주민등록번호</label>
                                 </VCol>
-                                <VCol md="10">
+                                <VCol md="10" cols="12">
                                     <VRow style="align-items: center;">
-                                        <VCol :cols="5">
+                                        <VCol md="8" :cols="12" style="display: flex;">
                                             <VTextField v-model="props.item.resident_num_front" type="number" id="regidentFrontNum"
-                                                prepend-inner-icon="carbon-identification" placeholder="800101" maxlength="6"/>
-                                        </VCol>
-                                        <span> - </span>
-                                        <VCol :cols="5">
+                                                prepend-inner-icon="carbon-identification" placeholder="800101" maxlength="6"
+                                                @update:model-value="props.item.resident_num_front = getOnlyNumber($event)"
+                                                style="width: 13em;"/>
+                                            <span style="margin: 0.5em;text-align: center;"> - </span>
                                             <VTextField v-model="props.item.resident_num_back" placeholder="*******" id="regidentBackNum"
                                                 maxlength="7"
                                                 :append-inner-icon="is_resident_num_back_show ? 'tabler-eye' : 'tabler-eye-off'"
                                                 :type="is_resident_num_back_show ? 'number' : 'password'"
-                                                @click:append-inner="is_resident_num_back_show = !is_resident_num_back_show" />
+                                                @click:append-inner="is_resident_num_back_show = !is_resident_num_back_show" 
+                                                @update:model-value="props.item.resident_num_back = getOnlyNumber($event)"
+                                                style="width: 13em;"/>
                                         </VCol>
                                     </VRow>
                                 </VCol>
@@ -286,13 +302,12 @@ watchEffect(() => {
                     <VRow class="pt-3">
                         <VCol cols="12" :md="12">
                             <VRow no-gutters>
-                                <VCol>
+                                <VCol md="2" cols="4">
                                     <label>계좌번호</label>
                                 </VCol>
                                 <VCol md="10">
                                     <VTextField id="acctNumHorizontalIcons" v-model="props.item.acct_num"
-                                prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" persistent-placeholder maxlength="20" 
-                                 />
+                                    prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" persistent-placeholder maxlength="20" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -300,7 +315,7 @@ watchEffect(() => {
                     <VRow>
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol>
+                                <VCol md="4" cols="5">
                                     <label>예금주</label>
                                 </VCol>
                                 <VCol md="8">
@@ -315,15 +330,19 @@ watchEffect(() => {
                         </VCol>
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol>
+                                <VCol md="2" cols="5">
                                     <label>은행</label>
                                 </VCol>
-                                <VCol md="8">
+                                <VCol md="6">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.acct_bank_code"
-                                    :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
-                                    label="은행 선택" item-title="title" item-value="code" persistent-hint single-line
-                                    :hint="`${props.item.acct_bank_name}, 은행 코드: ${props.item.acct_bank_code ? props.item.acct_bank_code : '000'} `"
-                                    @update:modelValue="setAcctBankName()" />
+                                        :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
+                                        label="은행 선택" item-title="title" item-value="code" single-line
+                                        @update:modelValue="setAcctBankName()" />
+                                </VCol>
+                                <VCol md="4" cols="12" :style="$vuetify.display.smAndDown ? 'text-align: end;' : ''">
+                                    <h5 style="margin-top: 0.5em; margin-left: 0.5em;">
+                                        {{ `은행 코드: ${props.item.acct_bank_code ? props.item.acct_bank_code : '000'} ` }}
+                                    </h5>
                                 </VCol>
                             </VRow>
                             <VRow v-else>
@@ -429,19 +448,42 @@ watchEffect(() => {
                                     </VRow>
                                 </VCol>
                             </VRow>
-                        </VCol>                        
-                        <VCol v-if="isAbleModiy(props.item.id)">
-                            <VTextarea v-model="props.item.note" counter label="메모사항"
-                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
-                        </VCol>                        
+                        </VCol>
+                        <VCol cols="12" v-if="isAbleModiy(props.item.id)">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VTextarea v-model="props.item.note" counter label="메모사항"
+                                        prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
+                                </VCol>
+                                <VCol v-if="false" cols="12" md="6" style="margin-bottom: auto;">
+                                    <VRow no-gutters>
+                                        <VCol>
+                                            <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점 언락권한'" 
+                                                :content="'하위 가맹점의 계정잠금해제, 패스워드변경 권한을 부여합니다.<br>하위 모든 가맹점의 패스워드, LOCK 상태를 제어할 수 있으므로 설정 시 해당 영업점은 2FA 설정을 권장합니다.'"/>
+                                        </VCol>
+                                        <VCol md="6">                                            
+                                            <BooleanRadio :radio="props.item.is_able_unlock_mcht"
+                                                @update:radio="props.item.is_able_unlock_mcht = $event">
+                                                <template #true>가능</template>
+                                                <template #false>불가능</template>
+                                            </BooleanRadio>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
                     </VRow>
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol cols="12" md="6" v-if="getUserLevel() >= 35 && props.item.id">
-            <MchtBatchOverview ref="mchtBatchOverview" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"/>
-            <br>
-            <PayModuleBatchOverview ref="payModuleBatchOverview" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"/>
-        </VCol>
+        <BatchDialog ref="mchtBatchDialog" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"
+            :item_type="ItemTypes.Merchandise" @update:select_idxs=""/>
+        <BatchDialog ref="pmodBatchDialog" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"
+            :item_type="ItemTypes.PaymentModule" @update:select_idxs=""/>
     </VRow>
 </template>
+<style scoped>
+:deep(.v-row) {
+  align-items: center;
+}
+</style>

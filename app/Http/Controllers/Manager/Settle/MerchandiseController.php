@@ -21,6 +21,7 @@ use App\Http\Traits\Settle\SettleTerminalTrait;
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Controllers\Utils\ChartFormat;
 
+use App\Http\Controllers\Manager\Settle\Settle;
 
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
@@ -74,16 +75,14 @@ class MerchandiseController extends Controller
 
         // ----- 가맹점 목록 조회 ---------
         $mcht_ids = $this->getExistTransUserIds($target_id, $target_settle_id);
-        #$terminal_settle_ids = $this->getTerminalSettleIds($request, 10, 'id');
+        $terminal_settle_ids = $this->getTerminalSettleIds($request, 10, 'id');
 
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
             ->where('use_collect_withdraw', false)
-            ->where('mcht_name', 'like', "%".$request->search."%");
-            /*
-            ->orWhere(function ($query) use($terminal_settle_ids) {    
-                $query->whereIn('id',$terminal_settle_ids);
+            ->where('mcht_name', 'like', "%".$request->search."%")
+            ->orWhere(function ($query) use($terminal_settle_ids) {
+                $query->whereIn('id', $terminal_settle_ids);
             });
-            */
         // 모아서 출금
         if($request->mcht_id)
             $query = $query->where('id', $request->mcht_id);
@@ -142,6 +141,13 @@ class MerchandiseController extends Controller
         $total = array_merge($total, ChartFormat::settle($transactions, $target_settle_amount));
         return $this->response(0, $total);
     }
+    /*
+    public function test(IndexRequest $request)
+    {
+        $data = Settle::getMerchandiseNoSettle($request);
+        return $this->response(0, $data);
+    }
+    */
 
     public function index(IndexRequest $request)
     {

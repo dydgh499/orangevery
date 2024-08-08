@@ -14,6 +14,7 @@ import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
+
 const { store, head, exporter } = useSearchStore()
 const { findSalesName } = useSalesFilterStore()
 const { selected, all_selected } = selectFunctionCollect(store)
@@ -45,6 +46,11 @@ const isExtendSettleCols = (parent_key: string, key: string) => {
 
 onMounted(() => {
     watchEffect(async () => {
+        /*
+        axios.get('/api/v1/manager/transactions/settle/merchandises/test', {
+                params: store.params
+            })
+        */
         if (store.getChartProcess() === false) {
             const r = await store.getChartData()
             totals.value = [r.data]
