@@ -140,7 +140,7 @@ class PostController extends Controller
             'Bucket' => Config::get('filesystems.disks.s3.bucket'),
             'Key'    => str_replace(Config::get('filesystems.disks.s3.url').'/', '', $link)
         ]);
-        $request = $client->createPresignedRequest($command, '+365 days');
+        $request = $client->createPresignedRequest($command, '+7 days');
         return $request->getUri();
     }
 
