@@ -55,7 +55,7 @@ trait SettleTrait
     {   //#date groupby하면 속도에서 느려짐
         return Transaction::noSettlement($target)
             ->distinct()
-            ->orderBy('desc', $col)
+            ->orderBy($col, 'desc')
             ->pluck($col)
             ->all();
     }
