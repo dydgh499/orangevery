@@ -455,7 +455,7 @@ watchEffect(() => {
                                     <VTextarea v-model="props.item.note" counter label="메모사항"
                                         prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
                                 </VCol>
-                                <VCol v-if="false" cols="12" md="6" style="margin-bottom: auto;">
+                                <VCol cols="12" md="6" style="margin-bottom: auto;">
                                     <VRow no-gutters>
                                         <VCol>
                                             <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점 언락권한'" 
