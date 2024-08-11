@@ -22,8 +22,8 @@ onMounted(async () => {
         <VCard rounded>
             <VCardText>
                 <VRow class="match-height">
-                    <VCol cols="12" md="12" class="d-flex justify-center align-center">
-                        <div style="width: 700px;">
+                    <VCol cols="12" class="d-flex justify-center align-center">
+                        <div style="max-width: 700px;">
                             <HandPayOverview :pay_module="pay_module" :merchandise="merchandise">
                                 <template #explain>
                                     <div style="padding-bottom: 1em;text-align: center;">

@@ -13,7 +13,7 @@ updatePayModule()
             <VCardText>
                 <VRow class="match-height">
                     <VCol cols="12" md="12" class="d-flex justify-center align-center">
-                        <div style="width: 700px;">
+                        <div style="max-width: 700px;">
                             <AuthPayOverview :pay_module="pay_module" :merchandise="merchandise" :return_url="return_url"
                                 :pay_url="pay_url" >
                                 <template #explain>
