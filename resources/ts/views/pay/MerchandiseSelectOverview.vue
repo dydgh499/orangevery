@@ -9,7 +9,7 @@ const pay_modules = <any>(inject('pay_modules'))
 
 </script>
 <template>
-    <VCardTitle style="margin: 0.5em 0;"><b>테스트 가맹점 정보</b></VCardTitle>
+    <VCardTitle><b>테스트 가맹점 정보</b></VCardTitle>
     <VCol>
         <VRow>
             <VCol md="6" cols="12">

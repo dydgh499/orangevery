@@ -21,7 +21,7 @@ watchEffect(() => {
 </script>
 <template>
     <VCard flat rounded>
-        <VCardText>
+        <VCardText style="padding: 0;">
             <slot name="explain">
             </slot>
             <VDivider />
