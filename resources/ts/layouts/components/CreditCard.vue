@@ -1,20 +1,24 @@
 <script setup lang="ts">
 interface Props {
     card_num: string,
-    buyer_name: string,
+    auth_num: string,
     yymm: string,
+    is_old_auth: boolean
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+    card_num: '',
+    auth_num: '',
+    yymm: '',
+})
 
 const cur_card_background = ref(Math.floor(Math.random() * 25 + 1));
 
-const card_name = ref(props.buyer_name)
+const auth_num = ref(props.auth_num)
 const card_number = ref(props.card_num)
 const card_month = ref('')
 const card_year = ref("")
 
-const amexCardMask = "#### ###### #####";
-const otherCardMask = "#### #### #### ####";
+const otherCardMask = "################";
 
 const getCardType = computed(() => {
     let number = card_number.value;
@@ -42,7 +46,7 @@ watchEffect(() => {
     card_month.value = props.yymm.length >= 2 ? props.yymm.slice(0, 2) : ''
     card_year.value = props.yymm.length == 4 ? props.yymm.slice(2, 4) : ''
     card_number.value = props.card_num
-    card_name.value = props.buyer_name
+    auth_num.value = props.auth_num
 })
 
 </script>
@@ -56,7 +60,6 @@ watchEffect(() => {
                         <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + cur_card_background + '.jpeg'"
                             class="card-item__bg">
                     </div>
-
                     <div class="card-item__wrapper">
                         <div class="card-item__top">
                             <img src="https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/chip.png"
@@ -69,49 +72,37 @@ watchEffect(() => {
                             </div>
                         </div>
                         <label for="cardNumber" class="card-item__number" ref="cardNumber">
-                            <template v-if="getCardType === 'amex'">
-                                <span v-for="(n, $index) in amexCardMask" :key="$index">
-                                    <transition name="slide-fade-up">
-                                        <div class="card-item__numberItem"
-                                            v-if="$index > 4 && $index < 14 && card_number.length > $index && n.trim() !== ''">
-                                            *</div>
-                                        <div class="card-item__numberItem" :class="{ '-active': n.trim() === '' }"
-                                            :key="$index" v-else-if="card_number.length > $index">
-                                            {{ card_number[$index] }}
-                                        </div>
-                                        <div class="card-item__numberItem" :class="{ '-active': n.trim() === '' }" v-else
-                                            :key="$index + 1">{{ n }}</div>
-                                    </transition>
+                            <span v-for="(n, $index) in otherCardMask" :key="$index">
+                                <span v-if="$index === 4 || $index === 8 || $index === 12" style="margin-left: 1em;">
                                 </span>
-                            </template>
-                            <template v-else>
-                                <span v-for="(n, $index) in otherCardMask" :key="$index">
-                                    <transition name="slide-fade-up">
-                                        <div class="card-item__numberItem"
-                                            v-if="$index > 4 && $index < 15 && card_number.length > $index && n.trim() !== ''">
-                                            *</div>
-                                        <div class="card-item__numberItem" :class="{ '-active': n.trim() === '' }"
-                                            :key="$index" v-else-if="card_number.length > $index">
-                                            {{ card_number[$index] }}
-                                        </div>
-                                        <div class="card-item__numberItem" :class="{ '-active': n.trim() === '' }" v-else
-                                            :key="$index + 1">{{ n }}</div>
-                                    </transition>
-                                </span>
-                            </template>
+                                <transition name="slide-fade-up">
+                                    <!-- 6 ~ 12 까지 마스킹 -->
+                                    <div class="card-item__numberItem"
+                                        v-if="$index > 5 && $index < 12 && card_number.length > $index && n.trim() !== ''">
+                                        *</div>
+                                    <!-- 카드번호 길이가 index보다 길으면 ?-->
+                                    <div class="card-item__numberItem" :class="{ '-active': n.trim() === '' }"
+                                        :key="$index" v-else-if="card_number.length > $index">
+                                        {{ card_number[$index] }}
+                                    </div>
+                                    <!-- 아직 입력되지 않은 자리들 ?-->
+                                    <div class="card-item__numberItem" :class="{ '-active': n.trim() === '' }" v-else
+                                        :key="$index + 1">{{ n }}</div>
+                                </transition>
+                            </span>
                         </label>
                         <div class="card-item__content">
-                            <label for="cardName" class="card-item__info" ref="cardName">
-                                <div class="card-item__holder">카드 소유주</div>
+                            <label for="cardName" class="card-item__info" ref="cardName" v-if="props.is_old_auth">
+                                <div class="card-item__holder">본인확인</div>
                                 <transition name="slide-fade-up">
-                                    <div class="card-item__name" v-if="card_name.length" key="1">
+                                    <div class="card-item__name" v-if="auth_num.length" key="1">
                                         <transition-group name="slide-fade-right">
                                             <span class="card-item__nameItem"
-                                                v-for="(n, $index) in card_name.replace(/\s\s+/g, ' ')"
+                                                v-for="(n, $index) in auth_num.replace(/\s\s+/g, ' ')"
                                                 v-bind:key="$index + 1">{{ n }}</span>
                                         </transition-group>
                                     </div>
-                                    <div class="card-item__name" v-else key="2">Full Name</div>
+                                    <div class="card-item__name" v-else key="2">생년월일 또는 사업자번호</div>
                                 </transition>
                             </label>
                             <div class="card-item__date" ref="cardDate">
@@ -135,22 +126,12 @@ watchEffect(() => {
                 </div>
             </div>
         </div>
-        <div class="nick-name">
-            BC체크카드 신용카드
-        </div>
     </div>
 </template>
 <style lang="scss" scoped>
 @import "https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600,700|Source+Sans+Pro:400,600,700&display=swap";
 
-.nick-name {
-  margin-block: 1em;
-  margin-inline: 0;
-  text-align: center;
-}
-
 .card-form {
-  padding: 1em;
   margin: auto;
 
   @media screen and (max-width: 576px) {
@@ -230,12 +211,12 @@ watchEffect(() => {
 }
 
 .card-item {
-  block-size: 250px;
+  block-size: 210px;
   margin-inline: auto;
-  max-inline-size: 410px;
+  max-inline-size: 380px;
 
   @media screen and (max-width: 480px) {
-    block-size: 220px;
+    block-size: 210px;
     max-inline-size: 310px;
   }
 
@@ -294,7 +275,7 @@ watchEffect(() => {
     border-radius: 15px;
     backface-visibility: hidden;
     block-size: 100%;
-    box-shadow: 0 10px 30px 0 rgba(14, 42, 90, 55%);
+    box-shadow: 0 5px 20px 0 rgba(14, 42, 90, 55%);
     transform: perspective(2000px) rotateY(0deg) rotateX(0deg) rotate(0deg);
     transform-style: preserve-3d;
     transition: all 0.8s cubic-bezier(0.71, 0.03, 0.56, 0.85);
@@ -349,12 +330,12 @@ watchEffect(() => {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    margin-block-end: 40px;
+    margin-block-end: 35px;
     padding-block: 0;
     padding-inline: 10px;
 
     @media screen and (max-width: 480px) {
-      margin-block-end: 25px;
+      margin-block-end: 20px;
     }
 
     @media screen and (max-width: 360px) {
@@ -363,10 +344,10 @@ watchEffect(() => {
   }
 
   &__chip {
-    inline-size: 60px;
+    inline-size: 45px;
 
     @media screen and (max-width: 480px) {
-      inline-size: 50px;
+      inline-size: 45px;
     }
 
     @media screen and (max-width: 360px) {
@@ -378,7 +359,7 @@ watchEffect(() => {
     position: relative;
     display: flex;
     justify-content: flex-end;
-    block-size: 45px;
+    block-size: 40px;
     inline-size: 100%;
     margin-inline-start: auto;
     max-inline-size: 100px;
@@ -431,7 +412,7 @@ watchEffect(() => {
     z-index: 4;
     block-size: 100%;
     font-family: "Source Code Pro", monospace;
-    padding-block: 25px;
+    padding-block: 20px;
     padding-inline: 15px;
     user-select: none;
 
@@ -443,8 +424,6 @@ watchEffect(() => {
 
   &__name {
     overflow: hidden;
-    font-size: 18px;
-    line-height: 1;
     max-inline-size: 100%;
     text-overflow: ellipsis;
     text-transform: uppercase;
@@ -465,23 +444,19 @@ watchEffect(() => {
     display: inline-block;
     color: #fff;
     cursor: pointer;
-    font-size: 27px;
+    font-size: 20px;
     font-weight: 500;
+    inline-size: 100%;
     line-height: 1;
-    margin-block-end: 20px;
-    padding-block: 5px;
-    padding-inline: 10px;
+    text-align: center;
 
     @media screen and (max-width: 480px) {
-      font-size: 21px;
-      margin-block-end: 15px;
       padding-block: 10px;
       padding-inline: 10px;
     }
 
     @media screen and (max-width: 360px) {
       font-size: 19px;
-      margin-block-end: 10px;
       padding-block: 10px;
       padding-inline: 10px;
     }
@@ -489,7 +464,7 @@ watchEffect(() => {
 
   &__numberItem {
     display: inline-block;
-    inline-size: 15px;
+    inline-size: 12px;
 
     &.-active {
       inline-size: 30px;
@@ -516,6 +491,7 @@ watchEffect(() => {
     display: flex;
     align-items: flex-start;
     color: #fff;
+    margin-block-start: 1em;
   }
 
   &__date {
@@ -525,7 +501,7 @@ watchEffect(() => {
     padding: 10px;
     cursor: pointer;
     font-size: 18px;
-    inline-size: 62px;
+    inline-size: 82px;
     margin-inline-start: auto;
     white-space: nowrap;
 

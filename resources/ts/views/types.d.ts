@@ -769,6 +769,7 @@ export interface NotiSendHistory {
 export interface BasePay {
     pmod_id: number,
     amount: number,
+    user_agent: string,
     item_name: string,
     buyer_name: string,
     buyer_phone: string,
@@ -777,8 +778,7 @@ export interface BasePay {
     temp?: string,
 }
 
-export interface HandPay extends BasePay{
-    is_old_auth: number,
+export interface HandPay extends BasePay {
     card_num: string,
     yymm: string,
     auth_num?: string,
@@ -786,7 +786,6 @@ export interface HandPay extends BasePay{
 }
 
 export interface AuthPay extends BasePay{
-    user_agent: string,
     return_url: string,
 }
 

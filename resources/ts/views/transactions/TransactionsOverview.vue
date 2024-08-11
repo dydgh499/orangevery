@@ -553,7 +553,7 @@ onMounted(async () => {
                                     <template #name>상품명</template>
                                     <template #input>
                                         <VTextField v-model="props.item.item_name" type="text" placeholder="상품명을 입력해주세요"
-                                            prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
+                                            prepend-inner-icon="tabler:shopping-bag"
                                             maxlength="100" />
                                     </template>
                                 </CreateHalfVCol>

@@ -263,7 +263,7 @@ onMounted(() => {
                         <template #name>상품명</template>
                         <template #input>
                             <VTextField v-model="hand_pay_info.item_name" type="text"
-                                prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
+                                prepend-inner-icon="tabler:shopping-bag"
                                 maxlength="100" :rules="[requiredValidatorV2(hand_pay_info.item_name, '상품명')]" placeholder="상품명을 입력해주세요" />
                         </template>
                     </CreateHalfVCol>

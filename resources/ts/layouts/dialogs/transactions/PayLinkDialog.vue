@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { requiredValidatorV2 } from '@validators'
 import { axios } from '@axios'
+import { requiredValidatorV2 } from '@validators'
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
@@ -100,7 +100,7 @@ defineExpose({
                                 <template #name>상품명</template>
                                 <template #input>
                                     <VTextField v-model="item_name"
-                                        prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
+                                        prepend-inner-icon="tabler:shopping-bag"
                                         maxlength="100" placeholder="상품명을 입력해주세요" persistent-placeholder
                                         :rules="[requiredValidatorV2(item_name, '상품명')]" />
                                 </template>
