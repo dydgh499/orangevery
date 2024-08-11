@@ -9,13 +9,8 @@ const pay_modules = <any>(inject('pay_modules'))
 
 </script>
 <template>
+    <VCardTitle style="margin: 0.5em 0;"><b>테스트 가맹점 정보</b></VCardTitle>
     <VCol>
-        <div style="text-align: center;">
-            <b>
-                결제 테스트를 할 가맹점 및 결제모듈을 선택하신 후 결제하기 버튼을 눌러주세요.
-            </b>
-        </div>
-        <br>
         <VRow>
             <VCol md="6" cols="12">
                 <VRow no-gutters>
