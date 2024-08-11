@@ -141,7 +141,7 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold">대표자 연락처</VCol>
+                                <VCol class="font-weight-bold" cols="4">대표자 연락처</VCol>
                                 <VCol md="8"><span>{{ props.item.phone_num }}</span></VCol>
                             </VRow>
                         </VCol>
@@ -150,7 +150,7 @@ watchEffect(() => {
                     <VRow>
                         <VCol cols="12" md="12">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol cols="4">
+                                <VCol md="2" cols="4">
                                     <label>주소</label>
                                 </VCol>
                                 <VCol md="10">
@@ -169,7 +169,7 @@ watchEffect(() => {
                     <VRow>
                         <VCol cols="12">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol cols="4">
+                                <VCol md="2" cols="4">
                                     <label>사업자등록번호</label>
                                 </VCol>
                                 <VCol md="10">

@@ -259,7 +259,7 @@ watchEffect(() => {
                                     </FeeChangeBtn>
                             </VRow>
                             <VRow v-else>
-                                <VCol md="3" class="font-weight-bold">가맹점/유보금/수수료율</VCol>
+                                <VCol md="3" class="font-weight-bold">가맹점/유보금 수수료율</VCol>
                                 <VCol md="4">
                                     <span>{{ props.item.trx_fee }} %</span>
                                 </VCol>
