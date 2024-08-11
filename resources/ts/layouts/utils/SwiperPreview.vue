@@ -113,11 +113,11 @@ watchEffect(() => {
 .swiper {
   block-size: 100%;
   inline-size: 100%;
-  padding-block-end: 50px;
+  padding-block-end: 30px;
 
   .slide {
-    block-size: 80px;
-    inline-size: 80px;
+    block-size: 120px;
+    inline-size: 120px;
 
     img {
       display: block;
