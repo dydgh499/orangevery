@@ -69,7 +69,7 @@ watchEffect(() => {
                     <VRow class="pt-3">
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol cols="4">
+                                <VCol cols="5" md="4">
                                     <label>* 아이디
                                         <VAvatar class="cursor-pointer" color="primary preview" variant="tonal"
                                             @click="modifyProfleimage()">
@@ -84,11 +84,11 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold" cols="4">
+                                <VCol class="font-weight-bold" cols="5">
                                     <label>
                                         아이디
                                         <VAvatar class="cursor-pointer" color="primary preview" variant="tonal">
-                                            <VImg :src="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]" />
+                                            <VImg :src="props.item.profile_img ? props.item.profile_img : avatars[Math.floor(Math.random() * avatars.length)]" />
                                         </VAvatar>
                                     </label>
                                 </VCol>
@@ -97,7 +97,7 @@ watchEffect(() => {
                         </VCol>
                         <VCol cols="12" md="6" v-if="props.id == 0">
                             <VRow no-gutters>
-                                <VCol cols="4">
+                                <VCol cols="5" md="4">
                                     <label>* 패스워드</label>
                                 </VCol>
                                 <VCol md="8">
@@ -113,7 +113,7 @@ watchEffect(() => {
                     <VRow>
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol cols="4">
+                                <VCol cols="5" md="4">
                                     <label>대표자명</label>
                                 </VCol>
                                 <VCol md="8">
@@ -124,13 +124,13 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold" cols="4">대표자명</VCol>
+                                <VCol class="font-weight-bold" cols="5" md="4">대표자명</VCol>
                                 <VCol md="8"><span>{{ props.item.nick_name }}</span></VCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol cols="4">
+                                <VCol cols="5" md="4">
                                     <label>대표자 연락처</label>
                                 </VCol>
                                 <VCol md="8">
@@ -141,7 +141,7 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold" cols="4">대표자 연락처</VCol>
+                                <VCol class="font-weight-bold" cols="5" md="4">대표자 연락처</VCol>
                                 <VCol md="8"><span>{{ props.item.phone_num }}</span></VCol>
                             </VRow>
                         </VCol>
@@ -150,7 +150,7 @@ watchEffect(() => {
                     <VRow>
                         <VCol cols="12" md="12">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol md="2" cols="4">
+                                <VCol md="2" cols="5">
                                     <label>주소</label>
                                 </VCol>
                                 <VCol md="10">
@@ -160,7 +160,7 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold" cols="4">주소</VCol>
+                                <VCol class="font-weight-bold" cols="5" md="2">주소</VCol>
                                 <VCol md="10"><span>{{ props.item.addr }}</span></VCol>
                             </VRow>
                         </VCol>
@@ -169,7 +169,7 @@ watchEffect(() => {
                     <VRow>
                         <VCol cols="12">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol md="2" cols="4">
+                                <VCol md="2" cols="5">
                                     <label>사업자등록번호</label>
                                 </VCol>
                                 <VCol md="10">
@@ -186,7 +186,7 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold" cols="4">사업자등록번호</VCol>
+                                <VCol class="font-weight-bold" cols="5" md="2">사업자등록번호</VCol>
                                 <VCol md="10"><span>{{ props.item.business_num }}</span></VCol>
                             </VRow>
                         </VCol>
@@ -217,7 +217,7 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold" cols="4">주민등록번호</VCol>
+                                <VCol class="font-weight-bold" cols="5" md="2">주민등록번호</VCol>
                                 <VCol md="10"><span>{{ props.item.resident_num_front }} - *******</span></VCol>
                             </VRow>
                         </VCol>
