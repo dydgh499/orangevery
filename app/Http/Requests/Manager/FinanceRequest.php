@@ -22,6 +22,7 @@ class FinanceRequest extends FormRequest
         'bank_code',
         'nick_name',
         'withdraw_acct_num',
+        'deposit_type',
     ];
 
     public function authorize()

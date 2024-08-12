@@ -299,6 +299,7 @@ return [
         'iv' => 'iv',
         'finance_company_num' => '금융 VAN 타입',
         'is_agency_van' => '지급대행 사용여부',
+        'deposit_type' => '입금자 타입',
         //noti
         'noti_status' => '노티 사용 상태',
         'send_url'  => '전송 URL',

@@ -301,6 +301,7 @@ export interface FinanceVan {
     withdraw_acct_num: string,
 
     min_balance_limit: number,
+    deposit_type: number,
     balance_status?: number,
     balance?: number,
 }

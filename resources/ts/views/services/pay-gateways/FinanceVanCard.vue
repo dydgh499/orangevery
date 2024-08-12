@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVColV2 from '@/layouts/utils/CreateHalfVColV2.vue'
 import { getUserLevel } from '@/plugins/axios'
 import { useRequestStore } from '@/views/request'
@@ -151,13 +152,27 @@ onMounted(async () => {
                                             persistent-placeholder suffix="만원" />
                                 </template>
                             </CreateHalfVColV2>
+                            <CreateHalfVColV2 :mdl="5" :mdr="7">
+                                <template #l_name>
+                                    <BaseQuestionTooltip :location="'top'" text="입금자 타입"
+                                            :content="`별칭 선택일 경우 해당 금융 VAN의 별칭으로 입금되며<br>예금주 선택일 경우 각 대상의 예금주(가맹점, 영업점)으로 입금됩니다.`" />
+                                </template>
+                                <template #l_input>
+                                    <BooleanRadio :radio="props.item.deposit_type" @update:radio="props.item.deposit_type = $event">
+                                        <template #true>예금주</template>
+                                        <template #false>별칭</template>
+                                    </BooleanRadio>
+                                </template>
+                                <template #r_name>
+                                    <BaseQuestionTooltip :location="'top'" text="별칭"
+                                            :content="`사이트 내에서 관리될 별칭입니다.`" />
+                                </template>
+                                <template #r_input>
+                                    <VTextField v-model="props.item.nick_name" 
+                                        prepend-inner-icon="twemoji-spiral-notepad" maxlength="10"/>
+                                </template>
+                            </CreateHalfVColV2>
                             
-                            <VRow>
-                                <VCol>
-                                    <VTextarea v-model="props.item.nick_name" counter label="별칭(비고)"
-                                        prepend-inner-icon="twemoji-spiral-notepad" auto-grow maxlength="10"/>
-                                </VCol>
-                            </VRow>
                             <VRow>
                                 <VCol class="d-flex gap-4 pt-10">
                                     <VBtn type="button" style="margin-left: auto;"
