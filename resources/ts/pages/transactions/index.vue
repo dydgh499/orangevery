@@ -104,12 +104,12 @@ onMounted(() => {
             :add="user_info.level >= 35" add_name="매출" :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
-                    :sales="true">
+                    :sales="getUserLevel() > 10 ? true : false">
                     <template #sales_extra_field>
                         <VCol cols="6" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="getAllLevels()"
                                 :label="`등급 선택`" item-title="title" item-value="id"
-                                @update:modelValue="store.updateQueryString({ level: store.params.level })" />
+                                @update:modelValue="store.updateQueryString({ level: store.params.level })"/>
                         </VCol>
                     </template>
                     <template #pg_extra_field>

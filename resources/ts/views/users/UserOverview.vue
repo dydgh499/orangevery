@@ -84,7 +84,7 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold" cols="5">
+                                <VCol class="font-weight-bold" cols="5" md="4">
                                     <label>
                                         아이디
                                         <VAvatar class="cursor-pointer" color="primary preview" variant="tonal">
@@ -296,7 +296,7 @@ watchEffect(() => {
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol cols="12" md="6" v-if="getUserLevel() >= 35 || corp.id !== 8">
+        <VCol cols="12" md="6" v-if="getUserLevel() >= 35 || (corp.id !== 35 && corp.id !== 18)">
             <VCard>
                 <VCardItem>
                     <VCardTitle>계약파일</VCardTitle>

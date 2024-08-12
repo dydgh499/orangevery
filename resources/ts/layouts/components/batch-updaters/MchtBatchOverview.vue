@@ -169,7 +169,7 @@ const setMchtFee = async (type: string) => {
         post(`merchandises/${type}`, {
             'trx_fee': parseFloat(merchandise.trx_fee),
             'hold_fee': parseFloat(merchandise.hold_fee),
-            'apply_dt': formatDate(new Date),
+            'apply_dt': apply_dt,
         }, fee_type)
     }
 }

@@ -19,9 +19,9 @@ const show = () => {
     });
 }
 
-const submit = async(apply_dt: string) => {
+const submit = async() => {
     visible.value = false
-    resolveCallback(apply_dt)
+    resolveCallback(apply_dt.value)
 }
 
 const handleEvent = (event: KeyboardEvent) => {
@@ -42,8 +42,8 @@ defineExpose({
                         <template #name>적용일</template>
                         <template #input>
                             <VTextField v-model="apply_dt" type="date" :rules="[requiredValidatorV2(apply_dt, '적용일')]"                            
-                            @keydown.enter="handleEvent"
-                            style="max-width: 10em;"
+                                @keydown.enter="handleEvent"
+                                style="max-width: 10em;"
                             />
                         </template>
                     </CreateHalfVCol>
@@ -53,10 +53,10 @@ defineExpose({
                 <h5>실수로 적용된 예약적용 수수료는 "수수료율 변경이력" 탭에서 삭제시 반영되지 않습니다.</h5>
             </VCardText>
             <VCardText class="d-flex justify-end gap-3 flex-wrap">
-                <VBtn color="secondary" variant="tonal" @click="submit('')">
+                <VBtn color="secondary" variant="tonal" @click="visible = false; resolveCallback('')">
                     취소
                 </VBtn>
-                <VBtn @click="submit(apply_dt)">
+                <VBtn @click="submit()">
                     확인
                 </VBtn>
             </VCardText>
