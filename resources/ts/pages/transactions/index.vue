@@ -242,6 +242,9 @@ onMounted(() => {
                             <span v-else-if="_key == 'extra_col'">
                                 <ExtraMenu :item="item"></ExtraMenu>
                             </span>
+                            <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
+                                {{ item[_key] }}
+                            </span>     
                             <span v-else>
                                 {{ item[_key] }}
                             </span>

@@ -83,6 +83,9 @@ const showAvatar = (preview: string) => {
                                 <span v-else-if="_key == 'extra_col'">
                                     <UserExtraMenu :item="item" :type="2" :key="item['id']" />
                                 </span>
+                                <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
+                                    {{ item[_key] }}
+                                </span>     
                                 <span v-else>
                                     {{ item[_key] }}
                                 </span>

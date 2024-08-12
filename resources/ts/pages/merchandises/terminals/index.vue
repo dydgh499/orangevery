@@ -106,6 +106,9 @@ const all_levels = allLevels()
                         <span v-else-if="_key == 'comm_calc_level'">
                             {{ all_levels.find(level => level['id'] === item[_key])?.title }}
                         </span>
+                        <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
+                            {{ item[_key] }}
+                        </span>     
                         <span v-else>
                             {{ item[_key] }}
                         </span>

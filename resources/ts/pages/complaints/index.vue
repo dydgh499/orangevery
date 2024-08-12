@@ -14,9 +14,11 @@ provide('exporter', exporter)
     <BaseIndexView placeholder="가맹점 상호, 고객명, 승인번호, 거래번호 검색" :metas="[]" :add="getUserLevel() >= 35 ? true : false" add_name="민원" :date_filter_type="DateFilters.SETTLE_RANGE">
         <template #index_extra_field>
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.history_type" density="compact" variant="outlined" item-title="title" item-value="id"
-                    :items="[{ id: null, title: '전체' }].concat(complaint_types)" label="민원 상태" eager  @update:modelValue="store.updateQueryString({complaint_type: store.params.complaint_type})" />
+                :items="[{ id: null, title: '전체' }].concat(complaint_types)" label="민원 상태" eager  @update:modelValue="store.updateQueryString({complaint_type: store.params.complaint_type})" 
+                :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''"/>
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager @update:modelValue="store.updateQueryString({page_size: store.params.page_size})"/>
+                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager @update:modelValue="store.updateQueryString({page_size: store.params.page_size})"
+                :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''"/>
         </template>
         <template #headers>
             <tr>
@@ -50,6 +52,9 @@ provide('exporter', exporter)
                                     <span>{{ item[_key] }}</span>
                                 </VTooltip>
                             </div>
+                            <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
+                                {{ item[_key] }}
+                            </span>     
                             <span v-else>
                                 {{ item[_key] }}
                             </span>

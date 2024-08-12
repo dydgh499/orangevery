@@ -64,6 +64,9 @@ const showAvatar = (preview: string) => {
                                     <VAvatar :image="item[_key]" class="me-3 preview"
                                         @click="showAvatar(item['profile_img'])" />
                                 </span>
+                                <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
+                                    {{ item[_key] }}
+                                </span>     
                                 <span v-else>
                                     {{ item[_key] }}
                                 </span>

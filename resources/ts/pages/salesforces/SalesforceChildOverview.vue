@@ -84,6 +84,9 @@ const getChildDepth = computed(() => {
                 <span v-else-if="key == 'extra_col'">
                     <UserExtraMenu :item="props.salesforce" :type="1" :key="props.salesforce.id"/>
                 </span>
+                <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
+                    {{ item[_key] }}
+                </span>     
                 <span v-else>
                     {{ props.salesforce[key] }}
                 </span>

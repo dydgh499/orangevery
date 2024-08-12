@@ -170,6 +170,9 @@ onMounted(() => {
                                         {{ item[_key] ? 'O' : 'X' }}
                                     </VChip>
                                 </span>
+                                <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
+                                    {{ item[_key] }}
+                                </span>     
                                 <span v-else>
                                     {{ item[_key] }}
                                 </span>
