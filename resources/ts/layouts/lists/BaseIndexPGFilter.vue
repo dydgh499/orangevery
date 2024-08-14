@@ -60,7 +60,7 @@ if(corp.pv_options.free.init_search_filter) {
         <slot name="pg_extra_field"></slot>
         <VCol cols="6" sm="3">
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
+                :items="[10, 20, 30, 50, 100, 200]" label="조회 개수" id="page-size-filter" eager @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
         </VCol>
     </VRow>
 </template>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import HolidayDlg from '@/layouts/dialogs/services/HolidayDlg.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { useRequestStore } from '@/views/request'
 import ExtraMenu from '@/views/services/holidays/ExtraMenu.vue'
 import { rest_types, useSearchStore } from '@/views/services/holidays/useStore'
-import { useRequestStore } from '@/views/request'
 import { DateFilters } from '@core/enums'
 
 const { 
@@ -38,7 +38,7 @@ onMounted(() => {
         <BaseIndexView placeholder="공휴일 명칭" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.NOT_USE">
             <template #index_extra_field>
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                    :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
+                    :items="[10, 20, 30, 50, 100, 200]" label="조회 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
                     <VBtn prepend-icon="material-symbols:holiday-village" @click="holidayDlg.show({id:0})" size="small">
                         공휴일 추가
                     </VBtn>

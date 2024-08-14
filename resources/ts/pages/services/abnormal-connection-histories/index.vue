@@ -38,7 +38,7 @@ if(getUserLevel() < 35) {
                     style="max-width: 10em;"
                     :items="[{id:null, title:'전체'}].concat(connection_types)" label="접근 타입" eager  @update:modelValue="store.updateQueryString({page_size: store.params.connection_type})" />
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined" id="page-size-filter"
-                    :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
+                    :items="[10, 20, 30, 50, 100, 200]" label="조회 개수" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
                     
             </template>
             <template #headers>

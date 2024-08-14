@@ -31,7 +31,7 @@ const moveContent = (post: Post) => {
         </template>
         <template #index_extra_field>
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})"
+                :items="[10, 20, 30, 50, 100, 200]" label="조회 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})"
                 :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''"/>
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.type"
                 :items="[{id:null, title:'전체'}].concat(types)" prepend-inner-icon="fxemoji-notepage" label="게시글 타입"

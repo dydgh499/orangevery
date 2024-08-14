@@ -91,24 +91,22 @@ trait FormRequestTrait
     protected function getParamsBaseFile($keys)
     {
         $data = [];
-        if(env('FILESYSTEM_DISK') === 's3')
+        foreach($keys as $key)
         {
-            foreach($keys as $key)
+            if(isset($this[$key]))
             {
-                if(isset($this[$key]))
+                if(strpos($this[$key], 'amazonaws.com') && strpos($this[$key], '?X-Amz-Content-Sha256') !== false)
                 {
-                    if(env('FILESYSTEM_DISK') === 's3' && strpos($this[$key], '?X-Amz-Content-Sha256') !== false)
-                    {
-                        $idx = strpos($this[$key], '?X-Amz-Content-Sha256');
-                        $data[$key] = substr($this[$key], 0, $idx);    
-                    }
-                    else
-                        $data[$key] = $this[$key];
+                    $idx = strpos($this[$key], '?X-Amz-Content-Sha256');
+                    $data[$key] = substr($this[$key], 0, $idx);    
                 }
                 else
-                    $data[$key] = null;
-            }    
-        }
+                    $data[$key] = $this[$key];
+            }
+            else
+                $data[$key] = null;
+        }    
+        
         return $data;
     }
 }
