@@ -82,7 +82,7 @@ const moveContent = (post: Post) => {
                             </span>
                             <span v-else-if="_key == 'extra_col'">
                                 <VBtn size="small" type="button" color="primary" @click="router.push('/posts/reply?parent_id=' + item['id'])">
-                                    <VIcon end size="22" icon="gridicons:reply" />
+                                    <VIcon size="22" icon="gridicons:reply" />
                                     답변하기
                                 </VBtn>
                             </span>

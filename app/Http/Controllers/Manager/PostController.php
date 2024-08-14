@@ -62,7 +62,7 @@ class PostController extends Controller
             ->whereNull('parent_id')
             ->with(['replies']);
 
-        if($request->type)
+        if($request->type !== null)
             $query = $query->where('type', $request->type);
         if(Ablilty::isOperator($request) == false)
         {

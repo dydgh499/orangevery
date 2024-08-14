@@ -69,7 +69,7 @@ const getChildDepth = computed(() => {
                 </span>
                 <span v-else-if="key == 'extra_col'">
                     <VBtn size="small" type="button" color="primary" @click="router.push('/posts/reply?parent_id=' + props.post['id'])">
-                        <VIcon end size="22" icon="gridicons:reply" />
+                        <VIcon size="22" icon="gridicons:reply" />
                         답변하기
                     </VBtn>
                 </span>

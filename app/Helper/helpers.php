@@ -195,12 +195,12 @@
 
     function s3ImageLinkConvert($before_history_detail) 
     {
-        $params = [
+        $keys = [
             'contract_img', 'id_img', 'passbook_img', 'bsin_lic_img', 
             'profile_img', 'favicon_img', 'og_img', 'login_img', 'logo_img',
             'logo_img', 'favicon_img', 'og_img',
         ];
-        foreach($params as $key)
+        foreach($keys as $key)
         {
             if(isset($before_history_detail[$key]))
             {
@@ -209,8 +209,6 @@
                     $idx = strpos($before_history_detail[$key], '?X-Amz-Content-Sha256');
                     $before_history_detail[$key] = substr($before_history_detail[$key], 0, $idx);    
                 }
-                else
-                    $before_history_detail[$key] = $before_history_detail[$key];
             }
         }   
         

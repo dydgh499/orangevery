@@ -27,7 +27,6 @@ const batchRemove = async() => {
         selected.value = []
     }
 }
-
 </script>
 <template>
     <BaseIndexView placeholder="가맹점명 검색" :metas="[]" :add="false" add_name="가맹점" :date_filter_type="DateFilters.DATE_RANGE">
