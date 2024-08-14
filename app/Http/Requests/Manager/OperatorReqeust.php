@@ -15,6 +15,10 @@ class OperatorReqeust extends FormRequest
         'level',
     ];
 
+    public $image_keys = [
+        'profile_img',
+    ];
+    
     public function authorize()
     {
         return $this->user()->tokenCan(40) ? true : false;
@@ -50,7 +54,7 @@ class OperatorReqeust extends FormRequest
 
     public function data()
     {
-        $data = $this->getParmasBaseKey();
+        $data = array_merge($this->getParmasBaseKey(), $this->getParamsBaseFile($this->image_keys));
         $data['brand_id'] = $this->user()->brand_id;
         return $data;
     }

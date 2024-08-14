@@ -1,3 +1,4 @@
+import { getUserLevel } from '@/plugins/axios'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 export const useSearchStore = defineStore('mchtFeeHistorySearchStore', () => {
@@ -6,19 +7,26 @@ export const useSearchStore = defineStore('mchtFeeHistorySearchStore', () => {
     
     const headers: Record<string, string> = {
         'id' : 'NO.',
-        'apply_dt': '적용일',
         'mcht_name' : '가맹점 상호',
-        'bf_trx_fee' : '이전 수수료',
-        'aft_trx_fee' : '변경 수수료',
-        'bf_hold_fee' : '이전 유보금 수수료',
-        'aft_hold_fee' : '변경 유보금 수수료',
-        'change_status' : '변경상태',
         'created_at' : '생성시간',
-        'updated_at' : '업데이트시간',
-        'extra_col': '더보기',
+        'apply_dt': '적용예정일',
+        'change_status' : '변경상태',
+        'bf_trx_fee' : '수수료',
+        'bf_hold_fee' : '유보금 수수료',
+        'aft_trx_fee' : '수수료',
+        'aft_hold_fee' : '유보금 수수료',
     }
 
-    head.sub_headers.value = []
+    head.sub_headers.value = [
+        head.getSubHeaderFormat('적용정보', 'id', 'change_status', 'string', 5),
+        head.getSubHeaderFormat('이전 값', 'bf_trx_fee', 'bf_hold_fee', 'string', 2),
+        head.getSubHeaderFormat('변경 값', 'aft_trx_fee', 'aft_hold_fee', 'string', 2),
+    ]
+    if(getUserLevel() >= 35) {
+        headers['remove'] = '삭제'
+        head.sub_headers.value.push(head.getSubHeaderFormat('', 'remove', 'remove', 'string', 1))
+    }
+
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
     

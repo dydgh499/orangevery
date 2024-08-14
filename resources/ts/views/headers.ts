@@ -68,7 +68,14 @@ export const Header = (path: string, file_name: string) => {
         getSubHeaderComputed
     } = SubHeader(path)
 
+    const _init = (_headers: object) => {
+        const kos = Object.keys(headers.value).map(key => headers.value[key].ko)
+        if (!_.isEqual(kos, Object.values(_headers)))
+            headers.value = {}
+    }
+
     const initHeader = (_headers: object, result: Filter): Filter => {
+        _init(_headers)
         for (const [key, value] of Object.entries(_headers)) {
             if (typeof value === 'object')
                 result[key] = initHeader(value, {})

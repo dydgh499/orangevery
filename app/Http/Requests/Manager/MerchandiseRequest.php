@@ -47,6 +47,13 @@ class MerchandiseRequest extends FormRequest
         'id_file',
         'profile_file',
     ];
+    public $image_keys = [
+        'passbook_img',
+        'contract_img',
+        'bsin_lic_img',
+        'id_img',
+        'profile_img',
+    ];
     public $integer_keys = [
         'specified_time_disable_limit',
         'phone_auth_limit_count',
@@ -125,8 +132,12 @@ class MerchandiseRequest extends FormRequest
     }
     public function data()
     {
-        $data = array_merge($this->getParmasBaseKey(), $this->getParmasBaseKeyV2($this->integer_keys, 0));
-        $data = array_merge($data, $this->getParmasBaseKeyV2($this->nullable_keys, null));
+        $data = array_merge(
+            $this->getParmasBaseKey(), $this->getParmasBaseKeyV2($this->integer_keys, 0),
+            $this->getParmasBaseKeyV2($this->nullable_keys, null), $this->getParamsBaseFile($this->image_keys)
+        );
+
+        
         $data['brand_id'] = $this->user()->brand_id;
         if($data['acct_bank_code'] == '')
             $data['acct_bank_code'] = "000";

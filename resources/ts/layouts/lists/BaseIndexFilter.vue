@@ -224,16 +224,19 @@ queryToStoreParams()
                                     @click="store.setTable(); store.updateQueryString({ search: search })">
                                     검색
                                 </VBtn>
-                                <VBtn variant="tonal" color="secondary" prepend-icon="tabler-filter"  size="small"
+                                <VBtn variant="tonal" color="secondary" prepend-icon="tabler-filter" size="small"
                                     @click="head.filter.show()">
                                     검색 필터
                                 </VBtn>
-                                <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel"  size="small"
+                                <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel" size="small"
                                     @click="exporter(1)">
                                     엑셀 추출
                                 </VBtn>
-                                <VBtn prepend-icon="tabler-plus" @click="store.edit(0)" v-if="props.add"  size="small">
-                                    {{ props.add_name }} 추가
+                                <VBtn prepend-icon="tabler-plus" @click="store.edit(0)" v-if="props.add" size="small">
+                                    {{ props.add_name }}
+                                    <VTooltip activator="parent" location="top">
+                                        추가하기
+                                    </VTooltip>
                                 </VBtn>
                                 <slot name="index_extra_field"></slot>
                             </div>

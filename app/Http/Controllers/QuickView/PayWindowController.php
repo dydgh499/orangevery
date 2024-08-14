@@ -12,6 +12,7 @@ use Carbon\Carbon;
 class PayWindowController extends Controller
 {
     use ExtendResponseTrait;
+    
     public function __construct()
     {
 
@@ -35,5 +36,10 @@ class PayWindowController extends Controller
         }
         else
             return $this->extendResponse(1999, '존재하지 않은 결제창 입니다.');        
+    }
+
+    public function signIn(Request $request)
+    {
+
     }
 }

@@ -143,6 +143,33 @@ class FeeChangeHistoryController extends Controller
         return $this->deleteHistory($this->sf_fee_histories, '영업점 수수료율', $id);
     }
 
+    private function batchDeleteHistory($orm, $target, $ids)
+    {
+        $query = $orm->whereIn('id', $ids);
+        $res = DB::transaction(function () use($query, $target) {
+            $res  = $query->update(['is_delete' => true]);    
+            $histories = (clone $query)->get();
+            foreach($histories as $history)
+            {
+                $_history = json_decode(json_encode($history), true);
+                $history_type = $_history['change_status'] ? HistoryType::HISTORY_DELETE : HistoryType::BOOK_DELETE;
+                operLogging($history_type, $target, $_history, $_history, "#".$history['id']);
+            }
+            return true;
+        });
+        return $this->response($res ? 4 : 990);
+    }
+
+    public function deleteMerchandiseBatch(Request $request)
+    {
+        return $this->batchDeleteHistory($this->mcht_fee_histories, '가맹점 수수료율', $request->selected_idxs);
+    }
+
+    public function deleteSalesforceBatch(Request $request)
+    {
+        return $this->batchDeleteHistory($this->sf_fee_histories, '영업점 수수료율', $request->selected_idxs);
+    }
+
     /**
      * 가맹점/영업점 수수료율 즉시/예약적용 
      */

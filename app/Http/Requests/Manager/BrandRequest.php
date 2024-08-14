@@ -41,7 +41,15 @@ class BrandRequest extends FormRequest
         'id_file',
         'og_file',
     ];
-
+    public $image_keys = [
+        'logo_img',         
+        'favicon_img',
+        'passbook_img',
+        'contract_img',
+        'bsin_lic_img',
+        'id_img',
+        'og_img',
+    ];
     public function authorize()
     {
         return $this->user()->tokenCan(40) ? true : false;
@@ -107,7 +115,7 @@ class BrandRequest extends FormRequest
 
     public function data()
     {
-        $data = $this->getParmasBaseKey();
+        $data = array_merge($this->getParmasBaseKey(), $this->getParamsBaseFile($this->image_keys));
         $data['pv_options'] = json_encode($this->pv_options); 
         $data['theme_css']  = json_encode($this->theme_css);
         $data['dev_fee']    = $this->dev_fee/100;

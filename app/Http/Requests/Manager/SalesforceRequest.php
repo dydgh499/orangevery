@@ -28,6 +28,21 @@ class SalesforceRequest extends FormRequest
         'settle_day',
         'note',
     ];
+
+    public $file_keys = [
+        'passbook_file',
+        'contract_file',
+        'bsin_lic_file',
+        'id_file',
+        'profile_file',
+    ];
+    public $image_keys = [
+        'passbook_img',
+        'contract_img',
+        'bsin_lic_img',
+        'id_img',
+        'profile_img',
+    ];
     public $integer_keys = [
         'sales_fee',
         'is_able_modify_mcht',
@@ -87,12 +102,23 @@ class SalesforceRequest extends FormRequest
 
     public function bodyParameters()
     {
-        $params = $this->getDocsParameters($this->keys);
+        $params = array_merge($this->getDocsParameters($this->keys), $this->getDocsParameters($this->file_keys));
+        $params = array_merge($params, $this->getDocsParameters($this->integer_keys));
+        $params = array_merge($params, $this->getDocsParameters($this->nullable_keys));
+        
+        $params['passbook_file']['description']  .= '(max-width:500px 이상은 리사이징)';
+        $params['contract_file']['description']  .= '(max-width:500px 이상은 리사이징)';
+        $params['bsin_lic_file']['description']  .= '(max-width:500px 이상은 리사이징)';
+        $params['id_file']['description']    .= '(max-width:500px 이상은 리사이징)';
         return $params;
     }
     public function data()
     {
-        $data = array_merge($this->getParmasBaseKeyV2($this->integer_keys, 0), $this->getParmasBaseKeyV2($this->nullable_keys, null));
+        $data = array_merge(
+            $this->getParmasBaseKeyV2($this->integer_keys, 0), $this->getParmasBaseKeyV2($this->nullable_keys, null),
+            $this->getParamsBaseFile($this->image_keys)
+        );
+
         for ($i=0; $i < count($this->keys) ; $i++)
         {
             $key = $this->keys[$i];

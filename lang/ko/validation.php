@@ -356,6 +356,19 @@ return [
         'brand_settle_amount' => '본사 이익금',
         'dev_realtime_settle_amount' => '개발사 즉시출금 이익금',
         'dev_settle_amount' => '개발사 이익금',
-        'mcht_settle_amount' => '가맹점 정산금'
+        'mcht_settle_amount' => '가맹점 정산금',
+        // fee change history
+        'bf_trx_fee' => '이전 수수료',
+        'bf_hold_fee' => '이전 유보금 수수료',
+        'aft_trx_fee' => '이후 수수료',
+        'aft_hold_fee' => '이후 유보금 수수료',
+        'change_status' => '변경상태',
+        'is_delete' => '삭제여부',
+        'updated_at' => '마지막 업데이트 시간',
+        'apply_dt' => '적용일',
+        'bf_sales_id' => '이전 영업점',
+        'aft_sales_id' => '이후 영업점',
+        'bf_sales_name' => '이전 영업점 상호',
+        'aft_sales_name' => '이후 영업점 상호',
     ],
 ];

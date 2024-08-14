@@ -31,6 +31,7 @@ Route::prefix('salesforces')->group(function() {
         //FIXPLUS
         Route::middleware(['is.edit.able'])->group(function() {
             Route::prefix('fee-change-histories')->group(function() {
+                Route::delete('batch-remove', [FeeChangeHistoryController::class, 'deleteSalesforceBatch']);
                 Route::delete('{id}', [FeeChangeHistoryController::class, 'deleteSalesforce']);
                 Route::post('{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
             });
@@ -103,6 +104,7 @@ Route::prefix('merchandises')->group(function() {
     
             Route::apiResource('products', ProductController::class);
             Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
+            Route::delete('fee-change-histories/batch-remove', [FeeChangeHistoryController::class, 'deleteMerchandiseBatch']);
             Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
         });
         Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
