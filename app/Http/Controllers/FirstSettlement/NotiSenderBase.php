@@ -9,8 +9,8 @@ class NotiSenderBase
     static public function getMcht($tran)
     {
         $key_name = 'mcht-info-'.$tran['mcht_id'].'-'.$tran['pmod_id'];
-        $mcht = Redis::get($key_name, 'EX', 300);
-        if($mcht)
+        $mcht = Redis::get($key_name);
+        if($mcht !== null)
             return json_decode($mcht, true);
         else
         {

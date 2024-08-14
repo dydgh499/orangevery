@@ -32,15 +32,20 @@ class PayWindowGenerator implements GeneratorInterface
 
     static private function getPayWindow($pmod_id)
     {
-        $key_name = "pay-window-pid:".$pmod_id;
+        $key_name = "pay-window-pida:".$pmod_id;
         $pay_window = Redis::get($key_name);
-        if($pay_window)
+        if($pay_window !== null)
             return json_decode($pay_window, true);
         else
         {
             $pay_window = PayWindow::where('pmod_id', $pmod_id)->first();
-            Redis::set($key_name, json_encode($pay_window), 'EX', 600);
-            return json_decode(json_encode($pay_window), true);
+            if($pay_window)
+            {
+                Redis::set($key_name, json_encode($pay_window), 'EX', 600);
+                return json_decode(json_encode($pay_window), true);    
+            }
+            else
+                return null;
         }
     }
 
@@ -52,7 +57,6 @@ class PayWindowGenerator implements GeneratorInterface
             'window_code' => self::create(''), 
             'holding_able_at' => Carbon::now()->addHours(1)->format('Y-m-d H:i:s'),
         ];
-
         $pay_window = self::getPayWindow($pmod_id);
         if($pay_window)
         {
@@ -84,7 +88,7 @@ class PayWindowGenerator implements GeneratorInterface
     {
         $key_name = "pay-window-info:".$window_code;
         $data = Redis::get($key_name);
-        if($data)
+        if($data !== null)
             return json_decode($data, true);
         else
         {
