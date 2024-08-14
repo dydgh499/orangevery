@@ -227,11 +227,11 @@ watchEffect(() => {
                                         </FeeChangeBtn>
                                     </VRow>
                                     <VRow v-else>
-                                        <VCol md="3" class="font-weight-bold">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
-                                        <VCol md="4">
+                                        <VCol md="4" cols="6" class="font-weight-bold">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
+                                        <VCol md="4" cols="3">
                                             {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
                                         </VCol>
-                                        <VCol md="3">
+                                        <VCol md="4" cols="3">
                                             <span>{{ props.item['sales'+(6-i)+'_fee'] }} %</span>
                                         </VCol>
                                     </VRow>
@@ -259,11 +259,11 @@ watchEffect(() => {
                                     </FeeChangeBtn>
                             </VRow>
                             <VRow v-else>
-                                <VCol md="3" class="font-weight-bold">가맹점/유보금 수수료율</VCol>
-                                <VCol md="4">
+                                <VCol md="4" class="font-weight-bold" cols="6">가맹점/유보금 수수료율</VCol>
+                                <VCol md="4" cols="3">
                                     <span>{{ props.item.trx_fee }} %</span>
                                 </VCol>
-                                <VCol md="4">
+                                <VCol md="4" cols="3">
                                     <span>{{ props.item.hold_fee }} %</span>
                                 </VCol>
                             </VRow>
@@ -578,14 +578,16 @@ watchEffect(() => {
                                             </VCol>
                                         </VRow>
                                     </VCol>
-                                    <VCol :md="8" :cols="12">
+                                    <VCol md="3" cols="12">
+                                        <VTextField v-model="props.item.phone_auth_limit_count" type="number" suffix="회 허용" label="인증 허용 회수"
+                                            :rules="[requiredValidatorV2(props.item.phone_auth_limit_count, '인증 허용 회수')]" 
+                                            style="max-width: 120px; margin-right: 1em;"/>
+                                    </VCol>
+                                    <VCol :md="5" :cols="12">
                                         <div class="flex-container">
-                                            <VTextField v-model="props.item.phone_auth_limit_count" type="number" suffix="회 허용" label="인증 허용 회수"
-                                                :rules="[requiredValidatorV2(props.item.phone_auth_limit_count, '인증 허용 회수')]" 
-                                                style="max-width: 120px; margin-right: 1em;"/>
                                             <VTextField v-model="props.item.phone_auth_limit_s_tm" type="time" label="적용시작시간"
                                                 style="max-width: 150px;"/>
-                                            <span style="margin: 0 1em;">~</span>
+                                            <span style="margin: 0 0.5em;">~</span>
                                             <VTextField v-model="props.item.phone_auth_limit_e_tm" type="time" label="적용종료시간"
                                                 style="max-width: 150px;"/>
                                         </div>
@@ -634,7 +636,7 @@ watchEffect(() => {
 .flex-container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
 }
 
 </style>

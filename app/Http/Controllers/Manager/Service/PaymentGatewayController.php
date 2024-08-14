@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Manager;
+namespace App\Http\Controllers\Manager\Service;
 
-use App\Models\FinanceVan;
-use App\Models\PaymentGateway;
-use App\Models\PaymentSection;
+use App\Models\Service\FinanceVan;
+use App\Models\Service\PaymentGateway;
+use App\Models\Service\PaymentSection;
 use App\Models\Service\Classification;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;

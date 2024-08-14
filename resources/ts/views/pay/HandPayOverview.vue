@@ -145,8 +145,6 @@ const pay = async () => {
                                 </VRow>
                             </VCol>
                         </VRow>
-                        <VRow v-if="hand_pay_info.is_old_auth">
-                        </VRow>
                     </template>
                 </CommonPayOverview>
             </VForm>

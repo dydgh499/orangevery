@@ -4,6 +4,7 @@ namespace App\Models\Merchandise;
 
 use App\Models\Transaction;
 use App\Models\Service\Classification;
+use App\Models\Merchandise\PayWindow;
 use App\Http\Traits\Models\AttributeTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,6 +20,13 @@ class PaymentModule extends Model
     protected   $guarded    = [];
     protected   $hidden     = [];
     
+    public function payWindows()
+    {
+        return $this->hasOne(PayWindow::class, 'pmod_id')
+            ->where('holding_able_at', Carbon::now()->format('Y-m-d H:i:s'))
+            ->select();
+    }
+
     public function classifications()
     {
         return $this->belongsTo(Classification::class, 'terminal_id')

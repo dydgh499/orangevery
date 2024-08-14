@@ -67,30 +67,30 @@ const props = defineProps<Props>()
                 </VCol>
             </VRow>
             <VRow>
-                <VCol md="5" cols="4">
+                <VCol md="6" cols="4">
                     일 결제 한도
                 </VCol>
-                <VCol md="7">
+                <VCol md="6">
                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_day_limit"
                         type="number" suffix="만원"
                         :rules="[requiredValidatorV2(props.item.pay_day_limit, '일 결제 한도')]" />
                 </VCol>
             </VRow>
             <VRow>
-                <VCol md="5" cols="4">
+                <VCol md="6" cols="4">
                     월 결제 한도
                 </VCol>
-                <VCol md="7">
+                <VCol md="6">
                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_month_limit"
                         type="number" suffix="만원"
                         :rules="[requiredValidatorV2(props.item.pay_month_limit, '월 결제 한도')]" />
                 </VCol>
             </VRow>
             <VRow>
-                <VCol md="5" cols="4">
+                <VCol md="6" cols="4">
                     연 결제 한도
                 </VCol>
-                <VCol md="7">
+                <VCol md="6">
                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_year_limit"
                         type="number" suffix="만원"
                         :rules="[requiredValidatorV2(props.item.pay_year_limit, '연 결제 한도')]" />

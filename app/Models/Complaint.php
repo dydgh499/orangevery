@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\PaymentGateway;
+use App\Models\Service\PaymentGateway;
 use App\Models\Merchandise;
 use App\Http\Traits\Models\AttributeTrait;
 

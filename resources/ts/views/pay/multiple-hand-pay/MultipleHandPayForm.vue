@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
 import type { MultipleHandPay, Options, PayModule } from '@/views/types'
-import { lengthValidator, lengthValidatorV2, requiredValidatorV2 } from '@validators'
+import { lengthValidatorV2, requiredValidatorV2 } from '@validators'
 import { computed } from 'vue'
 import { VForm } from 'vuetify/components'
 
@@ -45,59 +44,110 @@ watchEffect(async () => {
         </template>
         <VDivider />
         <VForm ref="multiVForm">
-            <CreateHalfVCol :mdl="4" :mdr="8">
-                <template #name>상품금액</template>
-                <template #input>
-                    <VTextField v-model="props.hand_pay_info.amount" type="number" suffix="₩" placeholder="거래금액을 입력해주세요"
-                        prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidatorV2(props.hand_pay_info.amount, '거래금액')]" />
-                </template>
-            </CreateHalfVCol>
-            <CreateHalfVCol :mdl="4" :mdr="8">
-                <template #name>카드번호</template>
-                <template #input>
-                    <VTextField v-model="props.hand_pay_info.card_num" type="text" persistent-placeholder
-                        prepend-inner-icon="emojione:credit-card" placeholder="카드번호를 입력해주세요"
-                        :rules="[lengthValidator(props.hand_pay_info.card_num, 15)]" maxlength="18" autocomplete="cc-number" />
-                </template>
-            </CreateHalfVCol>
-            <CreateHalfVCol :mdl="4" :mdr="8">
-                <template #name>유효기간</template>
-                <template #input>
-                    <VTextField v-model="props.hand_pay_info.yymm" type="text" persistent-placeholder
-                        prepend-inner-icon="ic-baseline-calendar-today" placeholder="(MM/YY:0324)"
-                        :rules="[lengthValidatorV2(props.hand_pay_info.yymm, 4)]" maxlength="4" />
-                </template>
-            </CreateHalfVCol>
-            <CreateHalfVCol :mdl="4" :mdr="8">
-                <template #name>할부기간</template>
-                <template #input>
-                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.hand_pay_info.installment"
-                        :items="filterInstallment"
-                        prepend-inneer-icon="fluent-credit-card-clock-20-regular" item-title="title" item-value="id"
-                        single-line :rules="[requiredValidatorV2(props.hand_pay_info.installment, '할부기간')]"/>
-                </template>
-            </CreateHalfVCol>
-            <CreateHalfVCol :mdl="6" :mdr="6" v-if="props.hand_pay_info.is_old_auth">
-                <template #name>생년월일6자리(사업자등록번호)</template>
-                <template #input>
-                    <VTextField v-model="props.hand_pay_info.auth_num" type="number" maxlength="10"
-                        prepend-inner-icon="carbon:two-factor-authentication" />
-                </template>
-            </CreateHalfVCol>
-            <CreateHalfVCol :mdl="6" :mdr="6" v-if="props.hand_pay_info.is_old_auth">
-                <template #name>카드비밀번호 앞 2자리</template>
-                <template #input>
-                    <VTextField v-model="props.hand_pay_info.card_pw" counter prepend-inner-icon="tabler-lock"
-                        :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
-                        :type="is_show ? 'number' : 'password'" persistent-placeholder
-                        @click:append-inner="is_show = !is_show" autocomplete maxlength="2" />
-                </template>
-            </CreateHalfVCol>
+            <VCol cols="12" style="padding-bottom: 0;">
+                <VRow cols="12">
+                    <VCol md="6" cols="12" style="padding: 0 12px;">
+                        <VRow no-gutters style="min-height: 4em;">
+                            <VCol cols="4" :md="4">
+                                <label>상품금액</label>
+                            </VCol>
+                            <VCol cols="8" :md="8">
+                                <VTextField v-model="props.hand_pay_info.amount" type="number" suffix="₩" name="amount"
+                                    variant="underlined"
+                                    placeholder="상품금액을 입력해주세요" prepend-icon="ic:outline-price-change"
+                                    :rules="[requiredValidatorV2(props.hand_pay_info.amount, '상품금액')]" />
+                            </VCol>
+                        </VRow>
+                    </VCol>
+                    <VCol md="6" cols="12" style="padding: 0 12px;">
+                        <VRow no-gutters style="min-height: 4em;">
+                            <VCol cols="4" :md="4">
+                                <label>할부기간</label>
+                            </VCol>
+                            <VCol cols="8" :md="8">
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.hand_pay_info.installment" name="installment"
+                                    variant="underlined"
+                                    :items="filterInstallment" prepend-icon="fluent-credit-card-clock-20-regular"
+                                    label="할부기간 선택" item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(props.hand_pay_info.installment, '할부기간')]" />
+                            </VCol>
+                        </VRow>
+                    </VCol>
+                </VRow>
+                <VRow no-gutters style="min-height: 4em;">
+                    <VCol md="4" cols="4">
+                        <label>카드번호</label>
+                    </VCol>
+                    <VCol md="8" cols="8">
+                        <VTextField v-model="props.hand_pay_info.card_num" variant="underlined"
+                            prepend-icon="tabler:credit-card"
+                            placeholder="카드번호를 입력해주세요" 
+                            :rules="[requiredValidatorV2(props.hand_pay_info.card_num, '카드번호')]"
+                            maxlength="18" autocomplete="cc-number" />
+                    </VCol>
+                </VRow>
+                <VRow no-gutters style="min-height: 4em;">
+                    <VCol md="4" cols="4">
+                        <label>유효기간</label>
+                    </VCol>
+                    <VCol md="8" cols="8">
+                        <VTextField v-model="props.hand_pay_info.yymm" placeholder="MMYY" variant="underlined"
+                            prepend-icon="ri:pass-expired-line"
+                            :rules="[requiredValidatorV2(props.hand_pay_info.yymm, '유효기간'), lengthValidatorV2(props.hand_pay_info.yymm, 4)]"
+                            maxlength="4" style="min-inline-size: 11em;">
+                            <VTooltip activator="parent" location="top">
+                                카드의 유효기간 4자리를 입력해주세요.<br>
+                                (MM/YY:0324)
+                            </VTooltip>
+                        </VTextField>
+                    </VCol>
+                </VRow>
+                
+                <VRow no-gutters style="min-height: 4em;" v-if="props.pay_module.is_old_auth">
+                    <VCol md="4" cols="4">
+                        <label>본인확인</label>
+                    </VCol>
+                    <VCol md="8" cols="8">
+                        <VTextField v-model="props.hand_pay_info.auth_num" type="number" maxlength="10" variant="underlined"
+                            prepend-icon="teenyicons:id-outline"
+                            placeholder="생년월일6자리(사업자번호)" persistent-placeholder counter>
+                            <VTooltip activator="parent" location="top">
+                                개인카드일 경우 카드소유주의 생년월일6자리 입력,<br>법인카드의 경우 사업자등록번호를 입력해주세요.
+                            </VTooltip>
+                        </VTextField>
+                    </VCol>
+                </VRow>
+                <VRow no-gutters style="min-height: 4em;" v-if="props.pay_module.is_old_auth">
+                    <VCol md="4" cols="4">
+                        <label>비밀번호</label>
+                    </VCol>
+                    <VCol md="8" cols="8">
+                        <div style="display: inline-flex; align-items: center;">
+                            <VTextField v-model="props.hand_pay_info.card_pw" 
+                                type="password" 
+                                prepend-icon="tabler:paywall"
+                                variant="underlined"
+                                persistent-placeholder
+                                maxlength="2"
+                                style="max-width: 4em;">
+                                <VTooltip activator="parent" location="top">
+                                    카드비밀번호 앞 4자리 중 2자리를 입력해주세요.
+                                </VTooltip>
+                            </VTextField>
+                            <b style="margin-left: 0.5em;">**</b>
+                        </div>
+                    </VCol>
+                </VRow>
+
+            </VCol>
         </VForm>
     </AppCardActions>
 </template>
 <style scoped>
 :deep(.v-card-item) {
   padding: 18px !important;
+}
+
+:deep(.v-table__wrapper) {
+  block-size: auto !important;
 }
 </style>

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Manager\MerchandiseController;
-use App\Http\Controllers\Manager\PaymentGatewayController;
+use App\Http\Controllers\Manager\Service\PaymentGatewayController;
 use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
 use App\Http\Controllers\Manager\Transaction\TransactionController;
 use App\Http\Controllers\Manager\Dashboard\DashboardController;
@@ -12,6 +12,8 @@ use App\Http\Controllers\Manager\Service\MchtBlacklistController;
 use App\Http\Controllers\Manager\Service\CMSTransactionController;
 
 use App\Http\Controllers\QuickView\QuickViewController;
+use App\Http\Controllers\QuickView\PayWindowController;
+
 use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 
 /*
@@ -30,6 +32,8 @@ Route::prefix('v1')->group(function() {
     Route::get('merchandises/{id}/sale-slip', [MerchandiseController::class, 'saleSlip']);
     Route::get('pay-gateways/{id}/sale-slip', [PaymentGatewayController::class, 'saleSlip']);
     Route::get('pay-modules/{id}/sale-slip', [PaymentModuleController::class, 'saleSlip']);
+    Route::get('pay-windows/{window_code}', [PayWindowController::class, 'window']);
+
 
     Route::post('transactions/hand-pay', [TransactionController::class, 'handPay']);
     Route::post('transactions/pay-cancel', [TransactionController::class, 'payCancel']);
@@ -72,5 +76,6 @@ Route::prefix('v1')->group(function() {
     Route::prefix('quick-view')->middleware(['auth:sanctum', 'log.route'])->group(function() {
         Route::get('', [QuickViewController::class, 'index']);
         Route::get('withdraw-able-amount', [QuickViewController::class, 'withdrawAbleAmount']);        
+        Route::get('pay-modules/{id}/renew', [PayWindowController::class, 'renew']);
     });
 });

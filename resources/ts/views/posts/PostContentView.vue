@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import type { Post } from '@/views/types'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import type { Post } from '@/views/types';
 
 interface Props {
     post: Post,
@@ -63,5 +63,9 @@ const props = defineProps<Props>()
   text-align: start;
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+:deep(.ql-editor img) {
+  inline-size: 100% !important;
 }
 </style>

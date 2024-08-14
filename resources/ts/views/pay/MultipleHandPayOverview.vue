@@ -246,6 +246,7 @@ onMounted(() => {
 })
 </script>
 <template>
+    <section>
     <VDivider />
     <CreateHalfVCol :mdl="6" :mdr="6" style="align-items: baseline !important;">
         <template #name>
@@ -259,29 +260,59 @@ onMounted(() => {
                 </template>
                 <VDivider/>
                 <VForm ref="vForm">
-                    <CreateHalfVCol :mdl="4" :mdr="8">
-                        <template #name>상품명</template>
-                        <template #input>
-                            <VTextField v-model="hand_pay_info.item_name" type="text"
-                                prepend-inner-icon="tabler:shopping-bag"
-                                maxlength="100" :rules="[requiredValidatorV2(hand_pay_info.item_name, '상품명')]" placeholder="상품명을 입력해주세요" />
-                        </template>
-                    </CreateHalfVCol>
-                    <CreateHalfVCol :mdl="4" :mdr="8">
-                        <template #name>구매자명</template>
-                        <template #input>
-                            <VTextField v-model="hand_pay_info.buyer_name" type="text" placeholder="구매자명을 입력해주세요"
-                                :rules="[requiredValidatorV2(hand_pay_info.buyer_name, '구매자명')]" prepend-inner-icon="tabler-user" />
-                        </template>
-                    </CreateHalfVCol>
-                    <CreateHalfVCol :mdl="4" :mdr="8">
-                        <template #name>구매자 연락처</template>
-                        <template #input>
-                            <VTextField v-model="hand_pay_info.buyer_phone" type="number"
-                                prepend-inner-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
-                                :rules="[requiredValidatorV2(hand_pay_info.buyer_phone, '구매자 연락처')]" />
-                        </template>
-                    </CreateHalfVCol>
+                    <VCol>
+                        <VRow>
+                            <VCol md="12" cols="12" style="padding-bottom: 0;">
+                                <VRow no-gutters style="min-height: 4em;">
+                                    <VCol cols="4" :md="2">
+                                        <label>상품명</label>
+                                    </VCol>
+                                    <VCol cols="8" :md="10">
+                                        <VTextField v-model="hand_pay_info.item_name" name="item_name"
+                                            prepend-icon="tabler:shopping-bag"
+                                            maxlength="100" 
+                                            counter
+                                            variant="underlined"
+                                            :rules="[requiredValidatorV2(hand_pay_info.item_name, '상품명')]" 
+                                            placeholder="상품명을 입력해주세요" />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+
+                        <VRow>
+                            <VCol md="12" cols="12" style="padding: 0 12px;">
+                                <VRow no-gutters style="min-height: 4em;">
+                                    <VCol cols="4" :md="2">
+                                        <label>구매자명</label>
+                                    </VCol>
+                                    <VCol cols="8" :md="10">
+                                        <VTextField v-model="hand_pay_info.buyer_name" name="buyer_name"
+                                            variant="underlined"
+                                            placeholder="구매자명을 입력해주세요" :rules="[requiredValidatorV2(hand_pay_info.buyer_name, '구매자명')]" 
+                                            prepend-icon="tabler-user" />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                        <VRow>
+                            <VCol md="12" cols="12" style="padding: 0 12px;">
+                                <VRow no-gutters style="min-height: 4em;">
+                                    <VCol cols="4" :md="2">
+                                        <label>연락처</label>
+                                    </VCol>
+                                    <VCol cols="8" :md="10">
+                                        <VTextField v-model="hand_pay_info.buyer_phone" type="number" name="buyer_phone"
+                                        variant="underlined"
+                                            prepend-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
+                                            :rules="[requiredValidatorV2(hand_pay_info.buyer_phone, '구매자 연락처')]" />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+
+                    </VCol>
+                    
                     <VCol cols="12">
                         <VRow>
                             <VCol cols="6">
@@ -383,6 +414,8 @@ onMounted(() => {
             </VCol>
         </VCardText>
     </VCard>
+    </section>
+
 </template>
 <style scoped>
 .process-icon {
@@ -410,5 +443,9 @@ onMounted(() => {
   :deep(.common-field) {
     margin-inline-end: 1em !important;
   }
+}
+
+:deep(.v-row) {
+  align-items: center;
 }
 </style>

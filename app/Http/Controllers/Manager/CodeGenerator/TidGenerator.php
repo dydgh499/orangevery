@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Manager\CodeGenerator;
 
 use App\Http\Controllers\Manager\CodeGenerator\GeneratorInterface;
 use App\Models\Merchandise\PaymentModule;
-use App\Models\PaymentGateway;
+use App\Models\Service\PaymentGateway;
 use Carbon\Carbon;
 
 class TidGenerator implements GeneratorInterface
@@ -53,6 +53,7 @@ class TidGenerator implements GeneratorInterface
 
     static public function create($generate_code)
     {
+        //0523070000 pg(2) + ym(2) + idx(4)
         $init_idx = self::getInitIdx($generate_code);
         return self::getNewTid($generate_code, $init_idx);
     }

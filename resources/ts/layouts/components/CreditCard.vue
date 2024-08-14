@@ -460,6 +460,12 @@ watchEffect(() => {
       padding-block: 10px;
       padding-inline: 10px;
     }
+
+    @media screen and (max-width: 300px) {
+      font-size: 18px;
+      padding-block: 9px;
+      padding-inline: 9px;
+    }
   }
 
   &__numberItem {

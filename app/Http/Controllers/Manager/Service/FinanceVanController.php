@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Manager;
+namespace App\Http\Controllers\Manager\Service;
 
-use App\Models\FinanceVan;
+use App\Models\Service\FinanceVan;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;

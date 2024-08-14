@@ -6,40 +6,44 @@ import Recent30DaysRankOverview from '@/views/quick-view/Recent30DaysRankOvervie
 import SettleContentOverview from '@/views/quick-view/SettleContentOverview.vue'
 import SettleContentSkeleton from '@/views/quick-view/SettleContentSkeleton.vue'
 import { useQuickViewStore } from '@/views/quick-view/useStore'
-import { useRequestStore } from '@/views/request'
 import type { MchtRecentTransactions } from '@/views/types'
-import { getUserLevel, user_info } from '@axios'
-import corp from '@corp'
+import { axios, getUserLevel, user_info } from '@axios'
 
 const transactions = ref(<MchtRecentTransactions>({}))
 const is_skeleton = ref(true)
-const { get, post } = useRequestStore()
-const { hands, getEncryptParams } = useQuickViewStore()
+const { hands } = useQuickViewStore()
 
-const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
+
 const my_level = getUserLevel()
-const amount = ref(0)
-const able_balance = ref(0)
+const payShow  = <any>(inject('payShow'))
 
 if(my_level >= 35)  //본사
     router.replace('dashboards')
 else {
-    get('/api/v1/quick-view?level='+my_level)
+    axios.get('/api/v1/quick-view?level='+my_level)
         .then(r => { transactions.value = r.data as MchtRecentTransactions; })
         .catch(e => { console.log(e) })
 }
 
-const toHandPayLink = () => {    
-    location.href = '/pay/hand?e=' + getEncryptParams(hands[0])
+const toHandPayLink = () => {
+    payShow.value.show(hands[0])
 }
+const toComplaintLink = () => {
+    router.push('complaints')
+}
+
+/*
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+const amount = ref(0)
+const able_balance = ref(0)
 
 const getWithdrawAbleAmount = async() => {
     const r = await get('/api/v1/quick-view/withdraw-able-amount', {})
     able_balance.value = Number(r.data.profit) - r.data.withdraw_fee
 }
+
 const isBrightFix = () => {
-    // temp function
     return (corp.id == 14 || corp.id == 12 || corp.id == 30) ? true : false
 }
 
@@ -60,16 +64,15 @@ const requestWithdraw = async() => {
     else
         snackbar.value.show('출금 가능 금액을 초과하였습니다.', 'warning')
 }
-
-const toComplaintLink = () => {
-    router.push('complaints')
-}
+*/
 
 watchEffect(() => {
     if(Object.keys(transactions.value).length)
         is_skeleton.value = false
-    if(getUserLevel() == 10 && user_info.value.use_collect_withdraw)
-        getWithdrawAbleAmount()
+    /*
+        if(getUserLevel() == 10 && user_info.value.use_collect_withdraw)
+            getWithdrawAbleAmount()
+    */
 })
 </script>
 <template>
@@ -114,8 +117,7 @@ watchEffect(() => {
             <template v-else>
                 <CardLayout v-for="(transaction, key) in transactions.monthly" :key="key" :padding="true">
                     <template #content>
-                        <SettleContentOverview :transaction="transaction" :date="(key as string)">
-                        </SettleContentOverview>
+                        <SettleContentOverview :transaction="transaction" :date="(key as string)"/>
                     </template>
                 </CardLayout> 
             </template>

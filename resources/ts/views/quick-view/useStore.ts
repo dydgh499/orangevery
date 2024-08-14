@@ -29,47 +29,30 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
                 , '^^_masking_^^').toString())
     }
 
-    const getPayMenuFormats = (pay: PayModule, type: string) => {
+    const getPayMenuFormats = (pay: PayModule, type: string, icon: string) => {
         const pays: any = []
-        const params = getEncryptParams(pay)
         pays.push({
-            title: '이동하기',
-            href: '/pay/' + type + "?e=" + params,
-        })
-        pays.push({
-            title: '링크복사',
-            class: 'copy()',
-            params: url.origin + '/pay/' + type + "?e=" + params,
-        })
-        pays.push({
-            title: '링크생성',
+            title: '결제창 생성',
             class: 'direct()',
-            params: url.origin + '/pay/' + type + "?e=" + params,
+            params: pay,
         })
-        if(corp.pv_options.paid.use_hand_pay_sms) {
-            pays.push({
-                title: 'SMS 결제 전송',
-                class: 'sms()',
-                params: url.origin + '/pay/' + type + "?e=" + params,
-            })
-        }
-        if(type === 'hand' && corp.pv_options.paid.use_multiple_hand_pay) {
-            pays.push({
-                title: '다중결제',
-                href: url.origin + '/pay/multiple-hand?e=' + params,
-            })
-        }
+        pays.push({
+            title: '결제창 조회',
+            class: `select()`,
+            params: pay,
+        })
         return {
             title: pay.note,
+            icon: { icon: icon },
             children: pays            
         };
     }
 
-    const getPayLinkFormats = (pays: PayModule[], type: string) => {
+    const getPayLinkFormats = (pays: PayModule[], type: string, icon: string) => {
         const children = []
         for (let i = 0; i < pays.length; i++) {
             if(pays[i].show_pay_view)
-                children.push(getPayMenuFormats(pays[i], type))
+                children.push(getPayMenuFormats(pays[i], type, icon))
         }
         return children
     };
@@ -78,36 +61,12 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
     const getPaymentMenu = computed(() => {
         const payment_menus = []
         if (getUserLevel() == 10) {
-            if (corp.pv_options.free.use_hand_pay) {
-                let children = getPayLinkFormats(hands.value, 'hand')
-                if(children.length > 0) {
-                    payment_menus.push({
-                        title: '수기결제',
-                        icon: { icon: 'fluent-payment-32-regular' },
-                        children: children,
-                    });    
-                }
-            }
-            if (corp.pv_options.free.use_auth_pay) {
-                let children = getPayLinkFormats(auths.value, 'auth')
-                if(children.length > 0) {
-                    payment_menus.push({
-                        title: '인증결제',
-                        icon: { icon: 'fluent-payment-32-regular' },
-                        children: children,
-                    });    
-                }
-            }
-            if (corp.pv_options.free.use_simple_pay) {
-                let children = getPayLinkFormats(simples.value, 'simple')
-                if(children.length > 0) {
-                    payment_menus.push({
-                        title: '간편결제',
-                        icon: { icon: 'fluent-payment-32-regular' },
-                        children: children,
-                    });    
-                }
-            }
+            if (corp.pv_options.free.use_hand_pay)
+                payment_menus.push(...getPayLinkFormats(hands.value, 'hand', 'fluent-payment-32-regular'))
+            if (corp.pv_options.free.use_auth_pay) 
+                payment_menus.push(...getPayLinkFormats(auths.value, 'auth', 'fluent:payment-32-filled'))    
+            if (corp.pv_options.free.use_simple_pay) 
+                payment_menus.push(...getPayLinkFormats(simples.value, 'simple', 'streamline:money-wallet-money-payment-finance-wallet'))
         }
         const transactions = {
             title: '매출 관리',

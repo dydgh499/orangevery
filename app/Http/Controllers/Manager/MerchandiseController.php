@@ -383,34 +383,14 @@ class MerchandiseController extends Controller
     {
         $request->merge([
             'page' => 1,
-            'page_size' => 9999999,
+            'page_size' => 999999,
         ]);
-        $cols = ['merchandises.id', 'merchandises.mcht_name'];
-        if(Ablilty::isMerchandise($request))
-        {
-        }
-        else if(Ablilty::isSalesforce($request))
-        {   // 영업자
-            if($request->user()->level > 10)
-                $cols[] = 'sales0_id';
-            if($request->user()->level > 13)
-                $cols[] = 'sales1_id';
-            if($request->user()->level > 15)
-                $cols[] = 'sales2_id';
-            if($request->user()->level > 17)
-                $cols[] = 'sales3_id';
-            if($request->user()->level > 20)
-                $cols[] = 'sales4_id';
-            if($request->user()->level > 25)
-                $cols[] = 'sales5_id';
-        }
-        else if(Ablilty::isOperator($request))
-            $cols = array_merge($cols, ['sales5_id', 'sales4_id', 'sales3_id', 'sales2_id', 'sales1_id', 'sales0_id']);
-
         $query = $this->merchandises
             ->where('is_delete', false)
             ->where('brand_id', $request->user()->brand_id);
+        $query = globalAuthFilter($query, $request, 'merchandises');
 
+        $cols = UnderSalesforce::getViewableSalesCols($request, ['merchandises.id', 'merchandises.mcht_name']);
         $data = $this->getIndexData($request, $query, 'id', $cols, 'created_at');
         return $this->response(0, $data);
     }

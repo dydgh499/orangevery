@@ -207,7 +207,7 @@
                 {
                     $idx = strpos($before_history_detail[$param], '?X-Amz-Content-Sha256');
                     $before_history_detail[$param] = substr($before_history_detail[$param], 0, $idx);
-                }    
+                }
             }    
         }
         return $before_history_detail;

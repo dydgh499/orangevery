@@ -32,6 +32,18 @@ class PostController extends Controller
         $this->posts = $posts;
     }
 
+    private function setOperatorWriterNull($replies)
+    {
+        foreach($replies as $replie)
+        {
+            if($replie->level >= 35)
+                $replie->writer = null;
+            if(count($replie->replies) > 0)
+                $replie->replies = $this->setOperatorWriterNull($replie->replies);
+        }
+        return $replies;
+    }
+
     /**
      * 목록출력
      *
@@ -63,6 +75,14 @@ class PostController extends Controller
             });
         }
         $data = $this->getIndexData($request, $query, 'id', $this->posts->cols, 'updated_at');
+        
+        foreach($data['content'] as $content)
+        {
+            if($content->level >= 35)
+                $content->writer = null;
+            if(count($content->replies) > 0)
+                $content->replies = $this->setOperatorWriterNull($content->replies);
+        }
         return $this->response(0, $data);
     }
 

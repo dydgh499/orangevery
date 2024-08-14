@@ -15,11 +15,10 @@ export const useSearchStore = defineStore('postSearchStore', () => {
     const head  = Header('posts', '공지사항')
     const headers: Record<string, string> = {
         'id' : 'NO.',
-        'type' : '타입',
+        'type' : '게시글 타입',
         'writer' : '작성자',
         'title' : '제목',
         'created_at' : '생성시간',
-        'updated_at' : '업데이트시간',
     }    
     if(getUserLevel() >= 35)
         headers['extra_col'] = '더보기'
@@ -54,7 +53,9 @@ export const defaultItemInfo = () => {
         type: 0,
         parent_id: null,
         writer: '',
-        is_reply: 0
+        is_reply: 0,
+        level: 10,
+        updated_at: ''
     })
     return {
         path, item

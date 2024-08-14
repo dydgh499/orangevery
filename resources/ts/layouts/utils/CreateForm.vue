@@ -1,5 +1,6 @@
 a
 <script setup lang="ts">
+import router from '@/router'
 import { useRequestStore } from '@/views/request'
 import type { Tab } from '@/views/types'
 import { getUserLevel, isAbleModiy, user_info } from '@axios'
@@ -80,15 +81,21 @@ watchEffect(() => {
             <slot name="view"></slot>
         </VWindow>
     </VForm>
-    <VCard style="margin-top: 1em;" slot="button" v-if="hideConditions() && authHideConditions()">
-        <VCol class="d-flex gap-4">
-            <VBtn type="button" style="margin-left: auto;" @click="formRequest('/'+props.path, props.item, vForm)">
-                {{ props.id == 0 ? "추가" : "수정" }}
-                <VIcon end icon="tabler-pencil" />
-            </VBtn>
-            <VBtn type="button" color="error" v-if="props.id" @click="remove('/'+props.path, props.item)">
-                삭제
-                <VIcon size="22" icon="tabler-trash" />
+    <VCard style="margin-top: 1em;" slot="button">
+        <VCol class="d-flex gap-4" style="justify-content: end;">
+            <template v-if="hideConditions() && authHideConditions()">
+                <VBtn type="button" @click="formRequest('/'+props.path, props.item, vForm)">
+                    {{ props.id == 0 ? "추가" : "수정" }}
+                    <VIcon end icon="tabler-pencil" />
+                </VBtn>
+                <VBtn type="button" color="error" v-if="props.id" @click="remove('/'+props.path, props.item)">
+                    삭제
+                    <VIcon size="22" icon="tabler-trash" />
+                </VBtn>
+            </template>
+            <VBtn type="button" color="warning" @click="router.back()">
+                뒤로가기
+                <VIcon end size="22" icon="tabler:arrow-back" />
             </VBtn>
         </VCol>
     </VCard>

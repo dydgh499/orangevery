@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import router from '@/router'
-import ExtraMenu from '@/views/posts/ExtraMenu.vue'
 import PostReplyView from '@/views/posts/PostReplyView.vue'
 import { types, useSearchStore } from '@/views/posts/useStore'
 import type { Post } from '@/views/types'
-import { getUserLevel, user_info, allLevels } from '@axios'
+import { allLevels, getUserLevel, user_info } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
@@ -27,15 +26,17 @@ const moveContent = (post: Post) => {
 
 </script>
 <template>
-    <BaseIndexView placeholder="게시글 검색" :metas="[]" :add="true" add_name="게시글" :date_filter_type="DateFilters.NOT_USE">
+    <BaseIndexView placeholder="게시글 검색" :metas="[]" :add="true" :add_name="getUserLevel() < 35 ? '1:1 문의' : '게시글'" :date_filter_type="DateFilters.NOT_USE">
         <template #filter>
         </template>
         <template #index_extra_field>
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})"/>
+                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})"
+                :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''"/>
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.type"
-                :items="types" prepend-inner-icon="fxemoji-notepage" label="게시글 타입"
-                item-title="title" item-value="id" style="min-width: 11em;"  @update:modelValue="store.updateQueryString({type: store.params.type})"/>
+                :items="[{id:null, title:'전체'}].concat(types)" prepend-inner-icon="fxemoji-notepage" label="게시글 타입"
+                item-title="title" item-value="id" @update:modelValue="store.updateQueryString({type: store.params.type})"
+                :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''"/>
         </template>
         <template #headers>
             <tr>
@@ -80,8 +81,10 @@ const moveContent = (post: Post) => {
                                 {{ item[_key] }}
                             </span>
                             <span v-else-if="_key == 'extra_col'">
-                                <ExtraMenu :item="item">
-                                </ExtraMenu>
+                                <VBtn size="small" type="button" color="primary" @click="router.push('/posts/reply?parent_id=' + item['id'])">
+                                    <VIcon end size="22" icon="gridicons:reply" />
+                                    답변하기
+                                </VBtn>
                             </span>
                             <span v-else>
                                 {{ item[_key] }}
@@ -89,15 +92,14 @@ const moveContent = (post: Post) => {
                         </td>
                     </template>
                 </tr>
-                <PostReplyView v-for="(reply, _index) in item.replies" :key="_index" :post="reply" :depth="1">
-                </PostReplyView>
+                <PostReplyView v-for="(reply, _index) in item.replies" :key="_index" :post="reply" :depth="1"/>
             </template>
         </template>
     </BaseIndexView>
 </template>
 <style scoped>
 :deep(.title) {
-  inline-size: 80em;
+  inline-size: 55%;
   max-inline-size: 100em;
   padding-block: 2em;
   padding-inline: 0;

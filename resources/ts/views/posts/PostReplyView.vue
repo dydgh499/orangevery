@@ -1,7 +1,6 @@
 
 <script setup lang="ts">
 import router from '@/router'
-import ExtraMenu from '@/views/posts/ExtraMenu.vue'
 import PostReplyView from '@/views/posts/PostReplyView.vue'
 import { types } from '@/views/posts/useStore'
 import type { Post } from '@/views/types'
@@ -34,7 +33,7 @@ const getChildDepth = computed(() => {
 })
 </script>
 <template>
-    <tr>
+    <tr :style="`background: rgba(var(--v-theme-primary), 5%`">
         <template v-for="(header, key, idx) in head.headers" :key="idx">
             <td v-show="header.visible" :class="key == 'title' ? 'list-square title' : 'list-square'">
                 <span v-if="key == 'id'" class="edit-link" @click="moveContent(props.post)">
@@ -61,7 +60,7 @@ const getChildDepth = computed(() => {
                         </template>
                     </div>
                 </span>
-                <span v-else-if="key == 'title'" :style="{ 'margin-left': `${props.depth * 20}px` }" class="edit-link"
+                <span v-else-if="key == 'title'" :style="`margin-left: ${props.depth * 20}px`" class="edit-link"
                     @click="moveContent(props.post)">
                     <VIcon icon="gridicons:reply" size="20" class="me-2" />
                     <span>
@@ -69,7 +68,10 @@ const getChildDepth = computed(() => {
                     </span>
                 </span>
                 <span v-else-if="key == 'extra_col'">
-                    <ExtraMenu :item="props.post"/>
+                    <VBtn size="small" type="button" color="primary" @click="router.push('/posts/reply?parent_id=' + props.post['id'])">
+                        <VIcon end size="22" icon="gridicons:reply" />
+                        답변하기
+                    </VBtn>
                 </span>
                 <span v-else>
                     {{ props.post[key] }}

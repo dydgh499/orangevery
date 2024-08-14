@@ -203,6 +203,13 @@ export interface Operator extends BasePropertie {
     above_phone_num?: number,
 }
 
+export interface PayWindow {
+    pmod_id: number,
+    pin_code: string,
+    window_code: string,
+    holding_able_at: string,
+}
+
 export interface PayModule {
     id: number,
     mcht_name? : string,
@@ -252,6 +259,7 @@ export interface PayModule {
     payment_term_min: number,
     pay_key?: string,
     sign_key?: string,
+    pay_window: PayWindow | null,
 }
 
 export interface PayGateway {

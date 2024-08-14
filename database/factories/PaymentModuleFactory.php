@@ -4,9 +4,9 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Service\Classification;
+use App\Models\Service\PaymentGateway;
+use App\Models\Service\PaymentSection;
 use App\Models\Merchandise;
-use App\Models\PaymentGateway;
-use App\Models\PaymentSection;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Merchandise\PaymentModule>

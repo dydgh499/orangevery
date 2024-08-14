@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getUserLevel } from '@/plugins/axios'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { useZoomProperty } from '@layouts/composable/useZoomProperty'
 import { useDisplay } from 'vuetify'
@@ -8,12 +9,10 @@ const { isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
 const { mobile } = useDisplay()
 onMounted(() => {
-    /*
     watchEffect(() => {
         if(mobile && getUserLevel() < 35)
             zoom.value = 100
     })
-    */
 })
 </script>
 <template>

@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Merchandise;
 use App\Models\Merchandise\PaymentModule;
-use App\Models\PaymentSection;
+use App\Models\Service\PaymentSection;
 use App\Models\Service\Classification;
 use App\Models\Transaction;
 

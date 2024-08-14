@@ -70,7 +70,7 @@ Route::prefix('merchandises')->group(function() {
 
     Route::get('pay-modules/chart', [PaymentModuleController::class, 'chart']);
     Route::get('pay-modules/all', [PaymentModuleController::class, 'all']);
-    
+
     Route::get('noti-send-histories', [NotiSendHistoryController::class, 'index']);
     Route::prefix('noti-send-histories')->group(function() {
         Route::get('{trans_id}', [NotiSendHistoryController::class, 'show']);

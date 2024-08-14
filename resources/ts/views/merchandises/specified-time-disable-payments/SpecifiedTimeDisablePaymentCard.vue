@@ -25,7 +25,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VRow>
+    <VRow cols="12">
         <VCol :md="6" :cols="12">
             <VCardTitle>지정시간 결제제한</VCardTitle>
         </VCol>
@@ -35,25 +35,20 @@ watchEffect(() => {
             <VRow no-gutters style="align-items: center;">
                 <VCol md="7" cols="7">단건 결제한도 하향 설정</VCol>
                 <VCol md="5" cols="5">
-                    <VTextField v-model="props.item.specified_time_disable_limit" type="number" suffix="만원" label="단건 결제한도"
+                    <VTextField v-model="props.item.specified_time_disable_limit" type="number" suffix="만원"
                         :rules="[requiredValidatorV2(props.item.specified_time_disable_limit, '단건 결제한도')]" 
                         style="max-width: 120px;margin-right: 1em;"/>
                 </VCol>
             </VRow>
         </VCol>
         <VCol :md="7" :cols="12">
-            <VRow no-gutters style="align-items: center;">
-                <VCol md="3" cols="3" :style="$vuetify.display.smAndDown ? 'margin-bottom:1em;' : ''">적용시간</VCol>
-                <VCol md="9" cols="12">
-                    <div class="flex-container">
-                        <VTextField v-model="props.item.single_payment_limit_s_tm" type="time" label="시작시간"
-                            style="max-width: 150px;"/>                        
-                        <span style="margin: 0 0.5em;">~</span>
-                        <VTextField v-model="props.item.single_payment_limit_e_tm" type="time" label="종료시간"
-                            style="max-width: 150px;"/>
-                    </div>
-                </VCol>
-            </VRow>
+            <div class="flex-container">
+                <VTextField v-model="props.item.single_payment_limit_s_tm" type="time" label="적용시작시간"
+                    style="max-width: 150px;"/>
+                <span style="margin: 0 0.5em;">~</span>
+                <VTextField v-model="props.item.single_payment_limit_e_tm" type="time" label="적용종료시간"
+                    style="max-width: 150px;"/>
+            </div>
         </VCol>
     </VRow>
     
@@ -96,6 +91,6 @@ watchEffect(() => {
 .flex-container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
 }
 </style>

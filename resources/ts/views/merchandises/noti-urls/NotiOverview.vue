@@ -34,14 +34,20 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VCard style="margin-top: 1em;">
-        <VCol class="d-flex gap-4" v-if="isAbleModiy(0)">
+    <VCard style="margin-top: 1em;" v-if="isAbleModiy(0)">
+        <VCol class="d-flex gap-4">
             <VBtn type="button" style="margin-left: auto;" @click="addNewNotiUrl">
                 노티 신규추가
                 <VIcon end icon="tabler-plus" />
             </VBtn>
         </VCol>
     </VCard>
+    <VCard style="margin-top: 1em;" v-if="isAbleModiy(0) === false && noti_urls.length === 0">
+        <VCol class="d-flex gap-4">
+            등록된 노티정보가 없습니다.
+        </VCol>
+    </VCard>
+
     <VRow style="margin-top: 1em;">
         <NotiCard v-for="(item, index) in noti_urls" :key="index" :item="item" :able_mcht_chanage="false" :pay_modules="pay_modules"/>
     </VRow>

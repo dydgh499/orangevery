@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\PaymentSection;
+use App\Models\Service\PaymentSection;
 
 class PaymentSectionSeeder extends Seeder
 {

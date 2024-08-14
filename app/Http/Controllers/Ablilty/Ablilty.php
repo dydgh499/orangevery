@@ -3,7 +3,6 @@ namespace App\Http\Controllers\Ablilty;
 
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
-use Illuminate\Support\Facades\Redis;
 use App\Models\Merchandise;
 use Carbon\Carbon;
 

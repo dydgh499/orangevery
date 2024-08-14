@@ -24,8 +24,8 @@ const getPostTypes = computed(() => {
         <VCol cols="12" md="12">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>게시글 작성</VCardTitle>
-                    <VRow  class="pt-5">                        
+                    <VCardTitle class="pb-5">게시글 작성</VCardTitle>
+                    <VRow v-if="getUserLevel() >= 35">                        
                         <VCol md="1">
                             작성타입
                         </VCol>
@@ -39,7 +39,7 @@ const getPostTypes = computed(() => {
                         <VCol md="1">
                             제목
                         </VCol>
-                        <VCol md="4" cols="10">
+                        <VCol md="11" cols="10">
                             <VTextField v-model="props.item.title"
                                 prepend-inner-icon="ic-round-subtitles" placeholder="제목을 입력해주세요"
                                 persistent-placeholder :rules="[requiredValidatorV2(props.item.title, '제목')]" />

@@ -4,7 +4,6 @@ import CreateForm from '@/layouts/utils/CreateForm.vue'
 import PostContentView from '@/views/posts/PostContentView.vue'
 import { types } from '@/views/posts/useStore'
 import type { Post, Tab } from '@/views/types'
-import router from '@/router'
 import { axios } from '@axios'
 
 const post = ref<Post>()
@@ -27,7 +26,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <section>
+    <section style="max-width: 1400px; margin-right: auto; margin-left: auto;">
         <CreateForm :id="0" :path="'posts/view'" :tabs="tabs" :item="post">
             <template #view>
                 <VWindowItem>                    
@@ -42,13 +41,5 @@ watchEffect(() => {
                 </VWindowItem>
             </template>
         </CreateForm>
-        <VCard style="margin-top: 1em;" slot="button">
-            <VCol class="d-flex gap-4">
-                <VBtn type="button" color="primary" style="margin-left: auto;" @click="router.back()">
-                    뒤로가기
-                    <VIcon size="22" icon="tabler:arrow-back" />
-                </VBtn>
-            </VCol>
-        </VCard>
     </section>
 </template>

@@ -13,7 +13,8 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
 import router from '@/router'
 import { VerticalNavLayout } from '@layouts'
 
-import PayLinkDialog from '@/layouts/dialogs/transactions/PayLinkDialog.vue'
+import PayWindowCreateDialog from '@/layouts/dialogs/transactions/PayWindowCreateDialog.vue'
+import PayWindowShowDialog from '@/layouts/dialogs/transactions/PayWindowShowDialog.vue'
 import PasswordChangeNoticeDialog from '@/layouts/dialogs/users/PasswordChangeNoticeDialog.vue'
 import AlertDialog from '@/layouts/dialogs/utils/AlertDialog.vue'
 import LoadingDialog from '@/layouts/dialogs/utils/LoadingDialog.vue'
@@ -25,14 +26,13 @@ import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import corp from '@/plugins/corp'
 import { isFixplus } from '@/plugins/fixplus'
 import { axios, getUserLevel, user_info } from '@axios'
-import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
-import { config } from '@layouts/config'
 
 const popup = ref()
 const alert = ref()
 const snackbar = ref()
 const loading = ref()
 const payLink = ref()
+const payShow = ref()
 const pwaSnackbar = ref()
 const passwordChangeNoticeDialog = ref()
 
@@ -43,6 +43,7 @@ provide('alert', alert)
 provide('snackbar', snackbar)
 provide('loading', loading)
 provide('payLink', payLink)
+provide('payShow', payShow)
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
@@ -97,10 +98,7 @@ onMounted(() => {
                     <VIcon icon="tabler-menu-2" size="24" />
                 </VBtn>
 
-                <div v-if="isLessThanOverlayNavBreakpoint(windowWidth)" style="display: flex;">
-                    <VNodeRenderer :nodes="config.app.logo" />
-                </div>
-                <div v-else>
+                <div v-if="isLessThanOverlayNavBreakpoint(windowWidth) === false">
                     <template v-if="isFixplus()">
                         <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>
                         <span v-if="getUserLevel() === 10" class="text-primary font-weight-bold">({{ user_info.mcht_name }})</span>
@@ -128,7 +126,8 @@ onMounted(() => {
             <PWASnackbar ref="pwaSnackbar"/>
             <AlertDialog ref="alert" />
             <LoadingDialog ref="loading" />
-            <PayLinkDialog ref="payLink" />
+            <PayWindowCreateDialog ref="payLink"/>
+            <PayWindowShowDialog ref="payShow"/>
             <PopupDialog ref="popup"/>
             <PasswordChangeNoticeDialog ref="passwordChangeNoticeDialog"/>
         </RouterView>

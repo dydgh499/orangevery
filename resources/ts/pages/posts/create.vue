@@ -12,7 +12,7 @@ const tabs = <Tab[]>([
 const id = ref<number>(0)
 </script>
 <template>
-    <section>
+    <section style="max-width: 1400px; margin-right: auto; margin-left: auto;">
         <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
             <template #view>
                 <VWindowItem>

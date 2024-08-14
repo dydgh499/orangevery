@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Manager\Service;
 
-use App\Models\FinanceVan;
 use App\Models\CollectWithdraw;
+use App\Models\Service\FinanceVan;
 use App\Models\Service\HeadOfficeAccount;
 use App\Models\Service\CMSTransaction;
 

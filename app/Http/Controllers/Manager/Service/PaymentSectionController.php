@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Manager;
+namespace App\Http\Controllers\Manager\Service;
 
-use App\Models\PaymentSection;
+use App\Models\Service\PaymentSection;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\PaySectionRequest;

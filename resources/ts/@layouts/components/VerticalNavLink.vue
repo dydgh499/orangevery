@@ -9,50 +9,18 @@ defineProps<{
   item: NavLink
 }>()
 
-const snackbar  = <any>(inject('snackbar'))
+const payShow  = <any>(inject('payShow'))
 const payLink  = <any>(inject('payLink'))
-
 
 const { width: windowWidth } = useWindowSize()
 const { isVerticalNavMini, dynamicI18nProps } = useLayouts()
 const hideTitleAndBadge = isVerticalNavMini(windowWidth)
 
-const copy = (text: string) => {
-    try {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        textarea.setAttribute('readonly', '');
-        textarea.style.position = 'fixed';
-        document.body.appendChild(textarea);
-        textarea.focus();
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-        snackbar.value.show('복사에 성공하였습니다.', 'success')
-    } catch (err) {
-        snackbar.value.show('복사에 실패하였습니다.', 'error')
-    }
-}
-
-const direct = (url: string) => {
-    payLink.value.show('PAY-LINK', url)
-}
-
-const sms = (url: string) => {
-    payLink.value.show('SMS-SEND', url)    
-}
-const log = () => {
-    window.open('http://log.payvery.kr:3000/')
-}
 const TapFunctionNavi = (item: NavLink) => {
-    if(item.class == 'copy()')
-        copy(item.params ?? '')
-    else if(item.class == 'direct()')
-        direct(item.params ?? '')
-    else if(item.class == 'sms()')
-        sms(item.params ?? '')
-    else if(item.class == 'log()')
-        log()
+    if(item.class == 'direct()')
+        payLink.value.show(item.params)
+    else if(item.class == 'select()')
+        payShow.value.show(item.params)
 }
 </script>
 

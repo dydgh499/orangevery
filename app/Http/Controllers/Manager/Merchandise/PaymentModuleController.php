@@ -286,7 +286,7 @@ class PaymentModuleController extends Controller
                 'payment_modules.terminal_id', 'payment_modules.note', 'payment_modules.is_old_auth', 'payment_modules.installment', 
             ];
         }
-        $query = $this->commonSelect($request);
+        $query = $this->commonSelect($request)->with(['payWindows']);
         $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
         return $this->response(0, $data);
     }
@@ -365,7 +365,6 @@ class PaymentModuleController extends Controller
      */
     public function tidCreate(Request $request)
     {
-        //0523070000 pg(2) + ym(2) + idx(4)
         $tid = TidGenerator::create($request->pg_type);
         return $this->response(0, ['tid'=>$tid]);    
     }
