@@ -40,7 +40,7 @@ class PayWindowGenerator implements GeneratorInterface
         {
             $pay_window = PayWindow::where('pmod_id', $pmod_id)->first();
             Redis::set($key_name, json_encode($pay_window), 'EX', 600);
-            return $pay_window;
+            return json_decode(json_encode($pay_window), true);
         }
     }
 
