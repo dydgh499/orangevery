@@ -32,7 +32,7 @@ class PayWindowGenerator implements GeneratorInterface
 
     static private function getPayWindow($pmod_id)
     {
-        $key_name = "pay-window-pida:".$pmod_id;
+        $key_name = "pay-window-id:".$pmod_id;
         $pay_window = Redis::get($key_name);
         if($pay_window !== null)
             return json_decode($pay_window, true);
