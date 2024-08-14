@@ -33,8 +33,15 @@ const batchRemove = async() => {
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="가맹점" :date_filter_type="DateFilters.DATE_RANGE">
         <template #index_extra_field>
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
-            <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small" v-if="getUserLevel() >= 35">
+                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" 
+                :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''" item-title="title" item-value="id"/>
+
+            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.change_status" density="compact" variant="outlined"
+                :items="[{ id: null, title: '전체' },{ id: 0, title: '변경예약' },{ id: 1, title: '변경완료' }]" label="변경 상태"  @update:modelValue="store.updateQueryString({change_status: store.params.change_status})" 
+                :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''" item-title="title" item-value="id"/>
+
+            <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small" v-if="getUserLevel() >= 35"
+                :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''" item-title="title" item-value="id">
                 일괄삭제
                 <VIcon size="18" icon="tabler-trash" />
             </VBtn>
