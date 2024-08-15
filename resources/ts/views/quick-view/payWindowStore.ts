@@ -15,8 +15,21 @@ export const payWindowStore = () => {
         navigator.clipboard.writeText(value).then(() => {
             snackbar.value.show('생성하신 결제링크가 클립보드에 복사되었습니다.', 'success')
         }).catch(err => {
-            snackbar.value.show('결제링크 복사를 실패하였습니다.', 'error')
-            console.error('Could not copy text: ', err)
+            try {
+                const textarea = document.createElement('textarea');
+                textarea.value = value;
+                textarea.setAttribute('readonly', '');
+                textarea.style.position = 'fixed';
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                snackbar.value.show('생성하신 결제링크가 클립보드에 복사되었습니다.', 'success')    
+            }
+            catch (err) {
+                snackbar.value.show('결제링크 복사를 실패하였습니다.', 'error')
+            }
         });
     }
 
