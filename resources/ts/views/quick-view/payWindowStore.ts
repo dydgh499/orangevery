@@ -19,16 +19,21 @@ export const payWindowStore = () => {
                 const textarea = document.createElement('textarea');
                 textarea.value = value;
                 textarea.setAttribute('readonly', '');
-                textarea.style.position = 'fixed';
+                textarea.style.position = 'absolute';
+                textarea.style.left = '-9999px'; // 화면에서 벗어나게 위치 설정
                 document.body.appendChild(textarea);
-                textarea.focus();
                 textarea.select();
-                document.execCommand('copy');
+
+                const successful = document.execCommand('copy');
                 document.body.removeChild(textarea);
-                snackbar.value.show('생성하신 결제링크가 클립보드에 복사되었습니다.', 'success')    
+
+                if (successful) 
+                    snackbar.value.show('생성하신 결제링크가 클립보드에 복사되었습니다.', 'success');
+                else 
+                    throw new Error('Copy command was unsuccessful');
             }
             catch (err) {
-                snackbar.value.show('결제링크 복사를 실패하였습니다.', 'error')
+                snackbar.value.show('결제링크 복사를 실패하였습니다.<br>결제링크를 길게눌러 복사하세요.', 'error')
             }
         });
     }

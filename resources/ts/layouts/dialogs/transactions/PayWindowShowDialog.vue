@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { payWindowStore } from '@/views/quick-view/payWindowStore';
 import { PayModule } from '@/views/types';
+import { user_info } from '@axios';
 import { hourTimer } from '@core/utils/timer';
 import corp from '@corp';
 
@@ -75,7 +76,7 @@ defineExpose({
                 <VBtn @click="move(url)" size="small">결제창 이동</VBtn>
                 <VBtn @click="copy(url)" size="small" color="warning">결제창 복사</VBtn>
                 <VBtn @click="multiplePayMove(payment_module)" size="small" color="error"
-                    v-if="corp.pv_options.paid.use_multiple_hand_pay && payment_module.module_type === 1"
+                    v-if="corp.pv_options.paid.use_multiple_hand_pay && payment_module.module_type === 1 && user_info.use_multiple_hand_pay"
                 >다중결제</VBtn>
             </VCardText>
         </VCard>

@@ -72,7 +72,7 @@ onMounted(async () => {
                     <VCol cols="12" class="d-flex justify-center align-center" v-if="pay_module?.module_type > 0">
                         <div style="max-width: 700px;">
                             <div style="padding-bottom: 1em;text-align: center;">
-                                <img :src="corp.logo_img || ''" width="80" height="80">
+                                <img :src="corp.logo_img || ''" width="80">
                                 <div>
                                     <b>환영합니다 !</b>
                                     <br>

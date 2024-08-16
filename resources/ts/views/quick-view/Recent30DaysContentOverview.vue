@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { MchtRecentTransaction } from '@/views/types'
-import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
+import SkeletonBox from '@/layouts/utils/SkeletonBox.vue';
+import type { MchtRecentTransaction } from '@/views/types';
 import { getUserLevel, user_info } from '@axios';
 
 interface Props {
-    transactions: MchtRecentTransaction[],
+    transactions?: MchtRecentTransaction[] | undefined,
 }
 const props = defineProps<Props>()
 const formatDate = <any>(inject('$formatDate'))
