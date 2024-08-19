@@ -8,6 +8,7 @@ use App\Models\Log\SfFeeApplyHistory;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+use App\Http\Controllers\Manager\Service\BrandInfo;
 
 use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ManagerTrait;
@@ -102,7 +103,8 @@ class SalesforceController extends Controller
     public function index(IndexRequest $request)
     {
         // 영업점이면서, 종속구조사용
-        if($request->sales_parent_structure)
+        $b_info = BrandInfo::getBrandById($request->user()->brand_id);
+        if($b_info['pv_options']['paid']['sales_parent_structure'])
         {
             [$total_count, $content] =SalesforceOverlap::OverlapSearch($request);
             $data = [
@@ -266,7 +268,8 @@ class SalesforceController extends Controller
 
     public function classification(Request $request)
     {
-        if($request->sales_parent_structure && Ablilty::isSalesforce($request))
+        $b_info = BrandInfo::getBrandById($request->user()->brand_id);
+        if($b_info['pv_options']['paid']['sales_parent_structure'] && (Ablilty::isSalesforce($request) || (Ablilty::isOperator($request) && $request->user()->level === 35)))
             $data = SalesforceOverlap::overlapClassification($request);
         else
         {

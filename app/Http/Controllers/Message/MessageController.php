@@ -134,10 +134,10 @@ class MessageController extends Controller
     */
     public function smslinkSend(Request $request)
     {
-        $validated = $request->validate(['phone_num'=>'required']);
-        $res = $this->send($request->phone_num, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n".$request->url, $request->user()->brand_id);
+        $validated = $request->validate(['buyer_phone'=>'required']);
+        $res = $this->send($request->buyer_phone, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n".$request->url, $request->user()->brand_id);
 
-        if($res == null)
+        if($res === null)
             return $this->extendResponse(1999, '문자발송 플랫폼과 연동되어있지 않습니다.<br>계약 이후 사용 가능합니다.');
         else if($res['code'] == 500)
             return $this->extendResponse(1999, '통신 과정에서 에러가 발생했습니다.');

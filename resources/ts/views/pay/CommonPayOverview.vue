@@ -52,7 +52,6 @@ watchEffect(() => {
 
 watchEffect(() => {
     if(params_mode) {
-        console.log(params.value)
         props.common_info.item_name = params.value.item_name
         props.common_info.buyer_name = params.value.buyer_name
         props.common_info.buyer_phone = params.value.buyer_phone

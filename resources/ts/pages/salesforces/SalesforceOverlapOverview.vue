@@ -27,7 +27,6 @@ provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = sales_levels[sales_levels.length - 1].id as number
-store.params.sales_parent_structure = 1
 </script>
 <template>
   

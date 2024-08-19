@@ -26,7 +26,6 @@ provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = null
-store.params.sales_parent_structure = 0
 
 onMounted(() => {
     watchEffect(async() => {
