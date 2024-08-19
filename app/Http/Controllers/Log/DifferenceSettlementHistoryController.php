@@ -65,6 +65,7 @@ class DifferenceSettlementHistoryController extends Controller
     public function index(IndexRequest $request)
     {
         $query = TransactionFilter::common($request);
+        $query  = $query->join('difference_settlement_histories', 'transactions.id', '=', 'difference_settlement_histories.trans_id');
         return $this->getIndexData($request, $query, 'difference_settlement_histories.id', $this->cols, 'transactions.trx_at');
     }
 
@@ -77,6 +78,7 @@ class DifferenceSettlementHistoryController extends Controller
     {
         $query  = TransactionFilter::common($request);        
         $query  = TransactionFilter::date($request, $query);
+        $query  = $query->join('difference_settlement_histories', 'transactions.id', '=', 'difference_settlement_histories.trans_id');
         $chart  = $query->first([
             DB::raw("SUM(transactions.amount) AS amount"),
             DB::raw("SUM(difference_settlement_histories.supply_amount) AS supply_amount"),
