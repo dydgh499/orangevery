@@ -11,15 +11,16 @@ use Illuminate\Support\Str;
 
 class PayWindowGenerator implements GeneratorInterface
 {
-    static public function getNewPayWindowCode($window_code)
+    static public $remain_sec = 600;
+    static public function publishCode($window_code, $length)
     {
-        return $window_code.strtoupper(Str::random(10 - strlen($window_code)));
+        return $window_code.strtoupper(Str::random($length - strlen($window_code)));
     }
 
-    static public function create($generate_code)
+    static public function create($generate_code, $length=8)
     {
         do {
-            $window_code = self::getNewPayWindowCode($generate_code);
+            $window_code = self::publishCode($generate_code, $length);
         }
         while(PayWindow::where('window_code', $window_code)->exists());
         return $window_code;
@@ -41,7 +42,7 @@ class PayWindowGenerator implements GeneratorInterface
             $pay_window = PayWindow::where('pmod_id', $pmod_id)->first();
             if($pay_window)
             {
-                Redis::set($key_name, json_encode($pay_window), 'EX', 600);
+                Redis::set($key_name, json_encode($pay_window), 'EX', self::$remain_sec);
                 return json_decode(json_encode($pay_window), true);    
             }
             else
@@ -148,5 +149,32 @@ class PayWindowGenerator implements GeneratorInterface
             else
                 return null;
         }
+    }
+    
+    static public function getPayParamsCode($param_code)
+    {
+        $params = Redis::get($param_code);
+        if($params !== null)
+            return json_decode($params);
+        else
+            return null;
+    }
+
+    static public function setPayParamsCode($window_code, $request)
+    {
+        $param_code = '';
+        do {
+            $param_code = self::publishCode('', 5);
+        }
+        while(Redis::get($param_code) !== null);
+
+        $params = [
+            'amount'        => $request->amount,
+            'item_name'     => $request->item_name,
+            'buyer_name'    => $request->buyer_name,
+            'buyer_phone'   => $request->buyer_phone,
+        ];
+        Redis::set($param_code, json_encode($params), 'EX', self::$remain_sec);
+        return $param_code;
     }
 }

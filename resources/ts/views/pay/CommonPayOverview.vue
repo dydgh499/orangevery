@@ -13,15 +13,13 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const route = useRoute()
 const { mobile } = useDisplay()
+const params = <any>(inject('params'))
 
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
+const format_amount = ref('0')
 
-const urlParams = new URLSearchParams(window.location.search)
-props.common_info.item_name = urlParams.get('item_name') || ''
-props.common_info.buyer_name = urlParams.get('buyer_name') || ''
-props.common_info.buyer_phone = urlParams.get('phone_num') || ''
-props.common_info.amount = Number(urlParams.get('amount') || '')
 props.common_info.installment = 0
 
 const updateToken = (value : string) => {
@@ -38,12 +36,29 @@ const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
 })
 
+const formatAmount = computed(() => {
+    const parse_amount = parseFloat(format_amount.value.replace(/,/g, "")) || 0;
+    props.common_info.amount = parse_amount
+    format_amount.value = parse_amount.toLocaleString()
+})
+
 watchEffect(() => {
     props.common_info.user_agent = mobile ? "WM" : "WP"
     props.common_info.pmod_id = props.pay_module.id
     props.common_info.ord_num = props.pay_module.id + props.pay_code + Date.now().toString().substr(0, 10)
     if(props.merchandise.use_pay_verification_mobile == 0)
         is_show_pay_button.value = true
+})
+
+watchEffect(() => {
+    if(route.query.pc) {
+        props.common_info.item_name = params.value.item_name
+        props.common_info.buyer_name = params.value.buyer_name
+        props.common_info.buyer_phone = params.value.buyer_phone
+
+        format_amount.value = params.value.amount
+        props.common_info.amount = params.value.amount
+    }
 })
 </script>
 <template>
@@ -66,7 +81,7 @@ watchEffect(() => {
                             variant="underlined"
                             :rules="[requiredValidatorV2(props.common_info.item_name, '상품명')]" 
                             placeholder="상품명을 입력해주세요" 
-                            :readonly="urlParams.get('item_name') ? true : false"/>
+                            :disabled="route.query.pc ? true : false"/>
                     </VCol>
                 </VRow>
             </VCol>
@@ -82,7 +97,7 @@ watchEffect(() => {
                             variant="underlined"
                             placeholder="구매자명을 입력해주세요" :rules="[requiredValidatorV2(props.common_info.buyer_name, '구매자명')]" 
                             prepend-icon="tabler-user" 
-                            :readonly="urlParams.get('buyer_name') ? true : false"/>
+                            :disabled="route.query.pc ? true : false"/>
                     </VCol>
                 </VRow>
             </VCol>
@@ -96,7 +111,7 @@ watchEffect(() => {
                         variant="underlined"
                             prepend-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
                             :rules="[requiredValidatorV2(props.common_info.buyer_phone, '구매자 연락처')]" 
-                            :readonly="urlParams.get('phone_num') ? true : false"/>
+                            :disabled="route.query.pc ? true : false"/>
                     </VCol>
                 </VRow>
             </VCol>
@@ -108,11 +123,12 @@ watchEffect(() => {
                         <label>상품금액</label>
                     </VCol>
                     <VCol cols="8" :md="8">
-                        <VTextField v-model="props.common_info.amount" type="number" suffix="₩" name="amount"
+                        <VTextField v-model="format_amount" suffix="₩" name="amount"
+                            @input="formatAmount"
                             variant="underlined"
                             placeholder="상품금액을 입력해주세요" prepend-icon="ic:outline-price-change"
                             :rules="[requiredValidatorV2(props.common_info.amount, '상품금액')]" 
-                            :readonly="urlParams.get('amount') ? true : false"/>
+                            :disabled="route.query.pc ? true : false"/>
                     </VCol>
                 </VRow>
             </VCol>

@@ -21,7 +21,7 @@ const show = async (_payment_module: PayModule) => {
     expire_time.value = payment_module.value.pay_window.holding_able_at
     intervalId.value = setInterval(updateRemainingTime, 1001);
 
-    url.value = getPayWindowUrl(payment_module.value, {})
+    url.value = getPayWindowUrl(payment_module.value, '')
     visible.value = true
 }
 

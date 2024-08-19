@@ -15,9 +15,17 @@ const payment_gateways = ref(<PayGateway[]>[])
 const merchandise = ref(<Merchandise>({}))
 const pay_module = ref(<PayModule>{module_type: 0})
 const pay_window = ref(<PayWindow>({}))
+const params = ref({
+    item_name : '',
+    buyer_name : '',
+    amount : 0,
+    buyer_phone : '',
+})
 
 const salesslip = ref()
 const window_code = decodeURIComponent(route.query.wc as string)
+const param_code = decodeURIComponent(route.query.pc as string)
+
 const return_url = window.location.origin + '/pay/result'
 const pay_url = ref(<string>(''))
 
@@ -26,15 +34,23 @@ const message = ref()
 
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
+
 provide('salesslip', salesslip)
+provide('params', params)
 
 onMounted(async () => {
     try {
-        const res = await axios.get('/api/v1/pay-windows/' + window_code)
+        const res = await axios.get('/api/v1/pay-windows/' + window_code, {
+            params : {
+                pc: param_code
+            }
+        })
         pay_window.value = res.data.pay_window
         pay_module.value = res.data.payment_module
         merchandise.value = res.data.merchandise
         payment_gateways.value = [res.data.payment_gateway]
+        if(res.data.params && Object.keys(res.data.params))
+            params.value = res.data.params
 
         expire_time.value = pay_window.value.holding_able_at
         if (pay_module.value.module_type == 2)

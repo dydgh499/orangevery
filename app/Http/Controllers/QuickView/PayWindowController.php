@@ -21,6 +21,9 @@ class PayWindowController extends Controller
     public function renew(Request $request, int $pmod_id)
     {
         [$code, $data] = PayWindowGenerator::renew($pmod_id);
+        if($request->item_name !== null)
+            $data['param_code'] = PayWindowGenerator::setPayParamsCode($data['window_code'], $request);
+
         return $this->response($code, $data);
     }
 
@@ -30,7 +33,11 @@ class PayWindowController extends Controller
         if($pay_module)
         {
             if(Carbon::createFromFormat('Y-m-d H:i:s', $pay_module['pay_window']['holding_able_at']) > Carbon::now())
+            {
+                if($request->pc != null)
+                    $pay_module['params'] = PayWindowGenerator::getPayParamsCode($request->pc);
                 return $this->response(0, $pay_module);
+            }
             else
                 return $this->extendResponse(1999, '만료된 결제창 입니다.');
         }

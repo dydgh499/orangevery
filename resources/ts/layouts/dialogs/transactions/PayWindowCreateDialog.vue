@@ -11,13 +11,15 @@ const visible = ref(false)
 
 const vForm = ref()
 const pay_info = reactive({
+    amount : 0,
     item_name : '',
     buyer_name : '',
-    amount : 0,
-    phone_num : '',
+    buyer_phone : '',
 })
 const is_sms_link = ref()
+const format_amount = ref('0')
 const payment_module = ref()
+const url = ref()
 
 const { copy, send, getPayWindowUrl, renewPayWindow } = payWindowStore()
 
@@ -31,18 +33,23 @@ const submit = async () => {
     const message = is_sms_link.value ? '결제링크를 SMS 전송' : '결제 링크를 생성'
     
     if (is_valid.valid && await alert.value.show('정말 ' + message + '하시겠습니까?')) {
-        const res = await renewPayWindow(payment_module.value)
+        const res = await renewPayWindow(payment_module.value, pay_info)
         payment_module.value.pay_window = res.data
     
-        const url = getPayWindowUrl(payment_module.value, pay_info)
+        url.value = getPayWindowUrl(payment_module.value, res.data.param_code)
         if (is_sms_link.value) 
-            await send({'url': url, ...cloneDeep(pay_info)}, pay_info.phone_num)
+            await send({'url': url.value, ...cloneDeep(pay_info)}, pay_info.buyer_phone)
         else 
-            copy(url)
-
-        visible.value = false
+            copy(url.value)
     }
 }
+
+const formatAmount = computed(() => {
+    const parse_amount = parseFloat(format_amount.value.replace(/,/g, "")) || 0;
+    pay_info.amount = parse_amount
+    format_amount.value = parse_amount.toLocaleString()
+})
+
 
 defineExpose({
     show
@@ -61,7 +68,7 @@ defineExpose({
                             <h4>수기결제창은 생성 후 1시간동안 유효합니다.</h4>
                         </template>
                         <VRow class="pt-5">
-                            <VCol md="12" cols="12" style="padding: 0 12px;">
+                            <VCol md="12" cols="12" :style="$vuetify.display.smAndDown ? '' : 'padding: 0 12px;'">
                                 <VRow no-gutters style="min-height: 4em;">
                                     <VCol cols="12" :md="4">
                                         <label>상품명</label>
@@ -78,7 +85,7 @@ defineExpose({
                             </VCol>
                         </VRow>
                         <VRow>
-                            <VCol md="12" cols="12" style="padding: 0 12px;">
+                            <VCol md="12" cols="12" :style="$vuetify.display.smAndDown ? '' : 'padding: 0 12px;'">
                                 <VRow no-gutters style="min-height: 4em;">
                                     <VCol cols="12" :md="4">
                                         <label>구매자명</label>
@@ -94,28 +101,35 @@ defineExpose({
                             </VCol>
                         </VRow>
                         <VRow>
-                            <VCol md="12" cols="12" style="padding: 0 12px;">
+                            <VCol md="12" cols="12" :style="$vuetify.display.smAndDown ? '' : 'padding: 0 12px;'">
                                 <VRow no-gutters style="min-height: 4em;">
                                     <VCol cols="12" :md="4">
                                         <label>구매자 연락처</label>
                                     </VCol>
                                     <VCol cols="12" :md="8">
-                                        <VTextField v-model="pay_info.phone_num" type="number" name="buyer_phone"
-                                        variant="underlined"
+                                        <VTextField 
+                                            v-model="pay_info.buyer_phone" 
+                                            type="number" 
+                                            name="buyer_phone"
+                                            variant="underlined"
                                             prepend-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
-                                            :rules="[requiredValidatorV2(pay_info.phone_num, '구매자 연락처')]" />
+                                            :rules="[requiredValidatorV2(pay_info.buyer_phone, '구매자 연락처')]" />
                                     </VCol>
                                 </VRow>
                             </VCol>
                         </VRow>
                         <VRow>
-                            <VCol md="12" cols="12" style="padding: 0 12px;">
+                            <VCol md="12" cols="12" ::style="$vuetify.display.smAndDown ? '' : 'padding: 0 12px;'">
                                 <VRow no-gutters style="min-height: 4em;">
                                     <VCol cols="12" :md="4">
                                         <label>상품금액</label>
                                     </VCol>
                                     <VCol cols="12" :md="8">
-                                        <VTextField v-model="pay_info.amount" type="number" suffix="₩" name="amount"
+                                        <VTextField 
+                                        v-model="format_amount" 
+                                            suffix="₩" 
+                                            name="amount"
+                                            @input="formatAmount"
                                             variant="underlined"
                                             placeholder="상품금액을 입력해주세요" prepend-icon="ic:outline-price-change"
                                             :rules="[requiredValidatorV2(pay_info.amount, '상품금액')]" />
@@ -123,6 +137,19 @@ defineExpose({
                                 </VRow>
                             </VCol>
                         </VRow>
+                        <VRow v-if="url">
+                            <VCol md="12" cols="12" :style="$vuetify.display.smAndDown ? '' : 'padding: 0 12px;'">
+                                <VRow no-gutters style="min-height: 4em;">
+                                    <VCol cols="12" :md="4">
+                                        <b>결제창 주소</b>
+                                    </VCol>
+                                    <VCol cols="12" :md="8">
+                                        <label>{{ url }}</label>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+
                         <VRow v-if="corp.pv_options.paid.use_hand_pay_sms">
                             <VCheckbox v-model="is_sms_link" 
                                 class="check-label" 

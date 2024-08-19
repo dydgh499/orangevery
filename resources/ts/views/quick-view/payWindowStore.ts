@@ -1,7 +1,6 @@
 import { PayModule } from '@/views/types';
 import { axios } from '@axios';
 import * as CryptoJS from 'crypto-js';
-import { cloneDeep } from 'lodash';
 
 export const payWindowStore = () => {
     const snackbar = <any>(inject('snackbar'))
@@ -38,10 +37,10 @@ export const payWindowStore = () => {
         });
     }
 
-    const send = async (params: any, phone_num: string) => {
+    const send = async (params: any, buyer_phone: string) => {
         try {
             const r = await axios.post('/api/v1/bonaejas/sms-link-send', params)
-            snackbar.value.show(phone_num+'으로 결제링크를 전송하였습니다.', 'success')
+            snackbar.value.show(buyer_phone+'으로 결제링크를 전송하였습니다.', 'success')
         }
         catch (e: any) {
             snackbar.value.show(e.response.data.message, 'error')
@@ -49,7 +48,7 @@ export const payWindowStore = () => {
         }
     }
 
-    const getPayWindowUrl = (payment_module: PayModule, pay_info: any) => {
+    const getPayWindowUrl = (payment_module: PayModule, param_code: string) => {
         let type = '';
         if(payment_module.module_type === 1)
             type = 'hand'
@@ -58,18 +57,16 @@ export const payWindowStore = () => {
         else if(payment_module.module_type === 3)
             type = 'simple'
     
-        const base_url = window.location.origin + '/pay/window' + '?wc=' + payment_module.pay_window?.window_code
-        if(Object.keys(pay_info).length) {
-            const p = cloneDeep(pay_info)
-            const sub_query = Object.keys(p).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(p[key])}`).join('&')
-            return base_url+"&"+sub_query    
-        }
-        else
-            return base_url
+        let url = window.location.origin + '/pay/window' + '?wc=' + payment_module.pay_window?.window_code 
+        if(param_code.length > 0)
+            url += '&pc=' + param_code
+        return url
     }
 
-    const renewPayWindow = async (payment_module: PayModule) => {
-        return await axios.get(`/api/v1/quick-view/pay-modules/${payment_module.id}/renew`)
+    const renewPayWindow = async (payment_module: PayModule, params={}) => {
+        return await axios.get(`/api/v1/quick-view/pay-modules/${payment_module.id}/renew`, {
+            params: params
+        })
     }
 
     const multiplePayMove = (pay: PayModule) => {
@@ -92,8 +89,4 @@ export const payWindowStore = () => {
     return {
         move, copy, send, getPayWindowUrl, renewPayWindow, multiplePayMove
     }
-}
-
-export const multiplePayStore = () => {
-
 }

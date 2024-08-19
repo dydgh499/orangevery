@@ -74,7 +74,8 @@ const pay = async () => {
                                                 <label>카드번호</label>
                                             </VCol>
                                             <VCol md="8" cols="8">
-                                                <VTextField v-model="hand_pay_info.card_num" variant="underlined"
+                                                <VTextField  variant="underlined"
+                                                    v-model="hand_pay_info.card_num"
                                                     prepend-icon="tabler:credit-card"
                                                     placeholder="카드번호를 입력해주세요" 
                                                     :rules="[requiredValidatorV2(hand_pay_info.card_num, '카드번호')]"
@@ -140,8 +141,7 @@ const pay = async () => {
                                             :yymm="hand_pay_info.yymm"
                                             :is_old_auth="props.pay_module.is_old_auth"
                                         />
-                                    </VCol>
-
+                                    </VCol>                                    
                                 </VRow>
                             </VCol>
                         </VRow>
