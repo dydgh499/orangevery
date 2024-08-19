@@ -25,6 +25,8 @@ const hand_pay_info = reactive(<HandPay>({
     buyer_name: '',
     installment: 0,
 }))
+const card_num_format = ref('')
+const yymm_format = ref('')
 const vForm = ref<VForm>()
 
 const pay = async () => {
@@ -52,6 +54,18 @@ const pay = async () => {
         snackbar.value.show('결제모듈을 선택해주세요.', 'error')
 }
 
+const formatCardNum = computed(() => {
+    let raw_value = card_num_format.value.replace(/\D/g, '')
+    hand_pay_info.card_num = raw_value
+    card_num_format.value = raw_value.match(/.{1,4}/g)?.join(' ') || ''  
+})
+
+const formatYYmm = computed(() => {
+    let raw_value = yymm_format.value.replace(/\D/g, '')
+    hand_pay_info.yymm = raw_value
+    yymm_format.value = raw_value.match(/.{1,2}/g)?.join('/') || ''  
+})
+
 </script>
 <template>
     <VCard flat rounded>
@@ -74,12 +88,14 @@ const pay = async () => {
                                                 <label>카드번호</label>
                                             </VCol>
                                             <VCol md="8" cols="8">
-                                                <VTextField  variant="underlined"
-                                                    v-model="hand_pay_info.card_num"
+                                                <VTextField  
+                                                    variant="underlined"
+                                                    v-model="card_num_format"
+                                                    @input="formatCardNum"
                                                     prepend-icon="tabler:credit-card"
                                                     placeholder="카드번호를 입력해주세요" 
                                                     :rules="[requiredValidatorV2(hand_pay_info.card_num, '카드번호')]"
-                                                    maxlength="18" autocomplete="cc-number" />
+                                                    maxlength="22" autocomplete="cc-number" />
                                             </VCol>
                                         </VRow>
                                         <VRow no-gutters style="min-height: 3.5em;">
@@ -87,10 +103,14 @@ const pay = async () => {
                                                 <label>유효기간</label>
                                             </VCol>
                                             <VCol md="8" cols="8">
-                                                <VTextField v-model="hand_pay_info.yymm" placeholder="MMYY" variant="underlined"
+                                                <VTextField 
+                                                    v-model="yymm_format" 
+                                                    @input="formatYYmm"
+                                                    placeholder="MM/YY" 
+                                                    variant="underlined"
                                                     prepend-icon="ri:pass-expired-line"
                                                     :rules="[requiredValidatorV2(hand_pay_info.yymm, '유효기간'), lengthValidatorV2(hand_pay_info.yymm, 4)]"
-                                                    maxlength="4" style="min-inline-size: 11em;">
+                                                    maxlength="5" style="min-inline-size: 11em;">
                                                     <VTooltip activator="parent" location="top">
                                                         카드의 유효기간 4자리를 입력해주세요.<br>
                                                         (MM/YY:0324)

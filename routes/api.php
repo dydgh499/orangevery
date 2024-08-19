@@ -76,6 +76,7 @@ Route::prefix('v1')->group(function() {
     Route::prefix('quick-view')->middleware(['auth:sanctum', 'log.route'])->group(function() {
         Route::get('', [QuickViewController::class, 'index']);
         Route::get('withdraw-able-amount', [QuickViewController::class, 'withdrawAbleAmount']);        
-        Route::get('pay-modules/{id}/renew', [PayWindowController::class, 'renew']);
+        Route::get('pay-modules/{id}/pay-window-renew', [PayWindowController::class, 'renew']);
+        Route::post('pay-modules/pay-windows/{window_code}/extend', [PayWindowController::class, 'extend']);
     });
 });

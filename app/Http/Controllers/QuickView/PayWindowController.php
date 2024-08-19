@@ -27,9 +27,29 @@ class PayWindowController extends Controller
         return $this->response($code, $data);
     }
 
+    public function extend(Request $request, string $window_code)
+    {
+        $pay_module = PayWindowGenerator::getPayInfo($window_code);
+        if($pay_module)
+        {
+            if(Carbon::createFromFormat('Y-m-d H:i:s', $pay_module['pay_window']['holding_able_at']) > Carbon::now())
+            {
+                $holding_able_at = PayWindowGenerator::extend($window_code);
+                return $this->response(0, [
+                    'holding_able_at' => $holding_able_at,
+                ]);
+            }
+            else
+                return $this->extendResponse(1999, '만료된 결제창 입니다.');
+
+        }
+        else
+            return $this->extendResponse(1999, '존재하지 않은 결제창 입니다.');        
+    }
+
     public function window(Request $request, string $window_code)
     {
-        $pay_module = PayWindowGenerator::getPayInfo($window_code);            
+        $pay_module = PayWindowGenerator::getPayInfo($window_code);
         if($pay_module)
         {
             if(Carbon::createFromFormat('Y-m-d H:i:s', $pay_module['pay_window']['holding_able_at']) > Carbon::now())

@@ -85,6 +85,22 @@ class PayWindowGenerator implements GeneratorInterface
         }
     }
 
+    static public function extend($window_code)
+    {
+        $holding_able_at = Carbon::now()->addHours(1)->format('Y-m-d H:i:s');
+        $pay_window = PayWindow::where('window_code', $window_code)->first();
+        if($pay_window)
+        {
+            $pay_window->holding_able_at = $holding_able_at;
+            $pay_window->save();
+
+            Redis::set("pay-window-id:".$pay_window->id, null, 'EX', 1);
+            Redis::set("pay-window-info:".$window_code, null, 'EX', 1);    
+        }
+        
+        return $holding_able_at;
+    }
+
     static public function getPayInfo($window_code)
     {
         $key_name = "pay-window-info:".$window_code;
@@ -153,7 +169,8 @@ class PayWindowGenerator implements GeneratorInterface
     
     static public function getPayParamsCode($param_code)
     {
-        $params = Redis::get($param_code);
+        $key_name = 'pay-window-params:';
+        $params = Redis::get($key_name.$param_code);
         if($params !== null)
             return json_decode($params);
         else
@@ -162,11 +179,12 @@ class PayWindowGenerator implements GeneratorInterface
 
     static public function setPayParamsCode($window_code, $request)
     {
+        $key_name = 'pay-window-params:';
         $param_code = '';
         do {
             $param_code = self::publishCode('', 5);
         }
-        while(Redis::get($param_code) !== null);
+        while(Redis::get($key_name.$param_code) !== null);
 
         $params = [
             'amount'        => $request->amount,
@@ -174,7 +192,7 @@ class PayWindowGenerator implements GeneratorInterface
             'buyer_name'    => $request->buyer_name,
             'buyer_phone'   => $request->buyer_phone,
         ];
-        Redis::set($param_code, json_encode($params), 'EX', self::$remain_sec);
+        Redis::set($key_name.$param_code, json_encode($params), 'EX', self::$remain_sec);
         return $param_code;
     }
 }

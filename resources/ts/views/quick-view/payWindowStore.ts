@@ -48,6 +48,10 @@ export const payWindowStore = () => {
         }
     }
 
+    const extend = async(window_code: string) => {
+        return await axios.post(`/api/v1/quick-view/pay-modules/pay-windows/${window_code}/extend`, {})
+    }
+
     const getPayWindowUrl = (payment_module: PayModule, param_code: string) => {
         let type = '';
         if(payment_module.module_type === 1)
@@ -64,7 +68,7 @@ export const payWindowStore = () => {
     }
 
     const renewPayWindow = async (payment_module: PayModule, params={}) => {
-        return await axios.get(`/api/v1/quick-view/pay-modules/${payment_module.id}/renew`, {
+        return await axios.get(`/api/v1/quick-view/pay-modules/${payment_module.id}/pay-window-renew`, {
             params: params
         })
     }
@@ -87,6 +91,6 @@ export const payWindowStore = () => {
     }
 
     return {
-        move, copy, send, getPayWindowUrl, renewPayWindow, multiplePayMove
+        move, copy, extend, send, getPayWindowUrl, renewPayWindow, multiplePayMove
     }
 }

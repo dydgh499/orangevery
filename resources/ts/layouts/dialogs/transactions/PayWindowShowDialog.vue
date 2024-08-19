@@ -5,7 +5,10 @@ import { user_info } from '@axios';
 import { hourTimer } from '@core/utils/timer';
 import corp from '@corp';
 
-const { move, copy, getPayWindowUrl, renewPayWindow, multiplePayMove } = payWindowStore()
+const snackbar = <any>(inject('snackbar'))
+const errorHandler = <any>(inject('$errorHandler'))
+
+const { move, copy, extend, getPayWindowUrl, renewPayWindow, multiplePayMove } = payWindowStore()
 const {remaining_time, expire_time, getRemainTimeColor, updateRemainingTime} = hourTimer()
 
 const visible = ref(false)
@@ -23,6 +26,13 @@ const show = async (_payment_module: PayModule) => {
 
     url.value = getPayWindowUrl(payment_module.value, '')
     visible.value = true
+}
+
+const extendPayWindow = async () => {
+    const res = await extend(payment_module.value.pay_window.window_code)
+    payment_module.value.pay_window.holding_able_at = res.data.holding_able_at
+    expire_time.value = res.data.holding_able_at
+    snackbar.value.show(`결제링크의 유효기간이 ${res.data.holding_able_at}까지 연장되었습니다.`, 'success')
 }
 
 const close = () => {
@@ -73,8 +83,9 @@ defineExpose({
                 </VCol>
             </VCardText>
             <VCardText class="d-flex justify-end gap-3 flex-wrap">
-                <VBtn @click="move(url)" size="small">결제창 이동</VBtn>
-                <VBtn @click="copy(url)" size="small" color="warning">결제창 복사</VBtn>
+                <VBtn @click="move(url)" size="small">이동</VBtn>
+                <VBtn @click="copy(url)" size="small" color="warning">복사</VBtn>
+                <VBtn @click="extendPayWindow()" size="small" color="error">유효기간 연장</VBtn>
                 <VBtn @click="multiplePayMove(payment_module)" size="small" color="error"
                     v-if="corp.pv_options.paid.use_multiple_hand_pay && payment_module.module_type === 1 && user_info.use_multiple_hand_pay"
                 >다중결제</VBtn>

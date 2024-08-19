@@ -19,7 +19,7 @@ const params_mode = <any>(inject('params_mode'))
 
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
 const format_amount = ref('0')
-
+const phone_num_format = ref('')
 props.common_info.installment = 0
 
 const updateToken = (value : string) => {
@@ -41,6 +41,19 @@ const formatAmount = computed(() => {
     props.common_info.amount = parse_amount
     format_amount.value = parse_amount.toLocaleString()
 })
+
+const formatPhoneNum = computed(() => {
+    let raw_value = phone_num_format.value.replace(/\D/g, '');
+    props.common_info.buyer_phone = raw_value
+    // 휴대폰 번호 마스킹
+    if (raw_value.length <= 3)
+        phone_num_format.value = raw_value;
+    else if (raw_value.length <= 7) 
+        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3);
+    else
+        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 7) + '-' + raw_value.slice(7, 11);
+})
+
 
 watchEffect(() => {
     props.common_info.user_agent = mobile ? "WM" : "WP"
@@ -66,6 +79,8 @@ watchEffect(() => {
     <VTextField v-model="props.common_info.pmod_id" type="visible" name="pmod_id" style="display: none;" />
     <VTextField v-model="props.common_info.ord_num" type="visible" name="ord_num" style="display: none;" />
     <VTextField v-model="props.common_info.user_agent" type="visible" name="user_agent" style="display: none;" />
+    <VTextField v-model="props.common_info.buyer_phone" type="visible" name="buyer_phone" style="display: none;" />
+    <VTextField v-model="props.common_info.amount" type="visible" name="amount" style="display: none;" />
     <VCol style="padding: 0 12px;">
         <VRow>
             <VCol md="12" cols="12" style="padding: 0 12px;">
@@ -107,8 +122,10 @@ watchEffect(() => {
                         <label>연락처</label>
                     </VCol>
                     <VCol cols="8" :md="8">
-                        <VTextField v-model="props.common_info.buyer_phone" type="number" name="buyer_phone"
-                        variant="underlined"
+                        <VTextField 
+                            v-model="phone_num_format" 
+                            @input="formatPhoneNum"
+                            variant="underlined"
                             prepend-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
                             :rules="[requiredValidatorV2(props.common_info.buyer_phone, '구매자 연락처')]" 
                             :disabled="params_mode ? true : false"/>
@@ -123,7 +140,8 @@ watchEffect(() => {
                         <label>상품금액</label>
                     </VCol>
                     <VCol cols="8" :md="8">
-                        <VTextField v-model="format_amount" suffix="₩" name="amount"
+                        <VTextField 
+                            v-model="format_amount" suffix="₩" 
                             @input="formatAmount"
                             variant="underlined"
                             placeholder="상품금액을 입력해주세요" prepend-icon="ic:outline-price-change"
