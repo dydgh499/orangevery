@@ -332,11 +332,39 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
                 }
             }
         }
-        setMchtBaseSales(select_idx, params)
+        if(corp.pv_options.paid.sales_parent_structure && getUserLevel() < 40)
+            setParentIdBaseSales(select_idx, params)
+        else
+            setMchtBaseSales(select_idx, params)
+    }
+    const getAboveSalesFilterByParentId = (select_idx: number, params: any) => {
+        for (let i = select_idx; i < SALES_LEVEL_SIZE - 1; i++) {
+            const sales_key = `sales${i}`
+            let _sales = all_sales[i].find(obj => obj.id === params[sales_key + '_id'])
+            if(_sales) {
+                let parent_sales = all_sales[i+1].find(obj => obj.id === _sales.parent_id)
+                if(parent_sales) {
+                    sales[i+1].value = [
+                        { id: null, sales_name: '전체' },
+                        { id: parent_sales.id, sales_name: parent_sales.sales_name },
+                    ]
+                    params[`sales${i+1}` + '_id'] = parent_sales.id
+                }
+            }
+        }
     }
 
     const setParentIdBaseSales = (select_idx: number, params: any) => {
-        for (let i = 5; i > 0; i--) {
+        getAboveSalesFilterByParentId(select_idx, params)
+        // 하위
+        let _sales = all_sales[select_idx].find(obj => obj.id === params[`sales${select_idx}_id`])
+        if(_sales) {
+            sales[i-1].value = [
+                { id: null, sales_name: '전체' },
+                { id: _sales.id, sales_name: _sales.sales_name },
+            ]
+        }
+        for (let i = select_idx-1; i > 0; i--) {
             const sales_key = `sales${i}`
             if(params[sales_key+'_id']) {
                 sales[i-1].value = [
