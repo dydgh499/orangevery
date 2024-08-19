@@ -126,7 +126,7 @@ defineExpose({
                                     </VCol>
                                     <VCol cols="12" :md="8">
                                         <VTextField 
-                                        v-model="format_amount" 
+                                            v-model="format_amount" 
                                             suffix="₩" 
                                             name="amount"
                                             @input="formatAmount"

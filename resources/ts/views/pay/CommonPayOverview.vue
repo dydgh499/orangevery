@@ -13,9 +13,9 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const route = useRoute()
 const { mobile } = useDisplay()
 const params = <any>(inject('params'))
+const params_mode = <any>(inject('params_mode'))
 
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
 const format_amount = ref('0')
@@ -51,12 +51,13 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-    if(route.query.pc) {
+    if(params_mode) {
+        console.log(params.value)
         props.common_info.item_name = params.value.item_name
         props.common_info.buyer_name = params.value.buyer_name
         props.common_info.buyer_phone = params.value.buyer_phone
 
-        format_amount.value = params.value.amount
+        format_amount.value = params.value.amount.toString()
         props.common_info.amount = params.value.amount
     }
 })
@@ -81,7 +82,7 @@ watchEffect(() => {
                             variant="underlined"
                             :rules="[requiredValidatorV2(props.common_info.item_name, '상품명')]" 
                             placeholder="상품명을 입력해주세요" 
-                            :disabled="route.query.pc ? true : false"/>
+                            :disabled="params_mode ? true : false"/>
                     </VCol>
                 </VRow>
             </VCol>
@@ -97,7 +98,7 @@ watchEffect(() => {
                             variant="underlined"
                             placeholder="구매자명을 입력해주세요" :rules="[requiredValidatorV2(props.common_info.buyer_name, '구매자명')]" 
                             prepend-icon="tabler-user" 
-                            :disabled="route.query.pc ? true : false"/>
+                            :disabled="params_mode ? true : false"/>
                     </VCol>
                 </VRow>
             </VCol>
@@ -111,7 +112,7 @@ watchEffect(() => {
                         variant="underlined"
                             prepend-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
                             :rules="[requiredValidatorV2(props.common_info.buyer_phone, '구매자 연락처')]" 
-                            :disabled="route.query.pc ? true : false"/>
+                            :disabled="params_mode ? true : false"/>
                     </VCol>
                 </VRow>
             </VCol>
@@ -128,7 +129,7 @@ watchEffect(() => {
                             variant="underlined"
                             placeholder="상품금액을 입력해주세요" prepend-icon="ic:outline-price-change"
                             :rules="[requiredValidatorV2(props.common_info.amount, '상품금액')]" 
-                            :disabled="route.query.pc ? true : false"/>
+                            :disabled="params_mode ? true : false"/>
                     </VCol>
                 </VRow>
             </VCol>

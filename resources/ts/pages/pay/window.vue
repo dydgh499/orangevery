@@ -21,6 +21,7 @@ const params = ref({
     amount : 0,
     buyer_phone : '',
 })
+const params_mode = ref(false)
 
 const salesslip = ref()
 const window_code = decodeURIComponent(route.query.wc as string)
@@ -37,6 +38,7 @@ const errorHandler = <any>(inject('$errorHandler'))
 
 provide('salesslip', salesslip)
 provide('params', params)
+provide('params_mode', params_mode)
 
 onMounted(async () => {
     try {
@@ -49,8 +51,10 @@ onMounted(async () => {
         pay_module.value = res.data.payment_module
         merchandise.value = res.data.merchandise
         payment_gateways.value = [res.data.payment_gateway]
-        if(res.data.params && Object.keys(res.data.params))
+        if(res.data.params && Object.keys(res.data.params)) {
             params.value = res.data.params
+            params_mode.value = true
+        }
 
         expire_time.value = pay_window.value.holding_able_at
         if (pay_module.value.module_type == 2)
@@ -121,7 +125,7 @@ onMounted(async () => {
                             <VIcon size="40" icon="line-md:emoji-frown-twotone" color="error"/>                        
                         </div>
                         <br>
-                        <h2>결제창을 사용할 수 없습니다. </h2>
+                        <h3>결제창을 사용할 수 없습니다. </h3>
                         <div style=" padding: 1em;text-align: center;">
                             <h4>- {{ message }} -</h4>
                         </div>
