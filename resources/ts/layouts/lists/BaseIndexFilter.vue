@@ -169,8 +169,8 @@ queryToStoreParams()
                         </VTextField>
                     </VCol>
                 </VRow>
-                <VRow style="align-items: center; justify-content: space-around;">
-                    <VCol cols="12" style="display: flex;">
+                <VRow>
+                    <VCol cols="12" style="display: flex; justify-content: center;">
                         <VBtn variant="tonal" color="secondary" prepend-icon="tabler-filter" 
                             :style="'margin: 0.25em;'" size="small"
                             @click="head.filter.show()">

@@ -32,9 +32,10 @@ Route::prefix('v1')->group(function() {
     Route::get('merchandises/{id}/sale-slip', [MerchandiseController::class, 'saleSlip']);
     Route::get('pay-gateways/{id}/sale-slip', [PaymentGatewayController::class, 'saleSlip']);
     Route::get('pay-modules/{id}/sale-slip', [PaymentModuleController::class, 'saleSlip']);
-    Route::get('pay-windows/{window_code}', [PayWindowController::class, 'window']);
-
-
+    Route::prefix('pay')->group(function() {
+        Route::post('{window_code}/auth', [PayWindowController::class, 'auth']);
+        Route::get('{window_code}', [PayWindowController::class, 'window']);
+    });
     Route::post('transactions/hand-pay', [TransactionController::class, 'handPay']);
     Route::post('transactions/pay-cancel', [TransactionController::class, 'payCancel']);
 
@@ -77,6 +78,6 @@ Route::prefix('v1')->group(function() {
         Route::get('', [QuickViewController::class, 'index']);
         Route::get('withdraw-able-amount', [QuickViewController::class, 'withdrawAbleAmount']);        
         Route::get('pay-modules/{id}/pay-window-renew', [PayWindowController::class, 'renew']);
-        Route::post('pay-modules/pay-windows/{window_code}/extend', [PayWindowController::class, 'extend']);
+        Route::post('pay-windows/{window_code}/extend', [PayWindowController::class, 'extend']);
     });
 });

@@ -37,7 +37,7 @@ defineExpose({
         <!-- Dialog Content -->
         <VCard class="pa-5 pa-sm-8">
           <VCardItem class="text-start">
-                <VCardTitle class="text-h6 font-weight-bold mb-2">SMS 휴대폰번호 인증</VCardTitle>
+                <VCardTitle class="text-h6 font-weight-bold mb-2">SMS 인증</VCardTitle>
                 <br>
                 <span class="text-base">
                     휴대폰 인증이 필요합니다.

@@ -4,7 +4,7 @@
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { abnormal_trans_limits, installments } from '@/views/merchandises/pay-modules/useStore'
+import { abnormal_trans_limits, installments, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { axios, getUserLevel, user_info } from '@axios'
@@ -27,7 +27,6 @@ const checkAgreeDialog = ref()
 const passwordAuthDialog = ref()
 
 const is_realtime_deposit_use = [{id:0, title:'미사용'}, {id:1, title:'사용'}]
-const is_payview_open = [{id:0, title:'숨김'}, {id:1, title:'노출'}]
 
 const { request } = useRequestStore()
 const { pgs, pss, settle_types, terminals, finance_vans, psFilter, setFee } = useStore()
@@ -54,7 +53,7 @@ const pay_module = reactive<any>({
 
     fin_id: null,
     use_realtime_deposit: 0,
-    show_pay_view: 0,
+    pay_window_secure_level: 0,
     note: '',
 
     pg_id: null,
@@ -180,7 +179,7 @@ const setForbiddenPayTime = () => {
 }
 const setShowPayView = () => {
     post('set-show-pay-view', {
-        'show_pay_view': pay_module.show_pay_view,
+        'pay_window_secure_level': pay_module.pay_window_secure_level,
     })
 }
 const setUseRealtimeDeposit = () => {
@@ -339,11 +338,11 @@ const filterPgs = computed(() => {
                     </VCol>
                     <VCol :md=6>
                         <VRow no-gutters style="align-items: center;">
-                            <VCol md="4" cols="12">결제창 노출여부</VCol>
+                            <VCol md="4" cols="12">결제창 보안등급</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.show_pay_view"
-                                        :items="is_payview_open" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.pay_window_secure_level"
+                                        :items="pay_window_secure_levels" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
                                         item-title="title" item-value="id" single-line />
                                     <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setShowPayView()">
                                         즉시적용

@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
-import router from '@/router'
-import AuthPayOverview from '@/views/pay/AuthPayOverview.vue'
-import HandPayOverview from '@/views/pay/HandPayOverview.vue'
-import SimplePayOverview from '@/views/pay/SimplePayOverview.vue'
-import type { Merchandise, PayGateway, PayModule, PayWindow } from '@/views/types'
-import { axios } from '@axios'
-import { hourTimer } from '@core/utils/timer'
-import corp from '@corp'
+import { pinInputEvent } from '@/@core/utils/pin_input_event';
+import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue';
+import router from '@/router';
+import AuthPayOverview from '@/views/pay/AuthPayOverview.vue';
+import HandPayOverview from '@/views/pay/HandPayOverview.vue';
+import SimplePayOverview from '@/views/pay/SimplePayOverview.vue';
+import type { Merchandise, PayGateway, PayModule, PayWindow } from '@/views/types';
+import { axios } from '@axios';
+import { hourTimer } from '@core/utils/timer';
+import corp from '@corp';
 
 const route = useRoute()
 const {remaining_time, expire_time, getRemainTimeColor, updateRemainingTime} = hourTimer()
+const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(6)
+
 const payment_gateways = ref(<PayGateway[]>[])
 const merchandise = ref(<Merchandise>({}))
 const pay_module = ref(<PayModule>{module_type: 0})
@@ -22,16 +25,14 @@ const params = ref({
     buyer_phone : '',
 })
 const params_mode = ref(false)
-
 const salesslip = ref()
-const window_code = decodeURIComponent(route.query.wc as string)
-const param_code = decodeURIComponent(route.query.pc as string)
 
 const return_url = window.location.origin + '/pay/result'
 const pay_url = ref(<string>(''))
 
 const code = ref(200)
 const message = ref()
+const sign_in_result = ref(false)
 
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
@@ -40,20 +41,42 @@ provide('salesslip', salesslip)
 provide('params', params)
 provide('params_mode', params_mode)
 
+const handleKeyDownEvent = async (index: number) => {
+    handleKeyDown(index)
+    if (digits.value.join('').length === 6) {
+        try {
+            const res = await axios.post('/api/v1/pay/' + route.query.wc + '/auth', {
+                pin_code: digits.value.join('')
+            })
+            sign_in_result.value = true
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+        }
+    }
+}
+
 onMounted(async () => {
     try {
-        const res = await axios.get('/api/v1/pay-windows/' + window_code, {
+        const res = await axios.get('/api/v1/pay/' + route.query.wc, {
             params : {
-                pc: param_code
+                pc: route.query.pc
             }
         })
-        pay_window.value = res.data.pay_window
-        pay_module.value = res.data.payment_module
-        merchandise.value = res.data.merchandise
-        payment_gateways.value = [res.data.payment_gateway]
-        if(res.data.params && Object.keys(res.data.params)) {
-            params.value = res.data.params
-            params_mode.value = true
+        if(route.query.pc && route.query.pc.length && res.data.params === null) {
+            code.value = 409
+            message.value = '상품정보를 찾을 수 없습니다. 결제창을 재생성해주세요.'
+        }
+        else {
+            pay_window.value = res.data.pay_window
+            pay_module.value = res.data.payment_module
+            merchandise.value = res.data.merchandise
+            payment_gateways.value = [res.data.payment_gateway]
+
+            if(res.data.params && Object.keys(res.data.params)) {
+                params.value = res.data.params
+                params_mode.value = true
+            }
         }
 
         expire_time.value = pay_window.value.holding_able_at
@@ -89,7 +112,17 @@ onMounted(async () => {
                     </VBtn>
                 </div>
                 <VRow class="match-height">
-                    <VCol cols="12" class="d-flex justify-center align-center" v-if="pay_module?.module_type > 0">
+                    <VCol v-if="pay_module?.pay_window_secure_level > 1 && sign_in_result === false" style="padding: 3em 1em;">
+                        <br>
+                        <h4 style="text-align: center;">전달받은 PIN번호를 입력해주세요.</h4>                        
+                        <div style=" padding: 1em;text-align: center;">
+                            <div ref="ref_opt_comp" class="d-flex align-center gap-4">
+                                <VTextField v-for="i in 6" :key="i" :model-value="digits[i - 1]" 
+                                    v-bind="defaultStyle" maxlength="1" @input="handleKeyDownEvent(i)" />
+                            </div>
+                        </div>
+                    </VCol>
+                    <VCol cols="12" v-else-if="pay_module?.module_type > 0" class="d-flex justify-center align-center">
                         <div style="max-width: 700px;">
                             <div style="padding-bottom: 1em;text-align: center;">
                                 <img :src="corp.logo_img || ''" width="80">
@@ -125,13 +158,13 @@ onMounted(async () => {
                             <VIcon size="40" icon="line-md:emoji-frown-twotone" color="error"/>                        
                         </div>
                         <br>
-                        <h3>결제창을 사용할 수 없습니다. </h3>
+                        <h3 style="text-align: center;">결제창을 사용할 수 없습니다. </h3>
                         <div style=" padding: 1em;text-align: center;">
                             <h4>- {{ message }} -</h4>
                         </div>
                     </VCol>
                     <VCol v-else-if="pay_module?.module_type === 0" style="padding: 3em;">
-                        <b>결제창을 로딩하고 있습니다...</b>
+                        <b style="text-align: center;">결제창을 로딩하고 있습니다...</b>
                         <div style=" padding: 1em;text-align: center;">
                             <VIcon size="40" icon="svg-spinners:3-dots-move" style="margin-right: 0.5em;"/>
                             <VIcon size="40" icon="svg-spinners:3-dots-move" />

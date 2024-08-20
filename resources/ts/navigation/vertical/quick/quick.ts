@@ -3,7 +3,6 @@ import { useQuickViewStore } from '@/views/quick-view/useStore'
 import { getUserLevel, isAbleModiy, user_info } from '@axios'
 import corp from '@corp'
 
-const { getPaymentMenu } = useQuickViewStore()
 
 const getUserTap = () => {
     const users = []
@@ -48,6 +47,7 @@ const getUserTap = () => {
 }
 
 const getAbilitiesMenu = computed(() => {
+    const { getPaymentMenu } = useQuickViewStore()
     const payments = getPaymentMenu
     const services = [
         { heading: 'Service' },

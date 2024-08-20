@@ -6,6 +6,11 @@ import type { Options, PayModule, StringOptions } from '@/views/types'
 import { axios, getUserLevel, pay_token, user_info } from '@axios'
 import corp from '@corp'
 
+export const pay_window_secure_levels = <Options[]>([
+    { id: 0, title: "결제창 숨김" }, { id: 1, title: "결제창 노출" },
+    { id: 2, title: "PIN 인증" }, { id: 3, title: "SCA 인증" },
+])
+
 export const simplePays = <StringOptions[]>([
     { id: "KAKAO", title: "카카오페이" }, 
     { id: "NAVER", title: "네이버페이" }, 
@@ -29,6 +34,16 @@ export const installments = <Options[]>([
     { id: 9, title: "9개월" }, { id: 10, title: "10개월" },
     { id: 11, title: "11개월" }, { id: 12, title: "12개월" },
 ])
+
+export const pay_window_extend_hours = <Options[]>([
+    { id: 1, title: "1시간" }, { id: 2, title: "2시간" },
+    { id: 3, title: "3시간" }, { id: 4, title: "4시간" },
+    { id: 5, title: "5시간" }, { id: 6, title: "6시간" },
+    { id: 7, title: "7시간" }, { id: 8, title: "8시간" },
+    { id: 9, title: "9시간" }, { id: 10, title: "10시간" },
+    { id: 11, title: "11시간" }, { id: 12, title: "12시간" },
+])
+
 
 export const ship_out_stats = <Options[]>([
     { id: 0, title: "공장비" }, { id: 1, title: "입고" },
@@ -154,7 +169,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     if(corp.pv_options.paid.use_forb_pay_time)
         headers2['pay_disable_tm'] = '결제금지 시간'
     if(getUserLevel() >= 35)
-        headers2['show_pay_view'] = '결제창 노출여부'
+        headers2['pay_window_secure_level'] = '결제창 보안등급'
     
     if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit) {
         headers2['use_realtime_deposit'] = '실시간 사용여부'
@@ -218,8 +233,9 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
             datas[i]['fin_id'] = finance_vans.find(obj => obj['id'] === datas[i]['fin_id'])?.nick_name
             datas[i]['fin_trx_delay'] = fin_trx_delays.find(obj => obj['id'] === datas[i]['fin_trx_delay'])?.title            
             datas[i]['pay_disable_tm'] = datas[i].pay_disable_s_tm + "~" + datas[i].pay_disable_e_tm
-            datas[i]['use_realtime_deposit'] =  datas[i].use_realtime_deposit ? '사용' : '미사용'
-            datas[i]['show_pay_view'] =  datas[i].show_pay_view ? '노출' : '숨김'
+            datas[i]['use_realtime_deposit'] = datas[i].use_realtime_deposit ? '사용' : '미사용'
+            datas[i]['pay_window_secure_level'] = pay_window_secure_levels.find(obj => obj.id === datas[i].pay_window_secure_level)?.title
+
             if (levels.sales5_use && getUserLevel() >= 30) {
                 datas[i]['sales5_id'] = findSalesName('sales5_id', datas[i]['sales5_id'])
                 datas[i]['sales5_fee'] = (datas[i]['sales5_fee'] * 100).toFixed(3)
@@ -295,7 +311,7 @@ export const defaultItemInfo =  () => {
         pay_single_limit: 0,
         pay_disable_s_tm: null,
         pay_disable_e_tm: null,
-        show_pay_view: 0,
+        pay_window_secure_level: 0,
         pay_key: '',
         filter_issuers: [],
         contract_s_dt: null,
@@ -307,6 +323,7 @@ export const defaultItemInfo =  () => {
         pay_dupe_least: 0,
         payment_term_min: 1,
         p_mid: '',
+        pay_window_extend_hour: 1
     })
     //카드사 필터 및 다른 필터옵션들
     return {

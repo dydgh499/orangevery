@@ -241,7 +241,7 @@ return [
         'comm_settle_type' => '통신비 정산타입',
         'comm_calc_level' => '정산주체',
         'settle_fee' => '입금 수수료',
-        'show_pay_view' => '결제창 노출여부',
+        'pay_window_secure_level' => '결제창 보안등급',
         'installment' => '할부',
         'note' => '비고',
         'resident_num' => '주민등록번호',

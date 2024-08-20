@@ -540,7 +540,7 @@ response.json()</code></pre></div>
         &quot;pay_month_amount&quot;: 3640000,
         &quot;pay_day_amount&quot;: 1640000,
         &quot;pay_able_amount&quot;: -2640000,
-        &quot;show_pay_view&quot;: 0,
+        &quot;pay_window_secure_level&quot;: 0,
         &quot;use_realtime_deposit&quot;: 0,
         &quot;fin_trx_delay&quot;: 0
     },
@@ -557,7 +557,7 @@ response.json()</code></pre></div>
         &quot;pay_month_amount&quot;: 3640000,
         &quot;pay_day_amount&quot;: 1640000,
         &quot;pay_able_amount&quot;: -2640000,
-        &quot;show_pay_view&quot;: 0,
+        &quot;pay_window_secure_level&quot;: 0,
         &quot;use_realtime_deposit&quot;: 1,
         &quot;fin_trx_delay&quot;: 15
     }
@@ -733,11 +733,11 @@ response.json()</code></pre></div>
 <p>결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)</p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>show_pay_view</code></b>&nbsp;&nbsp;
+            <b style="line-height: 2;"><code>pay_window_secure_level</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>결제창 노출여부</p>
+<p>결제창 보안등급</p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>use_realtime_deposit</code></b>&nbsp;&nbsp;

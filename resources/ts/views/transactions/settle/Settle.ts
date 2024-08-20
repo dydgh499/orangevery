@@ -54,7 +54,7 @@ export function settlementFunctionCollect(store: any) {
         if (await alert.value.show('정말 대표가맹점 정산을 하시겠습니까?')) {
             
             const params = cloneDeep(store.params)
-            params.page_size = 99999999
+            params.page_size = 999999
             params.page = 1
             const r = await post('/api/v1/manager/transactions/settle/merchandises/representative-settle', params, true)
             if(r.status === 201) {

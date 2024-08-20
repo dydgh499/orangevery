@@ -38,7 +38,6 @@ class PayModuleRequest extends FormRequest
     ];
     public $boolean_keys = [
         'is_old_auth',
-        'show_pay_view',
         'use_realtime_deposit',
     ];
     public $nullable_keys = [
@@ -60,6 +59,8 @@ class PayModuleRequest extends FormRequest
         'ship_out_stat',
         'comm_settle_day',
         'payment_term_min',
+        'pay_window_secure_level',
+        'pay_window_extend_hour',
     ];
 
     public function authorize()
@@ -97,7 +98,7 @@ class PayModuleRequest extends FormRequest
             'note' => 'required',
             'is_old_auth' => 'required',
             'use_realtime_deposit' => 'required',
-            'show_pay_view' => 'required',
+            'pay_window_secure_level' => 'required',
             'comm_settle_fee' => 'required|numeric',
             'under_sales_amt' => 'nullable|numeric',
         ];

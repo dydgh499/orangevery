@@ -197,11 +197,10 @@ const { terminals } = useStore()
         <!-- 👉 출고상태 -->
         <VRow v-if="isAbleModiy(props.item.id)">
             <VCol md="5" cols="5">출고상태</VCol>
-            <VCol md="7">
-                    <VRadioGroup v-model="props.item.ship_out_stat" inline>
-                        <VRadio v-for="(shipOutStat, key) in ship_out_stats" :key="key" :label="shipOutStat.title"
-                            :value="shipOutStat.id" />
-                    </VRadioGroup>
+            <VCol md="7">                
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.ship_out_stat"
+                        :items="ship_out_stats" prepend-inner-icon="tabler:truck-delivery"
+                         item-title="title" item-value="id" persistent-hint single-line />
             </VCol>
         </VRow>
         <VRow v-else>

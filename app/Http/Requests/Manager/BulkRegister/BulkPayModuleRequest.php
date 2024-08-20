@@ -18,7 +18,7 @@ class BulkPayModuleRequest extends FormRequest
         'comm_calc_level',
         'under_sales_amt',
         'is_old_auth',
-        'show_pay_view',
+        'pay_window_secure_level',
         'pay_dupe_least',
         'abnormal_trans_limit',
         'pay_dupe_limit',
@@ -88,7 +88,7 @@ class BulkPayModuleRequest extends FormRequest
             '*.comm_calc_level' => 'nullable|numeric',
             '*.under_sales_amt' => 'nullable|numeric',
             '*.is_old_auth' => 'nullable|numeric',
-            '*.show_pay_view' => 'nullable|numeric',
+            '*.pay_window_secure_level' => 'nullable|numeric',
             '*.pay_dupe_least' => 'nullable|numeric',
             '*.abnormal_trans_limit' => 'nullable|numeric',
             '*.pay_dupe_limit' => 'nullable|numeric',
@@ -123,6 +123,7 @@ class BulkPayModuleRequest extends FormRequest
             $data = array_merge($this->getParmasBaseKeyV3($_datas[$i], $this->integer_keys, 0), $this->getParmasBaseKeyV3($_datas[$i], $this->string_keys, ''));
             $data = array_merge($data, $this->getParmasBaseKeyV3($_datas[$i], $this->nullable_keys, null));
             $data['payment_term_min'] = 1;
+            $data['pay_window_extend_hour'] = 1;
             array_push($datas, $data);
         }
         return collect($datas);

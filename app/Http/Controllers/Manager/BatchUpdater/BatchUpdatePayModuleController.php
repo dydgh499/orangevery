@@ -157,11 +157,11 @@ class BatchUpdatePayModuleController extends Controller
     }
 
     /**
-     * 결제창 노출여부 적용 
+     * 결제창 보안등급 적용 
      */
     public function setShowPayView(Request $request)
     {
-        $cols = ['show_pay_view' => $request->show_pay_view];
+        $cols = ['pay_window_secure_level' => $request->pay_window_secure_level];
         $row = $this->payModuleBatch($request)->update($cols);
         return $this->batchResponse($row);
     }

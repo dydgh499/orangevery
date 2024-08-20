@@ -22,9 +22,7 @@ class PaymentModule extends Model
     
     public function payWindows()
     {
-        return $this->hasOne(PayWindow::class, 'pmod_id')
-            ->where('holding_able_at', Carbon::now()->format('Y-m-d H:i:s'))
-            ->select();
+        return $this->hasOne(PayWindow::class, 'pmod_id')->select();
     }
 
     public function classifications()

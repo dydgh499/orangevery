@@ -77,7 +77,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         'ship_out_stat': '출고상태(X)',
         'is_old_auth': '수기결제 여부(O)',
         'installment': '할부 한도(O)',
-        'show_pay_view': '결제창 노출여부(X)',
+        'pay_window_secure_level': '결제창 보안등급(X)',
         'abnormal_trans_limit': '이상거래 한도(X)',
         'cxl_type': '취소 타입(X)',
         'pay_dupe_least': '중복거래 하한금(X)',

@@ -64,7 +64,7 @@ export const getAutoInsertPaymentModuleFormat = (mcht_id: number) => {
         pay_single_limit: 300,
         pay_disable_s_tm: null,
         pay_disable_e_tm: null,
-        show_pay_view: 1,
+        pay_window_secure_level: 1,
         pay_key: '',
         filter_issuers: [],
         contract_s_dt: null,

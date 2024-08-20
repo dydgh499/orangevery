@@ -6,7 +6,6 @@ import { hourTimer } from '@core/utils/timer';
 import corp from '@corp';
 
 const snackbar = <any>(inject('snackbar'))
-const errorHandler = <any>(inject('$errorHandler'))
 
 const { move, copy, extend, getPayWindowUrl, renewPayWindow, multiplePayMove } = payWindowStore()
 const {remaining_time, expire_time, getRemainTimeColor, updateRemainingTime} = hourTimer()
@@ -77,11 +76,21 @@ defineExpose({
                             <b>{{ url }}</b>
                         </VCol>
                     </VRow>
+                    <VRow no-gutters style="padding-top: 12px;" v-if="payment_module.pay_window_secure_level > 1">
+                        <VCol cols="5" :md="3">
+                            <span>PIN 번호</span>
+                        </VCol>
+                        <VCol cols="7" :md="9">
+                            <b>{{ payment_module.pay_window.pin_code }}</b>
+                        </VCol>
+                    </VRow>
                 </VCol>
             </VCardText>
+
+            
             <VCardText class="d-flex justify-end gap-3 flex-wrap">
                 <VBtn @click="move(url)" size="small">이동</VBtn>
-                <VBtn @click="copy(url)" size="small" color="warning">복사</VBtn>
+                <VBtn @click="copy(url)" size="small" color="warning">주소복사</VBtn>
                 <VBtn @click="extendPayWindow()" size="small" color="error">유효기간 연장</VBtn>
                 <VBtn @click="multiplePayMove(payment_module)" size="small" color="error"
                     v-if="corp.pv_options.paid.use_multiple_hand_pay && payment_module.module_type === 1 && user_info.use_multiple_hand_pay"

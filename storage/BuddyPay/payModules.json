@@ -12,7 +12,7 @@
         "pay_month_amount": 3640000,
         "pay_day_amount": 1640000,
         "pay_able_amount":-2640000,
-        "show_pay_view": 0      
+        "pay_window_secure_level": 0      
     },
     {
         "id":5,
@@ -27,6 +27,6 @@
         "pay_month_amount": 3640000,
         "pay_day_amount": 1640000,
         "pay_able_amount":-2640000,
-        "show_pay_view": 0
+        "pay_window_secure_level": 0
     }    
 ]

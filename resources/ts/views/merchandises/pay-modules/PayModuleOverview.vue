@@ -94,7 +94,7 @@ const addNewPayModule = async () => {
         pay_single_limit: 0,
         pay_disable_s_tm: null,
         pay_disable_e_tm: null,
-        show_pay_view: 0,
+        pay_window_secure_level: 0,
         pay_key: '',
         filter_issuers: [],
         contract_s_dt: null,

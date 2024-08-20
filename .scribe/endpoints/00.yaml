@@ -298,7 +298,7 @@ endpoints:
                   "pay_month_amount": 3640000,
                   "pay_day_amount": 1640000,
                   "pay_able_amount":-2640000,
-                  "show_pay_view": 0      
+                  "pay_window_secure_level": 0      
               },
               {
                   "id":5,
@@ -313,7 +313,7 @@ endpoints:
                   "pay_month_amount": 3640000,
                   "pay_day_amount": 1640000,
                   "pay_able_amount":-2640000,
-                  "show_pay_view": 0
+                  "pay_window_secure_level": 0
               }    
           ]
         headers: []
@@ -416,9 +416,9 @@ endpoints:
         type: integer
         enumValues: []
         custom: []
-      show_pay_view:
-        name: show_pay_view
-        description: '결제창 노출여부'
+      pay_window_secure_level:
+        name: pay_window_secure_level
+        description: '결제창 보안등급'
         required: false
         example: null
         type: integer

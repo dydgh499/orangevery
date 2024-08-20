@@ -96,7 +96,7 @@ watchEffect(() => {
                             <VIcon end icon="twemoji:adhesive-bandage" />
                         </VBtn>
                         <VBtn variant="tonal" @click="toHandPayLink()" class="shortcut-button"
-                            v-if="hands.length > 0 && hands[0].show_pay_view">
+                            v-if="hands.length > 0 && hands[0].pay_window_secure_level">
                             수기결제
                             <VIcon end icon="fluent-payment-32-regular" />
                         </VBtn>

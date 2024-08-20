@@ -11,7 +11,6 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
     const hands = ref(<PayModule[]>(filter(payment_modules, { module_type: 1 })))
     const auths = ref(<PayModule[]>(filter(payment_modules, { module_type: 2 })))
     const simples = ref(<PayModule[]>(filter(payment_modules, { module_type: 3 })))
-    const url = new URL(window.location.href)
 
     const getEncryptParams = (pay: PayModule) => {
         return encodeURIComponent(
@@ -29,7 +28,7 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
                 , '^^_masking_^^').toString())
     }
 
-    const getPayMenuFormats = (pay: PayModule, type: string, icon: string) => {
+    const getPayMenuFormats = (pay: PayModule, icon: string) => {
         const pays: any = []
         pays.push({
             title: '결제창 생성',
@@ -44,15 +43,15 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
         return {
             title: pay.note,
             icon: { icon: icon },
-            children: pays            
+            children: pays
         };
     }
 
-    const getPayLinkFormats = (pays: PayModule[], type: string, icon: string) => {
+    const getPayLinkFormats = (pays: PayModule[], icon: string) => {
         const children = []
         for (let i = 0; i < pays.length; i++) {
-            if(pays[i].show_pay_view)
-                children.push(getPayMenuFormats(pays[i], type, icon))
+            if(pays[i].pay_window_secure_level)
+                children.push(getPayMenuFormats(pays[i], icon))
         }
         return children
     };
@@ -62,11 +61,11 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
         const payment_menus = []
         if (getUserLevel() == 10) {
             if (corp.pv_options.free.use_hand_pay)
-                payment_menus.push(...getPayLinkFormats(hands.value, 'hand', 'fluent-payment-32-regular'))
+                payment_menus.push(...getPayLinkFormats(hands.value, 'fluent-payment-32-regular'))
             if (corp.pv_options.free.use_auth_pay) 
-                payment_menus.push(...getPayLinkFormats(auths.value, 'auth', 'fluent:payment-32-filled'))    
+                payment_menus.push(...getPayLinkFormats(auths.value, 'fluent:payment-32-filled'))    
             if (corp.pv_options.free.use_simple_pay) 
-                payment_menus.push(...getPayLinkFormats(simples.value, 'simple', 'streamline:money-wallet-money-payment-finance-wallet'))
+                payment_menus.push(...getPayLinkFormats(simples.value, 'streamline:money-wallet-money-payment-finance-wallet'))
         }
         const transactions = {
             title: '매출 관리',

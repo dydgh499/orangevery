@@ -27,10 +27,11 @@ import corp from '@/plugins/corp'
 import { isFixplus } from '@/plugins/fixplus'
 import { axios, getUserLevel, user_info } from '@axios'
 
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+const loading = <any>(inject('loading'))
+
 const popup = ref()
-const alert = ref()
-const snackbar = ref()
-const loading = ref()
 const payLink = ref()
 const payShow = ref()
 const pwaSnackbar = ref()
@@ -39,9 +40,6 @@ const passwordChangeNoticeDialog = ref()
 const is_pay_link = ref(router.currentRoute.value.path.includes('/pay/'))
 
 provide('popup', popup)
-provide('alert', alert)
-provide('snackbar', snackbar)
-provide('loading', loading)
 provide('payLink', payLink)
 provide('payShow', payShow)
 
@@ -70,30 +68,28 @@ const fa2RequireNotification = () => {
 }
 
 onMounted(() => {
-    if(is_pay_link.value !== false) {
-        axios.get('/api/v1/manager/popups/currently', {
-            params: {
-                page_size : 10,
-                page : 1,
-            }
-        })
-        .then(r => { 
-            if(r.data.content.length)
-                popup.value.show(r.data.content)
-        })
-        .catch(e => { 
-            console.log(e) 
-        })
-        passwordChangeWarningValidate()
-        fa2RequireNotification()
-    }
+    axios.get('/api/v1/manager/popups/currently', {
+        params: {
+            page_size : 10,
+            page : 1,
+        }
+    })
+    .then(r => { 
+        if(r.data.content.length)
+            popup.value.show(r.data.content)
+    })
+    .catch(e => { 
+        console.log(e) 
+    })
+    passwordChangeWarningValidate()
+    fa2RequireNotification()
+    
 })
 </script>
 
 <template>
     <VerticalNavLayout 
-        :nav-items="navItems" 
-        v-if="is_pay_link === false">
+        :nav-items="navItems" >
         <!-- 👉 navbar -->
         <template #navbar="{ toggleVerticalOverlayNavActive }">
             <div class="d-flex h-100 align-center">
@@ -135,24 +131,9 @@ onMounted(() => {
             <PopupDialog ref="popup"/>
             <PasswordChangeNoticeDialog ref="passwordChangeNoticeDialog"/>
         </RouterView>
-
-        <!-- 👉 Footer -->
         <template #footer>
             <Footer/>
         </template>
-
-        <!-- 👉 Customizer -->
         <TheCustomizer />
     </VerticalNavLayout>
-
-    <div v-else class="d-flex justify-center align-center" style="height: 100%;flex-direction: column;">
-        <RouterView v-slot="{ Component }">
-            <Transition :name="appRouteTransition" mode="out-in">
-                <Component :is="Component" />
-            </Transition>
-            <Snackbar ref="snackbar" />
-            <AlertDialog ref="alert" />
-            <LoadingDialog ref="loading" />
-        </RouterView>
-    </div>
 </template>

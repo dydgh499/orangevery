@@ -153,10 +153,18 @@ defineExpose({
                             <VCol md="12" cols="12" :style="$vuetify.display.smAndDown ? '' : 'padding: 0 12px;'">
                                 <VRow no-gutters style="min-height: 4em;">
                                     <VCol cols="12" :md="4">
-                                        <b>결제창 주소</b>
+                                        <span>결제창 주소</span>
                                     </VCol>
                                     <VCol cols="12" :md="8">
-                                        <label>{{ url }}</label>
+                                        <b>{{ url }}</b>
+                                    </VCol>
+                                </VRow>
+                                <VRow no-gutters style="padding-top: 12px;" v-if="payment_module.pay_window_secure_level > 1">
+                                    <VCol cols="12" :md="4">
+                                        <span>PIN 번호</span>
+                                    </VCol>
+                                    <VCol cols="12" :md="8">
+                                        <b>{{ payment_module.pay_window.pin_code }}</b>
                                     </VCol>
                                 </VRow>
                             </VCol>

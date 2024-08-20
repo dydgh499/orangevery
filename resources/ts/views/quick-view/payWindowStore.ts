@@ -49,7 +49,13 @@ export const payWindowStore = () => {
     }
 
     const extend = async(window_code: string) => {
-        return await axios.post(`/api/v1/quick-view/pay-modules/pay-windows/${window_code}/extend`, {})
+        try {
+            return await axios.post(`/api/v1/quick-view/pay-windows/${window_code}/extend`, {})
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            return errorHandler(e)
+        }
     }
 
     const getPayWindowUrl = (payment_module: PayModule, param_code: string) => {
@@ -68,9 +74,15 @@ export const payWindowStore = () => {
     }
 
     const renewPayWindow = async (payment_module: PayModule, params={}) => {
-        return await axios.get(`/api/v1/quick-view/pay-modules/${payment_module.id}/pay-window-renew`, {
-            params: params
-        })
+        try {
+            return await axios.get(`/api/v1/quick-view/pay-modules/${payment_module.id}/pay-window-renew`, {
+                params: params
+            })    
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            return errorHandler(e)
+        }
     }
 
     const multiplePayMove = (pay: PayModule) => {

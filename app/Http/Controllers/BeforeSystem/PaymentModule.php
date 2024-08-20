@@ -144,7 +144,7 @@ class PaymentModule
                 'mid' => $mcht->M_MID,
                 'tid' => $mcht->M_TID,
                 'is_old_auth' => $mcht->USE_HAND_PAY_DTAIL,
-                'show_pay_view' => $mcht->USE_HAND_PAY,
+                'pay_window_secure_level' => $mcht->USE_HAND_PAY,
                 'installment' => $mcht->INSTALLMENT_PERD,
                 'pay_dupe_limit' => $mcht->USE_DUPE_TRX,
                 'abnormal_trans_limit' => $mcht->DANGER_DPST_PR,

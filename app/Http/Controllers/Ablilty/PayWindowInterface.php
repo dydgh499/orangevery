@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Manager\CodeGenerator;
+namespace App\Http\Controllers\Ablilty;
 
 use App\Http\Controllers\Manager\CodeGenerator\GeneratorInterface;
 use App\Models\Merchandise\PaymentModule;
@@ -9,9 +9,8 @@ use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
-class PayWindowGenerator implements GeneratorInterface
+class PayWindowInterface implements GeneratorInterface
 {
-    static public $remain_sec = 600;
     static public function publishCode($window_code, $length)
     {
         return $window_code.strtoupper(Str::random($length - strlen($window_code)));
@@ -42,12 +41,17 @@ class PayWindowGenerator implements GeneratorInterface
             $pay_window = PayWindow::where('pmod_id', $pmod_id)->first();
             if($pay_window)
             {
-                Redis::set($key_name, json_encode($pay_window), 'EX', self::$remain_sec);
+                Redis::set($key_name, json_encode($pay_window), 'EX', 600);
                 return json_decode(json_encode($pay_window), true);    
             }
             else
                 return null;
         }
+    }
+
+    static private function getHoldingAbleAt($pay_module)
+    {
+        return Carbon::now()->addHours($pay_module->pay_window_extend_hour)->format('Y-m-d H:i:s');
     }
 
     static public function renew($pmod_id)
@@ -56,7 +60,6 @@ class PayWindowGenerator implements GeneratorInterface
             'pmod_id'   => $pmod_id,
             'pin_code'  => str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT),
             'window_code' => self::create(''), 
-            'holding_able_at' => Carbon::now()->addHours(1)->format('Y-m-d H:i:s'),
         ];
         $pay_window = self::getPayWindow($pmod_id);
         if($pay_window)
@@ -65,6 +68,8 @@ class PayWindowGenerator implements GeneratorInterface
                 return [0, $pay_window];
             else
             {
+                $pay_module = PaymentModule::where('id', $pmod_id)->first();
+                $data['holding_able_at'] = self::getHoldingAbleAt($pay_module);
                 $res = PayWindow::where('pmod_id', $pmod_id)->update($data);
                 return [1, $data];    
             }
@@ -74,9 +79,7 @@ class PayWindowGenerator implements GeneratorInterface
             $pay_module = PaymentModule::where('id', $pmod_id)->first();
             if($pay_module)
             {   //인증, 간편결제는 만료기간 1년
-                if($pay_module->module_type > 1)
-                    $data['holding_able_at'] = Carbon::now()->addDays(365)->format('Y-m-d H:i:s');
-
+                $data['holding_able_at'] = self::getHoldingAbleAt($pay_module);
                 $res = PayWindow::create($data);
                 return [1, $data];    
             }
@@ -87,10 +90,13 @@ class PayWindowGenerator implements GeneratorInterface
 
     static public function extend($window_code)
     {
-        $holding_able_at = Carbon::now()->addHours(1)->format('Y-m-d H:i:s');
+        $holding_able_at = Carbon::now();
         $pay_window = PayWindow::where('window_code', $window_code)->first();
         if($pay_window)
         {
+            $pay_module = PaymentModule::where('id', $pay_window->pmod_id)->first();
+            $holding_able_at = self::getHoldingAbleAt($pay_module);
+
             $pay_window->holding_able_at = $holding_able_at;
             $pay_window->save();
 
@@ -119,6 +125,7 @@ class PayWindowGenerator implements GeneratorInterface
                     'payment_modules.is_old_auth',
                     'payment_modules.installment',
                     'payment_modules.module_type',
+                    'payment_modules.pay_window_secure_level',
                     'merchandises.use_pay_verification_mobile',
                     'merchandises.mcht_name',
                     'merchandises.business_num as mcht_business_num',
@@ -154,6 +161,7 @@ class PayWindowGenerator implements GeneratorInterface
                         'is_old_auth'   => $pay_module->is_old_auth,
                         'installment'   => $pay_module->installment,
                         'module_type'   => $pay_module->module_type,
+                        'pay_window_secure_level' => $pay_module->pay_window_secure_level
                     ],
                     'pay_window' => [
                         'holding_able_at' => $pay_module->holding_able_at,
@@ -177,7 +185,7 @@ class PayWindowGenerator implements GeneratorInterface
             return null;
     }
 
-    static public function setPayParamsCode($window_code, $request)
+    static public function setPayParamsCode($holding_able_at, $request)
     {
         $key_name = 'pay-window-params:';
         $param_code = '';
@@ -192,7 +200,13 @@ class PayWindowGenerator implements GeneratorInterface
             'buyer_name'    => $request->buyer_name,
             'buyer_phone'   => $request->buyer_phone,
         ];
-        Redis::set($key_name.$param_code, json_encode($params), 'EX', self::$remain_sec);
+
+        Redis::set($key_name.$param_code, json_encode($params), 'EX', Carbon::now()->diffInSeconds(Carbon::createFromFormat('Y-m-d H:i:s', $holding_able_at)));
         return $param_code;
+    }
+
+    static public function auth($window_code, $pin_code)
+    {
+        return PayWindow::where('window_code', $window_code)->where('pin_code', $pin_code)->exists();
     }
 }

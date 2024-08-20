@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_types, under_sales_types, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
+import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_types, pay_window_secure_levels, under_sales_types, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { Registration } from '@/views/registration'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue'
@@ -27,10 +27,6 @@ const all_levels = [{ id: 10, title: '가맹점' }, ...salesLevels()]
 const auth_types: Options[] = [
     { id: 0, title: '비인증', },
     { id: 1, title: '구인증', },
-]
-const view_types: Options[] = [
-    { id: 0, title: '숨김', },
-    { id: 1, title: '노출', },
 ]
 const { ExcelReader, openFilePicker, bulkRegister } = Registration()
 
@@ -245,9 +241,9 @@ watchEffect(async () => {
                         </VChip>
                     </VCol>
                     <VCol class="pb-0">
-                        <b>결제창 노출여부(기본:노출)</b>
+                        <b>결제창 보안등급(기본:노출)</b>
                         <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(view, key) in view_types" :key="key">
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(view, key) in pay_window_secure_levels" :key="key">
                             {{ view.title }} = {{ view.id }}
                         </VChip>
                     </VCol>

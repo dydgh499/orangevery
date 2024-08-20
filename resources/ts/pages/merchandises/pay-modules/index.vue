@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_types, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
+import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_types, pay_window_secure_levels, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -172,10 +172,10 @@ onMounted(() => {
                                         {{ item.pay_disable_s_tm }} ~ {{ item.pay_disable_e_tm }}
                                     </teamplate>
                                 </span>
-                                <span v-else-if="_key === 'show_pay_view'">
+                                <span v-else-if="_key === 'pay_window_secure_level'">
                                     <teamplate v-if="item.module_type != 0">
-                                        <VChip :color="store.booleanTypeColor(!item[_key])">
-                                            {{ item[_key] ? '노출' : '숨김' }}
+                                        <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
+                                            {{ pay_window_secure_levels.find(obj => obj.id === item[_key])?.title }}
                                         </VChip>
                                     </teamplate>
                                     <template v-else>

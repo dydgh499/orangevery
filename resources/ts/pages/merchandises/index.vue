@@ -49,8 +49,8 @@ onMounted(() => {
     <div>
         <BaseIndexView 
             placeholder="아이디, 상호, 연락처, 대표자명, 사업자번호, 예금주, 계좌번호 검색" 
-            sub_search_placeholder="MID, TID 검색"
-            sub_search_name="결제모듈"
+            :sub_search_placeholder="getUserLevel() > 10 ? 'MID, TID 검색' : ''"
+            :sub_search_name="getUserLevel() > 10 ?  '결제모듈' : ''"
             :metas="metas" :add="isAbleModiy(0)" 
             add_name="가맹점"
             :date_filter_type="DateFilters.NOT_USE"

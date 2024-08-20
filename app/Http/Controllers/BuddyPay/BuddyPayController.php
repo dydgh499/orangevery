@@ -121,7 +121,7 @@ class BuddyPayController extends Controller
      * @responseField pay_month_amount integer 월결제 금액
      * @responseField pay_day_amount integer 일결제 금액
      * @responseField pay_able_amount integer 결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)
-     * @responseField show_pay_view integer 결제창 노출여부
+     * @responseField pay_window_secure_level integer 결제창 보안등급
      */
     public function payModules(Request $request)
     {
@@ -140,7 +140,7 @@ class BuddyPayController extends Controller
                 'pay_day_limit',
                 'pay_single_limit',
                 'terminal_id',
-                'show_pay_view',
+                'pay_window_secure_level',
             ]);
         
         foreach($pay_modules as $pay_module)

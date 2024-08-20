@@ -15,7 +15,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <section style="max-width: 1400px; margin-right: auto; margin-left: auto;">
+    <section style="max-width: 1000px; margin-right: auto; margin-left: auto;">
         <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
             <template #view>
                 <VWindowItem>
