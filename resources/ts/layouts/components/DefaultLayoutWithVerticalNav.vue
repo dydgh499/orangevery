@@ -70,85 +70,92 @@ const fa2RequireNotification = () => {
 }
 
 onMounted(() => {
-    axios.get('/api/v1/manager/popups/currently', {
-        params: {
-            page_size : 10,
-            page : 1,
-        }
-    })
-    .then(r => { 
-        if(r.data.content.length)
-            popup.value.show(r.data.content)
-    })
-    .catch(e => { 
-        console.log(e) 
-    })
-    passwordChangeWarningValidate()
-    fa2RequireNotification()
+    if(is_pay_link.value !== false) {
+        axios.get('/api/v1/manager/popups/currently', {
+            params: {
+                page_size : 10,
+                page : 1,
+            }
+        })
+        .then(r => { 
+            if(r.data.content.length)
+                popup.value.show(r.data.content)
+        })
+        .catch(e => { 
+            console.log(e) 
+        })
+        passwordChangeWarningValidate()
+        fa2RequireNotification()
+    }
 })
 </script>
 
 <template>
-    <VerticalNavLayout :nav-items="navItems" v-if="is_pay_link === false">
-        <!-- 👉 navbar -->
-        <template #navbar="{ toggleVerticalOverlayNavActive }">
-            <div class="d-flex h-100 align-center">
-                <VBtn v-if="isLessThanOverlayNavBreakpoint(windowWidth)" icon variant="text" color="default" class="ms-n3"
-                    size="small" @click="toggleVerticalOverlayNavActive(true)">
-                    <VIcon icon="tabler-menu-2" size="24" />
-                </VBtn>
+    <section>
+        <VerticalNavLayout 
+            :nav-items="navItems" 
+            v-if="is_pay_link === false">
+            <!-- 👉 navbar -->
+            <template #navbar="{ toggleVerticalOverlayNavActive }">
+                <div class="d-flex h-100 align-center">
+                    <VBtn v-if="isLessThanOverlayNavBreakpoint(windowWidth)" icon variant="text" color="default" class="ms-n3"
+                        size="small" @click="toggleVerticalOverlayNavActive(true)">
+                        <VIcon icon="tabler-menu-2" size="24" />
+                    </VBtn>
 
-                <div v-if="isLessThanOverlayNavBreakpoint(windowWidth) === false">
-                    <template v-if="isFixplus()">
-                        <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>
-                        <span v-if="getUserLevel() === 10" class="text-primary font-weight-bold">({{ user_info.mcht_name }})</span>
-                        <span v-else-if="getUserLevel() < 35" class="text-primary font-weight-bold">({{ user_info.sales_name }})</span>님 안녕하세요!
-                    </template>
-                    <template v-else>
-                        <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>님 안녕하세요!
-                    </template>
+                    <div v-if="isLessThanOverlayNavBreakpoint(windowWidth) === false">
+                        <template v-if="isFixplus()">
+                            <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>
+                            <span v-if="getUserLevel() === 10" class="text-primary font-weight-bold">({{ user_info.mcht_name }})</span>
+                            <span v-else-if="getUserLevel() < 35" class="text-primary font-weight-bold">({{ user_info.sales_name }})</span>님 안녕하세요!
+                        </template>
+                        <template v-else>
+                            <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>님 안녕하세요!
+                        </template>
+                    </div>
+                    <VSpacer />
+                    <NavTokenableExpireTime />
+                    <NavbarZoomSwitcher />
+                    <NavbarThemeSwitcher />
+                    <NavbarNotifications v-if="user_info.level >= 35" />
+                    <UserProfile />
                 </div>
-                <VSpacer />
-                <NavTokenableExpireTime />
-                <NavbarZoomSwitcher />
-                <NavbarThemeSwitcher />
-                <NavbarNotifications class="me-2" v-if="user_info.level >= 35" />
-                <UserProfile />
-            </div>
-        </template>
+            </template>
 
-        <!-- 👉 Pages -->
-        <RouterView v-slot="{ Component }">
-            <Transition :name="appRouteTransition" mode="out-in">
-                <Component :is="Component" />
-            </Transition>
-            <Snackbar ref="snackbar" />
-            <PWASnackbar ref="pwaSnackbar"/>
-            <AlertDialog ref="alert" />
-            <LoadingDialog ref="loading" />
-            <PayWindowCreateDialog ref="payLink"/>
-            <PayWindowShowDialog ref="payShow"/>
-            <PopupDialog ref="popup"/>
-            <PasswordChangeNoticeDialog ref="passwordChangeNoticeDialog"/>
-        </RouterView>
+            <!-- 👉 Pages -->
+            <RouterView v-slot="{ Component }">
+                <Transition :name="appRouteTransition" mode="out-in">
+                    <Component :is="Component" />
+                </Transition>
+                <Snackbar ref="snackbar" />
+                <PWASnackbar ref="pwaSnackbar"/>
+                <AlertDialog ref="alert" />
+                <LoadingDialog ref="loading" />
+                <PayWindowCreateDialog ref="payLink"/>
+                <PayWindowShowDialog ref="payShow"/>
+                <PopupDialog ref="popup"/>
+                <PasswordChangeNoticeDialog ref="passwordChangeNoticeDialog"/>
+            </RouterView>
 
-        <!-- 👉 Footer -->
-        <template #footer>
-            <Footer />
-        </template>
+            <!-- 👉 Footer -->
+            <template #footer>
+                <Footer/>
+            </template>
 
-        <!-- 👉 Customizer -->
-        <TheCustomizer />
-    </VerticalNavLayout>
+            <!-- 👉 Customizer -->
+            <TheCustomizer />
+        </VerticalNavLayout>
 
-    <div v-else class="d-flex justify-center align-center" style="height: 100%;flex-direction: column;">
-        <RouterView v-slot="{ Component }">
-            <Transition :name="appRouteTransition" mode="out-in">
-                <Component :is="Component" />
-            </Transition>
-            <Snackbar ref="snackbar" />
-            <AlertDialog ref="alert" />
-            <LoadingDialog ref="loading" />
-        </RouterView>
-    </div>
+        <div v-else class="d-flex justify-center align-center" style="height: 100%;flex-direction: column;">
+            <RouterView v-slot="{ Component }">
+                <Transition :name="appRouteTransition" mode="out-in">
+                    <Component :is="Component" />
+                </Transition>
+                <Snackbar ref="snackbar" />
+                <AlertDialog ref="alert" />
+                <LoadingDialog ref="loading" />
+            </RouterView>
+        </div>
+
+    </section>
 </template>

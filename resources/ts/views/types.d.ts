@@ -259,7 +259,7 @@ export interface PayModule {
     payment_term_min: number,
     pay_key?: string,
     sign_key?: string,
-    pay_window: PayWindow | null,
+    pay_window?: PayWindow | null,
 }
 
 export interface PayGateway {

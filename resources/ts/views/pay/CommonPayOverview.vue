@@ -67,6 +67,8 @@ watchEffect(() => {
     if(params_mode) {
         props.common_info.item_name = params.value.item_name
         props.common_info.buyer_name = params.value.buyer_name
+
+        phone_num_format.value = params.value.buyer_phone.toString()
         props.common_info.buyer_phone = params.value.buyer_phone
 
         format_amount.value = params.value.amount.toString()

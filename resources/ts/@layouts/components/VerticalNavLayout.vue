@@ -24,21 +24,7 @@ export default defineComponent({
     const isLayoutOverlayVisible = ref(false)
     const toggleIsOverlayNavActive = useToggle(isOverlayNavActive)
 
-    // ℹ️ This is alternative to below two commented watcher
-    // We want to show overlay if overlay nav is visible and want to hide overlay if overlay is hidden and vice versa.
     syncRef(isOverlayNavActive, isLayoutOverlayVisible)
-
-    // watch(isOverlayNavActive, value => {
-    //   // Sync layout overlay with overlay nav
-    //   isLayoutOverlayVisible.value = value
-    // })
-
-    // watch(isLayoutOverlayVisible, value => {
-    //   // If overlay is closed via click, close hide overlay nav
-    //   if (!value) isOverlayNavActive.value = false
-    // })
-
-    // ℹ️ Hide overlay if user open overlay nav in <md and increase the window width without closing overlay nav
     watch(windowWidth, value => {
       if (!isLessThanOverlayNavBreakpoint.value(value) && isLayoutOverlayVisible.value)
         isLayoutOverlayVisible.value = false

@@ -9,7 +9,9 @@ interface Props {
     metas: any[],
     add: boolean,
     add_name: string,
-    date_filter_type: number | null
+    date_filter_type: number | null,
+    sub_search_name?: string,
+    sub_search_placeholder?: string,
 }
 const props = defineProps<Props>()
 
@@ -32,8 +34,14 @@ onMounted(() => {
                 <slot name="filter"></slot>
                 <br>
                 <VCard>
-                    <BaseIndexFilter :placeholder="props.placeholder" :add="props.add" :add_name="props.add_name"
-                        :date_filter_type="props.date_filter_type">
+                    <BaseIndexFilter 
+                        :placeholder="props.placeholder" 
+                        :sub_search_name="props.sub_search_name" 
+                        :sub_search_placeholder="props.sub_search_placeholder" 
+                        :add="props.add" 
+                        :add_name="props.add_name"
+                        :date_filter_type="props.date_filter_type"
+                        >
                         <template #index_extra_field>
                             <slot name="index_extra_field"></slot>
                         </template>

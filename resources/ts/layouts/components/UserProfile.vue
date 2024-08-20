@@ -16,7 +16,6 @@ const all_levels = allLevels()
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
-const errorHandler = <any>(inject('errorHandler'))
         
 const imageDialog = ref()
 const google2FACreateDialog = ref()
@@ -68,7 +67,6 @@ const show2FAAuthDialog = async () => {
             }
             catch(e:any) {
                 snackbar.value.show(e.response.data.message, 'error') 
-                const r = errorHandler(e)
             }
         }
     }

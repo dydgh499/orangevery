@@ -8,6 +8,7 @@ import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
+import PhoneNum2FAVertifyDialog from '@/layouts/dialogs/users/PhoneNum2FAVertifyDialog.vue'
 
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { getUserLevel, isAbleModiy } from '@axios'
@@ -20,7 +21,9 @@ const { selected, all_selected } = selectFunctionCollect(store)
 const { pgs, settle_types } = useStore()
 const password  = ref()
 const batchDialog = ref()
+const phoneNum2FAVertifyDialog = ref()
 
+provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
 provide('password', password)
 provide('store', store)
 provide('head', head)
@@ -44,8 +47,14 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="아이디, 상호, 연락처, 대표자명, 사업자번호, 예금주, 계좌번호 검색" :metas="metas" :add="isAbleModiy(0)" add_name="가맹점"
-            :date_filter_type="DateFilters.NOT_USE">
+        <BaseIndexView 
+            placeholder="아이디, 상호, 연락처, 대표자명, 사업자번호, 예금주, 계좌번호 검색" 
+            sub_search_placeholder="MID, TID 검색"
+            sub_search_name="결제모듈"
+            :metas="metas" :add="isAbleModiy(0)" 
+            add_name="가맹점"
+            :date_filter_type="DateFilters.NOT_USE"
+            >
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true"
                     :sales="true">
@@ -183,6 +192,7 @@ onMounted(() => {
          <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.Merchandise"
             @update:select_idxs="selected = $event; store.setTable(); store.getChartData()"/>
         <PasswordChangeDialog ref="password" />
+        <PhoneNum2FAVertifyDialog ref="phoneNum2FAVertifyDialog"/>
     </div>
 </template>
 

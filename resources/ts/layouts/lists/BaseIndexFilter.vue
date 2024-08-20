@@ -10,6 +10,8 @@ interface Props {
     add: boolean,
     add_name: string,
     date_filter_type: number | null,
+    sub_search_name?: string,
+    sub_search_placeholder?: string,
 }
 
 const route = useRoute()
@@ -41,9 +43,10 @@ const enable = ref(true)
 const format = ref({})
 const time_picker = ref(true)
 const search = ref(<string>(''))
+const search2 = ref(<string>(''))
 
 const queryToStoreParams = () => {
-    const str_keys = ['search', 's_dt', 'e_dt', 'dt']
+    const str_keys = ['search', 'search2', 's_dt', 'e_dt', 'dt']
     const keys = Object.keys(route.query).filter(key => !str_keys.includes(key));
     for (let i = 0; i < keys.length; i++) {
         store.params[keys[i]] = route.query[keys[i]] != null ? parseInt(route.query[keys[i]] as string) : null
@@ -56,10 +59,13 @@ const queryToStoreParams = () => {
 
     if (route.query.search) {
         store.params.search = route.query.search
+        store.params.search2 = route.query.search2
         search.value = store.params.search
+        search2.value = store.params.search2
     }
     else if(corp.pv_options.free.init_search_filter) {
         store.params.search = undefined
+        store.params.search2 = undefined
     }
     store.updateQueryString(store.params)
 }
@@ -67,7 +73,7 @@ const queryToStoreParams = () => {
 const handleEnterKey = (event: KeyboardEvent) => {
     if (event.keyCode === 13) {
         store.setTable()
-        store.updateQueryString({ search: search.value })
+        store.updateQueryString({ search: search.value, search2: search2.value })
     }
 }
 
@@ -139,7 +145,7 @@ queryToStoreParams()
                             :teleport="true" @update:modelValue="[dateChanged(store)]" />
                     </VCol>
                 </VRow>
-                <VRow style="align-items: center; justify-content: space-around;">
+                <VRow style="align-items: center; justify-content: space-around; justify-content: center;">
                     <VCol cols="12" style="display: flex;">
                         <VTextField id="search" :placeholder="props.placeholder" density="compact" v-model="search"
                             @keyup="handleEnterKey">
@@ -167,7 +173,7 @@ queryToStoreParams()
                         </VBtn>
                         <VBtn prepend-icon="tabler-plus" @click="store.edit(0)" v-if="props.add" 
                             :style="'margin: 0.25em;'" size="small">
-                            {{ props.add_name }} 추가
+                            {{ props.add_name }}
                         </VBtn>
                     </VCol>
                 </VRow>
@@ -215,13 +221,25 @@ queryToStoreParams()
                             </div>
                             <div class="d-inline-flex align-center flex-wrap gap-4 float-right justify-center">
                                 <VTextField id="search" :placeholder="props.placeholder" density="compact" v-model="search"
-                                    @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input">
+                                    @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input"
+                                    :label="add_name +' 정보 검색'">
                                     <VTooltip activator="parent" location="top">
                                         {{ props.placeholder }}
                                     </VTooltip>
                                 </VTextField>
+                                <VTextField v-show="props.sub_search_name" 
+                                    id="search2"
+                                    :placeholder="props.sub_search_placeholder" 
+                                    density="compact" 
+                                    v-model="search2"
+                                    @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input"
+                                    :label="props.sub_search_name + ' 정보 검색'">
+                                    <VTooltip activator="parent" location="top">
+                                        {{ props.sub_search_placeholder }}
+                                    </VTooltip>
+                                </VTextField>
                                 <VBtn prepend-icon="tabler:search"  size="small"
-                                    @click="store.setTable(); store.updateQueryString({ search: search })">
+                                    @click="store.setTable(); store.updateQueryString({ search: search, search2: search2 });">
                                     검색
                                 </VBtn>
                                 <VBtn variant="tonal" color="secondary" prepend-icon="tabler-filter" size="small"

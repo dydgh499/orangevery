@@ -1,12 +1,11 @@
 
 // Thanks: https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
-import { useZoomProperty } from '@layouts/composable/useZoomProperty'
-
+import { themeConfig } from '@themeConfig'
 export const useDynamicVhCssProperty = () => {
     const vh = ref(0)
-    const { zoom } = useZoomProperty()
     const updateVh = () => {
-        const offset = window.innerHeight * ((100 - zoom.value) / 100)
+        const zoom = Number(localStorage.getItem(`${themeConfig.app.title}-zoom`) ?? 90)
+        const offset = window.innerHeight * ((100 - zoom) / 100)
         vh.value = (window.innerHeight + offset) * 0.01
     }
 

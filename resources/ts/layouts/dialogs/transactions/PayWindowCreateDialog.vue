@@ -18,6 +18,7 @@ const pay_info = reactive({
 })
 const is_sms_link = ref()
 const format_amount = ref('0')
+const phone_num_format = ref('')
 const payment_module = ref()
 const url = ref()
 
@@ -50,6 +51,17 @@ const formatAmount = computed(() => {
     format_amount.value = parse_amount.toLocaleString()
 })
 
+const formatPhoneNum = computed(() => {
+    let raw_value = phone_num_format.value.replace(/\D/g, '');
+    pay_info.buyer_phone = raw_value
+    // 휴대폰 번호 마스킹
+    if (raw_value.length <= 3)
+        phone_num_format.value = raw_value;
+    else if (raw_value.length <= 7) 
+        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3);
+    else
+        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 7) + '-' + raw_value.slice(7, 11);
+})
 
 defineExpose({
     show
@@ -108,7 +120,8 @@ defineExpose({
                                     </VCol>
                                     <VCol cols="12" :md="8">
                                         <VTextField 
-                                            v-model="pay_info.buyer_phone" 
+                                            v-model="phone_num_format"
+                                            @input="formatPhoneNum"
                                             type="number" 
                                             name="buyer_phone"
                                             variant="underlined"

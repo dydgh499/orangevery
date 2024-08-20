@@ -82,6 +82,7 @@ export const Searcher = (path: string) => {
     const base_url = '/api/v1/manager/'+path
     // -----------------------------
     let before_search   = ''
+    let before_search2  = ''
     const items         = shallowRef(<[]>([]))
     const params        = reactive<any>({})
     const pagenation    = reactive<Pagenation>({ total_count: 0, total_page: 1, total_range: 0})
@@ -105,15 +106,21 @@ export const Searcher = (path: string) => {
         router.push('/' + path + '/' + (id ? `edit/${id}` : 'create'))
     }
 
-    const getSearch = () => {
+    const getSearch = (p: any) => {
         const search = (document.getElementById('search') as HTMLInputElement)
-        return search ? search.value : ''
+        const search2 = (document.getElementById('search2') as HTMLInputElement)
+
+        p.search    = search ? search.value : ''
+        p.search2   = search2 ? search2.value : ''
+
+        return p
     }
 
     const getParams = () => {
-        const p = cloneDeep(params)
-        p.search = getSearch()        
-        if(before_search != p.search) {
+        let p = cloneDeep(params)
+        p = getSearch(p)
+
+        if(before_search != p.search || before_search2 != p.search2) {
             params.page = 1
             setChartProcess()
             before_search = p.search
@@ -122,7 +129,7 @@ export const Searcher = (path: string) => {
     }
 
     const updateQueryString = (obj: any) => {
-        const is_chart_update = Object.keys(obj).some(key => !['page', 'page_size', 'search'].includes(key))
+        const is_chart_update = Object.keys(obj).some(key => !['page', 'page_size', 'search', 'search2'].includes(key))
         const query = {...router.currentRoute.value.query, ...obj}
         if(is_chart_update) {
             params.page = 1
@@ -156,9 +163,9 @@ export const Searcher = (path: string) => {
     })
     
     const getAllDataFormat = () => {
-        const p  = cloneDeep(params)  
-        p.search = getSearch()
-        p.page_size = 99999999
+        let p  = cloneDeep(params)  
+        p = getSearch(p)
+        p.page_size = 999999
         p.page = 1
         return p
     }

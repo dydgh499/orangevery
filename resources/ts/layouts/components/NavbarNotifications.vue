@@ -26,12 +26,14 @@ axios.get('/api/v1/manager/posts/recent')
 </script>
 
 <template>
-    <Notifications :notifications="notifications" />
-    <Suspense>
-        <CollectWithdrawDangerDialog ref="collectWithdrawDangerDialog"/>
-    </Suspense>
-    <Suspense>
-        <SecureReportDialog ref="secureReportDialog"/>
-    </Suspense>
-    <DetailWorkStatusDialog ref="detailWorkStatusDialog"/>
+    <div class="me-2">
+        <Notifications :notifications="notifications" />
+        <Suspense>
+            <CollectWithdrawDangerDialog ref="collectWithdrawDangerDialog"/>
+        </Suspense>
+        <Suspense>
+            <SecureReportDialog ref="secureReportDialog"/>
+        </Suspense>
+        <DetailWorkStatusDialog ref="detailWorkStatusDialog"/>
+    </div>
 </template>

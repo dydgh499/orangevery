@@ -69,6 +69,11 @@
   </body>
 </html>
 <script>
+  document.getElementById('load-custom').onerror = function () {
+      document.getElementById('load-custom').classList.add('hidden');
+      document.getElementById('load-default').classList.remove('hidden');
+  }
+
   @if(env('APP_ENV') === 'production' && !in_array($ip, json_decode(env('MASTER_IPS'), true)))
     document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
@@ -83,11 +88,6 @@
             e.preventDefault();
         }
     });
-
-    document.getElementById('load-custom').onerror = function () {
-        document.getElementById('load-custom').classList.add('hidden');
-        document.getElementById('load-default').classList.remove('hidden');
-    }
   @endif
   const loaderColor = localStorage.getItem("{{ $json['name'] }}-initial-loader-bg") || '#FFFFFF';
   const primaryColor = "{{ $json['color'] }}" || '#EA5455';

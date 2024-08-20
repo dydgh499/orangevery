@@ -50,34 +50,31 @@ defineExpose({
         <!-- Dialog close btn -->
         <DialogCloseBtn @click="close()" />
         <!-- Dialog Content -->
-        <VCard title="결제창 정보">
-            <VCardText>
+        <VCard>
+            <VCol cols="12">
+                <VRow no-gutters>
+                    <VCol cols="6" :md="6">
+                        <VCardTitle>결제창 정보</VCardTitle>
+                    </VCol>
+                    <VCol cols="12" :md="6">
+                        <div style="display: inline-flex; align-items: center;margin-right: 1em; float: inline-end;">
+                            <h5 style="margin-right: 0.5em;">결제창 유효시간</h5>
+                            <b :class="getRemainTimeColor">{{ remaining_time }}</b>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+            <VCardText style="padding-top: 0;">
                 <VCol cols="12">
                     <template v-if="payment_module.module_type === 1">
                         <h4>수기결제창은 생성 후 1시간동안 유효합니다.</h4>
                     </template>
-                    <VRow class="pt-5">
-                        <VCol md="12" cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="6" :md="3">
-                                    <b>결제창 유효시간</b>
-                                </VCol>
-                                <VCol cols="6" :md="9">
-                                    <b :class="getRemainTimeColor">{{ remaining_time }}</b>
-                                </VCol>
-                            </VRow>
+                    <VRow no-gutters style="padding-top: 12px;">
+                        <VCol cols="5" :md="3">
+                            <span>결제창 주소</span>
                         </VCol>
-                    </VRow>
-                    <VRow>
-                        <VCol md="12" cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="6" :md="3">
-                                    <b>결제창 주소</b>
-                                </VCol>
-                                <VCol cols="6" :md="9">
-                                    <label>{{ url }}</label>
-                                </VCol>
-                            </VRow>
+                        <VCol cols="7" :md="9">
+                            <b>{{ url }}</b>
                         </VCol>
                     </VRow>
                 </VCol>

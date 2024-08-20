@@ -78,43 +78,47 @@ class MerchandiseController extends Controller
 
     public function byPayModules($request, $is_all)
     {
+        $search = $request->input('search2', '');
         $query = $this->merchandises
             ->join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
             ->where('payment_modules.is_delete', false)
-            ->distinct('payment_modules.mcht_id');
+            ->distinct('payment_modules.mcht_id')
+            ->where(function ($query) use ($search) {
+                return $query->where('mid', 'like', "%$search%")
+                    ->orWhere('tid', 'like', "%$search%");
+            });
 
         $query = globalPGFilter($query, $request, 'payment_modules');
-        return $this->mchtCommonFilter($query, $request, 'merchandises', $is_all);
+        return $this->mchtFilter($query, $request, $is_all);
     }
 
     public function byNormalIndex($request, $is_all)
     {
-        return $this->mchtCommonFilter($this->merchandises, $request, 'merchandises', $is_all);
+        return $this->mchtFilter($this->merchandises, $request, $is_all);
     }
 
-    private function mchtCommonFilter($query, $request, $parent, $is_all)
+    private function mchtFilter($query, $request, $is_all)
     {
         $search = $request->input('search', '');
-
-        $query = globalSalesFilter($query, $request, $parent);
-        $query = globalAuthFilter($query, $request, $parent);
+        $query = globalSalesFilter($query, $request, 'merchandises');
+        $query = globalAuthFilter($query, $request, 'merchandises');
         $query = $query
-                ->where($parent.'.brand_id', $request->user()->brand_id)
-                ->where(function ($query) use ($search, $parent) {
-                    return $query->where($parent.'.mcht_name', 'like', "%$search%")
-                        ->orWhere($parent.'.user_name', 'like', "%$search%")
-                        ->orWhere($parent.'.phone_num', 'like', "%$search%")
-                        ->orWhere($parent.'.business_num', 'like', "%$search%")
-                        ->orWhere($parent.'.nick_name', 'like', "%$search%")
-                        ->orWhere($parent.'.acct_num', 'like', "%$search%")
-                        ->orWhere($parent.'.acct_name', 'like', "%$search%");
+                ->where('merchandises.brand_id', $request->user()->brand_id)
+                ->where(function ($query) use ($search) {
+                    return $query->where('merchandises.mcht_name', 'like', "%$search%")
+                        ->orWhere('merchandises.user_name', 'like', "%$search%")
+                        ->orWhere('merchandises.phone_num', 'like', "%$search%")
+                        ->orWhere('merchandises.business_num', 'like', "%$search%")
+                        ->orWhere('merchandises.nick_name', 'like', "%$search%")
+                        ->orWhere('merchandises.acct_num', 'like', "%$search%")
+                        ->orWhere('merchandises.acct_name', 'like', "%$search%");
                 });
         if($request->is_lock)
-            $query = $query->where($parent.'.is_lock', 1);
+            $query = $query->where('merchandises.is_lock', 1);
         if($request->input('settle_hold', 0))
-            $query = $query->whereNotNull($parent.'.settle_hold_s_dt');
+            $query = $query->whereNotNull('merchandises.settle_hold_s_dt');
         if($is_all == false)
-            $query = $query->where($parent.'.is_delete', false);
+            $query = $query->where('merchandises.is_delete', false);
         return $query;
     }
     
@@ -142,8 +146,9 @@ class MerchandiseController extends Controller
     {
         $cond_1 = $request->pg_id || $request->ps_id || $request->terminal_id;
         $cond_2 = $request->settle_type !== null || $request->mcht_settle_type !== null || $request->module_type != null;
+        $cond_3 = $request->input('search2', '') !== '';
 
-        return $cond_1 || $cond_2;
+        return $cond_1 || $cond_2 || $cond_3;
     }
 
     public function commonSelect($request, $is_all=false)
