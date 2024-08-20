@@ -91,71 +91,68 @@ onMounted(() => {
 </script>
 
 <template>
-    <section>
-        <VerticalNavLayout 
-            :nav-items="navItems" 
-            v-if="is_pay_link === false">
-            <!-- 👉 navbar -->
-            <template #navbar="{ toggleVerticalOverlayNavActive }">
-                <div class="d-flex h-100 align-center">
-                    <VBtn v-if="isLessThanOverlayNavBreakpoint(windowWidth)" icon variant="text" color="default" class="ms-n3"
-                        size="small" @click="toggleVerticalOverlayNavActive(true)">
-                        <VIcon icon="tabler-menu-2" size="24" />
-                    </VBtn>
+    <VerticalNavLayout 
+        :nav-items="navItems" 
+        v-if="is_pay_link === false">
+        <!-- 👉 navbar -->
+        <template #navbar="{ toggleVerticalOverlayNavActive }">
+            <div class="d-flex h-100 align-center">
+                <VBtn v-if="isLessThanOverlayNavBreakpoint(windowWidth)" icon variant="text" color="default" class="ms-n3"
+                    size="small" @click="toggleVerticalOverlayNavActive(true)">
+                    <VIcon icon="tabler-menu-2" size="24" />
+                </VBtn>
 
-                    <div v-if="isLessThanOverlayNavBreakpoint(windowWidth) === false">
-                        <template v-if="isFixplus()">
-                            <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>
-                            <span v-if="getUserLevel() === 10" class="text-primary font-weight-bold">({{ user_info.mcht_name }})</span>
-                            <span v-else-if="getUserLevel() < 35" class="text-primary font-weight-bold">({{ user_info.sales_name }})</span>님 안녕하세요!
-                        </template>
-                        <template v-else>
-                            <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>님 안녕하세요!
-                        </template>
-                    </div>
-                    <VSpacer />
-                    <NavTokenableExpireTime />
-                    <NavbarZoomSwitcher />
-                    <NavbarThemeSwitcher />
-                    <NavbarNotifications v-if="user_info.level >= 35" />
-                    <UserProfile />
+                <div v-if="isLessThanOverlayNavBreakpoint(windowWidth) === false">
+                    <template v-if="isFixplus()">
+                        <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>
+                        <span v-if="getUserLevel() === 10" class="text-primary font-weight-bold">({{ user_info.mcht_name }})</span>
+                        <span v-else-if="getUserLevel() < 35" class="text-primary font-weight-bold">({{ user_info.sales_name }})</span>님 안녕하세요!
+                    </template>
+                    <template v-else>
+                        <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>님 안녕하세요!
+                    </template>
                 </div>
-            </template>
+                <VSpacer />
+                <NavTokenableExpireTime />
+                <NavbarZoomSwitcher />
+                <NavbarThemeSwitcher />
+                <NavbarNotifications v-if="user_info.level >= 35" />
+                <UserProfile />
+            </div>
+        </template>
 
-            <!-- 👉 Pages -->
-            <RouterView v-slot="{ Component }">
-                <Transition :name="appRouteTransition" mode="out-in">
-                    <Component :is="Component" />
-                </Transition>
-                <Snackbar ref="snackbar" />
-                <PWASnackbar ref="pwaSnackbar"/>
-                <AlertDialog ref="alert" />
-                <LoadingDialog ref="loading" />
-                <PayWindowCreateDialog ref="payLink"/>
-                <PayWindowShowDialog ref="payShow"/>
-                <PopupDialog ref="popup"/>
-                <PasswordChangeNoticeDialog ref="passwordChangeNoticeDialog"/>
-            </RouterView>
+        <!-- 👉 Pages -->
+        <RouterView v-slot="{ Component }">
+            <Transition :name="appRouteTransition" mode="out-in">
+                <Component :is="Component" />
+            </Transition>
+            <Snackbar ref="snackbar" />
+            <PWASnackbar ref="pwaSnackbar"/>
+            <AlertDialog ref="alert" />
+            <LoadingDialog ref="loading" />
+            <PayWindowCreateDialog ref="payLink"/>
+            <PayWindowShowDialog ref="payShow"/>
+            <PopupDialog ref="popup"/>
+            <PasswordChangeNoticeDialog ref="passwordChangeNoticeDialog"/>
+        </RouterView>
 
-            <!-- 👉 Footer -->
-            <template #footer>
-                <Footer/>
-            </template>
+        <!-- 👉 Footer -->
+        <template #footer>
+            <Footer/>
+        </template>
 
-            <!-- 👉 Customizer -->
-            <TheCustomizer />
-        </VerticalNavLayout>
+        <!-- 👉 Customizer -->
+        <TheCustomizer />
+    </VerticalNavLayout>
 
-        <div v-else class="d-flex justify-center align-center" style="height: 100%;flex-direction: column;">
-            <RouterView v-slot="{ Component }">
-                <Transition :name="appRouteTransition" mode="out-in">
-                    <Component :is="Component" />
-                </Transition>
-                <Snackbar ref="snackbar" />
-                <AlertDialog ref="alert" />
-                <LoadingDialog ref="loading" />
-            </RouterView>
-        </div>
-
-    </section>
+    <div v-else class="d-flex justify-center align-center" style="height: 100%;flex-direction: column;">
+        <RouterView v-slot="{ Component }">
+            <Transition :name="appRouteTransition" mode="out-in">
+                <Component :is="Component" />
+            </Transition>
+            <Snackbar ref="snackbar" />
+            <AlertDialog ref="alert" />
+            <LoadingDialog ref="loading" />
+        </RouterView>
+    </div>
 </template>
