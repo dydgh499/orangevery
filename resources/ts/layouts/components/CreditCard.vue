@@ -3,7 +3,7 @@ interface Props {
     card_num: string,
     auth_num: string,
     yymm: string,
-    is_old_auth: boolean
+    is_old_auth: number
 }
 const props = withDefaults(defineProps<Props>(), {
     card_num: '',
