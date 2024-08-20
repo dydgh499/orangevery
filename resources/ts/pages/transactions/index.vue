@@ -130,7 +130,7 @@ onMounted(() => {
             </template>
             <template #index_extra_field>
                 <VBtn prepend-icon="carbon:batch-job" @click="transactionBatchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
-                    일괄 작업
+                    일괄작업
                 </VBtn>
                 <div>
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_realtime_fail" label="즉시출금 실패건 조회" color="error"

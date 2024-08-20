@@ -148,15 +148,25 @@ queryToStoreParams()
                 <VRow style="align-items: center; justify-content: space-around; justify-content: center;">
                     <VCol cols="12" style="display: flex;">
                         <VTextField id="search" :placeholder="props.placeholder" density="compact" v-model="search"
-                            @keyup="handleEnterKey">
+                            :label="props.add_name + ' 정보 검색'" @keyup="handleEnterKey" prepend-inner-icon="tabler:search">
                             <VTooltip activator="parent" location="top">
                                 {{ props.placeholder }}
                             </VTooltip>
                         </VTextField>
+
                         <VBtn prepend-icon="tabler:search"  size="small" style="height: 40px;margin-left: 0.5em;"
                             @click="store.setTable(); store.updateQueryString({ search: search })">
                             검색
                         </VBtn>
+                    </VCol>
+                    <VCol cols="12" style="padding: 0 12px;" v-show="props.sub_search_name">
+                        <VTextField  id="search2" :placeholder="props.sub_search_placeholder" 
+                            density="compact" v-model="search2" @keyup="handleEnterKey" prepend-inner-icon="tabler:search"
+                            :label="props.sub_search_name + ' 정보 검색'">
+                            <VTooltip activator="parent" location="top">
+                                {{ props.sub_search_placeholder }}
+                            </VTooltip>
+                        </VTextField>
                     </VCol>
                 </VRow>
                 <VRow style="align-items: center; justify-content: space-around;">
@@ -164,12 +174,12 @@ queryToStoreParams()
                         <VBtn variant="tonal" color="secondary" prepend-icon="tabler-filter" 
                             :style="'margin: 0.25em;'" size="small"
                             @click="head.filter.show()">
-                            검색 필터
+                            검색필터
                         </VBtn>
                         <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel" 
                             :style="'margin: 0.25em;'" size="small"
                             @click="exporter(1)">
-                            엑셀 추출
+                            엑셀추출
                         </VBtn>
                         <VBtn prepend-icon="tabler-plus" @click="store.edit(0)" v-if="props.add" 
                             :style="'margin: 0.25em;'" size="small">
@@ -227,12 +237,8 @@ queryToStoreParams()
                                         {{ props.placeholder }}
                                     </VTooltip>
                                 </VTextField>
-                                <VTextField v-show="props.sub_search_name" 
-                                    id="search2"
-                                    :placeholder="props.sub_search_placeholder" 
-                                    density="compact" 
-                                    v-model="search2"
-                                    @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input"
+                                <VTextField v-show="props.sub_search_name"  id="search2" :placeholder="props.sub_search_placeholder" 
+                                    density="compact" v-model="search2" @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input"
                                     :label="props.sub_search_name + ' 정보 검색'">
                                     <VTooltip activator="parent" location="top">
                                         {{ props.sub_search_placeholder }}
@@ -265,3 +271,8 @@ queryToStoreParams()
         </VCardText>
     </VCol>
 </template>
+<style scoped>
+.search-input {
+  min-inline-size: 15.35rem;
+}
+</style>

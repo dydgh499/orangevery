@@ -57,7 +57,7 @@ onMounted(() => {
             <template #index_extra_field>
                 <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35"
                     color="primary" size="small">
-                    일괄 작업
+                    일괄작업
                 </VBtn>
                 <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.un_use" label="작월 미결제 결제모듈 조회"
                     color="warning" @update:modelValue="store.updateQueryString({ un_use: store.params.un_use })" />

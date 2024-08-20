@@ -241,7 +241,7 @@ const filterPgs = computed(() => {
 
 </script>
 <template>
-    <VCard title="결제모듈 일괄 작업" style="max-height: 55em !important;overflow-y: auto !important;">
+    <VCard title="결제모듈 일괄작업" style="max-height: 55em !important;overflow-y: auto !important;">
         <VCardText>
             <template v-if="props.selected_sales_id === 0 && props.selected_level === 0">
                 <div style="display: flex; align-items: center; justify-content: space-between;">

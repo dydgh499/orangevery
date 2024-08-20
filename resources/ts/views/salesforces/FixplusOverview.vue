@@ -144,10 +144,10 @@ watchEffect(() => {
                             <div v-if="getUserLevel() >= 35 && props.item.id"
                                 :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
                                 <VBtn style='margin: 0.25em;' variant="tonal" size="small" @click="mchtBatchDialog.show()">
-                                    하위 가맹점 일괄 작업
+                                    하위 가맹점 일괄작업
                                 </VBtn>
                                 <VBtn style='margin: 0.25em;' variant="tonal" size="small" color="error" @click="pmodBatchDialog.show()">
-                                    하위 결제모듈 일괄 작업
+                                    하위 결제모듈 일괄작업
                                 </VBtn>
                             </div>
                         </div>

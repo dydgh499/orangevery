@@ -168,7 +168,7 @@ const setNote = () => {
 </script>
 <template>
     <section>
-        <VCard title="영업점 일괄 작업" style="max-height: 55em !important;overflow-y: auto !important;">
+        <VCard title="영업점 일괄작업" style="max-height: 55em !important;overflow-y: auto !important;">
             <VCardText>
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <VRadioGroup v-model="selected_all">

@@ -46,7 +46,7 @@ store.params.level = sales_levels[sales_levels.length - 1].id as number
             </template>
             <template #index_extra_field>
                 <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
-                    일괄 작업
+                    일괄작업
                 </VBtn>
                 <div>
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.is_lock" label="잠금계정 조회"

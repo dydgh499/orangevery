@@ -101,8 +101,3 @@ onMounted(() => {
         <SearchFilterDialog ref="filter" />
     </section>
 </template>
-<style>
-.search-input {
-  min-inline-size: 18.35rem;
-}
-</style>
