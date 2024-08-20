@@ -37,7 +37,7 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
             params: pay,
         })
         pays.push({
-            title: '결제창 조회',
+            title: '결제창 정보',
             class: `select()`,
             params: pay,
         })

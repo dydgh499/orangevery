@@ -122,7 +122,6 @@ defineExpose({
                                         <VTextField 
                                             v-model="phone_num_format"
                                             @input="formatPhoneNum"
-                                            type="number" 
                                             name="buyer_phone"
                                             variant="underlined"
                                             prepend-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
