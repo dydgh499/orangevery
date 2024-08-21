@@ -1,7 +1,7 @@
 import { getFixplusSalesHeader, isFixplus } from '@/plugins/fixplus'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
-import type { Merchandise, Options, Salesforce, UnderAutoSetting } from '@/views/types'
+import type { Merchandise, Options, SalesFilter, Salesforce, UnderAutoSetting } from '@/views/types'
 import { avatars } from '@/views/users/useStore'
 import { axios, getSalesLevelByCol, getUserLevel, salesLevels } from '@axios'
 import corp from '@corp'
@@ -169,10 +169,11 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
     }
 })
 
+
 export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     const is_sales_loaded = ref(false)
     const all_sales = Array.from({ length: SALES_LEVEL_SIZE }, () => <Salesforce[]>([]))
-    const sales = Array.from({ length: SALES_LEVEL_SIZE }, () => ref<Salesforce[]>([]))
+    const sales = Array.from({ length: SALES_LEVEL_SIZE }, () => ref<SalesFilter[]>([]))
     const sales_apply_histories = ref(<any[]>([]))
     const mchts = ref(<Merchandise[]>([]))
     
@@ -332,47 +333,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
                 }
             }
         }
-        if(corp.pv_options.paid.sales_parent_structure && getUserLevel() < 40)
-            setParentIdBaseSales(select_idx, params)
-        else
-            setMchtBaseSales(select_idx, params)
-    }
-    const getAboveSalesFilterByParentId = (select_idx: number, params: any) => {
-        for (let i = select_idx; i < SALES_LEVEL_SIZE - 1; i++) {
-            const sales_key = `sales${i}`
-            let _sales = all_sales[i].find(obj => obj.id === params[sales_key + '_id'])
-            if(_sales) {
-                let parent_sales = all_sales[i+1].find(obj => obj.id === _sales.parent_id)
-                if(parent_sales) {
-                    sales[i+1].value = [
-                        { id: null, sales_name: '전체' },
-                        { id: parent_sales.id, sales_name: parent_sales.sales_name },
-                    ]
-                    params[`sales${i+1}` + '_id'] = parent_sales.id
-                }
-            }
-        }
-    }
-
-    const setParentIdBaseSales = (select_idx: number, params: any) => {
-        getAboveSalesFilterByParentId(select_idx, params)
-        // 하위
-        let _sales = all_sales[select_idx].find(obj => obj.id === params[`sales${select_idx}_id`])
-        if(_sales) {
-            sales[i-1].value = [
-                { id: null, sales_name: '전체' },
-                { id: _sales.id, sales_name: _sales.sales_name },
-            ]
-        }
-        for (let i = select_idx-1; i > 0; i--) {
-            const sales_key = `sales${i}`
-            if(params[sales_key+'_id']) {
-                sales[i-1].value = [
-                    { id: null, sales_name: '전체' },
-                    ...all_sales[i-1].filter(obj => obj.parent_id === params[sales_key+'_id']).sort((a, b) => a.sales_name.localeCompare(b.sales_name))
-                ]
-            }
-        }
+        setMchtBaseSales(select_idx, params)
     }
 
     const setMchtBaseSales = (select_idx: number, params: any) => {

@@ -176,6 +176,11 @@ export interface Merchandise extends MerchandisePropertie, UserPropertie {
     products?: Product[],
 }
 
+export interface SalesFilter {
+    id: number | null,
+    sales_name: string,
+}    
+
 export interface Salesforce extends SalesforcePropertie, UserPropertie {
     parent_id?: number,
     sales_fee?: number,

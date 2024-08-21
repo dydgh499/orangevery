@@ -79,8 +79,16 @@ class IPInfo
             }
             else if($res['code'] === 200)
             {
-                self::set($res['body']);
-                return $res['body'];
+                if(gettype($res['body']) === 'string')
+                {
+                    error(array_merge($request->all(), $res), 'ip blacklist response type is string');
+                    return null;
+                }
+                else
+                {
+                    self::set($res['body']);
+                    return $res['body'];    
+                }
             }
             else
             {

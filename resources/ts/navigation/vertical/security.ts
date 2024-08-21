@@ -7,7 +7,7 @@ const getAbilitiesMenu = computed(() => {
         securities.push({ heading: 'Security' })
         securities.push({
             title: '보안 관리',
-            icon: { icon: 'ph-buildings' },
+            icon: { icon: 'tabler:lock-dollar' },
             children: []
         })
         securities[1].children.push({
