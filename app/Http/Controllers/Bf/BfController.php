@@ -113,7 +113,7 @@ class BfController extends Controller
                 'pay_day_limit',
                 'pay_single_limit',
                 'terminal_id',
-                'pay_window_secure_level',
+                'pay_window_secure_level as show_pay_view',
                 'use_realtime_deposit',
                 'fin_trx_delay',
             ]);
