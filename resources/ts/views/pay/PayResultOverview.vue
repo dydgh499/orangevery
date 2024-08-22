@@ -16,6 +16,13 @@ const salesSlipDialog = ref()
 const home = () => {
     location.href = '/pay/' + route.params.window + '/window'
 }
+const businessNumMasking = () => {
+    if(sales_slip.value.business_num?.length as number > 9) {
+        const bsin_num = sales_slip.value.business_num?.replace(/\D/g, '') as string
+        sales_slip.value.business_num = bsin_num.slice(0, 3) + "-" + bsin_num.slice(3, 5) + "-" + bsin_num.slice(5)
+    }
+}
+
 onMounted(async () => {
     try {
         const res = await axios.get('/api/v1/pay/' + route.params.window, {
@@ -33,6 +40,7 @@ onMounted(async () => {
         sales_slip.value.trx_dttm    = (route.query.trx_dttm ?? new Date()) as string
         sales_slip.value.amount      = Number(sales_slip.value.amount) 
         sales_slip.value.module_type = res.data.payment_module.module_type 
+        businessNumMasking()
     }
     catch (e: any) {
         sales_slip.value.result_cd = e.response.data.code
