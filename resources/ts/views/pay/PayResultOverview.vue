@@ -139,7 +139,7 @@ onMounted( async () => {
                 </div>
             </VCardText>
         </VCard>
-        <SalesSlipDialog ref="salesSlipDialog" :pgs="payment_gateways"/>
+        <SalesSlipDialog ref="salesSlipDialog" :pgs="payment_gateways" :key="payment_gateways.length"/>
     </section>
 </template>
 <style scoped>

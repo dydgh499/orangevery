@@ -58,7 +58,7 @@ onMounted(async () => {
             </Suspense>
         </div>
         <br>
-        <SalesSlipDialog ref="salesslip" :pgs="payment_gateways" />
+        <SalesSlipDialog ref="salesslip" :pgs="payment_gateways" :key="payment_gateways.length"/>
 
     </section>
 </template>
