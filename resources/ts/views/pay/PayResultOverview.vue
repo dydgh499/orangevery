@@ -16,7 +16,7 @@ const salesSlipDialog = ref()
 const home = () => {
     location.href = '/pay/' + route.params.window + '/window'
 }
-onMounted( async () => {
+onMounted(async () => {
     try {
         const res = await axios.get('/api/v1/pay/' + route.params.window, {
             params : {
@@ -28,9 +28,9 @@ onMounted( async () => {
             ...res.data.merchandise,
             ...route.query,
         }
-        sales_slip.value.pg_id       = Number(route.query.pg_id)
+        sales_slip.value.pg_id       = res.data.payment_gateway.id
         sales_slip.value.is_cancel   = Number(route.query.is_cancel ?? false)
-        sales_slip.value.trx_dttm    = (route.query.trx_dttm ?? '') as string
+        sales_slip.value.trx_dttm    = (route.query.trx_dttm ?? new Date()) as string
         sales_slip.value.amount      = Number(sales_slip.value.amount) 
         sales_slip.value.module_type = res.data.payment_module.module_type 
     }
@@ -80,14 +80,6 @@ onMounted( async () => {
                                 </VTable>
                                 <VTable v-else style="margin: 3em 0; text-align: center;">
                                     <tr>
-                                        <th class="padding">결과코드</th>
-                                        <td class="padding">{{ sales_slip?.result_cd }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="padding">응답 메세지</th>
-                                        <td class="padding">{{ sales_slip?.result_msg }}</td>
-                                    </tr>
-                                    <tr>
                                         <th class="padding">상품명</th>
                                         <td class="padding">{{ sales_slip.item_name }}</td>
                                     </tr>
@@ -98,6 +90,10 @@ onMounted( async () => {
                                     <tr>
                                         <th class="padding">구매자명</th>
                                         <td class="padding">{{ sales_slip.buyer_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="padding">거래일시</th>
+                                        <td class="padding">{{ sales_slip.trx_dttm }}</td>
                                     </tr>
                                     <tr>
                                         <th class="padding">카드번호</th>
@@ -125,7 +121,7 @@ onMounted( async () => {
                         </VCardText>
                         <VRow no-gutters style="display: flex; flex-direction: row; justify-content: space-evenly;">
                             <VCol cols="5" style="padding: 0;">
-                                <VBtn block @click="home()">
+                                <VBtn block @click="home()" color="warning">
                                     결제창으로
                                 </VBtn>
                             </VCol>
