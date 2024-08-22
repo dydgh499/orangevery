@@ -10,9 +10,9 @@ export const payWindowStore = () => {
         location.href = url
     }
 
-    const copy = (value : string) => {
+    const copy = (value : string, type='결제링크') => {
         navigator.clipboard.writeText(value).then(() => {
-            snackbar.value.show('생성하신 결제링크가 클립보드에 복사되었습니다.', 'success')
+            snackbar.value.show(`${type}가 클립보드에 복사되었습니다.`, 'success')
         }).catch(err => {
             try {
                 const textarea = document.createElement('textarea');
@@ -27,12 +27,12 @@ export const payWindowStore = () => {
                 document.body.removeChild(textarea);
 
                 if (successful) 
-                    snackbar.value.show('생성하신 결제링크가 클립보드에 복사되었습니다.', 'success');
+                    snackbar.value.show(`${type}가 클립보드에 복사되었습니다.`, 'success');
                 else 
                     throw new Error('Copy command was unsuccessful');
             }
             catch (err) {
-                snackbar.value.show('결제링크 복사를 실패하였습니다.<br>결제링크를 길게눌러 복사하세요.', 'error')
+                snackbar.value.show(`${type} 복사를 실패하였습니다.<br>${type}를 길게눌러 복사하세요.`, 'error')
             }
         });
     }

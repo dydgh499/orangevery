@@ -43,21 +43,17 @@ const pay_module = reactive<any>({
     api_key: '',
     sub_key: '',
     installment: 0,
-
     pay_single_limit: 0,
     pay_day_limit: 0,
     pay_month_limit: 0,
     pay_year_limit: 0,
     payment_term_min: 1,
-
     fin_id: null,
     use_realtime_deposit: 0,
     pay_window_secure_level: 0,
     note: '',
-
     pg_id: null,
     ps_id: null,
-
     pay_window_secure_level: 1,
     pay_window_extend_hour: 1,
 })

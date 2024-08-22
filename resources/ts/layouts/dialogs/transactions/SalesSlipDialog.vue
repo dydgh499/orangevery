@@ -1,12 +1,13 @@
 <script lang="ts" setup>
-import DialogHalfVCol from '@/layouts/utils/DialogHalfVCol.vue'
-import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
-import type { BeforeBrandInfo, PayGateway, SalesSlip } from '@/views/types'
-import corp from '@corp'
-import background from '@images/salesslip/background.jpg'
-import cancel from '@images/salesslip/cancel.png'
-import html2canvas from "html2canvas"
-import { useDisplay } from 'vuetify'
+import DialogHalfVCol from '@/layouts/utils/DialogHalfVCol.vue';
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
+import { payWindowStore } from '@/views/quick-view/payWindowStore';
+import type { BeforeBrandInfo, PayGateway, SalesSlip } from '@/views/types';
+import corp from '@corp';
+import background from '@images/salesslip/background.jpg';
+import cancel from '@images/salesslip/cancel.png';
+import html2canvas from "html2canvas";
+import { useDisplay } from 'vuetify';
 
 interface Props {
     pgs: PayGateway[],
@@ -15,11 +16,13 @@ interface Props {
 const reload_mode = ref(false)
 const props = defineProps<Props>()
 
+const { copy } = payWindowStore()
 const snackbar = <any>(inject('snackbar'))
 const visible = ref(false)
 const provider_info = ref<BeforeBrandInfo>()
 const trans = ref<SalesSlip>()
 const pg = ref<PayGateway>()
+
 const card = ref(null)
 const thickness = ref(3)
 
@@ -31,10 +34,7 @@ const { mobile } = useDisplay()
 
 
 const updateThickness = () => {
-    if (window.innerWidth <= 500)
-        thickness.value = 2;
-    else
-        thickness.value = 3;
+    thickness.value = window.innerWidth <= 500 ? 2 : 3;
 };
 
 const getVat = () => {
@@ -98,12 +98,7 @@ text += `총결제액\t\t${total_amount.value.toLocaleString()}원
 ---------------------------------
 신용카드 매출전표는 부가가치세법 제32조 2 제3항에 의거하여 발행되었으며 부가가치세법 제 46조에 따라 신용카드매출전표 등을 발급받은 경우에는 매입세액 공제가 가능합니다.`
     
-    navigator.clipboard.writeText(text).then(() => {
-        snackbar.value.show('영수증 텍스트가 클립보드에 복사되었습니다.', 'success')
-    }).catch(err => {
-        snackbar.value.show('텍스트 복사에 실패했습니다.', 'error')
-        console.error('Could not copy text: ', err)
-    });   
+    copy(text, '영수증 텍스트')
 }
 
 const downloadSalesSlip = async () => {
@@ -180,9 +175,6 @@ const close = () => {
     if(reload_mode.value)
         location.reload()
 }
-const cancelColor = computed(() => {
-    return trans.value?.is_cancel ? 'text-decoration: line-through;' : ''
-})
 
 onMounted(() => {
     window.addEventListener('resize', updateThickness);
@@ -282,7 +274,7 @@ defineExpose({
                     <DialogHalfVCol class="cell font-weight-bold">
                         <template #name>총결제금액</template>
                         <template #input>
-                            <span class="text-primary big-font" :style="cancelColor">
+                            <span class="text-primary big-font" :style="trans?.is_cancel ? 'text-decoration: line-through;' : ''">
                                 {{ total_amount.toLocaleString() }} 원
                             </span>
                         </template>
