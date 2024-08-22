@@ -4,25 +4,33 @@ import { SALES_LEVEL_SIZE } from './useStore'
 export const overlap = (all_sales: Salesforce[][], sales: Ref<SalesFilter[]>[]) => {
     const recursionSalesChildFilter = (select_idx: number, params: any) => {
         const findOneParentChildSaleses = () => {
-            const child_saleses = all_sales[select_idx - 1].filter(obj => obj.parent_id === params[`sales${select_idx}_id`]).sort((a, b) => a.sales_name.localeCompare(b.sales_name))
-            if(child_saleses) 
-                return child_saleses
+            let child_saleses = all_sales[select_idx - 1].filter(obj => obj.parent_id === params[`sales${select_idx}_id`])
+            if(child_saleses) {
+                if(params[`sales${select_idx - 1}_id`]) 
+                    child_saleses = child_saleses.filter(obj => obj.id === params[`sales${select_idx - 1}_id`])
+                
+                return child_saleses.sort((a, b) => a.sales_name.localeCompare(b.sales_name))
+            }
             else
                 return null
         }
-        const findManyParentChildSaleses = (select_idx:number, parent_saleses: Salesforce[]) => {
-            if(select_idx < 1)
+        const findManyParentChildSaleses = (parent_idx:number, parent_saleses: Salesforce[]) => {
+            if(parent_idx < 1)
                 return
             else {
                 const parent_idxs = parent_saleses.map(obj => obj.id)
-                const child_saleses = all_sales[select_idx - 1].filter(obj => obj.parent_id !== undefined && parent_idxs.includes(obj.parent_id)).sort((a, b) => a.sales_name.localeCompare(b.sales_name))
+                let child_saleses = all_sales[parent_idx - 1].filter(obj => obj.parent_id !== undefined && parent_idxs.includes(obj.parent_id))
+
                 if(child_saleses) {
-                    sales[select_idx - 1].value = child_saleses
-                    findManyParentChildSaleses(select_idx - 1, child_saleses)
+                    if(params[`sales${parent_idx - 1}_id`]) 
+                        child_saleses = child_saleses.filter(obj => obj.id === params[`sales${parent_idx - 1}_id`])
+                    
+                    sales[parent_idx - 1].value = child_saleses.sort((a, b) => a.sales_name.localeCompare(b.sales_name))
+                    findManyParentChildSaleses(parent_idx - 1, child_saleses)
                 }
                 else {
-                    sales[select_idx - 1].value = [{ id: null, sales_name: '전체'}]
-                    params[`sales${select_idx - 1}_id`] = null
+                    sales[parent_idx - 1].value = [{ id: null, sales_name: '전체'}]
+                    params[`sales${parent_idx - 1}_id`] = null
                 }
             }
         }
@@ -110,10 +118,6 @@ export const overlap = (all_sales: Salesforce[][], sales: Ref<SalesFilter[]>[]) 
                 sales[5].value = [{ id: null, sales_name: '전체'}, ...all_sales[5].sort((a, b) => a.sales_name.localeCompare(b.sales_name))]
                 params[`sales${5}_id`] = null              
             }
-            for (let i = select_idx - 1; i >= 0; i--) {
-                sales[i].value = [{ id: null, sales_name: '전체'}, ...all_sales[i].sort((a, b) => a.sales_name.localeCompare(b.sales_name))]
-                params[`sales${i}_id`] = null
-            }
             if(select_idx !== 5) {
                 for (let i = select_idx; i < SALES_LEVEL_SIZE - 1; i++) {
                     const sales_key = `sales${i}`
@@ -122,11 +126,11 @@ export const overlap = (all_sales: Salesforce[][], sales: Ref<SalesFilter[]>[]) 
                         break
                     }
                 }
-    
+                console.log('selected' ,select_idx)
                 for (let i = SALES_LEVEL_SIZE - 1; i > 0; i--) {
                     recursionSalesChildFilter(i, params)
                     break
-                }    
+                }
             }
         }
     }
