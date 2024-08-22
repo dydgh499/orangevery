@@ -139,6 +139,7 @@ class PayWindowInterface implements GeneratorInterface
                     'merchandises.nick_name',
                     'merchandises.addr as mcht_addr',
 
+                    'payment_gateways.id as pg_id',
                     'payment_gateways.pg_type',
                     'payment_gateways.company_name',
                     'payment_gateways.business_num',
@@ -152,6 +153,7 @@ class PayWindowInterface implements GeneratorInterface
             {
                 $data = [
                     'payment_gateway' => [
+                        'id'            => $pay_module->pg_id,
                         'pg_type'       => $pay_module->pg_type,
                         'company_name'  => $pay_module->company_name,
                         'business_num'  => $pay_module->business_num,
