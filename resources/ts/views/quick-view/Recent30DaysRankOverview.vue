@@ -44,7 +44,7 @@ watchEffect(() => {
             </span>
         </VCol>
     </VCard>
-    <VTable class="text-no-wrap">
+    <VTable class="text-no-wrap" :style="props.transactions.length > 14 ? 'block-size: 50em !important;' : ''">
         <thead>
             <tr>
                 <th class="list-square">

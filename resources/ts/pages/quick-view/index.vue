@@ -11,69 +11,45 @@ import { axios, getUserLevel, user_info } from '@axios'
 
 const transactions = ref(<MchtRecentTransactions>({}))
 const is_skeleton = ref(true)
-const { hands } = useQuickViewStore()
-
+const { getPayMenuIcon, payment_modules } = useQuickViewStore()
 
 const my_level = getUserLevel()
 const payShow  = <any>(inject('payShow'))
 
-if(my_level >= 35)  //본사
-    router.replace('dashboards')
-else {
-    axios.get('/api/v1/quick-view?level='+my_level)
-        .then(r => { transactions.value = r.data as MchtRecentTransactions; })
-        .catch(e => { console.log(e) })
-}
-
-const toHandPayLink = () => {
-    payShow.value.show(hands[0])
-}
-const toComplaintLink = () => {
-    router.push('complaints')
-}
-
-/*
-const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
-const amount = ref(0)
-const able_balance = ref(0)
-
-const getWithdrawAbleAmount = async() => {
-    const r = await get('/api/v1/quick-view/withdraw-able-amount', {})
-    able_balance.value = Number(r.data.profit) - r.data.withdraw_fee
-}
-
-const isBrightFix = () => {
-    return (corp.id == 14 || corp.id == 12 || corp.id == 30) ? true : false
-}
-
-const requestWithdraw = async() => {
-    if(able_balance.value >= amount.value) {
-        if(amount.value) {
-            if(await alert.value.show('정말 '+amount.value+'원을 출금하시겠습니까?')) {
-                const r = await post('/api/v1/bf/withdraws', {
-                    withdraw_amount: amount.value,
-                })
-                if(r.status == 201)
-                    getWithdrawAbleAmount()
-            }
-        }
-        else
-            snackbar.value.show('출금 금액을 입력해주세요.', 'warning')
+const getPaymentModuleNote = computed(() => {
+    if(payment_modules.length) {
+        if(payment_modules[0].module_type === 1)
+            return '수기결제'
+        else if(payment_modules[0].module_type === 2)
+            return '인증결제'
+        else if(payment_modules[0].module_type === 3)
+            return '간편결제'
     }
-    else
-        snackbar.value.show('출금 가능 금액을 초과하였습니다.', 'warning')
-}
-*/
-
-watchEffect(() => {
-    if(Object.keys(transactions.value).length)
-        is_skeleton.value = false
-    /*
-        if(getUserLevel() == 10 && user_info.value.use_collect_withdraw)
-            getWithdrawAbleAmount()
-    */
+    return ''
 })
+
+const getPaymentModuleIcon = computed(() => {
+    if(payment_modules.length)
+        return getPayMenuIcon(payment_modules[0].module_type)
+    else
+        return ''
+})
+
+onMounted(() => {
+    if(my_level >= 35)  //본사
+        router.replace('dashboards')
+    else {
+        axios.get('/api/v1/quick-view?level='+my_level)
+            .then(r => { transactions.value = r.data as MchtRecentTransactions; })
+            .catch(e => { console.log(e) })
+    }
+
+    watchEffect(() => {
+        if(Object.keys(transactions.value).length)
+            is_skeleton.value = false
+    })
+})
+
 </script>
 <template>
     <section>
@@ -95,12 +71,12 @@ watchEffect(() => {
                             1:1 문의
                             <VIcon end icon="twemoji:adhesive-bandage" />
                         </VBtn>
-                        <VBtn variant="tonal" @click="toHandPayLink()" class="shortcut-button"
-                            v-if="hands.length > 0 && hands[0].pay_window_secure_level">
-                            수기결제
-                            <VIcon end icon="fluent-payment-32-regular" />
+                        <VBtn variant="tonal" @click="payShow.show(payment_modules[0])" class="shortcut-button"
+                            v-if="payment_modules.length > 0 && payment_modules[0].pay_window_secure_level">
+                            {{ getPaymentModuleNote }}
+                            <VIcon end :icon="getPaymentModuleIcon" />
                         </VBtn>
-                        <VBtn variant="tonal" @click="toComplaintLink()" class="shortcut-button" color="error" v-if="getUserLevel() === 10">
+                        <VBtn variant="tonal" @click="router.push('complaints')" class="shortcut-button" color="error" v-if="getUserLevel() === 10">
                             민원관리
                             <VIcon end icon="ic-round-sentiment-dissatisfied" />
                         </VBtn>

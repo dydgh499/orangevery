@@ -70,8 +70,6 @@ const formatYYmm = computed(() => {
 <template>
     <VCard flat rounded>
         <VCardText style="padding: 0;">
-            <slot name="explain">
-            </slot>
             <VDivider />
             <VForm ref="vForm" @submit.prevent="pay">
                 <CommonPayOverview :common_info="hand_pay_info" :pay_module="props.pay_module"

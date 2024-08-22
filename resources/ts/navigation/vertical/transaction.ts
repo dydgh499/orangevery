@@ -2,32 +2,13 @@ import { getUserLevel } from '@axios'
 import corp from '@corp'
 
 
-const getPaymentTap = () => {
+const getPaymentTestTap = () => {
     let payment = []
     if(getUserLevel() >= 35) {
         payment.push({
-            title: '결제',
-            icon: { icon: 'fluent-payment-32-regular' },
-            children: <any>([])
+            title: '결제 테스트',
+            to: 'transactions-pay-test',
         })
-        if (corp.pv_options.free.use_hand_pay) {
-            payment[0].children.push({
-                title: '수기 결제 테스트',
-                to: 'transactions-pay-test-hand',
-            })
-        }
-        if (corp.pv_options.free.use_auth_pay) {
-            payment[0].children.push({
-                title: '인증 결제 테스트',
-                to: 'transactions-pay-test-auth',
-            })
-        }
-        if (corp.pv_options.free.use_simple_pay) {
-            payment[0].children.push({
-                title: '간편 결제 테스트',
-                to: 'transactions-pay-test-simple',
-            })
-        }    
     }
     return payment
 }
@@ -73,6 +54,7 @@ const getTransactionTap = () => {
         })
     }
     transactions[0].children.push(...getRiskTap())
+    transactions[0].children.push(...getPaymentTestTap())
     return transactions
 }
 
@@ -148,14 +130,12 @@ const getSettleHistoryTap = () => {
 }
 
 const getAbilitiesMenu = computed(() => {
-    const payment = getPaymentTap()
     const transactions = getTransactionTap()
     const settles = getSettleManagement()
     const settle_histories = getSettleHistoryTap()
 
     return [
         { heading: 'Transaction' },
-        ...payment,
         ...transactions,
         ...settles,
         ...settle_histories,

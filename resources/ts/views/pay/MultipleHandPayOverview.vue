@@ -61,7 +61,7 @@ const init = () => {
 }
 
 const addNewHandPay = () => {
-    hand_pay_infos.value.push(<MultipleHandPay>({
+    hand_pay_infos.value.push(<MultipleHandPay><unknown>({
         auth_num: '',
         card_pw: '',
         yymm: String(''),

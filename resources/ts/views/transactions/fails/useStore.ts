@@ -16,8 +16,8 @@ export const useSearchStore = defineStore('failSearchStore', () => {
         'mcht_name': '가맹점 상호',
         'module_type': '거래타입',
         'amount': '결제시도 금액',
-        'result_cd': '실패 코드',
-        'result_msg': '실패 메세지',
+        'result_cd': '에러 코드',
+        'result_msg': '에러 메세지',
         'trx_dttm': '결제시도시간',
     }
     head.sub_headers.value = []

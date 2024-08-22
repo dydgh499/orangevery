@@ -14,8 +14,8 @@ interface Props {
 
 const props = defineProps<Props>()
 const { mobile } = useDisplay()
-const params = <any>(inject('params'))
 const params_mode = <any>(inject('params_mode'))
+const params = <any>(inject('params'))
 
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
 const is_verify_sms = ref(false)
@@ -90,6 +90,8 @@ watchEffect(() => {
     <VTextField v-model="props.common_info.user_agent" type="visible" name="user_agent" style="display: none;" />
     <VTextField v-model="props.common_info.buyer_phone" type="visible" name="buyer_phone" style="display: none;" />
     <VTextField v-model="props.common_info.amount" type="visible" name="amount" style="display: none;" />
+    <VTextField v-model="props.common_info.item_name" type="visible" name="item_name" style="display: none;" />
+    <VTextField v-model="props.common_info.buyer_name" type="visible" name="buyer_name" style="display: none;" />
     <VCol style="padding: 0 12px;">
         <VRow>
             <VCol md="12" cols="12" style="padding: 0 12px;">
@@ -98,14 +100,18 @@ watchEffect(() => {
                         <label>상품명</label>
                     </VCol>
                     <VCol cols="8" :md="10">
-                        <VTextField v-model="props.common_info.item_name" name="item_name"
+                        <div v-if="params_mode" style="display: inline-flex;" class="text-primary">
+                            <VIcon size="24" icon="tabler:shopping-bag" style="margin-right: 16px;"/>
+                            <h4>{{ props.common_info.item_name }}</h4>
+                        </div>
+                        <VTextField v-else
+                            v-model="props.common_info.item_name"
                             prepend-icon="tabler:shopping-bag"
                             maxlength="100" 
                             counter
                             variant="underlined"
                             :rules="[requiredValidatorV2(props.common_info.item_name, '상품명')]" 
-                            placeholder="상품명을 입력해주세요" 
-                            :disabled="params_mode ? true : false"/>
+                            placeholder="상품명을 입력해주세요"/>
                     </VCol>
                 </VRow>
             </VCol>
@@ -117,11 +123,16 @@ watchEffect(() => {
                         <label>구매자명</label>
                     </VCol>
                     <VCol cols="8" :md="8">
-                        <VTextField v-model="props.common_info.buyer_name" name="buyer_name"
+                        <div v-if="params_mode" style="display: inline-flex;" class="text-primary">
+                            <VIcon size="24" icon="tabler-user" style="margin-right: 16px;"/>
+                            <h4>{{ props.common_info.buyer_name }}</h4>
+                        </div>
+                        <VTextField 
+                            v-else
+                            v-model="props.common_info.buyer_name"
                             variant="underlined"
                             placeholder="구매자명을 입력해주세요" :rules="[requiredValidatorV2(props.common_info.buyer_name, '구매자명')]" 
-                            prepend-icon="tabler-user" 
-                            :disabled="params_mode ? true : false"/>
+                            prepend-icon="tabler-user" />
                     </VCol>
                 </VRow>
             </VCol>
@@ -131,7 +142,12 @@ watchEffect(() => {
                         <label>연락처</label>
                     </VCol>
                     <VCol cols="8" :md="8">
+                        <div v-if="params_mode" style="display: inline-flex;" class="text-primary">
+                            <VIcon size="24" icon="tabler-device-mobile" style="margin-right: 16px;"/>
+                            <h4>{{ phone_num_format }}</h4>
+                        </div>
                         <VTextField 
+                            v-else
                             v-model="phone_num_format" 
                             @input="formatPhoneNum"
                             variant="underlined"
@@ -149,7 +165,12 @@ watchEffect(() => {
                         <label>상품금액</label>
                     </VCol>
                     <VCol cols="8" :md="8">
+                        <div v-if="params_mode" style="display: inline-flex;" class="text-primary">
+                            <VIcon size="24" icon="ic:outline-price-change" style="margin-right: 16px;"/>
+                            <h4>{{ format_amount }} 원</h4>
+                        </div>
                         <VTextField 
+                            v-else
                             v-model="format_amount" suffix="₩" 
                             @input="formatAmount"
                             variant="underlined"

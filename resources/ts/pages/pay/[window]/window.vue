@@ -4,7 +4,6 @@ import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
 import router from '@/router';
 import AuthPayOverview from '@/views/pay/AuthPayOverview.vue';
 import HandPayOverview from '@/views/pay/HandPayOverview.vue';
-import SimplePayOverview from '@/views/pay/SimplePayOverview.vue';
 import type { Merchandise, PayGateway, PayModule, PayWindow } from '@/views/types';
 import { axios } from '@axios';
 import { hourTimer } from '@core/utils/timer';
@@ -18,17 +17,14 @@ const payment_gateways = ref(<PayGateway[]>[])
 const merchandise = ref(<Merchandise>({}))
 const pay_module = ref(<PayModule>{module_type: 0})
 const pay_window = ref(<PayWindow>({}))
+const params_mode = ref(false)
 const params = ref({
     item_name : '',
     buyer_name : '',
     amount : 0,
     buyer_phone : '',
 })
-const params_mode = ref(false)
 const salesslip = ref()
-
-const return_url = window.location.origin + '/pay/result'
-const pay_url = ref(<string>(''))
 
 const code = ref(200)
 const message = ref()
@@ -38,14 +34,14 @@ const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 
 provide('salesslip', salesslip)
-provide('params', params)
 provide('params_mode', params_mode)
+provide('params', params)
 
 const handleKeyDownEvent = async (index: number) => {
     handleKeyDown(index)
     if (digits.value.join('').length === 6) {
         try {
-            const res = await axios.post('/api/v1/pay/' + route.query.wc + '/auth', {
+            const res = await axios.post('/api/v1/pay/' + route.params.window + '/auth', {
                 pin_code: digits.value.join('')
             })
             sign_in_result.value = true
@@ -58,7 +54,7 @@ const handleKeyDownEvent = async (index: number) => {
 
 onMounted(async () => {
     try {
-        const res = await axios.get('/api/v1/pay/' + route.query.wc, {
+        const res = await axios.get('/api/v1/pay/' + route.params.window, {
             params : {
                 pc: route.query.pc
             }
@@ -80,11 +76,6 @@ onMounted(async () => {
         }
 
         expire_time.value = pay_window.value.holding_able_at
-        if (pay_module.value.module_type == 2)
-            pay_url.value = import.meta.env.VITE_NOTI_URL + '/v2/online/pay/auth'
-        else if (pay_module.value.module_type == 3)
-            pay_url.value = import.meta.env.VITE_NOTI_URL + '/v2/online/pay/simple'
-
         const intervalId = setInterval(updateRemainingTime, 1002);
     }
     catch (e: any) {
@@ -123,7 +114,7 @@ onMounted(async () => {
                         </div>
                     </VCol>
                     <VCol cols="12" v-else-if="pay_module?.module_type > 0" class="d-flex justify-center align-center">
-                        <div style="max-width: 700px;">
+                        <div :style="$vuetify.display.smAndDown ? '' : 'min-width: 700px; max-width: 700px;'">
                             <div style="padding-bottom: 1em;text-align: center;">
                                 <img :src="corp.logo_img || ''" width="80">
                                 <div>
@@ -138,18 +129,10 @@ onMounted(async () => {
                                 :merchandise="merchandise"                             
                             />
                             <AuthPayOverview 
-                                v-else-if="pay_module?.module_type === 2"
+                                v-else-if="pay_module?.module_type === 2 || pay_module?.module_type === 3"
                                 :pay_module="pay_module" 
-                                :merchandise="merchandise" 
-                                :return_url="return_url"
-                                :pay_url="pay_url"
-                            />
-                            <SimplePayOverview 
-                                v-else-if="pay_module?.module_type === 3"
-                                :pay_module="pay_module" 
-                                :merchandise="merchandise"                             
-                                :return_url="return_url"
-                                :pay_url="pay_url"
+                                :merchandise="merchandise"
+                                :pay_window="pay_window"
                             />
                         </div>
                     </VCol>

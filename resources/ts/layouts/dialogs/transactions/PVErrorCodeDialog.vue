@@ -42,7 +42,7 @@ const setErrorCode = () => {
         {id: 'PV419', message: '결제 키(sub key) 값이 이상합니다. 결제 키를 확인하신 후 시도해주세요.', reason: '', resolve: '해당 결제모듈에서 SUB KEY 재확인'},
         {id: 'PV420', message: '이용할 수 없는 카드사입니다.', reason: '', resolve: '해당 결제모듈에서 카드사 필터 수정'},
         {id: 'PV421', message: '중복결제 방지를 위해 n시부터 결제 가능합니다.', reason: '', resolve: '해당 결제모듈에서 결제 허용 간격 수정'},
-        {id: 'PV422', message: '파라미터 누락', reason: '', resolve: '파라미터 재확안'},
+        {id: 'PV422', message: '파라미터 누락', reason: '', resolve: '파라미터 재확인'},
     ])
     if(corp.pv_options.paid.use_mcht_blacklist) 
         errors.value.push({id: 'PV423', message: '이용할 수 없는 카드입니다.', reason: '가맹점 블랙리스트에 등록된 카드정보', resolve: ''})

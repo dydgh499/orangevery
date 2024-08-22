@@ -4,7 +4,7 @@ import type { MchtRecentTransaction } from '@/views/types';
 import { getUserLevel, user_info } from '@axios';
 
 interface Props {
-    transactions?: MchtRecentTransaction[] | undefined,
+    transactions?: MchtRecentTransaction[],
 }
 const props = defineProps<Props>()
 const formatDate = <any>(inject('$formatDate'))
@@ -52,7 +52,7 @@ watchEffect(() => {
             </span>
         </VCol>
     </VCard>
-    <VTable class="text-no-wrap">
+    <VTable class="text-no-wrap" :style="props.transactions?.length > 14 ? 'block-size: 50em !important;' : ''">
         <thead>
             <tr>
                 <th class="list-square">

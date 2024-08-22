@@ -2,7 +2,6 @@ import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import type { PayModule } from '@/views/types'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
-import * as CryptoJS from 'crypto-js'
 import { filter } from 'lodash'
 import { ref } from 'vue'
 
@@ -12,20 +11,15 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
     const auths = ref(<PayModule[]>(filter(payment_modules, { module_type: 2 })))
     const simples = ref(<PayModule[]>(filter(payment_modules, { module_type: 3 })))
 
-    const getEncryptParams = (pay: PayModule) => {
-        return encodeURIComponent(
-            CryptoJS.AES.encrypt(
-                JSON.stringify(
-                    {
-                        m: pay.mcht_id,
-                        p: pay.id,
-                        o: Boolean(pay.is_old_auth),
-                        i: pay.installment,
-                        t: Date.now() % 10000,
-                        g: pay.pg_id,
-                    }
-                )
-                , '^^_masking_^^').toString())
+    const getPayMenuIcon = (module_type: number) => {
+        if(module_type === 1)
+            return 'fluent-payment-32-regular'
+        else if(module_type === 2)
+            return 'fluent:payment-32-filled'
+        else if(module_type === 3)
+            return 'streamline:money-wallet-money-payment-finance-wallet'
+        else
+            return ''
     }
 
     const getPayMenuFormats = (pay: PayModule, icon: string) => {
@@ -61,11 +55,11 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
         const payment_menus = []
         if (getUserLevel() == 10) {
             if (corp.pv_options.free.use_hand_pay)
-                payment_menus.push(...getPayLinkFormats(hands.value, 'fluent-payment-32-regular'))
+                payment_menus.push(...getPayLinkFormats(hands.value, getPayMenuIcon(1)))
             if (corp.pv_options.free.use_auth_pay) 
-                payment_menus.push(...getPayLinkFormats(auths.value, 'fluent:payment-32-filled'))    
+                payment_menus.push(...getPayLinkFormats(auths.value, getPayMenuIcon(2)))    
             if (corp.pv_options.free.use_simple_pay) 
-                payment_menus.push(...getPayLinkFormats(simples.value, 'streamline:money-wallet-money-payment-finance-wallet'))
+                payment_menus.push(...getPayLinkFormats(simples.value, getPayMenuIcon(3)))
         }
         const transactions = {
             title: '매출 관리',
@@ -101,7 +95,7 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
     })
 
     return {
-        getEncryptParams,
+        getPayMenuIcon,
         getPayLinkFormats,
         getPaymentMenu,
         hands,

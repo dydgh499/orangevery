@@ -129,6 +129,8 @@ Route::prefix('merchandises')->group(function() {
                     Route::post('set-use-realtime-deposit', [BatchUpdatePayModuleController::class, 'setUseRealtimeDeposit']);
                     Route::post('set-fin-id', [BatchUpdatePayModuleController::class, 'setFinId']);
                     Route::post('set-payment-term-min', [BatchUpdatePayModuleController::class, 'setPaymentTermMin']);
+                    Route::post('set-pay-window-secure-level', [BatchUpdatePayModuleController::class, 'setPayWindowSecureLevel']);
+                    Route::post('set-pay-window-extend-hour', [BatchUpdatePayModuleController::class, 'setPayWindowExtendHour']);
                     Route::delete('remove', [BatchUpdatePayModuleController::class, 'batchRemove']);   
                 });
                 Route::post('tid-create', [PaymentModuleController::class, 'tidCreate']);

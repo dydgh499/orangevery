@@ -97,13 +97,13 @@ const props = defineProps<Props>()
             </VRow>
         </template>
         <VRow v-if="corp.pv_options.paid.use_forb_pay_time && props.item.module_type != 0">
-            <VCol md="6" cols="7">
+            <VCol md="4" cols="7">
                 <BaseQuestionTooltip :location="'top'" :text="'결제금지 시간'"
                     :content="'해당 시간대에는 <b>온라인 결제</b>를 발생시킬 수 없습니다.'"/>
             </VCol>
-            <VCol md="6">
-                <div :class="$vuetify.display.smAndDown ? 'd-flex flex-row' : 'd-flex flex-column'">
-                    <VTextField v-model="props.item.pay_disable_s_tm" type="time" label="시작시간" :style="$vuetify.display.smAndDown ? 'width: 9em; margin-right: 1em;' : 'width: 9em; margin-bottom: 1em;'"/>
+            <VCol md="8">
+                <div :class="$vuetify.display.smAndDown ? 'd-flex flex-row' : 'd-flex flex-row'">
+                    <VTextField v-model="props.item.pay_disable_s_tm" type="time" label="시작시간" :style="$vuetify.display.smAndDown ? 'width: 9em; margin-right: 1em;' : 'width: 9em; margin-right: 1em;'"/>
                     <VTextField v-model="props.item.pay_disable_e_tm" type="time" label="종료시간" style="width: 9em;"/>
                 </div>
             </VCol>
@@ -142,7 +142,7 @@ const props = defineProps<Props>()
         <VRow v-if="props.item.module_type != 0">
             <VCol md="5" cols="6">
                 <BaseQuestionTooltip :location="'top'" :text="'결제창 연장시간'"
-                    :content="'결제창 유지시간 연장 시 적용되는 시간입니다.'"/>
+                    :content="'결제창 유지시간 연장 시 적용되는 시간입니다.<br>인증결제, 간편결제는 연징시간을 검증하지 않습니다.'"/>
             </VCol>
             <VCol md="7">
                 <VSelect v-model="props.item.pay_window_extend_hour" :items="pay_window_extend_hours"

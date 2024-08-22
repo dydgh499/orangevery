@@ -270,4 +270,16 @@ class BatchUpdatePayModuleController extends Controller
         $row = $this->payModuleBatch($request)->update(['payment_modules.is_delete' => true]);
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 결제모듈이 존재하지 않습니다.');
     }
+
+    public function setPayWindowSecureLevel(Request $request)
+    {
+        $row = $this->payModuleBatch($request)->update(['pay_window_secure_level' => $request->pay_window_secure_level]);
+        return $this->batchResponse($row);
+    }
+
+    public function setPayWindowExtendHour(Request $request)
+    {
+        $row = $this->payModuleBatch($request)->update(['pay_window_extend_hour' => $request->pay_window_extend_hour]);
+        return $this->batchResponse($row);
+    }
 }

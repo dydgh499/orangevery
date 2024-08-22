@@ -613,7 +613,6 @@ export interface Transaction {
 export interface SalesSlip extends Transaction {
     result_cd?: string,
     result_msg?: string,
-    is_show_fee: number, 
     use_saleslip_prov: number, 
     use_saleslip_sell: number, 
     tax_category_type: number,
@@ -800,13 +799,9 @@ export interface HandPay extends BasePay {
     card_pw?: string,
 }
 
-export interface AuthPay extends BasePay{
+export interface AuthPay extends BasePay {
     return_url: string,
-}
-
-export interface SimplePay extends BasePay {
-    route: string,
-    return_url: string,
+    route?: string,
 }
 
 export interface MultipleHandPay extends HandPay {

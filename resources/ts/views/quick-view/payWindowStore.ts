@@ -67,9 +67,9 @@ export const payWindowStore = () => {
         else if(payment_module.module_type === 3)
             type = 'simple'
     
-        let url = window.location.origin + '/pay/window' + '?wc=' + payment_module.pay_window?.window_code 
+        let url = window.location.origin + '/pay/' + payment_module.pay_window?.window_code  + '/window'
         if(param_code.length > 0)
-            url += '&pc=' + param_code
+            url += '?pc=' + param_code
         return url
     }
 
@@ -90,12 +90,7 @@ export const payWindowStore = () => {
             CryptoJS.AES.encrypt(
                 JSON.stringify(
                     {
-                        m: pay.mcht_id,
                         p: pay.id,
-                        o: Boolean(pay.is_old_auth),
-                        i: pay.installment,
-                        t: Date.now() % 10000,
-                        g: pay.pg_id,
                     }
                 )
                 , '^^_masking_^^').toString())

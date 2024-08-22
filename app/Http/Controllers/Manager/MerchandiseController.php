@@ -475,24 +475,6 @@ class MerchandiseController extends Controller
     }
 
     /**
-     * 영수증 정보조회
-     *
-     * @urlParam id integer required 유저 PK
-     */
-    public function saleSlip(Request $request, int $id)
-    {
-        $cols = [
-            'id', 'addr', 'business_num', 'resident_num', 'mcht_name', 'user_name',
-            'nick_name', 'is_show_fee', 'use_saleslip_prov', 'use_saleslip_sell', 'use_regular_card',
-            'tax_category_type', 'use_pay_verification_mobile',
-        ];
-        $data = $this->merchandises
-            ->where('id', $id)
-            ->first($cols);
-        return $this->response(0, $data);
-    }
-
-    /**
      * 지급보류
      */
     public function setSettleHold(Request $request, $id)

@@ -287,19 +287,24 @@ class PaymentModuleController extends Controller
             'page' => 1,
             'page_size' => 999999,
         ]);
+
         if(Ablilty::isSalesforce($request) || Ablilty::isOperator($request))
+        {
             $cols = ['payment_modules.*'];
+            $with = [];
+        }
         else
         {
             $cols = [
                 'payment_modules.pay_window_secure_level',
-                'payment_modules.id', 'payment_modules.mcht_id', 'payment_modules.installment',
-                'payment_modules.mid', 'payment_modules.tid', 'payment_modules.pg_id', 'payment_modules.ps_id',
-                'payment_modules.module_type', 'payment_modules.settle_fee', 'payment_modules.settle_type',
-                'payment_modules.terminal_id', 'payment_modules.note', 'payment_modules.is_old_auth', 'payment_modules.installment', 
+                'payment_modules.id',
+                'payment_modules.module_type',
+                'payment_modules.note',
             ];
+            $with = ['payWindows'];
         }
-        $query = $this->commonSelect($request)->with(['payWindows']);
+
+        $query = $this->commonSelect($request)->with($with);
         $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
         return $this->response(0, $data);
     }
@@ -348,31 +353,7 @@ class PaymentModuleController extends Controller
         }
         return $this->response(1);        
     }
-
-    /**
-     * 영수증 정보조회
-     *
-     * @urlParam id integer required 유저 PK
-     */
-    public function saleSlip(Request $request, int $id)
-    {
-        $cols = [
-            'merchandises.addr',
-            'merchandises.business_num',
-            'merchandises.resident_num',
-            'merchandises.mcht_name',
-            'merchandises.nick_name',
-            'merchandises.is_show_fee',
-            'merchandises.use_saleslip_prov',
-            'merchandises.use_saleslip_sell',
-        ];
-        $mcht = $this->pay_modules
-            ->join('merchandises', 'merchandises.id', '=', 'payment_modules.mcht_id')
-            ->where('payment_modules.id', $id)
-            ->first($cols);
-        return $this->response(0, $mcht);        
-    }
-
+    
     /**
      * TID 발급
      */

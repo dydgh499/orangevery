@@ -76,9 +76,6 @@ defineExpose({
             <VCardText>
                 <VForm ref="vForm">
                     <VCol cols="12">
-                        <template v-if="payment_module.module_type === 1">
-                            <h4>수기결제창은 생성 후 1시간동안 유효합니다.</h4>
-                        </template>
                         <VRow class="pt-5">
                             <VCol md="12" cols="12" :style="$vuetify.display.smAndDown ? '' : 'padding: 0 12px;'">
                                 <VRow no-gutters style="min-height: 4em;">

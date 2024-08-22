@@ -56,7 +56,8 @@ defineExpose({
                         <VCardTitle>결제창 정보</VCardTitle>
                     </VCol>
                     <VCol cols="12" :md="6">
-                        <div style="display: inline-flex; align-items: center;margin-right: 1em; float: inline-end;">
+                        <div v-if="payment_module.module_type === 1" 
+                            style="display: inline-flex; align-items: center;margin-right: 1em; float: inline-end;">
                             <h5 style="margin-right: 0.5em;">결제창 유효시간</h5>
                             <b :class="getRemainTimeColor">{{ remaining_time }}</b>
                         </div>
@@ -65,9 +66,6 @@ defineExpose({
             </VCol>
             <VCardText style="padding-top: 0;">
                 <VCol cols="12">
-                    <template v-if="payment_module.module_type === 1">
-                        <h4>수기결제창은 생성 후 1시간동안 유효합니다.</h4>
-                    </template>
                     <VRow no-gutters style="padding-top: 12px;">
                         <VCol cols="5" :md="3">
                             <span>결제창 주소</span>

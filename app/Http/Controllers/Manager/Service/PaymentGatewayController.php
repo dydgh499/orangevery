@@ -143,16 +143,4 @@ class PaymentGatewayController extends Controller
         ];
         return $this->response(0, $data);
     }
-
-    /**
-     * 매출전표 PG사 정보 API
-     *
-     * @urlParam id integer required PG사 id
-     */
-    public function saleSlip(Request $request, int $id)
-    {
-        $cols = ['id', 'pg_type' ,'company_name', 'business_num', 'rep_name', 'addr'];      
-        $datas = $this->pay_gateways->where('id', $id)->get($cols);
-        return $this->response(0, $datas);
-    }
 }

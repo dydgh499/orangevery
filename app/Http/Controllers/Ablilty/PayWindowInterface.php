@@ -51,7 +51,10 @@ class PayWindowInterface implements GeneratorInterface
 
     static private function getHoldingAbleAt($pay_module)
     {
-        return Carbon::now()->addHours($pay_module->pay_window_extend_hour)->format('Y-m-d H:i:s');
+        if($pay_module->module_type === 1)
+            return Carbon::now()->addHours($pay_module->pay_window_extend_hour)->format('Y-m-d H:i:s');
+        else
+            return Carbon::now()->addDays(365)->format('Y-m-d H:i:s');
     }
 
     static public function renew($pmod_id)
@@ -126,17 +129,24 @@ class PayWindowInterface implements GeneratorInterface
                     'payment_modules.installment',
                     'payment_modules.module_type',
                     'payment_modules.pay_window_secure_level',
+
                     'merchandises.use_pay_verification_mobile',
+                    'merchandises.use_saleslip_prov',
+                    'merchandises.use_saleslip_sell',
+                    'merchandises.tax_category_type',
                     'merchandises.mcht_name',
                     'merchandises.business_num as mcht_business_num',
                     'merchandises.nick_name',
                     'merchandises.addr as mcht_addr',
-                    'pay_windows.holding_able_at',
+
                     'payment_gateways.pg_type',
                     'payment_gateways.company_name',
                     'payment_gateways.business_num',
                     'payment_gateways.rep_name',
                     'payment_gateways.addr',
+
+                    'pay_windows.holding_able_at',
+                    'pay_windows.window_code',
                 ]);
             if($pay_module)
             {
@@ -154,6 +164,9 @@ class PayWindowInterface implements GeneratorInterface
                         'nick_name' => $pay_module->nick_name,
                         'addr' => $pay_module->mcht_addr,
                         'use_pay_verification_mobile' => $pay_module->use_pay_verification_mobile,
+                        'use_saleslip_prov' => $pay_module->use_saleslip_prov,
+                        'use_saleslip_sell' => $pay_module->use_saleslip_sell,
+                        'tax_category_type' => $pay_module->tax_category_type,
                     ],
                     'payment_module' => [
                         'id'            => $pay_module->id,
@@ -164,6 +177,7 @@ class PayWindowInterface implements GeneratorInterface
                         'pay_window_secure_level' => $pay_module->pay_window_secure_level
                     ],
                     'pay_window' => [
+                        'window_code' => $pay_module->window_code,
                         'holding_able_at' => $pay_module->holding_able_at,
                     ]
                 ];

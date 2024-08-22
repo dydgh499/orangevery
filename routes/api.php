@@ -29,10 +29,8 @@ use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 
 Route::prefix('v1')->group(function() {    
     Route::get('services/mcht-blacklists/all', [MchtBlacklistController::class, 'all']);
-    Route::get('merchandises/{id}/sale-slip', [MerchandiseController::class, 'saleSlip']);
-    Route::get('pay-gateways/{id}/sale-slip', [PaymentGatewayController::class, 'saleSlip']);
-    Route::get('pay-modules/{id}/sale-slip', [PaymentModuleController::class, 'saleSlip']);
     Route::prefix('pay')->group(function() {
+        Route::middleware(['log.route'])->get('test', [PayWindowController::class, 'testWindow']);
         Route::post('{window_code}/auth', [PayWindowController::class, 'auth']);
         Route::get('{window_code}', [PayWindowController::class, 'window']);
     });
@@ -76,7 +74,7 @@ Route::prefix('v1')->group(function() {
 
     Route::prefix('quick-view')->middleware(['auth:sanctum', 'log.route'])->group(function() {
         Route::get('', [QuickViewController::class, 'index']);
-        Route::get('withdraw-able-amount', [QuickViewController::class, 'withdrawAbleAmount']);        
+        Route::get('withdraw-able-amount', [QuickViewController::class, 'withdrawAbleAmount']);
         Route::get('pay-modules/{id}/pay-window-renew', [PayWindowController::class, 'renew']);
         Route::post('pay-windows/{window_code}/extend', [PayWindowController::class, 'extend']);
     });

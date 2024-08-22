@@ -1,20 +1,46 @@
 <script setup lang="ts">
-import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
-import MultipleHandPayOverview from '@/views/pay/MultipleHandPayOverview.vue'
-import { pay } from '@/views/pay/pay'
-import { axios } from '@axios'
-import corp from '@corp'
+import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue';
+import MultipleHandPayOverview from '@/views/pay/MultipleHandPayOverview.vue';
+import type { Merchandise, PayGateway, PayModule, PayWindow } from '@/views/types';
+import { axios } from '@axios';
+import corp from '@corp';
+import * as CryptoJS from 'crypto-js';
 
-const { pay_module, merchandise, updatePayModule } = pay(1)
+const route = useRoute()
+const payment_gateways = ref(<PayGateway[]>[])
+const merchandise = ref(<Merchandise>({}))
+const pay_module = ref(<PayModule>{module_type: 0})
+const pay_window = ref(<PayWindow>({}))
+const query_params = ref()
+
+const snackbar = <any>(inject('snackbar'))
+const errorHandler = <any>(inject('$errorHandler'))
 const salesslip = ref()
-const pgs = ref([])
 
-updatePayModule()
 provide('salesslip', salesslip)
 
+const decryptQuery = () => {
+    const encrypt = decodeURIComponent(route.query.e as string)
+    const enc = CryptoJS.AES.decrypt(encrypt, '^^_masking_^^').toString(CryptoJS.enc.Utf8)
+    const params = JSON.parse(enc)
+    if (params.p) {
+        query_params.value.id = params.p
+    }
+}
+
 onMounted(async () => {
-    const res = await axios.get('/api/v1/pay-gateways/' + pay_module.value.pg_id + '/sale-slip')
-    pgs.value = res.data
+    decryptQuery()
+    try {
+        const res = await axios.get('/api/v1/pay/test?pmod_id='+query_params.value.id)
+        pay_window.value = res.data.pay_window
+        pay_module.value = res.data.payment_module
+        merchandise.value = res.data.merchandise
+        payment_gateways.value = [res.data.payment_gateway]
+    }
+    catch (e: any) {
+        snackbar.value.show(e.response.data.message, 'error')
+        const r = errorHandler(e)
+    }
 })
 </script>
 <template>
@@ -32,7 +58,7 @@ onMounted(async () => {
             </Suspense>
         </div>
         <br>
-        <SalesSlipDialog ref="salesslip" :pgs="pgs" />
+        <SalesSlipDialog ref="salesslip" :pgs="payment_gateways" />
 
     </section>
 </template>
