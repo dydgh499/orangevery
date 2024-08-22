@@ -214,7 +214,7 @@ defineExpose({
         <div ref="card" style="overflow-y: auto;">
             <VCard class="sales-slip-rect-container">
                 <VCardText class="sales-slip-rect" :style="`background-image: url(${background});`">
-                    <VCol class="font-weight-bold v-col-custom big-font text-center" style="padding-top: 24px;">
+                    <VCol class="font-weight-bold v-col-custom big-font text-center" :style="$vuetify.display.smAndDown ? '' : 'padding-top: 24px;'">
                         신용카드 영수증
                     </VCol>
                     <VCol class="text-primary font-weight-bold v-col-custom">
@@ -320,7 +320,7 @@ defineExpose({
                         <template #input>{{ provider_info?.company_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
-                        <template #name>사업자등록번호</template>
+                        <template #name>사업자번호</template>
                         <template #input>{{ provider_info?.business_num }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
@@ -412,10 +412,6 @@ div {
 @media (max-width: 500px) {
   .v-col-custom {
     padding: 8px;
-  }
-
-  .big-font {
-    font-size: 1.5em;
   }
 
   .cancel-img {
