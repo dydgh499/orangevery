@@ -58,7 +58,7 @@ onMounted( async () => {
                             하단 실패사유를 확인해주세요.
                         </b>
                         <b v-else>
-                            결제를 성공하였습니다 
+                            결제를 성공하였습니다! 
                             <VIcon size="24" icon='line-md:check-all' color='success'/>
                             <br>
                             하단 결제정보를 확인해주세요.

@@ -158,6 +158,7 @@ class PayWindowInterface implements GeneratorInterface
                         'company_name'  => $pay_module->company_name,
                         'business_num'  => $pay_module->business_num,
                         'rep_name'      => $pay_module->rep_name,
+                        'addr'          => $pay_module->addr,
                     ],
                     'merchandise' => [
                         'id' => $pay_module->mcht_id,
