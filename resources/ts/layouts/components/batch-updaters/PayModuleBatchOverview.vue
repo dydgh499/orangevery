@@ -50,7 +50,6 @@ const pay_module = reactive<any>({
     payment_term_min: 1,
     fin_id: null,
     use_realtime_deposit: 0,
-    pay_window_secure_level: 0,
     note: '',
     pg_id: null,
     ps_id: null,

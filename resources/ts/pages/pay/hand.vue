@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue';
-import MultipleHandPayOverview from '@/views/pay/MultipleHandPayOverview.vue';
+import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
+import HandPayOverview from '@/views/pay/HandPayOverview.vue'
 import type { Merchandise, PayGateway, PayModule, PayWindow } from '@/views/types';
-import { axios } from '@axios';
-import corp from '@corp';
+import { pay } from '@/views/pay/pay'
+import { axios } from '@axios'
+import corp from '@corp'
 import * as CryptoJS from 'crypto-js';
 
 const route = useRoute()
@@ -45,27 +46,26 @@ onMounted(async () => {
 </script>
 <template>
     <section>
-        <div id="pay-container">
-            <div style="text-align: center;">
-                <img :src="corp.logo_img || ''" width="100" height="100">
-                <br>
-                <b>환영합니다 !</b>
-                <br>
-                결제하실 정보를 입력해주세요.
-            </div>
-            <Suspense>
-                <MultipleHandPayOverview :pay_module="pay_module" :merchandise="merchandise"/>
-            </Suspense>
-        </div>
+        <VCard rounded>
+            <VCardText>
+                <VRow class="match-height">
+                    <VCol cols="12" class="d-flex justify-center align-center">
+                        <div style="max-width: 700px;">
+                            <div style="padding-bottom: 1em;text-align: center;">
+                                <img :src="corp.logo_img || ''" width="100" height="100">
+                                <div>
+                                    <b>환영합니다 !</b>
+                                    <br>
+                                    <span>결제하실 정보를 입력해주세요.</span>
+                                </div>
+                            </div>
+                            <HandPayOverview :pay_module="pay_module" :merchandise="merchandise"/>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCardText>
+        </VCard>
         <br>
-        <SalesSlipDialog ref="salesslip" :pgs="payment_gateways" :key="payment_gateways.length"/>
-
+        <SalesSlipDialog ref="salesslip" :pgs="payment_gateways" />
     </section>
 </template>
-<style>
-@media screen and (min-width: 960px) {
-  #pay-container {
-    inline-size: 960px;
-  }
-}
-</style>

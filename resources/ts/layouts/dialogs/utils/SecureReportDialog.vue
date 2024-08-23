@@ -75,6 +75,9 @@ setSecureReport()
             <DialogCloseBtn @click="setOpenStatus(popup)" />
         </div>
         <VCard title="보안 리포트">
+            <!-- 작성
+                // TODO: 확인되지 않은 IP 이상접속이 발견되면 개발사측에 공유하여 대처될 수 있도록 공유바랍니다. 
+            -->
             <VCardText>
                 <VRow>
                     <VCol md="6" cols="12">
