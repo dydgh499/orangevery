@@ -11,18 +11,20 @@ import { installments, module_types } from '@/views/merchandises/pay-modules/use
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
+import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import { getDateFormat, realtimeResult, settleIdCol, useSearchStore } from '@/views/transactions/useStore'
 
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import type { Options } from '@/views/types'
-import { getUserLevel, salesLevels, user_info } from '@axios'
+import { getLevelByIndex, getUserLevel, salesLevels, user_info } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
 const { store, head, exporter, metas, realtimeMessage } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
+const { isSalesCol } = settlementFunctionCollect(store)
 
 const salesslip = ref()
 const cancelTran = ref()
@@ -65,13 +67,17 @@ const getAllLevels = () => {
     return sales
 }
 
-const isSalesCol = (key: string) => {
-    const sales_cols = ['amount', 'trx_amount', 'mcht_settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
-    for (let i = 0; i < sales_cols.length; i++) {
-        if (sales_cols[i] === key)
-            return true
-    }
-    return false
+const getProfitColName = () => {
+    if(store.params.level === 10)
+        return '정산금'
+    else if(store.params.level < 35)
+        return levels[`sales${getLevelByIndex(store.params.level)}_name`] + ' 수익금'
+    else if(store.params.level === 40)
+        return '본사 수익금'
+    else if(store.params.level === 50)
+        return '개발사 수익금'
+    else
+        return ''
 }
 
 
@@ -167,7 +173,7 @@ onMounted(() => {
                             <span>{{ store.params.level === 10 ? header.ko : '지급액' }}</span>
                         </span>
                         <span v-else-if="key == 'profit'">
-                            <span>{{ store.params.level === 10 ? header.ko : '수익금' }}</span>
+                            <span>{{ getProfitColName() }}</span>
                         </span>
                         <span v-else-if="key == 'hold_amount' && store.params.level == 10">
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
@@ -225,6 +231,9 @@ onMounted(() => {
                             <span v-else-if="_key == 'terminal_id'">
                                 {{ terminals.find(terminal => terminal['id'] === item[_key])?.name }}
                             </span>
+                            <b v-else-if="_key === 'profit'">
+                                {{ Number(item[_key]).toLocaleString() }}
+                            </b>
                             <span v-else-if="isSalesCol(_key as string)">
                                 {{ Number(item[_key]).toLocaleString() }}
                             </span>

@@ -130,7 +130,11 @@ export function settlementFunctionCollect(store: any) {
             return '' // 기본 스타일 또는 다른 스타일을 지정하고 싶은 경우 여기에 작성
     }
     const isSalesCol = (key: string) => {
-        const sales_cols = ['count', 'amount', 'trx_amount', 'settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
+        const sales_cols = [
+            'count', 'amount', 'trx_amount', 'settle_fee', 
+            'hold_amount', 'total_trx_amount', 'profit', 'mcht_settle_fee', 
+            'supply_amount', 'vat_amount', 'settle_amount'
+        ]
         return sales_cols.find(obj => obj === key) ? true : false
     }
     

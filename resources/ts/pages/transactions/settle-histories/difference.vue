@@ -4,6 +4,7 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getDifferenceSettleMenual, useSearchStore } from '@/views/transactions/settle-histories/useDifferenceStore'
+import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import type { DifferentSettlementInfo } from '@/views/types'
 import { axios, getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
@@ -11,6 +12,7 @@ import corp from '@corp'
 
 const { store, head, exporter, metas } = useSearchStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
+const { isSalesCol } = settlementFunctionCollect(store)
 
 const alert = <any>(inject('alert'))
 const different_settle_infos = ref(<DifferentSettlementInfo[]>([]))
@@ -21,16 +23,6 @@ provide('exporter', exporter)
 store.params.level = 10
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
 store.params.use_realtime_deposit = Number(corp.pv_options.paid.use_realtime_deposit)
-
-
-const isSalesCol = (key: string) => {
-    const sales_cols = ['amount', 'supply_amount', 'vat_amount', 'settle_amount']
-    for (let i = 0; i < sales_cols.length; i++) {
-        if (sales_cols[i] === key)
-            return true
-    }
-    return false
-}
     
 onMounted(async() => {
     watchEffect(async () => {

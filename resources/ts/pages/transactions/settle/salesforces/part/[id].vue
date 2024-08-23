@@ -7,6 +7,7 @@ import { useRequestStore } from '@/views/request'
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useSearchStore } from '@/views/transactions/settle/part/useSalesforceStore'
+import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
@@ -17,6 +18,7 @@ const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected, dialog } = selectFunctionCollect(store)
 const { get, post } = useRequestStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
+const { isSalesCol } = settlementFunctionCollect(store)
 
 const user = ref(<any>({}))
 const settle = ref({
@@ -43,14 +45,6 @@ store.params.e_dt = route.query.e_dt
 store.params.level = route.query.level
 store.params.is_base_trx = 1
 
-const isSalesCol = (key: string) => {
-    const sales_cols = ['amount', 'trx_amount', 'mcht_settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
-    for (let i = 0; i < sales_cols.length; i++) {
-        if (sales_cols[i] === key)
-            return true
-    }
-    return false
-}
 const partSettle = async () => {
     const count = selected.value.length
     const params = Object.assign(cloneDeep(store.params), settle.value)
