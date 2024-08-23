@@ -40,34 +40,7 @@ const accountLockLimits = <Options[]>([
         <VCol cols="12" :md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>결제 사용여부</VCardTitle>
-                    <VRow class="pt-5">
-                        <VCol md="4">
-                            <VRow style="align-items: center;">
-                                <VCol :md="6">수기결제</VCol>
-                                <VCol :md="6">
-                                    <VSwitch hide-details v-model="props.item.free.use_hand_pay" color="primary" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol md="4">
-                            <VRow style="align-items: center;">
-                                <VCol :md="6">인증결제</VCol>
-                                <VCol :md="6">
-                                    <VSwitch hide-details v-model="props.item.free.use_auth_pay" color="primary" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol md="4">
-                            <VRow style="align-items: center;">
-                                <VCol :md="6">간편결제</VCol>
-                                <VCol :md="6">
-                                <VSwitch hide-details v-model="props.item.free.use_simple_pay" color="primary" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                    <VCardTitle class="pt-10">기능 옵션</VCardTitle>
+                    <VCardTitle>기능 옵션</VCardTitle>
                     <CreateHalfVColV2 :mdl="6" :mdr="6" class="pt-5">
                         <template #l_name>MID 중복검사 사용</template>
                         <template #l_input>

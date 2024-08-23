@@ -3,9 +3,6 @@
 
     class FreeOption
     {
-        public $use_hand_pay = false;
-        public $use_auth_pay = false;
-        public $use_simple_pay = false;
         public $use_search_date_detail = true;
         public $use_tid_duplicate = true;
         public $use_mid_duplicate = false;

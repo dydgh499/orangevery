@@ -54,12 +54,9 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
     const getPaymentMenu = computed(() => {
         const payment_menus = []
         if (getUserLevel() == 10) {
-            if (corp.pv_options.free.use_hand_pay)
-                payment_menus.push(...getPayLinkFormats(hands.value, getPayMenuIcon(1)))
-            if (corp.pv_options.free.use_auth_pay) 
-                payment_menus.push(...getPayLinkFormats(auths.value, getPayMenuIcon(2)))    
-            if (corp.pv_options.free.use_simple_pay) 
-                payment_menus.push(...getPayLinkFormats(simples.value, getPayMenuIcon(3)))
+            payment_menus.push(...getPayLinkFormats(hands.value, getPayMenuIcon(1)))
+            payment_menus.push(...getPayLinkFormats(auths.value, getPayMenuIcon(2)))
+            payment_menus.push(...getPayLinkFormats(simples.value, getPayMenuIcon(3)))
         }
         const transactions = {
             title: '매출 관리',

@@ -34,9 +34,6 @@ class Brand
             $pv_options = new PvOptions('[]');
 
             $theme_css->main_color = $brand->TM_CLR;
-            $pv_options->free->use_hand_pay = (boolean)$brand->USE_HAND_PAY;
-            $pv_options->free->use_auth_pay = (boolean)$brand->USE_AUTH_PAY;
-            $pv_options->free->use_simple_pay = (boolean)$brand->USE_SIMPLE_PAY;
             $pv_options->free->sales_slip['merchandise']['company_name'] = $brand->SEL_NICK_NM;
             $pv_options->free->sales_slip['merchandise']['rep_name'] = $brand->SEL_REP_NM;
             $pv_options->free->sales_slip['merchandise']['phone_num'] = $brand->SEL_PHONE;

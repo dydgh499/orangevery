@@ -345,9 +345,6 @@ interface BrandBaseInfo {
 }
 
 interface FreeOption {
-    use_hand_pay: boolean,
-    use_auth_pay: boolean,
-    use_simple_pay: boolean,
     use_search_date_detail: boolean,
     use_tid_duplicate: boolean,
     use_mid_duplicate: boolean,

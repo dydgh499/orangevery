@@ -144,6 +144,14 @@ onMounted(() => {
             </template>
             <template #headers>
                 <tr>
+                    <template v-for="(sub_header, index) in head.getSubHeaderComputed" :key="index">
+                        <th :colspan="head.getSubHeaderComputed.length - 1 == index ? sub_header.width + 1 : sub_header.width"
+                            class='list-square sub-headers' v-show="sub_header.width">
+                            <span>{{ sub_header.ko }}</span>
+                        </th>
+                    </template>
+                </tr>
+                <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                         <span v-if="key == 'total_trx_amount'">
                             <BaseQuestionTooltip :location="'top'" :text="store.params.level === 10 ? (header.ko as string) : '총 지급액'"

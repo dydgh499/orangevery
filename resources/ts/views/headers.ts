@@ -68,17 +68,52 @@ export const Header = (path: string, file_name: string) => {
         getSubHeaderComputed
     } = SubHeader(path)
 
+
+
     const _init = (_headers: object) => {
-        const kos = Object.keys(headers.value).map(key => headers.value[key].ko)
-        if (!_.isEqual(kos, Object.values(_headers)))
+        const getLocalStorageCols = (localstrage_headers: Filter, depth: number) => {
+            if(depth > 1)
+                return []
+            else {
+                return Object.keys(localstrage_headers).map(key => {
+                    if(localstrage_headers[key].visible !== undefined)
+                        return localstrage_headers[key].ko
+                    else if(typeof localstrage_headers[key] === 'object')
+                        return getLocalStorageCols(localstrage_headers[key] as Filter, ++depth)
+                    else
+                        return []    
+                }).flat()
+            }
+        }
+    
+        const getRuntimeCols = (runtime_headers: object, depth: number) => {
+            if(depth > 1)
+                return []
+            else {
+                return Object.values(runtime_headers).map(key => {
+                    if(typeof key !== 'object')
+                        return key
+                    else
+                        return getRuntimeCols(key, ++depth)
+                }).flat()    
+            }
+        }
+
+        const local_cols = getLocalStorageCols(headers.value, 0)
+        const runtime_cols = getRuntimeCols(_headers, 0)
+
+        if (!_.isEqual(local_cols, runtime_cols)) {
             headers.value = {}
+            return
+        }
     }
 
-    const initHeader = (_headers: object, result: Filter): Filter => {
-        _init(_headers)
+    const initHeader = (_headers: object, result: Filter, depth=0): Filter => {
+        if(depth === 0)
+            _init(_headers)
         for (const [key, value] of Object.entries(_headers)) {
             if (typeof value === 'object')
-                result[key] = initHeader(value, {})
+                result[key] = initHeader(value, {}, ++depth)
             else {
                 if(headers.value[key])
                     result[key] = headers.value[key]
