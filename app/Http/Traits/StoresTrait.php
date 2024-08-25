@@ -67,20 +67,30 @@ trait StoresTrait
 
     public function isExistMutual($orm, $brand_id, $col, $mutual)
     {
-        return $orm
+        if($brand_id === 30)
+            return false;
+        else
+        {
+            return $orm
             ->where('brand_id', $brand_id)
             ->where('is_delete', false)
             ->where($col, $mutual)
             ->exists();
+        }
     }
 
     public function isExistBulkMutual($orm, $brand_id, $col, $mutuals)
     {
-        return $orm
+        if($brand_id === 30)
+            return [];
+        else
+        {
+            return $orm
             ->where('brand_id', $brand_id)
             ->where('is_delete', false)
             ->whereIn($col, $mutuals)
             ->pluck($col)
             ->toArray();
+        }
     }
 }

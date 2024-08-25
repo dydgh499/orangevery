@@ -4,12 +4,14 @@ import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
 import router from '@/router';
 import AuthPayOverview from '@/views/pay/AuthPayOverview.vue';
 import HandPayOverview from '@/views/pay/HandPayOverview.vue';
+import { payWindowStore } from '@/views/quick-view/payWindowStore';
 import type { Merchandise, PayGateway, PayModule, PayWindow } from '@/views/types';
 import { axios } from '@axios';
 import { hourTimer } from '@core/utils/timer';
 import corp from '@corp';
 
 const route = useRoute()
+const { isVisiableRemainTime } = payWindowStore()
 const {remaining_time, expire_time, getRemainTimeColor, updateRemainingTime} = hourTimer()
 const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(6)
 
@@ -91,7 +93,7 @@ onMounted(async () => {
         <VCard rounded>
             <VCardText style="padding: 0.5em;">
                 <div style="position: absolute; display: flex; width: 100%; justify-content: space-between;" v-if="pay_module?.module_type > 0 || code !== 200">
-                    <div style="display: inline-flex; flex-direction: column;" v-if="pay_module?.module_type === 1">
+                    <div style="display: inline-flex; flex-direction: column;" v-if="isVisiableRemainTime(payment_module)">
                         <h5>결제창 유효시간</h5>
                         <b :class="getRemainTimeColor">{{ remaining_time }}</b>
                     </div>

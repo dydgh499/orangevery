@@ -51,7 +51,9 @@ class PayWindowInterface implements GeneratorInterface
 
     static private function getHoldingAbleAt($pay_module)
     {
-        if($pay_module->module_type === 1)
+        if($pay_module->pay_window_extend_hour === 25)
+            return Carbon::now()->addYears(10)->format('Y-m-d H:i:s');
+        else if($pay_module->module_type === 1)
             return Carbon::now()->addHours($pay_module->pay_window_extend_hour)->format('Y-m-d H:i:s');
         else
             return Carbon::now()->addDays(365)->format('Y-m-d H:i:s');

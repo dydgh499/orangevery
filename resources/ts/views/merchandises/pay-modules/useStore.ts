@@ -42,6 +42,7 @@ export const pay_window_extend_hours = <Options[]>([
     { id: 7, title: "7시간" }, { id: 8, title: "8시간" },
     { id: 9, title: "9시간" }, { id: 10, title: "10시간" },
     { id: 11, title: "11시간" }, { id: 12, title: "12시간" },
+    { id: 25, title: "제한없음"}
 ])
 
 

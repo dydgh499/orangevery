@@ -7,7 +7,7 @@ import corp from '@corp';
 
 const snackbar = <any>(inject('snackbar'))
 
-const { move, copy, extend, getPayWindowUrl, renewPayWindow, multiplePayMove } = payWindowStore()
+const { move, copy, extend, getPayWindowUrl, renewPayWindow, multiplePayMove, isVisiableRemainTime } = payWindowStore()
 const {remaining_time, expire_time, getRemainTimeColor, updateRemainingTime} = hourTimer()
 
 const visible = ref(false)
@@ -56,7 +56,7 @@ defineExpose({
                         <VCardTitle>결제창 정보</VCardTitle>
                     </VCol>
                     <VCol cols="12" :md="6">
-                        <div v-if="payment_module.module_type === 1" 
+                        <div v-if="isVisiableRemainTime(payment_module)" 
                             style="display: inline-flex; align-items: center;margin-right: 1em; float: inline-end;">
                             <h5 style="margin-right: 0.5em;">결제창 유효시간</h5>
                             <b :class="getRemainTimeColor">{{ remaining_time }}</b>

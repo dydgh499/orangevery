@@ -97,7 +97,19 @@ export const payWindowStore = () => {
         return window.location.origin + '/pay/multiple-hand?e=' + query
     }
 
+    const isVisiableRemainTime = (payment_module: PayModule) => {
+        if(payment_module.module_type === 1) {
+            const expire = new Date(payment_module.pay_window?.holding_able_at as string)
+            const now = new Date()
+            const diff = expire.getDay() - now.getDay()
+            return diff > 10 ? false : true    
+        }
+        else
+            return false
+    }
+
     return {
-        move, copy, extend, send, getPayWindowUrl, renewPayWindow, multiplePayMove
+        move, copy, extend, send, getPayWindowUrl, renewPayWindow, multiplePayMove,
+        isVisiableRemainTime
     }
 }

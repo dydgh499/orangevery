@@ -69,7 +69,7 @@ defineExpose({
                                     </tr>
                                     <tr>
                                         <th style="min-width: 10em;text-align: start;">정산할 금액(-)</th>
-                                        <td><span>{{ settle_amount.toLocaleString() }} &#8361;</span></td>
+                                        <td><span>{{ settle_amount?.toLocaleString() }} &#8361;</span></td>
                                     </tr>
                                 </table>
                             </div>
