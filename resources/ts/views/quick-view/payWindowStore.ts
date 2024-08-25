@@ -98,12 +98,16 @@ export const payWindowStore = () => {
     }
 
     const isVisiableRemainTime = (payment_module: PayModule) => {
-        if(payment_module.module_type === 1) {
-            const expire = new Date(payment_module.pay_window?.holding_able_at as string)
-            const now = new Date()
-            const diff = expire.getTime() - now.getTime()
-            const diffInDays = diff / (1000 * 60 * 60 * 24)
-            return diffInDays >= 10 ? false : true    
+        if(payment_module) {
+            if(payment_module.module_type === 1) {
+                const expire = new Date(payment_module.pay_window?.holding_able_at as string)
+                const now = new Date()
+                const diff = expire.getTime() - now.getTime()
+                const diffInDays = diff / (1000 * 60 * 60 * 24)
+                return diffInDays >= 10 ? false : true    
+            }
+            else
+                return false    
         }
         else
             return false
