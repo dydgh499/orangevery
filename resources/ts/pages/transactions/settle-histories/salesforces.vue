@@ -75,6 +75,14 @@ onMounted(() => {
             </template>
             <template #headers>
                 <tr>
+                    <template v-for="(sub_header, index) in head.getSubHeaderComputed" :key="index">
+                        <th :colspan="head.getSubHeaderComputed.length - 1 == index ? sub_header.width + 1 : sub_header.width"
+                            class='list-square sub-headers' v-show="sub_header.width">
+                            <span>{{ sub_header.ko }}</span>
+                        </th>
+                    </template>
+                </tr>                
+                <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                         <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
                             <VCheckbox v-model="all_selected" class="check-label" />

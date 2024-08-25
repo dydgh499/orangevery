@@ -260,10 +260,15 @@ export const Header = (path: string, file_name: string) => {
         //pdfDoc.download(file_name + "_" + date + ".pdf");
     }
 
+    const getSubHeaderCol = (title:string, _headers: any, _sub_headers: any) => {
+        const keys = Object.keys(_headers)
+        if(keys.length > 1)
+            _sub_headers.push(getSubHeaderFormat(title, keys[0], keys[keys.length - 1], 'string', keys.length))
+    }
     return {
         filter, headers, sub_headers, flat_headers, initHeader, sortAndFilterByHeader,
         flatten, getDepth, getSubHeaderComputed, getSubHeaderFormat,
-        exportToExcel, exportToPdf, path,
+        exportToExcel, exportToPdf, path, getSubHeaderCol,
     }
 }
 

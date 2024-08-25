@@ -204,12 +204,6 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         return headers_7
     }
 
-    const getSubHeaderCol = (title:string, _headers: any, _sub_headers: any) => {
-        const keys = Object.keys(_headers)
-        if(keys.length > 1)
-            _sub_headers.push(head.getSubHeaderFormat(title, keys[0], keys[keys.length - 1], 'string', keys.length))
-    }
-
     const headers0:any = getTransactionCols()
     const headers1:any = getMerchandiseCols()
     const headers2:any = getPGCols()
@@ -228,15 +222,13 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         ...headers6,
     }
     const sub_headers: any = []
-    getSubHeaderCol('거래 정보', headers0, sub_headers)
-    getSubHeaderCol('가맹점 정보', headers1, sub_headers)
-    getSubHeaderCol('PG사 정보', headers2, sub_headers)
-    getSubHeaderCol('수수료 정보', headers3, sub_headers)
-    getSubHeaderCol('개인 정보', headers4, sub_headers)
-    getSubHeaderCol('결제 정보', headers5, sub_headers)
-    getSubHeaderCol('기타 정보', headers6, sub_headers)
-
-    console.log(sub_headers)
+    head.getSubHeaderCol('거래 정보', headers0, sub_headers)
+    head.getSubHeaderCol('가맹점 정보', headers1, sub_headers)
+    head.getSubHeaderCol('PG사 정보', headers2, sub_headers)
+    head.getSubHeaderCol('수수료 정보', headers3, sub_headers)
+    head.getSubHeaderCol('개인 정보', headers4, sub_headers)
+    head.getSubHeaderCol('결제 정보', headers5, sub_headers)
+    head.getSubHeaderCol('기타 정보', headers6, sub_headers)
 
     head.sub_headers.value = sub_headers
     head.headers.value = head.initHeader(headers, {})
