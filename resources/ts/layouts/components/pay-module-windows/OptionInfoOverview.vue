@@ -142,7 +142,7 @@ const props = defineProps<Props>()
         <VRow v-if="props.item.module_type != 0">
             <VCol md="5" cols="6">
                 <BaseQuestionTooltip :location="'top'" :text="'결제창 연장시간'"
-                    :content="'결제창 유지시간 연장 시 적용되는 시간입니다.<br>인증결제, 간편결제는 연징시간을 검증하지 않습니다.'"/>
+                    :content="'결제창 유지시간 연장 시 적용되는 시간입니다.<br>인증결제, 간편결제는 연장시간을 검증하지 않습니다.<br>유효기간 제한없음의 경우 보안에 취약할 수 있으니 가급적 사용을 제한하시길바랍니다.'"/>
             </VCol>
             <VCol md="7">
                 <VSelect v-model="props.item.pay_window_extend_hour" :items="pay_window_extend_hours"

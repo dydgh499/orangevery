@@ -89,7 +89,9 @@ defineExpose({
             <VCardText class="d-flex justify-end gap-3 flex-wrap">
                 <VBtn @click="move(url)" size="small">이동</VBtn>
                 <VBtn @click="copy(url)" size="small" color="warning">주소복사</VBtn>
-                <VBtn @click="extendPayWindow()" size="small" color="error">유효기간 연장</VBtn>
+                <VBtn @click="extendPayWindow()" size="small" color="error" 
+                    v-if="isVisiableRemainTime(payment_module)"
+                >유효기간 연장</VBtn>
                 <VBtn @click="multiplePayMove(payment_module)" size="small" color="error"
                     v-if="corp.pv_options.paid.use_multiple_hand_pay && payment_module.module_type === 1 && user_info.use_multiple_hand_pay"
                 >다중결제</VBtn>
