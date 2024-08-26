@@ -80,7 +80,7 @@ export const useSearchStore = defineStore('bonaejaSearchStore', () => {
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
             datas[i]['code'] = getCodeTypeString(datas[i]['code'], datas[i]['res_msg'])
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
+        head.exportToExcel(datas)
     }
     
     onMounted(async () => {

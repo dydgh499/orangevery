@@ -13,6 +13,7 @@ use App\Models\Merchandise\PaymentModule;
 use App\Models\Transaction;
 use App\Models\CollectWithdraw;
 
+use App\Models\Merchandise\NotiUrl;
 use App\Models\Merchandise\Product;
 use App\Models\Merchandise\RegularCreditCard;
 use App\Models\Merchandise\SpecifiedTimeDisablePayment;
@@ -48,6 +49,18 @@ class Merchandise extends Authenticatable
     public function products()
     {
         return $this->hasMany(Product::class, 'mcht_id');
+    }
+
+    public function notis()
+    {
+        return $this->hasMany(NotiUrl::class, 'mcht_id')->where('is_delete', false)->select();
+    }
+
+    public function paymentModules()
+    {
+        return $this->hasMany(PaymentModule::class, 'mcht_id')
+            ->where('is_delete', false)
+            ->select(['id', 'mcht_id', 'mid', 'tid', 'module_type', 'pg_id', 'settle_type', 'serial_num']);
     }
     
     public function noSettles()

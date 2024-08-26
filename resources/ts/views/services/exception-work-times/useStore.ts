@@ -28,7 +28,7 @@ export const useSearchStore = defineStore('ExceptionWorkTimeSearchStore', () => 
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
             datas[i]['rest_type'] = store.getSelectIdColor(datas[i]['rest_type'])
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
+        head.exportToExcel(datas)
     }
         
     return {

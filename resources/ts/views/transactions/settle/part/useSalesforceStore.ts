@@ -162,7 +162,7 @@ export const useSearchStore = defineStore('transSettlesSalesPartSearchStore', ()
             datas[i]['ps_fee'] = (datas[i]['ps_fee'] * 100).toFixed(3)
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
+        head.exportToExcel(datas)        
     }
     return {
         store,

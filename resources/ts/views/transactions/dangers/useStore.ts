@@ -61,7 +61,7 @@ export const useSearchStore = defineStore('dangerSearchStore', () => {
             datas[i]['danger_type'] = danger_types.find(obj => obj.id === datas[i]['danger_type'])?.title
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
+        head.exportToExcel(datas)        
     }
     return {
         store,

@@ -573,7 +573,7 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
             datas[i]['terminal_id'] = terminals.find(terminal => terminal['id'] === datas[i]['terminal_id'])?.name as string
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
+        head.exportToExcel(datas)        
     }
 
     return {

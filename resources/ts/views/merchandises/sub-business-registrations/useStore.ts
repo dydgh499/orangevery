@@ -58,7 +58,7 @@ export const useSearchStore = defineStore('subBusinessRegistrationSearchStore', 
         for (let i = 0; i < datas.length; i++) {
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
+        head.exportToExcel(datas)
     }
     
     return {

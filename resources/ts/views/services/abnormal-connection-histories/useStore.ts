@@ -54,7 +54,7 @@ export const useSearchStore = defineStore('abnormalConnectionHistoSearchStore', 
             datas[i]['connection_type'] = connection_types.find(obj => obj.id === datas[i]['connection_type'])?.title
             datas[i]['target_level'] = allLevels().find(obj => obj.id === datas[i]['target_level'])?.title
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
+        head.exportToExcel(datas)
     }
         
     return {

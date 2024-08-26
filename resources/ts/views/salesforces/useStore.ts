@@ -158,7 +158,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
                 datas = getChildDatas(datas, r.data.content[i]?.childs as Salesforce[])
             }
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
+        head.exportToExcel(datas)
     }
     
     return {

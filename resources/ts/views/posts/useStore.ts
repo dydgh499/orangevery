@@ -35,7 +35,7 @@ export const useSearchStore = defineStore('postSearchStore', () => {
             datas[i]['type'] = types.find(types => types.id === datas[i]['type'])?.title
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
+        head.exportToExcel(datas)
     }
     return {
         store,

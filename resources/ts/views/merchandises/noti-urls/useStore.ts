@@ -30,7 +30,7 @@ export const useSearchStore = defineStore('NotiSearchStore', () => {
         for (let i = 0; i < datas.length; i++) {
             datas[i]['noti_status'] = noti_statuses.find(status => status['id'] === datas[i]['noti_status'])?.title as string
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
+        head.exportToExcel(datas)
     }
     return {
         store,

@@ -1,6 +1,6 @@
-import { Filter, SubFilter } from '@/views/types';
+import { ExcelExporter } from '@/views/excel';
+import { Filter } from '@/views/types';
 import _ from 'lodash';
-import * as XLSX from 'xlsx';
 
 const SubHeader = (path: string) => {
     const headers = ref<Filter>(JSON.parse(localStorage.getItem(path) || "{}"))
@@ -53,7 +53,7 @@ const SubHeader = (path: string) => {
 
     return {
         headers, sub_headers,
-        getSubHeaderFormat, getSubHeaders,
+        getSubHeaderFormat,
         getSubHeaderComputed
     }
 }
@@ -64,10 +64,11 @@ export const Header = (path: string, file_name: string) => {
     const flat_headers = ref<Filter>({})
     const {
         headers, sub_headers,
-        getSubHeaderFormat, getSubHeaders,
+        getSubHeaderFormat,
         getSubHeaderComputed
     } = SubHeader(path)
 
+    const { exportToExcel, setHeaderStyle } = ExcelExporter(sub_headers, flat_headers, file_name)
 
 
     const _init = (_headers: object) => {
@@ -162,113 +163,16 @@ export const Header = (path: string, file_name: string) => {
         return orderedData as T
     }
 
-    const exportWorkSheet = (datas: { [key: string]: any }[]) => {
-        const getDatasToArray = () => {
-            const results = [];
-            for (let i = 0; i < datas.length; i++) {
-                const result: { [key: string]: string } = {};
-                for (const key of Object.keys(datas[i])) {
-                    if (typeof datas[i][key] === 'object' && datas[i][key] !== null) {
-                        for (const sub_key of Object.keys(datas[i][key])) {
-                            result[key + "." + sub_key] = datas[i][key][sub_key]
-                        }
-                    }
-                    else
-                        result[key] = datas[i][key];
-                }
-                results.push(result)
-            }
-            return results.map(obj => Object.values(obj));
-        }
-        const getHeadersToArray = (): any[][] => {
-            if(sub_headers.value.length) {
-                const _sub_headers =  _.map(sub_headers.value, (init_sub_header: SubFilter) => init_sub_header.ko)
-                const keys = Object.keys(flat_headers.value)
-                const least_length = keys.length - _sub_headers.length
-                for (let i = 0; i < least_length; i++) {
-                    _sub_headers.push('')                    
-                }
-                return [_sub_headers, _.map(flat_headers.value, (value:Filter) => value.ko)]
-            }
-            else
-               return [_.map(flat_headers.value, (value:Filter) => value.ko)]
-        }
-
-        const getExcelOptions = (): { merge_cols: any[], widths: any[] } => {
-            const header_2 = _.map(flat_headers.value, (value: Filter) => value.ko);
-            const _sub_headers = getSubHeaders()
-            let index = 0
-            let merge_cols = []
-
-            for (let i = 0; i < _sub_headers.length; i++) {
-                merge_cols.push({ s: { r: 0, c: index }, e: { r: 0, c: index + _sub_headers[i].width - 1 } })
-                index += _sub_headers[i].width
-            }
-            const widths = _.map(header_2, () => ({ width: 20 }))
-            return { merge_cols, widths };
-        };
-
-        const contents = getDatasToArray()
-        const total_headers = getHeadersToArray()
-        const { merge_cols, widths } = getExcelOptions()
-        const all_data = total_headers.concat(contents)
-        const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(all_data)
-        ws['!merges'] = merge_cols
-        ws['!cols'] = widths
-
-        if (total_headers.length > 0) {
-            console.log(ws)
-            for (let i = 0; i < merge_cols.length; i++) {
-                const cell = XLSX.utils.encode_cell(merge_cols[i].s);
-                console.log(cell)
-                ws[cell].v = total_headers[0][i]
-            }
-        }
-        return ws
-    }
-
-    const exportToExcel = (datas: object[]) => {
-        const date = new Date().toISOString().split('T')[0];
-        const ws = exportWorkSheet(datas)
-        const wb = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(wb, ws, file_name)
-        XLSX.writeFile(wb, file_name + "_" + date + ".xlsx")
-    }
-
-    const exportToPdf = (datas: object[]) => {
-        const date = new Date().toISOString().split('T')[0];
-        const rows = sub_headers.value.length > 0 ? 2 : 1
-        const ws = exportWorkSheet(datas)
-        const json_data = XLSX.utils.sheet_to_json(ws)
-
-        const docDefinition = {
-            content: [
-                {
-                    table: {
-                        headerRows: rows,
-                        body: json_data,
-                        // 가로로 돌리기 위해 rotate 속성 사용
-                        style: {
-                            tableBody: {
-                                rotate: 90,
-                            },
-                        },
-                    },
-                },
-            ],
-        };
-        //pdfDoc.download(file_name + "_" + date + ".pdf");
-    }
-
     const getSubHeaderCol = (title:string, _headers: any, _sub_headers: any) => {
         const keys = Object.keys(_headers)
-        if(keys.length > 1)
+        if(keys.length > 0)
             _sub_headers.push(getSubHeaderFormat(title, keys[0], keys[keys.length - 1], 'string', keys.length))
     }
+
     return {
         filter, headers, sub_headers, flat_headers, initHeader, sortAndFilterByHeader,
-        flatten, getDepth, getSubHeaderComputed, getSubHeaderFormat,
-        exportToExcel, exportToPdf, path, getSubHeaderCol,
+        flatten, getDepth, getSubHeaderComputed, getSubHeaderFormat, setHeaderStyle,
+        exportToExcel, path, getSubHeaderCol,
     }
 }
 

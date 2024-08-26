@@ -124,19 +124,8 @@ class MerchandiseController extends Controller
     
     private function mappingPayModules($data, $pay_modules)
     {
-        $module_mcht_ids = [];
-        foreach ($pay_modules as $module) {
-            $module_mcht_ids[$module->mcht_id][] = $module;
-        }
         foreach($data['content'] as $content) 
         {
-            $my_modules = isset($module_mcht_ids[$content->id]) ? collect($module_mcht_ids[$content->id]) : collect();
-            $content->serial_nums  = $my_modules->pluck('serial_num')->values()->toArray();
-            $content->settle_types = $my_modules->pluck('settle_type')->values()->toArray();
-            $content->module_types = $my_modules->pluck('module_type')->values()->toArray();    
-            $content->mids = $my_modules->pluck('mid')->values()->toArray();
-            $content->tids = $my_modules->pluck('tid')->values()->toArray();
-            $content->pgs = $my_modules->pluck('pg_id')->values()->toArray();
             $content->setFeeFormatting(true);
         }
         return $data;
@@ -153,26 +142,19 @@ class MerchandiseController extends Controller
 
     public function commonSelect($request, $is_all=false)
     {
+        $with = ['paymentModules'];
+        $b_info = BrandInfo::getBrandById($request->user()->brand_id);
         if($this->isByPayModule($request))
-        {
-            $query = $this->byPayModules($request, $is_all);
-            $data = $this->getIndexData($request, $query, 'merchandises.id', ['merchandises.*'], 'merchandises.id', false);
-        }
+            $query = $this->byPayModules($request, $is_all)->with([]);
         else 
-        {
             $query = $this->byNormalIndex($request, $is_all);
-            $data = $this->getIndexData($request, $query, 'id', [], 'id', false);
 
-        }
-        $mcht_ids = collect($data['content'])->sortByDesc('id')->pluck('id')->all();
-
-        $pay_modules = $this->pay_modules
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
-            ->whereIn('mcht_id', $mcht_ids)
-            ->orderby('id', 'desc')
-            ->get(['mcht_id', 'mid', 'tid', 'module_type', 'pg_id', 'settle_type', 'serial_num']);
-        return $this->mappingPayModules($data, $pay_modules);    
+        if($b_info['pv_options']['paid']['use_noti'])
+            array_push($with, 'notis');
+        
+        $query = $query->with($with);
+        $data = $this->getIndexData($request, $query, 'merchandises.id', ['merchandises.*'], 'merchandises.id', false);
+        return $data;
     }
 
     /**
@@ -190,6 +172,7 @@ class MerchandiseController extends Controller
         $data['content'] = globalMappingSales($salesforces, $data['content']);
         foreach($data['content'] as $content)
         {
+            $content->setFeeFormatting(true);
             $content = UnderSalesforce::setViewableSalesInfos($request, $content);
         }
         return $this->response(0, $data);

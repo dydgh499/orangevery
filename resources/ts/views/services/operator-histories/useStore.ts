@@ -45,7 +45,7 @@ export const useSearchStore = defineStore('operatorHistorySearchStore', () => {
             datas[i]['module_type'] = history_types.find(history_type => history_type['id'] === datas[i]['history_type'])?.title as string
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
+        head.exportToExcel(datas)
     }
     return {
         store,

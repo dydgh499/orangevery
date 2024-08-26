@@ -81,6 +81,14 @@ onMounted(() => {
             </template>
             <template #headers>
                 <tr>
+                    <template v-for="(sub_header, index) in head.getSubHeaderComputed" :key="index">
+                        <th :colspan="head.getSubHeaderComputed.length - 1 == index ? sub_header.width + 1 : sub_header.width"
+                            class='list-square sub-headers' v-show="sub_header.width">
+                            <span>{{ sub_header.ko }}</span>
+                        </th>
+                    </template>
+                </tr>                
+                <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                         <div class='check-label-container' v-if="key == 'id'">
                             <VCheckbox v-if="getUserLevel() >= 35" v-model="all_selected" class="check-label"/>
@@ -113,43 +121,43 @@ onMounted(() => {
                             </span>
                             <span v-else-if="_key == 'settle_types'">
                                 <select class="custom-select">
-                                    <option v-for="(settle_type, key) in item['settle_types']" :key="key">
-                                        {{ settle_types.find(obj => obj.id === settle_type)?.name }}
+                                    <option v-for="(payment_module, key) in item['payment_modules']" :key="key">
+                                        {{ settle_types.find(obj => obj.id === payment_module['settle_type'])?.name }}
                                     </option>
                                 </select>
                             </span>
                             <span v-else-if="_key == 'mids'">
                                 <select class="custom-select">
-                                    <option v-for="(mid, key) in item['mids']" :key="key">
-                                        {{ mid }}
+                                    <option v-for="(payment_module, key) in item['payment_modules']" :key="key">
+                                        {{ payment_module['mid'] }}
                                     </option>
                                 </select>
                             </span>
                             <span v-else-if="_key == 'tids'">
                                 <select class="custom-select">
-                                    <option v-for="(tid, key) in item['tids']" :key="key">
-                                        {{ tid }}
+                                    <option v-for="(payment_module, key) in item['payment_modules']" :key="key">
+                                        {{ payment_module['tid'] }}
                                     </option>
                                 </select>
                             </span>
                             <span v-else-if="_key == 'module_types'">
                                 <select class="custom-select">
-                                    <option v-for="(module_type, key) in item['module_types']" :key="key">
-                                        {{ module_types.find(module => module.id === module_type)?.title }}
+                                    <option v-for="(payment_module, key) in item['payment_modules']" :key="key">
+                                        {{ module_types.find(module => module.id === payment_module['module_type'])?.title }}
                                     </option>
                                 </select>
                             </span>
                             <span v-else-if="_key == 'pgs'">
                                 <select class="custom-select">
-                                    <option v-for="(_pg, key) in item['pgs']" :key="key">
-                                        {{ pgs.find(pg => pg.id === _pg)?.pg_name }}
+                                    <option v-for="(payment_module, key) in item['payment_modules']" :key="key">
+                                        {{ pgs.find(pg => pg.id === payment_module['pg_id'])?.pg_name }}
                                     </option>
                                 </select>
                             </span>
                             <span v-else-if="_key == 'serial_nums'">
                                 <select class="custom-select">
-                                    <option v-for="(serial_num, key) in item['serial_nums']" :key="key">
-                                        {{ serial_num }}
+                                    <option v-for="(payment_module, key) in item['payment_modules']" :key="key">
+                                        {{ payment_module['serial_num'] }}
                                     </option>
                                 </select>
                             </span>
@@ -164,6 +172,13 @@ onMounted(() => {
                                     {{ item[_key]  }}
                                 </VChip>
                                 <span v-else>-</span>
+                            </span>
+                            <span v-else-if="_key == 'notis'">
+                                <select class="custom-select">
+                                    <option v-for="(noti, key) in item['notis']" :key="key">
+                                        {{ noti['note'] }}
+                                    </option>
+                                </select>
                             </span>
                             <span v-else-if="_key == 'enabled'">
                                 <VChip :color="store.booleanTypeColor(!item[_key])">

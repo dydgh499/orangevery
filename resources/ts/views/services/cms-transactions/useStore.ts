@@ -43,7 +43,7 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
             datas[i]['result_code'] = realtimeMessage(datas[i]['result_code'])
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
+        head.exportToExcel(datas)
     }
 
     const metas = ref([

@@ -56,7 +56,7 @@ export const useSearchStore = defineStore('complaintSearchStore', () => {
             datas[i]['is_deposit'] = datas[i]['is_deposit'] ? '입금' : '미입금'
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
+        head.exportToExcel(datas)        
     }
     return {
         store,

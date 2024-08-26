@@ -4,7 +4,7 @@ import { useRequestStore } from '@/views/request';
 import { Searcher } from '@/views/searcher';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import { getUserLevel, user_info } from '@axios';
-import * as XLSX from 'xlsx';
+import { Workbook } from 'exceljs';
 
 
 export const useSearchStore = defineStore('transGroupSearchStore', () => {    
@@ -25,7 +25,7 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
-    const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
+    const { cus_filters } = useStore()
     const { get } = useRequestStore()
     
     const metas = ref([
@@ -67,67 +67,89 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
 
 
     const mchtGroup = async() => {        
+        const date = new Date().toISOString().split('T')[0];
+        const wb = new Workbook();
+        const worksheet = wb.addWorksheet("가맹점별 매출집계");
+
         const url = '/api/v1/manager/transactions/merchandises/groups'
         const r = await get(url, {params: router.currentRoute.value.query})
-        const datas = []
-        datas.push([
-            'NO.',
-            '가맹점 상호',
-            '주민등록번호',
-            '사업자등록번호',
-            '대표자명',
-            '주소',
-            '업종',
-            '결제건수',
-            '승인금액',
-            '승인건수',
-            '취소금액',
-            '취소건수',
-            '거래금액',
-            '거래 수수료',
-            '거래 수수료 공급가액',
-            '거래 수수료 세액',
-            '정산금액',
-            '커스텀 필터',
-        ])
+        const _headers = {
+            'mcht_name': '가맹점 상호',
+            'resident_num': '주민등록번호',
+            'business_num': '사업자등록번호',
+            'nick_name': '대표자명',
+            'addr': '주소',
+            'sector': '업종',
+            'count': '결제건수',
+            'appr_amount': '승인금액',
+            'appr_count': '승인건수',
+            'cxl_amount': '취소금액',
+            'cxl_count': '취소건수',
+            'total_amount': '거래금액',
+            'trx_amount': '거래 수수료',
+            'trx_supply_amount': '거래 수수료 공급가액',
+            'trx_tax_amount': '거래 수수료 세액',
+            'profit': '정산금액',
+            'custom_id': '커스텀 필터',
+        }
+        const columns = []
+        const keys = Object.keys(_headers)
+        for (let i = 0; i < keys.length; i++) {
+            columns.push({
+                header: _headers[keys[i]],
+                key: keys[i],
+                width: 20,
+            })            
+        }
+        worksheet.columns = columns
+
         for (let i = 0; i < r.data.length; i++) 
         {
             r.data[i]['cxl_amount'] = Number(r.data[i]['cxl_amount'])
             r.data[i]['appr_amount'] = Number(r.data[i]['appr_amount'])
             r.data[i]['profit'] = Number(r.data[i]['profit'])
-            r.data[i]['count'] = Number(r.data[i]['appr_count']) + Number(r.data[i]['cxl_count'])
-            r.data[i]['total_amount'] = r.data[i]['appr_amount'] + r.data[i]['cxl_amount']
-            r.data[i]['trx_amount'] = r.data[i]['total_amount'] - r.data[i]['profit']
-            r.data[i]['trx_supply_amount'] = Math.round(r.data[i]['trx_amount']/1.1)
-            r.data[i]['trx_tax_amount'] = r.data[i]['trx_amount'] - r.data[i]['trx_supply_amount']
-            
-            datas.push([
-                r.data[i]['id'],
-                r.data[i]['mcht_name'],
-                r.data[i]['resident_num'],
-                r.data[i]['business_num'],
-                r.data[i]['nick_name'],
-                r.data[i]['addr'],
-                r.data[i]['sector'],
-                r.data[i]['count'],
-                r.data[i]['appr_amount'],
-                r.data[i]['appr_count'],
-                r.data[i]['cxl_amount'],
-                r.data[i]['cxl_count'],
-                r.data[i]['total_amount'],
-                r.data[i]['trx_amount'],
-                r.data[i]['trx_supply_amount'],
-                r.data[i]['trx_tax_amount'],
-                r.data[i]['profit'],
-                cus_filters.find(cus => cus.id === r.data[i]['custom_id'])?.name,
-            ])
-        }
+            r.data[i]['total_amount'] = Number(r.data[i]['appr_amount'] + r.data[i]['cxl_amount'])
+            r.data[i]['trx_amount'] = Number(r.data[i]['total_amount'] - r.data[i]['profit'])
 
-        const date = new Date().toISOString().split('T')[0];
-        const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(datas)
-        const wb = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(wb, ws, "가맹점별 매출집계")
-        XLSX.writeFile(wb, "가맹점별 매출집계_" + date + ".xlsx")
+            let row = {
+                mcht_name: r.data[i]['mcht_name'],
+                resident_num: r.data[i]['resident_num'],
+                business_num: r.data[i]['business_num'],
+                nick_name: r.data[i]['nick_name'],
+                addr: r.data[i]['addr'],
+                sector: r.data[i]['sector'],
+                count: Number(r.data[i]['appr_count']) + Number(r.data[i]['cxl_count']),
+                appr_amount: r.data[i]['appr_amount'],
+                appr_count: r.data[i]['appr_count'],
+                cxl_amount: r.data[i]['cxl_amount'],
+                cxl_count: r.data[i]['cxl_count'],
+                total_amount: r.data[i]['total_amount'],
+                trx_amount: r.data[i]['trx_amount'],
+                profit: r.data[i]['profit'],
+                custom_id: cus_filters.find(cus => cus.id === r.data[i]['custom_id'])?.name,
+            }
+            row['trx_supply_amount'] = Number(Math.round(row['trx_amount']/1.1))
+            row['trx_tax_amount']    = Number(row['trx_amount'] - row['trx_supply_amount'])
+            console.log(row)
+            worksheet.addRow(row)
+        }
+        head.setHeaderStyle(worksheet.getRow(1));
+
+        worksheet.views = [{ state: 'frozen', ySplit: 1 }];
+        try {
+            const buffer = await wb.xlsx.writeBuffer(); // 버퍼로 엑셀 데이터 생성
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            
+            // 파일 다운로드 링크 생성
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${"가맹점별 매출집계"}_${date}.xlsx`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (err) {
+            console.error('Error creating Excel file:', err);
+        }
     }
 
     const exporter = async (type: number) => {      
@@ -143,7 +165,7 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
             datas[i]['total_trx_amount'] = datas[i]['total_amount'] - Number(datas[i]['total_profit'])
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
+        head.exportToExcel(datas)        
     }
 
     return {

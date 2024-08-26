@@ -37,7 +37,7 @@ export const useSearchStore = defineStore('failSearchStore', () => {
             datas[i]['ps_id'] = pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
+        head.exportToExcel(datas)
     }
     return {
         store,
