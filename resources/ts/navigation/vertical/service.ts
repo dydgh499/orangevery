@@ -1,4 +1,4 @@
-import { getUserLevel } from '@axios'
+import { getUserLevel } from '@axios';
 
 const getAbilitiesMenu = computed(() => {
     const operations:any[] = []
@@ -12,7 +12,7 @@ const getAbilitiesMenu = computed(() => {
             operations[0].children.push({
                 title: '서비스 관리',
                 to: 'services-brands',
-            })
+            })    
             operations[0].children.push({
                 title: 'PG사 관리',
                 to: 'services-pay-gateways',

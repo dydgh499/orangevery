@@ -4,6 +4,7 @@ import router from '@/router';
 import { getUserLevel } from '@axios';
 import corp from '@corp';
 
+
 onMounted(() => {
     if(getUserLevel() >= 40) {
         if(corp.id !== 1)
