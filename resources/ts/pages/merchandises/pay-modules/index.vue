@@ -113,12 +113,10 @@ onMounted(() => {
                                         {{ module_types.find(module_type => module_type['id'] === item[_key])?.title }}
                                     </VChip>
                                 </span>
-                                <span
-                                    v-else-if="(_key as string).includes('_id') && (_key as string).includes('sales')">
+                                <span v-else-if="(_key as string).includes('_id') && (_key as string).includes('sales')">
                                     {{ findSalesName(_key as string, item[_key]) }}
                                 </span>
-                                <span
-                                    v-else-if="(_key as string).includes('_fee') && _key !== 'settle_fee' && _key !== 'comm_settle_fee'">
+                                <span v-else-if="(_key as string).includes('_fee') && _key !== 'settle_fee' && _key !== 'comm_settle_fee'">
                                     <VChip v-if="item[_key]">
                                         {{ (item[_key] * 100).toFixed(3) }} %
                                     </VChip>

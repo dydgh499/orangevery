@@ -116,27 +116,27 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         const levels = corp.pv_options.auth.levels
         const headers_2:Record<string, string> = {}
         if (levels.sales5_use && getUserLevel() >= 30) {
-            headers_2['sales5_name'] = levels.sales5_name
+            headers_2['sales5_id'] = levels.sales5_name
             headers_2['sales5_fee'] = '수수료'
         }
         if (levels.sales4_use && getUserLevel() >= 25) {
-            headers_2['sales4_name'] = levels.sales4_name
+            headers_2['sales4_id'] = levels.sales4_name
             headers_2['sales4_fee'] = '수수료'
         }
         if (levels.sales3_use && getUserLevel() >= 20) {
-            headers_2['sales3_name'] = levels.sales3_name
+            headers_2['sales3_id'] = levels.sales3_name
             headers_2['sales3_fee'] = '수수료'
         }
         if (levels.sales2_use && getUserLevel() >= 17) {
-            headers_2['sales2_name'] = levels.sales2_name
+            headers_2['sales2_id'] = levels.sales2_name
             headers_2['sales2_fee'] = '수수료'
         }
         if (levels.sales1_use && getUserLevel() >= 15) {
-            headers_2['sales1_name'] = levels.sales1_name
+            headers_2['sales1_id'] = levels.sales1_name
             headers_2['sales1_fee'] = '수수료'
         }
         if (levels.sales0_use && getUserLevel() >= 13) {
-            headers_2['sales0_name'] = levels.sales0_name
+            headers_2['sales0_id'] = levels.sales0_name
             headers_2['sales0_fee'] = '수수료'
         }
         return headers_2
