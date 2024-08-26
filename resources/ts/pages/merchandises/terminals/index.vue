@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { installments, module_types, ship_out_stats, under_sales_types } from '@/views/merchandises/pay-modules/useStore'
+import { comm_settle_types, installments, module_types, ship_out_stats, under_sales_types } from '@/views/merchandises/pay-modules/useStore'
 import { useSearchStore } from '@/views/merchandises/terminals/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -16,7 +16,6 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-const all_levels = allLevels()
 </script>
 <template>
     <BaseIndexView placeholder="MID, TID, 시리얼 번호, 가맹점 상호 검색" :metas="[]" :add="isAbleModiy(0)" add_name="장비"
@@ -37,6 +36,14 @@ const all_levels = allLevels()
             <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.un_use" label="작월 미결제 단말기 조회" color="warning" @update:modelValue="store.updateQueryString({un_use: store.params.un_use})"/>
         </template>
         <template #headers>
+            <tr>
+                <template v-for="(sub_header, index) in head.getSubHeaderComputed" :key="index">
+                    <th :colspan="head.getSubHeaderComputed.length - 1 == index ? sub_header.width + 1 : sub_header.width"
+                        class='list-square sub-headers' v-show="sub_header.width">
+                        <span>{{ sub_header.ko }}</span>
+                    </th>
+                </template>
+            </tr>            
             <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                     <span>
@@ -74,6 +81,15 @@ const all_levels = allLevels()
                                 {{ (item[_key] * 100).toFixed(3) }} %
                             </VChip>
                         </span>
+                        <span v-else-if="(_key.includes('_limit') || _key === 'pay_dupe_least') && _key != 'pay_dupe_limit'">
+                            <teamplate
+                                v-if="(item.module_type != 0 || _key == 'abnormal_trans_limit' || _key == 'pay_dupe_least') && item[_key] != 0">
+                                {{ item[_key] }}만원
+                            </teamplate>
+                            <template v-else>
+                                -
+                            </template>
+                        </span>
                         <span v-else-if="_key == 'installment'">
                             {{ installments.find(item => item['id'] === item[_key])?.title }}
                         </span>
@@ -96,7 +112,21 @@ const all_levels = allLevels()
                             {{ item[_key].toLocaleString() }}
                         </span>                        
                         <span v-else-if="_key == 'under_sales_type'">
-                            {{ under_sales_types.find(under_sales_type => under_sales_type['id'] === item[_key])?.title }}
+                            <VChip
+                                :color="store.getSelectIdColor(under_sales_types.find(obj => obj.id === item[_key])?.id)">
+                                {{ under_sales_types.find(obj => obj.id === item[_key])?.title }}
+                            </VChip>
+                        </span>
+                        <span v-else-if="_key == 'comm_settle_type'">
+                            <template v-if="item[_key] !== null">
+                                <VChip
+                                    :color="store.getSelectIdColor(comm_settle_types.find(obj => obj.id === item[_key])?.id)">
+                                    {{ comm_settle_types.find(obj => obj.id === item[_key])?.title }}
+                                </VChip>
+                            </template>
+                            <template v-else>
+                                -
+                            </template>
                         </span>
                         <span v-else-if="_key == 'ship_out_stat'">
                             <VChip :color="store.getSelectIdColor(ship_out_stats.find(obj => obj.id === item[_key])?.id)">
@@ -104,7 +134,9 @@ const all_levels = allLevels()
                             </VChip>
                         </span>
                         <span v-else-if="_key == 'comm_calc_level'">
-                            {{ all_levels.find(level => level['id'] === item[_key])?.title }}
+                            <VChip :color="store.getAllLevelColor(item[_key])">
+                                {{ allLevels().find(level => level['id'] === item[_key])?.title }}
+                            </VChip>
                         </span>
                         <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
                             {{ item[_key] }}

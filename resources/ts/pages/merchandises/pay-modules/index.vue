@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_types, pay_window_secure_levels, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
+import { cxl_types, fin_trx_delays, installments, module_types, pay_window_extend_hours, pay_window_secure_levels, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -47,8 +47,8 @@ onMounted(() => {
                     <template #pg_extra_field>
                         <VCol cols="6" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"
-                                :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 필터" item-title="title"
-                                item-value="id"
+                                :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 필터"
+                                item-title="title" item-value="id"
                                 @update:modelValue="store.updateQueryString({ module_type: store.params.module_type })" />
                         </VCol>
                     </template>
@@ -64,7 +64,16 @@ onMounted(() => {
             </template>
             <template #headers>
                 <tr>
-                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
+                    <template v-for="(sub_header, index) in head.getSubHeaderComputed" :key="index">
+                        <th :colspan="head.getSubHeaderComputed.length - 1 == index ? sub_header.width + 1 : sub_header.width"
+                            class='list-square sub-headers' v-show="sub_header.width">
+                            <span>{{ sub_header.ko }}</span>
+                        </th>
+                    </template>
+                </tr>
+                <tr>
+                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible"
+                        class='list-square'>
                         <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
                             <VCheckbox v-model="all_selected" class="check-label" />
                             <span>선택/취소</span>
@@ -104,10 +113,12 @@ onMounted(() => {
                                         {{ module_types.find(module_type => module_type['id'] === item[_key])?.title }}
                                     </VChip>
                                 </span>
-                                <span v-else-if="(_key as string).includes('_id') && (_key as string).includes('sales')">
+                                <span
+                                    v-else-if="(_key as string).includes('_id') && (_key as string).includes('sales')">
                                     {{ findSalesName(_key as string, item[_key]) }}
                                 </span>
-                                <span v-else-if="(_key as string).includes('_fee') && _key !== 'settle_fee' && _key !== 'comm_settle_fee'">
+                                <span
+                                    v-else-if="(_key as string).includes('_fee') && _key !== 'settle_fee' && _key !== 'comm_settle_fee'">
                                     <VChip v-if="item[_key]">
                                         {{ (item[_key] * 100).toFixed(3) }} %
                                     </VChip>
@@ -126,17 +137,6 @@ onMounted(() => {
                                 </span>
                                 <span v-else-if="_key == 'comm_settle_fee'">
                                     {{ Number(item[_key]).toLocaleString() }}
-                                </span>
-                                <span v-else-if="_key == 'comm_settle_type'">
-                                    <template v-if="item[_key] !== null">
-                                        <VChip
-                                            :color="store.getSelectIdColor(comm_settle_types.find(obj => obj.id === item[_key])?.id)">
-                                            {{ comm_settle_types.find(obj => obj.id === item[_key])?.title }}
-                                        </VChip>
-                                    </template>
-                                    <template v-else>
-                                        -
-                                    </template>
                                 </span>
                                 <span v-else-if="_key == 'terminal_id'">
                                     {{ terminals.find(obj => obj.id === item[_key])?.name }}
@@ -158,7 +158,8 @@ onMounted(() => {
                                 <span v-else-if="_key == 'fin_trx_delay'">
                                     {{ fin_trx_delays.find(settle_type => settle_type['id'] === item[_key])?.title }}
                                 </span>
-                                <span v-else-if="(_key.includes('_limit') || _key === 'pay_dupe_least') && _key != 'pay_dupe_limit'">
+                                <span
+                                    v-else-if="(_key.includes('_limit') || _key === 'pay_dupe_least') && _key != 'pay_dupe_limit'">
                                     <teamplate
                                         v-if="(item.module_type != 0 || _key == 'abnormal_trans_limit' || _key == 'pay_dupe_least') && item[_key] != 0">
                                         {{ item[_key] }}만원
@@ -172,9 +173,18 @@ onMounted(() => {
                                         {{ item.pay_disable_s_tm }} ~ {{ item.pay_disable_e_tm }}
                                     </teamplate>
                                 </span>
+                                <span v-else-if="_key === 'payment_term_min'">
+                                    <teamplate v-if="item.module_type != 0">
+                                            {{ item[_key] }}분
+                                    </teamplate>
+                                    <template v-else>
+                                        -
+                                    </template>
+                                </span>
                                 <span v-else-if="_key === 'pay_window_secure_level'">
                                     <teamplate v-if="item.module_type != 0">
-                                        <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
+                                        <VChip
+                                            :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
                                             {{ pay_window_secure_levels.find(obj => obj.id === item[_key])?.title }}
                                         </VChip>
                                     </teamplate>
@@ -182,9 +192,18 @@ onMounted(() => {
                                         -
                                     </template>
                                 </span>
-                                <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
+                                <span v-else-if="_key === 'pay_window_extend_hour'">
+                                    <teamplate v-if="item.module_type === 1">
+                                        {{ pay_window_extend_hours.find(obj => obj.id === item[_key])?.title }}
+                                    </teamplate>
+                                    <template v-else>
+                                        -
+                                    </template>
+                                </span>
+                                <span v-else-if="_key == 'updated_at'"
+                                    :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
                                     {{ item[_key] }}
-                                </span>     
+                                </span>
                                 <span v-else>
                                     {{ item[_key] }}
                                 </span>
@@ -195,6 +214,6 @@ onMounted(() => {
             </template>
         </BaseIndexView>
         <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.PaymentModule"
-            @update:select_idxs="selected = $event; store.setTable(); store.getChartData()"/>
+            @update:select_idxs="selected = $event; store.setTable(); store.getChartData()" />
     </div>
 </template>
