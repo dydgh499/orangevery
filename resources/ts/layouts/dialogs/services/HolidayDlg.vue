@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import { useRequestStore } from '@/views/request';
-import { rest_types, useHolidayStore } from '@/views/services/holidays/useStore';
+import { rest_types } from '@/views/services/holidays/useStore';
 import type { Holiday } from '@/views/types';
 import { VForm } from 'vuetify/components';
 
 const { update , remove } = useRequestStore()
-const { holidays } = useHolidayStore()
 
 const visible = ref(false)
 const vForm = ref<VForm>()
