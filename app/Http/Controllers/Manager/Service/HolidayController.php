@@ -142,13 +142,17 @@ class HolidayController extends Controller
      *
      * @queryParam search string 검색어(공휴일 명)
      */
-    public function index(IndexRequest $request)
+    public function index(Request $request)
     {
-        $search     = $request->input('search', '');
         $brand_id   = $request->user()->brand_id;
-        $query  = $this->holidays->where('brand_id', $brand_id)->where('rest_name', 'like', "%$search%");
-        $data   = $this->getIndexData($request, $query, 'id', [], 'rest_dt');
-        return $this->response(0, $data);
+        $s_dt = Carbon::now()->subYears(1)->format("Y-01-01");
+        $e_dt = Carbon::now()->addYears(1)->format("Y-12-31");
+        $holidays  = $this->holidays
+            ->where('brand_id', $brand_id)
+            ->where('rest_dt', '>=', $s_dt)
+            ->where('rest_dt', '<=', $e_dt)
+            ->get();
+        return $this->response(0, $holidays);
     }
 
     /**

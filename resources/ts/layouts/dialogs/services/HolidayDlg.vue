@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { rest_types } from '@/views/services/holidays/useStore'
-import type { Holiday } from '@/views/types'
-import { useRequestStore } from '@/views/request'
-import { VForm } from 'vuetify/components'
+import { useRequestStore } from '@/views/request';
+import { rest_types, useHolidayStore } from '@/views/services/holidays/useStore';
+import type { Holiday } from '@/views/types';
+import { VForm } from 'vuetify/components';
 
-const { update } = useRequestStore()
-const store = <any>(inject('store'))
+const { update , remove } = useRequestStore()
+const { holidays } = useHolidayStore()
 
 const visible = ref(false)
 const vForm = ref<VForm>()
@@ -30,12 +30,12 @@ const show = (_holiday: Holiday): Promise<boolean> => {
 
 const onAgree = async () => {
     const res = await update(`/services/holidays`, holiday.value, vForm.value, false)
-    store.setTable()
     visible.value = false
     resolveCallback(true); // 동의 버튼 누름
 };
 
-const onCancel = () => {
+const onCancel = async () => {
+    const res = await remove(`/services/holidays`, holiday.value, false)
     visible.value = false
     resolveCallback(false); // 취소 버튼 누름
 };
@@ -81,8 +81,8 @@ defineExpose({
                 </VForm>
             </VCardText>
             <VCardText class="d-flex justify-end gap-3 flex-wrap">
-                <VBtn color="secondary" variant="tonal" @click="onCancel">
-                    취소
+                <VBtn color="error" @click="onCancel" v-if="holiday.id !== 0">
+                    삭제
                 </VBtn>
                 <VBtn @click="onAgree">
                     확인

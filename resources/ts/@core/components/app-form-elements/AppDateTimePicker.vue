@@ -9,8 +9,8 @@ import { VField, filterFieldProps, makeVFieldProps } from 'vuetify/lib/component
 import { VInput, makeVInputProps } from 'vuetify/lib/components/VInput/VInput'
 
 // @ts-expect-error There won't be declaration file for it
-import { filterInputAttrs } from 'vuetify/lib/util/helpers'
 import { useConfigStore } from '@core/stores/config'
+import { filterInputAttrs } from 'vuetify/lib/util/helpers'
 
 // inherit Attribute make false
 defineOptions({
@@ -229,9 +229,9 @@ input[altinputclass="inlinePicker"] {
   inline-size: 16.625rem;
   margin-block-start: 0.1875rem;
 
-  .flatpickr-day:focus{
-    border-color: rgba(var(--v-border-color),var(--v-border-opacity));
-    background:  rgba(var(--v-border-color),var(--v-border-opacity));
+  .flatpickr-day:focus {
+    border-color: rgba(var(--v-border-color), var(--v-border-opacity));
+    background: rgba(var(--v-border-color), var(--v-border-opacity));
   }
 
   .flatpickr-rContainer {

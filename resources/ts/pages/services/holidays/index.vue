@@ -1,92 +1,121 @@
 <script setup lang="ts">
-import HolidayDlg from '@/layouts/dialogs/services/HolidayDlg.vue'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { useRequestStore } from '@/views/request'
-import ExtraMenu from '@/views/services/holidays/ExtraMenu.vue'
-import { rest_types, useSearchStore } from '@/views/services/holidays/useStore'
-import { DateFilters } from '@core/enums'
+import { StatusColorSetter } from '@/views/searcher'
+import { rest_types, useHolidayStore } from '@/views/services/holidays/useStore'
+import FullCalendar from '@fullcalendar/vue3'
 
-const { 
-    store, 
-    head, 
-    exporter, 
-    metas
-} = useSearchStore()
-const { post } = useRequestStore()
 
+const refCalendar = ref()
 const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
-const holidayDlg = ref(null)
+const selected = ref<number[]>([0, 1, 2])
+const holidayDlg = <any>(inject('holidayDlg'))
 
-provide('store', store)
-provide('head', head)
-provide('exporter', exporter)
-provide('holidayDlg', holidayDlg)
+const { post } = useRequestStore()
+const { holidays, updateFilter, calendarOptions } = useHolidayStore()
 
-const bulkRegister = async() => {
-    if(await alert.value.show('정말 금년도 공휴일을 대량으로 읽어오시겠습니까?')) {
+const bulkRegister = async () => {
+    if (await alert.value.show('정말 금년도 공휴일을 대량으로 읽어오시겠습니까?')) {
         const r = await post('/api/v1/manager/services/holidays/bulk-register', {}, true)
     }
 }
-
-onMounted(() => {
-    snackbar.value.show('업데이트 시기: 매년 12월 30일 다음연도 공휴일 일괄 추가<br><br>추가/수정된 공휴일은 작업 후 최대 5분 이후에 정산내용에 반영됩니다.', 'success')
-})
 </script>
 <template>
-    <div>
-        <BaseIndexView placeholder="공휴일 명칭" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.NOT_USE">
-            <template #index_extra_field>
-                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                    :items="[10, 20, 30, 50, 100, 200]" label="조회 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
-                    <VBtn prepend-icon="material-symbols:holiday-village" @click="holidayDlg.show({id:0})" size="small">
-                        공휴일 추가
-                    </VBtn>
-                    <div>
-                        <VBtn prepend-icon="material-symbols:holiday-village" @click="bulkRegister()" size="small">
-                            금년 공휴일 대량업데이트
-                        </VBtn>
-                    </div>
-            </template>
-            <template #headers>
-                <tr>
-                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                        <span>
-                            {{ header.ko }}
-                        </span>
-                    </th>
-                </tr>
-            </template>
-            <template #body>
-                <tr v-for="(item, index) in store.getItems" :key="index">
-                    <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                        <template v-if="head.getDepth(_header, 0) != 1">
-                            <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
-                                class='list-square'>
-                            </td>
-                        </template>
-                        <template v-else>
-                            <td v-show="_header.visible" class='list-square'>
-                                <span v-if="_key === 'id'">
-                                    #{{ item[_key] }}
-                                </span>
-                                <span v-else-if="_key === 'rest_type'">
-                                    <VChip :color="store.getSelectIdColor(item[_key])">
-                                        {{ rest_types.find(obj => obj.id === item[_key]).title }}
-                                    </VChip>
-                                </span>
-                                <span v-else-if="_key === 'extra_col'">
-                                    <ExtraMenu :item="item"/>
-                                </span>
-                                <span v-else>
-                                    {{ item[_key] }}
-                                </span>
-                            </td>
-                        </template>
-                    </template>
-                </tr>
-            </template>
-        </BaseIndexView>
-        <HolidayDlg ref="holidayDlg"/>
-    </div>
+    <VRow>
+        <VCol>
+            <VCard>
+                <VLayout style="z-index: 0;">
+                    <!-- 👉 Navigation drawer -->
+                    <VNavigationDrawer width="290" absolute touchless location="start"
+                        class="calendar-add-event-drawer" :temporary="$vuetify.display.mdAndDown">
+                        <div style="display: flex; flex-direction: column;margin: 1.4rem;">
+                            <VBtn block prepend-icon="tabler-plus" @click="holidayDlg.show({ id: 0 })">
+                                공휴일 추가
+                            </VBtn>
+                        </div>
+                        <VDivider />
+                        <div class="pa-7">
+                            <p class="text-sm text-uppercase text-disabled mb-3">
+                                FILTER
+                            </p>
+                            <div class="d-flex flex-column calendars-checkbox">
+                                <VCheckbox v-for="rest_type in rest_types" :key="rest_type.id"
+                                    v-model="selected" 
+                                    :value="rest_type.id" 
+                                    :color="StatusColorSetter().getSelectIdColor(rest_type.id)"
+                                    :label="rest_type.title" 
+                                    @update:modelValue="updateFilter(selected)"
+                                />
+                            </div>
+                        </div>
+                        <VDivider />
+                        <div style="display: flex; flex-direction: column;margin: 1.4rem;">
+                            <VBtn prepend-icon="material-symbols:holiday-village" @click="bulkRegister()" color="warning">
+                                금년 공휴일 대량업데이트
+                            </VBtn>
+                        </div>
+                    </VNavigationDrawer>
+                    <VMain>
+                        <VCard flat>
+                            <FullCalendar ref="refCalendar" 
+                                :key="holidays.length"
+                                :options="calendarOptions"
+                            />
+                        </VCard>
+                        <VDivider />
+                        <div style="padding: 1em; text-align: end;">
+                            <h5>1. 매년 12월 30일 다음연도 공휴일이 일괄 추가됩니다.</h5>
+                            <h5>2. 추가/수정된 공휴일은 작업 후 5분 이후에 정산내용에 반영됩니다.</h5>
+                        </div>
+                    </VMain>
+                </VLayout>
+            </VCard>
+        </VCol>
+    </VRow>
 </template>
+
+<style lang="scss">
+@use "@core-scss/template/libs/full-calendar";
+
+.calendars-checkbox {
+  .v-label {
+    color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
+    opacity: var(--v-high-emphasis-opacity);
+  }
+}
+
+.calendar-add-event-drawer {
+  &.v-navigation-drawer:not(.v-navigation-drawer--temporary) {
+    border-end-start-radius: 0.375rem;
+    border-start-start-radius: 0.375rem;
+  }
+}
+
+.calendar-date-picker {
+  display: none;
+
+  +.flatpickr-input {
+    +.flatpickr-calendar.inline {
+      border: none;
+      box-shadow: none;
+
+      .flatpickr-months {
+        border-block-end: none;
+      }
+    }
+  }
+
+  & ~ .flatpickr-calendar .flatpickr-weekdays {
+    margin-block: 0 4px;
+  }
+}
+</style>
+
+<style lang="scss" scoped>
+.v-layout {
+  overflow: visible !important;
+
+  .v-card {
+    overflow: visible;
+  }
+}
+</style>

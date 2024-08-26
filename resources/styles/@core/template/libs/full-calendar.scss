@@ -148,8 +148,13 @@
     font-weight: 500;
   }
 
+  .fc-view {
+    max-block-size: 800px;
+  }
+
   // Calendar content container
   .fc-view-harness {
+    max-block-size: 800px;
     min-block-size: 40.625rem;
   }
 

@@ -1,45 +1,85 @@
-import { Header } from '@/views/headers'
-import { Searcher } from '@/views/searcher'
+import { StatusColorSetter } from '@/views/searcher';
+import { Holiday } from '@/views/types';
+import { axios } from '@axios';
+import type { CalendarOptions } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
 
 export const rest_types = [
-    {id: 0, title: '직접등록'},
     {id: 1, title: '공공기관 휴일'},
     {id: 2, title: '기념일'},
+    {id: 0, title: '기타'},
 ]
 
-export const useSearchStore = defineStore('HolidaySearchStore', () => {
-    const store = Searcher('services/holidays')
-    const head = Header('services/holidays', '공휴일 관리')
-    const headers: Record<string, string | object> = {
-        'id': 'NO.',
-        'rest_dt': '공휴일 날짜',
-        'rest_name': '공휴일 명칭',
-        'rest_type': '공휴일 타입',
-        'created_at': '발송시간',
-        'extra_col': '더보기',
-    }
-    head.sub_headers.value = []
-    head.headers.value = head.initHeader(headers, {})
-    head.flat_headers.value = head.flatten(head.headers.value)
+export const useHolidayStore = defineStore('HolidayStore', () => {
+    const holidays = ref(<Holiday[]>([]))
+    const filters = ref<number[]>([])
+    const holidayDlg = <any>(inject('holidayDlg'))
 
-    const metas = ref([])
+    onMounted(async () => { 
+        filters.value = [0, 1, 2]
+        const r = await axios.get('/api/v1/manager/services/holidays')
+        holidays.value = r.data
+    })
 
+    const updateFilter = (selected: number[]) => {
+        filters.value = selected
+    }
 
-    const exporter = async (type: number) => {
-        const keys = Object.keys(head.flat_headers.value)
-        const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
-        let datas = r.data.content;
-        for (let i = 0; i < datas.length; i++) {
-            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
-            datas[i]['rest_type'] = store.getSelectIdColor(datas[i]['rest_type'])
-        }
-        head.exportToExcel(datas)
+    const getHolidays = computed(() => {
+        const _holidays = <any>([])
+        holidays.value.forEach(holiday => {
+            if(filters.value.includes(holiday.rest_type)) {
+                _holidays.push({
+                    id: holiday.id,
+                    title: holiday.rest_name, 
+                    start: new Date(holiday.rest_dt), 
+                    end: new Date(holiday.rest_dt), 
+                    color: StatusColorSetter().getSelectIdColor(holiday.rest_type),
+                    allDay: true,
+                    extendedProps: {
+                        calendar: holiday.rest_type,
+                    },
+                })    
+            }
+        })
+        return _holidays
+    })
+    
+    const editHoliday = (holiday_id: number) => {
+        const idx = holidays.value.findIndex(obj => obj.id === Number(holiday_id))
+        if(idx !== -1) 
+            holidayDlg.value.show(holidays.value[idx])    
     }
-        
-    return {
-        store,
-        head,
-        exporter,
-        metas,
-    }
+
+    const calendarOptions = {
+        plugins: [dayGridPlugin],
+        initialView: 'dayGridMonth',
+            headerToolbar: {
+            start: 'drawerToggler,prev,next title',
+            end: 'dayGridMonth',
+        },
+        weekends: true,
+        forceEventDuration: true,
+        editable: true,
+        eventResizableFromStart: true,
+        dragScroll: true,
+        dayMaxEvents: 5,
+        events: getHolidays,
+        eventClassNames({ event: calendarEvent }) {
+            const calendarsColor = {
+                0: 'default',
+                1: 'primary',
+                2: 'success',
+            }
+            const colorName = calendarsColor[calendarEvent._def.extendedProps.calendar as keyof typeof calendarsColor]
+            return [
+                `bg-light-${colorName} text-${colorName}`,
+            ]
+        },
+        eventClick({ event: clickedEvent }) {
+            editHoliday(Number(clickedEvent.id))
+        },
+    } as CalendarOptions
+
+    return { holidays, updateFilter, calendarOptions }
 })

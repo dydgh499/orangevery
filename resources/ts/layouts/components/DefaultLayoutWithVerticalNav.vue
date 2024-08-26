@@ -10,9 +10,9 @@ import NavbarZoomSwitcher from '@/layouts/components/NavbarZoomSwitcher.vue'
 import NavTokenableExpireTime from '@/layouts/components/NavTokenableExpireTime.vue'
 
 import UserProfile from '@/layouts/components/UserProfile.vue'
-import router from '@/router'
 import { VerticalNavLayout } from '@layouts'
 
+import HolidayDlg from '@/layouts/dialogs/services/HolidayDlg.vue'
 import PayWindowCreateDialog from '@/layouts/dialogs/transactions/PayWindowCreateDialog.vue'
 import PayWindowShowDialog from '@/layouts/dialogs/transactions/PayWindowShowDialog.vue'
 import PasswordChangeNoticeDialog from '@/layouts/dialogs/users/PasswordChangeNoticeDialog.vue'
@@ -35,13 +35,13 @@ const popup = ref()
 const payLink = ref()
 const payShow = ref()
 const pwaSnackbar = ref()
+const holidayDlg = ref()
 const passwordChangeNoticeDialog = ref()
-
-const is_pay_link = ref(router.currentRoute.value.path.includes('/pay/'))
 
 provide('popup', popup)
 provide('payLink', payLink)
 provide('payShow', payShow)
+provide('holidayDlg', holidayDlg)
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
@@ -126,8 +126,11 @@ onMounted(() => {
             <PWASnackbar ref="pwaSnackbar"/>
             <AlertDialog ref="alert" />
             <LoadingDialog ref="loading" />
+            <HolidayDlg ref="holidayDlg"/>
+
             <PayWindowCreateDialog ref="payLink"/>
             <PayWindowShowDialog ref="payShow"/>
+            
             <PopupDialog ref="popup"/>
             <PasswordChangeNoticeDialog ref="passwordChangeNoticeDialog"/>
         </RouterView>
