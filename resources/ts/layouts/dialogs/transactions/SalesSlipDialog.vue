@@ -189,7 +189,7 @@ defineExpose({
 });
 </script>
 <template>
-    <VDialog v-model="visible" class="v-dialog-sm" style="box-shadow: 0 !important;">
+    <VDialog v-model="visible" class="v-dialog-sm" style="max-width: 36em;box-shadow: 0 !important;">
         <div class="button-container">
             <VBtn size="small" @click="copySalesSlip()" class="copy-btn">
                 영수증 복사
@@ -203,8 +203,8 @@ defineExpose({
             <DialogCloseBtn @click="close()" />
         </div>
         <!-- Dialog Content -->
-        <div ref="card" style="overflow-y: auto;">
-            <VCard class="sales-slip-rect-container">
+        <div ref="card" style=" max-width: 36em;overflow-y: auto;">
+            <VCard class="sales-slip-rect-container" style="border: 0 !important;">
                 <VCardText class="sales-slip-rect" :style="`background-image: url(${background});`">
                     <VCol class="font-weight-bold v-col-custom big-font text-center" :style="$vuetify.display.smAndDown ? '' : 'padding-top: 24px;'">
                         신용카드 영수증
@@ -272,7 +272,9 @@ defineExpose({
                         <template #input> {{ tax_free.toLocaleString() }} 원</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell font-weight-bold">
-                        <template #name>총결제금액</template>
+                        <template #name>
+                            <span style="margin-top: 0.25em;">총결제금액</span>
+                        </template>
                         <template #input>
                             <span class="text-primary big-font" :style="trans?.is_cancel ? 'text-decoration: line-through;' : ''">
                                 {{ total_amount.toLocaleString() }} 원
@@ -346,7 +348,6 @@ div {
 }
 
 .sales-slip-rect {
-  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   min-block-size: 67em;

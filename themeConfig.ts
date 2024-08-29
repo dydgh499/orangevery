@@ -13,7 +13,7 @@ export const { themeConfig, layoutConfig } = defineThemeConfig({
   app: {
     title: corp.name,
     logo: h('img', { src: corp.logo_img, style: 'color: rgb(var(--v-global-theme-primary)); width: 45px;' }),
-    contentWidth: ContentWidth.Boxed,
+    contentWidth: ContentWidth.중앙정렬,
     contentLayoutNav: AppContentLayoutNav.Vertical,
     overlayNavFromBreakpoint: breakpointsVuetify.md + 16, // 16 for scro
     enableI18n: false,
@@ -24,10 +24,10 @@ export const { themeConfig, layoutConfig } = defineThemeConfig({
     iconRenderer: VIcon,
   },
   navbar: {
-    type: NavbarType.Sticky,
+    type: NavbarType.고정,
     navbarBlur: true,
   },
-  footer: { type: FooterType.Static },
+  footer: { type: FooterType.고정 },
   verticalNav: {
     isVerticalNavCollapsed: false,
     defaultNavItemIconProps: { icon: 'tabler-circle', size: 10 },

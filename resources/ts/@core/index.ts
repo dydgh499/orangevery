@@ -9,9 +9,8 @@ export const defineThemeConfig = (
   const localStorageIsVerticalNavSemiDark = localStorage.getItem(`${userConfig.app.title}-isVerticalNavSemiDark`)
 
   const localStorageSkin = (() => {
-    const storageValue = localStorage.getItem(`${userConfig.app.title}-skin`)
-
-    return Object.values(Skins).find(v => v === storageValue)
+        const storageValue = localStorage.getItem(`${userConfig.app.title}-skin`)
+        return Object.values(Skins).find(v => v === storageValue)
   })()
 
   const localStorageTransition = (() => {
@@ -31,7 +30,7 @@ export const defineThemeConfig = (
         enableI18n: userConfig.app.enableI18n,
         theme: ref(localStorageTheme || userConfig.app.theme),
         isRtl: ref(userConfig.app.isRtl),
-        skin: ref(localStorageSkin || userConfig.app.skin),
+        skin: ref('bordered' || userConfig.app.skin),
         routeTransition: ref(localStorageTransition || userConfig.app.routeTransition),
         iconRenderer: userConfig.app.iconRenderer,
       },

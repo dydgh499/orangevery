@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import { realtimeHistoryInterface } from '@/views/transactions/transactions'
 import { Transaction } from '@/views/types'
-import { realtimeDetailClass } from '@/views/transactions/useStore'
 
+const formatTime = <any>(inject('$formatTime'))
 const visible = ref(false)
 const transaction = ref(<Transaction>({}))
+
+const { realtimeDetailClass } = realtimeHistoryInterface(formatTime)
+
 const show = (_transaction: Transaction) => {
     transaction.value = _transaction
     visible.value = true
@@ -43,7 +47,7 @@ defineExpose({
                             <td class='list-square'>{{ history.result_code }}</td>
                             <td class='list-square'>{{ history.request_type }}</td>
                             <td class='list-square'>{{ history.message }}</td>
-                            <td class='list-square'>{{ history.amount }}</td>
+                            <td class='list-square'>{{ history.amount.toLocaleString() }}</td>
                             <td class='list-square'>{{ history.acct_num }}</td>
                             <td class='list-square'>{{ history.acct_bank_name }}</td>
                             <td class='list-square'>{{ history.acct_bank_code }}</td>

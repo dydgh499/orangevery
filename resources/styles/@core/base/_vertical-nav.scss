@@ -4,7 +4,6 @@
 @use "@configured-variables" as variables;
 @use "@core-scss/base/mixins" as mixins;
 @use "vuetify/lib/styles/tools/states" as vuetifyStates;
-@use "vuetify/lib/styles/tools/elevation" as elevation;
 
 .layout-nav-type-vertical {
   // 👉 Layout Vertical nav
@@ -16,7 +15,7 @@
     @at-root {
       // ℹ️ Add styles for collapsed vertical nav
       .layout-vertical-nav-collapsed#{$sl-layout-nav-type-vertical}.hovered {
-        @include elevation.elevation(6);
+        @include mixins.elevation(6);
       }
     }
 
@@ -26,6 +25,7 @@
     .nav-header {
       overflow: hidden;
       padding: variables.$vertical-nav-header-padding;
+      margin-inline: variables.$vertical-nav-header-inline-spacing;
       min-block-size: variables.$vertical-nav-header-height;
 
       // TEMPLATE: Check if we need to move this to master
@@ -66,7 +66,6 @@
       inset-block-start: calc(#{variables.$vertical-nav-header-height} - 2px);
       opacity: 0;
       pointer-events: none;
-      transform: translateX(-8px);
       transition: opacity 0.15s ease-in-out;
       will-change: opacity;
 
@@ -79,6 +78,11 @@
       .vertical-nav-items-shadow {
         opacity: 1;
       }
+    }
+
+    .ps__rail-y {
+      // ℹ️ Setting z-index: 1 will make perfect scrollbar thumb appear on top of vertical nav items shadow
+      z-index: 1;
     }
 
     // 👉 Nav section title
@@ -135,7 +139,10 @@
         @include mixins.before-pseudo;
 
         // Adds vuetify states
-        @include vuetifyStates.states($active: false);
+
+        &:not(.router-link-active, .router-link-exact-active){
+          @include vuetifyStates.states($active: false);
+        }
       }
     }
 
@@ -176,8 +183,10 @@
       // Nav group label
       > :first-child {
         // Adds before psudo element to style hover state
-        @include mixins.before-pseudo;
+        @include mixins.before-pseudo;     
+      }
 
+      &:not(.active,.open) > :first-child {
         // Adds vuetify states
         @include vuetifyStates.states($active: false);
       }
@@ -193,7 +202,7 @@
   }
 }
 
-// 👉 Transitions
+// SECTION: Transitions
 .vertical-nav-section-title-enter-active,
 .vertical-nav-section-title-leave-active {
   transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
@@ -238,3 +247,5 @@
     transform: translateX(15px);
   }
 }
+
+// !SECTION

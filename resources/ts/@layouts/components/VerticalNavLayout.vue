@@ -135,7 +135,6 @@ export default defineComponent({
 @use "@layouts/styles/mixins";
 
 .layout-wrapper.layout-nav-type-vertical {
-  // TODO(v2): Check why we need height in vertical nav & min-height in horizontal nav
   block-size: 100%;
 
   .layout-content-wrapper {

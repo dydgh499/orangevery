@@ -117,7 +117,6 @@ onMounted(() => {
             </div>
         </template>
 
-        <!-- 👉 Pages -->
         <RouterView v-slot="{ Component }">
             <Transition :name="appRouteTransition" mode="out-in">
                 <Component :is="Component" />
@@ -137,6 +136,8 @@ onMounted(() => {
         <template #footer>
             <Footer/>
         </template>
-        <TheCustomizer />
+        <!--
+            <TheCustomizer />
+        -->
     </VerticalNavLayout>
 </template>

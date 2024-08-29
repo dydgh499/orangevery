@@ -1,6 +1,7 @@
-@use "vuetify/lib/styles/tools/elevation" as elevation;
+@use "@core-scss/base/mixins";
+@use "@styles/variables/_vuetify.scss";
 
-.fc {
+body .fc {
   --fc-today-bg-color: rgba(var(--v-theme-on-surface), 0.04);
   --fc-border-color: rgba(var(--v-border-color), var(--v-border-opacity));
   --fc-neutral-bg-color: rgb(var(--v-theme-background));
@@ -18,8 +19,8 @@
 
   .fc-col-header-cell-cushion {
     color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: 0.8125rem;
+    font-weight: 500;
   }
 
   .fc-toolbar .fc-toolbar-title {
@@ -28,11 +29,23 @@
 
   .fc-event-time {
     font-size: 0.75rem;
+    font-weight: 500 !important;
+  }
+
+  .fc-event-title {
+    font-size: 0.75rem;
+    font-weight: 500 !important;
   }
 
   .fc-timegrid-event {
     .fc-event-title {
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
+    }
+  }
+
+  .fc-event-title-container {
+    .fc-event-title {
+      font-size: 0.8125rem;
     }
   }
 
@@ -54,43 +67,47 @@
     block-size: 3rem;
   }
 
-  // Removed double border on left in list view
+  // Removed double border in list view
   .fc-list {
-    border-inline-start-color: transparent;
-    font-size: 0.875rem;
+    border-block-end: none;
+    border-inline: none;
+    font-size: 0.8125rem;
 
     .fc-list-day-cushion.fc-cell-shaded {
+      background-color: rgba(var(--v-theme-on-surface), var(--v-hover-opacity));
       color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
-      font-weight: 600;
+      font-weight: 500;
     }
 
     .fc-list-event-time,
     .fc-list-event-title {
       color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+      font-size: 0.9375rem;
     }
 
     .fc-list-day .fc-list-day-text,
     .fc-list-day .fc-list-day-side-text {
+      font-size: 0.9375rem;
       text-decoration: none;
     }
   }
 
   .fc-timegrid-axis {
     color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity));
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     text-transform: capitalize;
   }
 
   .fc-timegrid-slot-label-frame {
     color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     text-align: center;
     text-transform: uppercase;
   }
 
   .fc-header-toolbar {
     flex-wrap: wrap;
-    margin: 1.5rem;
+    margin: 1.4rem;
     column-gap: 0.5rem;
     row-gap: 1rem;
   }
@@ -123,10 +140,11 @@
         .fc-button:active {
           background-color: rgba(var(--v-theme-primary), 0.16);
           color: rgb(var(--v-theme-primary));
-          font-size: 0.9rem;
+          font-size: 0.9375rem;
+          font-weight: 500;
           letter-spacing: 0.0187rem;
           padding-inline: 1rem;
-          text-transform: uppercase;
+          text-transform: capitalize;
 
           &:not(:last-child) {
             border-inline-end: 0.0625rem solid rgba(var(--v-border-color), var(--v-border-opacity));
@@ -148,18 +166,14 @@
     font-weight: 500;
   }
 
-  .fc-view {
-    max-block-size: 800px;
-  }
-
   // Calendar content container
   .fc-view-harness {
-    max-block-size: 800px;
     min-block-size: 40.625rem;
   }
 
   .fc-event {
     border-color: transparent;
+    cursor: pointer;
     margin-block-end: 0.3rem;
     padding-block: 0.1875rem;
     padding-inline: 0.3125rem;
@@ -167,7 +181,7 @@
 
   .fc-event-main {
     color: inherit;
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     font-weight: 500;
     padding-inline: 0.25rem;
   }
@@ -188,7 +202,7 @@
 
   .fc-daygrid-day-number {
     padding-block: 0.5rem;
-    padding-inline: 0.75rem;
+    padding-inline: 0.6875rem;
   }
 
   .fc-daygrid-day {
@@ -211,7 +225,7 @@
   }
 
   .fc-popover {
-    @include elevation.elevation(3);
+    @include mixins.elevation(3);
 
     border-radius: 6px;
 
@@ -222,7 +236,7 @@
 
     .fc-popover-title {
       margin: 0;
-      font-size: 1rem;
+      font-size: 0.9375rem;
       font-weight: 500;
     }
   }
@@ -251,10 +265,46 @@
           display: block !important;
         }
 
-        .v-theme--dark & {
-          background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' stroke='rgba(232,232,241,0.68)' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'%3E%3Cpath d='M3 12h18M3 6h18M3 18h18'/%3E%3C/svg%3E");
+        @at-root {
+          .v-theme--dark#{&} {
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' stroke='rgba(232,232,241,0.68)' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'%3E%3Cpath d='M3 12h18M3 6h18M3 18h18'/%3E%3C/svg%3E");
+          }
         }
       }
     }
   }
+
+  // ℹ️ Workaround of https://github.com/fullcalendar/fullcalendar/issues/6407
+  .fc-col-header,
+  .fc-daygrid-body,
+  .fc-scrollgrid-sync-table,
+  .fc-timegrid-body,
+  .fc-timegrid-body table {
+    inline-size: 100% !important;
+  }
+}
+
+// Remove event margin in week view inside day column
+.fc-timegrid-col-events {
+  margin: 0 !important;
+}
+
+// Remove day view, day bg
+// .fc .fc-daygrid-day.fc-day-today {
+//   background: transparent;
+// }
+
+.fc-timegrid .fc-timegrid-slots .fc-timegrid-slot {
+  background: rgb(var(--v-theme-surface));
+}
+
+// Set calendar month font-size
+.fc-toolbar-title {
+  font-size: 18px !important;
+}
+
+// Set button border radius
+.fc .fc-button {
+  border-radius: vuetify.$card-border-radius;
+  min-block-size: vuetify.$button-height;
 }

@@ -1,7 +1,7 @@
 @use "@layouts/styles/mixins" as layoutsMixins;
-@use "vuetify/lib/styles/tools/elevation" as elevation;
 @use "@core-scss/base/variables";
 @use "@layouts/styles/placeholders";
+@use "@core-scss/base/mixins";
 
 // Horizontal nav item styles (including nested)
 %horizontal-nav-item {
@@ -12,6 +12,11 @@
 // Top level horizontal nav item styles (`a` tag & group label)
 %horizontal-nav-top-level-item {
   border-radius: 0.4rem;
+}
+
+%horizontal-nav-disabled {
+  opacity: var(--v-disabled-opacity);
+  pointer-events: none;
 }
 
 // Active styles for sub nav link
@@ -83,7 +88,7 @@
 
 // Popper content styles
 %horizontal-nav-popper-content {
-  @include elevation.elevation(4);
+  @include mixins.elevation(4);
 
   border-radius: 6px;
   padding-block: 0.3rem;

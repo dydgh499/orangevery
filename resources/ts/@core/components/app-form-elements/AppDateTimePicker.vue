@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import FlatPickr from 'vue-flatpickr-component'
-import { useTheme } from 'vuetify'
 
 // @ts-expect-error There won't be declaration file for it
 import { VField, filterFieldProps, makeVFieldProps } from 'vuetify/lib/components/VField/VField'
@@ -9,7 +8,6 @@ import { VField, filterFieldProps, makeVFieldProps } from 'vuetify/lib/component
 import { VInput, makeVInputProps } from 'vuetify/lib/components/VInput/VInput'
 
 // @ts-expect-error There won't be declaration file for it
-import { useConfigStore } from '@core/stores/config'
 import { filterInputAttrs } from 'vuetify/lib/util/helpers'
 
 // inherit Attribute make false
@@ -51,13 +49,11 @@ interface Emit {
   (e: 'click:clear', el: MouseEvent): void
 }
 
-const configStore = useConfigStore()
 const attrs = useAttrs()
 
 const [rootAttrs, compAttrs] = filterInputAttrs(attrs)
-
-const [{ modelValue: _, ...inputProps }] = VInput.filterProps(props)
-const [fieldProps] = filterFieldProps(props)
+//const modelValue = VInput.filterProps(props)
+const fieldProps = filterFieldProps(props)
 
 const refFlatPicker = ref()
 const { focused } = useFocus(refFlatPicker)
@@ -69,39 +65,15 @@ if (compAttrs.config && compAttrs.config.inline) {
   isInlinePicker.value = compAttrs.config.inline
   Object.assign(compAttrs, { altInputClass: 'inlinePicker' })
 }
-
 // v-field clear prop
 const onClear = (el: MouseEvent) => {
   el.stopPropagation()
 
   nextTick(() => {
     emit('update:modelValue', '')
-
     emit('click:clear', el)
   })
 }
-
-const vuetifyTheme = useTheme()
-
-const vuetifyThemesName = Object.keys(vuetifyTheme.themes.value)
-
-// Themes class added to flat-picker component for light and dark support
-const updateThemeClassInCalendar = () => {
-  // ℹ️ Flatpickr don't render it's instance in mobile and device simulator
-  if (!refFlatPicker.value.fp.calendarContainer)
-    return
-
-  vuetifyThemesName.forEach(t => {
-    refFlatPicker.value.fp.calendarContainer.classList.remove(`v-theme--${t}`)
-  })
-  refFlatPicker.value.fp.calendarContainer.classList.add(`v-theme--${vuetifyTheme.global.name.value}`)
-}
-
-watch(() => configStore.theme, updateThemeClassInCalendar)
-
-onMounted(() => {
-  updateThemeClassInCalendar()
-})
 
 const emitModelValue = (val: string) => {
   emit('update:modelValue', val)
@@ -109,76 +81,66 @@ const emitModelValue = (val: string) => {
 
 const elementId = computed(() => {
   const _elementIdToken = fieldProps.id || fieldProps.label
-
   return _elementIdToken ? `app-picker-field-${_elementIdToken}-${Math.random().toString(36).slice(2, 7)}` : undefined
 })
 </script>
 
 <template>
-  <div class="app-picker-field">
-    <!-- v-input -->
-    <VLabel
-      v-if="fieldProps.label"
-      class="mb-1 text-body-2 text-high-emphasis"
-      :for="elementId"
-      :text="fieldProps.label"
-    />
-
+  <div class="app-picker-field" :style="props.style">
     <VInput
-      v-bind="{ ...inputProps, ...rootAttrs }"
-      :model-value="modelValue"
+      v-bind="{ ...rootAttrs }"
+      :model-value="props.modelValue"
       :hide-details="props.hideDetails"
       :class="[{
         'v-text-field--prefixed': props.prefix,
         'v-text-field--suffixed': props.suffix,
         'v-text-field--flush-details': ['plain', 'underlined'].includes(props.variant),
       }, props.class]"
-      class="position-relative v-text-field"
-      :style="props.style"
+      class="position-relative v-text-field"      
     >
-      <template #default="{ id, isDirty, isValid, isDisabled, isReadonly }">
-        <!-- v-field -->
-        <VField
-          v-bind="{ ...fieldProps, label: undefined }"
-          :id="id.value"
-          role="textbox"
-          :active="focused || isDirty.value || isCalendarOpen"
-          :focused="focused || isCalendarOpen"
-          :dirty="isDirty.value || props.dirty"
-          :error="isValid.value === false"
-          :disabled="isDisabled.value"
-          @click:clear="onClear"
-        >
-          <template #default="{ props: vFieldProps }">
-            <div v-bind="vFieldProps">
-              <!-- flat-picker  -->
-              <FlatPickr
-                v-if="!isInlinePicker"
-                v-bind="compAttrs"
-                ref="refFlatPicker"
-                :model-value="modelValue"
-                :placeholder="props.placeholder"
-                :readonly="isReadonly.value"
-                class="flat-picker-custom-style"
-                :disabled="isReadonly.value"
-                @on-open="isCalendarOpen = true"
-                @on-close="isCalendarOpen = false"
-                @update:model-value="emitModelValue"
-              />
+        <template #default="{ id, isDirty, isValid, isDisabled, isReadonly }">
+            <VField
+            v-bind="{ ...fieldProps, label: undefined }"
+            :id="id.value"
+            role="textbox"
+            :label="fieldProps.label"
+            :active="focused || isDirty.value || isCalendarOpen"
+            :focused="focused || isCalendarOpen"
+            :dirty="isDirty.value || props.dirty"
+            :error="isValid.value === false"
+            :disabled="isDisabled.value"
+            @click:clear="onClear"
+            >
+            <template #default="{ props: vFieldProps }">
+                <div v-bind="vFieldProps">
+                <!-- flat-picker  -->
+                <FlatPickr
+                    v-if="!isInlinePicker"
+                    v-bind="compAttrs"
+                    ref="refFlatPicker"
+                    :model-value="props.modelValue"
+                    :placeholder="props.placeholder"
+                    :readonly="isReadonly.value"
+                    class="flat-picker-custom-style"
+                    :disabled="isReadonly.value"
+                    @on-open="isCalendarOpen = true"
+                    @on-close="isCalendarOpen = false"
+                    @update:model-value="emitModelValue"
+                />
 
-              <!-- simple input for inline prop -->
-              <input
-                v-if="isInlinePicker"
-                :value="modelValue"
-                :placeholder="props.placeholder"
-                :readonly="isReadonly.value"
-                class="flat-picker-custom-style"
-                type="text"
-              >
-            </div>
-          </template>
-        </VField>
-      </template>
+                <!-- simple input for inline prop -->
+                <input
+                    v-if="isInlinePicker"
+                    :value="props.modelValue"
+                    :placeholder="props.placeholder"
+                    :readonly="isReadonly.value"
+                    class="flat-picker-custom-style"
+                    type="text"
+                >
+                </div>
+            </template>
+            </VField>
+        </template>
     </VInput>
 
     <!-- flat picker for inline props -->
@@ -186,7 +148,7 @@ const elementId = computed(() => {
       v-if="isInlinePicker"
       v-bind="compAttrs"
       ref="refFlatPicker"
-      :model-value="modelValue"
+      :model-value="props.modelValue"
       @update:model-value="emitModelValue"
       @on-open="isCalendarOpen = true"
       @on-close="isCalendarOpen = false"
@@ -359,11 +321,6 @@ input[altinputclass="inlinePicker"] {
     font-weight: 300;
   }
 
-  &.open {
-    // Open calendar above overlay
-    z-index: 2401;
-  }
-
   &.hasTime.open {
     .flatpickr-time {
       border-color: rgba(var(--v-border-color), var(--v-border-opacity));
@@ -508,5 +465,15 @@ input[altinputclass="inlinePicker"] {
 // Update hour font-weight
 .flatpickr-time input.flatpickr-hour {
   font-weight: 400;
+}
+
+</style>
+<style scoped>
+:deep(.v-field__field) {
+  height: 36px;
+}
+
+:deep(.flatpickr-input) {
+  height: 36px;
 }
 </style>

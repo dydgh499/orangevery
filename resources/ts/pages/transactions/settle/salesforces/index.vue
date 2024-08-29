@@ -6,7 +6,6 @@ import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/us
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
-import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
 import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import { useSearchStore } from '@/views/transactions/settle/useSalesforceStore'
 import { getLevelByIndex, getUserLevel, salesLevels } from '@axios'
@@ -15,7 +14,7 @@ import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = settlementFunctionCollect(store)
+const { getSettleStyle, batchSettle, isSalesCol, movePartSettle, settle } = settlementFunctionCollect(store)
 const { settle_types } = useStore()
 const all_sales = salesLevels()
 const all_cycles = settleCycles()
@@ -139,13 +138,15 @@ onMounted(() => {
             </tr>
             <!-- normal -->
             <tr v-for="(item, index) in store.getItems" :key="index">
+                <VTooltip activator="parent" location="end" open-delay="250">
+                    {{ item['sales_name'] }}
+                </VTooltip>
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
                         <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
                             class='list-square'>
                             <span v-if="_key == 'deduction' && (__key as string) == 'input'">
-                                <AddDeductBtn :id="item['id']" :name="item['user_name']" :is_mcht="false">
-                                </AddDeductBtn>
+                                <AddDeductBtn :id="item['id']" :name="item['user_name']" :is_mcht="false"/>
                             </span>
                             <span v-else-if="_key === 'terminal' && (__key as string) === 'settle_pay_module_idxs'">
                                 {{ item[_key][__key] ? (item[_key][__key].length).toLocaleString() : 0 }}
@@ -191,8 +192,10 @@ onMounted(() => {
                                 {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
                             </span>
                             <span v-else-if="_key === 'extra_col'">
-                                <ExtraMenu :name="item['user_name']" :is_mcht="false" :item="item">
-                                </ExtraMenu>
+                                <VBtn size="small" type="button" color="primary" @click="settle(item['user_name'], item, false)" v-if="getUserLevel() >= 35">
+                                    정산하기
+                                    <VIcon size="22" icon="tabler-calculator" style="margin-left: 0.25em;"/>
+                                </VBtn>
                             </span>
                             <span v-else>
                                 {{ item[_key] }}

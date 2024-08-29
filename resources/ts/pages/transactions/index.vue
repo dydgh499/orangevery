@@ -3,6 +3,7 @@ import TransactionBatchDialog from '@/layouts/dialogs/TransactionBatchDialog.vue
 import CancelDepositDialog from '@/layouts/dialogs/transactions/CancelDepositDialog.vue'
 import CancelPartDialog from '@/layouts/dialogs/transactions/CancelPartDialog.vue'
 import CancelTransDialog from '@/layouts/dialogs/transactions/CancelTransDialog.vue'
+import NotiSendHistoriesDialog from '@/layouts/dialogs/transactions/NotiSendHistoriesDialog.vue'
 import RealtimeHistoriesDialog from '@/layouts/dialogs/transactions/RealtimeHistoriesDialog.vue'
 import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
 import MchtBlacklistCreateDialog from '@/layouts/dialogs/users/MchtBlacklistCreateDialog.vue'
@@ -12,25 +13,31 @@ import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
 import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
-import { getDateFormat, realtimeResult, settleIdCol, useSearchStore } from '@/views/transactions/useStore'
+import { notiSendHistoryInterface, realtimeHistoryInterface } from '@/views/transactions/transactions'
+import { getDateFormat, getProfitColName, settleIdCol, useSearchStore } from '@/views/transactions/useStore'
 
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import type { Options } from '@/views/types'
-import { getLevelByIndex, getUserLevel, salesLevels, user_info } from '@axios'
+import { getUserLevel, salesLevels, user_info } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
-const { store, head, exporter, metas, realtimeMessage } = useSearchStore()
+const formatTime = <any>(inject('$formatTime'))
+const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 const { isSalesCol } = settlementFunctionCollect(store)
+
+const { notiSendResult, notiSendMessage } = notiSendHistoryInterface()
+const { realtimeResult, realtimeMessage } = realtimeHistoryInterface(formatTime)
 
 const salesslip = ref()
 const cancelTran = ref()
 const cancelPart = ref()
 const cancelDeposit = ref()
-const realtimeHistories = ref()
+const realtimeHistoryDialog = ref()
+const notiSendHistoriesDialog = ref()
 const transactionBatchDialog = ref()
 const mchtBlackListDlg = ref(null)
 
@@ -44,7 +51,8 @@ provide('salesslip', salesslip)
 provide('cancelTran', cancelTran)
 provide('cancelPart', cancelPart)
 provide('cancelDeposit', cancelDeposit)
-provide('realtimeHistories', realtimeHistories)
+provide('realtimeHistoryDialog', realtimeHistoryDialog)
+provide('notiSendHistoriesDialog', notiSendHistoriesDialog)
 provide('mchtBlackListDlg', mchtBlackListDlg)
 
 store.params.level = 10
@@ -67,38 +75,24 @@ const getAllLevels = () => {
     return sales
 }
 
-const getProfitColName = () => {
-    if(store.params.level === 10)
-        return '정산금'
-    else if(store.params.level < 35)
-        return levels[`sales${getLevelByIndex(store.params.level)}_name`] + ' 수익금'
-    else if(store.params.level === 40)
-        return '본사 수익금'
-    else if(store.params.level === 50)
-        return '개발사 수익금'
-    else
-        return ''
-}
-
-
 onMounted(() => {
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
             const r = await store.getChartData()
-                metas[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
-                metas[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
-                metas[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
-                metas[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
-                metas[0]['subtitle'] = r.data.appr.count.toLocaleString() + '건'
-                metas[1]['subtitle'] = r.data.cxl.count.toLocaleString() + '건'
-                metas[2]['subtitle'] = r.data.count.toLocaleString() + '건'
-                metas[3]['subtitle'] = r.data.count.toLocaleString() + '건'
-                metas[0]['percentage'] = r.data.appr.amount ? 100 : 0
+            metas[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
+            metas[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
+            metas[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
+            metas[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
+            metas[0]['subtitle'] = r.data.appr.count.toLocaleString() + '건'
+            metas[1]['subtitle'] = r.data.cxl.count.toLocaleString() + '건'
+            metas[2]['subtitle'] = r.data.count.toLocaleString() + '건'
+            metas[3]['subtitle'] = r.data.count.toLocaleString() + '건'
+            metas[0]['percentage'] = r.data.appr.amount ? 100 : 0
 
-            if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
+            if ((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
                 metas[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
                 metas[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
-                metas[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)                
+                metas[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
             }
         }
     })
@@ -113,38 +107,42 @@ onMounted(() => {
                     :sales="true">
                     <template #sales_extra_field>
                         <VCol cols="6" sm="3">
-                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="getAllLevels()"
-                                :label="`등급 선택`" item-title="title" item-value="id"
-                                @update:modelValue="store.updateQueryString({ level: store.params.level })"/>
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level"
+                                :items="getAllLevels()" :label="`등급 선택`" item-title="title" item-value="id"
+                                @update:modelValue="store.updateQueryString({ level: store.params.level })" />
                         </VCol>
                     </template>
                     <template #pg_extra_field>
                         <VCol cols="6" sm="3" v-if="getUserLevel() >= 35">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
-                                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
-                                item-value="id"
-                                @update:modelValue="store.updateQueryString({ mcht_settle_type: store.params.mcht_settle_type })" />                                
+                                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터"
+                                item-title="name" item-value="id"
+                                @update:modelValue="store.updateQueryString({ mcht_settle_type: store.params.mcht_settle_type })" />
                         </VCol>
                         <VCol cols="6" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"
-                                :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 필터" item-title="title"
-                                item-value="id"
+                                :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 필터"
+                                item-title="title" item-value="id"
                                 @update:modelValue="[store.updateQueryString({ module_type: store.params.module_type })]" />
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="carbon:batch-job" @click="transactionBatchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
+                <VBtn prepend-icon="carbon:batch-job" @click="transactionBatchDialog.show()" v-if="getUserLevel() >= 35"
+                    color="primary" size="small" style="margin: 0.25em;">
                     일괄작업
                 </VBtn>
                 <div>
-                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_realtime_fail" label="즉시출금 실패건 조회" color="error"
-                        @update:modelValue="store.updateQueryString({ only_realtime_fail: store.params.only_realtime_fail })" 
-                        v-if="corp.pv_options.paid.use_realtime_deposit && getUserLevel() >= 35"/>
-                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_cancel" label="취소 매출 조회" color="error"
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_realtime_fail"
+                        label="즉시출금 실패건 조회" color="error"
+                        @update:modelValue="store.updateQueryString({ only_realtime_fail: store.params.only_realtime_fail })"
+                        v-if="corp.pv_options.paid.use_realtime_deposit && getUserLevel() >= 35" />
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_cancel"
+                        label="취소 매출 조회" color="error"
                         @update:modelValue="store.updateQueryString({ only_cancel: store.params.only_cancel })" />
-                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.no_settlement" label="미정산 매출 조회" color="warning"
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.no_settlement"
+                        label="미정산 매출 조회" color="warning"
                         @update:modelValue="store.updateQueryString({ no_settlement: store.params.no_settlement })" />
                 </div>
             </template>
@@ -158,27 +156,26 @@ onMounted(() => {
                     </template>
                 </tr>
                 <tr>
-                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
+                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible"
+                        class='list-square'>
                         <span v-if="key == 'total_trx_amount'">
-                            <BaseQuestionTooltip :location="'top'" :text="store.params.level === 10 ? (header.ko as string) : '총 지급액'"
-                                :content="'총 거래 수수료 = 금액 - (거래 수수료 + 유보금 + 이체 수수료)'">
-                            </BaseQuestionTooltip>
+                            <BaseQuestionTooltip :location="'top'"
+                                :text="store.params.level === 10 ? (header.ko as string) : '총 지급액'"
+                                :content="'총 거래 수수료 = 금액 - (거래 수수료 + 유보금 + 이체 수수료)'" />
                         </span>
                         <span v-else-if="key == 'mcht_settle_fee' && store.params.level == 10">
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
-                                :content="'입금 수수료는 가맹점만 적용됩니다.'">
-                            </BaseQuestionTooltip>
+                                :content="'입금 수수료는 가맹점만 적용됩니다.'" />
                         </span>
                         <span v-else-if="key == 'trx_amount'">
                             <span>{{ store.params.level === 10 ? header.ko : '지급액' }}</span>
                         </span>
                         <span v-else-if="key == 'profit'">
-                            <span>{{ getProfitColName() }}</span>
+                            <span>{{ getProfitColName(store.params.level) }}</span>
                         </span>
                         <span v-else-if="key == 'hold_amount' && store.params.level == 10">
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
-                                :content="'유보금은 가맹점만 적용됩니다.'">
-                            </BaseQuestionTooltip>
+                                :content="'유보금은 가맹점만 적용됩니다.'" />
                         </span>
                         <span v-else>
                             <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
@@ -194,23 +191,32 @@ onMounted(() => {
             </template>
             <template #body>
                 <tr v-for="(item, index) in store.getItems" :key="item['id']">
+                    <VTooltip activator="parent" location="end" open-delay="250">
+                        <span>{{ `${item['mcht_name']} (${item['is_cancel'] ? "취소" : "승인"})` }}</span>
+                        <br>
+                        <span>{{ `${item['amount'].toLocaleString()}원` }}</span>
+                    </VTooltip>
                     <template v-for="(_header, _key, _index) in head.headers" :key="_key">
-                        <td v-if="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square' >
+                        <td v-if="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
                             <span v-if="_key == 'id'">
                                 <div class='check-label-container'>
                                     <VCheckbox v-if="getUserLevel() >= 35" v-model="selected" :value="item[_key]"
                                         class="check-label" />
-                                    <span class="edit-link" @click="getUserLevel() >= 35 ? store.edit(item['id']) : ''">#{{ item[_key] }}</span>
+                                    <span class="edit-link"
+                                        @click="getUserLevel() >= 35 ? store.edit(item['id']) : ''">#{{ item[_key]
+                                        }}</span>
                                 </div>
                             </span>
                             <span v-else-if="_key == 'module_type'">
-                                <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
+                                <VChip
+                                    :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
                                     {{ module_types.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'settle_id'">
                                 <VChip :color="settleIdCol(item, store.params.level) === null ? 'default' : 'success'">
-                                    {{ settleIdCol(item, store.params.level) === null ? '정산안함' : "#"+settleIdCol(item, store.params.level)}}
+                                    {{ settleIdCol(item, store.params.level) === null ? '정산안함' : "#" + settleIdCol(item,
+                                    store.params.level)}}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'settle_dt'">
@@ -251,17 +257,24 @@ onMounted(() => {
                             <span v-else-if="_key == 'custom_id'">
                                 {{ cus_filters.find(cus => cus.id === item[_key])?.name }}
                             </span>
+
+                            <span v-else-if="_key == 'noti_send_result'">
+                                <VChip :color="store.getSelectIdColor(notiSendResult(item))">
+                                    {{ notiSendMessage(item) }}
+                                </VChip>
+                            </span>
                             <span v-else-if="_key == 'realtime_result'">
                                 <VChip :color="store.getSelectIdColor(realtimeResult(item))">
                                     {{ realtimeMessage(item) }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'extra_col'">
-                                <ExtraMenu :item="item"></ExtraMenu>
+                                <ExtraMenu :item="item" />
                             </span>
-                            <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
+                            <span v-else-if="_key == 'updated_at'"
+                                :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
                                 {{ item[_key] }}
-                            </span>     
+                            </span>
                             <span v-else>
                                 {{ item[_key] }}
                             </span>
@@ -274,9 +287,10 @@ onMounted(() => {
         <CancelTransDialog ref="cancelTran" />
         <CancelPartDialog ref="cancelPart" />
         <CancelDepositDialog ref="cancelDeposit" />
-        <RealtimeHistoriesDialog ref="realtimeHistories" />
+        <RealtimeHistoriesDialog ref="realtimeHistoryDialog" />
+        <NotiSendHistoriesDialog ref="notiSendHistoriesDialog" />
         <TransactionBatchDialog ref="transactionBatchDialog" :selected_idxs="selected" :store="store"
-            @update:select_idxs="selected = $event; store.setTable(); store.getChartData()"/>
+            @update:select_idxs="selected = $event; store.setTable(); store.getChartData()" />
         <MchtBlacklistCreateDialog ref="mchtBlackListDlg" />
-</div>
+    </div>
 </template>

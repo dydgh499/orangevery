@@ -5,9 +5,10 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
 import { useSearchStore } from '@/views/services/cms-transactions/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { realtimeMessage, realtimeResult } from '@/views/transactions/settle-histories/useCollectWithdrawHistoryStore'
+import { realtimeHistoryInterface } from '@/views/transactions/transactions'
 import { DateFilters } from '@core/enums'
 
+const formatTime = <any>(inject('$formatTime'))
 const { store, head, exporter, metas } = useSearchStore()
 const { finance_vans } = useStore()
 const headOfficeWithdrawDialog = ref()
@@ -15,10 +16,12 @@ const total_amount = ref(<any>{
     deposit_amount: 0,
     withdraw_amount: 0,
 })
+
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 const snackbar = <any>(inject('snackbar'))
+const { realtimeResult, realtimeMessage } = realtimeHistoryInterface(formatTime)
 
 if(getUserLevel() < 35) {
     pay_token.value = ''

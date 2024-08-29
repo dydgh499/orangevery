@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Manager\BatchUpdater;
 
+use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateController;
 use App\Http\Controllers\Manager\BatchUpdater\MerchandiseFeeUpdater;
 use App\Http\Controllers\Manager\MerchandiseController;
 use App\Models\Merchandise;
 use App\Models\Merchandise\NotiUrl;
 use App\Models\Merchandise\PaymentModule;
-use App\Models\Log\MchtFeeChangeHistory;
-use App\Models\Log\SfFeeChangeHistory;
-use App\Models\Log\SfFeeApplyHistory;
+use App\Models\Merchandise\MerchandiseColumnApplyBook;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -19,7 +18,6 @@ use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Auth\AuthOperatorIP;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -28,7 +26,7 @@ use Illuminate\Support\Facades\DB;
  *
  * 가맹점 일괄 업데이트 group 입니다.
  */
-class BatchUpdateMchtController extends Controller
+class BatchUpdateMchtController extends BatchUpdateController
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $merchandises;
@@ -38,68 +36,71 @@ class BatchUpdateMchtController extends Controller
         $this->merchandises = $merchandises;
     }
 
-    private function batchResponse($row)
+    private function applyBook($query, $request, $cols)
     {
-        return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 업데이트되었습니다.' : '업데이트된 가맹점이 존재하지 않습니다.');
+        $datas = $this->getApplyBookDatas($request, $query->pluck('id')->all(), 'mcht_id', $cols);
+        $res = $this->manyInsert(new MerchandiseColumnApplyBook, $datas);
+        return count($datas);
     }
+
+    private function getApplyRow($request, $cols)
+    {
+        $query = $this->merchandiseBatch($request);
+        if($request->apply_type === 0) 
+            $row = $query->update($cols);
+        else
+            $row = $this->applyBook($query, $request, $cols);
+        return $row;
+    }
+
     /**
      * 선택된 가맹점 가져오기
      */
     private function merchandiseBatch($request)
     {
-        $cond_1 = count($request->selected_idxs);
-        $cond_2 = ($request->selected_sales_id && $request->selected_level);
-        $cond_3 = ($request->selected_all && $request->filter['page_size']);  //전체 변경
-        
-        if($cond_1 || $cond_2 || $cond_3)
+        $apply_mode = $this->getBatchMode($request);
+        if($apply_mode === 3)
         {
-            if($cond_3)
-            {
-                $filter_request = new Request();
-                $filter_request->merge($request->filter);
-                $filter_request->setUserResolver(function () use ($request) {
-                    return $request->user();
-                });
-                
-                $inst = resolve(MerchandiseController::class);
-                if($inst->isByPayModule($filter_request))
-                    $query = $inst->byPayModules($filter_request, false);
-                else 
-                    $query = $inst->byNormalIndex($filter_request, false);
+            $filter_request = new Request();
+            $filter_request->merge($request->filter);
+            $filter_request->setUserResolver(function () use ($request) {
+                return $request->user();
+            });
+            
+            $inst = resolve(MerchandiseController::class);
+            if($inst->isByPayModule($filter_request))
+                $query = $inst->byPayModules($filter_request, false);
+            else 
+                $query = $inst->byNormalIndex($filter_request, false);
 
-                $mcht_ids = $query->pluck('merchandises.id')->all();
-                if($request->total_selected_count !== count($mcht_ids))
-                {
-                    print_r(json_encode(['code'=>1999, 'message'=>'변경할 개수와 조회 개수가 같지 않습니다.', 'data'=>[]], JSON_UNESCAPED_UNICODE));
-                    exit;
-                }
-                return $this->merchandises->whereIn('id', $mcht_ids);
-            }
-            else
+            $mcht_ids = $query->pluck('merchandises.id')->all();
+            if($request->total_selected_count !== count($mcht_ids))
             {
-                $query = $this->merchandises->where('brand_id', $request->user()->brand_id);
-                if(count($request->selected_idxs))
-                    $query = $query->whereIn('id', $request->selected_idxs);
-                if($request->selected_sales_id && $request->selected_level)
-                {
-                    $idx    = globalLevelByIndex($request->selected_level);
-                    $query  = $query->where('sales'.$idx.'_id', $request->selected_sales_id);
-                }
-                return $query;    
+                print_r(json_encode(['code'=>1999, 'message'=>'변경할 개수와 조회 개수가 같지 않습니다.', 'data'=>[]], JSON_UNESCAPED_UNICODE));
+                exit;
             }
+            return $this->merchandises->whereIn('id', $mcht_ids);
+        }
+        else if($apply_mode === 1)
+        {
+            $query = $this->merchandises->where('brand_id', $request->user()->brand_id);
+            if(count($request->selected_idxs))
+                $query = $query->whereIn('id', $request->selected_idxs);
+            if($request->selected_sales_id && $request->selected_level)
+            {
+                $idx    = globalLevelByIndex($request->selected_level);
+                $query  = $query->where('sales'.$idx.'_id', $request->selected_sales_id);
+            }
+            return $query;    
         }
         else
-        {
-            logging([], '잘못된 접근');
-            echo "wrong access";
             return null;
-        }
     }
 
     /**
      * 가맹점/영업점 수수료율 즉시/예약적용 
      */
-    public function feeApply(Request $request, $user, $type)
+    public function feeApply(Request $request, $user)
     {
         $cond_1 = (Ablilty::isOperator($request) && AuthOperatorIP::valiate($request->user()->brand_id, $request->ip())) || Ablilty::isDevLogin($request);
         $cond_2 = Ablilty::isSalesforce($request);
@@ -107,12 +108,12 @@ class BatchUpdateMchtController extends Controller
         if($cond_1 || $cond_2)
         {
             $query = $this->merchandiseBatch($request);
-            $row = MerchandiseFeeUpdater::apply($request, $user, $type, $query);
+            $row = MerchandiseFeeUpdater::apply($request, $user, $request->apply_type, $query);
 
             // 상위영업점 변경건일 시 히스토리 추가
             if($row && $user === 'salesforces')
                     MerchandiseFeeUpdater::SalesFeeHistoryUpdate($request);
-            return $this->batchResponse($row);
+            return $this->batchResponse($row, '가맹점');
         }
         else
             return $this->response(951);
@@ -121,8 +122,8 @@ class BatchUpdateMchtController extends Controller
     public function setEnabled(Request $request)
     {
         $cols = ['enabled' => $request->enabled];
-        $row = $this->merchandiseBatch($request)->update($cols);
-        return $this->batchResponse($row);
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
     }
     /**
      * 커스텀 필터 적용 
@@ -130,8 +131,8 @@ class BatchUpdateMchtController extends Controller
     public function setCustomFilter(Request $request)
     {
         $cols = ['custom_id' => $request->custom_id];
-        $row = $this->merchandiseBatch($request)->update($cols);
-        return $this->batchResponse($row);
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
     }
 
     /**
@@ -140,8 +141,8 @@ class BatchUpdateMchtController extends Controller
     public function setBusinessNum(Request $request)
     {
         $cols = ['business_num' => $request->business_num];
-        $row = $this->merchandiseBatch($request)->update($cols);
-        return $this->batchResponse($row);
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
     }
     
     /**
@@ -150,8 +151,8 @@ class BatchUpdateMchtController extends Controller
     public function setShowFee(Request $request)
     {
         $cols = ['is_show_fee' => $request->is_show_fee];
-        $row = $this->merchandiseBatch($request)->update($cols);
-        return $this->batchResponse($row);
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
     }
 
     /**
@@ -165,8 +166,8 @@ class BatchUpdateMchtController extends Controller
             'acct_bank_code' => $request->acct_bank_code,
             'acct_bank_name' => $request->acct_bank_name,
         ];
-        $row = $this->merchandiseBatch($request)->update($cols);
-        return $this->batchResponse($row);
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
     }
     /**
      * 노티 URL 일괄등록
@@ -197,6 +198,7 @@ class BatchUpdateMchtController extends Controller
                 $data[] = [
                     'brand_id' => $request->user()->brand_id,
                     'mcht_id' => $mcht_id,
+                    'pmod_id' => -1,
                     'send_url' => $request->send_url,
                     'noti_status' => $request->noti_status,
                     'note' => $request->note,

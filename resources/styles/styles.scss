@@ -1,4 +1,20 @@
 // Write your overrides
+// 👉 Theme
+.v-theme--light {
+  --v-theme-secondary: 30, 30, 30 !important;   // add
+  --v-field-border-opacity: 0.78 !important;
+  --v-medium-emphasis-opacity: 0.78 !important;
+  --v-tooltip-background: 0, 0, 0, 0.7;
+  --v-selection-control-size: 32px !important;
+}
+
+.v-theme--dark {
+  --v-field-border-opacity: 0.78 !important;
+  --v-medium-emphasis-opacity: 0.78 !important;
+  --v-tooltip-background: 0, 0, 0, 0.7;
+  --v-selection-control-size: 32px !important;
+}
+
 body {
   background: rgb(var(--v-theme-background));
 }

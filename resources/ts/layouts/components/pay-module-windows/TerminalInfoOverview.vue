@@ -167,8 +167,7 @@ const { terminals } = useStore()
         <VRow v-if="isAbleModiy(props.item.id)">
             <VCol md="5" cols="5">개통일</VCol>
             <VCol md="7">
-                <VTextField type="date" v-model="props.item.begin_dt"
-                        prepend-inner-icon="ic-baseline-calendar-today" single-line />
+                <AppDateTimePicker v-model="props.item.begin_dt" prepend-inner-icon="ic-baseline-calendar-today" />
             </VCol>
         </VRow>
         <VRow v-else>
@@ -182,8 +181,7 @@ const { terminals } = useStore()
         <VRow v-if="isAbleModiy(props.item.id)">
             <VCol md="5" cols="5">출고일</VCol>
             <VCol md="7">
-                    <VTextField type="date" v-model="props.item.ship_out_dt"
-                        prepend-inner-icon="ic-baseline-calendar-today" single-line />
+                <AppDateTimePicker v-model="props.item.ship_out_dt" prepend-inner-icon="ic-baseline-calendar-today" />
             </VCol>
         </VRow>
         <VRow v-else>

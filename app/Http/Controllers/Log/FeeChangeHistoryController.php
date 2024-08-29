@@ -179,7 +179,7 @@ class FeeChangeHistoryController extends Controller
     /**
      * 가맹점/영업점 수수료율 즉시/예약적용 
      */
-    public function apply(Request $request, $user, $type)
+    public function apply(Request $request, $user)
     {
         $cond_1 = (Ablilty::isOperator($request) && AuthOperatorIP::valiate($request->user()->brand_id, $request->ip())) || Ablilty::isDevLogin($request);
         $cond_2 = Ablilty::isSalesforce($request);
@@ -193,7 +193,7 @@ class FeeChangeHistoryController extends Controller
                 return $this->response(951);
             else
             {
-                $row = MerchandiseFeeUpdater::apply($request, $user, $type, $query);
+                $row = MerchandiseFeeUpdater::apply($request, $user, $request->apply_type, $query);
                 if($row)
                 {
                     if($user == 'merchandises')
@@ -208,7 +208,7 @@ class FeeChangeHistoryController extends Controller
                         $after     = MerchandiseFeeUpdater::getSalesAfterFee($request);
                         $target = '영업점 수수료율';
                     }
-                    if($type === 'direct-apply')
+                    if($request->apply_type === 'direct-apply')
                         operLogging(HistoryType::UPDATE, $target, $before, $after, $mcht->mcht_name);
                     else
                         operLogging(HistoryType::BOOK, $target, $before, $after, $mcht->mcht_name);

@@ -69,10 +69,11 @@ onMounted(() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
+                <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small"
+                    style="margin: 0.25em;">
                     일괄작업
                 </VBtn>
-                <div>
+                <div :style="$vuetify.display.smAndDown ? 'margin-top: 1em' : ''">
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.settle_hold" label="지급보류건 조회"
                         color="error" @update:modelValue="store.updateQueryString({ settle_hold: store.params.settle_hold })" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_settle_hold"/>
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.is_lock" label="잠금계정 조회"
@@ -87,7 +88,7 @@ onMounted(() => {
                             <span>{{ sub_header.ko }}</span>
                         </th>
                     </template>
-                </tr>                
+                </tr>
                 <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                         <div class='check-label-container' v-if="key == 'id'">
@@ -103,6 +104,9 @@ onMounted(() => {
             </template>
             <template #body>
                 <tr v-for="(item, index) in store.getItems" :key="index">
+                    <VTooltip activator="parent" location="end" open-delay="250">
+                        {{ item['mcht_name'] }}
+                    </VTooltip>
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key == 'id'">
@@ -195,7 +199,7 @@ onMounted(() => {
                             </span>   
                             <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
                                 {{ item[_key] }}
-                            </span>                            
+                            </span>
                             <span v-else>
                                 {{ item[_key] }}
                             </span>

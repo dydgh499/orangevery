@@ -1,11 +1,6 @@
 .layout-blank {
   .auth-wrapper {
-    background-color: rgb(var(--v-theme-surface));
-    min-block-size: calc(var(--vh, 1vh) * 100);
-  }
-
-  .auth-bg {
-    background-color: rgb(var(--v-theme-background));
+    min-block-size: 100dvh;
   }
 
   .auth-v1-top-shape,
@@ -43,7 +38,7 @@
 @media (min-width: 960px) {
   .skin--bordered {
     .auth-card-v2 {
-      border-inline-start: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+      border-inline-start: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
     }
   }
 }

@@ -1,10 +1,10 @@
 @use "@configured-variables" as variables;
 
 // ————————————————————————————————————
-//* ——— Perfect Scrollbar
+// * ——— Perfect Scrollbar
 // ————————————————————————————————————
 
-.v-application.v-theme--dark {
+body.v-theme--dark {
   .ps__rail-y,
   .ps__rail-x {
     background-color: transparent !important;

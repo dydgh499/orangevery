@@ -7,7 +7,7 @@ import { AppContentLayoutNav, NavbarType } from '../enums'
 export const useLayouts = () => {
   const navbarType = computed({
     get() {
-      return config.navbar.type.value == null ? 'static' : config.navbar.type.value
+      return config.navbar.type.value == null ? 'sticky' : config.navbar.type.value
     },
     set(value: typeof config.navbar.type.value) {
       config.navbar.type.value = value
@@ -54,7 +54,6 @@ export const useLayouts = () => {
     },
     set(val: typeof config.app.contentWidth.value) {
       config.app.contentWidth.value = val
-      console.log(config.app.contentWidth.value)
       localStorage.setItem(`${config.app.title}-contentWidth`, val.toString())
     },
   })
@@ -64,12 +63,10 @@ export const useLayouts = () => {
       return config.app.contentLayoutNav.value
     },
     set(val: typeof config.app.contentLayoutNav.value) {
-      config.app.contentLayoutNav.value = val
-
-      // If Navbar type is hidden while switching to horizontal nav => Reset it to sticky
+        config.app.contentLayoutNav.value = val
       if (val === AppContentLayoutNav.Horizontal) {
-        if (navbarType.value === NavbarType.Hidden)
-          navbarType.value = NavbarType.Sticky
+        if (navbarType.value === NavbarType.숨김)
+          navbarType.value = NavbarType.고정
 
         isVerticalNavCollapsed.value = false
       }

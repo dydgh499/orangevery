@@ -197,6 +197,7 @@ export const getFixplusMchtHeader = () => {
     if(getUserLevel() >= 35 || (getUserLevel() >= 13 && user_info.value.is_able_unlock_mcht)) {
         headers['is_lock'] = '계정잠김여부'
         headers['locked_at'] = '계정잠금시간'
+        headers['extra_col'] = '더보기'
     }
     return headers
 }

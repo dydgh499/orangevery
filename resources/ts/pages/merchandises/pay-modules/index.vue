@@ -56,7 +56,7 @@ onMounted(() => {
             </template>
             <template #index_extra_field>
                 <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35"
-                    color="primary" size="small">
+                    color="primary" size="small" style="margin: 0.25em;">
                     일괄작업
                 </VBtn>
                 <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.un_use" label="작월 미결제 결제모듈 조회"
@@ -86,6 +86,9 @@ onMounted(() => {
             </template>
             <template #body>
                 <tr v-for="(item, index) in store.getItems" :key="index">
+                    <VTooltip activator="parent" location="end" open-delay="250">
+                        {{ item['mcht_name'] }}
+                    </VTooltip>                    
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <template v-if="head.getDepth(_header, 0) != 1">
                             <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"

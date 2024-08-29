@@ -81,8 +81,8 @@ Route::prefix('merchandises')->group(function() {
 
     //FIXPLUS
     Route::middleware(['is.edit.able'])->group(function() {
-        Route::post('fee-change-histories/{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
-        Route::post('batch-updaters/{user}/{type}', [BatchUpdateMchtController::class, 'feeApply']);
+        Route::post('fee-change-histories/{user}/set-fee', [FeeChangeHistoryController::class, 'apply']);
+        Route::post('batch-updaters/{user}/set-fee', [BatchUpdateMchtController::class, 'feeApply']);
     });
 
     Route::middleware(['is.operate'])->group(function() {
@@ -125,7 +125,6 @@ Route::prefix('merchandises')->group(function() {
                     Route::post('set-note', [BatchUpdatePayModuleController::class, 'setNote']);
                     Route::post('set-pay-limit', [BatchUpdatePayModuleController::class, 'setPayLimit']);
                     Route::post('set-pay-disable-time', [BatchUpdatePayModuleController::class, 'setForbiddenPayTime']);
-                    Route::post('set-show-pay-view', [BatchUpdatePayModuleController::class, 'setShowPayView']);
                     Route::post('set-use-realtime-deposit', [BatchUpdatePayModuleController::class, 'setUseRealtimeDeposit']);
                     Route::post('set-fin-id', [BatchUpdatePayModuleController::class, 'setFinId']);
                     Route::post('set-payment-term-min', [BatchUpdatePayModuleController::class, 'setPaymentTermMin']);

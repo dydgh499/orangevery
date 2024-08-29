@@ -4,7 +4,6 @@
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -28,6 +27,7 @@ const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 const formatDate = <any>(inject('$formatDate'))
 
+const feeBookDialog = ref()
 const checkAgreeDialog = ref()
 const passwordAuthDialog = ref()
 
@@ -35,7 +35,6 @@ const { cus_filters } = useStore()
 const { request } = useRequestStore()
 const { sales, initAllSales } = useSalesFilterStore()
 
-const feeBookDialog = ref()
 
 const levels = corp.pv_options.auth.levels
 const show_fees = <Options[]>([{id:0, title:"숨김"}, {id:1, title:"노출"}])
@@ -88,10 +87,12 @@ const getCommonParams = async (params: any, method: string, type: string) => {
                     }
                 }
             }
-
         }
+        let message = `정말 ${type}${method}하시겠습니까?`;
+        if(params['apply_type'] === 1)
+            message += `<br><b>${params['apply_dt']}${params['apply_dt'].length > 10 ? '부터' : '일 자정에'}</b> 적용될 예정입니다.`
 
-        if (await alert.value.show(`정말 ${type}${method}하시겠습니까?`)) {
+        if (await alert.value.show(message)) {
             Object.assign(params, { 
                 selected_idxs: props.selected_idxs,
                 selected_sales_id: props.selected_sales_id,
@@ -123,13 +124,18 @@ const batchRemove = async () => {
     }
 }
 
-const post = async (page: string, _params: any, type='일괄') => {
+const post = async (page: string, _params: any, apply_type: number) => {
     try {
-        const [result, params] = await getCommonParams(_params, '수정', type)
-        if(result) {
-            const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/' + page, params)
-            snackbar.value.show(r.data.message, 'success')
-            emits('update:select_idxs', [])
+        const apply_dt = await getApplyDt(page, apply_type)
+        if(apply_dt !== '') {
+            _params['apply_dt'] = apply_dt
+            _params['apply_type'] = apply_type
+            const [result, params] = await getCommonParams(_params, '적용', apply_type ? '예약' : '일괄')
+            if(result) {
+                const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/' + page, params)
+                snackbar.value.show(r.data.message, 'success')
+                emits('update:select_idxs', [])
+            }
         }
     }
     catch (e: any) {
@@ -138,81 +144,69 @@ const post = async (page: string, _params: any, type='일괄') => {
     }
 }
 
-const getApplyDt = async (type: string) => {
+const getApplyDt = async (page: string, type: number) => {
     let apply_dt = ''
-    if(type === 'direct-apply')
+    if(type === 0)
         apply_dt = formatDate(new Date)
     else 
-        apply_dt = await feeBookDialog.value.show()
+        apply_dt = await feeBookDialog.value.show(page.includes('set-fee') ? false : true)
     return apply_dt
 }
 
-const setSalesFee = async (sales_idx: number, type: string) => {
-    const fee_type = type === 'direct-apply' ? '일괄' : '예약'
-    const apply_dt = await getApplyDt(type)
-
-    if(apply_dt !== '') {
-        post(`salesforces/${type}`, {
-            'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
-            'sales_id': merchandise['sales' + sales_idx + "_id"],
-            'level': getIndexByLevel(sales_idx),
-            'apply_dt': apply_dt,
-        }, fee_type)
-    }
+const setSalesFee = async (sales_idx: number, apply_type: number) => {
+    post(`salesforces/set-fee`, {
+        'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
+        'sales_id': merchandise['sales' + sales_idx + "_id"],
+        'level': getIndexByLevel(sales_idx),
+    }, apply_type)
 }
 
-const setMchtFee = async (type: string) => {
-    const fee_type = type === 'direct-apply' ? '일괄' : '예약'
-    const apply_dt = await getApplyDt(type)
-
-    if(apply_dt !== '') {
-        post(`merchandises/${type}`, {
-            'trx_fee': parseFloat(merchandise.trx_fee),
-            'hold_fee': parseFloat(merchandise.hold_fee),
-            'apply_dt': apply_dt,
-        }, fee_type)
-    }
+const setMchtFee = async (apply_type: number) => {
+    post(`merchandises/set-fee`, {
+        'trx_fee': parseFloat(merchandise.trx_fee),
+        'hold_fee': parseFloat(merchandise.hold_fee),
+    }, apply_type)
 }
 
-const setEnabled = () => {
+const setEnabled = (apply_type: number) => {
     post('set-enabled', {
         'enabled': Number(merchandise.enabled),
-    })
+    }, apply_type)
 }
 
-const setCustomFilter = () => {
+const setCustomFilter = (apply_type: number) => {
     post('set-custom-filter', {
         'custom_id': merchandise.custom_id,
-    })
+    }, apply_type)
 }
-const setBusinessNum = () => {
+const setBusinessNum = (apply_type: number) => {
     post('set-business-num', {
         'business_num': merchandise.business_num,
-    })
+    }, apply_type)
 }
 
-const setAccountInfo = () => {
+const setAccountInfo = (apply_type: number) => {
     post('set-account-info', {
         'acct_num': merchandise.acct_num,
         'acct_name': merchandise.acct_name,
         'acct_bank_code': merchandise.bank.code,
         'acct_bank_name': merchandise.bank.title,
-    })
+    }, apply_type)
 }
 
-const setIsShowFee = async () => {
+const setIsShowFee = async (apply_type: number) => {
     post('set-show-fee', {
         'is_show_fee': merchandise.is_show_fee,
-    })
+    }, apply_type)
 }
 
 // -------------- noti ----------------
-const setNotiUrl = () => {
+const setNotiUrl = (apply_type: number) => {
     post('set-noti-url', {
         'noti_status': noti.noti_status,
         'send_url': noti.noti_url,
         'note': noti.noti_note,
-    })
+    }, apply_type)
 }
 
 initAllSales()
@@ -251,190 +245,242 @@ watchEffect(() => {
                     <VDivider style="margin: 0.5em 0;" />
                 </template>
                 <div style="width: 100%;">
-                    <template v-for="i in 6" :key="i">
-                        <VRow no-gutters style="align-items: center; margin-bottom: 0.5em;" v-if="levels['sales' + (6 - i) + '_use'] && getUserLevel() >= getIndexByLevel(6 - i)">
-                            <VCol md="3" cols="12" style="padding: 0.25em;">
-                                {{ levels['sales' + (6 - i) + '_name'] }}/수수료율
-                            </VCol>
-                            <VCol md="3" cols="6" style="padding: 0.25em;">
-                                <VAutocomplete :menu-props="{ maxHeight: 400 }"
-                                    v-model="merchandise['sales' + (6 - i) + '_id']" :items="sales[6 - i].value"
-                                    :label="levels['sales' + (6 - i) + '_name'] + ' 선택'" item-title="sales_name"
-                                    item-value="id" single-line />
-                                <VTooltip activator="parent" location="top"
-                                    v-if="merchandise['sales' + (6 - i) + '_id']">
-                                    {{ sales[6 - i].value.find(obj => obj.id ===
-                                        merchandise['sales' + (6 - i) + '_id'])?.sales_name }}
-                                </VTooltip>
-                            </VCol>
-                            <VCol md="2" cols="6" style="padding: 0.25em;">
-                                <VTextField v-model="merchandise['sales' + (6 - i) + '_fee']" type="number"
-                                    suffix="%" />
-                            </VCol>
-                            <VCol md="4" cols="12" style="padding: 0.25em;">
-                                <div style="float: inline-end;">
-                                    <VBtn variant="tonal" size="small" @click="setSalesFee(6 - i, 'direct-apply')" style='margin-left: 0.5em;'>
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                    <VBtn variant="tonal" size="small" color="secondary" @click="setSalesFee(6 - i, 'book-apply')"
-                                        style='margin-left: 0.5em;'>
-                                        예약적용
-                                        <VIcon end size="18" icon="tabler-clock-up" />
-                                    </VBtn>
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </template>
-                    <VDivider style="margin: 1em 0;" />
-                    <VRow no-gutters style="align-items: center;">
-                        <VCol md="3" cols="12" style="padding: 0.25em;">
-                            거래/유보금 수수료율
-                        </VCol>
-                        <VCol md="3" cols="6" style="padding: 0.25em;">
-                            <VTextField v-model="merchandise.trx_fee" type="number" suffix="%"/>
-                        </VCol>
-                        <VCol md="2" cols="6" style="padding: 0.25em;">
-                            <VTextField v-model="merchandise.hold_fee" type="number" suffix="%"/>
-                        </VCol>
-                        <VCol md="4" cols="12" style="padding: 0.25em;">
-                            <div style="float: inline-end;">
-                                <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setMchtFee('direct-apply')">
-                                    즉시적용
-                                    <VIcon end size="18" icon="tabler-direction-sign" />
-                                </VBtn>
-                                <VBtn variant="tonal" size="small" color="secondary" @click="setMchtFee('book-apply')"
-                                    style='margin-left: 0.5em;'>
-                                    예약적용
-                                    <VIcon end size="18" icon="tabler-clock-up" />
-                                </VBtn>
-                            </div>
-                        </VCol>
-                    </VRow>
-                    <template v-if="corp.pv_options.paid.use_noti">
-                        <VDivider style="margin: 1em 0;" />
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol md="3" cols="12" style="padding: 0.25em;">
-                                <BaseQuestionTooltip :location="'top'" :text="'노티 URL 등록'"
-                                    :content="'선택한 가맹점의 모든 노티 URL이 추가됩니다.<br>(같은 노티 URL의 중복등록은 불가능합니다.)'">
-                                </BaseQuestionTooltip>
-                            </VCol>
-                            <VCol md="3" cols="6" style="padding: 0.25em;">
-                                <VTextField v-model="noti.noti_url" type="text"
-                                    placeholder="https://www.naver.com" />
-                            </VCol>
-                            <VCol md="2" cols="6" style="padding: 0.25em;">
-                                <VTextField v-model="noti.noti_note" label="메모사항"
-                                    prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" />
-                            </VCol>
-                            <VCol md="4" cols="12" style="padding: 0.25em;">
-                                <div style="float: inline-end;">
-                                    <VBtn variant="tonal" size="small" @click="setNotiUrl()" style='margin-left: 0.5em;'>
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </template>
-                    <VDivider style="margin: 1em 0;" />
-                    <VRow no-gutters style="align-items: center;">
-                        <VCol md="2" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">계좌 정보</VCol>
-                        <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">
-                            <VTextField v-model="merchandise.acct_num" prepend-inner-icon="ri-bank-card-fill"
-                                placeholder="계좌번호 입력" persistent-placeholder />
-                        </VCol>
-                        <VCol md="2" cols="6" style="padding: 0.25em;margin-bottom: auto !important;">
-                            <VTextField v-model="merchandise.acct_name" prepend-inner-icon="tabler-user"
-                                placeholder="예금주 입력" persistent-placeholder />
-                        </VCol>
-                        <VCol md="3" cols="6" style="padding: 0.25em;">
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.bank"
-                                :items="[{ code: null, title: '선택안함' }].concat(banks)"
-                                prepend-inner-icon="ph-buildings" label="은행 선택"
-                                :hint="`${merchandise.bank.title}, 은행 코드: ${merchandise.bank.code ? merchandise.bank.code : '000'} `"
-                                item-title="title" item-value="code" persistent-hint return-object single-line
-                                />
-                        </VCol>
-                        <VCol md="2" cols="12" style="padding: 0.25em;margin-bottom: auto !important; margin-left: auto;">
-                            <VBtn variant="tonal" size="small" @click="setAccountInfo()" style="float: inline-end;">
-                                즉시적용
-                                <VIcon end size="18" icon="tabler-direction-sign" />
-                            </VBtn>
-                        </VCol>
+                    <h4 class="pt-3">상위 영업점 일괄변경</h4>
+                    <br>
+                    <VRow no-gutters style="align-items: center; margin-bottom: 0.5em;">
+                            <template v-for="i in 6" :key="i">
+                                <template v-if="levels['sales' + (6 - i) + '_use'] && getUserLevel() >= getIndexByLevel(6 - i)">
+                                    <VCol md="3" cols="12" style="margin-bottom: 0.5em;">
+                                        <div class="batch-container">
+                                            <VAutocomplete :menu-props="{ maxHeight: 400 }"
+                                                v-model="merchandise['sales' + (6 - i) + '_id']" :items="sales[6 - i].value"
+                                                item-title="sales_name"
+                                                item-value="id" 
+                                                :label="`${ levels['sales' + (6 - i) + '_name'] } 선택`"
+                                                >
+                                            </VAutocomplete>
+                                            <VTextField v-model="merchandise['sales' + (6 - i) + '_fee']" type="number"
+                                                suffix="%" 
+                                                :label="`수수료율`"
+                                                style="max-width: 6em;"/>
+                                        </div>
+                                    </VCol>
+                                    <VCol md="3" cols="12" style="margin-bottom: 0.5em;">
+                                        <div class="button-cantainer" style="margin-right: 0.5em;">
+                                            <VBtn variant="tonal" size="small" @click="setSalesFee(6 - i, 0)">
+                                                즉시적용
+                                                <VIcon end size="18" icon="tabler-direction-sign" />
+                                            </VBtn>
+                                            <VBtn variant="tonal" size="small" color="secondary" @click="setSalesFee(6 - i, 1)" style="margin-left: 0.5em;">
+                                                예약적용
+                                                <VIcon end size="18" icon="tabler-clock-up" />
+                                            </VBtn>
+                                        </div>
+                                    </VCol>
+                                </template>
+                        </template>
                     </VRow>
                     <VDivider style="margin: 1em 0;" />
                     <VRow>
                         <VCol :md="6" :cols="12">
+                            <h4 class="pt-3">가맹점 수수료 일괄변경</h4>
+                            <br>
                             <VRow no-gutters style="align-items: center;">
-                                <VCol md="4" cols="12">커스텀 필터</VCol>
-                                <VCol md="8">
+                                <VCol md="6" cols="12">
                                     <div class="batch-container">
-                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.custom_id"
-                                            :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)" label="커스텀 필터"
-                                            item-title="name" item-value="id" single-line />
-                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setCustomFilter()">
+                                        <VTextField v-model="merchandise.trx_fee" type="number" suffix="%" :label="`거래 수수료율`"/>
+                                        <VTextField v-model="merchandise.hold_fee" type="number" suffix="%" :label="`유보금 수수료율`"/>
+                                    </div>
+                                </VCol>
+                                <VCol md="6" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setMchtFee(0)">
                                             즉시적용
                                             <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setMchtFee(1)" style="margin-left: 0.5em;">
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <template v-if="corp.pv_options.paid.use_noti">
+                            <VCol :md="6" :cols="12">
+                                <h4 class="pt-3">노티정보 일괄변경</h4>
+                                <br>
+                                <VRow no-gutters style="align-items: center;">                    
+                                    <VCol md="8" cols="12">
+                                        <div class="batch-container">
+                                            <VTextField v-model="noti.noti_url" type="text" label="노티 URL" />
+                                            <VTextField v-model="noti.noti_note" label="메모사항"
+                                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" />
+                                        </div>
+                                    </VCol>
+                                    <VCol md="4" cols="12">
+                                        <div class="button-cantainer">
+                                            <VBtn variant="tonal" size="small" @click="setNotiUrl(0)">
+                                                즉시적용
+                                                <VIcon end size="18" icon="tabler-direction-sign" />
+                                            </VBtn>
+                                        </div>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </template>
+                    </VRow>
+
+                    <VDivider style="margin: 1em 0;" />
+                    <h4 class="pt-3">계좌정보 일괄변경</h4>
+                    <br>
+                    <VRow no-gutters style="align-items: center;">
+                        <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">
+                            <VTextField v-model="merchandise.acct_num" prepend-inner-icon="ri-bank-card-fill"
+                                label="계좌번호 입력"  />
+                        </VCol>
+                        <VCol md="3" cols="6" style="padding: 0.25em;margin-bottom: auto !important;">
+                            <VTextField v-model="merchandise.acct_name" prepend-inner-icon="tabler-user"
+                                label="예금주 입력"  />
+                        </VCol>
+                        <VCol md="3" cols="6" style="padding: 0.25em;margin-bottom: auto !important;">
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.bank"
+                                :items="[{ code: null, title: '선택안함' }].concat(banks)"
+                                prepend-inner-icon="ph-buildings" label="은행 선택"
+                                :hint="`${merchandise.bank.title}, 은행 코드: ${merchandise.bank.code ? merchandise.bank.code : '000'} `"
+                                item-title="title" item-value="code" persistent-hint return-object
+                            />                            
+                        </VCol>
+                        <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important; margin-left: auto;">
+                            <div style="float: inline-end;">
+                                <VBtn variant="tonal" size="small" @click="setAccountInfo(0)">
+                                    즉시적용
+                                    <VIcon end size="18" icon="tabler-direction-sign" />
+                                </VBtn>
+                                <VBtn variant="tonal" size="small" color="secondary" @click="setAccountInfo(1)"
+                                    style='margin-left: 0.5em;'>
+                                    예약적용
+                                    <VIcon end size="18" icon="tabler-clock-up" />
+                                </VBtn>                                
+                            </div>
+                        </VCol>
+                    </VRow>
+                    <VDivider style="margin: 1em 0;" />
+                    <h4 class="pt-3">가맹점정보 일괄변경</h4>
+                    <br>                    
+                    <VRow>
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.custom_id"
+                                            :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)" label="커스텀 필터"
+                                            item-title="name" item-value="id" />
+                                </VCol>
+                                <VCol md="6" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setCustomFilter(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setCustomFilter(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>                 
                                     </div>
                                 </VCol>
                             </VRow>
                         </VCol>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
-                                <VCol md="4" cols="12">사업자 번호</VCol>
-                                <VCol md="8">
-                                    <div class="batch-container">
-                                        <VTextField v-model="merchandise.business_num" type="number" placeholder="사업자등록번호 입력"
-                                            persistent-placeholder @update:model-value="merchandise.business_num = getOnlyNumber($event)"/>
-                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setBusinessNum()">
+                                <VCol md="6" cols="12">
+                                    <VTextField v-model="merchandise.business_num" type="number" 
+                                        @update:model-value="merchandise.business_num = getOnlyNumber($event)"
+                                        label="사업자 번호"/>
+                                </VCol>
+                                <VCol md="6" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setBusinessNum(0)">
                                             즉시적용
                                             <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setBusinessNum(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>                 
                                     </div>
                                 </VCol>
                             </VRow>
                         </VCol>
                     </VRow>
-                    <VRow md="12" :cols=12>
+                    <VRow>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
-                                <VCol md="4" cols="12">수수료율 노출</VCol>
-                                <VCol md="8">
-                                    <div class="batch-container">
-                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="merchandise.is_show_fee" 
-                                            :items="show_fees" item-title="title" item-value="id" single-line/>
-                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setIsShowFee()">
+                                <VCol md="6" cols="12">
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="merchandise.is_show_fee" 
+                                        :items="show_fees" item-title="title" item-value="id" label="수수료율 노출"/>
+                                </VCol>
+                                <VCol md="6" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setIsShowFee(0)">
                                             즉시적용
                                             <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setIsShowFee(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>                 
                                     </div>
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol :md="6" v-if="corp.pv_options.paid.subsidiary_use_control">
+                        <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.subsidiary_use_control">
                             <VRow no-gutters style="align-items: center;">
-                                <VCol md="4" cols="12">전산 사용상태</VCol>
-                                <VCol md="8">
-                                    <div class="batch-container">
+                                <template>
+                                    <VCol md="6" cols="12">
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="merchandise.enabled" 
                                             :items="[{id:0, title:'OFF'}, {id:1, title:'ON'}]" item-title="title" item-value="id" 
-                                            single-line/>
-                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setEnabled()">
-                                            즉시적용
-                                            <VIcon end size="18" icon="tabler-direction-sign" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
+                                            label="전산 사용상태"/>
+                                    </VCol>
+                                    <VCol md="6" cols="12">
+                                        <div class="button-cantainer">
+                                            <VBtn variant="tonal" size="small" @click="setEnabled(0)">
+                                                즉시적용
+                                                <VIcon end size="18" icon="tabler-direction-sign" />
+                                            </VBtn>
+                                            <VBtn variant="tonal" size="small" color="secondary" @click="setEnabled(1)"
+                                                style='margin-left: 0.5em;'>
+                                                예약적용
+                                                <VIcon end size="18" icon="tabler-clock-up" />
+                                            </VBtn>                 
+                                        </div>
+                                    </VCol>
+                                </template>
                             </VRow>
                         </VCol>
                     </VRow>
                 </div>
             </VCardText>
+            <VDivider />
+            <div style="padding: 1em; text-align: end;">
+                <h5>0시(자정) 예약정보의 경우 수수료율 예약정보가 먼저 적용된 후 나머지 예약정보가 적용됩니다.</h5>
+            </div>
         </VCard>
         <FeeBookDialog ref="feeBookDialog"/>
         <CheckAgreeDialog ref="checkAgreeDialog"/>
         <PasswordAuthDialog ref="passwordAuthDialog"/>
     </section>
 </template>
+<style scoped>
+.button-cantainer {
+  display: flex;
+  padding: 0.25em;
+  float: inline-end;
+}
+
+:deep(.v-input) {
+  padding: 0.25em !important;
+}
+</style>

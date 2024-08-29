@@ -63,7 +63,7 @@ const getMchtHeaders = (head :any) => {
         headers_3['user_name'] = '가맹점 ID'
         headers_3['mcht_name'] = '상호'
         if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
-            headers_3['trx_fee'] = '수수료'
+            headers_3['trx_fee'] = '가맹점 수수료'
             headers_3['hold_fee'] = '유보금 수수료'
         }
         headers_3['sector'] = '업종'
@@ -122,6 +122,7 @@ const getMchtHeaders = (head :any) => {
         if(getUserLevel() >= 35 || (getUserLevel() >= 13 && user_info.value.is_able_unlock_mcht)) {
             headers_8['is_lock'] = '계정잠김여부'
             headers_8['locked_at'] = '계정잠금시간'
+            headers_8['note'] = '메모사항'
         }
         headers_8['created_at'] = '생성시간'
         headers_8['updated_at'] = '업데이트시간'
@@ -159,7 +160,7 @@ const getMchtHeaders = (head :any) => {
     head.getSubHeaderCol('결제모듈 정보', headers4, sub_headers)
     head.getSubHeaderCol('노티 정보', headers7, sub_headers)
     head.getSubHeaderCol('개인 정보', headers5, sub_headers)
-    head.getSubHeaderCol('은행 정보', headers6, sub_headers)
+    head.getSubHeaderCol('계좌 정보', headers6, sub_headers)
     head.getSubHeaderCol('기타 정보', headers8, sub_headers)
     return [headers, sub_headers]
 }

@@ -3,62 +3,30 @@ import { Header } from '@/views/headers';
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
 import { Searcher } from '@/views/searcher';
 import { useStore } from '@/views/services/pay-gateways/useStore';
-import type { RealtimeHistory, Transaction } from '@/views/types';
+import { notiSendHistoryInterface, realtimeHistoryInterface } from '@/views/transactions/transactions';
+import type { Transaction } from '@/views/types';
 import { getLevelByIndex, getUserLevel, user_info } from '@axios';
-import { StatusColors } from '@core/enums';
 import corp from '@corp';
+
+export const getProfitColName = (level: number) => {
+    const levels = corp.pv_options.auth.levels
+    if(level === 10)
+        return '정산금'
+    else if(level < 35)
+        return levels[`sales${getLevelByIndex(level)}_name`] + ' 수익금'
+    else if(level === 40)
+        return '본사 수익금'
+    else if(level === 50)
+        return '개발사 수익금'
+    else
+        return ''
+}
 
 export const getDateFormat = (_settle_dt: number) => {
     const settle_dt = _settle_dt.toString()
     return settle_dt.substr(0, 4) + '-' + settle_dt.substr(4, 2) + '-' + settle_dt.substr(6, 2)
 }
 
-export const realtimeDetailClass = (history: RealtimeHistory) => {
-    if(history.result_code === '0000' && history.request_type === 6170)
-        return 'text-success'
-    else if(history.result_code !== '0000')
-        return 'text-error'
-    else
-        return 'text-default'
-}
-
-export const realtimeResult = (item: Transaction) => {
-    if(item.is_cancel)
-        return StatusColors.Default
-    //실시간 수수료 존재시(실시간 사용)    
-    const is_success = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
-    const is_sending = item.realtimes?.find(obj => obj.result_code === '0050' && obj.request_type === 6170)
-    const is_cancel = item.realtimes?.find(obj => obj.result_code === '-2')
-    const is_error  = item.realtimes?.find(obj => obj.result_code !== '0000' && obj.result_code !== '0050')
-    const is_deposit_cancel_job  = item.realtimes?.find(obj => obj.result_code === '-5')
-
-    if(is_success)  //성공
-        return StatusColors.Success
-    if(is_sending)  // 처리중
-        return StatusColors.Processing
-    if(is_cancel)   // 취소
-        return StatusColors.Cancel
-    if(is_deposit_cancel_job)
-        return StatusColors.DepositCancelJob
-    if(item.use_realtime_deposit == 0) // 사용안함
-        return StatusColors.Default
-    if(is_error)    // 에러
-        return StatusColors.Error
-
-    if(item.fin_trx_delay as number < 0 && item.realtimes?.length == 0)    // 모아서 출금
-        return StatusColors.Info
-    if(item.realtimes?.length == 0) //요청 대기
-    {
-        const retry_able_time = (new Date(item.trx_dttm as string)).getTime() + (item.fin_trx_delay as number * 60000)
-        const offset_time = new Date(retry_able_time) - new Date() 
-
-        if(offset_time > 0) //요청 대기
-            return StatusColors.Primary
-        else //대기시간 초과
-            return StatusColors.Timeout
-    }
-    
-}
 
 export const settleIdCol = (item: Transaction, search_level: number) => {
     if(search_level === 10)
@@ -71,21 +39,16 @@ export const settleIdCol = (item: Transaction, search_level: number) => {
         return null
 }
 
-export const isRetryAble = (item: Transaction) => {
-    const result = realtimeResult(item)
-    if(result == StatusColors.Error || result == StatusColors.Timeout ||  result == StatusColors.DepositCancelJob)
-        return true
-    else
-        return false
-}
 
-export const useSearchStore = defineStore('transSearchStore', () => {    
+export const useSearchStore = defineStore('transSearchStore', () => {
+    const formatTime = <any>(inject('$formatTime'))
     const snackbar = <any>(inject('snackbar'))
     const store = Searcher('transactions')
     const head  = Header('transactions', '매출 관리')    
     const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
+    const { notiSendMessage } = notiSendHistoryInterface()
+    const { realtimeMessage } = realtimeHistoryInterface(formatTime)
 
-    const formatTime = <any>(inject('$formatTime'))
     const levels = corp.pv_options.auth.levels
 
     const getTransactionCols = () => {
@@ -109,6 +72,9 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         const headers_2:Record<string, string> = {}
         headers_2['user_name'] = '가맹점 ID'
         headers_2['mcht_name'] = '가맹점 상호'
+        if(getUserLevel() >= 35) {
+            headers_2['mcht_settle_type'] = '가맹점 정산타입'
+        }
         if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
             headers_2['profit'] = '정산금'
             headers_2['settle_dt'] = '가맹점 정산예정일'
@@ -123,7 +89,6 @@ export const useSearchStore = defineStore('transSearchStore', () => {
             headers_3['pg_id'] = 'PG사'
             headers_3['ps_id'] = '구간'
             headers_3['ps_fee'] = '구간 수수료'
-            headers_3['mcht_settle_type'] = '가맹점 정산타입'
         }
         return headers_3
     }
@@ -156,7 +121,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         }
     
         if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
-            headers_4['mcht_fee'] = '수수료'
+            headers_4['mcht_fee'] = '가맹점 수수료'
             headers_4['hold_fee'] = '유보금 수수료'
             headers_4['trx_amount'] = '거래 수수료'
             headers_4['hold_amount'] = '유보금'
@@ -195,10 +160,12 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     const getEtcCols = () => {
         const headers_7:Record<string, string> = {}
 
+        if(corp.pv_options.paid.use_noti)
+            headers_7['noti_send_result'] = '노티전송결과'
         if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit)
             headers_7['realtime_result'] = '이체결과'
         
-        headers_7['created_at'] = '노티생성 시간'
+        headers_7['created_at'] = '거래수신 시간'
         headers_7['updated_at'] = '업데이트 시간'
         headers_7['extra_col'] = '더보기'
         return headers_7
@@ -308,6 +275,8 @@ export const useSearchStore = defineStore('transSearchStore', () => {
             if(levels.sales0_use)
                 datas[i]['sales0_fee'] = (datas[i]['sales0_fee'] * 100).toFixed(3)
 
+            if(corp.pv_options.paid.use_noti)
+                datas[i]['noti_send_result'] = notiSendMessage(datas[i])
             if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit)
                 datas[i]['realtime_result'] = realtimeMessage(datas[i])
             
@@ -318,32 +287,6 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         }
         head.exportToExcel(datas)        
     }
-    
-    const realtimeMessage = (item: Transaction):string => {
-        const code = realtimeResult(item)
-        if(code === StatusColors.Default)
-            return 'N/A'
-        else if(code === StatusColors.Primary) {
-            const retry_able_time = (new Date(item.trx_dttm as string)).getTime() + (item.fin_trx_delay as number * 60000)
-            return formatTime(new Date(retry_able_time))+'초 이체예정'
-        }
-        else if(code === StatusColors.Success)
-            return '성공'
-        else if(code === StatusColors.Processing)
-            return '결과 처리중'
-        else if(code === StatusColors.Info)
-            return '모아서 출금예정'
-        else if(code === StatusColors.DepositCancelJob)
-            return '이체예약취소'
-        else if(code === StatusColors.Error)
-            return '실패'
-        else if(code === StatusColors.Cancel)
-            return '취소'
-        else if(code === StatusColors.Timeout)
-            return '이체예정시간 초과'
-        else
-            return '알수없는 상태'
-    }
 
     return {
         store,
@@ -351,7 +294,6 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         exporter,
         metas,
         printer,
-        realtimeMessage,
     }
 })
 

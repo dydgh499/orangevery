@@ -18,8 +18,7 @@
   .nav-group {
     // 👉 Disabled nav items
     &.disabled {
-      opacity: var(--v-disabled-opacity);
-      pointer-events: none;
+      @extend %horizontal-nav-disabled;
     }
 
     // Set width of inner nav group and link
@@ -80,6 +79,18 @@
 
       // Adds vuetify states
       @include vuetifyStates.states($active: false);
+    }
+
+    .popper-content {
+      @extend %horizontal-nav-popper-content-hidden;
+      @extend %horizontal-nav-popper-content;
+
+      background-color: rgb(var(--v-theme-surface));
+
+      // Set max-height for the popper content
+      > div {
+        max-block-size: variables.$horizontal-nav-popper-content-max-height;
+      }
     }
 
     // 👉 Top level group
@@ -145,7 +156,7 @@
     }
 
     .nav-group-arrow {
-      font-size: 1.375rem;
+      font-size: variables.$horizontal-nav-group-arrow-icon-size;
 
       /*
         ℹ️ ml-auto won't matter in top level group (because we haven't specified fixed width for top level groups)
@@ -168,20 +179,14 @@
       @extend %horizontal-nav-item-title;
     }
 
-    .popper-content {
-      @extend %horizontal-nav-popper-content-hidden;
-      @extend %horizontal-nav-popper-content;
-
-      background-color: rgb(var(--v-theme-surface));
-
-      // Set max-height for the popper content
-      > div {
-        max-block-size: variables.$horizontal-nav-popper-content-max-height;
+    &.show-content {
+      > .popper-content {
+        @extend %horizontal-nav-popper-content-visible;
       }
-    }
 
-    &.show-content > .popper-content {
-      @extend %horizontal-nav-popper-content-visible;
+      &:not(.active) {
+        @include mixins.selected-states("> .popper-triggerer > .nav-group-label::before");
+      }
     }
   }
 

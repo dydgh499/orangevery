@@ -596,6 +596,7 @@ export interface Transaction {
     resident_num?: string,
     business_num?: string,
     realtimes?: RealtimeHistory[],
+    noti_send_histories?: NotiSendHistory[],
     cancel_deposits?: CancelDeposit[],
     use_realtime_deposit?: number,
     cxl_type?: number,
@@ -605,6 +606,7 @@ export interface Transaction {
     profit?: number,
     trx_amount?: number,    
     pg_settle_type: number,
+    created_at?: string,
 }
 
 export interface SalesSlip extends Transaction {

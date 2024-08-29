@@ -2,7 +2,9 @@ import { StatusColorSetter } from '@/views/searcher';
 import { Holiday } from '@/views/types';
 import { axios } from '@axios';
 import type { CalendarOptions } from '@fullcalendar/core';
+import koLocale from '@fullcalendar/core/locales/ko';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction'; // 상호작용 플러그인
 
 export const rest_types = [
     {id: 1, title: '공공기관 휴일'},
@@ -39,6 +41,7 @@ export const useHolidayStore = defineStore('HolidayStore', () => {
                     extendedProps: {
                         calendar: holiday.rest_type,
                     },
+                    locales: [koLocale], // 로케일을 배열로 설정
                 })    
             }
         })
@@ -52,7 +55,7 @@ export const useHolidayStore = defineStore('HolidayStore', () => {
     }
 
     const calendarOptions = {
-        plugins: [dayGridPlugin],
+        plugins: [dayGridPlugin, interactionPlugin ],
         initialView: 'dayGridMonth',
             headerToolbar: {
             start: 'drawerToggler,prev,next title',

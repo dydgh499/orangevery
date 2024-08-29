@@ -10,6 +10,7 @@ use App\Models\Salesforce;
 use App\Models\Merchandise;
 use App\Models\CancelDeposit;
 use App\Models\CollectWithdraw;
+use App\Models\Log\NotiSendHistory;
 use App\Models\Log\RealtimeSendHistory;
 
 use Illuminate\Support\Facades\Redis;
@@ -137,6 +138,13 @@ class Transaction extends Model
             return 0;        
     }
     
+    public function notiSendHistories()
+    {
+        return $this->hasMany(NotiSendHistory::class, 'trans_id')
+            ->orderby('id', 'desc')
+            ->select();
+    }
+
     public function realtimes()
     {
         return $this->hasMany(RealtimeSendHistory::class, 'trans_id')

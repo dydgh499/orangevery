@@ -1,8 +1,8 @@
 @use "@configured-variables" as variables;
 @use "@core-scss/base/placeholders" as *;
 @use "@core-scss/template/placeholders" as *;
-@use "vuetify/lib/styles/tools/_elevation" as mixins_elevation;
 @use "misc";
+@use "@core-scss/base/mixins";
 
 $header: ".layout-navbar";
 
@@ -29,9 +29,9 @@ $header: ".layout-navbar";
     // Scrolled styles for sticky navbar
     @at-root {
       /* ℹ️ This html selector with not selector is required when:
-        dialog is opened and window don't have any scroll. This removes window-scrolled class from layout and out style broke
+        dialog is opened and window don't have any scroll. This removes window-scrolled class from layout and our style broke
     */
-      html.v-overlay-scroll-blocked:not([style*="--v-body-scroll-y:0px;"]) .layout-navbar-sticky,
+      html.v-overlay-scroll-blocked:not([style*="--v-body-scroll-y: 0px;"]) .layout-navbar-sticky,
       &.window-scrolled.layout-navbar-sticky {
 
         #{$header} {
@@ -87,14 +87,22 @@ $header: ".layout-navbar";
 
       // Sticky footer
       @at-root {
-        // ℹ️ .layout-footer-sticky#{$ele-layout-footer} => .layout-footer-sticky.layout-wrapper.layout-nav-type-vertical .layout-footer
         .layout-footer-sticky#{$ele-layout-footer} {
           .footer-content-container {
             background-color: rgb(var(--v-theme-surface));
             padding-block: 0;
             padding-inline: 1.2rem;
 
-            @include mixins_elevation.elevation(3);
+            @include mixins.elevation(3);
+          }
+        }
+        .layout-footer-static#{$ele-layout-footer} {
+          .footer-content-container {
+            background-color: rgb(var(--v-theme-surface));
+            padding-block: 0;
+            padding-inline: 1.2rem;
+
+            @include mixins.elevation(3);
           }
         }
       }

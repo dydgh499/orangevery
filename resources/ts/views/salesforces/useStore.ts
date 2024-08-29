@@ -38,43 +38,96 @@ export const getAutoSetting = (auto_settings: UnderAutoSetting[]) => {
     return auto_settings.map(item => `${item.note} ${item.sales_fee}%`)
 }
 
-const getSalesHeaders = () => {
-    const headers: Record<string, string> = {
-        'id' : 'NO.',
-        'level' : '등급',
-        'user_name' : '영업점 ID',
-        'sales_name': '영업점 상호',
-    }
-    headers['under_auto_settings'] = '수수료율'
-    headers['view_type'] = '화면타입'
-    headers['settle_cycle'] = '정산 주기'
-    headers['settle_day'] = '정산 요일'
-    headers['settle_tax_type'] = '정산 세율'
-    Object.assign(headers, {
-        'nick_name' : '대표자명',
-        'phone_num' : '연락처',
-        'resident_num' : '주민등록번호',
-        'business_num' : '사업자등록번호',
-        'sector' : '업종',
-        'addr' : '주소',
-        'acct_name' : '예금주',
-        'acct_num' : '계좌번호',
-        'acct_bank_name' : '은행',
-        'acct_bank_code' : '은행코드',
-        'last_settle_dt': '마지막 정산일',
-    })
-   
-    if(getUserLevel() >= 35) {
-        headers['is_lock'] = '계정잠김여부'
-        headers['locked_at'] = '계정잠금시간'
+const getSalesHeaders = (head :any) => {
+    
+    const getSalesforceCol = () => {
+        return {
+            'id' : 'NO.',
+            'level' : '등급',
+            'user_name' : '영업점 ID',
+            'sales_name': '영업점 상호',
+            'sector' : '업종',
+        }
     }
 
-    headers['is_2fa_use'] = '2FA 사용'
-    headers['created_at'] = '생성시간'
-    headers['updated_at'] = '업데이트시간'
-    if(getUserLevel() >= 35) 
-        headers['extra_col'] = '더보기'
-   return headers
+    const getSettleInfoCol = () => {
+        return {
+            'under_auto_settings' : '수수료율',
+            'settle_cycle' : '정산 주기',
+            'settle_day' : '정산 요일',
+            'settle_tax_type' : '정산 세율',
+            'last_settle_dt': '마지막 정산일',
+        }
+    }
+
+    const getPrivacyCols = () => {
+        return {
+            'nick_name' : '대표자명',
+            'phone_num' : '대표자 연락처',
+            'resident_num' : '주민등록번호',
+            'business_num' : '사업자등록번호',
+            'addr' : '주소',
+        }
+    }
+    
+    const getBankCols = () => {
+        return {
+            'acct_bank_name' : '은행',
+            'acct_bank_code' : '은행코드',
+            'acct_name' : '예금주',
+            'acct_num' : '계좌번호',
+        }
+    }
+    
+    const getSecureCols = () => {
+        const headers_4:Record<string, string> = {}
+        if(getUserLevel() >= 35) {
+            headers_4['is_lock'] = '계정잠김여부'
+            headers_4['locked_at'] = '계정잠금시간'
+        }
+        headers_4['is_2fa_use'] = '2FA 사용'
+        return headers_4
+    }
+
+    const getEtcCols = () => {
+        const headers_5:Record<string, string> = {}
+        headers_5['view_type'] = '화면타입'
+
+        if(getUserLevel() >= 35) {
+            headers_5['note'] = '메모사항'
+        }
+        headers_5['created_at'] = '생성시간'
+        headers_5['updated_at'] = '업데이트시간'
+        if(getUserLevel() >= 35) {
+            headers_5['extra_col'] = '더보기'
+        }
+        return headers_5    
+    }
+    
+    const headers0:any = getSalesforceCol()
+    const headers1:any = getSettleInfoCol()
+    const headers2:any = getPrivacyCols()
+    const headers3:any = getBankCols()
+    const headers4:any = getSecureCols()
+    const headers5:any = getEtcCols()
+
+    const headers: Record<string, string> = {
+        ...headers0,
+        ...headers1,
+        ...headers2,
+        ...headers3,
+        ...headers4,
+        ...headers5,
+    }
+
+    const sub_headers: any = []
+    head.getSubHeaderCol('영업점 정보', headers0, sub_headers)
+    head.getSubHeaderCol('정산 정보', headers1, sub_headers)
+    head.getSubHeaderCol('개인 정보', headers2, sub_headers)
+    head.getSubHeaderCol('계좌 정보', headers3, sub_headers)
+    head.getSubHeaderCol('보안 정보', headers4, sub_headers)
+    head.getSubHeaderCol('기타 정보', headers5, sub_headers)
+    return [headers, sub_headers]
 }
 
 export const useSearchStore = defineStore('salesSearchStore', () => {
@@ -85,12 +138,16 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
     const all_days = settleDays()
     const tax_types = settleTaxTypes()
     
+    if(isFixplus()) {
+        head.headers.value = head.initHeader(getFixplusSalesHeader(), {})
+    }
+    else {
+        const [headers, sub_headers] = getSalesHeaders(head)
+        head.sub_headers.value = sub_headers
+        head.headers.value = head.initHeader(headers, {})
+    }
 
-    const headers: Record<string, string> = isFixplus() ? getFixplusSalesHeader() : getSalesHeaders()
-    head.sub_headers.value = []
-    head.headers.value = head.initHeader(headers, {})
-    head.flat_headers.value = head.flatten(head.headers.value)
-    
+    head.flat_headers.value = head.flatten(head.headers.value)    
     const metas = ref([])
     if(corp.pv_options.paid.sales_parent_structure === false) {
         Object.assign(metas.value, [
@@ -359,7 +416,6 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     }
     
     const findSalesName = (key: string, value: number) => {
-        console.log(key)
         const level = getSalesLevelByCol(key)
         return all_sales[level].find(obj => obj.id === value)?.sales_name
     }

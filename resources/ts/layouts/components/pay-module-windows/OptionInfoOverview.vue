@@ -10,7 +10,15 @@ interface Props {
     item: PayModule,
 }
 const props = defineProps<Props>()
+const pay_disable_range = ref()
 
+/*
+    <VTextField v-model="props.item.pay_disable_s_tm" type="time" label="시작시간" :style="$vuetify.display.smAndDown ? 'width: 9em; margin-right: 1em;' : 'width: 9em; margin-right: 1em;'"/>
+    <VTextField v-model="props.item.pay_disable_e_tm" type="time" label="종료시간" style="width: 9em;"/>
+*/
+watchEffect(() => {
+    console.log(pay_disable_range.value)
+})
 </script>
 <template>
     <VCardItem>
@@ -97,14 +105,23 @@ const props = defineProps<Props>()
             </VRow>
         </template>
         <VRow v-if="corp.pv_options.paid.use_forb_pay_time && props.item.module_type != 0">
-            <VCol md="4" cols="7">
+            <VCol md="5" cols="7">
                 <BaseQuestionTooltip :location="'top'" :text="'결제금지 시간'"
                     :content="'해당 시간대에는 <b>온라인 결제</b>를 발생시킬 수 없습니다.'"/>
             </VCol>
-            <VCol md="8">
-                <div :class="$vuetify.display.smAndDown ? 'd-flex flex-row' : 'd-flex flex-row'">
-                    <VTextField v-model="props.item.pay_disable_s_tm" type="time" label="시작시간" :style="$vuetify.display.smAndDown ? 'width: 9em; margin-right: 1em;' : 'width: 9em; margin-right: 1em;'"/>
-                    <VTextField v-model="props.item.pay_disable_e_tm" type="time" label="종료시간" style="width: 9em;"/>
+            <VCol md="7">
+                <div :class="'d-flex flex-row'" style="width: 100%; align-items: center; justify-content: end;">
+                    <AppDateTimePicker 
+                        v-model="props.item.pay_disable_s_tm" placeholder="시작시간"
+                        :config="{ mode: 'range', enableTime: true, noCalendar: true, dateFormat: 'H:i'  }"   
+                        style="min-width: 6em;"
+                    />
+                    <span style="margin: 0 0.25em;">-</span>
+                    <AppDateTimePicker 
+                        v-model="props.item.pay_disable_e_tm" placeholder="종료시간"
+                        :config="{ mode: 'range', enableTime: true, noCalendar: true, dateFormat: 'H:i'  }"
+                        style="min-width: 6em;"
+                    />
                 </div>
             </VCol>
         </VRow>

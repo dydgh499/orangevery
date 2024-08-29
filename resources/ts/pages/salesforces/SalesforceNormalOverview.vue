@@ -64,7 +64,8 @@ onMounted(() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
+                <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small"
+                    style="margin: 0.25em;">
                     일괄작업
                 </VBtn>
                 <div>
@@ -73,6 +74,14 @@ onMounted(() => {
                 </div>
             </template>
             <template #headers>
+                <tr>
+                    <template v-for="(sub_header, index) in head.getSubHeaderComputed" :key="index">
+                        <th :colspan="head.getSubHeaderComputed.length - 1 == index ? sub_header.width + 1 : sub_header.width"
+                            class='list-square sub-headers' v-show="sub_header.width">
+                            <span>{{ sub_header.ko }}</span>
+                        </th>
+                    </template>
+                </tr>                
                 <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                         <div class='check-label-container' v-if="key == 'id'">
@@ -88,6 +97,9 @@ onMounted(() => {
             </template>
             <template #body>
                 <tr v-for="(item, index) in store.getItems" :key="index">
+                    <VTooltip activator="parent" location="end" open-delay="250">
+                        {{ item['sales_name'] }}
+                    </VTooltip>
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <template v-if="head.getDepth(_header, 0) != 1">
                             <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"

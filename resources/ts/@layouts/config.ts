@@ -9,17 +9,17 @@ export const config: Config = {
     logo: h('img', { src: corp.logo_img }),
 
     // logo: () => h('img', { src: 'assets/colored-logo.png' }, null),
-    contentWidth: ref(ContentWidth.Boxed),
+    contentWidth: ref(ContentWidth.꽉차게),
     contentLayoutNav: ref(AppContentLayoutNav.Vertical),
     overlayNavFromBreakpoint: breakpointsVuetify.md,
     enableI18n: true,
     isRtl: ref(false),
   },
   navbar: {
-    type: ref(NavbarType.Sticky),
+    type: ref(NavbarType.고정),
     navbarBlur: ref(true),
   },
-  footer: { type: ref(FooterType.Static) },
+  footer: { type: ref(FooterType.고정) },
   verticalNav: {
     isVerticalNavCollapsed: ref(false),
     defaultNavItemIconProps: { icon: 'tabler-circle' },

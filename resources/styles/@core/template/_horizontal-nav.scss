@@ -13,15 +13,21 @@
       .nav-group.active {
         > .popper-triggerer .nav-group-label {
           color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
-          font-weight: 600;
+          font-weight: 500;
         }
       }
 
       .nav-link.sub-item {
         .router-link-active.router-link-exact-active {
-          font-weight: 600;
+          font-weight: 500;
         }
       }
+    }
+  }
+
+  .nav-group {
+    .nav-group-arrow {
+      font-size: 1.125rem;
     }
   }
 

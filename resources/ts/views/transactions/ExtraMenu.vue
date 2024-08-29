@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import router from '@/router'
 import { useRequestStore } from '@/views/request'
-import { isRetryAble, realtimeResult } from '@/views/transactions/useStore'
+import { realtimeHistoryInterface } from '@/views/transactions/transactions'
 import type { MchtBlacklist, SalesSlip } from '@/views/types'
 import { getUserLevel, pay_token } from '@axios'
 import { StatusColors } from '@core/enums'
@@ -10,6 +10,8 @@ import corp from '@corp'
 interface Props {
     item: SalesSlip,
 }
+
+const formatTime = <any>(inject('$formatTime'))
 
 const { post } = useRequestStore()
 const props = defineProps<Props>()
@@ -24,8 +26,11 @@ const salesslip = <any>(inject('salesslip'))
 const cancelTran = <any>(inject('cancelTran'))
 const cancelDeposit = <any>(inject('cancelDeposit'))
 const cancelPart = <any>(inject('cancelPart'))
-const realtimeHistories = <any>(inject('realtimeHistories'))
 const mchtBlackListDlg = <any>(inject('mchtBlackListDlg'))
+const notiSendHistoriesDialog = <any>(inject('notiSendHistoriesDialog'))
+const realtimeHistoryDialog = <any>(inject('realtimeHistoryDialog'))
+
+const { realtimeResult, realtimeRetryAble } = realtimeHistoryInterface(formatTime)
 
 const complaint = () => {
     const params = {
@@ -105,7 +110,7 @@ const payCanceled = async () => {
     }
 }
 
-const noti = async () => {
+const notiSend = async () => {
     if (await alert.value.show('정말 노티 재발송을 하시겠습니까?')) {
         try {
             const r = await post('/api/v1/manager/transactions/noti/'+props.item.id, {}, true)
@@ -158,7 +163,7 @@ const isUseCancelDeposit = () => {
                     <VListItemTitle>블랙리스트 등록</VListItemTitle>
                 </VListItem>
                 <VListItem value="retry-realtime-deposit" class="retry-realtime-deposit" @click="retryDeposit()"
-                    v-if="isRealtimeTransaction() && isRetryAble(props.item)">
+                    v-if="isRealtimeTransaction() && realtimeRetryAble(props.item)">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="fa6-solid:money-bill-transfer" />
                     </template>
@@ -171,20 +176,26 @@ const isUseCancelDeposit = () => {
                     </template>
                     <VListItemTitle>이체예약취소</VListItemTitle>
                 </VListItem>
-                
-                <VListItem value="noti" class="noti" @click="noti()"
+                <VListItem value="noti" class="noti" @click="notiSend()"
                     v-if="corp.pv_options.paid.use_noti && getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="emojione:envelope" />
                     </template>
                     <VListItemTitle>노티전송</VListItemTitle>
                 </VListItem>
-                <VListItem value="realtime-histories" @click="realtimeHistories.show(props.item)"
+                <VListItem value="noti" class="noti" @click="notiSendHistoriesDialog.show(props.item)"
+                    v-if="corp.pv_options.paid.use_noti">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="tabler:history" />
+                    </template>
+                    <VListItemTitle>노티 발송이력</VListItemTitle>
+                </VListItem>
+                <VListItem value="realtime-histories" @click="realtimeHistoryDialog.show(props.item)"
                     v-if="isRealtimeTransaction()">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:history" />
                     </template>
-                    <VListItemTitle>실시간 상세이력</VListItemTitle>
+                    <VListItemTitle>실시간 이체이력</VListItemTitle>
                 </VListItem>
                 <VListItem value="cancelTrans" @click="cancelTran.show(props.item)"
                     v-if="getUserLevel() >= 35 && props.item.is_cancel == 0">

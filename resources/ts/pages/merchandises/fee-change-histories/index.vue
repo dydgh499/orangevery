@@ -97,8 +97,8 @@ const batchRemove = async() => {
                             </span>
                             <span v-else-if="_key == 'remove'">
                                 <VBtn size="small" type="button" color="error" @click="remove('/merchandises/fee-change-histories', item, false)">
-                                    <VIcon size="22" icon="tabler-trash"/>
                                     삭제
+                                    <VIcon size="22" icon="tabler-trash"/>
                                 </VBtn>
                             </span>
                             <span v-else :class="_key.includes('aft_') ? 'text-primary': ''">

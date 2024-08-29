@@ -165,8 +165,11 @@ watchEffect(() => {
         <VRow v-if="isAbleModiy(props.item.id)">
             <VCol md="5" cols="5">계약 시작일</VCol>
             <VCol md="7">
-                <VTextField type="date" v-model="props.item.contract_s_dt"
-                        prepend-inner-icon="ic-baseline-calendar-today" label="시작일 입력" single-line />
+                <AppDateTimePicker 
+                    v-model="props.item.contract_s_dt" 
+                    prepend-inner-icon="ic-baseline-calendar-today"
+                    placeholder="시작일 입력"
+                    />
             </VCol>
         </VRow>
         <VRow v-else>
@@ -182,8 +185,11 @@ watchEffect(() => {
                     :content="'결제일이 계약 시작일 ~ 계약 종료일에 포함되지 않을 시 결제가 불가능합니다.<br>입력하지 않을 시 검증하지 않으며 <b>온라인 결제</b>만 적용 가능합니다.'"/>
             </VCol>
             <VCol md="7">
-                <VTextField type="date" v-model="props.item.contract_e_dt"
-                    prepend-inner-icon="ic-baseline-calendar-today" label="종료일 입력" single-line />
+                <AppDateTimePicker 
+                    v-model="props.item.contract_e_dt" 
+                    prepend-inner-icon="ic-baseline-calendar-today" 
+                    placeholder="종료일 입력" 
+                    />
             </VCol>
         </VRow>
         <VRow v-else>
@@ -198,28 +204,33 @@ watchEffect(() => {
             <VRow v-if="isAbleModiy(props.item.id)">
                 <VCol md="5" cols="4">
                     <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'"
-                        :content="'해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.<br>키를 복사하려면 입력필드에서 더블클릭하세요.'"/>
+                        :content="'해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.'"/>
                 </VCol>
                 <VCol md="7">
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <VTextField type="text" v-model="props.item.pay_key" prepend-inner-icon="ic-baseline-vpn-key"
-                            persistent-placeholder :disabled="true" />
-
-                        <VBtn type="button" variant="tonal" @click="payKeyCreate()">
+                            persistent-placeholder :disabled="true"/>
+                        <VBtn type="button" variant="tonal" @click="payKeyCreate()" style="margin-left: 0.5em;">
                             {{ "발급" }}
                             <VIcon end icon="material-symbols:add-to-home-screen" />
                         </VBtn>
+                        <VTooltip activator="parent" location="top">
+                            더블클릭해서 키를 복사하세요.
+                        </VTooltip>
                     </div>
                 </VCol>
             </VRow>
             <VRow v-else>
                 <VCol md="5" cols="4">
-                    <span class="font-weight-bold">
-                        <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'" :content="'드래그하여 확인할 수 있습니다.'"/>
-                    </span>    
+                    <span class="font-weight-bold">결제 KEY</span>    
                 </VCol>
                 <VCol md="7" cols="12">
-                    <span style="background-color: rgba(var(--v-theme-on-surface));">{{ props.item.pay_key }}</span>
+                    <span style="background-color: rgba(var(--v-theme-on-surface));">
+                        {{ props.item.pay_key }}
+                        <VTooltip activator="parent" location="top">
+                            더블클릭또는 드래그하여 키를 복사하세요.
+                        </VTooltip>
+                    </span>
                 </VCol>
             </VRow>
         </template>
@@ -228,28 +239,33 @@ watchEffect(() => {
             <VRow v-if="isAbleModiy(props.item.id)">
                 <VCol md="5" cols="4">
                     <BaseQuestionTooltip :location="'top'" :text="'서명 KEY'"
-                        :content="'노티발송시 데이터 위변조 방지 값으로 사용됩니다.<br>키를 복사하려면 입력필드에서 더블클릭하세요.'"/>
+                        :content="'노티발송시 데이터 위변조 방지 값으로 사용됩니다.'"/>
                 </VCol>
                 <VCol md="7">
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <VTextField type="text" v-model="props.item.sign_key" prepend-inner-icon="ic-baseline-vpn-key"
-                            persistent-placeholder :disabled="true" />
-
-                        <VBtn type="button" variant="tonal" @click="signKeyCreate()">
+                            persistent-placeholder :disabled="true"/>
+                        <VBtn type="button" variant="tonal" @click="signKeyCreate()" style="margin-left: 0.5em;">
                             {{ "발급" }}
                             <VIcon end icon="material-symbols:add-to-home-screen" />
                         </VBtn>
+                        <VTooltip activator="parent" location="top">
+                            더블클릭해서 키를 복사하세요.
+                        </VTooltip>
                     </div>
                 </VCol>
             </VRow>
             <VRow v-else>
                 <VCol md="5" cols="4">
-                    <span class="font-weight-bold">
-                        <BaseQuestionTooltip :location="'top'" :text="'서명 KEY'" :content="'드래그하여 확인할 수 있습니다.'"/>
-                    </span>    
+                    <span class="font-weight-bold">서명 KEY</span>    
                 </VCol>
                 <VCol md="7" cols="12">
-                    <span style="background-color: rgba(var(--v-theme-on-surface));">{{ props.item.sign_key }}</span>
+                    <span style="background-color: rgba(var(--v-theme-on-surface));">
+                        {{ props.item.sign_key }}
+                        <VTooltip activator="parent" location="top">
+                            더블클릭또는 드래그하여 키를 복사하세요.
+                        </VTooltip>
+                    </span>
                 </VCol>
             </VRow>
         </template>

@@ -185,6 +185,7 @@ export const Searcher = (path: string) => {
 }
 
 export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
+    const str_range_date = ref('')
     const range_date = ref(<string[]>(['', '']))
     const date = ref(<string>(''))
     const date_selecter = ref()
@@ -290,13 +291,23 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
         }
     }
     
+    const datePickerRangeUpdater = (store: any) => {
+        console.log(range_date.value)
+        if(range_date.value.includes('to')) {
+            range_date.value = range_date.value.split(' to ')
+            console.log(range_date.value)
+            dateChanged(store)
+        }
+    }
     return {
         getRangeFormat,
         setDateRange,
         init,
         dateChanged,
+        datePickerRangeUpdater,
         range_date,
         date,
         date_selecter,
+        str_range_date,
     }
 }

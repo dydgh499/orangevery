@@ -56,24 +56,27 @@ const getResponseBody = (body: string) => {
 </script>
 <template>
     <div>
-        <BaseIndexView :placeholder="search_placeholder" :metas="[]" :add="false" add_name="가맹점"
+        <BaseIndexView :placeholder="search_placeholder" :metas="[]" :add="false" add_name="노티이력"
             :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="false" :cus_filter="true"
-                    :sales="true">
-                    <template #pg_extra_field>
-                        <VCol cols="6" sm="3">
-                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"
-                                :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 필터" item-title="title"
-                                item-value="id" @update:modelValue="store.updateQueryString({module_type: store.params.module_type})" />
-                        </VCol>
-                    </template>
-                </BaseIndexFilterCard>
+                    :sales="true"/>
             </template>
             <template #index_extra_field>
+                
                 <VBtn prepend-icon="tabler-calculator" @click="batchRetry()" size="small" v-if="getUserLevel() >= 35">
                     노티 재발송
                 </VBtn>
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.result_status" 
+                    :items="[{ id: null, title: '전체' }, { id: 1, title: '성공' }, { id: 2, title: '실패' }]" label="응답결과" item-title="title"
+                    item-value="id" @update:modelValue="store.updateQueryString({result_status: store.params.result_status})" 
+                    :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''"/>
+                    
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type" 
+                    :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입" item-title="title"
+                    item-value="id" @update:modelValue="store.updateQueryString({module_type: store.params.module_type})" 
+                    :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''"/>
+
             </template>
             <template #headers>
                 <tr>

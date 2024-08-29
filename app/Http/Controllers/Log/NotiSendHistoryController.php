@@ -50,12 +50,25 @@ class NotiSendHistoryController extends Controller
         $query = globalPGFilter($query, $request, 'transactions');
         $query = globalSalesFilter($query, $request, 'transactions');
         $query = globalAuthFilter($query, $request, 'transactions');
+        
         $query = $query->where(function($query) use ($search) {
             return $query->where('transactions.appr_num', 'like', "%$search%")
                 ->orWhere('transactions.mid', 'like', "%$search%")
                 ->orWhere('transactions.tid', 'like', "%$search%");
         });
 
+        if((int)$request->result_status === 1) {
+            $query = $query->where(function($query) {
+                return $query->where('noti_send_histories.http_code', 200)
+                    ->orWhere('noti_send_histories.http_code', 201);
+            });
+        }
+        else if((int)$request->result_status === 2) {
+            $query = $query->where(function($query) {
+                return $query->where('noti_send_histories.http_code', '!=', 200)
+                    ->where('noti_send_histories.http_code', '!=', 201);
+            });
+        }
         $data = $this->getIndexData($request, $query, 'noti_send_histories.id', $cols, 'noti_send_histories.created_at');
         return $this->response(0, $data);
     }

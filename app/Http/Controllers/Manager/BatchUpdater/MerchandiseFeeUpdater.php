@@ -135,9 +135,9 @@ class MerchandiseFeeUpdater
         ];
     }
 
-    static public function apply($request, $user, $type, $query)
+    static public function apply($request, $user, $apply_type, $query)
     {
-        $change_status = $type == 'direct-apply' ? 1 : 0;
+        $change_status = $apply_type ? 0 : 1;
         if($user === 'merchandises')
         {
             $resources  = self::getMchtResource($request, $change_status, (clone $query)->get());

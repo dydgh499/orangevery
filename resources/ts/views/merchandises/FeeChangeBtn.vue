@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { axios, getLevelByIndex } from '@axios'
 import type { Merchandise } from '@/views/types'
+import { axios, getLevelByIndex } from '@axios'
 
 interface Props {
     level: number,
@@ -22,28 +22,27 @@ const getSalesByClass = () => {
     }
 }
 
-const feeChangeRequest = async (type: string, apply_dt: string) => {
-    let url = '/api/v1/manager/merchandises/fee-change-histories'
-    let params = {}
+const feeChangeRequest = async (apply_type: number, apply_dt: string) => {
+    let params = {
+        apply_dt: apply_dt,
+        mcht_id: props.item.id,
+        apply_type: apply_type,
+    }
     if (props.level < 0) {
-        params = {
-            apply_dt: apply_dt,
+        params = Object.assign(params, {
             trx_fee: parseFloat(props.item.trx_fee),
             hold_fee: parseFloat(props.item.hold_fee),
-            mcht_id: props.item.id,
-        }
-        url += '/merchandises/' + type
+        })
     }
     else {
-        params = Object.assign({
-            apply_dt: apply_dt,
+        params = Object.assign(params, {
             level: props.level,
-            mcht_id: props.item.id,
-        }, getSalesByClass())
-        url += '/salesforces/' + type
+            ...getSalesByClass()
+        })
     }
-
     try {
+        const user_type = props.level < 0 ? 'merchandises' : 'salesforces'
+        const url = `/api/v1/manager/merchandises/fee-change-histories/${user_type}/set-fee`
         const r = await axios.post(url, params)
         snackbar.value.show('성공하였습니다.', 'success')
     }
@@ -54,13 +53,13 @@ const feeChangeRequest = async (type: string, apply_dt: string) => {
 }
 const directFeeChange = async () => {
     if (await alert.value.show('정말 즉시적용하시겠습니까?'))
-        await feeChangeRequest('direct-apply', formatDate(new Date))
+        await feeChangeRequest(0, formatDate(new Date))
 }
 const bookFeeChange = async () => {
     const apply_dt = await feeBookDialog.value.show()
     if(apply_dt !== '') {
         if (await alert.value.show('정말 예약적용하시겠습니까?'))
-        await feeChangeRequest('book-apply', apply_dt)
+        await feeChangeRequest(1, apply_dt)
     }
 }
 </script>

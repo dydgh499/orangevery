@@ -1,10 +1,10 @@
 
 <script setup lang="ts">
-import { useSearchStore, realtimeResult, realtimeMessage } from '@/views/transactions/settle/useCollectWithdrawStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { DateFilters } from '@core/enums'
+import { useSearchStore } from '@/views/transactions/settle/useCollectWithdrawStore'
 import { getUserLevel } from '@axios'
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 
@@ -17,8 +17,7 @@ provide('exporter', exporter)
     <section>
         <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="" :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
-                <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="true" :sales="true" v-if="getUserLevel() >= 35">
-                </BaseIndexFilterCard>
+                <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="true" :sales="true" v-if="getUserLevel() >= 35"/>
             </template>
             <template #index_extra_field>
             </template>
@@ -60,5 +59,3 @@ provide('exporter', exporter)
         </BaseIndexView>
     </section>
 </template>
-@/views/transactions/settle-histories/useMerchandiseSelfSettleStore
-@/views/transactions/settle/useCollectWithdrawStore

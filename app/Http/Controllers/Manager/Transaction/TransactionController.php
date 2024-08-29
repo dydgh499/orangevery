@@ -89,13 +89,16 @@ class TransactionController extends Controller
      */
     public function index(IndexRequest $request)
     {
+        $b_info = BrandInfo::getBrandById($request->user()->brand_id);
         $this->setTransactionData($request->level);
 
         $with  = ['cancelDeposits'];
         $query = TransactionFilter::common($request);
         if($request->use_realtime_deposit && (int)$request->level === 10)
             $with[] = 'realtimes';
-
+        if($b_info['pv_options']['paid']['use_noti'])
+            $with[] = 'notiSendHistories';
+            
         if(count($with))
             $query = $query->with($with);
         $data = TransactionFilter::pagenation($request, $query, $this->cols, 'transactions.trx_at', false);

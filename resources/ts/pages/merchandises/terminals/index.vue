@@ -54,6 +54,9 @@ provide('exporter', exporter)
         </template>
         <template #body>
             <tr v-for="(item, index) in store.getItems" :key="index">
+                <VTooltip activator="parent" location="end" open-delay="250">
+                    {{ item['mcht_name'] }}
+                </VTooltip>                
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <td v-show="_header.visible" class='list-square'>
                         <span v-if="_key === 'id' && getUserLevel() > 10" class="edit-link" @click="store.edit(item['id'])">

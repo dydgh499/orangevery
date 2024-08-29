@@ -1,6 +1,5 @@
 <script setup lang="tsx">
 import { useThemeConfig } from '@core/composable/useThemeConfig'
-import { Skins } from '@core/enums'
 import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layouts/enums'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 
@@ -60,16 +59,14 @@ const headerValues = computed(() => {
             <VDivider />
 
             <PerfectScrollbar tag="ul" :options="{ wheelPropagation: false }">
-                <!-- SECTION Theming -->
+                <!--
                 <CustomizerSection title="테마" :divider="false">
-                    <!-- 👉 Skin -->
                     <h6 class="text-base font-weight-regular">
                         배경
                     </h6>
                     <VRadioGroup v-model="skin" inline>
                         <VRadio v-for="[key, val] in Object.entries(Skins)" :key="key" :label="key" :value="val" />
                     </VRadioGroup>
-                    <!-- 👉 Theme -->
                     <h6 class="mt-3 text-base font-weight-regular">
                         다크모드
                     </h6>
@@ -78,6 +75,7 @@ const headerValues = computed(() => {
                             false-value="light" color="primary" style="margin-top: 1.2em;"/>
                     </div>
                 </CustomizerSection>
+                -->
                 <!-- !SECTION -->
 
                 <!-- SECTION LAYOUT -->
@@ -91,7 +89,7 @@ const headerValues = computed(() => {
                     </VRadioGroup>
                     <!-- 👉 Navbar Type -->
                     <h6 class="mt-3 text-base font-weight-regular">
-                        {{ appContentLayoutNav === AppContentLayoutNav.Vertical ? '네비' : '헤더' }} 타입
+                        네비 타입
                     </h6>
                     <VRadioGroup v-model="navbarType" inline>
                         <VRadio v-for="[key, val] in headerValues" :key="key" :label="key" :value="val" />
@@ -103,8 +101,7 @@ const headerValues = computed(() => {
                     <VRadioGroup v-model="footerType" inline>
                         <VRadio v-for="[key, val] in Object.entries(FooterType)" :key="key" :label="key" :value="val" />
                     </VRadioGroup>
-                    <!-- 👉 Navbar blur -->
-                    <br>
+                    <!--
                     <div class="d-flex align-center justify-space-between">
                         <VLabel for="customizer-navbar-blur" class="text-high-emphasis">
                             네비 불투명 적용
@@ -114,12 +111,10 @@ const headerValues = computed(() => {
                                 color="primary" />
                         </div>
                     </div>
+                    -->
                 </CustomizerSection>
-                <!-- !SECTION -->
-
-                <!-- SECTION Menu -->
+                    <!--
                 <CustomizerSection title="메뉴">
-                    <!-- 👉 Collapsed Menu -->
                     <div v-if="appContentLayoutNav === AppContentLayoutNav.Vertical"
                         class="d-flex align-center justify-space-between">
                         <VLabel for="customizer-menu-collapsed" class="text-high-emphasis">
@@ -131,7 +126,7 @@ const headerValues = computed(() => {
                         </div>
                     </div>
                 </CustomizerSection>
-                <!-- !SECTION -->
+                    -->
 
                 <!-- SECTION MISC -->
                 <!-- 👉 Route Transition -->

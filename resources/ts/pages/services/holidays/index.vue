@@ -27,7 +27,7 @@ const bulkRegister = async () => {
                     <!-- 👉 Navigation drawer -->
                     <VNavigationDrawer width="290" absolute touchless location="start"
                         class="calendar-add-event-drawer" :temporary="$vuetify.display.mdAndDown">
-                        <div style="display: flex; flex-direction: column;margin: 1.4rem;">
+                        <div style="display: flex; flex-direction: column;margin: 24.5px;">
                             <VBtn block prepend-icon="tabler-plus" @click="holidayDlg.show({ id: 0 })">
                                 공휴일 추가
                             </VBtn>
@@ -48,7 +48,7 @@ const bulkRegister = async () => {
                             </div>
                         </div>
                         <VDivider />
-                        <div style="display: flex; flex-direction: column;margin: 1.4rem;">
+                        <div style="display: flex; flex-direction: column;margin: 24px;">
                             <VBtn prepend-icon="material-symbols:holiday-village" @click="bulkRegister()" color="warning">
                                 금년 공휴일 대량업데이트
                             </VBtn>

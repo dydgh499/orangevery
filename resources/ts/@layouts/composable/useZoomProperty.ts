@@ -19,9 +19,9 @@ export const useZoomProperty = () => {
 
     const zoomOut = () => {
         zoom.value -= 10
-        if (zoom.value < 90) {
+        if (zoom.value < 80) {
             snackbar.value.show('더이상 축소할 수 없습니다', 'warning')
-            zoom.value = 90
+            zoom.value = 80
         }
     }
     watchEffect(() => {
