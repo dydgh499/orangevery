@@ -54,7 +54,7 @@ provide('exporter', exporter)
         </template>
         <template #body>
             <tr v-for="(item, index) in store.getItems" :key="index">
-                <VTooltip activator="parent" location="end" open-delay="250">
+                <VTooltip activator="parent" location="end" open-delay="250" transition="scroll-x-transition" v-if="$vuetify.display.smAndDown === false">
                     {{ item['mcht_name'] }}
                 </VTooltip>                
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">

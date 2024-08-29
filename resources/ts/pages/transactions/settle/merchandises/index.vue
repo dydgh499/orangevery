@@ -173,7 +173,7 @@ onMounted(() => {
                 </tr>
                 <!-- normal -->
                 <tr v-for="(item, _key, _index) in store.getItems" :key="_key">
-                    <VTooltip activator="parent" location="end" open-delay="250">
+                    <VTooltip activator="parent" location="end" open-delay="250" transition="scroll-x-transition" v-if="$vuetify.display.smAndDown === false">
                         {{ item['mcht_name'] }}
                     </VTooltip>
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">

@@ -191,7 +191,7 @@ onMounted(() => {
             </template>
             <template #body>
                 <tr v-for="(item, index) in store.getItems" :key="item['id']">
-                    <VTooltip activator="parent" location="end" open-delay="250">
+                    <VTooltip activator="parent" location="end" open-delay="250" transition="scroll-x-transition" v-if="$vuetify.display.smAndDown === false">
                         <span>{{ `${item['mcht_name']} (${item['is_cancel'] ? "취소" : "승인"})` }}</span>
                         <br>
                         <span>{{ `${item['amount'].toLocaleString()}원` }}</span>
