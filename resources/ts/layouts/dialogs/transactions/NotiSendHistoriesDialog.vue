@@ -43,7 +43,7 @@ defineExpose({
                         </tr>
                     </tbody>
                     <!-- 👉 table footer  -->
-                    <tfoot v-if="!Boolean(transaction.realtimes?.length)">
+                    <tfoot v-if="!Boolean(transaction.noti_send_histories?.length)">
                         <tr>
                             <td colspan="12" class='list-square' style="border: 0;">
                                 상세이력이 존재하지 않습니다.
