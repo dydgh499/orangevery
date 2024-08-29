@@ -13,7 +13,7 @@ export const { themeConfig, layoutConfig } = defineThemeConfig({
   app: {
     title: corp.name,
     logo: h('img', { src: corp.logo_img, style: 'color: rgb(var(--v-global-theme-primary)); width: 45px;' }),
-    contentWidth: ContentWidth.중앙정렬,
+    contentWidth: ContentWidth.꽉차게,
     contentLayoutNav: AppContentLayoutNav.Vertical,
     overlayNavFromBreakpoint: breakpointsVuetify.md + 16, // 16 for scro
     enableI18n: false,
