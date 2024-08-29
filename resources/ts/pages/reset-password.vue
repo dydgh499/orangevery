@@ -40,35 +40,35 @@ const getAbilities = (): UserAbility[] => {
 }
 
 const resetPassword = () => {
-    if(route.query.token === undefined)
+    if (route.query.token === undefined)
         router.replace('/')
-    if(user_pw.value != user_pw_check.value) {
+    if (user_pw.value != user_pw_check.value) {
         snackbar.value.show('패스워드 및 패스워드 확인이 다릅니다.', 'warning')
     }
-    else if(route.query.token) {
-        axios.post('/api/v1/auth/reset-password', { 
-            token: decodeURIComponent(route.query.token as string), 
+    else if (route.query.token) {
+        axios.post('/api/v1/auth/reset-password', {
+            token: decodeURIComponent(route.query.token as string),
             level: route.query.level,
             user_pw: user_pw.value
         })
-        .then(r => {
-            const { access_token, user } = r.data
-            user['level'] = user['level'] == null ? 10 : user['level']
-            const abilities = getAbilities()
-            ability.update(abilities);
-            pay_token.value = access_token
-            user_info.value = user
-            token_expire_time.value = r.headers['token-expire-time']
+            .then(r => {
+                const { access_token, user } = r.data
+                user['level'] = user['level'] == null ? 10 : user['level']
+                const abilities = getAbilities()
+                ability.update(abilities);
+                pay_token.value = access_token
+                user_info.value = user
+                token_expire_time.value = r.headers['token-expire-time']
 
-            localStorage.setItem('token-expire-time', token_expire_time.value)
-            localStorage.setItem('abilities', JSON.stringify(abilities))
-            // Redirect to `to` query if exist or redirect to index route
-            router.replace(route.query.to ? String(route.query.to) : '/')
-        })
-        .catch(e => {
-            console.log(e.response.data.code)
-            errors.value = e.response.data
-        })
+                localStorage.setItem('token-expire-time', token_expire_time.value)
+                localStorage.setItem('abilities', JSON.stringify(abilities))
+                // Redirect to `to` query if exist or redirect to index route
+                router.replace(route.query.to ? String(route.query.to) : '/')
+            })
+            .catch(e => {
+                console.log(e.response.data.code)
+                errors.value = e.response.data
+            })
     }
     else
         snackbar.value.show('잘못된 접근입니다.', 'warning')
@@ -92,96 +92,66 @@ const passwordCheckRules = computed(() => {
 </script>
 
 <template>
-  <VRow
-    class="auth-wrapper bg-surface"
-    no-gutters
-  >
-    <VCol
-      lg="8"
-      class="d-none d-lg-flex"
-    >
-      <div class="position-relative bg-background rounded-lg w-100 ma-8 me-0">
-        <div class="d-flex align-center justify-center w-100 h-100">
-          <VImg
-            max-width="368"
-            :src="authThemeImg"
-            class="auth-illustration mt-16 mb-2"
-          />
-        </div>
+    <VRow class="auth-wrapper bg-surface" no-gutters>
+        <VCol lg="8" class="d-none d-lg-flex">
+            <div class="position-relative bg-background rounded-lg w-100 ma-8 me-0">
+                <div class="d-flex align-center justify-center w-100 h-100">
+                    <VImg max-width="605" :src="authThemeImg" class="auth-illustration mt-16 mb-2" />
+                </div>
 
-        <VImg
-          class="auth-footer-mask"
-          :src="authThemeMask"
-        />
-      </div>
-    </VCol>
+                <VImg class="auth-footer-mask" :src="authThemeMask" />
+            </div>
+        </VCol>
 
-    <VCol
-      cols="12"
-      lg="4"
-      class="d-flex align-center justify-center"
-    >
-      <VCard
-        flat
-        :max-width="500"
-        class="mt-12 mt-sm-0 pa-4"
-      >
-        <VCardText>
-          <h4 class="text-h5 mb-1">
-            비밀번호 재설정 🔒
-          </h4>
-          <p class="mb-0 mt-5">
-            최초 접속으로 비밀번호를 재설정합니다.
-            <br>
-            새 비밀번호는 이전에 사용한 비밀번호와 달라야합니다.
-          </p>
-        </VCardText>
+        <VCol cols="12" lg="4" class="d-flex align-center justify-center">
+            <VCard flat :max-width="500" class="mt-12 mt-sm-0 pa-4">
+                <VCardText>
+                    <h4 class="text-h5 mb-1">
+                        비밀번호 재설정 🔒
+                    </h4>
+                    <p class="mb-0 mt-5">
+                        최초 접속으로 비밀번호를 재설정합니다.
+                        <br>
+                        새 비밀번호는 이전에 사용한 비밀번호와 달라야합니다.
+                    </p>
+                </VCardText>
 
-        <VCardText>
-            <VForm ref="refVForm" @submit.prevent="onSubmit">
-            <VRow no-gutters>
-                <VCol cols="12">
-                    <VTextField v-model="user_pw" label="새 비밀번호" :type="isPasswordVisible ? 'text' : 'password'" 
-                        :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                        :rules="passwordRules"
-                        @click:append-inner="isPasswordVisible = !isPasswordVisible" 
-                        :error-messages="errors.message"/>
-                </VCol>
-                <VCol cols="12" style="margin: 24px 0;">
-                    <VTextField v-model="user_pw_check" label="새 비밀번호 확인" :rules="passwordCheckRules"
-                        :type="isPasswordCheckVisible ? 'text' : 'password'"
-                        :append-inner-icon="isPasswordCheckVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                        @click:append-inner="isPasswordCheckVisible = !isPasswordCheckVisible"/>
-                </VCol>
-              <!-- Reset link -->
-              <VCol cols="12">
-                <VBtn
-                  block
-                  type="submit"
-                >
-                  새 비밀번호 설정
-                </VBtn>
-              </VCol>
-              <!-- back to login -->
-                <VCol cols="12" style="margin-top: 24px;">
-                <RouterLink
-                  class="d-flex align-center justify-center"
-                  :to="{ name: 'login' }"
-                >
-                  <VIcon
-                    icon="tabler-chevron-left"
-                    class="flip-in-rtl"
-                  />
-                  <span>Back to login</span>
-                </RouterLink>
-              </VCol>
-            </VRow>
-          </VForm>
-        </VCardText>
-      </VCard>
-    </VCol>
-  </VRow>
-<Snackbar ref="snackbar" />
+                <VCardText>
+                    <VForm ref="refVForm" @submit.prevent="onSubmit">
+                        <VRow no-gutters>
+                            <VCol cols="12">
+                                <VTextField v-model="user_pw" label="새 비밀번호"
+                                    :type="isPasswordVisible ? 'text' : 'password'"
+                                    :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
+                                    :rules="passwordRules" @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                                    :error-messages="errors.message" />
+                            </VCol>
+                            <VCol cols="12" style="margin: 24px 0;">
+                                <VTextField v-model="user_pw_check" label="새 비밀번호 확인" :rules="passwordCheckRules"
+                                    :type="isPasswordCheckVisible ? 'text' : 'password'"
+                                    :append-inner-icon="isPasswordCheckVisible ? 'tabler-eye-off' : 'tabler-eye'"
+                                    @click:append-inner="isPasswordCheckVisible = !isPasswordCheckVisible" />
+                            </VCol>
+                            <!-- Reset link -->
+                            <VCol cols="12">
+                                <VBtn block type="submit">
+                                    새 비밀번호 설정
+                                </VBtn>
+                            </VCol>
+                            <!-- back to login -->
+                            <VCol cols="12" style="margin-top: 24px;">
+                                <RouterLink class="d-flex align-center justify-center" :to="{ name: 'login' }">
+                                    <VIcon icon="tabler-chevron-left" class="flip-in-rtl" />
+                                    <span>Back to login</span>
+                                </RouterLink>
+                            </VCol>
+                        </VRow>
+                    </VForm>
+                </VCardText>
+            </VCard>
+        </VCol>
+    </VRow>
+    <Snackbar ref="snackbar" />
 </template>
 
 <style lang="scss">

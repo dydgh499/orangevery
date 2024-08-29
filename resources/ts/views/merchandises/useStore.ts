@@ -114,21 +114,28 @@ const getMchtHeaders = (head :any) => {
 
     }
 
-    const getEtcCols = () => {
+    const getSecureCols = () => {
         const headers_8:Record<string, string> = {}
         if (corp.pv_options.paid.subsidiary_use_control)
             headers_8['enabled'] = '전산사용여부'
-    
         if(getUserLevel() >= 35 || (getUserLevel() >= 13 && user_info.value.is_able_unlock_mcht)) {
             headers_8['is_lock'] = '계정잠김여부'
             headers_8['locked_at'] = '계정잠금시간'
-            headers_8['note'] = '메모사항'
         }
-        headers_8['created_at'] = '생성시간'
-        headers_8['updated_at'] = '업데이트시간'
-        if(getUserLevel() >= 35 || (getUserLevel() >= 13 && user_info.value.is_able_unlock_mcht)) 
-            headers_8['extra_col'] = '더보기'
         return headers_8
+    }
+
+    const getEtcCols = () => {
+        const headers_9:Record<string, string> = {}
+        if(getUserLevel() >= 35) {
+            headers_9['custom_id'] = '커스텀필터'
+            headers_9['note'] = '메모사항'
+        }
+        headers_9['created_at'] = '생성시간'
+        headers_9['updated_at'] = '업데이트시간'
+        if(getUserLevel() >= 35 || (getUserLevel() >= 13 && user_info.value.is_able_unlock_mcht)) 
+            headers_9['extra_col'] = '더보기'
+        return headers_9
     }
     
     const headers0:any = getIdCol()
@@ -139,7 +146,8 @@ const getMchtHeaders = (head :any) => {
     const headers5:any = getPrivacyCols()
     const headers6:any = getBankCols()
     const headers7:any = getNotiCols()
-    const headers8:any = getEtcCols()
+    const headers8:any = getSecureCols()
+    const headers9:any = getEtcCols()
 
     const headers: Record<string, string> = {
         ...headers0,
@@ -151,6 +159,7 @@ const getMchtHeaders = (head :any) => {
         ...headers5,
         ...headers6,
         ...headers8,
+        ...headers9,
     }
     const sub_headers: any = []
     head.getSubHeaderCol('NO.', headers0, sub_headers)
@@ -161,14 +170,15 @@ const getMchtHeaders = (head :any) => {
     head.getSubHeaderCol('노티 정보', headers7, sub_headers)
     head.getSubHeaderCol('개인 정보', headers5, sub_headers)
     head.getSubHeaderCol('계좌 정보', headers6, sub_headers)
-    head.getSubHeaderCol('기타 정보', headers8, sub_headers)
+    head.getSubHeaderCol('보안 정보', headers8, sub_headers)
+    head.getSubHeaderCol('기타 정보', headers9, sub_headers)
     return [headers, sub_headers]
 }
 
 export const useSearchStore = defineStore('mchtSearchStore', () => {
     const store     = Searcher('merchandises')
     const head      = Header('merchandises', '가맹점 관리')
-    const { pgs, settle_types }   = useStore()
+    const { pgs, settle_types, cus_filters } = useStore()
 
     if(isFixplus()) {
         head.headers.value = head.initHeader(getFixplusMchtHeader(), {})
@@ -232,6 +242,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
 
             datas[i]['settle_types'] = datas[i]['payment_modules'].map(module => settle_types.find(settle_type => settle_type.id === module.settle_type)?.title).join(',')  
             datas[i]['resident_num'] = datas[i]['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
+            datas[i]['custom_id'] = cus_filters.find(cus => cus.id === datas[i]['custom_id'])?.name as string
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         head.exportToExcel(datas)

@@ -64,8 +64,6 @@ class RealtimeSendHistoryController extends Controller
             }
             return [];
         })->all();
-
-        logging(['params'=>$params], 'realtime-auto-withdraws');
         return $params;
     }
 
@@ -107,6 +105,8 @@ class RealtimeSendHistoryController extends Controller
             if($res['code'] == 201)
                 return $this->response($res ? 1 : 990);
         }
+
+        logging(['params'=>$params], 'realtime-auto-withdraws-scheduler');
     }
 
     public function commonSelect($request)

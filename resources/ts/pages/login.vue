@@ -109,56 +109,49 @@ const onSubmit = () => {
 </script>
 
 <template>
-    <VRow no-gutters class="auth-wrapper">
-        <VCol lg="8" class="d-none d-lg-flex">
-            <div class="position-relative auth-bg rounded-lg w-100 ma-8 me-0">
+    <VRow no-gutters class="auth-wrapper bg-surface">
+        <VCol lg="8" class="d-none d-md-flex">
+            <div class="position-relative bg-background rounded-lg w-100 ma-8 me-0">
                 <div class="d-flex align-center justify-center w-100 h-100">
                     <VImg max-width="605" :src="authThemeImg" class="auth-illustration mt-16 mb-2" />
                 </div>
-
                 <VImg :src="authThemeMask" class="auth-footer-mask" />
             </div>
         </VCol>
 
-        <VCol cols="12" lg="4" class="d-flex align-center justify-center">
-            <VCard flat :max-width="500" class="mt-sm-0 pa-4">
+        <VCol cols="12" lg="4" class="auth-card-v2 d-flex align-center justify-center">
+            <VCard flat class="mt-sm-0 pa-4" :max-width="500">
                 <VCardText>
                     <VNodeRenderer :nodes="themeConfig.app.logo" class="mb-6" />
-                    <h5 class="text-h5 font-weight-semibold mb-1">
-                        {{ themeConfig.app.title }}에 오신것을 환영합니다! 👋🏻
-                    </h5>
+                    <h4 class="text-h4 mb-1 font-weight-bold">
+                        <span class="text-capitalize">{{ themeConfig.app.title }}</span>에 오신것을 환영합니다! 👋🏻
+                    </h4>
                 </VCardText>
                 <VCardText>
                     <VForm ref="refVForm" @submit.prevent="onSubmit">
-                        <VRow no-gutters>
-                            <!-- user_name -->
-                            <VCol cols="12">
+                        <VRow>
+                            <VCol cols="12" style="height: 4.5em;">
                                 <VTextField v-model="user_name" label="아이디 입력" type="user_name" :rules="[requiredValidatorV2(user_name, '아이디')]"
                                     :error-messages="errors.message" />
                             </VCol>
-                            <!-- password -->
-                            <VCol cols="12" style="margin-top: 24px;">
-                                <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidatorV2(user_pw, '패스워드')]"
+                            <VCol cols="12">
+                                <div style="height: 4em;">
+                                    <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidatorV2(user_pw, '패스워드')]"
                                     :type="isPasswordVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                                     @click:append-inner="isPasswordVisible = !isPasswordVisible"/>
+                                </div>
 
-                                <div class="d-flex align-center flex-wrap justify-space-between mt-2 mb-4">
-                                    <div class="text-primary ms-2 mb-1" style="cursor: pointer;"
+                                <div class="d-flex align-center flex-wrap mb-4">
+                                    <div class="text-primary" style="cursor: pointer;"
                                         @click="forgotPassword()">
                                         패스워드를 잊으셨나요?
                                     </div>
                                 </div>
 
                                 <VBtn block type="submit">
-                                    Login
+                                    LOGIN
                                 </VBtn>
-                            </VCol>
-
-                            <!-- create account -->
-                            <VCol cols="12" class="text-center">
-                            </VCol>
-                            <VCol cols="12" class="d-flex align-center">
                             </VCol>
                         </VRow>
                     </VForm>
@@ -191,6 +184,21 @@ const onSubmit = () => {
 .auth-illustration {
   animation: scale 14s infinite;
 }
+
+.bg-background {
+  --v-theme-overlay-multiplier: var(--v-theme-background-overlay-multiplier);
+
+  background-color: rgb(var(--v-theme-background)) !important;
+  color: rgb(var(--v-theme-on-background)) !important;
+}
+
+.bg-surface {
+  --v-theme-overlay-multiplier: var(--v-theme-surface-overlay-multiplier);
+
+  background-color: rgb(var(--v-theme-surface)) !important;
+  color: rgb(var(--v-theme-on-surface)) !important;
+}
+
 </style>
 
 <route lang="yaml">

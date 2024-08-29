@@ -81,7 +81,8 @@ class DangerTransController extends Controller
             ];
         }
         $res = $this->manyInsert(new DangerTransaction, $dangers);
-
+        
+        logging(['count' => count($dangers)], 'danger-transactions-scheduler');
     }
 
     private function commonSelect($request)

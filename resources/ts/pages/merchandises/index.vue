@@ -18,7 +18,7 @@ import { template } from 'lodash'
 
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { pgs, settle_types } = useStore()
+const { pgs, settle_types, cus_filters } = useStore()
 const password  = ref()
 const batchDialog = ref()
 const phoneNum2FAVertifyDialog = ref()
@@ -196,7 +196,10 @@ onMounted(() => {
                             </span>
                             <span v-else-if="_key == 'extra_col'">
                                 <UserExtraMenu :item="item" :type="0" :key="item['id']"/>
-                            </span>   
+                            </span>
+                            <span v-else-if="_key == 'custom_id'">
+                                {{ cus_filters.find(cus => cus.id === item[_key])?.name }}
+                            </span>
                             <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
                                 {{ item[_key] }}
                             </span>

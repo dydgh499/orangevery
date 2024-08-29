@@ -48,11 +48,6 @@ class FeeChangeHistoryController extends Controller
                     ->orderby('created_at', 'asc')
                     ->get();
 
-        logging([
-            'mcht_histories'=> json_decode(json_encode($mcht_histories), true),
-            'sf_histories'  => json_decode(json_encode($sf_histories), true),
-        ], 'fee-book-apply-scheduler');
-
         $date = date('Y-m-d H:i:s');
         foreach($sf_histories as $sf_history)
         {
@@ -83,8 +78,11 @@ class FeeChangeHistoryController extends Controller
             });
 
         }
-        return true;
-        logging(['result' => true], 'fee-book-apply-scheduler');
+
+        logging([
+            'mcht_histories'=> count($mcht_histories),
+            'sf_histories'  => count($sf_histories),
+        ], 'fee-book-apply-scheduler');
     }
 
     public function __construct(MchtFeeChangeHistory $mcht_fee_histories, SfFeeChangeHistory $sf_fee_histories)

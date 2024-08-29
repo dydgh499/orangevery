@@ -10,7 +10,7 @@ use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\DangerTransController;
 use App\Http\Controllers\Log\RealtimeSendHistoryController;
 use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
-
+use App\Http\Controllers\Manager\BatchUpdater\ApplyBookController;
 
 use App\Models\Log\DifferenceSettlementHistory;
 use App\Models\Log\MchtFeeChangeHistory;
@@ -30,10 +30,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('sanctum:prune-expired --hours=35')->daily();
-
-        $schedule->call(new FeeChangeHistoryController(new MchtFeeChangeHistory, new SfFeeChangeHistory))->daily();
         $schedule->call(new RealtimeSendHistoryController(new RealtimeSendHistory))->hourly();
+        $schedule->call(new ApplyBookController)->hourly();
+        $schedule->call(new FeeChangeHistoryController(new MchtFeeChangeHistory, new SfFeeChangeHistory))->daily();
+        $schedule->command('sanctum:prune-expired --hours=35')->daily();        
         $schedule->call(new DangerTransController(new DangerTransaction))->everySixHours();
 
         // 차액정산

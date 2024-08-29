@@ -39,7 +39,7 @@ class BatchUpdateSalesController extends BatchUpdateController
 
     private function getApplyRow($request, $cols)
     {
-        $query = $this->payModuleBatch($request);
+        $query = $this->salesforceBatch($request);
         if($request->apply_type === 0) 
             $row = $query->update($cols);
         else
