@@ -16,7 +16,7 @@ const tabs = <Tab[]>([
     { icon: 'tabler-table-options', title: '추가옵션' },
 ])
 if(getUserLevel() == 50) {
-    tabs.push({ icon: 'carbon:two-factor-authentication', title: '영업점 단계설정' })
+    tabs.push({ icon: 'carbon:two-factor-authentication', title: '유료옵션' })
 }
 const id = ref<number>(0)
 const route = useRoute()
@@ -37,7 +37,7 @@ watchEffect(() => {
                 <VWindowItem>
                     <BrandOptionOverview :item="item.pv_options" :key="item.id"/>
                 </VWindowItem>
-                <VWindowItem>
+                <VWindowItem v-if="getUserLevel() == 50">
                     <BrandAuthOverview :item="item.pv_options"/>
                 </VWindowItem>
             </template>

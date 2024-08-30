@@ -205,17 +205,16 @@ watchEffect(() => {
                 <VCol md="5" cols="4">
                     <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'"
                         :content="'해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.'"/>
+                    <VBtn type="button" variant="tonal" @click="payKeyCreate()" style="margin-left: 0.5em;" size="small">
+                        {{ "발급하기" }}
+                    </VBtn>
                 </VCol>
                 <VCol md="7">
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <VTextField type="text" v-model="props.item.pay_key" prepend-inner-icon="ic-baseline-vpn-key"
                             persistent-placeholder :disabled="true"/>
-                        <VBtn type="button" variant="tonal" @click="payKeyCreate()" style="margin-left: 0.5em;">
-                            {{ "발급" }}
-                            <VIcon end icon="material-symbols:add-to-home-screen" />
-                        </VBtn>
                         <VTooltip activator="parent" location="top">
-                            더블클릭해서 키를 복사하세요.
+                            더블클릭해서 결제 KEY를 복사하세요.
                         </VTooltip>
                     </div>
                 </VCol>
@@ -227,8 +226,8 @@ watchEffect(() => {
                 <VCol md="7" cols="12">
                     <span style="background-color: rgba(var(--v-theme-on-surface));">
                         {{ props.item.pay_key }}
-                        <VTooltip activator="parent" location="top">
-                            더블클릭또는 드래그하여 키를 복사하세요.
+                        <VTooltip activator="parent" location="top" v-if="props.item.pay_key">
+                            더블클릭또는 드래그하여 결제 KEY를 복사하세요.
                         </VTooltip>
                     </span>
                 </VCol>
@@ -240,17 +239,17 @@ watchEffect(() => {
                 <VCol md="5" cols="4">
                     <BaseQuestionTooltip :location="'top'" :text="'서명 KEY'"
                         :content="'노티발송시 데이터 위변조 방지 값으로 사용됩니다.'"/>
+                    <VBtn type="button" variant="tonal" @click="signKeyCreate()" style="margin-left: 0.5em;" size="small">
+                        {{ "발급하기" }}
+                    </VBtn>
                 </VCol>
                 <VCol md="7">
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <VTextField type="text" v-model="props.item.sign_key" prepend-inner-icon="ic-baseline-vpn-key"
                             persistent-placeholder :disabled="true"/>
-                        <VBtn type="button" variant="tonal" @click="signKeyCreate()" style="margin-left: 0.5em;">
-                            {{ "발급" }}
-                            <VIcon end icon="material-symbols:add-to-home-screen" />
-                        </VBtn>
-                        <VTooltip activator="parent" location="top">
-                            더블클릭해서 키를 복사하세요.
+
+                        <VTooltip activator="parent" location="top" v-if="props.item.sign_key">
+                            더블클릭해서 서명 KEY를 복사하세요.
                         </VTooltip>
                     </div>
                 </VCol>
@@ -263,7 +262,7 @@ watchEffect(() => {
                     <span style="background-color: rgba(var(--v-theme-on-surface));">
                         {{ props.item.sign_key }}
                         <VTooltip activator="parent" location="top">
-                            더블클릭또는 드래그하여 키를 복사하세요.
+                            더블클릭또는 드래그하여 서명 KEY를 복사하세요.
                         </VTooltip>
                     </span>
                 </VCol>

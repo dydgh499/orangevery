@@ -38,7 +38,7 @@ watchEffect(() => {
             </VBtn>
         </VCol>
     </VCard>
-    <VRow>
-        <FinanceVanCard v-for="finance_van in finance_vans" :key="finance_van.id" style="margin-top: 1em;" :item="finance_van"/>
+    <VRow style="margin-top: 1em;">
+        <FinanceVanCard v-for="finance_van in finance_vans" :key="finance_van.id" :item="finance_van"/>
     </VRow>
 </template>

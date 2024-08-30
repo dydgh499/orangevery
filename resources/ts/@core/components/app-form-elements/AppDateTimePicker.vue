@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import FlatPickr from 'vue-flatpickr-component'
+import { Korean } from 'flatpickr/dist/l10n/ko.js';
+import FlatPickr from 'vue-flatpickr-component';
 
 // @ts-expect-error There won't be declaration file for it
-import { VField, filterFieldProps, makeVFieldProps } from 'vuetify/lib/components/VField/VField'
+import { VField, filterFieldProps, makeVFieldProps } from 'vuetify/lib/components/VField/VField';
 
 // @ts-expect-error There won't be declaration file for it
-import { VInput, makeVInputProps } from 'vuetify/lib/components/VInput/VInput'
+import { VInput, makeVInputProps } from 'vuetify/lib/components/VInput/VInput';
 
 // @ts-expect-error There won't be declaration file for it
-import { filterInputAttrs } from 'vuetify/lib/util/helpers'
+import { filterInputAttrs } from 'vuetify/lib/util/helpers';
 
 // inherit Attribute make false
 defineOptions({
@@ -78,11 +79,11 @@ const onClear = (el: MouseEvent) => {
 const emitModelValue = (val: string) => {
   emit('update:modelValue', val)
 }
-
-const elementId = computed(() => {
-  const _elementIdToken = fieldProps.id || fieldProps.label
-  return _elementIdToken ? `app-picker-field-${_elementIdToken}-${Math.random().toString(36).slice(2, 7)}` : undefined
+watchEffect(() => {
+    if(refFlatPicker.value)
+        refFlatPicker.value.fp.set('locale', Korean)
 })
+
 </script>
 
 <template>
@@ -146,12 +147,12 @@ const elementId = computed(() => {
     <!-- flat picker for inline props -->
     <FlatPickr
       v-if="isInlinePicker"
-      v-bind="compAttrs"
-      ref="refFlatPicker"
-      :model-value="props.modelValue"
-      @update:model-value="emitModelValue"
-      @on-open="isCalendarOpen = true"
-      @on-close="isCalendarOpen = false"
+        v-bind="compAttrs"
+        ref="refFlatPicker"
+        :model-value="props.modelValue"
+        @update:model-value="emitModelValue"
+        @on-open="isCalendarOpen = true"
+        @on-close="isCalendarOpen = false"
     />
   </div>
 </template>

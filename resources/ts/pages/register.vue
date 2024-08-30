@@ -40,10 +40,7 @@ const business_num = ref('')
 const user_name = ref('')
 const user_pw = ref('')
 const user_pw_check = ref('')
-/*
-  Admin user_name: <strong>admin@demo.com</strong> / Pass: <strong>admin</strong>
-  Client user_name: <strong>client@demo.com</strong> / Pass: <strong>client</strong>
-*/
+
 const getAbilities = (): UserAbility[] => {
     let auth: UserAbility[] = [];
     auth.push({ action: 'manage', subject: 'all' })
@@ -88,76 +85,63 @@ const sameValidaor = () => {
 </script>
 
 <template>
-    <VRow no-gutters class="auth-wrapper">
-        <VCol lg="8" class="d-none d-lg-flex">
-            <div class="position-relative auth-bg rounded-lg w-100 ma-8 me-0">
+    <VRow no-gutters class="auth-wrapper bg-surface">
+        <VCol lg="8" class="d-none d-md-flex">
+            <div class="position-relative bg-background rounded-lg w-100 ma-8 me-0">
                 <div class="d-flex align-center justify-center w-100 h-100">
                     <VImg max-width="605" :src="authThemeImg" class="auth-illustration mt-16 mb-2" />
                 </div>
-
                 <VImg :src="authThemeMask" class="auth-footer-mask" />
             </div>
         </VCol>
 
-        <VCol cols="12" lg="4" class="d-flex align-center justify-center">
-            <VCard flat :max-width="500" class="mt-sm-0 pa-4">
+        <VCol cols="12" lg="4" class="auth-card-v2 d-flex align-center justify-center">
+            <VCard flat class="mt-sm-0 pa-4" :max-width="500">
                 <VCardText>
                     <VNodeRenderer :nodes="themeConfig.app.logo" class="mb-6" />
 
-                    <h5 class="text-h5 font-weight-semibold mb-1">
-                        {{ themeConfig.app.title }}에 오신것을 환영합니다! 👋🏻
-                    </h5>
+                    <h4 class="text-h4 mb-1 font-weight-bold">
+                        <span class="text-capitalize">{{ themeConfig.app.title }}</span>에 오신것을 환영합니다! 👋🏻
+                    </h4>
                     <p class="mb-0">
-                        서비스 운영에 사용할 본사 계정을 등록해주세요.
+                        서비스 운영에 사용할 본사계정을 등록해주세요.
                     </p>
                 </VCardText>
                 <VCardText>
                     <VForm ref="refVForm" @submit.prevent="onSubmit">
                         <VRow>
-
-                            <VCol cols="12">
+                            <VCol cols="12" style="height: 4.5em;">
                                 <VTextField v-model="ceo_name" label="대표자명 입력" type="ceo_name"
                                     :rules="[requiredValidatorV2(ceo_name, '대표자명')]" />
                             </VCol>
-                            <VCol cols="12">
+                            <VCol cols="12" style="height: 4.5em;">
                                 <VTextField v-model="phone_num" label="전화번호 입력" type="phone_num"
                                     :rules="[requiredValidatorV2(phone_num, '전화번호')]" />
                             </VCol>
-                            <VCol cols="12">
+                            <VCol cols="12" style="height: 4.5em;">
                                 <VTextField v-model="business_num" label="사업자등록번호 입력" type="business_num"
                                     :rules="[requiredValidatorV2(business_num, '사업자등록번호')]" />
                             </VCol>
-                            <!-- user_name -->
-                            <VCol cols="12">
+                            <VCol cols="12" style="height: 4.5em;">
                                 <VTextField v-model="user_name" label="아이디 입력" type="user_name" :rules="[requiredValidatorV2(user_name, '아이디'), lengthValidator(user_name, 8)]"
                                     :error-messages="errors.message" />
                             </VCol>
-                            <VCol cols="12">
+                            <VCol cols="12" style="height: 4.5em;">
                                 <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidatorV2(user_pw, '패스워드'), passwordValidatorV2]"
                                     :type="isPasswordVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                                     @click:append-inner="isPasswordVisible = !isPasswordVisible" />
                             </VCol>
-                            <!-- password -->
                             <VCol cols="12">
-                                <VTextField v-model="user_pw_check" label="패스워드 확인" :rules="[requiredValidatorV2(user_pw_check, '패스워드확인'), passwordValidatorV2]"
+                                <div style="height: 4em;">
+                                    <VTextField v-model="user_pw_check" label="패스워드 확인" :rules="[requiredValidatorV2(user_pw_check, '패스워드확인'), passwordValidatorV2]"
                                     :type="isPasswordVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                                     @click:append-inner="isPasswordVisible = !isPasswordVisible" />
-
-                                <div class="d-flex align-center flex-wrap justify-space-between mt-2 mb-4">
-                                    <div class="text-primary ms-2 mb-1" style="cursor: pointer;">
-                                    </div>
                                 </div>
                                 <VBtn block type="submit">
-                                    Register
+                                    REGISTER
                                 </VBtn>
-                            </VCol>
-
-                            <!-- create account -->
-                            <VCol cols="12" class="text-center">
-                            </VCol>
-                            <VCol cols="12" class="d-flex align-center">
                             </VCol>
                         </VRow>
                     </VForm>
@@ -170,24 +154,6 @@ const sameValidaor = () => {
 
 <style lang="scss">
 @use "@core-scss/template/pages/page-auth.scss";
-
-@keyframes scale {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.1);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-.auth-illustration {
-  animation: scale 14s infinite;
-}
 </style>
 
 <route lang="yaml">

@@ -1,15 +1,16 @@
 <script lang="ts" setup>
-import type { Brand } from '@/views/types'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import FileLogoInput from '@/layouts/utils/FileLogoInput.vue'
 import KakaotalkPreview from '@/layouts/utils/KakaotalkPreview.vue'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
-import { useTheme } from 'vuetify'
-import { themeConfig } from '@themeConfig'
+import type { Brand } from '@/views/types'
 import authV2LoginDefault1 from '@images/pages/auth-v2-login-default1.png'
 import authV2LoginDefault2 from '@images/pages/auth-v2-login-default2.png'
 import authV2LoginDefault3 from '@images/pages/auth-v2-login-default3.png'
 import authV2LoginDefault4 from '@images/pages/auth-v2-login-default4.png'
+import { themeConfig } from '@themeConfig'
+import { useTheme } from 'vuetify'
+import { VDivider } from 'vuetify/lib/components/index.mjs'
 
 interface Props {
     item: Brand,
@@ -99,13 +100,14 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                     </VRow>
-                    <br>
+                    <VDivider style="margin: 1em 0;"/>
                     <VCardTitle>로그인 페이지 배경 이미지</VCardTitle>
                     <VRow class="pt-5">
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <SwiperPreview :items="login_imgs" :preview="props.item.login_img ?? login_imgs[Math.floor(Math.random() * login_imgs.length)]"
-                                    :label="'배경'" :lmd="6" :rmd="6"
+                                <SwiperPreview :items="login_imgs" 
+                                    :preview="props.item.login_img ?? login_imgs[Math.floor(Math.random() * login_imgs.length)]"
+                                    :label="'로그인 배경'" :lmd="6" :rmd="6"
                                     @update:file="props.item.login_file = $event"
                                     @update:path="props.item.login_img = $event">
                                 </SwiperPreview>

@@ -65,6 +65,14 @@ const filterPgs = computed(() => {
                 {{ mchts.find(obj => obj.id === props.item.mcht_id)?.mcht_name }}
             </VCol>
         </VRow>
+        <!-- 👉 비고 -->
+        <VRow v-if="isAbleModiy(props.item.id)">
+            <VCol md="5" cols="5">결제모듈 별칭</VCol>
+            <VCol md="7">
+                <VTextField v-model="props.item.note" label="" placeholder='결제모듈 명칭을 입력해주세요.'
+                prepend-inner-icon="twemoji-spiral-notepad" />
+            </VCol>
+        </VRow>
 
         <VRow v-if="isAbleModiy(props.item.id)">
             <VCol md="5" cols="5">결제모듈 타입</VCol>
@@ -178,13 +186,6 @@ const filterPgs = computed(() => {
             </VCol>
             <VCol md="7">
                 {{ props.item.settle_fee }} ₩
-            </VCol>
-        </VRow>
-        <!-- 👉 비고 -->
-        <VRow v-if="isAbleModiy(props.item.id)">
-            <VCol>
-                <VTextarea v-model="props.item.note" counter label="결제모듈 별칭" placeholder='결제모듈 명칭을 적어주세요.😀'
-                    prepend-inner-icon="twemoji-spiral-notepad" auto-grow />
             </VCol>
         </VRow>
     </VCardItem>

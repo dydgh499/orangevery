@@ -166,39 +166,6 @@ const onSubmit = () => {
 
 <style lang="scss">
 @use "@core-scss/template/pages/page-auth.scss";
-
-@keyframes scale {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.1);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-.auth-illustration {
-  animation: scale 14s infinite;
-}
-
-.bg-background {
-  --v-theme-overlay-multiplier: var(--v-theme-background-overlay-multiplier);
-
-  background-color: rgb(var(--v-theme-background)) !important;
-  color: rgb(var(--v-theme-on-background)) !important;
-}
-
-.bg-surface {
-  --v-theme-overlay-multiplier: var(--v-theme-surface-overlay-multiplier);
-
-  background-color: rgb(var(--v-theme-surface)) !important;
-  color: rgb(var(--v-theme-on-surface)) !important;
-}
-
 </style>
 
 <route lang="yaml">

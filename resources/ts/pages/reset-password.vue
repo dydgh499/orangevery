@@ -92,19 +92,18 @@ const passwordCheckRules = computed(() => {
 </script>
 
 <template>
-    <VRow class="auth-wrapper bg-surface" no-gutters>
-        <VCol lg="8" class="d-none d-lg-flex">
+    <VRow no-gutters class="auth-wrapper bg-surface">
+        <VCol lg="8" class="d-none d-md-flex">
             <div class="position-relative bg-background rounded-lg w-100 ma-8 me-0">
                 <div class="d-flex align-center justify-center w-100 h-100">
                     <VImg max-width="605" :src="authThemeImg" class="auth-illustration mt-16 mb-2" />
                 </div>
-
-                <VImg class="auth-footer-mask" :src="authThemeMask" />
+                <VImg :src="authThemeMask" class="auth-footer-mask" />
             </div>
         </VCol>
 
-        <VCol cols="12" lg="4" class="d-flex align-center justify-center">
-            <VCard flat :max-width="500" class="mt-12 mt-sm-0 pa-4">
+        <VCol cols="12" lg="4" class="auth-card-v2 d-flex align-center justify-center">
+            <VCard flat class="mt-sm-0 pa-4" :max-width="500">
                 <VCardText>
                     <h4 class="text-h5 mb-1">
                         비밀번호 재설정 🔒
@@ -119,26 +118,24 @@ const passwordCheckRules = computed(() => {
                 <VCardText>
                     <VForm ref="refVForm" @submit.prevent="onSubmit">
                         <VRow no-gutters>
-                            <VCol cols="12">
+                            <VCol cols="12" style="height: 4.5em;">
                                 <VTextField v-model="user_pw" label="새 비밀번호"
                                     :type="isPasswordVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                                     :rules="passwordRules" @click:append-inner="isPasswordVisible = !isPasswordVisible"
                                     :error-messages="errors.message" />
                             </VCol>
-                            <VCol cols="12" style="margin: 24px 0;">
+                            <VCol cols="12" style="height: 4.5em;">
                                 <VTextField v-model="user_pw_check" label="새 비밀번호 확인" :rules="passwordCheckRules"
                                     :type="isPasswordCheckVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordCheckVisible ? 'tabler-eye-off' : 'tabler-eye'"
                                     @click:append-inner="isPasswordCheckVisible = !isPasswordCheckVisible" />
                             </VCol>
-                            <!-- Reset link -->
                             <VCol cols="12">
                                 <VBtn block type="submit">
                                     새 비밀번호 설정
                                 </VBtn>
                             </VCol>
-                            <!-- back to login -->
                             <VCol cols="12" style="margin-top: 24px;">
                                 <RouterLink class="d-flex align-center justify-center" :to="{ name: 'login' }">
                                     <VIcon icon="tabler-chevron-left" class="flip-in-rtl" />
@@ -156,24 +153,6 @@ const passwordCheckRules = computed(() => {
 
 <style lang="scss">
 @use "@core-scss/template/pages/page-auth.scss";
-
-@keyframes scale {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.1);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-.auth-illustration {
-  animation: scale 14s infinite;
-}
 </style>
 
 <route lang="yaml">

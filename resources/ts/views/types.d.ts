@@ -404,7 +404,6 @@ interface PaidOption {
     use_part_cancel: boolean, // 부분취소 사용여부
     use_settle_hold: boolean, // 지급보류
     use_hide_account: boolean, // 계좌 숨김
-    use_settle_count: boolean, // 정산시 개수 노출
     sales_parent_structure: boolean, // 영업점 종속구조
     use_specified_limit: boolean,   // 지정시간 제한
     use_syslink: boolean,

@@ -27,7 +27,10 @@ const previewStyle = `
     margin-block: 0;
     margin-inline: 0.5em;
 `;
-
+const containerStyle = `
+    max-width: ${(props.label === '로그인 배경' ? "27": "13")}em;
+    margin-right: auto;margin-left: auto;
+`
 const getFileExtension = (file_name: string) => {
     const dot = file_name.lastIndexOf('.') + 1
     return file_name.substring(dot, file_name.length).toLowerCase()
@@ -88,11 +91,11 @@ watchEffect(() => {
                 </VBtn>
             </div>
         </template>
-        <span v-else>{{ label+' 이미지' }}</span>
+        <span v-else>{{ props.label+' 이미지' }}</span>
     </VCol>
-    <VCol cols="12" :md="props.rmd" style="max-width: 13em;margin-right: auto;margin-left: auto;">
+    <VCol cols="12" :md="props.rmd" :style="containerStyle">
         <Preview :preview="preview" :style="`inline-size:20em !important;`" :preview-style="previewStyle" class="preview" :ext="ext" />
-        <VFileInput accept="image/*" show-size v-model="files" :label="label+' 이미지'"
+        <VFileInput accept="image/*" show-size v-model="files" :label="props.label+' 이미지'"
             prepend-icon=""
             prepend-inner-icon="tabler-camera-up" @change="upload()" style="padding: 0.5em;">
             <template #selection="{ fileNames }">

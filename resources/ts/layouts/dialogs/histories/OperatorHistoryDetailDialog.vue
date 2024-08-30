@@ -197,63 +197,65 @@ defineExpose({
                     </VCard>
                 </VCol>
                 <VCol md="8" cols="12">
-                    <VCard>
-                        <VCardText v-if="temp_history">
-                            <b>
-                                <div class="d-flex justify-space-between">
-                                    <h6 class="text-base font-weight-semibold me-3">
-                                        {{ temp_history.history_target }}
-                                        {{ temp_history.history_title ? " - "+temp_history.history_title : ''}}
-                                        <VChip :color="store.getSelectIdColor(temp_history.history_type)">
-                                            {{ history_types.find(history_type => history_type['id'] === temp_history.history_type)?.title  }}
-                                        </VChip>   
-                                    </h6>
-                                    <span class="text-sm">
-                                        활동시간: {{ temp_history.created_at }}
-                                    </span>
-                                </div>
-                            </b>
-                            <br>
-                            <VTable class="text-no-wrap" style="width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th class='list-square'>적용대상</th>
-                                        <th class='list-square'>
-                                            <div class="content">
-                                                이전 값
-                                            </div>
-                                        </th>
-                                        <th class='list-square'>
-                                            <div class="content">
-                                                변경 값
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(hist, key) in temp_history.after_history_detail" :key="key">
-                                        <th class='list-square'>{{ key }}</th>
-                                        <td class='list-square'>
-                                            <div class="content">
-                                                {{ temp_history.before_history_detail[key] }}
-                                                <VTooltip activator="parent" location="top" transition="scale-transition">
-                                                    <span>{{ temp_history.before_history_detail[key] }}</span>
-                                                </VTooltip>
-                                            </div>
-                                        </td>
-                                        <td :class="isChangeColor(temp_history.before_history_detail[key], hist)">
-                                            <div class="content">
-                                                {{ hist }}
-                                                <VTooltip activator="parent" location="top" transition="scale-transition">
-                                                    <span>{{ hist }}</span>
-                                                </VTooltip>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </VTable>
-                        </VCardText>
-                    </VCard>
+                    <Transition :name="'fade-transition'" mode="out-in">
+                        <VCard v-if="temp_history" :key="temp_history?.id">
+                            <VCardText>
+                                <b>
+                                    <div class="d-flex justify-space-between">
+                                        <h6 class="text-base font-weight-semibold me-3">
+                                            {{ temp_history.history_target }}
+                                            {{ temp_history.history_title ? " - "+temp_history.history_title : ''}}
+                                            <VChip :color="store.getSelectIdColor(temp_history.history_type)">
+                                                {{ history_types.find(history_type => history_type['id'] === temp_history.history_type)?.title  }}
+                                            </VChip>   
+                                        </h6>
+                                        <span class="text-sm">
+                                            활동시간: {{ temp_history.created_at }}
+                                        </span>
+                                    </div>
+                                </b>
+                                <br>
+                                <VTable class="text-no-wrap" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th class='list-square'>적용대상</th>
+                                            <th class='list-square'>
+                                                <div class="content">
+                                                    이전 값
+                                                </div>
+                                            </th>
+                                            <th class='list-square'>
+                                                <div class="content">
+                                                    변경 값
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(hist, key) in temp_history.after_history_detail" :key="key">
+                                            <th class='list-square'>{{ key }}</th>
+                                            <td class='list-square'>
+                                                <div class="content">
+                                                    {{ temp_history.before_history_detail[key] }}
+                                                    <VTooltip activator="parent" location="top" transition="scale-transition">
+                                                        <span>{{ temp_history.before_history_detail[key] }}</span>
+                                                    </VTooltip>
+                                                </div>
+                                            </td>
+                                            <td :class="isChangeColor(temp_history.before_history_detail[key], hist)">
+                                                <div class="content">
+                                                    {{ hist }}
+                                                    <VTooltip activator="parent" location="top" transition="scale-transition">
+                                                        <span>{{ hist }}</span>
+                                                    </VTooltip>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </VTable>
+                            </VCardText>
+                        </VCard>
+                    </Transition>
                 </VCol>
             </VRow>
         </VDialog>

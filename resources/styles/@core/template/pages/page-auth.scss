@@ -3,13 +3,6 @@
     min-block-size: 100dvh;
   }
 
-  .auth-v1-top-shape,
-  .auth-v1-bottom-shape {
-    position: absolute;
-    block-size: 233px;
-    inline-size: 238px;
-  }
-
   .auth-footer-mask {
     position: absolute;
     inset-block-end: 0;
@@ -21,17 +14,40 @@
   }
 
   .auth-illustration {
-    z-index: 1;
+    animation: scale 14s infinite;
   }
 
-  .auth-v1-top-shape {
-    inset-block-start: -77px;
-    inset-inline-start: -40px;
+  .bg-background {
+    --v-theme-overlay-multiplier: var(--v-theme-background-overlay-multiplier);
+
+    background-color: rgb(var(--v-theme-background)) !important;
+    color: rgb(var(--v-theme-on-background)) !important;
+  }
+
+  .bg-surface {
+    --v-theme-overlay-multiplier: var(--v-theme-surface-overlay-multiplier);
+
+    background-color: rgb(var(--v-theme-surface)) !important;
+    color: rgb(var(--v-theme-on-surface)) !important;
   }
 
   .auth-v1-bottom-shape {
     inset-block-end: -55px;
     inset-inline-end: -55px;
+  }
+
+  @keyframes scale {
+    0% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.1);
+    }
+
+    100% {
+      transform: scale(1);
+    }
   }
 }
 

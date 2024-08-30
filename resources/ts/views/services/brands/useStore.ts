@@ -209,7 +209,6 @@ export const defaultItemInfo = () => {
                 use_part_cancel: false,
                 use_settle_hold: false,
                 use_hide_account: false,
-                use_settle_count: true,
                 sales_parent_structure: false,
                 use_specified_limit: false,
                 use_syslink: false,
