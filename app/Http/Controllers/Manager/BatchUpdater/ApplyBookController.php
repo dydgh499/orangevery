@@ -12,8 +12,8 @@ use App\Models\Salesforce;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Traits\StoresTrait;
 
+use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Auth\AuthOperatorIP;
@@ -26,6 +26,8 @@ use Carbon\Carbon;
 
 class ApplyBookController extends Controller
 {
+    use ManagerTrait, ExtendResponseTrait;
+
     public static function getApplyWaitCount($orm, $apply_at)
     {
         return $orm->where('change_status', 0)->where('apply_at', $apply_at)->count();
@@ -91,5 +93,78 @@ class ApplyBookController extends Controller
             'merchandises' => $mcht_result,
             'payment_modules' => $pmod_result,
         ], 'apply-book-column-scheduler');
+    }
+
+    public function index(IndexRequest $request)
+    {
+        $dest_type = (int)$request->dest_type;
+        if($dest_type === 0)
+        {
+            $query = SalesforceColumnApplyBook::join('salesforces', 'salesforce_column_apply_books.sales_id', '=', 'salesforces.id');
+            $parent = 'salesforce_column_apply_books.';
+            $cols = [
+                $parent."*",
+                "salesforces.sales_name as dest_name"
+            ];
+        }
+        else if($dest_type === 1)
+        {
+            $query = MerchandiseColumnApplyBook::join('merchandises', 'merchandise_column_apply_books.mcht_id', '=', 'merchandises.id');
+            $parent = 'merchandise_column_apply_books.';
+            $cols = [
+                $parent."*",
+                "merchandises.mcht_name as dest_name"
+            ];
+        }
+        else if($dest_type === 2)
+        {
+            $query = PaymentModuleColumnApplyBook::join('payment_modules', 'payment_module_column_apply_books.pmod_id', '=', 'payment_modules.id')
+                ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id');
+            $parent = 'payment_module_column_apply_books.';
+            $cols  = [
+                $parent."*",
+                "merchandises.mcht_name as dest_name",
+                "payment_modules.note as pmod_note",
+            ];
+        }
+        else
+            return $this->extendResponse(1999, '잘못된 변경대상');
+
+        $query  = $query->where($parent.'brand_id', $request->user()->brand_id);
+        if($request->change_status !== null)
+            $query = $query->where($parent.'change_status', $request->change_status);
+
+        $data = $this->getIndexData($request, $query, $parent."id", $cols, $parent."apply_at");
+        foreach($data['content'] as $content)
+        {
+            $encode_data = [];
+            $apply_datas = json_decode($content->apply_data, true);
+            foreach($apply_datas as $key => $value)
+            {
+                $encode_data[__('validation.attributes.'.$key)] = $apply_datas[$key];
+            }
+            $content->apply_data = $encode_data;
+        }
+        return $this->response(0, $data);
+    }
+
+    /**
+     * 단일삭제
+     *
+     * @urlParam id integer required 유저 PK
+     */
+    public function destroy(Request $request, string $dest_type, int $id)
+    {
+        if($dest_type === 'salesforces')
+            $query = new SalesforceColumnApplyBook;
+        else if($dest_type === 'merchandises')
+            $query = new MerchandiseColumnApplyBook;
+        else if($dest_type === 'payment_modules')
+            $query = new PaymentModuleColumnApplyBook;
+        else
+            return $this->extendResponse(1999, '잘못된 변경대상');
+
+        $res = $query->where('id', $id)->delete();
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 }

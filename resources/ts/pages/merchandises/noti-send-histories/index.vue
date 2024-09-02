@@ -134,7 +134,7 @@ const getResponseBody = (body: string) => {
                                     </VChip>
                                 </span>
                                 <span v-else-if="_key == 'extra_col'">
-                                    <ExtraMenu :item="item"></ExtraMenu>
+                                    <ExtraMenu :item="item"/>
                                 </span>
                                 <span v-else>
                                     {{ item[_key] }}

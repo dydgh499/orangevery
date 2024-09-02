@@ -234,7 +234,7 @@ watchEffect(() => {
             </VRow>
         </template>
 
-        <template v-if="props.item.id != 0 && corp.pv_options.paid.use_online_pay">
+        <template v-if="props.item.id != 0 && corp.pv_options.paid.use_noti">
             <VRow v-if="isAbleModiy(props.item.id)">
                 <VCol md="5" cols="4">
                     <BaseQuestionTooltip :location="'top'" :text="'서명 KEY'"

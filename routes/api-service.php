@@ -27,6 +27,7 @@ use App\Http\Controllers\Manager\OperatorController;
 use App\Http\Controllers\Manager\PostController;
 use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Log\OperatorHistoryContoller;
+use App\Http\Controllers\Manager\BatchUpdater\ApplyBookController;
 
 Route::get('services/pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
 Route::get('popups/currently', [PopupController::class, 'currently']);
@@ -77,6 +78,8 @@ Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
         Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
         Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
         Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);
+        Route::get('book-applies', [ApplyBookController::class, 'index']);
+        Route::delete('book-applies/{dest_type}/{id}', [ApplyBookController::class, 'destroy']);
     });
     Route::apiResource('popups', PopupController::class);
 });

@@ -76,11 +76,11 @@ class NotiSendHistoryController extends Controller
     /*
      * 노티 재전송
      */
-    public function retry(Request $request, $trans_id)
+    public function retry(Request $request, int $id)
     {
         $noti  = $this->noti_send_histories
             ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
-            ->where('noti_send_histories.trans_id', $trans_id)
+            ->where('noti_send_histories.id', $id)
             ->orderby('retry_count', 'desc')
             ->first($this->cols);
 
@@ -110,14 +110,25 @@ class NotiSendHistoryController extends Controller
     /*
      * 노티 상세정보 확인
      */
-    public function show(Request $request, $trans_id)
+    public function show(Request $request, int $id)
     {
         $noti  = $this->noti_send_histories
             ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
-            ->where('noti_send_histories.trans_id', $trans_id)
+            ->where('noti_send_histories.id', $id)
             ->first($this->cols);
         [$params, $headers] = NotiRetrySender::getNotiSendFormat($noti, $noti->temp);
         $params['send_url'] = $noti->send_url;
         return $this->response(0, $params);
+    }
+
+    /**
+     * 단일삭제
+     *
+     * @urlParam id integer required 노티 PK
+     */
+    public function destory(Request $request, int $id)
+    {
+        $res = $this->delete($this->noti_send_histories->where('id', $id));
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 }

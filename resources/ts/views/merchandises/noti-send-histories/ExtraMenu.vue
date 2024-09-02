@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { NotiSendHistory } from '@/views/types'
 import { useRequestStore } from '@/views/request'
+import type { NotiSendHistory } from '@/views/types'
 import { getUserLevel } from '@axios'
 
 interface Props {
@@ -18,7 +18,7 @@ const notiDetail = <any>(inject('notiDetail'))
 const retry = async () => {
     if(await alert.value.show('정말 재발송하시겠습니까?'))
     {
-        const url = '/api/v1/manager/merchandises/noti-send-histories/'+props.item.trans_id+'/retry'
+        const url = '/api/v1/manager/merchandises/noti-send-histories/'+props.item.id+'/retry'
         const r = await post(url, {})
         if(r.status == 201)
             snackbar.value.show('성공하였습니다.', 'success')
@@ -29,7 +29,7 @@ const retry = async () => {
 }
 
 const detail = async () => {
-    const url = '/api/v1/manager/merchandises/noti-send-histories/'+props.item.trans_id
+    const url = '/api/v1/manager/merchandises/noti-send-histories/'+props.item.id
     const r = await get(url)
     notiDetail.value.show(r.data)
 }

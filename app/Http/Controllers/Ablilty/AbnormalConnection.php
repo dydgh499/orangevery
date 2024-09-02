@@ -246,7 +246,7 @@ class AbnormalConnection
     }
 
     /*
-        9. 브라우저가 아님
+        9. 브라우저 미감지
     */
     static public function notBrowser()
     {

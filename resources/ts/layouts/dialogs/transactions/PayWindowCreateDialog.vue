@@ -72,7 +72,14 @@ defineExpose({
         <!-- Dialog close btn -->
         <DialogCloseBtn @click="visible = false" />
         <!-- Dialog Content -->
-        <VCard title="결제링크 생성하기">
+        <VCard>            
+            <VCol cols="12">
+                <VRow no-gutters>
+                    <VCol cols="12" :md="6">
+                        <VCardTitle>결제링크 생성({{ payment_module.note }})</VCardTitle>
+                    </VCol>
+                </VRow>
+            </VCol>
             <VCardText>
                 <VForm ref="vForm">
                     <VCol cols="12">

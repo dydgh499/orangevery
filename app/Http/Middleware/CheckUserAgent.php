@@ -16,7 +16,8 @@ class CheckUserAgent
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+
+    public function isValidUserAgent($request)
     {
         // 정상적인 브라우저의 User-Agent 패턴 목록
         $vaild_user_agents = [
@@ -33,16 +34,30 @@ class CheckUserAgent
         ];
         $user_agent = $request->header('User-Agent');
         // User-Agent가 정상적인 브라우저 목록에 포함되는지 검사
-        $is_valid = false;
         foreach ($vaild_user_agents as $validuser_agent) 
         {
-            if (strpos($user_agent, $validuser_agent) !== false) {
-                $is_valid = true;
-                break;
-            }
+            if (strpos($user_agent, $validuser_agent) !== false) 
+                return true;
         }
+        return false;
+    }
 
-        if(!$is_valid)
+    public function isExceptIP($request)
+    {
+        $except_ips = [
+            '211.188.197.19'    //SKT 문자관련 IP 대역
+        ];
+        foreach ($except_ips as $except_ip) 
+        {
+            if (strpos($request->ip(), $except_ip) !== false) 
+                return true;
+        }
+        return false;
+    }
+
+    public function handle(Request $request, Closure $next): Response
+    {
+        if($this->isValidUserAgent($request) === false && $this->isExceptIP($request) === false)
             return $this->response(958);
         else
             return $next($request);

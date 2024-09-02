@@ -173,7 +173,7 @@ class MessageController extends Controller
                     $this->bonaejaDepositValidate($bonaeja, $brand['name']);
 
                     return [$res['body']['code'] == 100 ? 0 : 1999, $res['body']['message']];
-                }   
+                }
             }
             else
                 return [1999, '휴대폰 인증허용 회수를 초과하였습니다.'];
@@ -213,6 +213,9 @@ class MessageController extends Controller
                 'verify_code' => $verification_number,
                 'verify_date' => date('Y-m-d H:i:s')
             ]);
+            /*
+            *   phone-auth-limit-count-
+            */
             return $this->response(0,  ['token' => $this->aes256_encode($token)]);
         }
         else

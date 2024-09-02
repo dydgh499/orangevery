@@ -44,6 +44,10 @@ const getAbilitiesMenu = computed(() => {
             title: '민원 관리',
             to: 'complaints',
         })
+        operations[0].children.push({
+            title: '예약변경 관리',
+            to: 'services-book-applies',
+        })
     }
     return [
         { heading: 'Service' },

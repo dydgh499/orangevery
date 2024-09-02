@@ -38,14 +38,38 @@ class AuthPhoneNum
         }
     }
 
+    static public function limitGet($mcht_id, $phone_num)
+    {
+        $over_key_name = "phone-auth-limit-over-".$mcht_id.":".$phone_num;
+        return Redis::get($over_key_name);
+    }
+
+    static public function limitSet($mcht_id, $phone_num)
+    {
+        $end_time = $e_tm->diffInSeconds(Carbon::now());
+        $over_key_name = "phone-auth-limit-over-".$mcht_id.":".$phone_num;
+        Redis::set($over_key_name, 'over', 'EX', $end_time);
+    }
+
+    static public function countGet($mcht_id, $phone_num)
+    {
+        $count_key_name = "phone-auth-limit-count-".$mcht_id.":".$phone_num;
+        return ((int)Redis::get($count_key_name)) + 1;
+    }
+
+    static public function countSet($mcht_id, $phone_num, $try_count)
+    {
+        $end_time = $e_tm->diffInSeconds(Carbon::now());
+        $count_key_name = "phone-auth-limit-count-".$mcht_id.":".$phone_num;
+        Redis::set($count_key_name, $try_count, 'EX', $end_time); 
+    }
     
     // 휴대폰 인증허용회수 검증
     static public function limitValidate($brand, $phone_num, $mcht_id)
     {
         if($brand['pv_options']['paid']['use_pay_verification_mobile'])
         {
-            $over_key_name = "phone-auth-limit-over-".$mcht_id.":".$phone_num;
-            $is_over = Redis::get($over_key_name);
+            $is_over = self::limitGet($mcht_id, $phone_num);
             if($is_over)
                 return false;
             else
@@ -58,15 +82,12 @@ class AuthPhoneNum
                         [$time_type, $s_tm, $e_tm] = self::payDisableTimeType($mcht->phone_auth_limit_s_tm, $mcht->phone_auth_limit_e_tm);
                         if($time_type > 0)
                         {
-                            $end_time = $e_tm->diffInSeconds(Carbon::now());
+                            $try_count = self::countGet($mcht_id, $phone_num);                            
+                            self::countSet($mcht_id, $phone_num, $try_count);
 
-                            $count_key_name = "phone-auth-limit-count-".$mcht_id.":".$phone_num;
-                            $try_count = ((int)Redis::get($count_key_name)) + 1;
-                            
-                            Redis::set($count_key_name, $try_count, 'EX', $end_time);                            
                             if($mcht->phone_auth_limit_count < $try_count)
                             {
-                                Redis::set($over_key_name, 'over', 'EX', $end_time);
+                                self::limitSet($mcht_id, $phone_num);
                                 return false;
                             }
                             else

@@ -52,8 +52,8 @@ defineExpose({
         <VCard>
             <VCol cols="12">
                 <VRow no-gutters>
-                    <VCol cols="6" :md="6">
-                        <VCardTitle>결제창 정보</VCardTitle>
+                    <VCol cols="12" :md="6">
+                        <VCardTitle>결제창 정보({{ payment_module.note }})</VCardTitle>
                     </VCol>
                     <VCol cols="12" :md="6">
                         <div v-if="isVisiableRemainTime(payment_module)" 
