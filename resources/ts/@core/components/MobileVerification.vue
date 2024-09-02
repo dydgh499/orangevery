@@ -42,7 +42,9 @@ const handleKeyDownEvent = (index: number) => {
 const requestCodeIssuance = async () => {
     try {
         const r = await axios.post('/api/v1/bonaejas/mobile-code-issuance', { 
-            phone_num: props.phone_num, brand_id: corp.id, mcht_id: props.merchandise.id
+            phone_num: props.phone_num, 
+            brand_id: corp.id, 
+            mcht_id: props.merchandise.id
         })
         snackbar.value.show('휴대폰번호로 인증번호를 보냈습니다!<br>6자리 인증번호를 입력해주세요.', 'success')
         button_status.value = 1
@@ -62,7 +64,12 @@ const verification = async () => {
     }
     else if (button_status.value === 1) {
         try {
-            const r = await axios.post('/api/v1/bonaejas/mobile-code-auth', { phone_num: props.phone_num, verification_number: digits.value.join('') })
+            const r = await axios.post('/api/v1/bonaejas/mobile-code-auth', { 
+                phone_num: props.phone_num, 
+                verification_number: digits.value.join(''),
+                brand_id: corp.id, 
+                mcht_id: props.merchandise.id
+            })
             emits('update:token', r.data.token)
             button_status.value = 2
             snackbar.value.show('인증에 성공하였습니다.', 'success')

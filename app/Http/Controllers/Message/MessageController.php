@@ -213,9 +213,12 @@ class MessageController extends Controller
                 'verify_code' => $verification_number,
                 'verify_date' => date('Y-m-d H:i:s')
             ]);
-            /*
-            *   phone-auth-limit-count-
-            */
+
+            if($request->mcht_id !== null)
+            {
+                $brand = BrandInfo::getBrandById($request->brand_id);
+                AuthPhoneNum::clearValidate($brand, $request->mcht_id, $phone_num);
+            }
             return $this->response(0,  ['token' => $this->aes256_encode($token)]);
         }
         else

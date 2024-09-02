@@ -44,22 +44,20 @@ class AuthPhoneNum
         return Redis::get($over_key_name);
     }
 
-    static public function limitSet($mcht_id, $phone_num)
-    {
-        $end_time = $e_tm->diffInSeconds(Carbon::now());
-        $over_key_name = "phone-auth-limit-over-".$mcht_id.":".$phone_num;
-        Redis::set($over_key_name, 'over', 'EX', $end_time);
-    }
-
     static public function countGet($mcht_id, $phone_num)
     {
         $count_key_name = "phone-auth-limit-count-".$mcht_id.":".$phone_num;
         return ((int)Redis::get($count_key_name)) + 1;
     }
 
-    static public function countSet($mcht_id, $phone_num, $try_count)
+    static public function limitSet($mcht_id, $phone_num, $end_time)
     {
-        $end_time = $e_tm->diffInSeconds(Carbon::now());
+        $over_key_name = "phone-auth-limit-over-".$mcht_id.":".$phone_num;
+        Redis::set($over_key_name, 'over', 'EX', $end_time);
+    }
+
+    static public function countSet($mcht_id, $phone_num, $try_count, $end_time)
+    {
         $count_key_name = "phone-auth-limit-count-".$mcht_id.":".$phone_num;
         Redis::set($count_key_name, $try_count, 'EX', $end_time); 
     }
@@ -82,12 +80,13 @@ class AuthPhoneNum
                         [$time_type, $s_tm, $e_tm] = self::payDisableTimeType($mcht->phone_auth_limit_s_tm, $mcht->phone_auth_limit_e_tm);
                         if($time_type > 0)
                         {
+                            $end_time = $e_tm->diffInSeconds(Carbon::now());
                             $try_count = self::countGet($mcht_id, $phone_num);                            
-                            self::countSet($mcht_id, $phone_num, $try_count);
+                            self::countSet($mcht_id, $phone_num, $try_count, $end_time);
 
                             if($mcht->phone_auth_limit_count < $try_count)
                             {
-                                self::limitSet($mcht_id, $phone_num);
+                                self::limitSet($mcht_id, $phone_num, $end_time);
                                 return false;
                             }
                             else
@@ -131,5 +130,14 @@ class AuthPhoneNum
             }
         }
         return [0, '', ''];
+    }
+
+    static public function clearValidate($brand, $phone_num, $mcht_id)
+    {
+        if($brand['pv_options']['paid']['use_pay_verification_mobile'])
+        {
+            self::limitSet($mcht_id, $phone_num, 1);
+            self::countSet($mcht_id, $phone_num, 0, 1);
+        }
     }
 }
