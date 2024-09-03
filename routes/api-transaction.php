@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Manager\Transaction\TransactionController;
 use App\Http\Controllers\Manager\Transaction\TransactionSummaryController;
+use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateTransactionController;
 
 use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
 use App\Http\Controllers\Log\RealtimeSendHistoryController;
@@ -23,11 +24,17 @@ use App\Http\Controllers\Log\CollectWithdrawHistoryController;
 Route::prefix('transactions')->group(function() {          
     Route::middleware(['is.operate'])->group(function() {
         Route::middleware(['is.edit.able'])->group(function() {
-            Route::post('batch-retry', [TransactionController::class, 'batchRetry']);
-            Route::post('batch-self-retry', [TransactionController::class, 'batchSelfRetry']);    
-            Route::post('change-settle-date', [TransactionController::class, 'changeSettleDate']);
-            Route::post('remove-deposit-fee', [TransactionController::class, 'removeDepositFee']);
+            Route::post('notis/batch-retry', [TransactionController::class, 'batchRetry']);
+            Route::post('notis/batch-self-retry', [TransactionController::class, 'batchSelfRetry']);    
             Route::post('settle/merchandises/representative-settle', [RepMerchandiseController::class, 'settlement']);
+
+            Route::prefix('batch-updaters')->group(function() {
+                Route::delete('remove', [BatchUpdateTransactionController::class, 'batchRemove']);
+                Route::post('change-settle-date', [BatchUpdateTransactionController::class, 'changeSettleDate']);
+                Route::post('set-custom-filter', [BatchUpdateTransactionController::class, 'setCustomFilter']);
+                Route::post('remove-deposit-fee', [BatchUpdateTransactionController::class, 'removeDepositFee']);
+                Route::post('single-deposit-cancel-job-reservation', [BatchUpdateTransactionController::class, 'singleDepositCancelJobReservation']);
+            });
         });
     
         Route::prefix('settle-histories')->group(function() {
@@ -50,12 +57,11 @@ Route::prefix('transactions')->group(function() {
                 Route::post('salesforces/batch-deposit', [SalesSettleHistoryController::class, 'setBatchDeposit']);
             });
             Route::post('merchandises/single-deposit', [MchtSettleHistoryController::class, 'singleDeposit']);
-            Route::post('merchandises/single-deposit-cancel-job-reservation', [MchtSettleHistoryController::class, 'singleDepositCancelJobReservation']);
         });
         Route::post('settle/merchandises/deposit-validate', [MchtSettleController::class, 'depositValidate']);
     });
 
-    Route::post('noti/{id}', [TransactionController::class, 'noti']);
+    Route::post('notis/{id}', [TransactionController::class, 'noti']);
     Route::post('cancel', [TransactionController::class, 'cancel']);
     Route::get('chart', [TransactionController::class, 'chart']);
     Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);

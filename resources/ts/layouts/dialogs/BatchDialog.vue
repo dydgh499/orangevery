@@ -2,6 +2,7 @@
 import MchtBatchOverview from '@/layouts/components/batch-updaters/MchtBatchOverview.vue'
 import PayModuleBatchOverview from '@/layouts/components/batch-updaters/PayModuleBatchOverview.vue'
 import SalesBatchOverview from '@/layouts/components/batch-updaters/SalesBatchOverview.vue'
+import TransactionBatchOverview from '@/layouts/components/batch-updaters/TransactionBatchOverview.vue'
 import { ItemTypes } from '@core/enums'
 
 interface Props {
@@ -26,13 +27,15 @@ defineExpose({
 });
 </script>
 <template>
-    <VDialog v-model="visible" persistent style="max-width: 1100px;">
+    <VDialog v-model="visible" persistent :style="`max-width: ${ItemTypes.Transaction ? '700' : '1100'}px;`">
         <DialogCloseBtn @click="visible = !visible" />
         <MchtBatchOverview :selected_idxs="props.selected_idxs" :selected_sales_id="props.selected_sales_id" :selected_level="props.selected_level" v-if="props.item_type === ItemTypes.Merchandise"
             @update:select_idxs="emits('update:select_idxs', $event)"/>
         <PayModuleBatchOverview :selected_idxs="props.selected_idxs" :selected_sales_id="props.selected_sales_id" :selected_level="props.selected_level" v-if="props.item_type === ItemTypes.PaymentModule"
             @update:select_idxs="emits('update:select_idxs', $event)"/>
         <SalesBatchOverview :selected_idxs="props.selected_idxs" v-if="props.item_type === ItemTypes.Salesforce"
+            @update:select_idxs="emits('update:select_idxs', $event)"/>
+        <TransactionBatchOverview :selected_idxs="props.selected_idxs" v-if="props.item_type === ItemTypes.Transaction"
             @update:select_idxs="emits('update:select_idxs', $event)"/>
     </VDialog>
 </template>

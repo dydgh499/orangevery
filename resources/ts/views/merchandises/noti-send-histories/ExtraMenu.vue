@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRequestStore } from '@/views/request'
+import { notiSendHistoryInterface } from '@/views/transactions/transactions'
 import type { NotiSendHistory } from '@/views/types'
 import { getUserLevel } from '@axios'
 
@@ -8,25 +9,9 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const { remove, post, get } = useRequestStore()
-
-const store = <any>(inject('store'))
-const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
+const { get } = useRequestStore()
+const { notiSend, notiRemove } = notiSendHistoryInterface()
 const notiDetail = <any>(inject('notiDetail'))
-
-const retry = async () => {
-    if(await alert.value.show('정말 재발송하시겠습니까?'))
-    {
-        const url = '/api/v1/manager/merchandises/noti-send-histories/'+props.item.id+'/retry'
-        const r = await post(url, {})
-        if(r.status == 201)
-            snackbar.value.show('성공하였습니다.', 'success')
-        else
-            snackbar.value.show(r.data.message, 'error')
-        store.setTable()
-    }
-}
 
 const detail = async () => {
     const url = '/api/v1/manager/merchandises/noti-send-histories/'+props.item.id
@@ -40,7 +25,7 @@ const detail = async () => {
         <VIcon size="22" icon="tabler-dots-vertical" />
         <VMenu activator="parent" width="230">
             <VList>
-                <VListItem value="retry" @click="retry()">
+                <VListItem value="retry" @click="notiSend(props.item.id)">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="gridicons:reply" />
                     </template>
@@ -52,7 +37,7 @@ const detail = async () => {
                     </template>
                     <VListItemTitle>상세이력</VListItemTitle>
                 </VListItem>
-                <VListItem value="history" @click="remove('/merchandises/noti-send-histories', props.item, false)" v-if="getUserLevel() >= 35">
+                <VListItem value="history" @click="notiRemove(props.item)" v-if="getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:receipt" />
                     </template>

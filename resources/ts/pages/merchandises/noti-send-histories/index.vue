@@ -5,22 +5,20 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import ExtraMenu from '@/views/merchandises/noti-send-histories/ExtraMenu.vue'
 import { useSearchStore } from '@/views/merchandises/noti-send-histories/useStore'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
-import { useRequestStore } from '@/views/request'
 import { selectFunctionCollect } from '@/views/selected'
+import { notiSendHistoryInterface } from '@/views/transactions/transactions'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { post } = useRequestStore()
+const { notiBatchSend } = notiSendHistoryInterface()
 const notiDetail = ref()
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 provide('notiDetail', notiDetail)
-const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
 const search_placeholder = getUserLevel() >= 35 ? "MID, TID, 승인번호, 가맹점명 검색" : "승인번호 검색"
 
 const httpCodeColor = (http_code: number) => {
@@ -31,17 +29,9 @@ const httpCodeColor = (http_code: number) => {
     else
         return "error"
 }
+
 const batchRetry = async () => {
-    if (await alert.value.show('정말 일괄 재발송하시겠습니까?')) {
-        const params = { selected: selected.value }
-        const url = '/api/v1/manager/merchandises/noti-send-histories/batch-retry'
-        const r = await post(url, params)
-        if (r.status == 201)
-            snackbar.value.show('성공하였습니다.', 'success')
-        else
-            snackbar.value.show(r.data.message, 'error')
-        store.setTable()
-    }
+    notiBatchSend(selected.value)
 }
 
 const getResponseBody = (body: string) => {

@@ -1,10 +1,18 @@
+import { useRequestStore } from '@/views/request';
 import type { NotiSendHistory, RealtimeHistory, Transaction } from '@/views/types';
+import { getUserLevel } from '@axios';
 import { StatusColors } from '@core/enums';
+import corp from '@corp';
 
 export const notiSendHistoryInterface = () => {
+    const alert = <any>(inject('alert'))
+    const snackbar = <any>(inject('snackbar'))
+    const errorHandler = <any>(inject('$errorHandler'))
+    const { remove, post } = useRequestStore()
+
     const notiSendDetailClass = (history: NotiSendHistory) => {
         if(history.http_code === 200 || history.http_code === 201)
-            return 'text-success'
+            return ''
         else 
             return 'text-error'
     }
@@ -28,7 +36,6 @@ export const notiSendHistoryInterface = () => {
         }
     }
 
-
     const notiSendMessage = (item: Transaction):string => {
         const code = notiSendResult(item)
         if(code === StatusColors.Default)
@@ -43,15 +50,82 @@ export const notiSendHistoryInterface = () => {
             return '알수없는 상태'
     }
 
+    const notiBatchSendByTrans = async (end_point: string, select_idxs: number[], emits:any) => {
+        if(select_idxs.length) {
+            if (await alert.value.show('정말 일괄 재발송하시겠습니까?')) {
+                const r = await post(`/api/v1/manager/transactions/notis/${end_point}`, { selected: select_idxs })
+                if (r.status == 201)
+                    snackbar.value.show('성공하였습니다.', 'success')
+                else
+                    snackbar.value.show(r.data.message, 'error')            
+                emits('update:select_idxs', [])
+            }    
+        }
+        else
+            snackbar.value.show('매출을 1개이상 선택해주세요.', 'error')
+    }
+
+    const notiSendByTrans = async (trans_id: number) => {
+        if (await alert.value.show('정말 노티 재발송을 하시겠습니까?')) {
+            try {
+                const r = await post('/api/v1/manager/transactions/notis/'+trans_id, {}, true)
+            }
+            catch (e: any) {
+                snackbar.value.show(e.response.data.message, 'error')
+                const r = errorHandler(e)
+            }
+        }
+    }
+
+    const notiBatchSend = async (select_idxs: number[]) => {
+        if(select_idxs.length) {
+            if (await alert.value.show('정말 일괄 재발송하시겠습니까?')) {
+                const r = await post(`/api/v1/manager/merchandises/noti-send-histories/batch-retry`, {
+                    selected: select_idxs 
+                })
+                if (r.status == 201)
+                    snackbar.value.show('성공하였습니다.', 'success')
+                else
+                    snackbar.value.show(r.data.message, 'error')            
+            }
+        }
+        else
+            snackbar.value.show('노티이력을 1개이상 선택해주세요.', 'error')
+    }
+
+    const notiSend = async (noti_id: number) => {
+        if(await alert.value.show('정말 재발송하시겠습니까?')) {
+            const r = await post('/api/v1/manager/merchandises/noti-send-histories/'+noti_id+'/retry', {})
+            if(r.status == 201)
+                snackbar.value.show('성공하였습니다.', 'success')
+            else
+                snackbar.value.show(r.data.message, 'error')
+        }
+    }
+    
+    const notiRemove = async (item: NotiSendHistory) => {
+        remove('/merchandises/noti-send-histories', item, false)
+    }
+
     return {
         notiSendResult,
         notiSendMessage,
-        notiSendDetailClass,        
+        notiSendDetailClass,
+        notiBatchSendByTrans,
+        notiBatchSend,
+        notiSendByTrans,
+        notiSend,
+        notiRemove,
     }
 }
 
 
 export const realtimeHistoryInterface = (formatTime: any) => {
+    const alert = <any>(inject('alert'))
+    const snackbar = <any>(inject('snackbar'))
+    const errorHandler = <any>(inject('$errorHandler'))
+    const { post } = useRequestStore()
+
     const realtimeDetailClass = (history: RealtimeHistory) => {
         if(history.result_code === '0000' && history.request_type === 6170)
             return 'text-success'
@@ -131,11 +205,40 @@ export const realtimeHistoryInterface = (formatTime: any) => {
             return false
     }
     
+    const isRealtimeTransaction = () => {
+        return getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit
+    }
+
+    const singleDepositCancelJobReservation = async (trx_ids: number[]) => {
+        if (await alert.value.show('정말 해당 거래건을 이체예약취소처리 하시겠습니까?')) {
+            const r = await post('/api/v1/manager/transactions/batch-updaters/single-deposit-cancel-job-reservation', {
+                selected_idxs: trx_ids
+            }, true)
+        }
+    }    
+
+    const realtimeRetry = async (item: Transaction) => {
+        if (await alert.value.show('정말 해당 거래건을 재이체(정산) 하시겠습니까?')) {
+            const params = {
+                'trx_id': item.id,
+                'mid': item.mid,
+                'tid': item.tid,
+                'pmod_id': item.pmod_id,
+            }
+            return await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit', params, true)
+        }
+        else
+            return null
+    }
+
     return {
         realtimeResult,
         realtimeMessage,
         realtimeDetailClass,
         realtimeRetryAble,
+        realtimeRetry,
+        isRealtimeTransaction,
+        singleDepositCancelJobReservation,
     }
 }
 

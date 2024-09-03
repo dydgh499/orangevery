@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import router from '@/router'
 import { useRequestStore } from '@/views/request'
-import { realtimeHistoryInterface } from '@/views/transactions/transactions'
+import { notiSendHistoryInterface, realtimeHistoryInterface } from '@/views/transactions/transactions'
 import type { MchtBlacklist, SalesSlip } from '@/views/types'
 import { getUserLevel, pay_token } from '@axios'
 import { StatusColors } from '@core/enums'
@@ -30,7 +30,11 @@ const mchtBlackListDlg = <any>(inject('mchtBlackListDlg'))
 const notiSendHistoriesDialog = <any>(inject('notiSendHistoriesDialog'))
 const realtimeHistoryDialog = <any>(inject('realtimeHistoryDialog'))
 
-const { realtimeResult, realtimeRetryAble } = realtimeHistoryInterface(formatTime)
+const { notiSendByTrans } = notiSendHistoryInterface()
+const { 
+    realtimeResult, realtimeRetryAble, realtimeRetry, 
+    isRealtimeTransaction, singleDepositCancelJobReservation 
+} = realtimeHistoryInterface(formatTime)
 
 const complaint = () => {
     const params = {
@@ -49,27 +53,8 @@ const complaint = () => {
     })
 }
 const retryDeposit = async () => {
-    if (await alert.value.show('정말 해당 거래건을 재이체(정산) 하시겠습니까?')) {
-        const params = {
-            'trx_id': props.item.id,
-            'mid': props.item.mid,
-            'tid': props.item.tid,
-            'pmod_id': props.item.pmod_id,
-        }
-        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit', params, true)
-        if(r.status == 201) {
-            store.setChartProcess()
-            store.setTable()
-        }
-    }
-}
-
-const singleDepositCancelJobReservation = async (trx_ids: number[]) => {
-    if (await alert.value.show('정말 해당 거래건을 이체예약취소처리 하시겠습니까?')) {
-        const params = {
-            'trx_ids': trx_ids,
-        }
-        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit-cancel-job-reservation', params, true)
+    const r = await realtimeRetry(props.item)
+    if(r) {
         if(r.status == 201) {
             store.setChartProcess()
             store.setTable()
@@ -110,19 +95,6 @@ const payCanceled = async () => {
     }
 }
 
-const notiSend = async () => {
-    if (await alert.value.show('정말 노티 재발송을 하시겠습니까?')) {
-        try {
-            const r = await post('/api/v1/manager/transactions/noti/'+props.item.id, {}, true)
-        }
-        catch (e: any) {
-            snackbar.value.show(e.response.data.message, 'error')
-            const r = errorHandler(e)
-        }
-
-    }
-}
-
 const blacklist = () => {
     mchtBlackListDlg.value.show(<MchtBlacklist>{
         id: 0,
@@ -132,9 +104,7 @@ const blacklist = () => {
 const isCancelSafeDate = () => {
     return getUserLevel() == 10 && props.item.trx_dt == formatDate(new Date())
 }
-const isRealtimeTransaction = () => {
-    return getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit
-}
+
 const isUseCancelDeposit = () => {
     return getUserLevel() >= 35 && props.item.is_cancel
 }
@@ -176,7 +146,7 @@ const isUseCancelDeposit = () => {
                     </template>
                     <VListItemTitle>이체예약취소</VListItemTitle>
                 </VListItem>
-                <VListItem value="noti" class="noti" @click="notiSend()"
+                <VListItem value="noti" class="noti" @click="notiSendByTrans(props.item.id)"
                     v-if="corp.pv_options.paid.use_noti && getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="emojione:envelope" />

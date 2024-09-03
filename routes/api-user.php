@@ -76,7 +76,7 @@ Route::prefix('merchandises')->group(function() {
     Route::prefix('noti-send-histories')->group(function() {
         Route::get('{id}', [NotiSendHistoryController::class, 'show']);
         Route::delete('{id}', [NotiSendHistoryController::class, 'destory']);
-        Route::post('{id}/retry', [NotiSendHistoryController::class, 'retry']);
+        Route::post('{trans_id}/retry', [NotiSendHistoryController::class, 'retry']);
         Route::post('batch-retry', [NotiSendHistoryController::class, 'batchRetry']);    
     });
 

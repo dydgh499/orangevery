@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TransactionBatchDialog from '@/layouts/dialogs/TransactionBatchDialog.vue'
+import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 import CancelDepositDialog from '@/layouts/dialogs/transactions/CancelDepositDialog.vue'
 import CancelPartDialog from '@/layouts/dialogs/transactions/CancelPartDialog.vue'
 import CancelTransDialog from '@/layouts/dialogs/transactions/CancelTransDialog.vue'
@@ -15,6 +15,7 @@ import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
 import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import { notiSendHistoryInterface, realtimeHistoryInterface } from '@/views/transactions/transactions'
 import { getDateFormat, getProfitColName, settleIdCol, useSearchStore } from '@/views/transactions/useStore'
+import { ItemTypes } from '@core/enums'
 
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
@@ -38,7 +39,7 @@ const cancelPart = ref()
 const cancelDeposit = ref()
 const realtimeHistoryDialog = ref()
 const notiSendHistoriesDialog = ref()
-const transactionBatchDialog = ref()
+const batchDialog = ref()
 const mchtBlackListDlg = ref(null)
 
 const levels = corp.pv_options.auth.levels
@@ -129,7 +130,7 @@ onMounted(() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="carbon:batch-job" @click="transactionBatchDialog.show()" v-if="getUserLevel() >= 35"
+                <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35"
                     color="primary" size="small" style="margin: 0.25em;">
                     일괄작업
                 </VBtn>
@@ -289,7 +290,7 @@ onMounted(() => {
         <CancelDepositDialog ref="cancelDeposit" />
         <RealtimeHistoriesDialog ref="realtimeHistoryDialog" />
         <NotiSendHistoriesDialog ref="notiSendHistoriesDialog" />
-        <TransactionBatchDialog ref="transactionBatchDialog" :selected_idxs="selected" :store="store"
+        <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.Transaction"
             @update:select_idxs="selected = $event; store.setTable(); store.getChartData()" />
         <MchtBlacklistCreateDialog ref="mchtBlackListDlg" />
     </div>

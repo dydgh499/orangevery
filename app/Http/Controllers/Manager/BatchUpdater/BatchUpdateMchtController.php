@@ -125,6 +125,7 @@ class BatchUpdateMchtController extends BatchUpdateController
         $row = $this->getApplyRow($request, $cols);
         return $this->batchResponse($row, '가맹점');
     }
+    
     /**
      * 커스텀 필터 적용 
      */

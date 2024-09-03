@@ -1,14 +1,14 @@
 
 
 <script lang="ts" setup>
+import { batch } from '@/layouts/components/batch-updaters/batch'
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
-import { useRequestStore } from '@/views/request'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import { Salesforce } from '@/views/types'
 import { banks } from '@/views/users/useStore'
-import { axios, getUserLevel, user_info } from '@axios'
+import { getUserLevel } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -17,6 +17,18 @@ interface Props {
 
 const props = defineProps<Props>()
 const emits = defineEmits(['update:select_idxs'])
+const {
+        selected_idxs,
+        selected_sales_id,
+        selected_level,
+        selected_all,
+        feeBookDialog,
+        checkAgreeDialog,
+        passwordAuthDialog,
+        post,
+        batchRemove
+    } = batch(emits, '영업점', 'salesforces')
+const store = <any>(inject('store'))
 
 const all_cycles = settleCycles()
 const all_days = settleDays()
@@ -24,19 +36,7 @@ const tax_types = settleTaxTypes()
 const is_ables = [{id:0, title:'불가능'}, {id:1, title:'가능'}]
 const view_types = [{id:0, title:'간편보기'}, {id:1, title:'상세보기'}]
 
-const { request } = useRequestStore()
 
-const store = <any>(inject('store'))
-const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
-const errorHandler = <any>(inject('$errorHandler'))
-    const formatDate = <any>(inject('$formatDate'))
-
-const feeBookDialog = ref()
-const checkAgreeDialog = ref()
-const passwordAuthDialog = ref()
-
-const selected_all = ref(0)
 const salesforces = reactive<Salesforce>({
     settle_tax_type: 0,
     settle_cycle: 0,
@@ -49,121 +49,32 @@ const salesforces = reactive<Salesforce>({
     bank: { code: null, title: '선택안함' },
 })
 
-const getCommonParams = async (params: any, method: string, type: string) => {
-    if (props.selected_idxs.length || selected_all.value) {
-        if(selected_all.value) {
-            const agree = await checkAgreeDialog.value.show(store.pagenation.total_count, method, '영업점')
-            if (agree === false)
-                return [false, params]
-            else
-            {
-                if(corp.pv_options.paid.use_head_office_withdraw) {
-                    let phone_num = user_info.value.phone_num
-                    if(phone_num) {
-                        phone_num = phone_num.replaceAll(' ', '').replaceAll('-', '')
-                        const token = await passwordAuthDialog.value.show(phone_num)
-                        if(token !== '') {
-                            
-                        }
-                        else
-                            return [false, params]
-                    }
-                    else {
-                        snackbar.value.show('로그인한 계정의 휴대폰번호를 업데이트한 후 다시 시도해주세요.', 'error')
-                        return [false, params]
-                    }
-                }
-            }
-        }
-        let message = `정말 ${type}${method}하시겠습니까?`;
-        if(params['apply_type'] === 1)
-            message += `<br><b>${params['apply_dt']}${params['apply_dt'].length > 10 ? '부터' : '일 자정에'}</b> 적용될 예정입니다.`
-
-        if (await alert.value.show(message)) {
-            Object.assign(params, { 
-                selected_idxs: props.selected_idxs,
-                selected_all: selected_all.value,
-            })
-            if(selected_all.value) {
-                Object.assign(params, {
-                    filter: store.params
-                })
-                params.filter.search = (document.getElementById('search') as HTMLInputElement)?.value
-                params.total_selected_count = store.pagenation.total_count
-            }
-            return [true, params]
-        }
-        return [false, params]
-    }
-    else {
-        snackbar.value.show('영업점을 1개이상 선택해주세요.', 'error')
-        return [false, params]
-    }
-}
-
-const batchRemove = async () => {
-    const [result, params] = await getCommonParams({}, '삭제', '일괄')
-    if(result) {
-        const r = await request({ url: `/api/v1/manager/salesforces/batch-updaters/remove`, method: 'delete', data: params }, true)
-        emits('update:select_idxs', [])
-    }
-}
-
-const post = async (page: string, _params: any, apply_type: number) => {
-    try {
-        const apply_dt = await getApplyDt(page, apply_type)
-        if(apply_dt !== '') {
-            _params['apply_dt'] = apply_dt
-            _params['apply_type'] = apply_type
-            const [result, params] = await getCommonParams(_params, '적용', apply_type ? '예약' : '일괄')
-            if(result) {
-                const r = await axios.post('/api/v1/manager/salesforces/batch-updaters/' + page, params)
-                snackbar.value.show(r.data.message, 'success')
-                emits('update:select_idxs', [])
-            }
-        }
-    }
-    catch (e: any) {
-        snackbar.value.show(e.response.data.message, 'error')
-        const r = errorHandler(e)
-    }
-}
-
-const getApplyDt = async (page: string, type: number) => {
-    let apply_dt = ''
-    if(type === 0)
-        apply_dt = formatDate(new Date)
-    else 
-        apply_dt = await feeBookDialog.value.show(page.includes('set-fee') ? false : true)
-    return apply_dt
-}
-
-const setSettleTaxType= (apply_type: number) => {
+const setSettleTaxType = (apply_type: number) => {
     post('set-settle-tax-type', {
         'settle_tax_type': salesforces.settle_tax_type,
     }, apply_type)
 }
 
-const setSettleCycle= (apply_type: number) => {
+const setSettleCycle = (apply_type: number) => {
     post('set-settle-cycle', {
         'settle_cycle': salesforces.settle_cycle,
     }, apply_type)
 
 }
 
-const setSettleDay= (apply_type: number) => {
+const setSettleDay = (apply_type: number) => {
     post('set-settle-day', {
         'settle_day': salesforces.settle_day,
     }, apply_type)
 }
 
-const setIsAbleModifyMcht= (apply_type: number) => {
+const setIsAbleModifyMcht = (apply_type: number) => {
     post('set-is-able-modify-mcht', {
         'is_able_modify_mcht': salesforces.is_able_modify_mcht,
     }, apply_type)
 }
 
-const setViewType= (apply_type: number) => {
+const setViewType = (apply_type: number) => {
     post('set-view-type', {
         'view_type': salesforces.view_type,
     }, apply_type)
@@ -178,12 +89,17 @@ const setAccountInfo= (apply_type: number) => {
     }, apply_type)
 }
 
-const setNote= (apply_type: number) => {
+const setNote = (apply_type: number) => {
     post('set-note', {
         'note': salesforces.note,
     }, apply_type)
 }
 
+watchEffect(() => {
+    selected_idxs.value = props.selected_idxs
+    selected_sales_id.value = null
+    selected_level.value = null
+})
 
 </script>
 <template>

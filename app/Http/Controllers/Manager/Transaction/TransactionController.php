@@ -347,18 +347,6 @@ class TransactionController extends Controller
     }
 
     /*
-     * 정산일 변경
-     */
-    public function changeSettleDate(Request $request)
-    {
-        $settle_dt = Carbon::createFromFormat('Y-m-d', (string)$request->settle_dt)->format('Ymd');
-        $this->transactions
-            ->whereIn('id', $request->selected)
-            ->update(['settle_dt' => $settle_dt]);
-        return $this->response(1);
-    }
-
-    /*
     * 노티 전송 -> 가맹점
     */
     public function noti(Request $request, int $id)
@@ -391,24 +379,6 @@ class TransactionController extends Controller
                 ->orderBy('merchandises.mcht_name')
                 ->get($cols);
         return $grouped;
-    }
-
-    public function removeDepositFee(Request $request)
-    {
-        $this->transactions->whereIn('id', $request->trx_ids)->update(['mcht_settle_fee' => 0]);
-        $db_trans = $this->transactions->whereIn('id', $request->trx_ids)->get();
-
-        $b_info = BrandInfo::getBrandById($request->user()->brand_id);
-        $trans = json_decode(json_encode($db_trans), true);
-        $trans = SettleAmountCalculator::setSettleAmount($trans, $b_info['dev_settle_type']);
-        $i=0;
-
-        foreach($db_trans as $tran)
-        {
-            $tran->mcht_settle_amount = $trans[$i]['mcht_settle_amount'];
-            $tran->save();
-            $i++;
-        }
     }
 
     public function _test()

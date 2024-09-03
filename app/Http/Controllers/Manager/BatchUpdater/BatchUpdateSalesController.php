@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 /**
  * @group Salesforce-Batch-Updater API
  *
- * 가맹점 일괄 업데이트 group 입니다.
+ * 영업점 일괄 업데이트 group 입니다.
  */
 class BatchUpdateSalesController extends BatchUpdateController
 {

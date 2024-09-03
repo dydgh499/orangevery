@@ -276,20 +276,6 @@ class MchtSettleHistoryController extends Controller
             return $this->response(951);
     }
 
-    public function singleDepositCancelJobReservation(Request $request)
-    {
-        if($request->user()->tokenCan(35))
-        {
-            $validated = $request->validate(['trx_ids.*'=>'required|numeric']);
-            $url = $this->base_noti_url.'/single-deposit-cancel-job-reservation';
-            $res = Comm::post($url,$request->all());
-            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
-        }
-        else
-            return $this->response(951);
-
-    }
-
     /**
      * 추가차감
      */

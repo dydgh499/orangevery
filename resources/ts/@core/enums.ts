@@ -41,4 +41,5 @@ export const ItemTypes = {
     Merchandise : 0,
     Salesforce : 1,
     PaymentModule : 2,
+    Transaction: 3,
 } as const

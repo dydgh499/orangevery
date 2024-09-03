@@ -28,6 +28,13 @@ class BatchUpdateController extends Controller
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 적용되었습니다.' : "적용된 ".$apply_type."이 존재하지 않습니다.");
     }
 
+    protected function wrongTypeAccess()
+    {
+        error([], '잘못된 접근입니다.');
+        print_r(json_encode(['code'=>1999, 'message'=>'잘못된 접근입니다.', 'data'=>[]], JSON_UNESCAPED_UNICODE));
+        exit;
+    }
+
     protected function getApplyBookDatas($request, $ids, $dest_key, $cols)
     {
         $datas = [];
