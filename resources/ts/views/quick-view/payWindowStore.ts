@@ -113,8 +113,34 @@ export const payWindowStore = () => {
             return false
     }
 
+    const getPayWindow = async (window: string | string[], pc: string | string[]) => {
+        let code = 200
+        let message = ''
+        let params_mode = false
+        let res = null
+        try {
+            res = await axios.get('/api/v1/pay/' + window, { params : { pc: pc }})
+            if(pc && pc.length && res.data.params === null) {
+                code = 409
+                message = '상품정보를 찾을 수 없습니다. 결제창을 재생성해주세요.'
+            }
+            else {
+                if(res.data.params && Object.keys(res.data.params)) {
+                    params_mode = true
+                }
+            }
+        }
+        catch (e: any) {
+            code = e.response.data.code
+            message = e.response.data.message
+            res = errorHandler(e)
+        }
+        return [code, message, params_mode, res.data]
+    }
+
     return {
-        move, copy, extend, send, getPayWindowUrl, renewPayWindow, multiplePayMove,
-        isVisiableRemainTime
+        move, copy, extend, send, 
+        getPayWindowUrl, renewPayWindow, multiplePayMove,
+        isVisiableRemainTime, getPayWindow
     }
 }

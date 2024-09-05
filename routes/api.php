@@ -29,6 +29,7 @@ use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 
 Route::prefix('v1')->group(function() {    
     Route::get('services/mcht-blacklists/all', [MchtBlacklistController::class, 'all']);
+    Route::get('pay/sales-slip/{ord_num}', [PayWindowController::class, 'salesSlip']);
     Route::prefix('pay')->group(function() {
         Route::middleware(['log.route'])->get('test', [PayWindowController::class, 'testWindow']);
         Route::post('{window_code}/auth', [PayWindowController::class, 'auth']);

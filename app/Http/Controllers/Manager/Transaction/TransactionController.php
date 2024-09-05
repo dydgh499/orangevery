@@ -46,7 +46,7 @@ class TransactionController extends Controller
         $this->transactions = $transactions;
         $this->target = '매출';
         $this->cols = [
-            'merchandises.mcht_name', 'merchandises.user_name', 'merchandises.nick_name',
+            'merchandises.mcht_name', 'merchandises.user_name', 'merchandises.nick_name', 'merchandises.contact_num',
             'merchandises.addr', 'merchandises.resident_num', 'merchandises.business_num', 'merchandises.tax_category_type',
             'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell', 'merchandises.use_collect_withdraw', 'merchandises.is_show_fee',
             'transactions.*',

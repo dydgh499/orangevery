@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\QuickView;
 
+use App\Models\Transaction;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Ablilty\PayWindowInterface;
@@ -112,5 +113,81 @@ class PayWindowController extends Controller
         }
         else
             return $this->extendResponse(1999, '존재하지 않은 결제창 입니다.');        
+    }
+
+    public function salesSlip(Request $request, string $ord_num)
+    {
+        $data = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
+            ->join('payment_gateways', 'transactions.pg_id', '=', 'payment_gateways.id')
+            ->where('transactions.brand_id', $request->brand_id)
+            ->where('transactions.ord_num', $ord_num)
+            ->where('transactions.is_cancel', $request->is_cancel)
+            ->first([
+                'merchandises.use_saleslip_prov',
+                'merchandises.use_saleslip_sell',
+                'merchandises.tax_category_type',
+                'merchandises.contact_num',
+                'merchandises.mcht_name',
+                'merchandises.business_num as mcht_business_num',
+                'merchandises.nick_name',
+                'merchandises.addr as mcht_addr',
+
+                'payment_gateways.id as pg_id',
+                'payment_gateways.pg_type',
+                'payment_gateways.phone_num',
+                'payment_gateways.company_name',
+                'payment_gateways.business_num',
+                'payment_gateways.rep_name',
+                'payment_gateways.addr',
+
+                'transactions.*',
+            ]);
+        if($data)
+        {
+            $result = [
+                'payment_gateway' => [
+                    'id'            => $data->pg_id,
+                    'pg_type'       => $data->pg_type,
+                    'company_name'  => $data->company_name,
+                    'business_num'  => $data->business_num,
+                    'phone_num'     => $data->phone_num,
+                    'rep_name'      => $data->rep_name,
+                    'addr'          => $data->addr,
+                ],
+                'merchandise' => [
+                    'id' => $data->mcht_id,
+                    'addr' => $data->mcht_addr,
+                    'mcht_name' => $data->mcht_name,
+                    'nick_name' => $data->nick_name,
+                    'contact_num' => $data->contact_num,
+                    'business_num' => $data->mcht_business_num,
+                    'use_saleslip_prov' => $data->use_saleslip_prov,
+                    'use_saleslip_sell' => $data->use_saleslip_sell,
+                    'tax_category_type' => $data->tax_category_type,
+                ],
+                'transactions' => [
+                    'id'            => $data->id,
+                    'pg_id'         => $data->pg_id,
+                    'pmod_id'       => $data->pmod_id,
+                    'is_cancel'     => $data->is_cancel,
+                    'trx_dttm'      => $data->trx_dt." ".$data->trx_tm,
+                    'module_type'   => $data->module_type,
+                    'amount'        => $data->amount,
+                    'item_name'     => $data->item_name,
+                    'buyer_name'    => $data->buyer_name,
+                    'card_num'      => $data->card_num,
+                    'appr_num'      => $data->appr_num,
+                    'acquirer'      => $data->acquirer,
+                    'issuer'        => $data->issuer,
+                    'installment'   => $data->installment,
+                    'ord_num'       => $data->ord_num,
+                ]
+            ];
+            if($result['transactions']['is_cancel'])
+                $result['transactions']['cxl_dttm'] = $data->cxl_dt." ".$data->cxl_tm;
+            return $this->response(0, $result);
+        }
+        else
+            return $this->extendResponse(1999, '존재하지 거래건 입니다.');
     }
 }

@@ -1,13 +1,10 @@
 <script lang="ts" setup>
 import DialogHalfVCol from '@/layouts/utils/DialogHalfVCol.vue';
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
-import { payWindowStore } from '@/views/quick-view/payWindowStore';
-import type { BeforeBrandInfo, PayGateway, SalesSlip } from '@/views/types';
-import corp from '@corp';
+import { salesSlip } from '@/views/pay/sales-slip';
+import type { PayGateway, SalesSlip } from '@/views/types';
 import background from '@images/salesslip/background.jpg';
 import cancel from '@images/salesslip/cancel.png';
-import html2canvas from "html2canvas";
-import { useDisplay } from 'vuetify';
 
 interface Props {
     pgs: PayGateway[],
@@ -16,157 +13,26 @@ interface Props {
 const reload_mode = ref(false)
 const props = defineProps<Props>()
 
-const { copy } = payWindowStore()
-const snackbar = <any>(inject('snackbar'))
+const { 
+    provider_info, merchandise_info,
+    supply_amount, vat, tax_free, total_amount,
+    init, copySalesSlip, copyLink, downloadSalesSlip 
+} = salesSlip()
+
 const visible = ref(false)
-const provider_info = ref<BeforeBrandInfo>()
 const trans = ref<SalesSlip>()
-const pg = ref<PayGateway>()
 
-const card = ref(null)
+const card = ref()
 const thickness = ref(3)
-
-const supply_amount = ref(0)
-const vat = ref(0)
-const tax_free = ref(0)
-const total_amount = ref(0)
-const { mobile } = useDisplay()
-
 
 const updateThickness = () => {
     thickness.value = window.innerWidth <= 500 ? 2 : 3;
 };
 
-const getVat = () => {
-    return Math.round(trans.value?.amount as number / 1.1)
-}
-
-const copySalesSlip = async () => {
-    if(mobile.value)
-        copySalesSlipText()
-    else
-    {
-        if (card.value) {
-            const canvas = await html2canvas(document.getElementsByClassName('sales-slip-rect')[0], { useCORS: true, removeContainer: true })
-            canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({ "image/png": blob as Blob })]))
-            snackbar.value.show('영수증 이미지가 클립보드에 복사되었습니다.', 'success')
-        }
-    }
-}
-
-const copySalesSlipText = () => {
-    let text = `신용카드 영수증\n
-결제정보
----------------------------------
-결제수단\t\t${module_types.find(obj => obj.id === trans.value?.module_type)?.title}
-거래상태\t\t${trans.value?.is_cancel ? "취소" : '승인'}
-승인일시\t\t${trans.value?.trx_dttm}
-`
-    if(trans.value?.is_cancel) {
-        text += `취소일시\t\t${trans.value?.cxl_dttm}
-`
-    }
-        text += `발급사\t\t\t${trans.value?.issuer ?? ''}
-매입사\t\t\t${trans.value?.acquirer ?? ''}
-카드번호\t\t${trans.value?.card_num ?? ''}
-할부개월\t\t${installments.find(inst => inst['id'] === parseInt(trans.value?.installment as string))?.title}
-구매자명\t\t${trans.value?.buyer_name ?? ''}
-상품명\t\t\t${trans.value?.item_name ?? ''}
-승인번호\t\t${trans.value?.appr_num ?? ''}
-과세금액\t\t${supply_amount.value.toLocaleString()}원
-부가세액\t\t${vat.value.toLocaleString()}원
-`
-if(trans.value?.tax_category_type === 1)
-    text += `면세액\t\t\t${tax_free.value.toLocaleString()}원
-`
-text += `총결제액\t\t${total_amount.value.toLocaleString()}원
-
-판매자 정보
----------------------------------
-상호\t\t\t\t${trans.value?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.company_name : trans.value?.mcht_name}
-사업자번호\t${trans.value?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.business_num : trans.value?.business_num}
-대표자명\t\t${trans.value?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.rep_name : trans.value?.nick_name}
-주소\t\t\t\t${trans.value?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.addr : trans.value?.addr}
-
-공급자(결제대행사)정보
----------------------------------
-상호\t\t\t\t${provider_info.value?.company_name}
-사업자번호\t${provider_info.value?.business_num}
-대표자명\t\t${provider_info.value?.rep_name}
-주소\t\t\t\t${provider_info.value?.addr}
-
----------------------------------
-신용카드 매출전표는 부가가치세법 제32조 2 제3항에 의거하여 발행되었으며 부가가치세법 제 46조에 따라 신용카드매출전표 등을 발급받은 경우에는 매입세액 공제가 가능합니다.`
-    
-    copy(text, '영수증 텍스트')
-}
-
-const downloadSalesSlip = async () => {
-    const downloadURI = (uri: string, file_name: string) => {
-        const link = document.createElement("a")
-        link.download = file_name
-        link.href = uri
-        document.body.appendChild(link)
-        link.click()
-    }
-
-    snackbar.value.show('영수증을 다운로드하고있습니다..', 'success')
-    if (card.value) {
-        const canvas = await html2canvas(document.getElementsByClassName('sales-slip-rect')[0], { useCORS: true, removeContainer: true })
-        downloadURI(canvas.toDataURL(), trans.value?.trx_dttm+"_"+trans.value?.appr_num+".png")
-        snackbar.value.show('영수증이 다운로드 되었습니다.', 'success')
-    }
-
-}
-
-const getProviderInfo = (): BeforeBrandInfo => {
-    if (corp.pv_options.paid.use_before_brand_info) {
-        const trx_dt = new Date(trans.value?.trx_dt as string)
-        const before_brand_info = corp.before_brand_infos.find(obj => new Date(obj.apply_e_dt) >= trx_dt && new Date(obj.apply_s_dt) <= trx_dt)
-        if (before_brand_info) {
-            return <BeforeBrandInfo>({
-                company_name: before_brand_info?.company_name,
-                business_num: before_brand_info?.business_num,
-                rep_name: before_brand_info?.rep_name,
-                addr: before_brand_info?.addr,
-            })
-        }
-    }
-    if (Number(trans.value?.use_saleslip_prov)) {
-        return <BeforeBrandInfo>({
-            company_name: pg.value?.company_name,
-            business_num: pg.value?.business_num,
-            rep_name: pg.value?.rep_name,
-            addr: pg.value?.addr,
-        })
-    }
-    else {
-        return <BeforeBrandInfo>({
-            company_name: corp.company_name,
-            business_num: corp.business_num,
-            rep_name: corp.ceo_name,
-            addr: corp.addr,
-        })
-    }
-}
-
 const show = (item: SalesSlip, _reload_mode:boolean=false) => {
     reload_mode.value = _reload_mode
     trans.value = item
-    pg.value = props.pgs.find(pg => pg['id'] === Number(item.pg_id))
-    if (trans.value.tax_category_type == 1) {
-        supply_amount.value = 0
-        vat.value = 0
-        tax_free.value = trans.value.amount
-        total_amount.value = trans.value.amount
-    }
-    else {
-        supply_amount.value = getVat()
-        vat.value = trans.value.amount as number - getVat()
-        tax_free.value = 0
-        total_amount.value = trans.value.amount
-    }
-    provider_info.value = getProviderInfo()
+    init(trans.value, props.pgs)
     visible.value = true
 }
 
@@ -190,20 +56,29 @@ defineExpose({
 </script>
 <template>
     <VDialog v-model="visible" class="v-dialog-sm" style="max-width: 36em;box-shadow: 0 !important;">
-        <div class="button-container">
-            <VBtn size="small" @click="copySalesSlip()" class="copy-btn">
-                영수증 복사
+        <div class="button-container action-container" 
+            :style="`${$vuetify.display.smAndDown ? 'width: 105%; inset-block-start: -1em': 'width: 90%'}`">
+            <VBtn size="small" @click="copyLink(trans)" color="warning" 
+                :style="`margin-right: 1em;`">
+                링크복사
                 <VIcon end icon="tabler:copy" />
             </VBtn>
-            <VBtn size="small" @click="downloadSalesSlip()" class="download-btn" color="secondary">
+            <VBtn size="small" @click="copySalesSlip(trans, card)"
+                :style="`margin-right: 1em;`">
+                영수증복사
+                <VIcon end icon="tabler:copy" />
+            </VBtn>
+            <VBtn size="small" @click="downloadSalesSlip(trans, card)" color="secondary"
+                :style="`margin-right: 1em;`">
                 다운로드
                 <VIcon end icon="material-symbols:download" />
             </VBtn>
-            <!-- Dialog close btn -->
-            <DialogCloseBtn @click="close()" />
         </div>
-        <!-- Dialog Content -->
-        <div ref="card" style=" max-width: 36em;overflow-y: auto;">
+        <DialogCloseBtn @click="close()" 
+                v-if="$vuetify.display.smAndDown === false"
+                style="inset-block-start: 0.5em; inset-inline-end: 1.5em;"/>
+
+        <div ref="card" style="max-width: 36em;overflow-y: auto;">
             <VCard class="sales-slip-rect-container" style="border: 0 !important;">
                 <VCardText class="sales-slip-rect" :style="`background-image: url(${background});`">
                     <VCol class="font-weight-bold v-col-custom big-font text-center" :style="$vuetify.display.smAndDown ? '' : 'padding-top: 24px;'">
@@ -287,23 +162,33 @@ defineExpose({
                     <VDivider :thickness="thickness" class="mb-2" />
                     <DialogHalfVCol class="cell">
                         <template #name>상호</template>
-                        <template #input>{{ trans?.use_saleslip_sell ?
-                            corp.pv_options.free.sales_slip.merchandise.company_name : trans?.mcht_name }}</template>
-                    </DialogHalfVCol>
-                    <DialogHalfVCol class="cell">
-                        <template #name>사업자번호</template>
-                        <template #input>{{ trans?.use_saleslip_sell ?
-                            corp.pv_options.free.sales_slip.merchandise.business_num : trans?.business_num }}</template>
+                        <template #input>
+                            {{ merchandise_info?.company_name }}
+                        </template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>대표자명</template>
-                        <template #input>{{ trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.rep_name
-                            : trans?.nick_name }}</template>
+                        <template #input>
+                            {{ merchandise_info?.rep_name }}                            
+                        </template>
+                    </DialogHalfVCol>
+                    <DialogHalfVCol class="cell">
+                        <template #name>사업자번호</template>
+                        <template #input>
+                            {{ merchandise_info?.business_num }}
+                        </template>
+                    </DialogHalfVCol>
+                    <DialogHalfVCol class="cell">
+                        <template #name>전화번호</template>
+                        <template #input>
+                            {{ merchandise_info?.phone_num }}
+                        </template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>주소</template>
-                        <template #input>{{ trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.addr :
-                            trans?.addr }}</template>
+                        <template #input>
+                            {{ merchandise_info?.addr }}                            
+                        </template>
                     </DialogHalfVCol>
                     <VCol class="text-primary font-weight-bold v-col-custom">
                         공급자(결제대행사) 정보
@@ -314,12 +199,16 @@ defineExpose({
                         <template #input>{{ provider_info?.company_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
+                        <template #name>대표자명</template>
+                        <template #input>{{ provider_info?.rep_name }}</template>
+                    </DialogHalfVCol>
+                    <DialogHalfVCol class="cell">
                         <template #name>사업자번호</template>
                         <template #input>{{ provider_info?.business_num }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
-                        <template #name>대표자명</template>
-                        <template #input>{{ provider_info?.rep_name }}</template>
+                        <template #name>전화번호</template>
+                        <template #input>{{ provider_info?.phone_num }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell mb-2">
                         <template #name>주소</template>
@@ -368,28 +257,10 @@ div {
   padding-block: 3px;
 }
 
-.copy-btn {
+.action-container {
   position: absolute;
   z-index: 9999;
-  block-size: calc(var(--v-btn-height) + 3px);
-  inset-block-start: -0.75em;
-  inset-inline-end: 3em;
-}
-
-.copy-text-btn {
-  position: absolute;
-  z-index: 9999;
-  block-size: calc(var(--v-btn-height) + 3px);
-  inset-block-start: -0.75em;
-  inset-inline-end: 3em;
-}
-
-.download-btn {
-  position: absolute;
-  z-index: 9999;
-  block-size: calc(var(--v-btn-height) + 3px);
-  inset-block-start: -0.75em;
-  inset-inline-end: 14em;
+  font-size: 0.8em;
 }
 
 .v-col-custom {

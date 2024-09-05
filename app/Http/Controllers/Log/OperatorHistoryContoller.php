@@ -170,13 +170,14 @@ class OperatorHistoryContoller extends Controller
             if($pv_options->paid->use_regular_card === false)
                 unset($conv_history_detail['use_regular_card']);
             if($pv_options->paid->use_collect_withdraw === false)
+            {
                 unset($conv_history_detail['use_collect_withdraw']);  
+                unset($conv_history_detail['collect_withdraw_fee']);
+            }
             if($pv_options->paid->use_noti === false)
                 unset($conv_history_detail['use_noti']);
             if(isset($conv_history_detail['brand_id']))
                 unset($conv_history_detail['brand_id']);
-            if($pv_options->paid->use_collect_withdraw === false)
-                unset($conv_history_detail['collect_withdraw_fee']);
             
             if($pv_options->paid->use_hide_account === false)
                 unset($conv_history_detail['is_hide_account']);

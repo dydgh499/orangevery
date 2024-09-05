@@ -590,8 +590,8 @@ export interface Transaction {
     buyer_phone: string,
     item_name: string,
     //
-    nick_name?: string,
     addr?: string,
+    nick_name?: string,
     resident_num?: string,
     business_num?: string,
     realtimes?: RealtimeHistory[],
@@ -611,6 +611,7 @@ export interface Transaction {
 export interface SalesSlip extends Transaction {
     result_cd?: string,
     result_msg?: string,
+    contact_num?: string,
     use_saleslip_prov: number, 
     use_saleslip_sell: number, 
     tax_category_type: number,

@@ -448,7 +448,7 @@ class MerchandiseController extends Controller
                 })->toArray();
                 $res = $this->manyInsert($this->merchandises, $merchandises);
                 $mcht_ids = $this->merchandises
-                        ->where('brand_id', 30)
+                        ->where('brand_id', $brand_id)
                         ->where('created_at', $current)
                         ->pluck('id')->all();
 
