@@ -146,7 +146,6 @@ watchEffect(() => {
                                     </div>
                                 </VCol>
                                 <template v-if="isRealtimeTransaction() || corp.pv_options.paid.use_collect_withdraw_scheduler">
-                                    <VDivider :vertical="$vuetify.display.mdAndUp"/>
                                     <VCol cols="12" md="6" style="display: flex; flex-direction: column;" >
                                         <h4 class="pt-3">부가기능</h4>
                                         <br>
