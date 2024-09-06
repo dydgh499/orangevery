@@ -182,7 +182,7 @@ class EzpgController extends Controller
      * @responseField content.*.appr_num string 승인번호
      * 
      */
-    public function reconciliation(Request $request, $user_name)
+    public function reconciliation(Request $request)
     {
         $validated = $request->validate([
             'page'      => 'required|integer',

@@ -23,30 +23,31 @@
                 return 'unknown';
         }
 
-        static private function preTreatment($type, $url, $params, $headers)
+        static private function preTreatment($type, $url, $params, $headers, $rand_num)
         {
             $message = self::getRequestType($type);
             $log = [
                 'params'    => $params,
                 'headers'   => $headers,
             ];
-            Log::info("$message-request: $url", $log);
+            Log::info("($rand_num)$message-request: $url", $log);
         }
 
-        static private function afterTreatment($type, $res)
+        static private function afterTreatment($type, $url, $res, $rand_num)
         {
             $message = self::getRequestType($type);
             if($res['code'] < 400)
-                Log::info("$message-response", $res);
+                Log::info("($rand_num)$message-response: $url", $res);
             else if($res['code'] < 500)
-                Log::notice("$message-response", $res);
+                Log::notice("($rand_num)$message-response: $url", $res);
             else
-                Log::warning("$message-response", $res);
+                Log::warning("($rand_num)$message-response: $url", $res);
         }
 
         static private function httpSender($type, $url, $params, $headers=[])
         {
-            self::preTreatment($type, $url, $params, $headers);
+            $rand_num = rand(1000, 9999);
+            self::preTreatment($type, $url, $params, $headers, $rand_num);
             try
             {
                 if($type === 0)
@@ -70,7 +71,7 @@
                 $code = 408;
             }
             $res = ['body' => $body, 'code'=> $code];
-            self::afterTreatment($type, $res);
+            self::afterTreatment($type, $url, $res, $rand_num);
             return $res;
         }
 
@@ -96,7 +97,8 @@
 
         static public function curlPost($url, $params, $headers=[])
         {
-            self::preTreatment(4, $url, $params, $headers, 0);
+            $rand_num = rand(1000, 9999);
+            self::preTreatment(4, $url, $params, $headers, $rand_num);
             $res = [];
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -111,7 +113,7 @@
 
             $res['code'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
-            self::afterTreatment(4, $res);
+            self::afterTreatment(4, $url, $res, $rand_num);
             return $res;
         }
     }
