@@ -4,16 +4,17 @@ namespace App\Http\Controllers\Ezpg;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Manager\Transaction\TransactionController;
+use App\Http\Controllers\Manager\Transaction\TransactionFilter;
 
+use Carbon\Carbon;
 use App\Models\Merchandise;
-use App\Models\Merchandise\PaymentModule;
 use App\Models\Transaction;
+use App\Models\Merchandise\PaymentModule;
 
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\LoginRequest;
 
 use App\Http\Controllers\Auth\Login;
-use App\Http\Controllers\Manager\Transaction\TransactionFilter;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -128,25 +129,32 @@ class EzpgController extends Controller
             'level' => 10,
             'use_realtime_deposit' => 0,
         ]);
-        $inst   = new TransactionController(new Transaction);
-        $inst->cols = [
-            'transactions.id', 'transactions.trx_dt', 'transactions.trx_tm', 'transactions.cxl_dt', 'transactions.cxl_tm',
-            'transactions.sales5_id','transactions.sales4_id','transactions.sales3_id', 'transactions.sales2_id','transactions.sales1_id',
-            'transactions.sales5_fee','transactions.sales4_fee','transactions.sales3_fee', 'transactions.sales2_fee','transactions.sales1_fee',
-            'transactions.ps_fee','transactions.mcht_fee','transactions.hold_fee','transactions.mcht_settle_fee','transactions.is_cancel',
-            'transactions.amount','transactions.module_type','transactions.ord_num','transactions.mid','transactions.tid',
-            'transactions.trx_id','transactions.ori_trx_id','transactions.card_num','transactions.issuer','transactions.acquirer',
-            'transactions.appr_num','transactions.installment','transactions.buyer_name','transactions.buyer_phone','transactions.item_name',
-            'payment_modules.note', 'payment_modules.cxl_type',
-            DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"), DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
-        ];
-        $inst->setTransactionData(10);
-        $query = TransactionFilter::common($request);
-        $data           = $inst->getIndexData($request, $query, 'transactions.id', $inst->cols, 'transactions.trx_at', false);
-        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids);
-        $data['content'] = globalMappingSales($salesforces, $data['content']);
-        return $this->response(0, $data);
+        if($request->page_size > 3000)
+            return $this->extendResponse(409, '페이지 사이즈는 최대 3000개까지 허용합니다.');
+        else if($carbon_s_at->diffInDays($carbon_e_at, false) > 7)
+            return $this->extendResponse(409, '조회 날짜는 최대 7일까지 허용합니다.');
+        else
+        {
+            $inst   = new TransactionController(new Transaction);
+            $inst->cols = [
+                'transactions.id', 'transactions.trx_dt', 'transactions.trx_tm', 'transactions.cxl_dt', 'transactions.cxl_tm',
+                'transactions.sales5_id','transactions.sales4_id','transactions.sales3_id', 'transactions.sales2_id','transactions.sales1_id',
+                'transactions.sales5_fee','transactions.sales4_fee','transactions.sales3_fee', 'transactions.sales2_fee','transactions.sales1_fee',
+                'transactions.ps_fee','transactions.mcht_fee','transactions.hold_fee','transactions.mcht_settle_fee','transactions.is_cancel',
+                'transactions.amount','transactions.module_type','transactions.ord_num','transactions.mid','transactions.tid',
+                'transactions.trx_id','transactions.ori_trx_id','transactions.card_num','transactions.issuer','transactions.acquirer',
+                'transactions.appr_num','transactions.installment','transactions.buyer_name','transactions.buyer_phone','transactions.item_name',
+                'payment_modules.note', 'payment_modules.cxl_type',
+                DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"), DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
+            ];
+            $inst->setTransactionData(10);
+            $query = TransactionFilter::common($request);
+            $data           = $inst->getIndexData($request, $query, 'transactions.id', $inst->cols, 'transactions.trx_at', false);
+            $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+            $salesforces    = globalGetSalesByIds($sales_ids);
+            $data['content'] = globalMappingSales($salesforces, $data['content']);
+            return $this->response(0, $data);    
+        }
     }
 
     /**
