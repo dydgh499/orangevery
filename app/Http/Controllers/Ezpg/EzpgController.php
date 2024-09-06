@@ -247,7 +247,7 @@ class EzpgController extends Controller
     {
         $validated = $request->validate(['t_dt'  => 'required|string']);
         $cols = [
-            'mcht_id',            
+            'merchandises.id',            
             DB::raw("SUM(IF(is_cancel = 0, amount, 0)) AS appr_amount"),
             DB::raw("SUM(is_cancel = 0) AS appr_count"),
             DB::raw("SUM(IF(is_cancel = 1, amount, 0)) AS cxl_amount"),
@@ -257,7 +257,7 @@ class EzpgController extends Controller
         ];
         
         $chart = TransactionFilter::common($request)
-            ->groupBy('transactions.mcht_id')
+            ->groupBy('merchandises.id')
             ->first($cols);
 
         if($chart)
