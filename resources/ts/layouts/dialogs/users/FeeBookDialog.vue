@@ -90,7 +90,7 @@ defineExpose({
                 <br>
                 <VDivider />
                 <div style="text-align: end;">
-                    <h4>잘못 적용된 예약은 적용되기전 "변경이력"탭에서 삭제시 반영되지 않습니다.</h4>
+                    <h5>잘못 적용된 예약은 적용되기전 "변경이력"탭에서 삭제시 반영되지 않습니다.</h5>
                 </div>
             </VCardText>
             <VCardText class="d-flex justify-end gap-3 flex-wrap">

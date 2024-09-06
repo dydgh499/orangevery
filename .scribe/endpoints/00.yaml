@@ -1,21 +1,21 @@
-name: 'BuddyPay Mobile API'
+name: 'EZPG API'
 description: |-
 
-  BuddyPay와 BuddyPay Mobile간 API 입니다.
+  EZPG와 Smart Data간 API 입니다.
 endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/buddy-pay/sign-in
+    uri: api/v1/ezpg/sign-in
     metadata:
-      groupName: 'BuddyPay Mobile API'
+      groupName: 'EZPG API'
       groupDescription: |-
 
-        BuddyPay와 BuddyPay Mobile간 API 입니다.
+        EZPG와 Smart Data간 API 입니다.
       subgroup: ''
       subgroupDescription: ''
       title: 로그인
-      description: '각 한도의 종료시간이 시작시간보다 작을 경우, 종료시간은 다음날로 계산됩니다.'
+      description: ''
       authenticated: false
       custom: []
     headers:
@@ -30,7 +30,7 @@ endpoints:
         name: user_name
         description: '가맹점 아이디'
         required: true
-        example: placeat
+        example: rem
         type: string
         enumValues: []
         custom: []
@@ -38,13 +38,13 @@ endpoints:
         name: user_pw
         description: '가맹점 패스워드'
         required: true
-        example: at
+        example: quis
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      user_name: placeat
-      user_pw: at
+      user_name: rem
+      user_pw: quis
     fileParameters: []
     responses:
       -
@@ -121,134 +121,6 @@ endpoints:
         type: object
         enumValues: []
         custom: []
-      user.level:
-        name: user.level
-        description: '로그인 레벨'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      user.mcht_option:
-        name: user.mcht_option
-        description: '가맹점 옵션'
-        required: false
-        example: null
-        type: object
-        enumValues: []
-        custom: []
-      user.mcht_option.downward_s_tm:
-        name: user.mcht_option.downward_s_tm
-        description: '단건결제한도 시작시간'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        custom: []
-      user.mcht_option.downward_e_tm:
-        name: user.mcht_option.downward_e_tm
-        description: '단건결제한도 종료시간'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        custom: []
-      user.mcht_option.downward_limit:
-        name: user.mcht_option.downward_limit
-        description: '단건결제한도 상한금'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      user.payment_option:
-        name: user.payment_option
-        description: '결제모듈 옵션'
-        required: false
-        example: null
-        type: object
-        enumValues: []
-        custom: []
-      user.payment_option.pay_year_limit:
-        name: user.payment_option.pay_year_limit
-        description: '연 결제한도(만원단위)'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        custom: []
-      user.payment_option.pay_month_limit:
-        name: user.payment_option.pay_month_limit
-        description: '월 결제한도(만원단위)'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        custom: []
-      user.payment_option.pay_day_limit:
-        name: user.payment_option.pay_day_limit
-        description: '일 결제한도(만원단위)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      user.payment_option.pay_single_limit:
-        name: user.payment_option.pay_single_limit
-        description: '단건 결제한도(만원단위)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      user.payment_option.pay_disable_s_tm:
-        name: user.payment_option.pay_disable_s_tm
-        description: '결제금지 시작시간'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      user.payment_option.pay_disable_e_tm:
-        name: user.payment_option.pay_disable_e_tm
-        description: '결제금지 종료시간'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      user.specified_time_option:
-        name: user.specified_time_option
-        description: '지정시간 옵션'
-        required: false
-        example: null
-        type: object
-        enumValues: []
-        custom: []
-      user.specified_time_option.disable_s_tm:
-        name: user.specified_time_option.disable_s_tm
-        description: '거래제한 시작시간'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        custom: []
-      user.specified_time_option.disable_e_tm:
-        name: user.specified_time_option.disable_e_tm
-        description: '종료제한 시작시간'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        custom: []
-      user.specified_time_option.disable_type:
-        name: user.specified_time_option.disable_type
-        description: '제한타입(0=결제금지,1=이체금지)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
     auth: []
     controller: null
     method: null
@@ -257,190 +129,12 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/buddy-pay/pay-modules
+    uri: api/v1/ezpg/transactions
     metadata:
-      groupName: 'BuddyPay Mobile API'
+      groupName: 'EZPG API'
       groupDescription: |-
 
-        BuddyPay와 BuddyPay Mobile간 API 입니다.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '결제모듈정보 조회'
-      description: '결제모듈정보를 불러옵니다.<br>한도 및 수기결제에 필요한 데이터들을 조회합니다.'
-      authenticated: true
-      custom: []
-    headers:
-      Authorization: 'Bearer {ACCESS_TOKEN}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |
-          [
-              {
-                  "id":1,
-                  "is_old_auth":1,
-                  "module_type":1,
-                  "installment":12,
-                  "pay_year_limit":100,
-                  "pay_month_limit":200,
-                  "pay_day_limit":0,
-                  "pay_single_limit":300,
-                  "pay_year_amount": 3640000,
-                  "pay_month_amount": 3640000,
-                  "pay_day_amount": 1640000,
-                  "pay_able_amount":-2640000,
-                  "pay_window_secure_level": 0      
-              },
-              {
-                  "id":5,
-                  "is_old_auth":0,
-                  "module_type":1,
-                  "installment":12,
-                  "pay_year_limit":100,
-                  "pay_month_limit":200,
-                  "pay_day_limit":0,
-                  "pay_single_limit":300,
-                  "pay_year_amount": 3640000,
-                  "pay_month_amount": 3640000,
-                  "pay_day_amount": 1640000,
-                  "pay_able_amount":-2640000,
-                  "pay_window_secure_level": 0
-              }    
-          ]
-        headers: []
-        description: ''
-        custom: []
-    responseFields:
-      id:
-        name: id
-        description: '결제모듈 고유번호'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      module_type:
-        name: module_type
-        description: '모듈 타입(0=장비, 1=수기, 2=인증, 3=간편)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      settle_fee:
-        name: settle_fee
-        description: '입금 수수료'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      is_old_auth:
-        name: is_old_auth
-        description: '비인증, 구인증 여부(비인증=0, 구인증=1)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      installment:
-        name: installment
-        description: 할부한도(0~12)
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        custom: []
-      pay_year_limit:
-        name: pay_year_limit
-        description: '연결제 한도(만 단위)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      pay_month_limit:
-        name: pay_month_limit
-        description: '월결제 한도(만 단위)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      pay_single_limit:
-        name: pay_single_limit
-        description: '일결제 한도(만 단위)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      pay_year_amount:
-        name: pay_year_amount
-        description: '연결제 금액'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      pay_month_amount:
-        name: pay_month_amount
-        description: '월결제 금액'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      pay_day_amount:
-        name: pay_day_amount
-        description: '일결제 금액'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      pay_able_amount:
-        name: pay_able_amount
-        description: '결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      pay_window_secure_level:
-        name: pay_window_secure_level
-        description: '결제창 보안등급'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 8g3bfaZcDh4ekEv5aVd6P16'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/buddy-pay/transactions
-    metadata:
-      groupName: 'BuddyPay Mobile API'
-      groupDescription: |-
-
-        BuddyPay와 BuddyPay Mobile간 API 입니다.
+        EZPG와 Smart Data간 API 입니다.
       subgroup: ''
       subgroupDescription: ''
       title: '결제내역 조회'
@@ -490,7 +184,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: sint
+        example: natus
         type: string
         enumValues: []
         custom: []
@@ -499,7 +193,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: sint
+      search: natus
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -819,272 +513,565 @@ endpoints:
         type: integer
         enumValues: []
         custom: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer bvfhg5aZdkVc8661Ea3P4eD'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/buddy-pay/pay/hand
-    metadata:
-      groupName: 'BuddyPay Mobile API'
-      groupDescription: |-
-
-        BuddyPay와 BuddyPay Mobile간 API 입니다.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 수기결제
-      description: '수기결제 API 입니다.'
-      authenticated: true
-      custom: []
-    headers:
-      Authorization: 'Bearer {ACCESS_TOKEN}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      pmod_id:
-        name: pmod_id
-        description: '결제모듈 고유번호.'
-        required: true
-        example: 1023.0
-        type: number
-        enumValues: []
-        custom: []
-      yymm:
-        name: yymm
-        description: '4자리 YYMM 유효기간.'
-        required: true
-        example: 2311.0
-        type: number
-        enumValues: []
-        custom: []
-      card_num:
-        name: card_num
-        description: 카드번호.
-        required: true
-        example: '1234000000005678'
-        type: string
-        enumValues: []
-        custom: []
-      buyer_name:
-        name: buyer_name
-        description: 구매자명.
-        required: true
-        example: 홍길동
-        type: string
-        enumValues: []
-        custom: []
-      buyer_phone:
-        name: buyer_phone
-        description: '휴대폰 번호.'
-        required: true
-        example: '01000000000'
-        type: string
-        enumValues: []
-        custom: []
-      installment:
-        name: installment
-        description: '할부기간(0=일시불,2,3,4,5,6,7,8,9,10,11).<br>결제모듈의 할부한도를 초과할 수 없습니다.'
-        required: true
-        example: 0.0
-        type: number
-        enumValues: []
-        custom: []
-      amount:
-        name: amount
-        description: 구매금액.
-        required: true
-        example: 10000
-        type: string
-        enumValues: []
-        custom: []
-      ord_num:
-        name: ord_num
-        description: '중복되지 않는 주문번호.<br>50자 이하로 작성해야합니다.'
-        required: true
-        example: 1700385517624H102302
-        type: string
-        enumValues: []
-        custom: []
-      item_name:
-        name: item_name
-        description: 상품명.
-        required: true
-        example: '메가커피 아메리카노 L'
-        type: string
-        enumValues: []
-        custom: []
-      auth_num:
-        name: auth_num
-        description: '인증정보<b>(구인증 필수 값)</b>.<br>카도번호 소유주가 법인인경우 사업자번호, 개인인경우 주민등록번호 앞자리를 입력합니다.'
-        required: false
-        example: '901212'
-        type: string
-        enumValues: []
-        custom: []
-      card_pw:
-        name: card_pw
-        description: '카드비밀번호 앞 2자리<b>(구인증 필수 값)</b>.'
-        required: false
-        example: '34'
-        type: string
-        enumValues: []
-        custom: []
-    cleanBodyParameters:
-      pmod_id: 1023.0
-      yymm: 2311.0
-      card_num: '1234000000005678'
-      buyer_name: 홍길동
-      buyer_phone: '01000000000'
-      installment: 0.0
-      amount: 10000
-      ord_num: 1700385517624H102302
-      item_name: '메가커피 아메리카노 L'
-      auth_num: '901212'
-      card_pw: '34'
-    fileParameters: []
-    responses:
-      -
-        status: 201
-        content: |
-          {
-              "mid": "wel000707m",
-              "tid": "90387",
-              "amount": 100,
-              "ord_num": "1704385517624H102402",
-              "appr_num": "57480451",
-              "item_name": "메가커피 아메리카노 L",
-              "pg_id": 112,
-              "trx_id": "202311200495962",
-              "acquirer": "IBK",
-              "issuer": "IBK",
-              "card_num": "414003******3964",
-              "installment": "00",
-              "buyer_name": "홍길동",
-              "trx_dttm": "2023-11-20 00:09:39",
-              "method": "수기",
-              "is_cancel": 0
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields:
-      mid:
-        name: mid
-        description: '가맹점 MID'
+      'content.*.trx_dt':
+        name: 'content.*.trx_dt'
+        description: 승인일자
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      tid:
-        name: tid
-        description: '단말기 TID'
+      'content.*.trx_tm':
+        name: 'content.*.trx_tm'
+        description: 승인시간
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      amount:
-        name: amount
-        description: 거래금액
+      'content.*.cxl_dt':
+        name: 'content.*.cxl_dt'
+        description: '취소일자(취소일 경우)'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.cxl_tm':
+        name: 'content.*.cxl_tm'
+        description: '취소시간(취소일 경우)'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.cxl_seq':
+        name: 'content.*.cxl_seq'
+        description: '취소회차(취소일 경우)'
         required: false
         example: null
         type: integer
         enumValues: []
         custom: []
-      ord_num:
-        name: ord_num
-        description: '가맹점 주문번호'
+      'content.*.ori_trx_id':
+        name: 'content.*.ori_trx_id'
+        description: '원거래에 사용된 transaction ID (취소일 경우)'
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      appr_num:
-        name: appr_num
+      'content.*.ord_num':
+        name: 'content.*.ord_num'
+        description: '거래에 사용된 order number'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.trx_id':
+        name: 'content.*.trx_id'
+        description: '거래에 사용된 transaction ID'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.mid':
+        name: 'content.*.mid'
+        description: '거래에 사용된 PG사 MID'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.tid':
+        name: 'content.*.tid'
+        description: '거래에 사용된 terminal ID'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.card_num':
+        name: 'content.*.card_num'
+        description: '마스킹된 카드번호'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.issuer':
+        name: 'content.*.issuer'
+        description: 발급사
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.acquirer':
+        name: 'content.*.acquirer'
+        description: 매입사
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.installment':
+        name: 'content.*.installment'
+        description: 할부개월(0~12)
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.appr_num':
+        name: 'content.*.appr_num'
         description: 승인번호
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      item_name:
-        name: item_name
-        description: 상품명
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 38Vk6gb5DEdPa1eZhf4cav6'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/ezpg/reconciliation
+    metadata:
+      groupName: 'EZPG API'
+      groupDescription: |-
+
+        EZPG와 Smart Data간 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '실시간 거래대사'
+      description: '특정 기간의 결제내역을 조회합니다.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {ACCESS_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: '조회 페이지'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: '조회 사이즈'
+        required: true
+        example: 20
+        type: integer
+        enumValues: []
+        custom: []
+      s_at:
+        name: s_at
+        description: '검색 시작일'
+        required: true
+        example: '2023-11-01 00:00:00'
+        type: string
+        enumValues: []
+        custom: []
+      e_at:
+        name: e_at
+        description: '검색 종료일'
+        required: true
+        example: '2023-11-30 23:59:59'
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      page: 1
+      page_size: 20
+      s_at: '2023-11-01 00:00:00'
+      e_at: '2023-11-30 23:59:59'
+    bodyParameters:
+      page:
+        name: page
+        description: ''
+        required: true
+        example: 9
+        type: integer
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: ''
+        required: true
+        example: 3
+        type: integer
+        enumValues: []
+        custom: []
+      s_at:
+        name: s_at
+        description: ''
+        required: true
+        example: quae
+        type: string
+        enumValues: []
+        custom: []
+      e_at:
+        name: e_at
+        description: ''
+        required: true
+        example: alias
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      page: 9
+      page_size: 3
+      s_at: quae
+      e_at: alias
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |
+          {
+              "page": "1",
+              "page_size": "20",
+              "total": 2,
+              "content": [
+                  {
+                      "is_cancel": 0,
+                      "trx_dt": "2023-11-01",
+                      "trx_tm": "14:20:15",
+                      "cxl_dt": null,
+                      "cxl_tm": null,
+                      "cxl_seq": 0,
+                      "ori_trx_id": null,
+                      "amount": 1000,
+                      "ord_num": "57839H1700562509",
+                      "trx_id": "202311210528348",
+                      "mid": "PVPG_C3568479",
+                      "tid": "2824020001",
+                      "card_num": "467309******5166",
+                      "issuer": "국민",
+                      "acquirer": "국민",
+                      "installment": 0,
+                      "appr_num": "30018849"
+                  },
+                  {
+                      "is_cancel": 1,
+                      "trx_dt": "2023-11-01",
+                      "trx_tm": "14:25:15",
+                      "cxl_dt": "2023-11-01",
+                      "cxl_tm": "17:30:37",
+                      "cxl_seq": 1,
+                      "ori_trx_id": "202311210528348",
+                      "amount": -1000,
+                      "ord_num": "57839H1700562509",
+                      "trx_id": "202311210528413",
+                      "mid": "PVPG_C3568479",
+                      "tid": "2824020001",
+                      "card_num": "467309******5166",
+                      "issuer": "국민",
+                      "acquirer": "국민",
+                      "installment": 0,
+                      "appr_num": "30018849"
+                  }
+              ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields:
+      page:
+        name: page
+        description: '조회 페이지'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: '조회 사이즈'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      total:
+        name: total
+        description: '총 개수'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      content:
+        name: content
+        description: 결과
+        required: false
+        example: null
+        type: 'object[]'
+        enumValues: []
+        custom: []
+      'content.*.is_cancel':
+        name: 'content.*.is_cancel'
+        description: '취소여부(0=승인, 1=취소)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.trx_dt':
+        name: 'content.*.trx_dt'
+        description: 승인일자
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      trx_id:
-        name: trx_id
-        description: 거래번호
+      'content.*.trx_tm':
+        name: 'content.*.trx_tm'
+        description: 승인시간
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      acquirer:
-        name: acquirer
-        description: 매입사명
+      'content.*.cxl_dt':
+        name: 'content.*.cxl_dt'
+        description: '취소일자(취소일 경우)'
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      issuer:
-        name: issuer
-        description: 발급사명
+      'content.*.cxl_tm':
+        name: 'content.*.cxl_tm'
+        description: '취소시간(취소일 경우)'
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      card_num:
-        name: card_num
-        description: 카드번호
+      'content.*.cxl_seq':
+        name: 'content.*.cxl_seq'
+        description: '취소회차(취소일 경우)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.ori_trx_id':
+        name: 'content.*.ori_trx_id'
+        description: '원거래에 사용된 transaction ID (취소일 경우)'
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      installment:
-        name: installment
-        description: 할부기간
+      'content.*.amount':
+        name: 'content.*.amount'
+        description: 거래금액
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.ord_num':
+        name: 'content.*.ord_num'
+        description: '거래에 사용된 order number'
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      method:
-        name: method
-        description: 결제방식
+      'content.*.trx_id':
+        name: 'content.*.trx_id'
+        description: '거래에 사용된 transaction ID'
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      trx_dttm:
-        name: trx_dttm
-        description: '거래시간(Y-m-d H:i:s)'
+      'content.*.mid':
+        name: 'content.*.mid'
+        description: '거래에 사용된 PG사 MID'
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      is_cancel:
-        name: is_cancel
-        description: 취소여부
+      'content.*.tid':
+        name: 'content.*.tid'
+        description: '거래에 사용된 terminal ID'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.card_num':
+        name: 'content.*.card_num'
+        description: '마스킹된 카드번호'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.issuer':
+        name: 'content.*.issuer'
+        description: 발급사
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.acquirer':
+        name: 'content.*.acquirer'
+        description: 매입사
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.installment':
+        name: 'content.*.installment'
+        description: 할부개월(0~12)
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.appr_num':
+        name: 'content.*.appr_num'
+        description: 승인번호
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer Z6Edfh3bPVkae5D1a46v8gc'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/ezpg/reconciliation/summary
+    metadata:
+      groupName: 'EZPG API'
+      groupDescription: |-
+
+        EZPG와 Smart Data간 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '일별 요약 거래대사'
+      description: '특정 일의 결제내역을 조회합니다.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {ACCESS_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      t_dt:
+        name: t_dt
+        description: 조회일
+        required: true
+        example: '2023-11-01'
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      t_dt: '2023-11-01'
+    bodyParameters:
+      t_dt:
+        name: t_dt
+        description: ''
+        required: true
+        example: id
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      t_dt: id
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |
+          {
+              "mcht_id": 12345,
+              "appr_amount": 1000,
+              "appr_count": 1,
+              "cxl_amount": -1000,
+              "cxl_count": 1,
+              "sales_amount": 0,
+              "total_count": 2
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields:
+      appr_amount:
+        name: appr_amount
+        description: '승인 금액 합계'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      appr_count:
+        name: appr_count
+        description: '승인 건수 합계'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      cxl_amount:
+        name: cxl_amount
+        description: '취소 금액 합계'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      cxl_count:
+        name: cxl_count
+        description: '취소 건수 합계'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      sales_amount:
+        name: sales_amount
+        description: '매출(승인+취소) 합계'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      total_count:
+        name: total_count
+        description: '총 건수'
         required: false
         example: null
         type: integer
@@ -1093,133 +1080,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer VbhD5fvZ6k18c34gd6eaPaE'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/buddy-pay/mobile-code-issuance
-    metadata:
-      groupName: 'BuddyPay Mobile API'
-      groupDescription: |-
-
-        BuddyPay와 BuddyPay Mobile간 API 입니다.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '모바일 코드 발급'
-      description: '인증번호를 문자로 전달합니다.<br>mcht_id는 login API의 응답 값에서 id 파라미터를 의미합니다.'
-      authenticated: true
-      custom: []
-    headers:
-      Authorization: 'Bearer {ACCESS_TOKEN}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      phone_num:
-        name: phone_num
-        description: 휴대폰번호
-        required: true
-        example: '01000001234'
-        type: string
-        enumValues: []
-        custom: []
-      mcht_id:
-        name: mcht_id
-        description: '가맹점 고유번호'
-        required: true
-        example: 15.0
-        type: number
-        enumValues: []
-        custom: []
-    cleanBodyParameters:
-      phone_num: '01000001234'
-      mcht_id: 15.0
-    fileParameters: []
-    responses:
-      -
-        status: 401
-        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          vary: Origin
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer ceDfVd3h6k8bPEga6a1v45Z'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/buddy-pay/mobile-code-auth
-    metadata:
-      groupName: 'BuddyPay Mobile API'
-      groupDescription: |-
-
-        BuddyPay와 BuddyPay Mobile간 API 입니다.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '휴대폰 인증번호 확인'
-      description: '제한시간은 3분이며 3분이후에 생성된 키값이 자동으로 삭제됩니다.'
-      authenticated: true
-      custom: []
-    headers:
-      Authorization: 'Bearer {ACCESS_TOKEN}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      verification_number:
-        name: verification_number
-        description: '문자로 전달받은 인증번호'
-        required: true
-        example: '1028933'
-        type: string
-        enumValues: []
-        custom: []
-      phone_num:
-        name: phone_num
-        description: 휴대폰번호
-        required: true
-        example: '01000000000'
-        type: string
-        enumValues: []
-        custom: []
-    cleanBodyParameters:
-      verification_number: '1028933'
-      phone_num: '01000000000'
-    fileParameters: []
-    responses:
-      -
-        status: 401
-        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          vary: Origin
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer EgkvV661D8chZb4Pdaae35f'
+      - 'Bearer fg18c6vk6d3aPbahV5ZE4De'
     controller: null
     method: null
     route: null

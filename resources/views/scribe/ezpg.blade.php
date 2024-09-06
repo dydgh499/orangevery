@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -12,8 +12,7 @@
     <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/obsidian.min.css">
     <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jets/0.14.1/jets.min.js"></script>
-    <link rel="icon" href="https://team.payvery.kr/storage/images/favicons/WT1zvOl9RSB5JFkLAJ8Q4bgRxO2UZ8677Toa7R4I.ico">
-    <style id="language-style">
+    <link rel="icon" href="https://team.payvery.kr/storage/images/favicons/WT1zvOl9RSB5JFkLAJ8Q4bgRxO2UZ8677Toa7R4I.ico">    <style id="language-style">
       /* starts out as display none and is replaced with js later  */
       body .content .javascript-example code {
         display: none;
@@ -41,8 +40,8 @@
   </head>
   <body data-languages="[&quot;javascript&quot;,&quot;php&quot;,&quot;python&quot;,&quot;bash&quot;]"><a href="#" id="nav-button"><span> MENU <img src="../docs/images/navbar.png" alt="navbar-image" /></span></a>
     <div class="tocify-wrapper">
-      <div style="display: inline-flex; align-items: center; text-align: center; vertical-align: middle; padding: 1em; justify-content: left;"><img src="https://w.ez-pg.kr/storage/images/logos/KU9q8LxifqSQw0Mhbqi0cqFu2SLsvmTriTBt7BvI.svg" alt="logo" class="logo" width="20%" /><span style='margin-left: 0.5em; font-size: 1.7em;'>이지피쥐</span></div>
-      <div class="lang-selector"><button type="button" class="lang-button" data-language-name="javascript">javascript</button><button type="button" class="lang-button" data-language-name="php">php</button><button type="button" class="lang-button" data-language-name="python">python</button><button type="button" class="lang-button" data-language-name="bash">bash</button></div>
+    <div style="display: inline-flex; align-items: center; text-align: center; vertical-align: middle; padding: 1em; justify-content: left;"><img src="https://w.ez-pg.kr/storage/images/logos/KU9q8LxifqSQw0Mhbqi0cqFu2SLsvmTriTBt7BvI.svg" alt="logo" class="logo" width="20%" /><span style='margin-left: 0.5em; font-size: 1.7em;'>이지피쥐</span></div>
+    <div class="lang-selector"><button type="button" class="lang-button" data-language-name="javascript">javascript</button><button type="button" class="lang-button" data-language-name="php">php</button><button type="button" class="lang-button" data-language-name="python">python</button><button type="button" class="lang-button" data-language-name="bash">bash</button></div>
       <div class="search"><input type="text" class="search" id="input-search" placeholder="검색"></div>
       <div id="toc">
         <ul id="tocify-header-" class="tocify-header">
@@ -56,14 +55,16 @@
           <ul id="tocify-subheader-ezpg-api" class="tocify-subheader">
             <li class="tocify-item level-2" data-unique="ezpg-api-POSTapi-v1-ezpg-sign-in"><a href="#ezpg-api-POSTapi-v1-ezpg-sign-in">로그인</a></li>
             <li class="tocify-item level-2" data-unique="ezpg-api-GETapi-v1-ezpg-transactions"><a href="#ezpg-api-GETapi-v1-ezpg-transactions">결제내역 조회</a></li>
+            <li class="tocify-item level-2" data-unique="ezpg-api-GETapi-v1-ezpg-reconciliation"><a href="#ezpg-api-GETapi-v1-ezpg-reconciliation">실시간 거래대사</a></li>
+            <li class="tocify-item level-2" data-unique="ezpg-api-GETapi-v1-ezpg-reconciliation-summary"><a href="#ezpg-api-GETapi-v1-ezpg-reconciliation-summary">일별 요약 거래대사</a></li>
           </ul>
         </ul>
       </div>
       <ul class="toc-footer" id="toc-footer">
-        <li><a>Documentation powered by EZPG ✍</a></li>
+          <li><a>Documentation powered by EZPG ✍</a></li>
       </ul>
       <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트: 2024-01-15 21:37:35</li>
+        <li>마지막 업데이트: 2024-09-06 12:37:56</li>
       </ul>
     </div>
     <div class="page-wrapper">
@@ -161,8 +162,8 @@ const headers = {
 };
 
 let body = {
-    "user_name": "nisi",
-    "user_pw": "voluptatem"
+    "user_name": "rem",
+    "user_pw": "quis"
 };
 
 fetch(url, {
@@ -181,8 +182,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'user_name' =&gt; 'nisi',
-            'user_pw' =&gt; 'voluptatem',
+            'user_name' =&gt; 'rem',
+            'user_pw' =&gt; 'quis',
         ],
     ]
 );
@@ -195,8 +196,8 @@ import json
 
 url = 'https://w.ez-pg.kr/api/v1/ezpg/sign-in'
 payload = {
-    "user_name": "nisi",
-    "user_pw": "voluptatem"
+    "user_name": "rem",
+    "user_pw": "quis"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -212,8 +213,8 @@ response.json()</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"user_name\": \"nisi\",
-    \"user_pw\": \"voluptatem\"
+    \"user_name\": \"rem\",
+    \"user_pw\": \"quis\"
 }"
 </code></pre>
             </div>
@@ -226,7 +227,50 @@ response.json()</code></pre>
     &quot;user&quot;: {
         &quot;id&quot;: 12,
         &quot;user_name&quot;: &quot;test0001&quot;,
-        &quot;level&quot;: 10
+        &quot;level&quot;: 10,
+        &quot;mcht_option&quot;: {
+            &quot;downward_s_tm&quot;: &quot;23:00&quot;,
+            &quot;downward_e_tm&quot;: &quot;07:00&quot;,
+            &quot;downward_limit&quot;: 300
+        },
+        &quot;payment_option&quot;: [
+            {
+                &quot;id&quot;: 1,
+                &quot;mcht_id&quot;: 12,
+                &quot;pay_year_limit&quot;: 10000,
+                &quot;pay_month_limit&quot;: 1000,
+                &quot;pay_day_limit&quot;: 30,
+                &quot;pay_single_limit&quot;: 3,
+                &quot;pay_disable_s_tm&quot;: &quot;23:00&quot;,
+                &quot;pay_disable_e_tm&quot;: &quot;07:00&quot;
+            },
+            {
+                &quot;id&quot;: 2,
+                &quot;mcht_id&quot;: 12,
+                &quot;pay_year_limit&quot;: 10000,
+                &quot;pay_month_limit&quot;: 1000,
+                &quot;pay_day_limit&quot;: 30,
+                &quot;pay_single_limit&quot;: 3,
+                &quot;pay_disable_s_tm&quot;: &quot;13:00&quot;,
+                &quot;pay_disable_e_tm&quot;: &quot;23:00&quot;
+            }
+        ],
+        &quot;specified_time_option&quot;: [
+            {
+                &quot;id&quot;: 1,
+                &quot;mcht_id&quot;: 12,
+                &quot;disable_s_tm&quot;: &quot;23:00&quot;,
+                &quot;disable_e_tm&quot;: &quot;07:00&quot;,
+                &quot;disable_type&quot;: 0
+            },
+            {
+                &quot;id&quot;: 2,
+                &quot;mcht_id&quot;: 12,
+                &quot;disable_s_tm&quot;: &quot;23:00&quot;,
+                &quot;disable_e_tm&quot;: &quot;07:00&quot;,
+                &quot;disable_type&quot;: 1
+            }
+        ]
     }
 }</code></pre>
           </span><span id="execution-results-POSTapi-v1-ezpg-sign-in" hidden>
@@ -242,7 +286,7 @@ response.json()</code></pre>
 디버깅 정보는 개발자 도구 콘솔에서 확인할 수 있습니다.</code></pre>
           </span>
           <form id="form-POSTapi-v1-ezpg-sign-in" data-method="POST" data-path="api/v1/ezpg/sign-in" data-authed="0" data-hasfiles="0" data-isarraybody="0" autocomplete="off" onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-ezpg-sign-in', this);">
-            <h3> 요청&nbsp;&nbsp;&nbsp; <button type="button" style="border-color: #0D47A1; background-color: #0D47A1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-ezpg-sign-in" onclick="tryItOut('POSTapi-v1-ezpg-sign-in');">시도하기 ⚡ </button><button type="button" style="border-color: #dfa1a5; background-color: #dfa1a5; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-ezpg-sign-in" onclick="cancelTryOut('POSTapi-v1-ezpg-sign-in');" hidden>취소 🛑 </button>&nbsp;&nbsp; <button type="submit" style="border-color: #81f18e; background-color: #81f18e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-ezpg-sign-in" data-initial-text="요청 💥" data-loading-text="⏱ 요청중..." hidden>요청 💥 </button></h3>
+            <h3> 요청&nbsp;&nbsp;&nbsp; <button type="button" style="border-color: #0d47a1; background-color: #0d47a1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-ezpg-sign-in" onclick="tryItOut('POSTapi-v1-ezpg-sign-in');">시도하기 ⚡ </button><button type="button" style="border-color: #dfa1a5; background-color: #dfa1a5; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-ezpg-sign-in" onclick="cancelTryOut('POSTapi-v1-ezpg-sign-in');" hidden>취소 🛑 </button>&nbsp;&nbsp; <button type="submit" style="border-color: #81f18e; background-color: #81f18e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-ezpg-sign-in" data-initial-text="요청 💥" data-loading-text="⏱ 요청중..." hidden>요청 💥 </button></h3>
             <p><small class="badge badge-black">POST</small><b><code>api/v1/ezpg/sign-in</code></b></p>
             <h4 class="fancy-heading-panel"><b>헤더</b></h4>
             <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp; &nbsp; &nbsp; <input type="text" style="display: none" name="Content-Type" data-endpoint="POSTapi-v1-ezpg-sign-in" value="application/json" data-component="header"><br>
@@ -252,11 +296,11 @@ response.json()</code></pre>
               <p><br>예시: <code>application/json</code></p>
             </div>
             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>user_name</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <input type="text" style="display: none" name="user_name" data-endpoint="POSTapi-v1-ezpg-sign-in" value="nisi" data-component="body"><br>
-              <p>가맹점 아이디 <br>예시: <code>nisi</code></p>
+            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>user_name</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <input type="text" style="display: none" name="user_name" data-endpoint="POSTapi-v1-ezpg-sign-in" value="rem" data-component="body"><br>
+              <p>가맹점 아이디 <br>예시: <code>rem</code></p>
             </div>
-            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>user_pw</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <input type="text" style="display: none" name="user_pw" data-endpoint="POSTapi-v1-ezpg-sign-in" value="voluptatem" data-component="body"><br>
-              <p>가맹점 패스워드 <br>예시: <code>voluptatem</code></p>
+            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>user_pw</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <input type="text" style="display: none" name="user_pw" data-endpoint="POSTapi-v1-ezpg-sign-in" value="quis" data-component="body"><br>
+              <p>가맹점 패스워드 <br>예시: <code>quis</code></p>
             </div>
           </form>
           <h3>응답</h3>
@@ -281,7 +325,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "dolorem",
+    "search": "natus",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -312,7 +356,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'dolorem',
+            'search' =&gt; 'natus',
         ],
     ]
 );
@@ -329,7 +373,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'dolorem',
+  'search': 'natus',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -342,7 +386,7 @@ response.json()</code></pre>
             </div>
             <div class="bash-example">
               <pre><code class="language-bash">curl --request GET \
-    --get "https://w.ez-pg.kr/api/v1/ezpg/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=dolorem" \
+    --get "https://w.ez-pg.kr/api/v1/ezpg/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=natus" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
@@ -512,7 +556,7 @@ response.json()</code></pre>
 디버깅 정보는 개발자 도구 콘솔에서 확인할 수 있습니다.</code></pre>
           </span>
           <form id="form-GETapi-v1-ezpg-transactions" data-method="GET" data-path="api/v1/ezpg/transactions" data-authed="1" data-hasfiles="0" data-isarraybody="0" autocomplete="off" onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-ezpg-transactions', this);">
-            <h3> 요청&nbsp;&nbsp;&nbsp; <button type="button" style="border-color: #0D47A1; background-color: #0D47A1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-GETapi-v1-ezpg-transactions" onclick="tryItOut('GETapi-v1-ezpg-transactions');">시도하기 ⚡ </button><button type="button" style="border-color: #dfa1a5; background-color: #dfa1a5; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-GETapi-v1-ezpg-transactions" onclick="cancelTryOut('GETapi-v1-ezpg-transactions');" hidden>취소 🛑 </button>&nbsp;&nbsp; <button type="submit" style="border-color: #81f18e; background-color: #81f18e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-GETapi-v1-ezpg-transactions" data-initial-text="요청 💥" data-loading-text="⏱ 요청중..." hidden>요청 💥 </button></h3>
+            <h3> 요청&nbsp;&nbsp;&nbsp; <button type="button" style="border-color: #0d47a1; background-color: #0d47a1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-GETapi-v1-ezpg-transactions" onclick="tryItOut('GETapi-v1-ezpg-transactions');">시도하기 ⚡ </button><button type="button" style="border-color: #dfa1a5; background-color: #dfa1a5; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-GETapi-v1-ezpg-transactions" onclick="cancelTryOut('GETapi-v1-ezpg-transactions');" hidden>취소 🛑 </button>&nbsp;&nbsp; <button type="submit" style="border-color: #81f18e; background-color: #81f18e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-GETapi-v1-ezpg-transactions" data-initial-text="요청 💥" data-loading-text="⏱ 요청중..." hidden>요청 💥 </button></h3>
             <p><small class="badge badge-green">GET</small><b><code>api/v1/ezpg/transactions</code></b></p>
             <h4 class="fancy-heading-panel"><b>헤더</b></h4>
             <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp; &nbsp; &nbsp; <input type="text" style="display: none" name="Authorization" class="auth-value" data-endpoint="GETapi-v1-ezpg-transactions" value="Bearer {ACCESS_TOKEN}" data-component="header"><br>
@@ -537,8 +581,8 @@ response.json()</code></pre>
             <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>e_dt</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; <i><b>optional</b></i> &nbsp; <input type="text" style="display: none" name="e_dt" data-endpoint="GETapi-v1-ezpg-transactions" value="2023-11-30" data-component="query"><br>
               <p>검색 종료일 <br>예시: <code>2023-11-30</code></p>
             </div>
-            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; <i><b>optional</b></i> &nbsp; <input type="text" style="display: none" name="search" data-endpoint="GETapi-v1-ezpg-transactions" value="dolorem" data-component="query"><br>
-              <p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>dolorem</code></p>
+            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; <i><b>optional</b></i> &nbsp; <input type="text" style="display: none" name="search" data-endpoint="GETapi-v1-ezpg-transactions" value="natus" data-component="query"><br>
+              <p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>natus</code></p>
             </div>
           </form>
           <h3>응답</h3>
@@ -608,9 +652,483 @@ response.json()</code></pre>
                   <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>hold_amount</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
                     <p>가맹점 유보금 수수료</p>
                   </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>trx_dt</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>승인일자</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>trx_tm</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>승인시간</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>cxl_dt</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>취소일자(취소일 경우)</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>cxl_tm</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>취소시간(취소일 경우)</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>cxl_seq</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+                    <p>취소회차(취소일 경우)</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>ori_trx_id</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>원거래에 사용된 transaction ID (취소일 경우)</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>ord_num</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>거래에 사용된 order number</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>trx_id</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>거래에 사용된 transaction ID</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>mid</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>거래에 사용된 PG사 MID</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>tid</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>거래에 사용된 terminal ID</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>card_num</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>마스킹된 카드번호</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>issuer</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>발급사</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>acquirer</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>매입사</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>installment</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+                    <p>할부개월(0~12)</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>appr_num</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>승인번호</p>
+                  </div>
                 </details>
               </div>
             </details>
+          </div>
+          <h2 id="ezpg-api-GETapi-v1-ezpg-reconciliation">실시간 거래대사</h2>
+          <p><small class="badge badge-darkred">인증 필요</small></p>
+          <p>특정 기간의 결제내역을 조회합니다.</p><span id="example-requests-GETapi-v1-ezpg-reconciliation">
+            <blockquote>예시 요청:</blockquote>
+            <div class="javascript-example">
+              <pre><code class="language-javascript">const url = new URL(
+    "https://w.ez-pg.kr/api/v1/ezpg/reconciliation"
+);
+
+const params = {
+    "page": "1",
+    "page_size": "20",
+    "s_at": "2023-11-01 00:00:00",
+    "e_at": "2023-11-30 23:59:59",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Authorization": "Bearer {ACCESS_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "page": 9,
+    "page_size": 3,
+    "s_at": "quae",
+    "e_at": "alias"
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre>
+            </div>
+            <div class="php-example">
+              <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'https://w.ez-pg.kr/api/v1/ezpg/reconciliation',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {ACCESS_TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'page' =&gt; '1',
+            'page_size' =&gt; '20',
+            's_at' =&gt; '2023-11-01 00:00:00',
+            'e_at' =&gt; '2023-11-30 23:59:59',
+        ],
+        'json' =&gt; [
+            'page' =&gt; 9,
+            'page_size' =&gt; 3,
+            's_at' =&gt; 'quae',
+            'e_at' =&gt; 'alias',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+            </div>
+            <div class="python-example">
+              <pre><code class="language-python">import requests
+import json
+
+url = 'https://w.ez-pg.kr/api/v1/ezpg/reconciliation'
+payload = {
+    "page": 9,
+    "page_size": 3,
+    "s_at": "quae",
+    "e_at": "alias"
+}
+params = {
+  'page': '1',
+  'page_size': '20',
+  's_at': '2023-11-01 00:00:00',
+  'e_at': '2023-11-30 23:59:59',
+}
+headers = {
+  'Authorization': 'Bearer {ACCESS_TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers, json=payload, params=params)
+response.json()</code></pre>
+            </div>
+            <div class="bash-example">
+              <pre><code class="language-bash">curl --request GET \
+    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation?page=1&amp;page_size=20&amp;s_at=2023-11-01+00%3A00%3A00&amp;e_at=2023-11-30+23%3A59%3A59" \
+    --header "Authorization: Bearer {ACCESS_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"page\": 9,
+    \"page_size\": 3,
+    \"s_at\": \"quae\",
+    \"e_at\": \"alias\"
+}"
+</code></pre>
+            </div>
+          </span><span id="example-responses-GETapi-v1-ezpg-reconciliation">
+            <blockquote>
+              <p>예시 응답 (201):</p>
+            </blockquote>
+            <pre><code class="language-json">{
+    &quot;page&quot;: &quot;1&quot;,
+    &quot;page_size&quot;: &quot;20&quot;,
+    &quot;total&quot;: 2,
+    &quot;content&quot;: [
+        {
+            &quot;is_cancel&quot;: 0,
+            &quot;trx_dt&quot;: &quot;2023-11-01&quot;,
+            &quot;trx_tm&quot;: &quot;14:20:15&quot;,
+            &quot;cxl_dt&quot;: null,
+            &quot;cxl_tm&quot;: null,
+            &quot;cxl_seq&quot;: 0,
+            &quot;ori_trx_id&quot;: null,
+            &quot;amount&quot;: 1000,
+            &quot;ord_num&quot;: &quot;57839H1700562509&quot;,
+            &quot;trx_id&quot;: &quot;202311210528348&quot;,
+            &quot;mid&quot;: &quot;PVPG_C3568479&quot;,
+            &quot;tid&quot;: &quot;2824020001&quot;,
+            &quot;card_num&quot;: &quot;467309******5166&quot;,
+            &quot;issuer&quot;: &quot;국민&quot;,
+            &quot;acquirer&quot;: &quot;국민&quot;,
+            &quot;installment&quot;: 0,
+            &quot;appr_num&quot;: &quot;30018849&quot;
+        },
+        {
+            &quot;is_cancel&quot;: 1,
+            &quot;trx_dt&quot;: &quot;2023-11-01&quot;,
+            &quot;trx_tm&quot;: &quot;14:25:15&quot;,
+            &quot;cxl_dt&quot;: &quot;2023-11-01&quot;,
+            &quot;cxl_tm&quot;: &quot;17:30:37&quot;,
+            &quot;cxl_seq&quot;: 1,
+            &quot;ori_trx_id&quot;: &quot;202311210528348&quot;,
+            &quot;amount&quot;: -1000,
+            &quot;ord_num&quot;: &quot;57839H1700562509&quot;,
+            &quot;trx_id&quot;: &quot;202311210528413&quot;,
+            &quot;mid&quot;: &quot;PVPG_C3568479&quot;,
+            &quot;tid&quot;: &quot;2824020001&quot;,
+            &quot;card_num&quot;: &quot;467309******5166&quot;,
+            &quot;issuer&quot;: &quot;국민&quot;,
+            &quot;acquirer&quot;: &quot;국민&quot;,
+            &quot;installment&quot;: 0,
+            &quot;appr_num&quot;: &quot;30018849&quot;
+        }
+    ]
+}</code></pre>
+          </span><span id="execution-results-GETapi-v1-ezpg-reconciliation" hidden>
+            <blockquote>받은 응답<span id="execution-response-status-GETapi-v1-ezpg-reconciliation"></span>: </blockquote>
+            <pre class="json"><code id="execution-response-content-GETapi-v1-ezpg-reconciliation"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+          </span><span id="execution-error-GETapi-v1-ezpg-reconciliation" hidden>
+            <blockquote>오류로 인해 요청이 실패했습니다.:</blockquote>
+            <pre><code id="execution-error-message-GETapi-v1-ezpg-reconciliation">
+
+팁: 네트워크에 제대로 연결되어 있는지 확인하세요.
+해당 API의 관리자인 경우 API가 실행 중이고 CORS를 활성화했는지 확인하세요.
+디버깅 정보는 개발자 도구 콘솔에서 확인할 수 있습니다.</code></pre>
+          </span>
+          <form id="form-GETapi-v1-ezpg-reconciliation" data-method="GET" data-path="api/v1/ezpg/reconciliation" data-authed="1" data-hasfiles="0" data-isarraybody="0" autocomplete="off" onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-ezpg-reconciliation', this);">
+            <h3> 요청&nbsp;&nbsp;&nbsp; <button type="button" style="border-color: #0d47a1; background-color: #0d47a1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-GETapi-v1-ezpg-reconciliation" onclick="tryItOut('GETapi-v1-ezpg-reconciliation');">시도하기 ⚡ </button><button type="button" style="border-color: #dfa1a5; background-color: #dfa1a5; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-GETapi-v1-ezpg-reconciliation" onclick="cancelTryOut('GETapi-v1-ezpg-reconciliation');" hidden>취소 🛑 </button>&nbsp;&nbsp; <button type="submit" style="border-color: #81f18e; background-color: #81f18e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-GETapi-v1-ezpg-reconciliation" data-initial-text="요청 💥" data-loading-text="⏱ 요청중..." hidden>요청 💥 </button></h3>
+            <p><small class="badge badge-green">GET</small><b><code>api/v1/ezpg/reconciliation</code></b></p>
+            <h4 class="fancy-heading-panel"><b>헤더</b></h4>
+            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp; &nbsp; &nbsp; <input type="text" style="display: none" name="Authorization" class="auth-value" data-endpoint="GETapi-v1-ezpg-reconciliation" value="Bearer {ACCESS_TOKEN}" data-component="header"><br>
+              <p><br>예시: <code>Bearer {ACCESS_TOKEN}</code></p>
+            </div>
+            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp; &nbsp; &nbsp; <input type="text" style="display: none" name="Content-Type" data-endpoint="GETapi-v1-ezpg-reconciliation" value="application/json" data-component="header"><br>
+              <p><br>예시: <code>application/json</code></p>
+            </div>
+            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp; &nbsp; &nbsp; <input type="text" style="display: none" name="Accept" data-endpoint="GETapi-v1-ezpg-reconciliation" value="application/json" data-component="header"><br>
+              <p><br>예시: <code>application/json</code></p>
+            </div>
+            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>page</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <input type="number" style="display: none" step="any" name="page" data-endpoint="GETapi-v1-ezpg-reconciliation" value="1" data-component="query"><br>
+              <p>조회 페이지 <br>예시: <code>1</code></p>
+            </div>
+            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>page_size</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <input type="number" style="display: none" step="any" name="page_size" data-endpoint="GETapi-v1-ezpg-reconciliation" value="20" data-component="query"><br>
+              <p>조회 사이즈 <br>예시: <code>20</code></p>
+            </div>
+            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>s_at</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <input type="text" style="display: none" name="s_at" data-endpoint="GETapi-v1-ezpg-reconciliation" value="2023-11-01 00:00:00" data-component="query"><br>
+              <p>검색 시작일 <br>예시: <code>2023-11-01 00:00:00</code></p>
+            </div>
+            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>e_at</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <input type="text" style="display: none" name="e_at" data-endpoint="GETapi-v1-ezpg-reconciliation" value="2023-11-30 23:59:59" data-component="query"><br>
+              <p>검색 종료일 <br>예시: <code>2023-11-30 23:59:59</code></p>
+            </div>
+            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>page</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <input type="number" style="display: none" step="any" name="page" data-endpoint="GETapi-v1-ezpg-reconciliation" value="9" data-component="body"><br>
+              <p><br>예시: <code>9</code></p>
+            </div>
+            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>page_size</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <input type="number" style="display: none" step="any" name="page_size" data-endpoint="GETapi-v1-ezpg-reconciliation" value="3" data-component="body"><br>
+              <p><br>예시: <code>3</code></p>
+            </div>
+            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>s_at</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <input type="text" style="display: none" name="s_at" data-endpoint="GETapi-v1-ezpg-reconciliation" value="quae" data-component="body"><br>
+              <p><br>예시: <code>quae</code></p>
+            </div>
+            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>e_at</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <input type="text" style="display: none" name="e_at" data-endpoint="GETapi-v1-ezpg-reconciliation" value="alias" data-component="body"><br>
+              <p><br>예시: <code>alias</code></p>
+            </div>
+          </form>
+          <h3>응답</h3>
+          <h4 class="fancy-heading-panel"><b>응답 필드</b></h4>
+          <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>page</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+            <p>조회 페이지</p>
+          </div>
+          <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>page_size</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+            <p>조회 사이즈</p>
+          </div>
+          <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>total</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+            <p>총 개수</p>
+          </div>
+          <div style=" padding-left: 28px;  clear: unset;">
+            <details>
+              <summary style="padding-bottom: 10px;"><b style="line-height: 2;"><code>content</code></b>&nbsp;&nbsp; <small>object[]</small>&nbsp; &nbsp; <br>
+                <p>결과</p>
+              </summary>
+              <div style=" margin-left: 14px; clear: unset;">
+                <details>
+                  <summary style="padding-bottom: 10px;"><b style="line-height: 2;"><code>*</code></b>&nbsp;&nbsp; <small>object</small>&nbsp; &nbsp; <br></summary>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>is_cancel</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+                    <p>취소여부(0=승인, 1=취소)</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>trx_dt</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>승인일자</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>trx_tm</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>승인시간</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>cxl_dt</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>취소일자(취소일 경우)</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>cxl_tm</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>취소시간(취소일 경우)</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>cxl_seq</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+                    <p>취소회차(취소일 경우)</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>ori_trx_id</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>원거래에 사용된 transaction ID (취소일 경우)</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>amount</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+                    <p>거래금액</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>ord_num</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>거래에 사용된 order number</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>trx_id</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>거래에 사용된 transaction ID</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>mid</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>거래에 사용된 PG사 MID</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>tid</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>거래에 사용된 terminal ID</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>card_num</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>마스킹된 카드번호</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>issuer</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>발급사</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>acquirer</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>매입사</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>installment</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+                    <p>할부개월(0~12)</p>
+                  </div>
+                  <div style="margin-left: 28px; clear: unset;"><b style="line-height: 2;"><code>appr_num</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <br>
+                    <p>승인번호</p>
+                  </div>
+                </details>
+              </div>
+            </details>
+          </div>
+          <h2 id="ezpg-api-GETapi-v1-ezpg-reconciliation-summary">일별 요약 거래대사</h2>
+          <p><small class="badge badge-darkred">인증 필요</small></p>
+          <p>특정 일의 결제내역을 조회합니다.</p><span id="example-requests-GETapi-v1-ezpg-reconciliation-summary">
+            <blockquote>예시 요청:</blockquote>
+            <div class="javascript-example">
+              <pre><code class="language-javascript">const url = new URL(
+    "https://w.ez-pg.kr/api/v1/ezpg/reconciliation/summary"
+);
+
+const params = {
+    "t_dt": "2023-11-01",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Authorization": "Bearer {ACCESS_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "t_dt": "id"
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre>
+            </div>
+            <div class="php-example">
+              <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'https://w.ez-pg.kr/api/v1/ezpg/reconciliation/summary',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {ACCESS_TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            't_dt' =&gt; '2023-11-01',
+        ],
+        'json' =&gt; [
+            't_dt' =&gt; 'id',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+            </div>
+            <div class="python-example">
+              <pre><code class="language-python">import requests
+import json
+
+url = 'https://w.ez-pg.kr/api/v1/ezpg/reconciliation/summary'
+payload = {
+    "t_dt": "id"
+}
+params = {
+  't_dt': '2023-11-01',
+}
+headers = {
+  'Authorization': 'Bearer {ACCESS_TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers, json=payload, params=params)
+response.json()</code></pre>
+            </div>
+            <div class="bash-example">
+              <pre><code class="language-bash">curl --request GET \
+    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation/summary?t_dt=2023-11-01" \
+    --header "Authorization: Bearer {ACCESS_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"t_dt\": \"id\"
+}"
+</code></pre>
+            </div>
+          </span><span id="example-responses-GETapi-v1-ezpg-reconciliation-summary">
+            <blockquote>
+              <p>예시 응답 (201):</p>
+            </blockquote>
+            <pre><code class="language-json">{
+    &quot;mcht_id&quot;: 12345,
+    &quot;appr_amount&quot;: 1000,
+    &quot;appr_count&quot;: 1,
+    &quot;cxl_amount&quot;: -1000,
+    &quot;cxl_count&quot;: 1,
+    &quot;sales_amount&quot;: 0,
+    &quot;total_count&quot;: 2
+}</code></pre>
+          </span><span id="execution-results-GETapi-v1-ezpg-reconciliation-summary" hidden>
+            <blockquote>받은 응답<span id="execution-response-status-GETapi-v1-ezpg-reconciliation-summary"></span>: </blockquote>
+            <pre class="json"><code id="execution-response-content-GETapi-v1-ezpg-reconciliation-summary"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+          </span><span id="execution-error-GETapi-v1-ezpg-reconciliation-summary" hidden>
+            <blockquote>오류로 인해 요청이 실패했습니다.:</blockquote>
+            <pre><code id="execution-error-message-GETapi-v1-ezpg-reconciliation-summary">
+
+팁: 네트워크에 제대로 연결되어 있는지 확인하세요.
+해당 API의 관리자인 경우 API가 실행 중이고 CORS를 활성화했는지 확인하세요.
+디버깅 정보는 개발자 도구 콘솔에서 확인할 수 있습니다.</code></pre>
+          </span>
+          <form id="form-GETapi-v1-ezpg-reconciliation-summary" data-method="GET" data-path="api/v1/ezpg/reconciliation/summary" data-authed="1" data-hasfiles="0" data-isarraybody="0" autocomplete="off" onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-ezpg-reconciliation-summary', this);">
+            <h3> 요청&nbsp;&nbsp;&nbsp; <button type="button" style="border-color: #0d47a1; background-color: #0d47a1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-GETapi-v1-ezpg-reconciliation-summary" onclick="tryItOut('GETapi-v1-ezpg-reconciliation-summary');">시도하기 ⚡ </button><button type="button" style="border-color: #dfa1a5; background-color: #dfa1a5; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-GETapi-v1-ezpg-reconciliation-summary" onclick="cancelTryOut('GETapi-v1-ezpg-reconciliation-summary');" hidden>취소 🛑 </button>&nbsp;&nbsp; <button type="submit" style="border-color: #81f18e; background-color: #81f18e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-GETapi-v1-ezpg-reconciliation-summary" data-initial-text="요청 💥" data-loading-text="⏱ 요청중..." hidden>요청 💥 </button></h3>
+            <p><small class="badge badge-green">GET</small><b><code>api/v1/ezpg/reconciliation/summary</code></b></p>
+            <h4 class="fancy-heading-panel"><b>헤더</b></h4>
+            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp; &nbsp; &nbsp; <input type="text" style="display: none" name="Authorization" class="auth-value" data-endpoint="GETapi-v1-ezpg-reconciliation-summary" value="Bearer {ACCESS_TOKEN}" data-component="header"><br>
+              <p><br>예시: <code>Bearer {ACCESS_TOKEN}</code></p>
+            </div>
+            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp; &nbsp; &nbsp; <input type="text" style="display: none" name="Content-Type" data-endpoint="GETapi-v1-ezpg-reconciliation-summary" value="application/json" data-component="header"><br>
+              <p><br>예시: <code>application/json</code></p>
+            </div>
+            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp; &nbsp; &nbsp; <input type="text" style="display: none" name="Accept" data-endpoint="GETapi-v1-ezpg-reconciliation-summary" value="application/json" data-component="header"><br>
+              <p><br>예시: <code>application/json</code></p>
+            </div>
+            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>t_dt</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <input type="text" style="display: none" name="t_dt" data-endpoint="GETapi-v1-ezpg-reconciliation-summary" value="2023-11-01" data-component="query"><br>
+              <p>조회일 <br>예시: <code>2023-11-01</code></p>
+            </div>
+            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>t_dt</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <input type="text" style="display: none" name="t_dt" data-endpoint="GETapi-v1-ezpg-reconciliation-summary" value="id" data-component="body"><br>
+              <p><br>예시: <code>id</code></p>
+            </div>
+          </form>
+          <h3>응답</h3>
+          <h4 class="fancy-heading-panel"><b>응답 필드</b></h4>
+          <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>appr_amount</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+            <p>승인 금액 합계</p>
+          </div>
+          <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>appr_count</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+            <p>승인 건수 합계</p>
+          </div>
+          <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>cxl_amount</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+            <p>취소 금액 합계</p>
+          </div>
+          <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>cxl_count</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+            <p>취소 건수 합계</p>
+          </div>
+          <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>sales_amount</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+            <p>매출(승인+취소) 합계</p>
+          </div>
+          <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>total_count</code></b>&nbsp;&nbsp; <small>integer</small>&nbsp; &nbsp; <br>
+            <p>총 건수</p>
           </div>
       </div>
       <div class="dark-box">

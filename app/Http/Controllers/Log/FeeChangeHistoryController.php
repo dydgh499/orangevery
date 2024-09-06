@@ -206,7 +206,7 @@ class FeeChangeHistoryController extends Controller
                         $after     = MerchandiseFeeUpdater::getSalesAfterFee($request);
                         $target = '영업점 수수료율';
                     }
-                    if($request->apply_type === 'direct-apply')
+                    if($request->apply_type === 0)
                         operLogging(HistoryType::UPDATE, $target, $before, $after, $mcht->mcht_name);
                     else
                         operLogging(HistoryType::BOOK, $target, $before, $after, $mcht->mcht_name);

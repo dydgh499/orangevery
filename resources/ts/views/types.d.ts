@@ -594,6 +594,7 @@ export interface Transaction {
     nick_name?: string,
     resident_num?: string,
     business_num?: string,
+    
     realtimes?: RealtimeHistory[],
     noti_send_histories?: NotiSendHistory[],
     cancel_deposits?: CancelDeposit[],

@@ -31,12 +31,11 @@ class EzpgController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
 
-    public function getMerchant($user_name)
+    public function getMerchant($request)
     {
         $pay_key = str_replace("Bearer ", "", request()->header('Authorization'));
         return Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
-            ->where('merchandises.user_name', $user_name)
-            ->where('merchandises.is_delete', false)
+            ->where('merchandises.id', $request->user()->id)
             ->where('payment_modules.pay_key', $pay_key)
             ->where('payment_modules.is_delete', false)
             ->first(['merchandises.id']);
@@ -183,7 +182,7 @@ class EzpgController extends Controller
      * @responseField content.*.appr_num string 승인번호
      * 
      */
-    public function index(Request $request, $user_name)
+    public function reconciliation(Request $request, $user_name)
     {
         $validated = $request->validate([
             'page'      => 'required|integer',
@@ -207,28 +206,18 @@ class EzpgController extends Controller
                 'transactions.card_num', 'transactions.issuer', 'transactions.acquirer', 'transactions.installment', 'transactions.appr_num',
                 DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"), DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
             ];
-            $merchant = $this->getMerchant($user_name);
-            if($merchant)
-            {
-                $query = $this->transactions
-                    ->where('transactions.mcht_id', $merchant->id)
-                    ->whereRaw("transactions.trx_at >= ?", [$request->s_dt])
-                    ->whereRaw("transactions.trx_at <= ?", [$request->e_dt])
-                    ->where('is_delete', false);
 
-                $data = $this->getIndexData($request, $query, 'transactions.id', $cols, 'transactions.trx_at');
-                foreach($data['content'] as $item)
-                {
-                    unset($item['trx_dttm']);
-                    unset($item['cxl_dttm']);
-                    unset($item['trx_amount']);
-                    unset($item['hold_amount']);
-                    unset($item['total_trx_amount']);
-                }
-                return $this->response(0, $data);
+            $query = TransactionFilter::common($request);
+            $data = $this->getIndexData($request, $query, 'transactions.id', $cols, 'transactions.trx_at');
+            foreach($data['content'] as $item)
+            {
+                unset($item['trx_dttm']);
+                unset($item['cxl_dttm']);
+                unset($item['trx_amount']);
+                unset($item['hold_amount']);
+                unset($item['total_trx_amount']);
             }
-            else
-                return $this->response(954);
+            return $this->response(0, $data);
         }
     }
 
@@ -246,7 +235,7 @@ class EzpgController extends Controller
      * @responseField sales_amount integer 매출(승인+취소) 합계
      * @responseField total_count integer 총 건수
      */
-    public function summary(Request $request, $user_name)
+    public function summary(Request $request)
     {
         $validated = $request->validate(['t_dt'  => 'required|string']);
         $cols = [
@@ -258,40 +247,31 @@ class EzpgController extends Controller
             DB::raw("SUM(amount) AS sales_amount"),
             DB::raw("COUNT(*) AS total_count"),
         ];
-        $merchant = $this->getMerchant($user_name);
-        if($merchant)
+        
+        $chart = TransactionFilter::common($request)
+            ->groupBy('transactions.mcht_id')
+            ->first($cols);
+
+        if($chart)
         {
-            $s_at = $request->t_dt." 00:00:00";
-            $e_at = $request->t_dt." 23:59:59";
-            $query = $this->transactions
-                ->where('transactions.mcht_id', $merchant->id)
-                ->where('transactions.is_delete', false)
-                ->whereRaw("transactions.trx_at >= ?", [$s_dt])
-                ->whereRaw("transactions.trx_at <= ?", [$e_dt])
-                ->groupBy('transactions.mcht_id');
-            $chart = $query->first($cols);
-            if($chart)
-            {
-                $chart = json_decode(json_encode($chart), true);                
-                unset($chart['trx_dttm']);
-                unset($chart['cxl_dttm']);
-                unset($chart['trx_amount']);
-                unset($chart['hold_amount']);
-                unset($chart['total_trx_amount']);
+            $chart = json_decode(json_encode($chart), true);                
+            unset($chart['trx_dttm']);
+            unset($chart['cxl_dttm']);
+            unset($chart['trx_amount']);
+            unset($chart['hold_amount']);
+            unset($chart['total_trx_amount']);
 
-                $chart['appr_amount'] = (int)$chart['appr_amount'];
-                $chart['appr_count'] = (int)$chart['appr_count'];
-                $chart['cxl_amount'] = (int)$chart['cxl_amount'];
-                $chart['cxl_count'] = (int)$chart['cxl_count'];
+            $chart['appr_amount'] = (int)$chart['appr_amount'];
+            $chart['appr_count'] = (int)$chart['appr_count'];
+            $chart['cxl_amount'] = (int)$chart['cxl_amount'];
+            $chart['cxl_count'] = (int)$chart['cxl_count'];
 
 
-                 
-                $chart['sales_amount'] = (int)$chart['sales_amount'];
-                $chart['total_count'] = (int)$chart['total_count'];
-            }
-            return $this->response(0, $chart);
+                
+            $chart['sales_amount'] = (int)$chart['sales_amount'];
+            $chart['total_count'] = (int)$chart['total_count'];
         }
-        else
-            return $this->response(954);
+
+        return $this->response(0, $chart);
     }
 }

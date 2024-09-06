@@ -1,9 +1,9 @@
 # 소개
 
-본 문서는 Buddy Pay와 Buddy Pay Mobile간 인터페이스에 대하여 기술합니다.
+본 문서는 EZPG와 Smart Data간 인터페이스에 대하여 기술합니다.
 
 <aside>
-    <strong>기본 URL</strong>: <code>https://pg.buddypay.co.kr</code>
+    <strong>기본 URL</strong>: <code>https://w.ez-pg.kr</code>
 </aside>
 
 <h2 id="response-format">응답코드 정의</h1>

@@ -34,7 +34,6 @@ class BatchUpdatePayModuleController extends BatchUpdateController
     {
         $datas = $this->getApplyBookDatas($request, $query->pluck('id')->all(), 'pmod_id', $cols);
         $res = $this->manyInsert(new PaymentModuleColumnApplyBook, $datas);
-        print_r($datas);
         return count($datas);
     }
 

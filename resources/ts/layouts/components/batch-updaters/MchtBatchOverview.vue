@@ -354,26 +354,24 @@ watchEffect(() => {
                         </VCol>
                         <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.subsidiary_use_control">
                             <VRow no-gutters style="align-items: center;">
-                                <template>
-                                    <VCol md="6" cols="12">
-                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="merchandise.enabled" 
-                                            :items="[{id:0, title:'OFF'}, {id:1, title:'ON'}]" item-title="title" item-value="id" 
-                                            label="전산 사용상태"/>
-                                    </VCol>
-                                    <VCol md="6" cols="12">
-                                        <div class="button-cantainer">
-                                            <VBtn variant="tonal" size="small" @click="setEnabled(0)">
-                                                즉시적용
-                                                <VIcon end size="18" icon="tabler-direction-sign" />
-                                            </VBtn>
-                                            <VBtn variant="tonal" size="small" color="secondary" @click="setEnabled(1)"
-                                                style='margin-left: 0.5em;'>
-                                                예약적용
-                                                <VIcon end size="18" icon="tabler-clock-up" />
-                                            </VBtn>                 
-                                        </div>
-                                    </VCol>
-                                </template>
+                                <VCol md="6" cols="12">
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="merchandise.enabled" 
+                                        :items="[{id:0, title:'OFF'}, {id:1, title:'ON'}]" item-title="title" item-value="id" 
+                                        label="전산 사용상태"/>
+                                </VCol>
+                                <VCol md="6" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setEnabled(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setEnabled(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>                 
+                                    </div>
+                                </VCol>
                             </VRow>
                         </VCol>
                     </VRow>

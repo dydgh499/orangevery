@@ -137,6 +137,7 @@ class MerchandiseFeeUpdater
 
     static public function apply($request, $user, $apply_type, $query)
     {
+                                    // 0=즉시적용, 1=예약적용
         $change_status = $apply_type ? 0 : 1;
         if($user === 'merchandises')
         {
