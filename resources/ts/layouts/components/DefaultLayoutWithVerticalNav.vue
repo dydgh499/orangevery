@@ -47,7 +47,7 @@ const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
 
 const passwordChangeWarningValidate = () => {
-    const last_change_at = new Date(user_info.value.password_change_at ?? '2024-06-09 12:00:00')
+    const last_change_at = new Date(user_info.value.password_change_at ?? '2024-06-15 17:20:00')
     const now = new Date()
     const diff = now.getTime() - last_change_at.getTime()
 

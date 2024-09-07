@@ -28,6 +28,7 @@ const show = (_user_id: number, _user_type: number) => {
         user_id.value = _user_id
         user_type.value = _user_type
         visible.value = true
+
         if(user_id.value === user_info.value.id) {
             if(user_type.value === 0 && getUserLevel() === 10)
                 is_my_password.value = true

@@ -54,7 +54,6 @@ Route::prefix('v1')->group(function() {
         Route::post('2fa-qrcode/vertify', [AuthController::class, 'vertify2FA']);  
 
         Route::middleware(['auth:sanctum'])->group(function() {
-            Route::post('extend-password-at', [AuthController::class, 'extendPasswordAt']);   
             Route::post('sign-out', [AuthController::class, 'signout']);
             Route::post('owner-check', [CMSTransactionController::class, 'ownerCheck']);
         });

@@ -8,9 +8,9 @@ export const PopupEvent = (popup_key_name: string) => {
         else
             popup.visible = true
     }
-    const setOpenStatus = (popup: Popup) => {
+    const setOpenStatus = (popup: Popup, add_days=0) => {
         if(popup.is_hide) {
-            setCookie(popup_key_name+popup.id, 'true', 1)
+            setCookie(popup_key_name+popup.id, 'true', add_days)
         }
         popup.visible = !popup.visible
     }
@@ -20,9 +20,10 @@ export const PopupEvent = (popup_key_name: string) => {
         return value? value[2] : null;  
     }
     
-    const setCookie = function(name: string, value: string, exp: number) {
+    const setCookie = function(name: string, value: string, days: number) {
         var date = new Date()
         date.setHours(23, 59, 59, 999)
+        date.setDate(date.getDate() + days)
         document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
     };
     return {

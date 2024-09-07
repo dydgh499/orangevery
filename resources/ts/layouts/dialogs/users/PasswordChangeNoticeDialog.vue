@@ -1,13 +1,19 @@
 <script lang="ts" setup>
-import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
-import { axios, getUserLevel, user_info } from '@axios'
+import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue';
+import type { Popup } from '@/views/types';
+import { getUserLevel, user_info } from '@axios';
+import { PopupEvent } from '@core/utils/popup';
 
-const visible = ref(false)
-const snackbar = <any>(inject('snackbar'))
 const password = ref()
+const { setOpenStatus, init } = PopupEvent('password-change-notice/hide/')
+const popup = ref(<Popup>({
+    id: 0,
+    visible: false,
+    is_hide: false,
+}))
 
 const show = () => {
-    visible.value = true
+    init(popup.value)
 }
 
 const changePassword = () => {
@@ -20,14 +26,12 @@ const changePassword = () => {
         type = 2
 
     password.value.show(user_info.value.id, type)
-    visible.value = false
+    popup.value.visible = false
 }
 
 const extendPassword = async () => {
-    const res = await axios.post('/api/v1/auth/extend-password-at')
-    snackbar.value.show('성공하였습니다.', 'success')
-    user_info.value.password_change_at = res.data.password_change_at
-    visible.value = false
+    popup.value.is_hide = true
+    setOpenStatus(popup.value, 30)    
 }
 
 defineExpose({
@@ -35,10 +39,8 @@ defineExpose({
 });
 </script>
 <template>
-    <VDialog v-model="visible" persistent class="v-dialog-sm">
-        <!-- Dialog close btn -->
-        <DialogCloseBtn @click="visible = !visible" />
-        <!-- Dialog Content -->
+    <VDialog v-model="popup.visible" persistent class="v-dialog-sm">
+        <DialogCloseBtn @click="setOpenStatus(popup)" />
         <VCard title="경고">
             <VCardText>
                 <span>비밀번호를 변경한지 90일이 초과되었습니다.<br>비밀번호를 변경해주세요.</span>
@@ -46,7 +48,7 @@ defineExpose({
             </VCardText>
             <VCardText class="d-flex justify-end gap-3 flex-wrap">
                 <VBtn color="secondary" variant="tonal" @click="extendPassword">
-                    알림 1개월 연장하기
+                    30일 안보기
                 </VBtn>
                 <VBtn @click="changePassword">
                     비밀번호 변경

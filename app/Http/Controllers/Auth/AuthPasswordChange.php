@@ -90,11 +90,11 @@ class AuthPasswordChange
         $reference_time     = Carbon::parse('2024-06-15 17:20:00');
 
         if($created_at->greaterThanOrEqualTo($reference_time))
-        {
+        {   // 계정생성일이 reference_time 보다 높을때
             return Hash::check($_user_pw.$user->created_at, $user->user_pw);
         }
         else if($user->password_change_at && $password_change_at->greaterThanOrEqualTo($reference_time))
-        {
+        {   // 패스워드를 변경한 적이 있고, 패스워드 변경일이 reference_time 보다 높을때
             return Hash::check($_user_pw.$user->created_at, $user->user_pw);
         }
         else

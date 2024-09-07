@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Support\Facades\Redis;
 use App\Models\Service\OperatorIP;
 
-class AuthOperatorIp
+class AuthOperatorIP
 {
     static public function valiate($brand_id, $ip)
     {
