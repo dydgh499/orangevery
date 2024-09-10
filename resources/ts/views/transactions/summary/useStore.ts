@@ -130,7 +130,6 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
             }
             row['trx_supply_amount'] = Number(Math.round(row['trx_amount']/1.1))
             row['trx_tax_amount']    = Number(row['trx_amount'] - row['trx_supply_amount'])
-            console.log(row)
             worksheet.addRow(row)
         }
         head.setHeaderStyle(worksheet.getRow(1));

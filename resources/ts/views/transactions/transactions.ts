@@ -21,7 +21,6 @@ export const notiSendHistoryInterface = () => {
         if(item.noti_send_histories?.length === 0) {
             const trans_at = (new Date(item.created_at as string)).getTime() + 30000
             const offset_at = new Date(trans_at) - new Date() 
-            console.log(offset_at)
             if(offset_at < 0)
                 return StatusColors.Default
             else

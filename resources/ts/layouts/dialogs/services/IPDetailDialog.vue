@@ -13,7 +13,6 @@ interface IPDetail {
 const visible = ref(false)
 const ip_detail = ref(<IPDetail>({}))
 const show = (_ip_detail: any) => {
-    console.log(_ip_detail)
     ip_detail.value = _ip_detail
     visible.value = true
 }

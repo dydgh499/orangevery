@@ -85,6 +85,7 @@ export default defineConfig({
     define: {
         'process.env': {
             MAIN_BRAND_ID: process.env.MAIN_BRAND_ID,
+            ERROR_PREFIX: process.env.ERROR_PREFIX,
             APP_URL: process.env.APP_URL,
             NOTI_URL: process.env.NOTI_URL,
         },

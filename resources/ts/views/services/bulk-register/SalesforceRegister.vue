@@ -36,7 +36,6 @@ const validate = () => {
     const user_names = new Set()
     for (let i = 0; i < saleses.value.length; i++) {
         saleses.value[i].settle_day = saleses.value[i].settle_day == -1 ? null : saleses.value[i].settle_day;
-        console.log(saleses.value[i])
         const level = all_sales.find(sales => sales.id === saleses.value[i].level)
         const settle_cycle = all_cycles.find(sales => sales.id === saleses.value[i].settle_cycle)
         const settle_day = all_days.find(sales => sales.id === saleses.value[i].settle_day)

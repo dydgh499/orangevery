@@ -126,7 +126,6 @@ export const overlap = (all_sales: Salesforce[][], sales: Ref<SalesFilter[]>[]) 
                         break
                     }
                 }
-                console.log('selected' ,select_idx)
                 for (let i = SALES_LEVEL_SIZE - 1; i > 0; i--) {
                     recursionSalesChildFilter(i, params)
                     break

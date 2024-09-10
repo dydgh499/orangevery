@@ -10,15 +10,6 @@ interface Props {
     item: PayModule,
 }
 const props = defineProps<Props>()
-const pay_disable_range = ref()
-
-/*
-    <VTextField v-model="props.item.pay_disable_s_tm" type="time" label="시작시간" :style="$vuetify.display.smAndDown ? 'width: 9em; margin-right: 1em;' : 'width: 9em; margin-right: 1em;'"/>
-    <VTextField v-model="props.item.pay_disable_e_tm" type="time" label="종료시간" style="width: 9em;"/>
-*/
-watchEffect(() => {
-    console.log(pay_disable_range.value)
-})
 </script>
 <template>
     <VCardItem>
