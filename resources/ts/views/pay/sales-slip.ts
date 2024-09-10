@@ -163,24 +163,25 @@ export const salesSlip = () => {
                 addr: before_brand_info?.addr,
             })
         }
-        
-        if (Number(trans?.use_saleslip_prov)) {
-            provider_info.value = <BeforeBrandInfo>({
-                company_name: pg.value?.company_name,
-                business_num: pg.value?.business_num,
-                phone_num: pg.value?.phone_num,
-                rep_name: pg.value?.rep_name,
-                addr: pg.value?.addr,
-            })
-        }
         else {
-            provider_info.value = <BeforeBrandInfo>({
-                company_name: corp.company_name,
-                business_num: corp.business_num,
-                phone_num: corp.phone_num,
-                rep_name: corp.ceo_name,
-                addr: corp.addr,
-            })
+            if (Number(trans?.use_saleslip_prov)) {
+                provider_info.value = <BeforeBrandInfo>({
+                    company_name: pg.value?.company_name,
+                    business_num: pg.value?.business_num,
+                    phone_num: pg.value?.phone_num,
+                    rep_name: pg.value?.rep_name,
+                    addr: pg.value?.addr,
+                })
+            }
+            else {
+                provider_info.value = <BeforeBrandInfo>({
+                    company_name: corp.company_name,
+                    business_num: corp.business_num,
+                    phone_num: corp.phone_num,
+                    rep_name: corp.ceo_name,
+                    addr: corp.addr,
+                })
+            }    
         }
     }
         

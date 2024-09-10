@@ -35,14 +35,13 @@ defineExpose({
                     </thead>
                     <tbody>
                         <tr v-for="(history, key) in transaction.noti_send_histories" :key="key" :class="notiSendDetailClass(history)">
-                            <td class='list-square'>#{{ history.send_url }}</td>
+                            <td class='list-square'>{{ history.send_url }}</td>
                             <td class='list-square'>{{ history.http_code }}</td>
                             <td class='list-square'>{{ history.message }}</td>
                             <td class='list-square'>{{ history.retry_count }}</td>
                             <td class='list-square'>{{ history.created_at }}</td>
                         </tr>
                     </tbody>
-                    <!-- 👉 table footer  -->
                     <tfoot v-if="!Boolean(transaction.noti_send_histories?.length)">
                         <tr>
                             <td colspan="12" class='list-square' style="border: 0;">

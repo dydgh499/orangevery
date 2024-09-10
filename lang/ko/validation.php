@@ -241,7 +241,6 @@ return [
         'comm_settle_type' => '통신비 정산타입',
         'comm_calc_level' => '정산주체',
         'settle_fee' => '입금 수수료',
-        'pay_window_secure_level' => '결제창 보안등급',
         'installment' => '할부',
         'note' => '비고',
         'resident_num' => '주민등록번호',
@@ -286,7 +285,8 @@ return [
         'fin_trx_delay' => '실시간 이체 딜레이',
         'use_realtime_deposit' => '실시간 이체 사용여부',
         'filter_issuers' => '카드사 필터',
-        'paywindow_secure_level' => '결제창 보안등급',
+        'pay_window_secure_level' => '결제창 보안등급',
+        'pay_window_extend_hour' => '결제창 연장시간',
         'show_pay_view' => '결제창 노출여부',
         //finance van
         'receive_phone' => '수신자 전화번호',
