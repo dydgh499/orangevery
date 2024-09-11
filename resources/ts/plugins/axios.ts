@@ -11,7 +11,7 @@ export const getUserType = () => {
     else if (getUserLevel() <= 30)
         return {id:1, link:'/salesforces/edit/' + user_info.value.id}
     else if (getUserLevel() <= 45) 
-        return {id:2, link:'/services/operators/edit/' + user_info.value.id}
+        return {id:2, link:''}
     else
         return {id:3, link:''}
 }

@@ -189,7 +189,7 @@ class OperatorController extends Controller
      */
     public function update(OperatorReqeust $request, int $id)
     {
-        if($request->user()->level > 35)
+        if($request->user()->level >= 35)
         {
             $data = $request->data();
             $data = $this->saveImages($request, $data, $this->imgs);
@@ -207,6 +207,11 @@ class OperatorController extends Controller
             }
             else if((int)$data['level'] === 35)
             {
+                if($request->user()->level === 35)
+                {   // 직원등급 로그인의 경우 전화번호 변경 불가
+                    unset($data['phone_num']);
+                }
+
                 [$result, $msg, $datas] = $this->employeePhoneValidate($request);
                 if($result !== AuthLoginCode::SUCCESS->value)
                     return $this->extendResponse($result, $msg, $datas);

@@ -31,6 +31,7 @@ const { cus_filters } = useStore()
 
 const alert = <any>(inject('alert'))
 const levels = corp.pv_options.auth.levels
+const contact_num_format = ref('')
 
 const feeBookDialog = ref()
 const underAutoSetting = ref()
@@ -78,6 +79,19 @@ const clearSettleHoldClear = async () => {
         props.item.settle_hold_reason = ''
     }
 }
+
+const formatContactNum = computed(() => {
+    let raw_value = contact_num_format.value.replace(/\D/g, '');
+    props.item.contact_num = raw_value
+    // 휴대폰 번호 마스킹
+    if(raw_value.length === 8)
+        contact_num_format.value = raw_value.replace(/(\d{4})(\d{4})/, '$1-$2')
+    else if(raw_value.startsWith("02") && (raw_value.length === 9 || raw_value.length === 10))
+        contact_num_format.value = raw_value.replace(/(\d{2})(\d{3,4})(\d{4})/, '$1-$2-$3')
+    else if(!raw_value.startsWith("02") && (raw_value.length === 10 || raw_value.length === 11))
+        contact_num_format.value = raw_value.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3')
+})
+
 initAllSales()
 
 watchEffect(() => {
@@ -178,15 +192,21 @@ watchEffect(() => {
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol cols="4">사업장 연락처</VCol>
                                         <VCol md="8">
-                                            <VTextField v-model="props.item.contact_num" prepend-inner-icon="tabler-building-store"
-                                            placeholder="사업장 연락처를 입력해주세요" persistent-placeholder type="text"
-                                            maxlength="15"
-                                            />
+                                            <VTextField 
+                                                v-model="contact_num_format" 
+                                                @input="formatContactNum"
+                                                prepend-inner-icon="tabler-building-store" 
+                                                placeholder="02-123-1234"
+                                            >                                            
+                                                <VTooltip activator="parent" location="top">
+                                                    매출전표에 해당 번호가 표기됩니다.<br>(매출전표 판매자 정보: 가맹점 일 경우)
+                                                </VTooltip>
+                                            </VTextField>
                                         </VCol>
                                     </VRow>
                                     <VRow v-else>
                                         <VCol class="font-weight-bold">사업장 연락처</VCol>
-                                        <VCol md="8"><span>{{ props.item.contact_num }}</span></VCol>
+                                        <VCol md="8"><span>{{ contact_num_format }}</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>

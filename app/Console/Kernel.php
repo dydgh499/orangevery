@@ -30,23 +30,26 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(new RealtimeSendHistoryController(new RealtimeSendHistory))->hourly();
-        $schedule->call(new ApplyBookController)->hourly();
-        $schedule->call(new FeeChangeHistoryController(new MchtFeeChangeHistory, new SfFeeChangeHistory))->daily();
-        $schedule->command('sanctum:prune-expired --hours=35')->daily();        
-        $schedule->call(new DangerTransController(new DangerTransaction))->everySixHours();
-
-        // 차액정산
-        $schedule->call(function () {
-            (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleRequest();
-        })->dailyAt("00:30");
-        $schedule->call(function () {
-            (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleResponse();
-        })->dailyAt("09:00");
-        // 공휴일 업데이트
-        $schedule->call(function () {
-            (new HolidayController(new Holiday))->updateNextHolidaysAllBrands();
-        })->yearlyOn(12, 30, '00:00');
+        if((int)env('SCHEDULE_ON', 1))
+        {
+            $schedule->call(new RealtimeSendHistoryController(new RealtimeSendHistory))->hourly();
+            $schedule->call(new ApplyBookController)->hourly();
+            $schedule->call(new FeeChangeHistoryController(new MchtFeeChangeHistory, new SfFeeChangeHistory))->daily();
+            $schedule->command('sanctum:prune-expired --hours=35')->daily();        
+            $schedule->call(new DangerTransController(new DangerTransaction))->everySixHours();
+    
+            // 차액정산
+            $schedule->call(function () {
+                (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleRequest();
+            })->dailyAt("00:30");
+            $schedule->call(function () {
+                (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleResponse();
+            })->dailyAt("09:00");
+            // 공휴일 업데이트
+            $schedule->call(function () {
+                (new HolidayController(new Holiday))->updateNextHolidaysAllBrands();
+            })->yearlyOn(12, 30, '00:00');    
+        }
     }
 
     /**

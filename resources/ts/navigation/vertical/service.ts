@@ -22,10 +22,12 @@ const getAbilitiesMenu = computed(() => {
             title: '공휴일 관리',
             to: 'services-holidays',
         })
-        operations[0].children.push({
-            title: '운영자 관리',
-            to: 'services-operators',
-        })
+        if (getUserLevel() >= 40) {
+            operations[0].children.push({
+                title: '운영자 관리',
+                to: 'services-operators',
+            })    
+        }
         operations[0].children.push({
             title: '대량 등록',
             to: 'services-bulk-register',

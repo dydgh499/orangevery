@@ -21,7 +21,7 @@ class OperatorReqeust extends FormRequest
     
     public function authorize()
     {
-        return $this->user()->tokenCan(40) ? true : false;
+        return $this->user()->tokenCan($this->id ? 35 : 40) ? true : false;
     }
 
     /**

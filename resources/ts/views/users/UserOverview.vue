@@ -17,6 +17,8 @@ const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 const profileDlg = ref()
 const is_show = ref(false)
+const phone_num_format = ref('')
+const business_num_format = ref('')
 const is_resident_num_back_show = ref(false)
 
 const setAcctBankName = () => {
@@ -53,6 +55,29 @@ const idRules = computed(() => {
 
 const passwordRules = computed(() => {
     return getUserPasswordValidate(props.is_mcht ? 0 : 1, props.item.user_pw)
+})
+
+const formatPhoneNum = computed(() => {
+    let raw_value = phone_num_format.value.replace(/\D/g, '');
+    props.item.phone_num = raw_value
+    // 휴대폰 번호 마스킹
+    if(raw_value.length === 8)
+        phone_num_format.value = raw_value.replace(/(\d{4})(\d{4})/, '$1-$2')
+    else if(raw_value.startsWith("02") && (raw_value.length === 9 || raw_value.length === 10))
+        phone_num_format.value = raw_value.replace(/(\d{2})(\d{3,4})(\d{4})/, '$1-$2-$3')
+    else if(!raw_value.startsWith("02") && (raw_value.length === 10 || raw_value.length === 11))
+        phone_num_format.value = raw_value.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3')
+})
+
+const formatBusinessNum = computed(() => {
+    let raw_value = business_num_format.value.replace(/\D/g, '');
+    props.item.business_num = raw_value
+    if (raw_value.length <= 3)
+        business_num_format.value = raw_value;
+    else if (raw_value.length <= 5)
+        business_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3);
+    else
+        business_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 5) + '-' + raw_value.slice(5, 10);
 })
 
 watchEffect(() => {
@@ -134,15 +159,17 @@ watchEffect(() => {
                                     <label>대표자 연락처</label>
                                 </VCol>
                                 <VCol md="8">
-                                    <VTextField v-model="props.item.phone_num" type="text"
-                                    prepend-inner-icon="tabler-device-mobile" placeholder="010-0000-0000"
-                                    persistent-placeholder maxlength="13" 
-                                    @update:model-value="props.item.phone_num = getOnlyNumber($event)"/>                                    
+                                    <VTextField 
+                                        v-model="phone_num_format" 
+                                        @input="formatPhoneNum"
+                                        prepend-inner-icon="tabler-device-mobile" 
+                                        placeholder="010-0000-0000"
+                                    />
                                 </VCol>
                             </VRow>
                             <VRow v-else>
                                 <VCol class="font-weight-bold" cols="5" md="4">대표자 연락처</VCol>
-                                <VCol md="8"><span>{{ props.item.phone_num }}</span></VCol>
+                                <VCol md="8"><span>{{ phone_num_format }}</span></VCol>
                             </VRow>
                         </VCol>
                     </VRow>
@@ -174,10 +201,12 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="10">
                                     <div style="display: flex;">
-                                        <VTextField v-model="props.item.business_num" type="text"
-                                            prepend-inner-icon="ic-outline-business-center" placeholder="1231212345"
-                                            persistent-placeholder maxlength="13"
-                                            @update:model-value="props.item.business_num = getOnlyNumber($event)">
+                                        <VTextField 
+                                            v-model="business_num_format" 
+                                            @input="formatBusinessNum"
+                                            prepend-inner-icon="ic-outline-business-center" 
+                                            placeholder="123-12-12345"
+                                        >
                                             <VTooltip activator="parent" location="top" v-if="corp.use_different_settlement">
                                                 {{ "사업자번호를 입력하지 않거나, 정확하게 입력하지 않으면 차액정산대상에서 제외됩니다." }}
                                             </VTooltip>
@@ -187,7 +216,7 @@ watchEffect(() => {
                             </VRow>
                             <VRow v-else>
                                 <VCol class="font-weight-bold" cols="5" md="2">사업자등록번호</VCol>
-                                <VCol md="10"><span>{{ props.item.business_num }}</span></VCol>
+                                <VCol md="10"><span>{{ business_num_format }}</span></VCol>
                             </VRow>
                         </VCol>
                     </VRow>
@@ -200,15 +229,15 @@ watchEffect(() => {
                                 <VCol md="10" cols="12">
                                     <VRow style="align-items: center;">
                                         <VCol md="8" :cols="12" style="display: flex;">
-                                            <VTextField v-model="props.item.resident_num_front" type="number" id="regidentFrontNum"
+                                            <VTextField v-model="props.item.resident_num_front"
                                                 prepend-inner-icon="carbon-identification" placeholder="800101" maxlength="6"
                                                 @update:model-value="props.item.resident_num_front = getOnlyNumber($event)"
                                                 style="width: 13em;"/>
                                             <span style="margin: 0.5em;text-align: center;"> - </span>
-                                            <VTextField v-model="props.item.resident_num_back" placeholder="*******" id="regidentBackNum"
+                                            <VTextField v-model="props.item.resident_num_back" placeholder="*******"
                                                 maxlength="7"
                                                 :append-inner-icon="is_resident_num_back_show ? 'tabler-eye' : 'tabler-eye-off'"
-                                                :type="is_resident_num_back_show ? 'number' : 'password'"
+                                                :type="is_resident_num_back_show ? 'text' : 'password'"
                                                 @click:append-inner="is_resident_num_back_show = !is_resident_num_back_show" 
                                                 @update:model-value="props.item.resident_num_back = getOnlyNumber($event)"
                                                 style="width: 13em;"/>

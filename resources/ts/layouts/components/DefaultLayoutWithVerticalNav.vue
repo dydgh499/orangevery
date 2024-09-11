@@ -62,7 +62,12 @@ const fa2RequireNotification = () => {
             if(corp.pv_options.paid.use_head_office_withdraw)
                 alert.value.show('휴대폰 인증대신 구글 OTP 인증으로 전환하세요.')
             else
-                alert.value.show('2FA 인증을 활성화하여 계정의 보안등급을 높일 수 있습니다.<br>안전한 운영을 위해 <b>우측 상단 프로필에서 2차인증</b>을 설정해주세요.')
+            {
+                let message = '2FA 인증을 활성화하여 계정의 보안등급을 높일 수 있습니다.<br>안전한 운영을 위해 <b>우측 상단 프로필에서 2차인증</b>을 설정해주세요.'
+                if(getUserLevel() >= 40)
+                    message += `<br><br><h4 class='text-error'>※ 본사등급의 경우 필수적으로 2FA 인증을 활성화 할 것을 권고합니다. ※</h4>`
+                alert.value.show(message)
+            }
         }
     }
 }

@@ -147,6 +147,16 @@ class BatchUpdateMchtController extends BatchUpdateController
     }
     
     /**
+     * 주민등록번호 적용
+     */
+    public function setResidentNum(Request $request)
+    {
+        $cols = ['resident_num' => $request->resident_num];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
+    }
+
+    /**
      * 수수료율 노출여부 적용
      */
     public function setShowFee(Request $request)

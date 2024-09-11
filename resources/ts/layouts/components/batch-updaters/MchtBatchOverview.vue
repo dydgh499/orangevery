@@ -40,6 +40,7 @@ const levels = corp.pv_options.auth.levels
 const show_fees = <Options[]>([{id:0, title:"숨김"}, {id:1, title:"노출"}])
 
 const merchandise = reactive<any>({
+    resident_num: '',
     custom_id: null,
     trx_fee: 0,
     hold_fee: 0,
@@ -63,6 +64,8 @@ const noti = reactive<any>({
     noti_note: "",
     noti_status: true,
 })
+const resident_num_front = ref('')
+const resident_num_back = ref('')
 
 const setSalesFee = async (sales_idx: number, apply_type: number) => {
     post(`salesforces/set-fee`, {
@@ -93,6 +96,12 @@ const setCustomFilter = (apply_type: number) => {
 const setBusinessNum = (apply_type: number) => {
     post('set-business-num', {
         'business_num': merchandise.business_num,
+    }, apply_type)
+}
+
+const setResidentNum = (apply_type: number) => {
+    post('set-resident-num', {
+        'resident_num': merchandise.resident_num,
     }, apply_type)
 }
 
@@ -133,7 +142,9 @@ watchEffect(() => {
     selected_sales_id.value = props.selected_sales_id
     selected_level.value = props.selected_level
 })
-
+watchEffect(() => {
+    merchandise.resident_num = resident_num_front.value + resident_num_back.value
+})
 </script>
 <template>
     <section>
@@ -283,7 +294,43 @@ watchEffect(() => {
                     </VRow>
                     <VDivider style="margin: 1em 0;" />
                     <h4 class="pt-3">가맹점정보 일괄변경</h4>
-                    <br>                    
+                    <br>
+                    <VRow>
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12" style="display: flex;">
+                                    <VTextField 
+                                        v-model="resident_num_front" 
+                                        maxlength="6"
+                                        @update:model-value="resident_num_front = getOnlyNumber($event)"
+                                        style="width: 13em;"
+                                        label="주민번호(앞)"
+                                    />
+                                    <span style="margin: 0.5em;text-align: center;"> - </span>
+                                    <VTextField 
+                                        v-model="resident_num_back" 
+                                        maxlength="7"
+                                        @update:model-value="resident_num_back = getOnlyNumber($event)"
+                                        style="width: 13em;"
+                                        label="주민번호(뒤)"
+                                    />
+                                </VCol>
+                                <VCol md="6" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setResidentNum(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setResidentNum(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>                                
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
                     <VRow>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
