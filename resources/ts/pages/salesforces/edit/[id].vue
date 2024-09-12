@@ -36,10 +36,10 @@ const route = useRoute()
                 </template>
                 <template v-else>
                     <VWindowItem>
-                        <UserOverview :item="item" :id="id" :is_mcht="false" />
+                        <UserOverview :item="item" :key="id" :is_mcht="false" />
                     </VWindowItem>
                     <VWindowItem>
-                        <SalesforceOverview :item="item" />
+                        <SalesforceOverview :item="item" :key="id"/>
                     </VWindowItem>
                 </template>
             </template>

@@ -1,12 +1,12 @@
 
 <script setup lang="ts">
-import PayGatewayOverview from '@/views/services/pay-gateways/PayGatewayOverview.vue'
+import CreateForm from '@/layouts/utils/CreateForm.vue'
 import ClassificationOverview from '@/views/services/pay-gateways/ClassificationOverview.vue'
 import FinanceVanOverview from '@/views/services/pay-gateways/FinanceVanOverview.vue'
-import CreateForm from '@/layouts/utils/CreateForm.vue'
+import PayGatewayOverview from '@/views/services/pay-gateways/PayGatewayOverview.vue'
 import type { Tab } from '@/views/types'
-import corp from '@corp'
 import { getUserLevel } from '@axios'
+import corp from '@corp'
 
 const tabs = <Tab[]>([
     { icon: 'ph-buildings', title: 'PG사 정보' },

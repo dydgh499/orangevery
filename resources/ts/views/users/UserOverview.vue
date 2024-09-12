@@ -8,7 +8,6 @@ import corp from '@corp'
 
 interface Props {
     item: UserPropertie,
-    id: number | string,
     is_mcht: boolean,
 }
 const props = defineProps<Props>()
@@ -83,6 +82,11 @@ const formatBusinessNum = computed(() => {
 watchEffect(() => {
     props.item.resident_num = props.item.resident_num_front + props.item.resident_num_back
 })
+
+watchEffect(() => {
+    phone_num_format.value = props.item.phone_num
+    business_num_format.value = props.item.business_num
+})
 </script>
 <template>
     <VRow class="match-height">
@@ -120,7 +124,7 @@ watchEffect(() => {
                                 <VCol md="8"><span>{{ props.item.user_name }}</span></VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" md="6" v-if="props.id == 0">
+                        <VCol cols="12" md="6" v-if="props.item.id == 0">
                             <VRow no-gutters>
                                 <VCol cols="5" md="4">
                                     <label>* 패스워드</label>

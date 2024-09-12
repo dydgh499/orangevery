@@ -45,7 +45,7 @@ const id = ref<number>(0)
                 </template>
                 <template v-else>
                     <VWindowItem>
-                        <UserOverview :item="item" :id="id" :is_mcht="true"/>
+                        <UserOverview :item="item" :key="id" :is_mcht="true"/>
                     </VWindowItem>
                     <VWindowItem>
                         <MchtOverview :item="item"/>

@@ -1,8 +1,8 @@
 
 <script setup lang="ts">
+import CreateForm from '@/layouts/utils/CreateForm.vue'
 import PopupOverview from '@/views/popups/PopupOverview.vue'
 import { defaultItemInfo } from '@/views/popups/useStore'
-import CreateForm from '@/layouts/utils/CreateForm.vue'
 import type { Tab } from '@/views/types'
 
 const { path, item } = defaultItemInfo()

@@ -95,7 +95,7 @@ const init2FA = async () => {
                 </VListItem>
                 <VListItem value="unlockAccount" @click="unlockAccount()" v-if="isAbleUnlock()">
                     <template #prepend>
-                        <VIcon size="24" class="me-3" icon="tabler-lock" />
+                        <VIcon size="24" class="me-3" icon="tabler:lock-off" />
                     </template>
                     <VListItemTitle>계정잠금해제</VListItemTitle>
                 </VListItem>                

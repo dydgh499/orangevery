@@ -1,9 +1,9 @@
 
 <script setup lang="ts">
-import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue'
-import { defaultItemInfo } from '@/views/merchandises/pay-modules/useStore'
-import CreateForm from '@/layouts/utils/CreateForm.vue'
-import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
+import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue';
+import CreateForm from '@/layouts/utils/CreateForm.vue';
+import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue';
+import { defaultItemInfo } from '@/views/merchandises/pay-modules/useStore';
 
 interface Props {
     able_mcht_chanage: boolean,

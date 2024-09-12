@@ -109,6 +109,9 @@ watchEffect(() => {
         }
     }
 })
+watchEffect(() => {
+    contact_num_format.value = props.item.contact_num
+})
 </script>
 <template>
     <VRow>

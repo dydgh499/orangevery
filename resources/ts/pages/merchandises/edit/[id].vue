@@ -42,15 +42,15 @@ watchEffect(() => {
             <template #view>
                 <template v-if="corp.id === 30">
                     <VWindowItem>
-                        <FixplusOverview :item="item"/>
+                        <FixplusOverview :item="item" :key="id"/>
                     </VWindowItem>
                 </template>
                 <template v-else>
                     <VWindowItem>
-                        <UserOverview :item="item" :id="id" :is_mcht="true" />
+                        <UserOverview :item="item" :key="id" :is_mcht="true" />
                     </VWindowItem>
                     <VWindowItem>
-                        <MchtOverview :item="item"/>
+                        <MchtOverview :item="item" :key="id"/>
                     </VWindowItem>
                     <VWindowItem v-if="getUserLevel() > 10">
                         <Suspense>
@@ -60,7 +60,7 @@ watchEffect(() => {
                     </VWindowItem>
                     <VWindowItem v-if="corp.pv_options.paid.use_noti">
                         <Suspense>
-                            <NotiOverview :item="item" />
+                            <NotiOverview :item="item" :key="id" />
                         </Suspense>
                     </VWindowItem>
                 </template>
