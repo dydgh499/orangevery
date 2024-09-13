@@ -86,7 +86,7 @@ onMounted(() => {
                         <tr>
                             <td class='list-square'>{{ trans?.mcht_name }}</td>
                             <td class='list-square'>
-                                <AppDateTimePicker v-model="cancel_deposit.deposit_dt" prepend-inner-icon="material-symbols:calendar-add-on" />
+                                <VTextField v-model="cancel_deposit.deposit_dt" type="date" prepend-inner-icon="material-symbols:calendar-add-on" />
                             </td>
                             <td class='list-square'>
                                 <VTextField v-model="cancel_deposit.deposit_amount" type="number" style="min-width: 10em;" />
@@ -112,7 +112,7 @@ onMounted(() => {
                         <tr v-for="(_cancel_deposit, key) in trans?.cancel_deposits" :key="key">
                             <td class='list-square'>{{ trans?.mcht_name }}</td>
                             <td class='list-square'>
-                                <AppDateTimePicker v-model="_cancel_deposit.deposit_dt" prepend-inner-icon="material-symbols:calendar-add-on" />
+                                <VTextField v-model="_cancel_deposit.deposit_dt" type="date" prepend-inner-icon="material-symbols:calendar-add-on" />
                             </td>
                             <td class='list-square'>
                                 <VTextField v-model="_cancel_deposit.deposit_amount" type="number" />
