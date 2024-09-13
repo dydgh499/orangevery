@@ -31,9 +31,11 @@
   <style>
     #load-custom {
       width: 80px;
+      text-align: center;
     }
     #load-default {
       width: 80px;
+      text-align: center;
     }
     .hidden {
       display: none;
