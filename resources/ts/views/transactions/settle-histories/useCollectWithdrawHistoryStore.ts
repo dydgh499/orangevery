@@ -2,7 +2,7 @@ import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import { StatusColors } from '@core/enums';
 
-export const realtimeResult = (result_code: string) => {
+export const depositResult = (result_code: string) => {
     if(result_code == '0000')  //성공
         return StatusColors.Success
     else if(result_code == '0050')
@@ -10,7 +10,7 @@ export const realtimeResult = (result_code: string) => {
     else
         return StatusColors.Error
 }
-export const realtimeMessage = (item: any) => {
+export const depositMessage = (item: any) => {
     if(item.result_code == '0000')  //성공
         return '성공'
     else if(item.result_code == '0050')

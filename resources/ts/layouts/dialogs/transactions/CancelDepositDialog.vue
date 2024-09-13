@@ -86,7 +86,7 @@ onMounted(() => {
                         <tr>
                             <td class='list-square'>{{ trans?.mcht_name }}</td>
                             <td class='list-square'>
-                                <VTextField v-model="cancel_deposit.deposit_dt" type="date" prepend-inner-icon="material-symbols:calendar-add-on" />
+                                <VTextField v-model="cancel_deposit.deposit_dt" type="date" />
                             </td>
                             <td class='list-square'>
                                 <VTextField v-model="cancel_deposit.deposit_amount" type="number" style="min-width: 10em;" />

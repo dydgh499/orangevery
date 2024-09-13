@@ -2,7 +2,7 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { realtimeMessage } from '@/views/transactions/settle-histories/useCollectWithdrawHistoryStore'
+import { depositMessage } from '@/views/transactions/settle-histories/useCollectWithdrawHistoryStore'
 import type { HeadOffceAccount } from '@/views/types'
 import { axios } from '@axios'
 
@@ -40,46 +40,13 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
         for (let i = 0; i < datas.length; i++) {
             datas[i]['fin_id'] = (finance_vans.find(obj => obj.id == datas[i]['fin_id']))?.nick_name
             datas[i]['is_withdraw'] = datas[i]['is_withdraw'] ? '출금' : '입금'
-            datas[i]['result_code'] = realtimeMessage(datas[i]['result_code'])
+            datas[i]['result_code'] = depositMessage(datas[i]['result_code'])
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         head.exportToExcel(datas)
     }
 
-    const metas = ref([
-        {
-            icon: 'ic-outline-payments',
-            color: 'primary',
-            title: '입금액 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-        {
-            icon: 'ic-outline-payments',
-            color: 'error',
-            title: '출금액 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-        {
-            icon: 'ic-outline-payments',
-            color: 'success',
-            title: '입출금 차액',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-        {
-            icon: 'ic-outline-payments',
-            color: 'warning',
-            title: '가상계좌 잔액',
-            stats: '',
-            percentage: 0,
-            subtitle: '',
-        }     
-    ])
+    const metas = ref([])
     
     return {
         store,

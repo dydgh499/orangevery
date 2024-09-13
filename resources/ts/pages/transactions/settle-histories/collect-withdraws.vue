@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { realtimeMessage, realtimeResult, useSearchStore } from '@/views/transactions/settle-histories/useCollectWithdrawHistoryStore'
+import { depositMessage, depositResult, useSearchStore } from '@/views/transactions/settle-histories/useCollectWithdrawHistoryStore'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 
@@ -47,8 +47,8 @@ provide('exporter', exporter)
                                     #{{ item[_key] }}
                                 </span>
                                 <span v-else-if="_key == 'result_code'">
-                                    <VChip :color="store.getSelectIdColor(realtimeResult(item[_key]))">
-                                        {{ realtimeMessage(item) }}
+                                    <VChip :color="store.getSelectIdColor(depositResult(item[_key]))">
+                                        {{ depositMessage(item) }}
                                     </VChip>
                                 </span>
                                 <span v-else-if="_key == 'mcht_settle_id'">
