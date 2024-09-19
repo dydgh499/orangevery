@@ -44,7 +44,7 @@ trait ExtendResponseTrait
 
     public function extendResponse($code, $msg, $data=[])
     {
-        $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all()];
+        $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all(), 'url' => request()->url()];
         if($code == 990)
         {
             $host = request()->getHost();
@@ -107,7 +107,7 @@ trait ExtendResponseTrait
             return Response::json($data, 204, [], JSON_UNESCAPED_UNICODE);
         else
         {
-            $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all()];
+            $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all(), 'url' => request()->url()];
             if($code == 940)
                 $http_code = 404;
             else if($code == 949)

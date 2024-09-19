@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useRequestStore } from '@/views/request'
-import { notiSendHistoryInterface } from '@/views/transactions/transactions'
-import type { NotiSendHistory } from '@/views/types'
-import { getUserLevel } from '@axios'
+import { useRequestStore } from '@/views/request';
+import { notiSendHistoryInterface } from '@/views/transactions/transactions';
+import type { NotiSendHistory } from '@/views/types';
+import { getUserLevel } from '@axios';
 
 interface Props {
     item: NotiSendHistory,
@@ -31,7 +31,7 @@ const detail = async () => {
                     </template>
                     <VListItemTitle>재발송</VListItemTitle>
                 </VListItem>
-                <VListItem value="retry" @click="detail()">
+                <VListItem value="detail" @click="detail()">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:check" />
                     </template>

@@ -337,7 +337,7 @@ watchEffect(() => {
                     <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
                             <VCol md="6" cols="12">
-                                <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_day_limit"
+                                <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_single_limit"
                                         type="number" suffix="만원" label="단건 결제 한도"/>
                             </VCol>
                             <VCol md="6">
