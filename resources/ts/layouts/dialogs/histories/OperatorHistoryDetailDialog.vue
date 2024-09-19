@@ -26,35 +26,8 @@ const hide_login = ref(false)
 const store = <any>(inject('store'))
 const { mchts, all_sales } = useSalesFilterStore()
 const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
-
-let is_dragging = false;
-let progress_bar = <any>(null);
-
-const startDrag = (event: KeyboardEvent) => {
-  is_dragging = true;
-  progress_bar = event.target
-  updateSlideByDrag(event)
-  document.addEventListener("mousemove", updateSlideByDrag)
-  document.addEventListener("mouseup", stopDrag)
-}
-
-const stopDrag = () => {
-  is_dragging = false;
-  document.removeEventListener("mousemove", updateSlideByDrag)
-  document.removeEventListener("mouseup", stopDrag)
-}
-
 const getRef = (swiperInstance:any) => {
     swiper.value = swiperInstance
-}
-
-const updateSlideByDrag = (event: KeyboardEvent) => {
-  if (is_dragging && swiper.value) {
-    const progress_bar_rect = progress_bar.getBoundingClientRect()
-    const progress = (event.clientY - progress_bar_rect.top) / progress_bar_rect.height
-    const newSlideIndex = Math.round(progress * (histories.value.length - 1));
-    swiper.value.slideTo(newSlideIndex);
-  }
 }
 
 const changeKeyName = (history_detail: any) => {
@@ -170,6 +143,35 @@ const getBackgroundcolor = (idx: number) => {
         return 'background: rgb(var(--v-theme-background)); height:6em !important;'
 }
 
+
+let isDragging = false;
+let progressBar = null;
+
+const startDrag = (event: KeyboardEvent) => {
+  isDragging = true;
+  progressBar = event.target;
+  updateSlideByDrag(event);
+  document.addEventListener("mousemove", updateSlideByDrag);
+  document.addEventListener("mouseup", stopDrag);
+};
+
+const stopDrag = () => {
+  isDragging = false;
+  document.removeEventListener("mousemove", updateSlideByDrag);
+  document.removeEventListener("mouseup", stopDrag);
+};
+
+const updateSlideByDrag = (event: KeyboardEvent) => {
+  if (isDragging && swiper.value) {
+    const progressBarRect = progressBar.getBoundingClientRect();
+    const progress =
+      (event.clientY - progressBarRect.top) / progressBarRect.height;
+    const newSlideIndex = Math.round(progress * (histories.value.length - 1));
+    swiper.value.slideTo(newSlideIndex);
+  }
+};
+
+
 watchEffect(() => {
     if(swiper.value && histories.value.length) {
         temp_history.value = histories.value[swiper.value.activeIndex]
@@ -182,8 +184,6 @@ watchEffect(() => {
     else
         histories.value = temp_histories.value
 })
-
-
 
 defineExpose({
     show
@@ -204,7 +204,7 @@ defineExpose({
                                     :modules="[Pagination, Navigation, EffectCoverflow]" 
                                     :watchSlidesProgress="true" 
                                     :spaceBetween="30"
-                                    :pagination="{type: 'progress_bar', clickable: true}" 
+                                    :pagination="{type: 'progressbar', clickable: true}" 
                                     :slides-per-view="6"
                                     :centered-slides="true"
                                     :grab-cursor="true" 
@@ -228,7 +228,7 @@ defineExpose({
                                         </div>
                                     </SwiperSlide>
                                 </Swiper>
-                                <div class="custom-progress-bar" @mousedown="startDrag">                                    
+                                <div class="custom-progressbar" @mousedown="startDrag">                                    
                                 </div>
                             </div>
                             <div style="display: flex; justify-content: space-between;">
@@ -344,7 +344,7 @@ defineExpose({
   block-size: 38em;
 }
 
-.custom-progress-bar {
+.custom-progressbar {
   position: absolute;
   z-index: 9999;
   background-color: rgba(0, 0, 0, 0%);
