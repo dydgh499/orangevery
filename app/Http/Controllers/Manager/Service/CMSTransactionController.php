@@ -137,8 +137,18 @@ class CMSTransactionController extends Controller
     {
         $data = $request->all();
         $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/get-balance', $data);
-        $res = $res['body']['data'];
-        return $this->extendResponse($res['result_cd'] == "0000" ? 1 : 2000, $res['result_msg'], $res['data']);
+        if(isset($res['body']['data']))
+        {
+            $res = $res['body']['data'];
+            return $this->extendResponse($res['result_cd'] == "0000" ? 1 : 2000, $res['result_msg'], $res['data']);    
+        }
+        else
+        {
+            if(isset($res['body']['code']) && isset($res['body']['message']))
+                return $this->apiResponse($res['body']['code'], $res['body']['message'], []);
+            else
+                return $this->apiResponse($res['code'], $res['body'], []);
+        }
     }
 
     /**

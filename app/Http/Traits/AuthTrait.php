@@ -14,6 +14,17 @@ trait AuthTrait
         return ['access_token'=>$token, 'user'=>$this];
     }
 
+    public function loginAPIResponse($result, $level)
+    {
+        $data = $result['user']->loginAPI($level);
+        $data['user'] = [
+            'id' => $data['user']->id,
+            'user_name' => $data['user']->user_name,
+            'level' => $level,
+        ];
+        return $data;
+    }
+
     public function loginAPI($level)
     {   //login expire 30 hours
         $auths = $this->getAuthority($level);

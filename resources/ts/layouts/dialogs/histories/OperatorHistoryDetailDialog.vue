@@ -105,8 +105,28 @@ const show = async (item: any) => {
                 temp_histories.value[i].before_history_detail['구분 타입'] = '커스텀 필터'
             }
         }
+        else if(corp.pv_options.paid.use_issuer_filter && temp_histories.value[i].history_target === '결제모듈')
+            temp_histories.value[i].before_history_detail['카드사 필터'] = JSON.stringify(temp_histories.value[i].before_history_detail['카드사 필터'])
     }
     visible.value = true
+}
+
+const movePage = (move_type: string) => {
+    const page_size = 20
+    let move_page = 0
+    if(move_type === '-') {
+        if(swiper.value.activeIndex - page_size < 0)
+            move_page = 0
+        else
+            move_page = swiper.value.activeIndex - page_size 
+    }
+    else {
+        if(swiper.value.activeIndex + page_size >= histories.value.length)
+            move_page = histories.value.length - 1
+        else
+            move_page = swiper.value.activeIndex + page_size 
+    }
+    swiper.value.slideTo(move_page)
 }
 
 const isChangeColor = (before: any, after: any) => {
@@ -187,7 +207,22 @@ defineExpose({
                                     <b>{{ history_info.activity_s_at }}</b>
                                     <br>처음
                                 </span>
-                                <b v-if="swiper && histories.length" class="text-primary">{{ swiper.activeIndex + 1 }}</b>
+
+                                <b v-if="swiper && histories.length > 10" 
+                                    @click="movePage('-')" class="text-primary page-jump">
+                                    {{ "<<" }}
+                                    <VTooltip activator="parent" location="top" transition="scale-transition">
+                                        <span>20페이지 이동</span>
+                                    </VTooltip>
+                                </b>
+                                <b v-if="swiper && histories.length" class="text-primary" style="margin-inline: 0.5em;">{{ swiper.activeIndex + 1 }}</b>
+                                <b v-if="swiper && histories.length > 10" 
+                                    @click="movePage('+')" class="text-primary page-jump">
+                                    {{ " >>" }}
+                                    <VTooltip activator="parent" location="top" transition="scale-transition">
+                                        <span>20페이지 이동</span>
+                                    </VTooltip>
+                                </b>
                                 <span style="text-align: center;">                                    
                                     <b>{{ history_info.activity_e_at }}</b>
                                     <br>마지막
@@ -262,7 +297,9 @@ defineExpose({
 </template>
 
 <style scoped>
-.coverflow-example {
+.page-jump {
+  cursor: pointer;
+  user-select: none;
 }
 
 .content {

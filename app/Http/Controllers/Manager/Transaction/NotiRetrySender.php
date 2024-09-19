@@ -87,7 +87,7 @@ class NotiRetrySender
             ->get(['transactions.*', 'noti_urls.send_url']);
 
         if(count($trans) === 0)
-            $fail_res[] = '#'.$id.":".__("validation.not_found_obj")."<br>";
+            $fail_res[] = '#'.$id.":노티주소가 등록되어있지 않습니다.<br>";
         else
         {
             foreach($trans as $tran)

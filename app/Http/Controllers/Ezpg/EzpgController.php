@@ -8,6 +8,7 @@ use App\Http\Controllers\Manager\Transaction\TransactionFilter;
 
 use Carbon\Carbon;
 use App\Models\Merchandise;
+use App\Models\Salesforce;
 use App\Models\Transaction;
 use App\Models\Merchandise\PaymentModule;
 
@@ -61,18 +62,22 @@ class EzpgController extends Controller
         $result = Login::isSafeLogin(new Merchandise(), $request);    // check merchandise
         if($result['result'] === 0)
         {
-            $data = $result['user']->loginAPI(10);
-            $data['user'] = [
-                'id' => $data['user']->id,
-                'user_name' => $data['user']->user_name,
-                'level' => 10,
-            ];
+            $data = $result['user']->loginAPIResponse($result, 10);
             return $this->response(0, $data);
         }
-        else if($result['result'] === -1)
-            return $this->extendResponse(1000, __('auth.not_found_obj'));
         else
-            return $this->extendResponse($result['result'], $result['msg'], $result['data']);
+        {
+            $result = Login::isSafeAccount(new Salesforce(), $request);    // check sales
+            if($result['result'] === 0)
+            {
+                $data = $result['user']->loginAPIResponse($result, $result['user']->level);
+                return $this->response(0, $data);
+            }
+            else if($result['result'] === -1)
+                return $this->extendResponse(1000, __('auth.not_found_obj'));
+            else
+                return $this->extendResponse($result['result'], $result['msg'], $result['data']);    
+        }
     }
 
     /**

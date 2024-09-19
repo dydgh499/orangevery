@@ -200,6 +200,7 @@ watchEffect(() => {
                                                 @input="formatContactNum"
                                                 prepend-inner-icon="tabler-building-store" 
                                                 placeholder="02-123-1234"
+                                                maxlength=20
                                             >                                            
                                                 <VTooltip activator="parent" location="top">
                                                     매출전표에 해당 번호가 표기됩니다.<br>(매출전표 판매자 정보: 가맹점 일 경우)
