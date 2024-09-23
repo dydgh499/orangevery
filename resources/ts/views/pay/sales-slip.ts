@@ -29,13 +29,35 @@ export const salesSlip = () => {
         else
         {
             if (card) {
-                const canvas = await html2canvas(document.getElementsByClassName('sales-slip-rect')[0], { useCORS: true,  })
+                const canvas = await html2canvas(document.getElementsByClassName('sales-slip-rect')[0], {
+                    scale: 2, // 기본값은 1, 더 높은 값으로 설정하면 고해상도로 캡처
+                    useCORS: true, // 외부 리소스를 로드할 때 CORS 문제가 발생하지 않도록 설정
+                    letterRendering: true, // 텍스트 렌더링 정확도를 높임
+                    allowTaint: true // Cross-Origin 이미지를 허용할 경우
+                })
                 canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({ "image/png": blob as Blob })]))
                 snackbar.value.show('영수증 이미지가 클립보드에 복사되었습니다.', 'success')
             }
         }
     }
     
+    const downloadSalesSlip = async (trans: SalesSlip, card: any) => {
+        const downloadURI = (uri: string, file_name: string) => {
+            const link = document.createElement("a")
+            link.download = file_name
+            link.href = uri
+            document.body.appendChild(link)
+            link.click()
+        }
+    
+        snackbar.value.show('영수증을 다운로드하고있습니다..', 'success')
+        if (card) {
+            const canvas = await html2canvas(document.getElementsByClassName('sales-slip-rect')[0], { useCORS: true,  })
+            downloadURI(canvas.toDataURL(), trans?.trx_dttm+"_"+trans?.appr_num+".png")
+            snackbar.value.show('영수증이 다운로드 되었습니다.', 'success')
+        }
+    }
+
     const copySalesSlipText = (trans: SalesSlip) => {
         let text = `신용카드 영수증\n
     결제정보
@@ -81,23 +103,6 @@ export const salesSlip = () => {
     신용카드 매출전표는 부가가치세법 제32조 2 제3항에 의거하여 발행되었으며 부가가치세법 제 46조에 따라 신용카드매출전표 등을 발급받은 경우에는 매입세액 공제가 가능합니다.`
         
         copy(text, '영수증 텍스트')
-    }
-    
-    const downloadSalesSlip = async (trans: SalesSlip, card: any) => {
-        const downloadURI = (uri: string, file_name: string) => {
-            const link = document.createElement("a")
-            link.download = file_name
-            link.href = uri
-            document.body.appendChild(link)
-            link.click()
-        }
-    
-        snackbar.value.show('영수증을 다운로드하고있습니다..', 'success')
-        if (card) {
-            const canvas = await html2canvas(document.getElementsByClassName('sales-slip-rect')[0], { useCORS: true,  })
-            downloadURI(canvas.toDataURL(), trans?.trx_dttm+"_"+trans?.appr_num+".png")
-            snackbar.value.show('영수증이 다운로드 되었습니다.', 'success')
-        }
     }
     
     const copyLink = async (trans: SalesSlip) => {

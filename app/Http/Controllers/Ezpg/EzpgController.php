@@ -67,7 +67,7 @@ class EzpgController extends Controller
         }
         else
         {
-            $result = Login::isSafeAccount(new Salesforce(), $request);    // check sales
+            $result = Login::isSafeLogin(new Salesforce(), $request);    // check sales
             if($result['result'] === 0)
             {
                 $data = $result['user']->loginAPIResponse($result, $result['user']->level);

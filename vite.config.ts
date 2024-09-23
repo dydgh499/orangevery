@@ -50,7 +50,7 @@ export default defineConfig({
             layoutsDirs: './resources/ts/layouts/',
         }),
         Components({
-            dirs: ['resources/ts/@core/components', 'resources/ts/views/demos', 'resources/ts/components'],
+            dirs: ['resources/ts/@core/components', 'resources/ts/layouts/dialogs', 'resources/ts/components'],
             dts: true,
         }),
         AutoImport({

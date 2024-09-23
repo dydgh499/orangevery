@@ -84,6 +84,10 @@ class NotiRetrySender
         $trans = Transaction::join('noti_urls', 'transactions.mcht_id', '=', 'noti_urls.mcht_id')
             ->where('noti_urls.is_delete', false)
             ->where('transactions.id', $id)
+            ->where(function ($query) {
+                return $query->whereColumn('noti_urls.pmod_id', 'transactions.pmod_id')
+                    ->orWhere('noti_urls.pmod_id', -1);
+            })
             ->get(['transactions.*', 'noti_urls.send_url']);
 
         if(count($trans) === 0)

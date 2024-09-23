@@ -74,7 +74,6 @@ onMounted(async () => {
                                             </span>
                                         </td>
                                     </tr>
-
                                     <tr>
                                         <th class='list-square'>
                                             <span>승인일시</span>
@@ -93,7 +92,6 @@ onMounted(async () => {
                                             </span>
                                         </td>
                                     </tr>
-
                                     <tr>
                                         <th class='list-square'>
                                             <span>발급사</span>
@@ -112,8 +110,6 @@ onMounted(async () => {
                                             </span>
                                         </td>
                                     </tr>
-
-
                                     <tr>
                                         <th class='list-square'>
                                             <span>할부개월</span>
@@ -310,7 +306,6 @@ onMounted(async () => {
                         </VCardText>
                     </VCard>
                 </div>
-                
                 <VCard rounded>
                     <VCardText>
                         <div class="button-container action-container">
@@ -368,12 +363,6 @@ onMounted(async () => {
 .result-wrapper {
   inline-size: 700px;
   margin-inline: auto;
-}
-
-.sales-slip-rect-container {
-  padding: 0.3em;
-  background: rgb(255, 255, 255, 0%) !important;
-  box-shadow: 0 0 0 0;
 }
 
 @media (max-width: 700px) {
