@@ -153,7 +153,7 @@ const isUseCancelDeposit = () => {
                     </template>
                     <VListItemTitle>노티전송</VListItemTitle>
                 </VListItem>
-                <VListItem value="noti" class="noti" @click="notiSendHistoriesDialog.show(props.item)"
+                <VListItem value="noti-histories" class="noti" @click="notiSendHistoriesDialog.show(props.item)"
                     v-if="corp.pv_options.paid.use_noti">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:history" />

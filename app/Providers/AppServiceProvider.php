@@ -35,7 +35,8 @@ class AppServiceProvider extends ServiceProvider
                 );
             });
         }
-        Type::addType('tinyinteger', \Doctrine\DBAL\Types\SmallIntType::class);
+        if (!Type::hasType('tinyinteger'))
+            Type::addType('tinyinteger', \Doctrine\DBAL\Types\SmallIntType::class);
         Paginator::useBootstrap();
     }
 }

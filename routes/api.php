@@ -44,6 +44,7 @@ Route::prefix('v1')->group(function() {
         Route::middleware(['auth:sanctum', 'log.route'])->group(function () {
             Route::post('sms-link-send', [MessageController::class, 'smslinkSend']);
             Route::middleware(['is.operate', 'is.edit.able'])->post('mobile-code-head-office-issuence', [MessageController::class, 'headOfficeMobileCodeIssuence']);
+            Route::middleware(['is.operate', 'is.edit.able'])->post('pay-verfication-init', [MessageController::class, 'payVerficationInit']);
         });
     });
     

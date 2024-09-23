@@ -16,7 +16,8 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 const phoneNum2FAVertifyDialog = <any>(inject('phoneNum2FAVertifyDialog'))
-
+const initPayVerficationDialog = <any>(inject('initPayVerficationDialog'))
+    
 const isAbleUnlock = () => {
     if(props.item?.is_lock) {
         if(props.type === 0 && getUserLevel() >= 13)
@@ -85,7 +86,7 @@ const init2FA = async () => {
 <template>
     <VBtn icon size="x-small" color="default" variant="text">
         <VIcon size="22" icon="tabler-dots-vertical" />
-        <VMenu activator="parent" width="230">
+        <VMenu activator="parent" width="250">
             <VList>
                 <VListItem value="password" @click="password.show(props.item.id, type)">
                     <template #prepend>
@@ -104,6 +105,12 @@ const init2FA = async () => {
                         <VIcon size="24" class="me-3" icon="tabler:infinity-off" />
                     </template>
                     <VListItemTitle>2FA 초기화</VListItemTitle>
+                </VListItem>
+                <VListItem value="initPayVerfication" @click="initPayVerficationDialog.show(props.item.id)" v-if="corp.pv_options.paid.use_pay_verification_mobile && props.type === 0 && getUserLevel() >= 35">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="tabler-device-mobile" />
+                    </template>
+                    <VListItemTitle>휴대폰인증회수 초기화</VListItemTitle>
                 </VListItem>
             </VList>
         </VMenu>

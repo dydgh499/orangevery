@@ -227,7 +227,6 @@ class MessageController extends Controller
 
     /**
      * 본사등급 휴대폰번호 인증 요청
-     *
     */
     public function headOfficeMobileCodeIssuence(Request $request)
     {
@@ -253,5 +252,16 @@ class MessageController extends Controller
             else
                 return $this->extendResponse($code, $msg);
         }
+    }
+
+    /**
+     * 휴대폰 인증회수 초기화
+    */
+    public function payVerficationInit(Request $request)
+    {
+        $validated = $request->validate(['phone_num'=>'required', 'mcht_id'=>'required']);
+        $brand = BrandInfo::getBrandById($request->user()->brand_id);
+        AuthPhoneNum::clearValidate($brand, $request->mcht_id, $request->phone_num);
+        return $this->response(0);
     }
 }

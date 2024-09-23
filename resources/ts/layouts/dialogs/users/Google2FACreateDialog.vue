@@ -62,7 +62,6 @@ const onAgree = async () => {
 
 const onCancel = () => {
     visible.value = false
-
 }
 
 const stepUp = async () => {

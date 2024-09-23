@@ -7,6 +7,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
+import InitPayVerficationDialog from '@/layouts/dialogs/users/InitPayVerficationDialog.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
 import PhoneNum2FAVertifyDialog from '@/layouts/dialogs/users/PhoneNum2FAVertifyDialog.vue'
 
@@ -14,7 +15,6 @@ import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { getUserLevel, isAbleModiy } from '@axios'
 import { DateFilters, ItemTypes } from '@core/enums'
 import corp from '@corp'
-import { template } from 'lodash'
 
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
@@ -22,8 +22,10 @@ const { pgs, settle_types, cus_filters } = useStore()
 const password  = ref()
 const batchDialog = ref()
 const phoneNum2FAVertifyDialog = ref()
+const initPayVerficationDialog = ref()
 
 provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
+provide('initPayVerficationDialog', initPayVerficationDialog)
 provide('password', password)
 provide('store', store)
 provide('head', head)
@@ -215,6 +217,7 @@ onMounted(() => {
             @update:select_idxs="selected = $event; store.setTable(); store.getChartData()"/>
         <PasswordChangeDialog ref="password" />
         <PhoneNum2FAVertifyDialog ref="phoneNum2FAVertifyDialog"/>
+        <InitPayVerficationDialog ref="initPayVerficationDialog"/>
     </div>
 </template>
 

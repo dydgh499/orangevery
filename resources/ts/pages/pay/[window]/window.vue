@@ -11,7 +11,7 @@ import { hourTimer } from '@core/utils/timer';
 import corp from '@corp';
 
 const route = useRoute()
-const { isVisiableRemainTime } = payWindowStore()
+const { isVisiableRemainTime, getPayWindow } = payWindowStore()
 const {remaining_time, expire_time, getRemainTimeColor, updateRemainingTime} = hourTimer()
 const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(6)
 
@@ -55,36 +55,23 @@ const handleKeyDownEvent = async (index: number) => {
 }
 
 onMounted(async () => {
-    try {
-        const res = await axios.get('/api/v1/pay/' + route.params.window, {
-            params : {
-                pc: route.query.pc
-            }
-        })
-        if(route.query.pc && route.query.pc.length && res.data.params === null) {
-            code.value = 409
-            message.value = '상품정보를 찾을 수 없습니다. 결제창을 재생성해주세요.'
-        }
-        else {
-            pay_window.value = res.data.pay_window
-            pay_module.value = res.data.payment_module
-            merchandise.value = res.data.merchandise
-            payment_gateways.value = [res.data.payment_gateway]
-
-            if(res.data.params && Object.keys(res.data.params)) {
-                params.value = res.data.params
-                params_mode.value = true
-            }
-        }
+    const [_code, _message, _params_mode, _data] = await getPayWindow(route.params.window, route.query.pc)
+    if(_code === 200) {
+        params_mode.value = _params_mode
+        pay_window.value = _data.pay_window
+        pay_module.value = _data.payment_module
+        merchandise.value = _data.merchandise
+        payment_gateways.value = [_data.payment_gateway]
+        if(params_mode.value)
+            params.value = _data.params
 
         expire_time.value = pay_window.value.holding_able_at
         const intervalId = setInterval(updateRemainingTime, 1002);
     }
-    catch (e: any) {
-        code.value = e.response.data.code
-        message.value = e.response.data.message
-        snackbar.value.show(e.response.data.message, 'error')
-        const r = errorHandler(e)
+    else {
+        code.value = _code
+        message.value = _message
+        snackbar.value.show(_message, 'error')
     }
 })
 </script>
@@ -93,7 +80,7 @@ onMounted(async () => {
         <VCard rounded>
             <VCardText style="padding: 0.5em;">
                 <div style="position: absolute; display: flex; width: 100%; justify-content: space-between;" v-if="pay_module?.module_type > 0 || code !== 200">
-                    <div style="display: inline-flex; flex-direction: column;" v-if="isVisiableRemainTime(payment_module)">
+                    <div style="display: inline-flex; flex-direction: column;" v-if="isVisiableRemainTime(pay_module)">
                         <h5>결제창 유효시간</h5>
                         <b :class="getRemainTimeColor">{{ remaining_time }}</b>
                     </div>
