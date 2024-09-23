@@ -279,7 +279,7 @@ class EzpgController extends Controller
                 DB::raw("COUNT(*) AS total_count"),
             ]);
 
-        foreach($charts as $chart)
+        foreach($charts as &$chart)
         {
             $chart = json_decode(json_encode($chart), true);                
             unset($chart['trx_dttm']);
