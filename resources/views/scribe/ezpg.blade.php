@@ -13,7 +13,7 @@
     <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jets/0.14.1/jets.min.js"></script>
 
-    <link rel="dns-prefetch" href="https://pg.buddypay.co.kr">
+    <link rel="dns-prefetch" href="https://w.ez-pg.kr">
     <link rel="icon" href="https://team.payvery.kr/storage/images/favicons/sODz1BFgSViN1X6kGoc37qc4Y59PsQcfR89NB1LL.ico"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta property="og:type" content="website">
@@ -37,7 +37,7 @@
             </style>
 
     <script>
-        var tryItOutBaseUrl = "https://pg.buddypay.co.kr";
+        var tryItOutBaseUrl = "https://w.ez-pg.kr";
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
