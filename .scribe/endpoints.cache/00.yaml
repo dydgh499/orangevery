@@ -32,7 +32,7 @@ endpoints:
         name: user_name
         description: '가맹점 아이디'
         required: true
-        example: ea
+        example: in
         type: string
         enumValues: []
         custom: []
@@ -40,13 +40,13 @@ endpoints:
         name: user_pw
         description: '가맹점 패스워드'
         required: true
-        example: in
+        example: velit
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      user_name: ea
-      user_pw: in
+      user_name: in
+      user_pw: velit
     fileParameters: []
     responses:
       -
@@ -170,7 +170,7 @@ endpoints:
         name: s_dt
         description: '검색 시작일'
         required: true
-        example: '2024-09-01'
+        example: '2024-09-01 00:00:00'
         type: string
         enumValues: []
         custom: []
@@ -178,7 +178,7 @@ endpoints:
         name: e_dt
         description: '검색 종료일'
         required: true
-        example: '2024-09-30'
+        example: '2024-09-07 23:59:59'
         type: string
         enumValues: []
         custom: []
@@ -186,16 +186,16 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: inventore
+        example: ratione
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
       page: 1
       page_size: 20
-      s_dt: '2024-09-01'
-      e_dt: '2024-09-30'
-      search: inventore
+      s_dt: '2024-09-01 00:00:00'
+      e_dt: '2024-09-07 23:59:59'
+      search: ratione
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -638,7 +638,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer baZ813kcf46eD6vE5hdgaVP'
+      - 'Bearer aE1ZcgbDke4d65V8a63fPvh'
     controller: null
     method: null
     route: null
@@ -677,13 +677,13 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: doloremque
+        example: et
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
       t_dt: '2024-09-01'
-      search: doloremque
+      search: et
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -755,7 +755,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6dg3cb4va6aPVhf51kZEDe8'
+      - 'Bearer 416fhcE5Vb6ZaeakD83gvPd'
     controller: null
     method: null
     route: null
@@ -810,7 +810,7 @@ endpoints:
         name: e_dt
         description: '검색 종료일'
         required: true
-        example: '2024-09-30 23:59:59'
+        example: '2024-09-07 23:59:59'
         type: string
         enumValues: []
         custom: []
@@ -818,7 +818,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: blanditiis
+        example: nostrum
         type: string
         enumValues: []
         custom: []
@@ -826,8 +826,8 @@ endpoints:
       page: 1
       page_size: 20
       s_dt: '2024-09-01 00:00:00'
-      e_dt: '2024-09-30 23:59:59'
-      search: blanditiis
+      e_dt: '2024-09-07 23:59:59'
+      search: nostrum
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -1055,7 +1055,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer kaabcDhf5g861Z6EdvVPe43'
+      - 'Bearer kfg6Eh6Z3ae41Va5dv8bDPc'
     controller: null
     method: null
     route: null

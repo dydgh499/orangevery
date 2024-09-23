@@ -87,8 +87,8 @@ class EzpgController extends Controller
      * 
      * @queryParam page integer required 조회 페이지 Example: 1
      * @queryParam page_size integer required 조회 사이즈 Example: 20
-     * @queryParam s_dt string required 검색 시작일 Example: 2024-09-01
-     * @queryParam e_dt string required 검색 종료일 Example: 2024-09-30
+     * @queryParam s_dt string required 검색 시작일 Example: 2024-09-01 00:00:00
+     * @queryParam e_dt string required 검색 종료일 Example: 2024-09-07 23:59:59 
      * @queryParam search string 검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)
      * @responseFile 201 storage/buddyPay/transactionIndex.json
      * @responseField page string 조회 페이지
@@ -134,8 +134,8 @@ class EzpgController extends Controller
         $validated = $request->validate([
             'page'      => 'required|integer',
             'page_size' => 'required|integer',
-            's_dt'  => 'required|string',
-            'e_dt'  => 'required|string',
+            's_dt'  => 'required|date_format:Y-m-d H:i:s',
+            'e_dt'  => 'required|date_format:Y-m-d H:i:s',
         ]);
 
         request()->merge([
@@ -180,7 +180,7 @@ class EzpgController extends Controller
      * @queryParam page integer required 조회 페이지 Example: 1
      * @queryParam page_size integer required 조회 사이즈 Example: 20
      * @queryParam s_dt string required 검색 시작일 Example: 2024-09-01 00:00:00
-     * @queryParam e_dt string required 검색 종료일 Example: 2024-09-30 23:59:59
+     * @queryParam e_dt string required 검색 종료일 Example: 2024-09-07 23:59:59
      * @queryParam search string 검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)
      * @responseFile 201 storage/reconciliations/index.json
      * @responseField page integer 조회 페이지
@@ -212,8 +212,8 @@ class EzpgController extends Controller
         $validated = $request->validate([
             'page'      => 'required|integer',
             'page_size' => 'required|integer',
-            's_dt'  => 'required|string',
-            'e_dt'  => 'required|string',
+            's_dt'  => 'required|date_format:Y-m-d H:i:s',
+            'e_dt'  => 'required|date_format:Y-m-d H:i:s',
         ]);
         
         $carbon_s_at = Carbon::createFromFormat('Y-m-d H:i:s', $request->s_dt);
@@ -264,8 +264,7 @@ class EzpgController extends Controller
     public function summary(Request $request)
     {
         // Query parameters
-        $validated = $request->validate(['t_dt' => 'required|string']);
-
+        $validated = $request->validate(['t_dt' => 'required|date_format:Y-m-d']);
         $cols = [
             'merchandises.id',            
             DB::raw("SUM(IF(is_cancel = 0, amount, 0)) AS appr_amount"),
@@ -275,12 +274,12 @@ class EzpgController extends Controller
             DB::raw("SUM(amount) AS sales_amount"),
             DB::raw("COUNT(*) AS total_count"),
         ];
-        
-        $chart = TransactionFilter::common($request)
-            ->groupBy('merchandises.id')
-            ->first($cols);
 
-        if($chart)
+        $charts = TransactionFilter::common($request)
+            ->groupBy('merchandises.id')
+            ->get($cols);
+
+        foreach($charts as $chart)
         {
             $chart = json_decode(json_encode($chart), true);                
             unset($chart['trx_dttm']);
@@ -297,7 +296,6 @@ class EzpgController extends Controller
             $chart['sales_amount'] = (int)$chart['sales_amount'];
             $chart['total_count'] = (int)$chart['total_count'];
         }
-
         return $this->response(0, $chart);
     }
 }
