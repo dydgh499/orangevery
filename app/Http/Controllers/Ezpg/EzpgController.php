@@ -265,19 +265,19 @@ class EzpgController extends Controller
     {
         // Query parameters
         $validated = $request->validate(['t_dt' => 'required|date_format:Y-m-d']);
-        $cols = [
-            'merchandises.id',            
-            DB::raw("SUM(IF(is_cancel = 0, amount, 0)) AS appr_amount"),
-            DB::raw("SUM(is_cancel = 0) AS appr_count"),
-            DB::raw("SUM(IF(is_cancel = 1, amount, 0)) AS cxl_amount"),
-            DB::raw("SUM(is_cancel = 1) AS cxl_count"),
-            DB::raw("SUM(amount) AS sales_amount"),
-            DB::raw("COUNT(*) AS total_count"),
-        ];
-
         $charts = TransactionFilter::common($request)
             ->groupBy('merchandises.id')
-            ->get($cols);
+            ->whereRaw("transactions.trx_at >= ?", [$request->t_dt." 00:00:00"])
+            ->whereRaw("transactions.trx_at <= ?", [$request->t_dt." 23:59:59"])
+            ->get([
+                'merchandises.id',            
+                DB::raw("SUM(IF(is_cancel = 0, amount, 0)) AS appr_amount"),
+                DB::raw("SUM(is_cancel = 0) AS appr_count"),
+                DB::raw("SUM(IF(is_cancel = 1, amount, 0)) AS cxl_amount"),
+                DB::raw("SUM(is_cancel = 1) AS cxl_count"),
+                DB::raw("SUM(amount) AS sales_amount"),
+                DB::raw("COUNT(*) AS total_count"),
+            ]);
 
         foreach($charts as $chart)
         {
@@ -296,6 +296,6 @@ class EzpgController extends Controller
             $chart['sales_amount'] = (int)$chart['sales_amount'];
             $chart['total_count'] = (int)$chart['total_count'];
         }
-        return $this->response(0, $chart);
+        return $this->response(0, $charts);
     }
 }

@@ -14,7 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jets/0.14.1/jets.min.js"></script>
 
     <link rel="dns-prefetch" href="https://w.ez-pg.kr">
-    <link rel="icon" href="https://team.payvery.kr/storage/images/favicons/sODz1BFgSViN1X6kGoc37qc4Y59PsQcfR89NB1LL.ico"/>
+    <link rel="icon" href="/storage/images/logos/KU9q8LxifqSQw0Mhbqi0cqFu2SLsvmTriTBt7BvI.svg"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta property="og:type" content="website">
     <meta property="og:title" content="BuddyPay Mobile API">
