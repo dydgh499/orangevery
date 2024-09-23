@@ -1,54 +1,60 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Ezpg API</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/utils/docs/theme-ezpg.style.css" media="screen">
-    <link rel="stylesheet" href="/utils/docs/theme-ezpg.style.css" media="print">
+    <link rel="stylesheet" href="/utils/docs/theme-buddypay.style.css" media="screen">
+    <link rel="stylesheet" href="/utils/docs/theme-buddypay.style.css" media="print">
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/obsidian.min.css">
     <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jets/0.14.1/jets.min.js"></script>
-    <link rel="icon" href="https://team.payvery.kr/storage/images/favicons/WT1zvOl9RSB5JFkLAJ8Q4bgRxO2UZ8677Toa7R4I.ico">    <style id="language-style">
-      /* starts out as display none and is replaced with js later  */
-      body .content .javascript-example code {
-        display: none;
-      }
 
-      body .content .php-example code {
-        display: none;
-      }
+    <link rel="dns-prefetch" href="https://pg.buddypay.co.kr">
+    <link rel="icon" href="https://team.payvery.kr/storage/images/favicons/sODz1BFgSViN1X6kGoc37qc4Y59PsQcfR89NB1LL.ico"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="BuddyPay Mobile API">
+    <meta property="og:image" content="https://team.payvery.kr/storage/images/ogs/170116003008dab237631d951bf4719ca827640d91.webp" >
+    <meta property="og:description" content="본 문서는 Buddy Pay와 Buddy Pay Mobile간 인터페이스에 대하여 기술합니다.">
+    <meta property="description" content="본 문서는 Buddy Pay와 Buddy Pay Mobile간 인터페이스에 대하여 기술합니다.">
+    <meta name="author" content="purplevery">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="BuddyPay">
+    <meta name="theme-color" content="#003067">
 
-      body .content .python-example code {
-        display: none;
-      }
+    <style id="language-style">
+        /* starts out as display none and is replaced with js later  */
+                    body .content .javascript-example code { display: none; }
+                    body .content .php-example code { display: none; }
+                    body .content .python-example code { display: none; }
+                    body .content .bash-example code { display: none; }
+            </style>
 
-      body .content .bash-example code {
-        display: none;
-      }
-    </style>
     <script>
-      var tryItOutBaseUrl = "https://w.ez-pg.kr";
-      var useCsrf = Boolean();
-      var csrfUrl = "/sanctum/csrf-cookie";
+        var tryItOutBaseUrl = "https://pg.buddypay.co.kr";
+        var useCsrf = Boolean();
+        var csrfUrl = "/sanctum/csrf-cookie";
     </script>
     <script src="/vendor/scribe/js/tryitout-4.25.0.js"></script>
     <script src="/vendor/scribe/js/theme-default-4.25.0.js"></script>
-  </head>
+</head>
 <body data-languages="[&quot;javascript&quot;,&quot;php&quot;,&quot;python&quot;,&quot;bash&quot;]">
 
 <a href="#" id="nav-button">
     <span>
         MENU
-        <img src="../docs/images/navbar.png" alt="navbar-image"/>
+        <img src="/vendor/scribe/images/navbar.png" alt="navbar-image"/>
     </span>
 </a>
 <div class="tocify-wrapper">
         <div style="display: inline-flex; align-items: center; text-align: center; vertical-align: middle; padding: 1em; justify-content: left;">
-        <img src="https://w.ez-pg.kr/storage/images/logos/KU9q8LxifqSQw0Mhbqi0cqFu2SLsvmTriTBt7BvI.svg" alt="logo" class="logo" width="20%"/>
+        <img src="/storage/images/logos/KU9q8LxifqSQw0Mhbqi0cqFu2SLsvmTriTBt7BvI.svg" alt="logo" class="logo" width="20%"/>
         <span style='margin-left: 0.5em; font-size: 1.7em;'>이지피쥐</span>
     </div>
     
@@ -100,7 +106,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2024-09-23 20:29:01</li>
+        <li>마지막 업데이트:  2024-09-23 20:45:52</li>
     </ul>
 </div>
 
@@ -213,8 +219,8 @@ const headers = {
 };
 
 let body = {
-    "user_name": "doloremque",
-    "user_pw": "id"
+    "user_name": "ea",
+    "user_pw": "in"
 };
 
 fetch(url, {
@@ -234,8 +240,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'user_name' =&gt; 'doloremque',
-            'user_pw' =&gt; 'id',
+            'user_name' =&gt; 'ea',
+            'user_pw' =&gt; 'in',
         ],
     ]
 );
@@ -249,8 +255,8 @@ import json
 
 url = 'https://w.ez-pg.kr/api/v1/ezpg/sign-in'
 payload = {
-    "user_name": "doloremque",
-    "user_pw": "id"
+    "user_name": "ea",
+    "user_pw": "in"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -267,8 +273,8 @@ response.json()</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"user_name\": \"doloremque\",
-    \"user_pw\": \"id\"
+    \"user_name\": \"ea\",
+    \"user_pw\": \"in\"
 }"
 </code></pre></div>
 
@@ -409,10 +415,10 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="user_name"                data-endpoint="POSTapi-v1-ezpg-sign-in"
-               value="doloremque"
+               value="ea"
                data-component="body">
     <br>
-<p>가맹점 아이디 <br>예시: <code>doloremque</code></p>
+<p>가맹점 아이디 <br>예시: <code>ea</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>user_pw</code></b>&nbsp;&nbsp;
@@ -420,10 +426,10 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="user_pw"                data-endpoint="POSTapi-v1-ezpg-sign-in"
-               value="id"
+               value="in"
                data-component="body">
     <br>
-<p>가맹점 패스워드 <br>예시: <code>id</code></p>
+<p>가맹점 패스워드 <br>예시: <code>in</code></p>
         </div>
         </form>
 
@@ -463,9 +469,9 @@ response.json()</code></pre></div>
 const params = {
     "page": "1",
     "page_size": "20",
-    "s_dt": "2023-11-01",
-    "e_dt": "2023-11-30",
-    "search": "id",
+    "s_dt": "2024-09-01",
+    "e_dt": "2024-09-30",
+    "search": "inventore",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -495,9 +501,9 @@ $response = $client-&gt;get(
         'query' =&gt; [
             'page' =&gt; '1',
             'page_size' =&gt; '20',
-            's_dt' =&gt; '2023-11-01',
-            'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'id',
+            's_dt' =&gt; '2024-09-01',
+            'e_dt' =&gt; '2024-09-30',
+            'search' =&gt; 'inventore',
         ],
     ]
 );
@@ -513,9 +519,9 @@ url = 'https://w.ez-pg.kr/api/v1/ezpg/transactions'
 params = {
   'page': '1',
   'page_size': '20',
-  's_dt': '2023-11-01',
-  'e_dt': '2023-11-30',
-  'search': 'id',
+  's_dt': '2024-09-01',
+  'e_dt': '2024-09-30',
+  'search': 'inventore',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -529,7 +535,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://w.ez-pg.kr/api/v1/ezpg/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=id" \
+    --get "https://w.ez-pg.kr/api/v1/ezpg/transactions?page=1&amp;page_size=20&amp;s_dt=2024-09-01&amp;e_dt=2024-09-30&amp;search=inventore" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -798,24 +804,24 @@ response.json()</code></pre></div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>s_dt</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
-<i><b>optional</b></i> &nbsp;
+ &nbsp;
                 <input type="text" style="display: none"
                               name="s_dt"                data-endpoint="GETapi-v1-ezpg-transactions"
-               value="2023-11-01"
+               value="2024-09-01"
                data-component="query">
     <br>
-<p>검색 시작일 <br>예시: <code>2023-11-01</code></p>
+<p>검색 시작일 <br>예시: <code>2024-09-01</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>e_dt</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
-<i><b>optional</b></i> &nbsp;
+ &nbsp;
                 <input type="text" style="display: none"
                               name="e_dt"                data-endpoint="GETapi-v1-ezpg-transactions"
-               value="2023-11-30"
+               value="2024-09-30"
                data-component="query">
     <br>
-<p>검색 종료일 <br>예시: <code>2023-11-30</code></p>
+<p>검색 종료일 <br>예시: <code>2024-09-30</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp;
@@ -823,10 +829,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-ezpg-transactions"
-               value="id"
+               value="inventore"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>id</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>inventore</code></p>
             </div>
                 </form>
 
@@ -1110,7 +1116,8 @@ response.json()</code></pre></div>
 );
 
 const params = {
-    "t_dt": "2023-11-01",
+    "t_dt": "2024-09-01",
+    "search": "doloremque",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1121,14 +1128,9 @@ const headers = {
     "Accept": "application/json",
 };
 
-let body = {
-    "t_dt": "quibusdam"
-};
-
 fetch(url, {
     method: "GET",
     headers,
-    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 
@@ -1143,10 +1145,8 @@ $response = $client-&gt;get(
             'Accept' =&gt; 'application/json',
         ],
         'query' =&gt; [
-            't_dt' =&gt; '2023-11-01',
-        ],
-        'json' =&gt; [
-            't_dt' =&gt; 'quibusdam',
+            't_dt' =&gt; '2024-09-01',
+            'search' =&gt; 'doloremque',
         ],
     ]
 );
@@ -1159,11 +1159,9 @@ print_r(json_decode((string) $body));</code></pre></div>
 import json
 
 url = 'https://w.ez-pg.kr/api/v1/ezpg/reconciliation/summary'
-payload = {
-    "t_dt": "quibusdam"
-}
 params = {
-  't_dt': '2023-11-01',
+  't_dt': '2024-09-01',
+  'search': 'doloremque',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1171,20 +1169,16 @@ headers = {
   'Accept': 'application/json'
 }
 
-response = requests.request('GET', url, headers=headers, json=payload, params=params)
+response = requests.request('GET', url, headers=headers, params=params)
 response.json()</code></pre></div>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation/summary?t_dt=2023-11-01" \
+    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation/summary?t_dt=2024-09-01&amp;search=doloremque" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"t_dt\": \"quibusdam\"
-}"
-</code></pre></div>
+    --header "Accept: application/json"</code></pre></div>
 
 </span>
 
@@ -1292,24 +1286,23 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="t_dt"                data-endpoint="GETapi-v1-ezpg-reconciliation-summary"
-               value="2023-11-01"
+               value="2024-09-01"
                data-component="query">
     <br>
-<p>조회일 <br>예시: <code>2023-11-01</code></p>
+<p>조회일 <br>예시: <code>2024-09-01</code></p>
             </div>
-                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>t_dt</code></b>&nbsp;&nbsp;
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
- &nbsp;
+<i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
-                              name="t_dt"                data-endpoint="GETapi-v1-ezpg-reconciliation-summary"
-               value="quibusdam"
-               data-component="body">
+                              name="search"                data-endpoint="GETapi-v1-ezpg-reconciliation-summary"
+               value="doloremque"
+               data-component="query">
     <br>
-<p><br>예시: <code>quibusdam</code></p>
-        </div>
-        </form>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>doloremque</code></p>
+            </div>
+                </form>
 
     <h3>응답</h3>
     <h4 class="fancy-heading-panel"><b>응답 필드</b></h4>
@@ -1375,8 +1368,9 @@ response.json()</code></pre></div>
 const params = {
     "page": "1",
     "page_size": "20",
-    "s_dt": "2023-11-01 00:00:00",
-    "e_dt": "2023-11-30 23:59:59",
+    "s_dt": "2024-09-01 00:00:00",
+    "e_dt": "2024-09-30 23:59:59",
+    "search": "blanditiis",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1406,8 +1400,9 @@ $response = $client-&gt;get(
         'query' =&gt; [
             'page' =&gt; '1',
             'page_size' =&gt; '20',
-            's_dt' =&gt; '2023-11-01 00:00:00',
-            'e_dt' =&gt; '2023-11-30 23:59:59',
+            's_dt' =&gt; '2024-09-01 00:00:00',
+            'e_dt' =&gt; '2024-09-30 23:59:59',
+            'search' =&gt; 'blanditiis',
         ],
     ]
 );
@@ -1423,8 +1418,9 @@ url = 'https://w.ez-pg.kr/api/v1/ezpg/reconciliation'
 params = {
   'page': '1',
   'page_size': '20',
-  's_dt': '2023-11-01 00:00:00',
-  'e_dt': '2023-11-30 23:59:59',
+  's_dt': '2024-09-01 00:00:00',
+  'e_dt': '2024-09-30 23:59:59',
+  'search': 'blanditiis',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1438,7 +1434,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation?page=1&amp;page_size=20&amp;s_dt=2023-11-01+00%3A00%3A00&amp;e_dt=2023-11-30+23%3A59%3A59" \
+    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation?page=1&amp;page_size=20&amp;s_dt=2024-09-01+00%3A00%3A00&amp;e_dt=2024-09-30+23%3A59%3A59&amp;search=blanditiis" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1607,10 +1603,10 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="s_dt"                data-endpoint="GETapi-v1-ezpg-reconciliation"
-               value="2023-11-01 00:00:00"
+               value="2024-09-01 00:00:00"
                data-component="query">
     <br>
-<p>검색 시작일 <br>예시: <code>2023-11-01 00:00:00</code></p>
+<p>검색 시작일 <br>예시: <code>2024-09-01 00:00:00</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>e_dt</code></b>&nbsp;&nbsp;
@@ -1618,10 +1614,21 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="e_dt"                data-endpoint="GETapi-v1-ezpg-reconciliation"
-               value="2023-11-30 23:59:59"
+               value="2024-09-30 23:59:59"
                data-component="query">
     <br>
-<p>검색 종료일 <br>예시: <code>2023-11-30 23:59:59</code></p>
+<p>검색 종료일 <br>예시: <code>2024-09-30 23:59:59</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i><b>optional</b></i> &nbsp;
+                <input type="text" style="display: none"
+                              name="search"                data-endpoint="GETapi-v1-ezpg-reconciliation"
+               value="blanditiis"
+               data-component="query">
+    <br>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>blanditiis</code></p>
             </div>
                 </form>
 

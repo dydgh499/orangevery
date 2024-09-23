@@ -48,8 +48,8 @@ class EzpgController extends Controller
      * 
      * @unauthenticated
      * 
-     * @bodyParam user_name string required 가맹점 아이디
-     * @bodyParam user_pw string required 가맹점 패스워드
+     * @bodyParam user_name string required 가맹점 아이디 
+     * @bodyParam user_pw string required 가맹점 패스워드 
      * @responseFile 200 storage/buddyPay/login.json
      * @responseField access_token string Bearer 토큰 값
      * @responseField user object 유저정보
@@ -87,8 +87,8 @@ class EzpgController extends Controller
      * 
      * @queryParam page integer required 조회 페이지 Example: 1
      * @queryParam page_size integer required 조회 사이즈 Example: 20
-     * @queryParam s_dt string 검색 시작일 Example: 2023-11-01
-     * @queryParam e_dt string 검색 종료일 Example: 2023-11-30
+     * @queryParam s_dt string required 검색 시작일 Example: 2024-09-01
+     * @queryParam e_dt string required 검색 종료일 Example: 2024-09-30
      * @queryParam search string 검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)
      * @responseFile 201 storage/buddyPay/transactionIndex.json
      * @responseField page string 조회 페이지
@@ -179,8 +179,9 @@ class EzpgController extends Controller
      * 
      * @queryParam page integer required 조회 페이지 Example: 1
      * @queryParam page_size integer required 조회 사이즈 Example: 20
-     * @queryParam s_dt string required 검색 시작일 Example: 2023-11-01 00:00:00
-     * @queryParam e_dt string required 검색 종료일 Example: 2023-11-30 23:59:59
+     * @queryParam s_dt string required 검색 시작일 Example: 2024-09-01 00:00:00
+     * @queryParam e_dt string required 검색 종료일 Example: 2024-09-30 23:59:59
+     * @queryParam search string 검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)
      * @responseFile 201 storage/reconciliations/index.json
      * @responseField page integer 조회 페이지
      * @responseField page_size integer 조회 사이즈
@@ -250,7 +251,8 @@ class EzpgController extends Controller
      *
      * 특정 일의 결제내역을 조회합니다.
      * 
-     * @queryParam t_dt string required 조회일 Example: 2023-11-01
+     * @queryParam t_dt string required 조회일 Example: 2024-09-01
+     * @queryParam search string 검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)
      * @responseFile 201 storage/reconciliations/summary.json
      * @responseField appr_amount integer 승인 금액 합계
      * @responseField appr_count integer 승인 건수 합계
@@ -262,7 +264,8 @@ class EzpgController extends Controller
     public function summary(Request $request)
     {
         // Query parameters
-        $validated = $request->validate(['t_dt'  => 'required|string']);
+        $validated = $request->validate(['t_dt' => 'required|string']);
+
         $cols = [
             'merchandises.id',            
             DB::raw("SUM(IF(is_cancel = 0, amount, 0)) AS appr_amount"),

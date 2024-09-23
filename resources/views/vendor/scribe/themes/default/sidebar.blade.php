@@ -4,7 +4,7 @@
 <a href="#" id="nav-button">
     <span>
         MENU
-        <img src="{!! $assetPathPrefix !!}images/navbar.png" alt="navbar-image"/>
+        <img src="/vendor/scribe/images/navbar.png" alt="navbar-image"/>
     </span>
 </a>
 <div class="tocify-wrapper">
