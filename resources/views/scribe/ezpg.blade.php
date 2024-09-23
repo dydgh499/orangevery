@@ -365,7 +365,7 @@ response.json()</code></pre></div>
     <h3>
         요청&nbsp;&nbsp;&nbsp;
                     <button type="button"
-                    style="border-color: #2196f3; background-color: #2196f3; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    style="border-color: #0d47a1; background-color: #0d47a1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-tryout-POSTapi-v1-ezpg-sign-in"
                     onclick="tryItOut('POSTapi-v1-ezpg-sign-in');">시도하기 ⚡
             </button>
@@ -724,7 +724,7 @@ response.json()</code></pre></div>
     <h3>
         요청&nbsp;&nbsp;&nbsp;
                     <button type="button"
-                    style="border-color: #2196f3; background-color: #2196f3; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    style="border-color: #0d47a1; background-color: #0d47a1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-tryout-GETapi-v1-ezpg-transactions"
                     onclick="tryItOut('GETapi-v1-ezpg-transactions');">시도하기 ⚡
             </button>
@@ -1240,7 +1240,7 @@ response.json()</code></pre></div>
     <h3>
         요청&nbsp;&nbsp;&nbsp;
                     <button type="button"
-                    style="border-color: #2196f3; background-color: #2196f3; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    style="border-color: #0d47a1; background-color: #0d47a1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-tryout-GETapi-v1-ezpg-reconciliation-summary"
                     onclick="tryItOut('GETapi-v1-ezpg-reconciliation-summary');">시도하기 ⚡
             </button>
@@ -1549,7 +1549,7 @@ response.json()</code></pre></div>
     <h3>
         요청&nbsp;&nbsp;&nbsp;
                     <button type="button"
-                    style="border-color: #2196f3; background-color: #2196f3; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    style="border-color: #0d47a1; background-color: #0d47a1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-tryout-GETapi-v1-ezpg-reconciliation"
                     onclick="tryItOut('GETapi-v1-ezpg-reconciliation');">시도하기 ⚡
             </button>

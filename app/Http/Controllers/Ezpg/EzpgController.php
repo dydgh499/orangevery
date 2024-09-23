@@ -207,7 +207,6 @@ class EzpgController extends Controller
      * @responseField content.*.acquirer string 매입사
      * @responseField content.*.installment integer 할부개월(0~12)
      * @responseField content.*.appr_num string 승인번호
-     * 
      */
     public function reconciliation(Request $request)
     {

@@ -30,7 +30,7 @@ endpoints:
         name: user_name
         description: '가맹점 아이디'
         required: true
-        example: animi
+        example: dolores
         type: string
         enumValues: []
         custom: []
@@ -38,13 +38,13 @@ endpoints:
         name: user_pw
         description: '가맹점 패스워드'
         required: true
-        example: eos
+        example: nihil
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      user_name: animi
-      user_pw: eos
+      user_name: dolores
+      user_pw: nihil
     fileParameters: []
     responses:
       -
@@ -184,7 +184,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: accusantium
+        example: quia
         type: string
         enumValues: []
         custom: []
@@ -193,7 +193,7 @@ endpoints:
       page_size: 20
       s_dt: '2024-09-01 00:00:00'
       e_dt: '2024-09-07 23:59:59'
-      search: accusantium
+      search: quia
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -636,7 +636,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer af514a6Zv3hkEbgD6eVdc8P'
+      - 'Bearer acfeV6a4DEZ5vPg86k31bhd'
     controller: null
     method: null
     route: null
@@ -675,13 +675,13 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: voluptas
+        example: in
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
       t_dt: '2024-09-01'
-      search: voluptas
+      search: in
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -785,7 +785,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer DEehak6d65Zgv3f1PcbV48a'
+      - 'Bearer vaDdabE15Pk84h6gfeV6Z3c'
     controller: null
     method: null
     route: null
@@ -848,7 +848,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: et
+        example: libero
         type: string
         enumValues: []
         custom: []
@@ -857,7 +857,7 @@ endpoints:
       page_size: 20
       s_dt: '2024-09-01 00:00:00'
       e_dt: '2024-09-07 23:59:59'
-      search: et
+      search: libero
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -1085,7 +1085,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer kvZ3f46h5Vd1caea6gbDP8E'
+      - 'Bearer k5gEafZch3ba6DeV814dP6v'
     controller: null
     method: null
     route: null
