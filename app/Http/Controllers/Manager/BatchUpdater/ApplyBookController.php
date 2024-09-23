@@ -54,7 +54,7 @@ class ApplyBookController extends Controller
             $dest_ids = $group->pluck($dest_key)->toArray();
             $primary_ids = $group->pluck('id')->toArray();
 
-            $book_row += DB::transaction(function () use($dest_orm, $book_orm, $dest_ids, $primary_ids, $update_data) {
+            $book_row = DB::transaction(function () use($dest_orm, $book_orm, $dest_ids, $primary_ids, $update_data) {
                 if(count($dest_ids) > 0)
                 {
                     $dest_row = $dest_orm->whereIn('id', $dest_ids)->update($update_data);
