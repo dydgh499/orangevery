@@ -160,7 +160,6 @@ class EzpgController extends Controller
                 'transactions.trx_id','transactions.ori_trx_id','transactions.card_num','transactions.issuer','transactions.acquirer',
                 'transactions.appr_num','transactions.installment','transactions.buyer_name','transactions.buyer_phone','transactions.item_name',
                 'payment_modules.note', 'payment_modules.cxl_type',
-                DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"), DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
             ];
             $inst->setTransactionData(10);
             $query = TransactionFilter::common($request);
@@ -168,6 +167,10 @@ class EzpgController extends Controller
             $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
             $salesforces    = globalGetSalesByIds($sales_ids);
             $data['content'] = globalMappingSales($salesforces, $data['content']);
+            for ($i=0; $i < count($data['content']); $i++) 
+            { 
+                $data['content'][$i]->makeHidden(['trx_dttm', 'cxl_dttm']);
+            }
             return $this->response(0, $data);    
         }
     }
@@ -229,18 +232,14 @@ class EzpgController extends Controller
                 'transactions.trx_dt', 'transactions.trx_tm', 'transactions.cxl_dt', 'transactions.cxl_tm', 'transactions.cxl_seq', 'transactions.ori_trx_id',
                 'transactions.amount', 'transactions.ord_num', 'transactions.trx_id', 'transactions.mid', 'transactions.tid',
                 'transactions.card_num', 'transactions.issuer', 'transactions.acquirer', 'transactions.installment', 'transactions.appr_num',
-                DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"), DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
             ];
 
             $query = TransactionFilter::common($request);
             $data = $this->getIndexData($request, $query, 'transactions.id', $cols, 'transactions.trx_at');
-            foreach($data['content'] as $item)
-            {
-                unset($item['trx_dttm']);
-                unset($item['cxl_dttm']);
-                unset($item['trx_amount']);
-                unset($item['hold_amount']);
-                unset($item['total_trx_amount']);
+            
+            for ($i=0; $i < count($data['content']); $i++) 
+            { 
+                $data['content'][$i]->makeHidden(['trx_dttm', 'cxl_dttm', 'trx_amount', 'hold_amount', 'total_trx_amount']);
             }
             return $this->response(0, $data);
         }
@@ -254,6 +253,8 @@ class EzpgController extends Controller
      * @queryParam t_dt string required 조회일 Example: 2024-09-01
      * @queryParam search string 검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)
      * @responseFile 201 storage/reconciliations/summary.json
+     * @responseField user_name string 가맹점 ID
+     * @responseField mcht_name string 가맹점 상호
      * @responseField appr_amount integer 승인 금액 합계
      * @responseField appr_count integer 승인 건수 합계
      * @responseField cxl_amount integer 취소 금액 합계

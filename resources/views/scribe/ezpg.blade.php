@@ -107,7 +107,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2024-09-23 21:00:39</li>
+        <li>마지막 업데이트:  2024-09-23 21:18:34</li>
     </ul>
 </div>
 
@@ -220,8 +220,8 @@ const headers = {
 };
 
 let body = {
-    "user_name": "in",
-    "user_pw": "velit"
+    "user_name": "animi",
+    "user_pw": "eos"
 };
 
 fetch(url, {
@@ -241,8 +241,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'user_name' =&gt; 'in',
-            'user_pw' =&gt; 'velit',
+            'user_name' =&gt; 'animi',
+            'user_pw' =&gt; 'eos',
         ],
     ]
 );
@@ -256,8 +256,8 @@ import json
 
 url = 'https://w.ez-pg.kr/api/v1/ezpg/sign-in'
 payload = {
-    "user_name": "in",
-    "user_pw": "velit"
+    "user_name": "animi",
+    "user_pw": "eos"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -274,8 +274,8 @@ response.json()</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"user_name\": \"in\",
-    \"user_pw\": \"velit\"
+    \"user_name\": \"animi\",
+    \"user_pw\": \"eos\"
 }"
 </code></pre></div>
 
@@ -365,7 +365,7 @@ response.json()</code></pre></div>
     <h3>
         요청&nbsp;&nbsp;&nbsp;
                     <button type="button"
-                    style="border-color: #0d47a1; background-color: #0d47a1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    style="border-color: #2196f3; background-color: #2196f3; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-tryout-POSTapi-v1-ezpg-sign-in"
                     onclick="tryItOut('POSTapi-v1-ezpg-sign-in');">시도하기 ⚡
             </button>
@@ -416,10 +416,10 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="user_name"                data-endpoint="POSTapi-v1-ezpg-sign-in"
-               value="in"
+               value="animi"
                data-component="body">
     <br>
-<p>가맹점 아이디 <br>예시: <code>in</code></p>
+<p>가맹점 아이디 <br>예시: <code>animi</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>user_pw</code></b>&nbsp;&nbsp;
@@ -427,10 +427,10 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="user_pw"                data-endpoint="POSTapi-v1-ezpg-sign-in"
-               value="velit"
+               value="eos"
                data-component="body">
     <br>
-<p>가맹점 패스워드 <br>예시: <code>velit</code></p>
+<p>가맹점 패스워드 <br>예시: <code>eos</code></p>
         </div>
         </form>
 
@@ -472,7 +472,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2024-09-01 00:00:00",
     "e_dt": "2024-09-07 23:59:59",
-    "search": "ratione",
+    "search": "accusantium",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -504,7 +504,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2024-09-01 00:00:00',
             'e_dt' =&gt; '2024-09-07 23:59:59',
-            'search' =&gt; 'ratione',
+            'search' =&gt; 'accusantium',
         ],
     ]
 );
@@ -522,7 +522,7 @@ params = {
   'page_size': '20',
   's_dt': '2024-09-01 00:00:00',
   'e_dt': '2024-09-07 23:59:59',
-  'search': 'ratione',
+  'search': 'accusantium',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -536,7 +536,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://w.ez-pg.kr/api/v1/ezpg/transactions?page=1&amp;page_size=20&amp;s_dt=2024-09-01+00%3A00%3A00&amp;e_dt=2024-09-07+23%3A59%3A59&amp;search=ratione" \
+    --get "https://w.ez-pg.kr/api/v1/ezpg/transactions?page=1&amp;page_size=20&amp;s_dt=2024-09-01+00%3A00%3A00&amp;e_dt=2024-09-07+23%3A59%3A59&amp;search=accusantium" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -724,7 +724,7 @@ response.json()</code></pre></div>
     <h3>
         요청&nbsp;&nbsp;&nbsp;
                     <button type="button"
-                    style="border-color: #0d47a1; background-color: #0d47a1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    style="border-color: #2196f3; background-color: #2196f3; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-tryout-GETapi-v1-ezpg-transactions"
                     onclick="tryItOut('GETapi-v1-ezpg-transactions');">시도하기 ⚡
             </button>
@@ -830,10 +830,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-ezpg-transactions"
-               value="ratione"
+               value="accusantium"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>ratione</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>accusantium</code></p>
             </div>
                 </form>
 
@@ -1118,7 +1118,7 @@ response.json()</code></pre></div>
 
 const params = {
     "t_dt": "2024-09-01",
-    "search": "et",
+    "search": "voluptas",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1147,7 +1147,7 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             't_dt' =&gt; '2024-09-01',
-            'search' =&gt; 'et',
+            'search' =&gt; 'voluptas',
         ],
     ]
 );
@@ -1162,7 +1162,7 @@ import json
 url = 'https://w.ez-pg.kr/api/v1/ezpg/reconciliation/summary'
 params = {
   't_dt': '2024-09-01',
-  'search': 'et',
+  'search': 'voluptas',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1176,7 +1176,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation/summary?t_dt=2024-09-01&amp;search=et" \
+    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation/summary?t_dt=2024-09-01&amp;search=voluptas" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1189,15 +1189,30 @@ response.json()</code></pre></div>
         </blockquote>
                 <pre>
 
-<code class="language-json">{
-    &quot;mcht_id&quot;: 12345,
-    &quot;appr_amount&quot;: 1000,
-    &quot;appr_count&quot;: 1,
-    &quot;cxl_amount&quot;: -1000,
-    &quot;cxl_count&quot;: 1,
-    &quot;sales_amount&quot;: 0,
-    &quot;total_count&quot;: 2
-}</code>
+<code class="language-json">[
+    {
+        &quot;id&quot;: 12345,
+        &quot;user_name&quot;: &quot;test1235&quot;,
+        &quot;mcht_name&quot;: &quot;테스트 가맹점&quot;,
+        &quot;appr_amount&quot;: 1000,
+        &quot;appr_count&quot;: 1,
+        &quot;cxl_amount&quot;: -1000,
+        &quot;cxl_count&quot;: 1,
+        &quot;sales_amount&quot;: 0,
+        &quot;total_count&quot;: 2
+    },
+    {
+        &quot;id&quot;: 181244,
+        &quot;user_name&quot;: &quot;test1234&quot;,
+        &quot;mcht_name&quot;: &quot;테스트 가맹점2&quot;,
+        &quot;appr_amount&quot;: 934000,
+        &quot;appr_count&quot;: 11,
+        &quot;cxl_amount&quot;: 0,
+        &quot;cxl_count&quot;: 0,
+        &quot;sales_amount&quot;: 934000,
+        &quot;total_count&quot;: 11
+    }
+]</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-ezpg-reconciliation-summary" hidden>
@@ -1225,7 +1240,7 @@ response.json()</code></pre></div>
     <h3>
         요청&nbsp;&nbsp;&nbsp;
                     <button type="button"
-                    style="border-color: #0d47a1; background-color: #0d47a1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    style="border-color: #2196f3; background-color: #2196f3; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-tryout-GETapi-v1-ezpg-reconciliation-summary"
                     onclick="tryItOut('GETapi-v1-ezpg-reconciliation-summary');">시도하기 ⚡
             </button>
@@ -1298,16 +1313,30 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-ezpg-reconciliation-summary"
-               value="et"
+               value="voluptas"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>et</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>voluptas</code></p>
             </div>
                 </form>
 
     <h3>응답</h3>
     <h4 class="fancy-heading-panel"><b>응답 필드</b></h4>
     <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>user_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>가맹점 ID</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>mcht_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>가맹점 상호</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>appr_amount</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
@@ -1371,7 +1400,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2024-09-01 00:00:00",
     "e_dt": "2024-09-07 23:59:59",
-    "search": "nostrum",
+    "search": "et",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1403,7 +1432,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2024-09-01 00:00:00',
             'e_dt' =&gt; '2024-09-07 23:59:59',
-            'search' =&gt; 'nostrum',
+            'search' =&gt; 'et',
         ],
     ]
 );
@@ -1421,7 +1450,7 @@ params = {
   'page_size': '20',
   's_dt': '2024-09-01 00:00:00',
   'e_dt': '2024-09-07 23:59:59',
-  'search': 'nostrum',
+  'search': 'et',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1435,7 +1464,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation?page=1&amp;page_size=20&amp;s_dt=2024-09-01+00%3A00%3A00&amp;e_dt=2024-09-07+23%3A59%3A59&amp;search=nostrum" \
+    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation?page=1&amp;page_size=20&amp;s_dt=2024-09-01+00%3A00%3A00&amp;e_dt=2024-09-07+23%3A59%3A59&amp;search=et" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1520,7 +1549,7 @@ response.json()</code></pre></div>
     <h3>
         요청&nbsp;&nbsp;&nbsp;
                     <button type="button"
-                    style="border-color: #0d47a1; background-color: #0d47a1; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    style="border-color: #2196f3; background-color: #2196f3; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-tryout-GETapi-v1-ezpg-reconciliation"
                     onclick="tryItOut('GETapi-v1-ezpg-reconciliation');">시도하기 ⚡
             </button>
@@ -1626,10 +1655,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-ezpg-reconciliation"
-               value="nostrum"
+               value="et"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>nostrum</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>et</code></p>
             </div>
                 </form>
 
