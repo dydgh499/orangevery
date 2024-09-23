@@ -10,7 +10,7 @@ use App\Http\Traits\Models\AttributeTrait;
 class PayWindow extends Model
 {
     use HasFactory, AttributeTrait;
-    protected   $table      = 'pay_windows';
+    protected   $table      = 'payment_windows';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
     protected   $hidden     = [];

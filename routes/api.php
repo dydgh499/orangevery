@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Message\MessageController;
-use App\Http\Controllers\Manager\MerchandiseController;
 use App\Http\Controllers\Manager\Service\PaymentGatewayController;
 use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
 use App\Http\Controllers\Manager\Transaction\TransactionController;

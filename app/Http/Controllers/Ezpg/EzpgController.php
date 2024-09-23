@@ -130,13 +130,24 @@ class EzpgController extends Controller
      */
     public function transactionIndex(IndexRequest $request)
     {
+        // Query parameters
+        $validated = $request->validate([
+            'page'      => 'required|integer',
+            'page_size' => 'required|integer',
+            's_dt'  => 'required|string',
+            'e_dt'  => 'required|string',
+        ]);
+
         request()->merge([
             'level' => 10,
             'use_realtime_deposit' => 0,
         ]);
-
+        $carbon_s_at = Carbon::createFromFormat('Y-m-d H:i:s', $request->s_dt);
+        $carbon_e_at = Carbon::createFromFormat('Y-m-d H:i:s', $request->e_dt);
         if($request->page_size > 3000)
             return $this->extendResponse(409, '페이지 사이즈는 최대 3000개까지 허용합니다.');
+        else if($carbon_s_at->diffInDays($carbon_e_at, false) > 7)
+            return $this->extendResponse(409, '조회 날짜는 최대 7일까지 허용합니다.');
         else
         {
             $inst   = new TransactionController(new Transaction);
@@ -168,8 +179,8 @@ class EzpgController extends Controller
      * 
      * @queryParam page integer required 조회 페이지 Example: 1
      * @queryParam page_size integer required 조회 사이즈 Example: 20
-     * @queryParam s_at string required 검색 시작일 Example: 2023-11-01 00:00:00
-     * @queryParam e_at string required 검색 종료일 Example: 2023-11-30 23:59:59
+     * @queryParam s_dt string required 검색 시작일 Example: 2023-11-01 00:00:00
+     * @queryParam e_dt string required 검색 종료일 Example: 2023-11-30 23:59:59
      * @responseFile 201 storage/reconciliations/index.json
      * @responseField page integer 조회 페이지
      * @responseField page_size integer 조회 사이즈
@@ -196,15 +207,16 @@ class EzpgController extends Controller
      */
     public function reconciliation(Request $request)
     {
+        // Query parameters
         $validated = $request->validate([
             'page'      => 'required|integer',
             'page_size' => 'required|integer',
-            's_at'  => 'required|string',
-            'e_at'  => 'required|string',
+            's_dt'  => 'required|string',
+            'e_dt'  => 'required|string',
         ]);
         
-        $carbon_s_at = Carbon::createFromFormat('Y-m-d H:i:s', $request->s_at);
-        $carbon_e_at = Carbon::createFromFormat('Y-m-d H:i:s', $request->e_at);
+        $carbon_s_at = Carbon::createFromFormat('Y-m-d H:i:s', $request->s_dt);
+        $carbon_e_at = Carbon::createFromFormat('Y-m-d H:i:s', $request->e_dt);
         if($request->page_size > 3000)
             return $this->extendResponse(409, '페이지 사이즈는 최대 3000개까지 허용합니다.');
         else if($carbon_s_at->diffInDays($carbon_e_at, false) > 7)
@@ -249,6 +261,7 @@ class EzpgController extends Controller
      */
     public function summary(Request $request)
     {
+        // Query parameters
         $validated = $request->validate(['t_dt'  => 'required|string']);
         $cols = [
             'merchandises.id',            
@@ -277,8 +290,6 @@ class EzpgController extends Controller
             $chart['appr_count'] = (int)$chart['appr_count'];
             $chart['cxl_amount'] = (int)$chart['cxl_amount'];
             $chart['cxl_count'] = (int)$chart['cxl_count'];
-
-
                 
             $chart['sales_amount'] = (int)$chart['sales_amount'];
             $chart['total_count'] = (int)$chart['total_count'];

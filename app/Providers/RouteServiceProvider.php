@@ -36,7 +36,7 @@ class RouteServiceProvider extends ServiceProvider
                 Route::middleware(['api', 'log.route'])
                     ->prefix("api/v1/$api")
                     ->namespace($this->namespace)
-                        ->group(base_path("routes/$api.php"));
+                    ->group(base_path("routes/$api.php"));
             }
 
             Route::middleware(['api', 'log.route', 'auth:sanctum', 'is.browser'])
@@ -60,7 +60,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/api.php'));
 
             Route::middleware(['web', 'is.browser'])
-            ->namespace($this->namespace)
+                ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
         });
     }

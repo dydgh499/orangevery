@@ -120,10 +120,10 @@ class PayWindowInterface implements GeneratorInterface
             return json_decode($data, true);
         else
         {
-            $pay_module = PayWindow::join('payment_modules', 'pay_windows.pmod_id', '=', 'payment_modules.id')
+            $pay_module = PayWindow::join('payment_modules', 'payment_windows.pmod_id', '=', 'payment_modules.id')
                 ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
                 ->join('payment_gateways', 'payment_modules.pg_id', '=', 'payment_gateways.id')
-                ->where('pay_windows.window_code', $window_code)
+                ->where('payment_windows.window_code', $window_code)
                 ->first([
                     'payment_modules.id',
                     'payment_modules.mcht_id',
@@ -150,8 +150,8 @@ class PayWindowInterface implements GeneratorInterface
                     'payment_gateways.rep_name',
                     'payment_gateways.addr',
 
-                    'pay_windows.holding_able_at',
-                    'pay_windows.window_code',
+                    'payment_windows.holding_able_at',
+                    'payment_windows.window_code',
                 ]);
             if($pay_module)
             {

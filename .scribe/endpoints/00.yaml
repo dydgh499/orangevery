@@ -30,7 +30,7 @@ endpoints:
         name: user_name
         description: '가맹점 아이디'
         required: true
-        example: rem
+        example: doloremque
         type: string
         enumValues: []
         custom: []
@@ -38,13 +38,13 @@ endpoints:
         name: user_pw
         description: '가맹점 패스워드'
         required: true
-        example: quis
+        example: id
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      user_name: rem
-      user_pw: quis
+      user_name: doloremque
+      user_pw: id
     fileParameters: []
     responses:
       -
@@ -184,7 +184,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: natus
+        example: id
         type: string
         enumValues: []
         custom: []
@@ -193,7 +193,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: natus
+      search: id
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -636,7 +636,124 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 38Vk6gb5DEdPa1eZhf4cav6'
+      - 'Bearer 41V6vbPkaZ6hcDad35Ef8ge'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/ezpg/reconciliation/summary
+    metadata:
+      groupName: 'EZPG API'
+      groupDescription: |-
+
+        EZPG와 Smart Data간 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '일별 요약 거래대사'
+      description: '특정 일의 결제내역을 조회합니다.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {ACCESS_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      t_dt:
+        name: t_dt
+        description: 조회일
+        required: true
+        example: '2023-11-01'
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      t_dt: '2023-11-01'
+    bodyParameters:
+      t_dt:
+        name: t_dt
+        description: ''
+        required: true
+        example: quibusdam
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      t_dt: quibusdam
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |
+          {
+              "mcht_id": 12345,
+              "appr_amount": 1000,
+              "appr_count": 1,
+              "cxl_amount": -1000,
+              "cxl_count": 1,
+              "sales_amount": 0,
+              "total_count": 2
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields:
+      appr_amount:
+        name: appr_amount
+        description: '승인 금액 합계'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      appr_count:
+        name: appr_count
+        description: '승인 건수 합계'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      cxl_amount:
+        name: cxl_amount
+        description: '취소 금액 합계'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      cxl_count:
+        name: cxl_count
+        description: '취소 건수 합계'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      sales_amount:
+        name: sales_amount
+        description: '매출(승인+취소) 합계'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      total_count:
+        name: total_count
+        description: '총 건수'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer Pf4Vda5c3Ev16he6kaDbg8Z'
     controller: null
     method: null
     route: null
@@ -679,16 +796,16 @@ endpoints:
         type: integer
         enumValues: []
         custom: []
-      s_at:
-        name: s_at
+      s_dt:
+        name: s_dt
         description: '검색 시작일'
         required: true
         example: '2023-11-01 00:00:00'
         type: string
         enumValues: []
         custom: []
-      e_at:
-        name: e_at
+      e_dt:
+        name: e_dt
         description: '검색 종료일'
         required: true
         example: '2023-11-30 23:59:59'
@@ -698,46 +815,10 @@ endpoints:
     cleanQueryParameters:
       page: 1
       page_size: 20
-      s_at: '2023-11-01 00:00:00'
-      e_at: '2023-11-30 23:59:59'
-    bodyParameters:
-      page:
-        name: page
-        description: ''
-        required: true
-        example: 9
-        type: integer
-        enumValues: []
-        custom: []
-      page_size:
-        name: page_size
-        description: ''
-        required: true
-        example: 3
-        type: integer
-        enumValues: []
-        custom: []
-      s_at:
-        name: s_at
-        description: ''
-        required: true
-        example: quae
-        type: string
-        enumValues: []
-        custom: []
-      e_at:
-        name: e_at
-        description: ''
-        required: true
-        example: alias
-        type: string
-        enumValues: []
-        custom: []
-    cleanBodyParameters:
-      page: 9
-      page_size: 3
-      s_at: quae
-      e_at: alias
+      s_dt: '2023-11-01 00:00:00'
+      e_dt: '2023-11-30 23:59:59'
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses:
       -
@@ -963,124 +1044,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer Z6Edfh3bPVkae5D1a46v8gc'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/ezpg/reconciliation/summary
-    metadata:
-      groupName: 'EZPG API'
-      groupDescription: |-
-
-        EZPG와 Smart Data간 API 입니다.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '일별 요약 거래대사'
-      description: '특정 일의 결제내역을 조회합니다.'
-      authenticated: true
-      custom: []
-    headers:
-      Authorization: 'Bearer {ACCESS_TOKEN}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters:
-      t_dt:
-        name: t_dt
-        description: 조회일
-        required: true
-        example: '2023-11-01'
-        type: string
-        enumValues: []
-        custom: []
-    cleanQueryParameters:
-      t_dt: '2023-11-01'
-    bodyParameters:
-      t_dt:
-        name: t_dt
-        description: ''
-        required: true
-        example: id
-        type: string
-        enumValues: []
-        custom: []
-    cleanBodyParameters:
-      t_dt: id
-    fileParameters: []
-    responses:
-      -
-        status: 201
-        content: |
-          {
-              "mcht_id": 12345,
-              "appr_amount": 1000,
-              "appr_count": 1,
-              "cxl_amount": -1000,
-              "cxl_count": 1,
-              "sales_amount": 0,
-              "total_count": 2
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields:
-      appr_amount:
-        name: appr_amount
-        description: '승인 금액 합계'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      appr_count:
-        name: appr_count
-        description: '승인 건수 합계'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      cxl_amount:
-        name: cxl_amount
-        description: '취소 금액 합계'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      cxl_count:
-        name: cxl_count
-        description: '취소 건수 합계'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      sales_amount:
-        name: sales_amount
-        description: '매출(승인+취소) 합계'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      total_count:
-        name: total_count
-        description: '총 건수'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer fg18c6vk6d3aPbahV5ZE4De'
+      - 'Bearer g4dPckDheE6V1abvZ38f5a6'
     controller: null
     method: null
     route: null
