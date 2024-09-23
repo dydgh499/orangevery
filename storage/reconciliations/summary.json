@@ -1,9 +1,25 @@
-{
-    "mcht_id": 12345,
-    "appr_amount": 1000,
-    "appr_count": 1,
-    "cxl_amount": -1000,
-    "cxl_count": 1,
-    "sales_amount": 0,
-    "total_count": 2
-}
+[
+    {
+        "id": 12345,
+        "user_name": "test1235",
+        "mcht_name": "테스트 가맹점",
+        "appr_amount": 1000,
+        "appr_count": 1,
+        "cxl_amount": -1000,
+        "cxl_count": 1,
+        "sales_amount": 0,
+        "total_count": 2
+    },
+    {
+        "id": 181244,
+        "user_name": "test1234",
+        "mcht_name": "테스트 가맹점2",
+        "appr_amount": 934000,
+        "appr_count": 11,
+        "cxl_amount": 0,
+        "cxl_count": 0,
+        "sales_amount": 934000,
+        "total_count": 11
+    }
+        
+]
