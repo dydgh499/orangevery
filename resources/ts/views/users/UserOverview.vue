@@ -84,8 +84,8 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-    phone_num_format.value = props.item.phone_num
-    business_num_format.value = props.item.business_num
+    phone_num_format.value = props.item.phone_num ?? ''
+    business_num_format.value = props.item.business_num ?? ''
 })
 </script>
 <template>

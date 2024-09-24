@@ -3,6 +3,7 @@ import { payWindowStore } from '@/views/quick-view/payWindowStore';
 import type { BeforeBrandInfo, PayGateway, SalesSlip } from '@/views/types';
 import { axios } from '@axios';
 import corp from '@corp';
+import { useZoomProperty } from '@layouts/composable/useZoomProperty';
 import html2canvas from "html2canvas";
 import { useDisplay } from 'vuetify';
 
@@ -18,23 +19,35 @@ export const salesSlip = () => {
     const tax_free = ref(0)
     const total_amount = ref(0)
     const { copy } = payWindowStore()
+    const { zoom } = useZoomProperty()
 
     const getVat = (trans: SalesSlip) => {
         return Math.round(trans?.amount as number / 1.1)
     }
     
+    const getSalesSlipRect = async () => {
+        const sales_slip_rect = document.getElementsByClassName('sales-slip-rect')[0]        
+        const canvas = await html2canvas(sales_slip_rect, {
+            scale: 2, // 기본값은 1, 더 높은 값으로 설정하면 고해상도로 캡처
+            useCORS: true, // 외부 리소스를 로드할 때 CORS 문제가 발생하지 않도록 설정
+            letterRendering: true, // 텍스트 렌더링 정확도를 높임
+            allowTaint: true, // Cross-Origin 이미지를 허용할 경우
+            onclone: (document, element) => {
+                if(zoom.value !== 100) {
+                    document.documentElement.style.setProperty("zoom", "100%")
+                }
+              }
+        })
+        return canvas
+    }
+
     const copySalesSlip = async (trans: SalesSlip, card: any) => {
         if(mobile.value)
             copySalesSlipText(trans)
         else
         {
             if (card) {
-                const canvas = await html2canvas(document.getElementsByClassName('sales-slip-rect')[0], {
-                    scale: 2, // 기본값은 1, 더 높은 값으로 설정하면 고해상도로 캡처
-                    useCORS: true, // 외부 리소스를 로드할 때 CORS 문제가 발생하지 않도록 설정
-                    letterRendering: true, // 텍스트 렌더링 정확도를 높임
-                    allowTaint: true // Cross-Origin 이미지를 허용할 경우
-                })
+                const canvas = await getSalesSlipRect()
                 canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({ "image/png": blob as Blob })]))
                 snackbar.value.show('영수증 이미지가 클립보드에 복사되었습니다.', 'success')
             }
@@ -52,12 +65,7 @@ export const salesSlip = () => {
     
         snackbar.value.show('영수증을 다운로드하고있습니다..', 'success')
         if (card) {
-            const canvas = await html2canvas(document.getElementsByClassName('sales-slip-rect')[0], {
-                scale: 2, // 기본값은 1, 더 높은 값으로 설정하면 고해상도로 캡처
-                useCORS: true, // 외부 리소스를 로드할 때 CORS 문제가 발생하지 않도록 설정
-                letterRendering: true, // 텍스트 렌더링 정확도를 높임
-                allowTaint: true // Cross-Origin 이미지를 허용할 경우
-            })
+            const canvas = await getSalesSlipRect()
             downloadURI(canvas.toDataURL(), trans?.trx_dttm+"_"+trans?.appr_num+".png")
             snackbar.value.show('영수증이 다운로드 되었습니다.', 'success')
         }

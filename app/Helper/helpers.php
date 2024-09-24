@@ -108,6 +108,7 @@
             case 50;
                 return 6;
             default:
+                throw new Exception('알 수 없는 등급');
                 return "UNKNOWUN";
         }
     }

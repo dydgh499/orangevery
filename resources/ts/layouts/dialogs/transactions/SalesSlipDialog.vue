@@ -2,7 +2,7 @@
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
 import { salesSlip } from '@/views/pay/sales-slip';
 import type { PayGateway, SalesSlip } from '@/views/types';
-import background from '@images/salesslip/background.jpg';
+import background from '@images/salesslip/background.png';
 import cancel from '@images/salesslip/cancel.png';
 
 interface Props {
@@ -54,21 +54,14 @@ defineExpose({
 });
 </script>
 <template>
-    <VDialog v-model="visible" style="box-shadow: 0 !important;" max-width="500">
-        <DialogCloseBtn @click="close()" 
-                v-if="$vuetify.display.smAndDown === false"
-                style="inset-block-start: 0.5em; inset-inline-end: 1.5em;"/>
+    <VDialog v-model="visible" style="box-shadow: 0 !important;" max-width="450">
         <section class="result-wrapper" ref="card">
             <div class="sales-slip-rect">
                 <VCard class="sales-slip-background" rounded :style="`background-image: url(${background});`">
                     <VCardText>
                         <br>
-                        <h2 style="text-align: center;">
-                            <b>매출전표 영수증</b>
-                        </h2>
-                        <VCol>
-                            <h3>결제정보</h3>
-                        </VCol>
+                        <h3 style="text-align: center;">매출전표 영수증</h3>
+                        <h3 :style="`padding: 12px ${$vuetify.display.smAndDown ? '12px' : '0px'};`">결제정보</h3>
                         <VDivider :thickness="thickness" class="mb-2" />
                         <table class='sales-slip-table text-no-wrap'>
                             <tbody>
@@ -202,9 +195,7 @@ defineExpose({
                                 </tr>
                             </tbody>
                         </table>
-                        <VCol>
-                            <h3>판매자(가맹점) 정보</h3>
-                        </VCol>
+                        <h3 :style="`padding: 12px ${$vuetify.display.smAndDown ? '12px' : '0px'};`">판매자(가맹점) 정보</h3>
                         <VDivider :thickness="thickness" class="mb-2" />
                         <table class='sales-slip-table'>
                             <tbody>
@@ -250,9 +241,7 @@ defineExpose({
                                 </tr>
                             </tbody>
                         </table>
-                        <VCol>
-                            <h3>공급자(결제대행사) 정보</h3>
-                        </VCol>
+                        <h3 :style="`padding: 12px ${$vuetify.display.smAndDown ? '12px' : '0px'};`">공급자(결제대행사) 정보</h3>
                         <VDivider :thickness="thickness" class="mb-2" />
                         <table class='sales-slip-table'>
                             <tbody>
@@ -308,24 +297,23 @@ defineExpose({
                 </VCard>
             </div>
         </section>
-        <div class="button-container action-container" 
-            :style="`${$vuetify.display.smAndDown ? 'width: 100%; inset-block-start: -1em': 'width: 90%'}`">
-            <VBtn size="small" @click="copyLink(trans)" color="warning" 
-                :style="`margin-right: 1em;`">
+        <div class="action-container" :style="`width: ${$vuetify.display.smAndDown ? '100%' : '90%'}`">
+            <VBtn size="small" @click="copyLink(trans)" color="warning">
                 링크복사
                 <VIcon end icon="tabler:copy" />
             </VBtn>
-            <VBtn size="small" @click="copySalesSlip(trans, card)"
-                :style="`margin-right: 1em;`">
+            <VBtn size="small" @click="copySalesSlip(trans, card)">
                 영수증복사
                 <VIcon end icon="tabler:copy" />
             </VBtn>
-            <VBtn size="small" @click="downloadSalesSlip(trans, card)" color="secondary"
-                :style="`margin-right: 1em;`">
+            <VBtn size="small" @click="downloadSalesSlip(trans, card)" color="secondary">
                 다운로드
                 <VIcon end icon="material-symbols:download" />
             </VBtn>
         </div>
+        <DialogCloseBtn @click="close()" 
+            v-if="$vuetify.display.smAndDown === false"
+            style="inset-block-start: -0.5em;"/>
     </VDialog>
 </template>
 <style scoped>
@@ -342,7 +330,7 @@ section::-webkit-scrollbar { block-size: 0; inline-size: 0; }
   padding: 0.3em;
   background: rgb(255, 255, 255, 0%) !important;
   color: rgba(51, 48, 60, 68%) !important;
-  inline-size: 500px;
+  inline-size: 450px;
   margin-inline: auto;
   overflow-y: auto;
 }
@@ -368,35 +356,43 @@ section::-webkit-scrollbar { block-size: 0; inline-size: 0; }
 .cancel-img {
   position: absolute;
   inline-size: 55%;
-  inset-block-start: 56%;
+  inset-block-start: 48%;
   inset-inline-start: 23%;
 }
 
 .action-container {
   position: absolute;
   z-index: 9999;
-  font-size: 0.8em;
-}
-
-@media (max-height: 900px) {
-  .sales-slip-rect {
-    font-size: 0.8em;
-  }
-}
-
-@media (max-width: 700px) {
-  .result-wrapper {
-    inline-size: 100%;
-  }
+  display: flex;
+  justify-content: space-around;
+  inset-block-start: -1em;
 }
 
 @media (max-width: 500px) {
+  :deep(.v-card-text) {
+    padding: 12px;
+  }
+
+  .result-wrapper {
+    inline-size: 100%;
+    padding-block-start: 1.5em;
+  }
+
+  .action-container {
+    justify-content: space-between;
+    font-size: 0.9em !important;
+  }
+
   .sales-slip-title {
     padding-inline: 8px;
   }
 
   .cancel-img {
-    inset-block-start: 67%;
+    inset-block-start: 45%;
+  }
+
+  * {
+    font-size: 14px;
   }
 }
 </style>

@@ -284,7 +284,7 @@ onMounted(() => {
                 </tr>
             </template>
         </BaseIndexView>
-        <SalesSlipDialog ref="salesslip" :pgs="pgs" />
+        <SalesSlipDialog ref="salesslip" :pgs="pgs" :style="`zoom: 100%;`"/>
         <CancelTransDialog ref="cancelTran" />
         <CancelPartDialog ref="cancelPart" />
         <CancelDepositDialog ref="cancelDeposit" />

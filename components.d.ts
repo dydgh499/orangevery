@@ -49,6 +49,7 @@ declare module '@vue/runtime-core' {
     HolidayDlg: typeof import('./resources/ts/layouts/dialogs/services/HolidayDlg.vue')['default']
     I18n: typeof import('./resources/ts/@core/components/I18n.vue')['default']
     ImageDialog: typeof import('./resources/ts/layouts/dialogs/utils/ImageDialog.vue')['default']
+    InitPayVerficationDialog: typeof import('./resources/ts/layouts/dialogs/users/InitPayVerficationDialog.vue')['default']
     IPDetailDialog: typeof import('./resources/ts/layouts/dialogs/services/IPDetailDialog.vue')['default']
     LastLoginDialog: typeof import('./resources/ts/layouts/dialogs/services/LastLoginDialog.vue')['default']
     LoadingDialog: typeof import('./resources/ts/layouts/dialogs/utils/LoadingDialog.vue')['default']
