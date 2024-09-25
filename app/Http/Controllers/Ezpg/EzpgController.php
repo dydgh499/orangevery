@@ -96,12 +96,10 @@ class EzpgController extends Controller
      * @responseField total string 총 개수
      * @responseField content object[] 결과
      * @responseField content.*.ps_fee integer PG사 구간 수수료(%)
-     * @responseField content.*.sales5_fee integer 총판 수수료(%)
-     * @responseField content.*.sales4_fee integer 지사 수수료(%)
-     * @responseField content.*.sales3_fee integer 대리점1 수수료(%)
-     * @responseField content.*.sales3_fee integer 대리점2 수수료(%)
-     * @responseField content.*.sales2_fee integer 대리점3 수수료(%)
-     * @responseField content.*.sales1_fee integer 대리점4 수수료(%)
+     * @responseField content.*.sales4_fee integer 영업점 수수료(%)
+     * @responseField content.*.sales3_fee integer 지사 수수료(%)
+     * @responseField content.*.sales2_fee integer 총판 수수료(%)
+     * @responseField content.*.sales1_fee integer 대리점 수수료(%)
      * @responseField content.*.mcht_fee integer 가맹점 수수료(%)
      * @responseField content.*.hold_fee integer 유보금 수수료(%)
      * @responseField content.*.is_cancel integer 취소여부(0=승인, 1=취소)
@@ -145,25 +143,23 @@ class EzpgController extends Controller
         $carbon_s_at = Carbon::createFromFormat('Y-m-d H:i:s', $request->s_dt);
         $carbon_e_at = Carbon::createFromFormat('Y-m-d H:i:s', $request->e_dt);
         if($request->page_size > 3000)
-            return $this->extendResponse(409, '페이지 사이즈는 최대 3000개까지 허용합니다.');
+            return $this->extendResponse(2000, '페이지 사이즈는 최대 3000개까지 허용합니다.');
         else if($carbon_s_at->diffInDays($carbon_e_at, false) > 7)
-            return $this->extendResponse(409, '조회 날짜는 최대 7일까지 허용합니다.');
+            return $this->extendResponse(2000, '조회 날짜는 최대 7일까지 허용합니다.');
         else
         {
-            $inst   = new TransactionController(new Transaction);
-            $inst->cols = [
+            $cols = [
                 'transactions.id', 'transactions.trx_dt', 'transactions.trx_tm', 'transactions.cxl_dt', 'transactions.cxl_tm',
-                'transactions.sales5_id','transactions.sales4_id','transactions.sales3_id', 'transactions.sales2_id','transactions.sales1_id',
-                'transactions.sales5_fee','transactions.sales4_fee','transactions.sales3_fee', 'transactions.sales2_fee','transactions.sales1_fee',
+                'transactions.sales4_id','transactions.sales3_id', 'transactions.sales2_id','transactions.sales1_id',
+                'transactions.sales4_fee','transactions.sales3_fee', 'transactions.sales2_fee','transactions.sales1_fee',
                 'transactions.ps_fee','transactions.mcht_fee','transactions.hold_fee','transactions.mcht_settle_fee','transactions.is_cancel',
                 'transactions.amount','transactions.module_type','transactions.ord_num','transactions.mid','transactions.tid',
                 'transactions.trx_id','transactions.ori_trx_id','transactions.card_num','transactions.issuer','transactions.acquirer',
                 'transactions.appr_num','transactions.installment','transactions.buyer_name','transactions.buyer_phone','transactions.item_name',
-                'payment_modules.note', 'payment_modules.cxl_type',
+                'payment_modules.note', 'payment_modules.cxl_type', DB::raw('mcht_settle_amount AS profit')
             ];
-            $inst->setTransactionData(10);
             $query = TransactionFilter::common($request);
-            $data           = $inst->getIndexData($request, $query, 'transactions.id', $inst->cols, 'transactions.trx_at', false);
+            $data = $this->getIndexData($request, $query, 'transactions.id', $cols, 'transactions.trx_at');
             $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
             $salesforces    = globalGetSalesByIds($sales_ids);
             $data['content'] = globalMappingSales($salesforces, $data['content']);

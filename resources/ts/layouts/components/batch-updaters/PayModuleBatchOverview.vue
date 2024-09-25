@@ -499,7 +499,7 @@ watchEffect(() => {
                         <VRow no-gutters style="align-items: center;">
                             <VCol md="6" cols="12">
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.settle_type" 
-                                :items="settle_types"
+                                :items="settle_types" label="정산일"
                                 prepend-inner-icon="ic-outline-send-to-mobile" item-title="name" item-value="id"/>
                             </VCol>
                             <VCol md="6">
@@ -514,7 +514,6 @@ watchEffect(() => {
                                         <VIcon end size="18" icon="tabler-clock-up" />
                                     </VBtn>                 
                                 </div>
-
                             </VCol>
                         </VRow>
                     </VCol>
