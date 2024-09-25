@@ -57,19 +57,11 @@ class AuthController extends Controller
         $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
         if($brand)
         {
-            //TODO 2024-08-25 쯤 지워야함(두리페이플러스 서버이전)
+            //TODO MNWORKS/TYINT 서버 이전 후 필요
             if(env('APP_ENV') === 'production' && $_SERVER['SERVER_ADDR'] === '211.45.163.74' && in_array($brand['id'], [2,9,15,42,39]))
             {
                 if($brand['id'] === 2)
                     return redirect()->to('https://b.onechek.co.kr/build/login');
-                else if($brand['id'] === 9)
-                    return redirect()->to('https://b.bicompany.co.kr/build/login');
-                else if($brand['id'] === 15)
-                    return redirect()->to('https://b.dooripayplus.co.kr/build/login');
-                else if($brand['id'] === 42)
-                    return redirect()->to('https://b.paypass.co.kr/build/login');
-                else if($brand['id'] === 39)
-                    return redirect()->to('https://b.raysolution.kr/build/login');
             }
     
             $brand['color'] = $brand['theme_css']['main_color'];

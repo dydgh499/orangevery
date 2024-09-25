@@ -34,7 +34,7 @@ const snackbar = <any>(inject('snackbar'))
 
 const is_realtime_deposit_use = [{id:0, title:'미사용'}, {id:1, title:'사용'}]
 
-const { pgs, pss, finance_vans, psFilter, setFee } = useStore()
+const { pgs, pss, settle_types, finance_vans, psFilter, setFee } = useStore()
 const pay_module = reactive<any>({
     abnormal_trans_limit: 0,
     pay_dupe_limit: 0,
@@ -42,8 +42,10 @@ const pay_module = reactive<any>({
     pay_disable_s_tm: 0,
     pay_disable_e_tm: 0,
 
-    pay_mid: '',
-    pay_tid: '',
+    settle_type: 0,
+    settle_fee: 0,
+    mid: '',
+    tid: '',
     api_key: '',
     sub_key: '',
     installment: 0,
@@ -116,16 +118,29 @@ const setFinId = (apply_type: number) => {
     }, apply_type)
 }
 
+const setSettleType = (apply_type: number) => {
+    post('set-settle-type', {
+        'settle_type': pay_module.settle_type,
+    }, apply_type)
+}
+
+const setSettleFee = (apply_type: number) => {
+    post('set-settle-fee', {
+        'settle_fee': pay_module.settle_fee,
+    }, apply_type)
+}
+
 const setMid = (apply_type: number) => {
     post('set-mid', {
-        'mid': pay_module.pay_mid,
+        'mid': pay_module.mid,
     }, apply_type)
 }
 const setTid = (apply_type: number) => {
     post('set-tid', {
-        'tid': pay_module.pay_tid,
+        'tid': pay_module.tid,
     }, apply_type)
 }
+
 const setApiKey = (apply_type: number) => {
     post('set-api-key', {
         'api_key': pay_module.api_key,
@@ -483,7 +498,52 @@ watchEffect(() => {
                     <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
                             <VCol md="6" cols="12">
-                                <VTextField v-model="pay_module.pay_mid" label="MID" />
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.settle_type" 
+                                :items="settle_types"
+                                prepend-inner-icon="ic-outline-send-to-mobile" item-title="name" item-value="id"/>
+                            </VCol>
+                            <VCol md="6">
+                                <div class="button-cantainer">
+                                    <VBtn variant="tonal" size="small" @click="setSettleType(0)">
+                                        즉시적용
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
+                                    </VBtn>
+                                    <VBtn variant="tonal" size="small" color="secondary" @click="setSettleType(1)"
+                                        style='margin-left: 0.5em;'>
+                                        예약적용
+                                        <VIcon end size="18" icon="tabler-clock-up" />
+                                    </VBtn>                 
+                                </div>
+
+                            </VCol>
+                        </VRow>
+                    </VCol>
+                    <VCol :md=6>
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol md="6" cols="12">
+                                <VTextField v-model="pay_module.settle_fee" label="이체 수수료" type="number" suffix="₩" />
+                            </VCol>
+                            <VCol md="6">
+                                <div class="button-cantainer">
+                                    <VBtn variant="tonal" size="small" @click="setSettleFee(0)">
+                                        즉시적용
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
+                                    </VBtn>
+                                    <VBtn variant="tonal" size="small" color="secondary" @click="setSettleFee(1)"
+                                        style='margin-left: 0.5em;'>
+                                        예약적용
+                                        <VIcon end size="18" icon="tabler-clock-up" />
+                                    </VBtn>                 
+                                </div>
+                            </VCol>
+                        </VRow>
+                    </VCol>
+                </VRow>
+                <VRow>
+                    <VCol :md="6" :cols="12">
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol md="6" cols="12">
+                                <VTextField v-model="pay_module.mid" label="MID" />
                             </VCol>
                             <VCol md="6">
                                 <div class="button-cantainer">
@@ -504,7 +564,7 @@ watchEffect(() => {
                     <VCol :md=6>
                         <VRow no-gutters style="align-items: center;">
                             <VCol md="6" cols="12">
-                                <VTextField v-model="pay_module.pay_tid" label="TID"  />
+                                <VTextField v-model="pay_module.tid" label="TID"  />
                             </VCol>
                             <VCol md="6">
                                 <div class="button-cantainer">

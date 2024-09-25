@@ -119,6 +119,8 @@ Route::prefix('merchandises')->group(function() {
                     Route::post('set-abnormal-trans-limit', [BatchUpdatePayModuleController::class, 'setAbnormalTransLimit']);
                     Route::post('set-dupe-pay-count-validation', [BatchUpdatePayModuleController::class, 'setDupPayCountValidation']);
                     Route::post('set-dupe-pay-least-validation', [BatchUpdatePayModuleController::class, 'setDupPayLeastValidation']);
+                    Route::post('set-settle-type', [BatchUpdatePayModuleController::class, 'setSettleType']);
+                    Route::post('set-settle-fee', [BatchUpdatePayModuleController::class, 'setSettleFee']);
                     Route::post('set-mid', [BatchUpdatePayModuleController::class, 'setMid']);
                     Route::post('set-tid', [BatchUpdatePayModuleController::class, 'setTid']);
                     Route::post('set-api-key', [BatchUpdatePayModuleController::class, 'setApiKey']);

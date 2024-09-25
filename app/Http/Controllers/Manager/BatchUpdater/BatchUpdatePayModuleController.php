@@ -159,6 +159,28 @@ class BatchUpdatePayModuleController extends BatchUpdateController
         return $this->batchResponse($row, '결제모듈');
     }
 
+    
+
+    /**
+     * 정산일 일괄적용
+     */
+    public function setSettleType(Request $request)
+    {
+        $cols = ['settle_type' => $request->settle_type];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '결제모듈');
+    }
+
+    /**
+     * 이체수수료 일괄적용
+     */
+    public function setSettleFee(Request $request)
+    {
+        $cols = ['settle_fee' => $request->settle_fee];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '결제모듈');
+    }
+
     /**
      * MID 일괄적용
      *
