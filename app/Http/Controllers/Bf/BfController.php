@@ -254,8 +254,7 @@ class BfController extends Controller
             'level' => 10,
             'use_realtime_deposit' => 0,
         ]);
-        $inst   = new TransactionController(new Transaction);
-        $inst->cols = [
+        $cols = [
             'transactions.id', 'transactions.trx_dt', 'transactions.trx_tm', 'transactions.cxl_dt', 'transactions.cxl_tm',
             'transactions.sales5_id','transactions.sales4_id','transactions.sales3_id', 'transactions.sales2_id','transactions.sales1_id',
             'transactions.sales5_fee','transactions.sales4_fee','transactions.sales3_fee', 'transactions.sales2_fee','transactions.sales1_fee',
@@ -265,10 +264,10 @@ class BfController extends Controller
             'transactions.appr_num','transactions.installment','transactions.buyer_name','transactions.buyer_phone','transactions.item_name',
             'payment_modules.note', 'payment_modules.cxl_type', 'payment_modules.fin_trx_delay',
             DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"), DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
+            DB::raw('mcht_settle_amount AS profit'),
         ];
-        $inst->setTransactionData(10);
-        $query = TransactionFilter::common($request);
-        $data           = $inst->getIndexData($request, $query, 'transactions.id', $inst->cols, 'transactions.trx_at', false);
+        $query  = TransactionFilter::common($request);
+        $data   = $this->getIndexData($request, $query, 'transactions.id', $cols, 'transactions.trx_at', false);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);

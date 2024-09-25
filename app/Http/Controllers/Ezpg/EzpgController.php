@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Ezpg;
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Manager\Transaction\TransactionController;
 use App\Http\Controllers\Manager\Transaction\TransactionFilter;
 
 use Carbon\Carbon;
@@ -159,7 +158,7 @@ class EzpgController extends Controller
                 'payment_modules.note', 'payment_modules.cxl_type', DB::raw('mcht_settle_amount AS profit')
             ];
             $query = TransactionFilter::common($request);
-            $data = $this->getIndexData($request, $query, 'transactions.id', $cols, 'transactions.trx_at');
+            $data = $this->getIndexData($request, $query, 'transactions.id', $cols, 'transactions.trx_at', false);
             $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
             $salesforces    = globalGetSalesByIds($sales_ids);
             $data['content'] = globalMappingSales($salesforces, $data['content']);
