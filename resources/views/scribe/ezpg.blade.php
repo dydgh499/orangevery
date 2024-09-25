@@ -19,8 +19,8 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="BuddyPay Mobile API">
     <meta property="og:image" content="https://team.payvery.kr/storage/images/ogs/170116003008dab237631d951bf4719ca827640d91.webp" >
-    <meta property="og:description" content="본 문서는 Buddy Pay와 Buddy Pay Mobile간 인터페이스에 대하여 기술합니다.">
-    <meta property="description" content="본 문서는 Buddy Pay와 Buddy Pay Mobile간 인터페이스에 대하여 기술합니다.">
+    <meta property="og:description" content="본 문서는 EZPG와 EZPG Mobile간 인터페이스에 대하여 기술합니다.">
+    <meta property="description" content="본 문서는 EZPG와 EZPG Mobile간 인터페이스에 대하여 기술합니다.">
     <meta name="author" content="purplevery">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -107,7 +107,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2024-09-23 21:18:34</li>
+        <li>마지막 업데이트:  2024-09-25 16:44:37</li>
     </ul>
 </div>
 
@@ -220,8 +220,8 @@ const headers = {
 };
 
 let body = {
-    "user_name": "animi",
-    "user_pw": "eos"
+    "user_name": "odio",
+    "user_pw": "ea"
 };
 
 fetch(url, {
@@ -241,8 +241,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'user_name' =&gt; 'animi',
-            'user_pw' =&gt; 'eos',
+            'user_name' =&gt; 'odio',
+            'user_pw' =&gt; 'ea',
         ],
     ]
 );
@@ -256,8 +256,8 @@ import json
 
 url = 'https://w.ez-pg.kr/api/v1/ezpg/sign-in'
 payload = {
-    "user_name": "animi",
-    "user_pw": "eos"
+    "user_name": "odio",
+    "user_pw": "ea"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -274,8 +274,8 @@ response.json()</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"user_name\": \"animi\",
-    \"user_pw\": \"eos\"
+    \"user_name\": \"odio\",
+    \"user_pw\": \"ea\"
 }"
 </code></pre></div>
 
@@ -416,10 +416,10 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="user_name"                data-endpoint="POSTapi-v1-ezpg-sign-in"
-               value="animi"
+               value="odio"
                data-component="body">
     <br>
-<p>가맹점 아이디 <br>예시: <code>animi</code></p>
+<p>가맹점 아이디 <br>예시: <code>odio</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>user_pw</code></b>&nbsp;&nbsp;
@@ -427,10 +427,10 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="user_pw"                data-endpoint="POSTapi-v1-ezpg-sign-in"
-               value="eos"
+               value="ea"
                data-component="body">
     <br>
-<p>가맹점 패스워드 <br>예시: <code>eos</code></p>
+<p>가맹점 패스워드 <br>예시: <code>ea</code></p>
         </div>
         </form>
 
@@ -472,7 +472,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2024-09-01 00:00:00",
     "e_dt": "2024-09-07 23:59:59",
-    "search": "accusantium",
+    "search": "cupiditate",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -504,7 +504,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2024-09-01 00:00:00',
             'e_dt' =&gt; '2024-09-07 23:59:59',
-            'search' =&gt; 'accusantium',
+            'search' =&gt; 'cupiditate',
         ],
     ]
 );
@@ -522,7 +522,7 @@ params = {
   'page_size': '20',
   's_dt': '2024-09-01 00:00:00',
   'e_dt': '2024-09-07 23:59:59',
-  'search': 'accusantium',
+  'search': 'cupiditate',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -536,7 +536,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://w.ez-pg.kr/api/v1/ezpg/transactions?page=1&amp;page_size=20&amp;s_dt=2024-09-01+00%3A00%3A00&amp;e_dt=2024-09-07+23%3A59%3A59&amp;search=accusantium" \
+    --get "https://w.ez-pg.kr/api/v1/ezpg/transactions?page=1&amp;page_size=20&amp;s_dt=2024-09-01+00%3A00%3A00&amp;e_dt=2024-09-07+23%3A59%3A59&amp;search=cupiditate" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -830,10 +830,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-ezpg-transactions"
-               value="accusantium"
+               value="cupiditate"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>accusantium</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>cupiditate</code></p>
             </div>
                 </form>
 
@@ -886,39 +886,32 @@ response.json()</code></pre></div>
 <p>PG사 구간 수수료(%)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
-                        <b style="line-height: 2;"><code>sales5_fee</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>총판 수수료(%)</p>
-                    </div>
-                                                                <div style="margin-left: 28px; clear: unset;">
                         <b style="line-height: 2;"><code>sales4_fee</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>지사 수수료(%)</p>
+<p>영업점 수수료(%)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
                         <b style="line-height: 2;"><code>sales3_fee</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>대리점2 수수료(%)</p>
+<p>지사 수수료(%)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
                         <b style="line-height: 2;"><code>sales2_fee</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>대리점3 수수료(%)</p>
+<p>총판 수수료(%)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
                         <b style="line-height: 2;"><code>sales1_fee</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>대리점4 수수료(%)</p>
+<p>대리점 수수료(%)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
                         <b style="line-height: 2;"><code>mcht_fee</code></b>&nbsp;&nbsp;
@@ -1118,7 +1111,7 @@ response.json()</code></pre></div>
 
 const params = {
     "t_dt": "2024-09-01",
-    "search": "voluptas",
+    "search": "rerum",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1147,7 +1140,7 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             't_dt' =&gt; '2024-09-01',
-            'search' =&gt; 'voluptas',
+            'search' =&gt; 'rerum',
         ],
     ]
 );
@@ -1162,7 +1155,7 @@ import json
 url = 'https://w.ez-pg.kr/api/v1/ezpg/reconciliation/summary'
 params = {
   't_dt': '2024-09-01',
-  'search': 'voluptas',
+  'search': 'rerum',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1176,7 +1169,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation/summary?t_dt=2024-09-01&amp;search=voluptas" \
+    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation/summary?t_dt=2024-09-01&amp;search=rerum" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1313,10 +1306,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-ezpg-reconciliation-summary"
-               value="voluptas"
+               value="rerum"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>voluptas</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>rerum</code></p>
             </div>
                 </form>
 
@@ -1400,7 +1393,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2024-09-01 00:00:00",
     "e_dt": "2024-09-07 23:59:59",
-    "search": "et",
+    "search": "magnam",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1432,7 +1425,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2024-09-01 00:00:00',
             'e_dt' =&gt; '2024-09-07 23:59:59',
-            'search' =&gt; 'et',
+            'search' =&gt; 'magnam',
         ],
     ]
 );
@@ -1450,7 +1443,7 @@ params = {
   'page_size': '20',
   's_dt': '2024-09-01 00:00:00',
   'e_dt': '2024-09-07 23:59:59',
-  'search': 'et',
+  'search': 'magnam',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1464,7 +1457,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation?page=1&amp;page_size=20&amp;s_dt=2024-09-01+00%3A00%3A00&amp;e_dt=2024-09-07+23%3A59%3A59&amp;search=et" \
+    --get "https://w.ez-pg.kr/api/v1/ezpg/reconciliation?page=1&amp;page_size=20&amp;s_dt=2024-09-01+00%3A00%3A00&amp;e_dt=2024-09-07+23%3A59%3A59&amp;search=magnam" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1655,10 +1648,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-ezpg-reconciliation"
-               value="et"
+               value="magnam"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>et</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>magnam</code></p>
             </div>
                 </form>
 

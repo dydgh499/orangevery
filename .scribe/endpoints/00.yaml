@@ -30,7 +30,7 @@ endpoints:
         name: user_name
         description: '가맹점 아이디'
         required: true
-        example: dolores
+        example: odio
         type: string
         enumValues: []
         custom: []
@@ -38,13 +38,13 @@ endpoints:
         name: user_pw
         description: '가맹점 패스워드'
         required: true
-        example: nihil
+        example: ea
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      user_name: dolores
-      user_pw: nihil
+      user_name: odio
+      user_pw: ea
     fileParameters: []
     responses:
       -
@@ -184,7 +184,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: quia
+        example: cupiditate
         type: string
         enumValues: []
         custom: []
@@ -193,7 +193,7 @@ endpoints:
       page_size: 20
       s_dt: '2024-09-01 00:00:00'
       e_dt: '2024-09-07 23:59:59'
-      search: quia
+      search: cupiditate
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -393,17 +393,9 @@ endpoints:
         type: integer
         enumValues: []
         custom: []
-      'content.*.sales5_fee':
-        name: 'content.*.sales5_fee'
-        description: '총판 수수료(%)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
       'content.*.sales4_fee':
         name: 'content.*.sales4_fee'
-        description: '지사 수수료(%)'
+        description: '영업점 수수료(%)'
         required: false
         example: null
         type: integer
@@ -411,7 +403,7 @@ endpoints:
         custom: []
       'content.*.sales3_fee':
         name: 'content.*.sales3_fee'
-        description: '대리점2 수수료(%)'
+        description: '지사 수수료(%)'
         required: false
         example: null
         type: integer
@@ -419,7 +411,7 @@ endpoints:
         custom: []
       'content.*.sales2_fee':
         name: 'content.*.sales2_fee'
-        description: '대리점3 수수료(%)'
+        description: '총판 수수료(%)'
         required: false
         example: null
         type: integer
@@ -427,7 +419,7 @@ endpoints:
         custom: []
       'content.*.sales1_fee':
         name: 'content.*.sales1_fee'
-        description: '대리점4 수수료(%)'
+        description: '대리점 수수료(%)'
         required: false
         example: null
         type: integer
@@ -636,7 +628,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer acfeV6a4DEZ5vPg86k31bhd'
+      - 'Bearer 3deP14haVvg8D6kZc5a6Ebf'
     controller: null
     method: null
     route: null
@@ -675,13 +667,13 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: in
+        example: rerum
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
       t_dt: '2024-09-01'
-      search: in
+      search: rerum
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -785,7 +777,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer vaDdabE15Pk84h6gfeV6Z3c'
+      - 'Bearer 6EVd36gbPkah48av5efcZD1'
     controller: null
     method: null
     route: null
@@ -848,7 +840,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: libero
+        example: magnam
         type: string
         enumValues: []
         custom: []
@@ -857,7 +849,7 @@ endpoints:
       page_size: 20
       s_dt: '2024-09-01 00:00:00'
       e_dt: '2024-09-07 23:59:59'
-      search: libero
+      search: magnam
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -1085,7 +1077,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer k5gEafZch3ba6DeV814dP6v'
+      - 'Bearer d1cg3VbE54D6Z6av8keaPfh'
     controller: null
     method: null
     route: null

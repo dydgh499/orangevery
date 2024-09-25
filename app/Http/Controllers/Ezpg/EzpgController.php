@@ -216,9 +216,9 @@ class EzpgController extends Controller
         $carbon_s_at = Carbon::createFromFormat('Y-m-d H:i:s', $request->s_dt);
         $carbon_e_at = Carbon::createFromFormat('Y-m-d H:i:s', $request->e_dt);
         if($request->page_size > 3000)
-            return $this->extendResponse(409, '페이지 사이즈는 최대 3000개까지 허용합니다.');
+            return $this->extendResponse(2000, '페이지 사이즈는 최대 3000개까지 허용합니다.');
         else if($carbon_s_at->diffInDays($carbon_e_at, false) > 7)
-            return $this->extendResponse(409, '조회 날짜는 최대 7일까지 허용합니다.');
+            return $this->extendResponse(2000, '조회 날짜는 최대 7일까지 허용합니다.');
         else
         {
             $cols = [
