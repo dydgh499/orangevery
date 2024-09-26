@@ -9,7 +9,7 @@ class SettleDateCalculator
     {
         //조회일로부터 M-1, M+1 공휴일 조회
         $holiday_s_dt = $settle_dt->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
-        $holiday_e_dt = $settle_dt->copy()->addMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
+        $holiday_e_dt = $settle_dt->copy()->addMonthNoOverflow(1)->endOfMonth()->format('Y-m-d');
         return explode(',', Transaction::getHolidays($brand_id, $holiday_s_dt, $holiday_e_dt)); // 공휴일 문자열을 배열로 변환
     }
 
