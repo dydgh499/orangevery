@@ -362,6 +362,7 @@ interface FreeOption {
         sender_phone: string,
         receive_phone: string,
         min_balance_limit: number,
+        is_use?: boolean,
     },
     default: {
         installment: number,

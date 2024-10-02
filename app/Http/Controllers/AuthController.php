@@ -65,10 +65,12 @@ class AuthController extends Controller
             }
     
             $brand['color'] = $brand['theme_css']['main_color'];
+            $use_bonaeja = $brand['pv_options']['free']['bonaeja']['user_id'] !== '' ? true : false;
             $brand['pv_options']['free']['bonaeja'] = [];
             $brand['pv_options']['free']['bonaeja']['min_balance_limit'] = 0;
             $brand['pv_options']['free']['bonaeja'] = [
-                'min_balance_limit' => $brand['pv_options']['free']['bonaeja']['min_balance_limit']
+                'min_balance_limit' => $brand['pv_options']['free']['bonaeja']['min_balance_limit'],
+                'is_use' => $use_bonaeja,
             ];
             return response(view('application', ['json' => $brand, 'ip'=>$request->ip()]))
                 ->withCookie('XSRF-TOKEN', csrf_token());

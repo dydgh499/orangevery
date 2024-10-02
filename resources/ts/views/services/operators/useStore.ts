@@ -60,7 +60,7 @@ export const operatorActionAuthStore = defineStore('operatorActionAuthStore', ()
     const phoneNum2FAVertifyDialog = <any>inject('phoneNum2FAVertifyDialog')
 
     const headOfficeAuthValidate = async (message: string) => {  
-        if(corp.pv_options.free.bonaeja.user_id !== '') {
+        if(corp.pv_options.free.bonaeja?.is_use) {
             if(await alert.value.show(message)) {
                 // 휴대폰 인증 후 재설정
                 try {
