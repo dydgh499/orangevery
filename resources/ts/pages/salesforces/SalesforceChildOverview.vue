@@ -35,11 +35,19 @@ const getChildDepth = computed(() => {
                 <span v-if="key == 'id'">
                     <div class='check-label-container'>
                         <VCheckbox v-if="getUserLevel() >= 35" v-model="selected" :value="props.salesforce[key]" class="check-label"/>
-                        <span class="edit-link" @click="store.edit(props.salesforce['id'])">#{{ props.salesforce[key] }}</span>
+                        <span class="edit-link" @click="store.edit(props.salesforce['id'])">
+                            #{{ props.salesforce[key] }}
+                            <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                상세보기
+                            </VTooltip>
+                        </span>
                     </div>
                 </span>
                 <span v-else-if="key == 'user_name'" class="edit-link" @click="store.edit(props.salesforce['id'])">
                     {{ props.salesforce[key] }}
+                    <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                        상세보기
+                    </VTooltip>
                 </span>
                 <span v-else-if="key == 'level'">
                     <VChip :color="store.getSelectIdColor(getLevelByIndex(props.salesforce[key]))">

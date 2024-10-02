@@ -4,10 +4,10 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import ExtraMenu from '@/views/services/exception-work-times/ExtraMenu.vue'
 import { useSearchStore } from '@/views/services/exception-work-times/useStore'
 import { DateFilters } from '@core/enums'
-const { 
-    store, 
-    head, 
-    exporter, 
+const {
+    store,
+    head,
+    exporter,
     metas
 } = useSearchStore()
 
@@ -26,17 +26,22 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="작업자 ID" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.NOT_USE">
+        <BaseIndexView placeholder="작업자 ID" :metas="metas" :add="false" add_name=""
+            :date_filter_type="DateFilters.NOT_USE">
             <template #index_extra_field>
-                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                    :items="[10, 20, 30, 50, 100, 200]" label="조회 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
-                    <VBtn prepend-icon="material-symbols:work-history-outline" @click="exceptionWorkTimeDialog.show({id:0})" size="small">
-                        예외작업시간 추가
-                    </VBtn>
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact"
+                    variant="outlined" :items="[10, 20, 30, 50, 100, 200]" label="조회 개수" id="page-size-filter" eager
+                    @update:modelValue="store.updateQueryString({ page_size: store.params.page_size })"
+                    :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''" />
+                <VBtn prepend-icon="material-symbols:work-history-outline" @click="exceptionWorkTimeDialog.show({ id: 0 })"
+                    size="small" :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
+                    예외작업시간 추가
+                </VBtn>
             </template>
             <template #headers>
                 <tr>
-                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
+                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible"
+                        class='list-square'>
                         <span>
                             {{ header.ko }}
                         </span>
@@ -57,7 +62,7 @@ onMounted(() => {
                                     #{{ item[_key] }}
                                 </span>
                                 <span v-else-if="_key === 'extra_col'">
-                                    <ExtraMenu :item="item"/>
+                                    <ExtraMenu :item="item" />
                                 </span>
                                 <span v-else>
                                     {{ item[_key] }}
@@ -68,6 +73,6 @@ onMounted(() => {
                 </tr>
             </template>
         </BaseIndexView>
-        <ExceptionWorkTimeDialog ref="exceptionWorkTimeDialog"/>
+        <ExceptionWorkTimeDialog ref="exceptionWorkTimeDialog" />
     </div>
 </template>

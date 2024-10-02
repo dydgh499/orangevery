@@ -104,11 +104,19 @@ onMounted(() => {
                                     <div class='check-label-container'>
                                         <VCheckbox v-if="getUserLevel() >= 35" v-model="selected" :value="item[_key]"
                                             class="check-label" />
-                                        <span class="edit-link" @click="store.edit(item['id'])">#{{ item[_key] }}</span>
+                                        <span class="edit-link" @click="store.edit(item['id'])">
+                                            #{{ item[_key] }}
+                                            <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                                상세보기
+                                            </VTooltip>
+                                        </span>
                                     </div>
                                 </span>
                                 <span v-else-if="_key == 'note'" class="edit-link" @click="store.edit(item['id'])">
                                     {{ item[_key] }}
+                                    <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                        상세보기
+                                    </VTooltip>
                                 </span>
                                 <span v-else-if="_key == 'module_type'">
                                     <VChip

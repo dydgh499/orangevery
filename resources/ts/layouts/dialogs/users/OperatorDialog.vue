@@ -1,39 +1,23 @@
 <script lang="ts" setup>
-import ProfileDialog from '@/layouts/dialogs/users/ProfileDialog.vue'
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { useRequestStore } from '@/views/request'
-import { operator_levels } from '@/views/services/operators/useStore'
-import type { Operator } from '@/views/types'
-import { avatars } from '@/views/users/useStore'
-import { axios, getUserLevel, user_info } from '@axios'
-import { lengthValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators'
-import { VForm } from 'vuetify/components'
+import ProfileDialog from '@/layouts/dialogs/users/ProfileDialog.vue';
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
+import { useRequestStore } from '@/views/request';
+import { operator_levels, operatorActionAuthStore } from '@/views/services/operators/useStore';
+import type { Operator } from '@/views/types';
+import { avatars } from '@/views/users/useStore';
+import { getUserLevel, user_info } from '@axios';
+import { lengthValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators';
+import { VForm } from 'vuetify/components';
 
-
-const snackbar = <any>(inject('snackbar'))
 const phone_num_format = ref('')
 const visible = ref(false)
 const is_show = ref(false)
 const profileDlg = ref()
 
 const vForm = ref<VForm>()
-const operator = ref(<Operator>({id:0}))
+const operator = ref(<Operator>({id:0, level:35}))
 const { formRequest, remove } = useRequestStore()
-
-
-const verification = async () => {
-    try {
-        const r = await axios.post('/api/v1/bonaejas/mobile-code-auth', { 
-            phone_num: operator.value.above_phone_num, 
-            verification_number: operator.value.appr_num 
-        })
-        operator.value.token = r.data.token
-        snackbar.value.show('인증에 성공하였습니다.<br>이어서 진행해주세요.', 'success')
-    }
-    catch(e:any) {
-        snackbar.value.show(e.response.data.message, 'warning')
-    }
-}
+const { headOfficeAuthValidate } = operatorActionAuthStore()
 
 const show = (_operator: Operator) => {
     operator.value = _operator
@@ -42,10 +26,26 @@ const show = (_operator: Operator) => {
 }
 
 const isHeadOffice = () => {
-    return getUserLevel() === 40
+    return getUserLevel() >= 40
 }
 const isAbleModiy = () => {
     return (isHeadOffice() || (getUserLevel() >= 35 && operator.value.id === user_info.value.id))
+}
+
+const operatorUpdate = async() => {
+    const [result, token] = await headOfficeAuthValidate('휴대폰번호 인증이 필요합니다.<br>계속하시겠습니까?')
+    if(result) {
+        operator.value.token = token
+        await formRequest('/services/operators', operator.value, vForm.value, false)
+    }
+}
+
+const operatorDelete = async() => {
+    const [result, token] = await headOfficeAuthValidate('휴대폰번호 인증이 필요합니다.<br>계속하시겠습니까?')
+    if(result) {
+        operator.value.token = token
+        await remove('/services/operators', operator.value)
+    }
 }
 
 const formatPhoneNum = computed(() => {
@@ -119,14 +119,15 @@ defineExpose({
                             </VRow>
                         </VCol>
                     </VRow>
+
                     <VRow v-if="isAbleModiy()">
                         <VCol md="6" cols=12>
                             <VRow style="align-items: center;">
-                                <VCol :md="5" cols="6">* 대표자명</VCol>
+                                <VCol :md="5" cols="6">* 성명</VCol>
                                 <VCol :md="7">
                                     <VTextField v-model="operator.nick_name" prepend-inner-icon="tabler-user"
                                         placeholder="사용자명으로 사용됩니다."
-                                        :rules="[requiredValidatorV2(operator.nick_name, '대표자명')]"
+                                        :rules="[requiredValidatorV2(operator.nick_name, '성명')]"
                                         persistent-placeholder />
                                 </VCol>
                             </VRow>
@@ -157,16 +158,25 @@ defineExpose({
                     <VRow v-else>
                         <VCol md="6" cols=12>
                             <VRow style="align-items: center;">
-                                <VCol :md="4" cols="5">* 등급</VCol>
-                                <VCol :md="8">
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="operator.level"
-                                        :items="operator_levels" prepend-inner-icon="tabler-adjustments-up"
-                                        label="등급 선택" item-title="title" item-value="id" single-line
-                                        :rules="[requiredValidatorV2(operator.level, '등급')]" :readonly="operator.id != 0"
-                                        v-if="getUserLevel() >= 40" />
-                                        <span v-else>
-                                            {{ operator_levels.find(obj => obj.id === operator.level)?.title}}
-                                        </span>
+                                <VCol :md="6" cols="6">
+                                    <b>성명</b>
+                                </VCol>
+                                <VCol :md="6">
+                                    <span>
+                                        {{ operator.nick_name }}
+                                    </span>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol md="6" cols=12>
+                            <VRow style="align-items: center;">
+                                <VCol :md="6" cols="6">
+                                    <b>휴대폰번호</b>
+                                </VCol>
+                                <VCol :md="6">
+                                    <span>
+                                        {{ operator.phone_num }}
+                                    </span>
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -195,18 +205,6 @@ defineExpose({
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol md="6" cols="12" v-if="operator.result === 956">
-                            <VRow style="align-items: center;">
-                                <VCol :md="5" cols="6">
-                                    <span>인증번호</span>
-                                </VCol>
-                                <VCol :md="7">
-                                    <VTextField v-model="operator.appr_num" type="number"
-                                        prepend-inner-icon="arcticons:2fas-auth" placeholder="인증번호 입력"
-                                        persistent-placeholder />
-                                </VCol>
-                            </VRow>
-                        </VCol>
                     </VRow>
                     <VRow v-else>
                         <VCol md="6" cols=12>
@@ -225,8 +223,6 @@ defineExpose({
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol md="6" cols=12>
-                        </VCol>
                     </VRow>
                 </VForm>
                 <template v-if="isAbleModiy()">
@@ -236,15 +232,11 @@ defineExpose({
                 </template>
                 <VRow v-if=" isAbleModiy()">
                     <VCol cols="12" class="d-flex gap-4">
-                        <VBtn end @click="verification()" color="warning" v-if="operator.result === 956">
-                            인증하기
-                            <VIcon end icon="arcticons:2fas-auth" />
-                        </VBtn>
-                        <VBtn type="button" style="margin-left: auto;" @click="formRequest('/services/operators', operator, vForm, isHeadOffice())">
+                        <VBtn type="button" style="margin-left: auto;" @click="operatorUpdate()">
                             {{ operator.id == 0 ? "추가" : "수정" }}
                             <VIcon end icon="tabler-pencil" />
                         </VBtn>
-                        <VBtn type="button" color="error" v-if="operator.id && isHeadOffice()" @click="remove('/services/operators', operator)">
+                        <VBtn type="button" color="error" v-if="operator.id && isHeadOffice()" @click="operatorDelete()">
                             삭제
                             <VIcon end icon="tabler-trash" />
                         </VBtn>

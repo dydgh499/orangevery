@@ -58,9 +58,8 @@ Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
         });
     
         Route::apiResource('brands/before-brand-infos', BeforeBrandInfoController::class);
-        Route::apiResource('brands/different-settlement-infos', DifferentSettlementInfoController::class);
-        
-        Route::middleware(['dev.ip'])->apiResource('brands/operator-ips', OperatorIPController::class);
+        Route::apiResource('brands/different-settlement-infos', DifferentSettlementInfoController::class);        
+        Route::apiResource('operator-ips', OperatorIPController::class);
         Route::apiResource('brands', BrandController::class);
     
         Route::apiResource('operators', OperatorController::class);            

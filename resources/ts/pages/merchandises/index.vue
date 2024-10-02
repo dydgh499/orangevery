@@ -9,7 +9,6 @@ import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 import InitPayVerficationDialog from '@/layouts/dialogs/users/InitPayVerficationDialog.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
-import PhoneNum2FAVertifyDialog from '@/layouts/dialogs/users/PhoneNum2FAVertifyDialog.vue'
 
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { getUserLevel, isAbleModiy } from '@axios'
@@ -21,11 +20,8 @@ const { selected, all_selected } = selectFunctionCollect(store)
 const { pgs, settle_types, cus_filters } = useStore()
 const password  = ref()
 const batchDialog = ref()
-const phoneNum2FAVertifyDialog = ref()
 const initPayVerficationDialog = ref()
 
-provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
-provide('initPayVerficationDialog', initPayVerficationDialog)
 provide('password', password)
 provide('store', store)
 provide('head', head)
@@ -114,11 +110,19 @@ onMounted(() => {
                             <span v-if="_key == 'id'">
                                 <div class='check-label-container'>
                                     <VCheckbox v-if="getUserLevel() >= 35" v-model="selected" :value="item[_key]" class="check-label"/>
-                                    <span class="edit-link" @click="store.edit(item['id'])">#{{ item[_key] }}</span>
+                                    <span class="edit-link" @click="store.edit(item['id'])">
+                                        #{{ item[_key] }}
+                                        <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                            상세보기
+                                        </VTooltip>
+                                    </span>
                                 </div>
                             </span>
                             <span v-else-if="_key == `user_name`" class="edit-link" @click="store.edit(item['id'])">
                                 {{ item[_key] }}
+                                <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                    상세보기
+                                </VTooltip>
                             </span>
                             <span v-else-if="(_key as string).includes('_fee')">
                                 <VChip v-if="item[_key]">
@@ -216,8 +220,7 @@ onMounted(() => {
          <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.Merchandise"
             @update:select_idxs="selected = $event; store.setTable(); store.getChartData()"/>
         <PasswordChangeDialog ref="password" />
-        <PhoneNum2FAVertifyDialog ref="phoneNum2FAVertifyDialog"/>
-        <InitPayVerficationDialog ref="initPayVerficationDialog"/>
+        <InitPayVerficationDialog ref="initPayVerficationDialog" @init:pay_verfication="initPayVerficationDialog.show($event)"/>
     </div>
 </template>
 

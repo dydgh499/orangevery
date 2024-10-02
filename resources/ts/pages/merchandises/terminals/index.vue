@@ -61,12 +61,18 @@ provide('exporter', exporter)
                     <td v-show="_header.visible" class='list-square'>
                         <span v-if="_key === 'id' && getUserLevel() > 10" class="edit-link" @click="store.edit(item['id'])">
                             #{{ item[_key] }}
+                            <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                상세보기
+                            </VTooltip>
                         </span>
                         <span v-else-if="_key === 'id' && getUserLevel() === 10">
                             #{{ item[_key] }}
                         </span>
                         <span v-else-if="_key == 'note' && getUserLevel() > 10" class="edit-link" @click="store.edit(item['id'])">
                             {{ item[_key] }}
+                            <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                상세보기
+                            </VTooltip>
                         </span>
                         <span v-else-if="_key == 'note' && getUserLevel() === 10">
                             {{ item[_key] }}

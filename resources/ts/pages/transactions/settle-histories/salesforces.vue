@@ -7,6 +7,7 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { selectFunctionCollect } from '@/views/selected'
 import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
+import { getDepositsStatusColor } from '@/views/transactions/settle-histories/SettleHistory'
 import { deposit_statuses, useSearchStore } from '@/views/transactions/settle-histories/useSalesforceStore'
 
 import type { Options } from '@/views/types'
@@ -126,8 +127,8 @@ onMounted(() => {
                                 </VChip>
                             </span>
                             <span v-else-if="_key === 'deposit_status'">
-                                <VChip :color="store.booleanTypeColor(!item[_key])">
-                                    {{ item[_key] ? '입금완료' : '미입금' }}
+                                <VChip :color="getDepositsStatusColor(item[_key])">
+                                    {{ deposit_statuses.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key === 'extra_col'">

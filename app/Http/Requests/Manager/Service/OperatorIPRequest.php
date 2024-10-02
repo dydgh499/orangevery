@@ -8,14 +8,11 @@ use App\Http\Traits\FormRequestTrait;
 class OperatorIPRequest extends FormRequest
 {
     use FormRequestTrait;
-    public $keys = [
-        'brand_id',
-        'enable_ip',
-    ];
+    public $keys = ['enable_ip'];
 
     public function authorize(): bool
     {
-        return $this->user()->tokenCan(50) ? true : false;
+        return $this->user()->tokenCan(40) ? true : false;
     }
 
     public function rules(): array

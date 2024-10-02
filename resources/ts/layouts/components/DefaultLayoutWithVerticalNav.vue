@@ -16,6 +16,7 @@ import HolidayDlg from '@/layouts/dialogs/services/HolidayDlg.vue'
 import PayWindowCreateDialog from '@/layouts/dialogs/transactions/PayWindowCreateDialog.vue'
 import PayWindowShowDialog from '@/layouts/dialogs/transactions/PayWindowShowDialog.vue'
 import PasswordChangeNoticeDialog from '@/layouts/dialogs/users/PasswordChangeNoticeDialog.vue'
+import PhoneNum2FAVertifyDialog from '@/layouts/dialogs/users/PhoneNum2FAVertifyDialog.vue'
 import AlertDialog from '@/layouts/dialogs/utils/AlertDialog.vue'
 import LoadingDialog from '@/layouts/dialogs/utils/LoadingDialog.vue'
 import PopupDialog from '@/layouts/dialogs/utils/PopupDialog.vue'
@@ -36,12 +37,14 @@ const payLink = ref()
 const payShow = ref()
 const pwaSnackbar = ref()
 const holidayDlg = ref()
+const phoneNum2FAVertifyDialog = ref()
 const passwordChangeNoticeDialog = ref()
 
 provide('popup', popup)
 provide('payLink', payLink)
 provide('payShow', payShow)
 provide('holidayDlg', holidayDlg)
+provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
@@ -136,6 +139,7 @@ onMounted(() => {
             <PayWindowShowDialog ref="payShow"/>
             
             <PopupDialog ref="popup"/>
+            <PhoneNum2FAVertifyDialog ref="phoneNum2FAVertifyDialog"/>
             <PasswordChangeNoticeDialog ref="passwordChangeNoticeDialog"/>
         </RouterView>
         <template #footer>

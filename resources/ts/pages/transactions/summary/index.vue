@@ -88,7 +88,8 @@ onMounted(() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="tabler-calculator" @click="mchtGroup()" size="small">
+                <VBtn prepend-icon="tabler-calculator" @click="mchtGroup()" size="small"
+                    :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
                     가맹점 매출집계
                 </VBtn>
                 <div>

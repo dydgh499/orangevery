@@ -6,7 +6,8 @@ import corp from '@corp'
 export const deposit_statuses = [
     { id: null, title: '전체' },
     { id: 0, title: '미입금' },
-    { id: 1, title: '입금' },
+    { id: 1, title: '입금완료' },
+    { id: 2, title: '상계처리' },
 ]
 
 export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', () => {    

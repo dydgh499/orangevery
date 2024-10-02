@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { operatorActionAuthStore } from '@/views/services/operators/useStore'
 import { getUserPasswordValidate, getUserTypeName } from '@/views/users/useStore'
 import { axios, getUserLevel, user_info } from '@axios'
 import { requiredValidatorV2 } from '@validators'
@@ -13,6 +14,7 @@ const vForm = ref()
 const user_type = ref(0)
 const user_id = ref(0)
 const is_my_password = ref(false)
+const { headOfficeAuthValidate } = operatorActionAuthStore()
 
 const current_password = ref({
     is_show: false,
@@ -44,16 +46,26 @@ const show = (_user_id: number, _user_type: number) => {
     }
 }
 
-
 const submit = async () => {
     const [name, path] = getUserTypeName(user_type.value)
-    const is_valid = await vForm.value.validate();
+    const is_valid = await vForm.value.validate()
+    const params = <any>{
+        user_pw: new_password.value.value,
+        current_pw: current_password.value.value
+    }
+
+    // 본사가 운영자 패스워드 변경할 시
+    if(is_my_password.value === false && name === '운영자' && getUserLevel() >= 40) {
+        const [result, token] = await headOfficeAuthValidate('휴대폰번호 인증이 필요합니다.<br>계속하시겠습니까?')
+        if(result)
+            params.token = token
+        else
+            return
+    }
+
     if (is_valid.valid && await alert.value.show(`정말 패스워드를 변경하시겠습니까?`)) {
         try {
-            const r = await axios.post(`/api/v1/manager/${path}/${user_id.value}/password-change`, {
-                 user_pw: new_password.value.value,
-                 current_pw: current_password.value.value
-            })
+            const r = await axios.post(`/api/v1/manager/${path}/${user_id.value}/password-change`, params)
             snackbar.value.show('성공하였습니다.', 'success')
             visible.value = false
         }

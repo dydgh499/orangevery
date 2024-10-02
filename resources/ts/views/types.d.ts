@@ -499,6 +499,7 @@ export interface OperatorIp {
     id: number,
     brand_id: number,
     enable_ip: string,
+    token?: string,
 }
 
 export interface DeductionHeader {

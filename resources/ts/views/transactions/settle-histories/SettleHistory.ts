@@ -5,6 +5,17 @@ import { SettlesHistory } from '@/views/types'
 import { axios, getLevelByIndex } from '@axios'
 import corp from '@corp'
 
+export const getDepositsStatusColor = (deposit_status: number) => {
+    if(deposit_status === 0)
+        return 'default'
+    else if(deposit_status === 1)
+        return 'success'
+    else if(deposit_status === 2)
+        return 'info'
+    else
+        return 'error'
+}
+
 export function settlementHistoryFunctionCollect(store: any) {
     const { post, get } = useRequestStore()
     const { printer } = useSearchStore()
@@ -153,7 +164,17 @@ export function settlementHistoryFunctionCollect(store: any) {
         }
     }
 
+    const batchOffsetProcessing = async (selected: number[], is_mcht: boolean) => {
+        const params:any = {}
+        if (await alert.value.show(`정말 선택한 정산이력들을 상계처리하시겠습니까?`)) {
+            params.data = selected
+            await post('/api/v1/manager/transactions/settle-histories/' + (is_mcht ? 'merchandises' : 'salesforces') + '/batch-offset-process', params, true)
+            store.setTable()
+        }
+    }
+
     return {
-        deposit, batchDeposit, cancel, batchCancel, download, addDeduct, linkAccount, batchLinkAccount
+        deposit, batchDeposit, cancel, batchCancel, download, addDeduct, linkAccount, 
+        batchLinkAccount, batchOffsetProcessing
     }
 }

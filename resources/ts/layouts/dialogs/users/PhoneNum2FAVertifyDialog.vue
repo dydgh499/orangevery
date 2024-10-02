@@ -8,7 +8,6 @@ const errorHandler = <any>(inject('$errorHandler'))
 const visible = ref(false)
 
 const phone_num = ref('')
-const user_pw = ref('')
 
 const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(6)
 
@@ -16,6 +15,7 @@ let resolveCallback: (token: string) => void;
 const show = async (_phone_num: string) => {
     phone_num.value = _phone_num
     visible.value = true
+    digits.value.fill('')
     return new Promise<string>((resolve) => {
         resolveCallback = resolve;
     });

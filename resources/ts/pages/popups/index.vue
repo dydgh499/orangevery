@@ -24,7 +24,8 @@ const showAvatar = (preview: string) => {
             <template #index_extra_field>
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact"
                     variant="outlined" :items="[10, 20, 30, 50, 100, 200]" label="조회 개수" id="page-size-filter" eager
-                    @update:modelValue="store.updateQueryString({ page_size: store.params.page_size })" />
+                    @update:modelValue="store.updateQueryString({ page_size: store.params.page_size })" 
+                    :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''"/>
             </template>
             <template #headers>
                 <tr>
@@ -44,6 +45,9 @@ const showAvatar = (preview: string) => {
                             <td v-show="_header.visible" class='list-square'>
                                 <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
                                     #{{ item[_key] }}
+                                    <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                        상세보기
+                                    </VTooltip>
                                 </span>
                                 <span v-else-if="_key == `level`">
                                     <VChip

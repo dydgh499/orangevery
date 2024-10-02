@@ -179,7 +179,7 @@ class SalesSettleHistoryController extends Controller
     public function destroy(Request $request, int $id)
     {        
         if($request->use_finance_van_deposit && $request->current_status)
-            return $this->extendResponse(2000, "입금완료된 정산건은 정산취소 할수 없습니다.");
+            return $this->extendResponse(2000, "입금완료, 상계처리된 정산건은 정산취소 할수 없습니다.");
         else
         {
             $code = $this->deleteSalesforceCommon($request, $id, 'sales_id');
@@ -293,7 +293,7 @@ class SalesSettleHistoryController extends Controller
         $fail_res = [];
         for ($i=0; $i < count($request->data); $i++) 
         {
-            $code = $this->linkAccountHistory($request, $request->data[$i], $this->settle_mcht_hist, new Salesforce);
+            $code = $this->linkAccountHistory($request, $request->data[$i], $this->settle_sales_hist, new Salesforce);
             if($code !== 1)
                 array_push($fail_res, '#'.$request->data[$i]);
         }
@@ -304,5 +304,16 @@ class SalesSettleHistoryController extends Controller
         }
         else
             return $this->response(1);
+    }
+
+    /*
+    * 정산이력 - 상계처리
+    */
+    public function batchOffsetProcess(Request $request)
+    {
+        $res = $this->settle_sales_hist->whereIn('id', $request->data)->update([
+            'deposit_status' => 2,
+        ]);
+        return $this->response(1);
     }
 }

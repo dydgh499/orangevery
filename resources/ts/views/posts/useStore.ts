@@ -1,7 +1,8 @@
+import router from '@/router'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { Options, Post } from '@/views/types'
-import { getUserLevel } from '@axios'
+import { getUserLevel, user_info } from '@axios'
 
 
 export const types = <Options[]>([
@@ -10,6 +11,29 @@ export const types = <Options[]>([
     { id: 2, title: "1:1 문의" },
 ])
 
+
+export const moveContent = (post: Post, store: any) => {
+    if(getUserLevel() < 35) {
+        if(post.writer === user_info.value.user_name)
+            store.edit(post.id)
+        else
+            router.push('/posts/view/' + post.id)
+    }
+    else
+        store.edit(post.id)
+}
+
+export const getContentTooltip = (post: Post) => {
+    if(getUserLevel() < 35) {
+        if(post.writer === user_info.value.user_name)
+            return '상세보기'
+        else {
+            return types.find(obj => obj.id === post.type)?.title +' 확인'
+        }
+    }
+    else
+        return '상세보기'
+}
 export const useSearchStore = defineStore('postSearchStore', () => {
     const store = Searcher('posts')
     const head  = Header('posts', '공지사항')
@@ -37,6 +61,8 @@ export const useSearchStore = defineStore('postSearchStore', () => {
         }
         head.exportToExcel(datas)
     }
+
+    
     return {
         store,
         head,

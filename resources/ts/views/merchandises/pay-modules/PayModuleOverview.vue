@@ -153,10 +153,20 @@ watchEffect(() => {
                         <td>{{ props.item.note }}</td>
                     </template>
                     <template #item.id="{ item }">
-                        <b class="edit-link" @click="editNewPayModule(item)">#{{ item.id }}</b>
+                        <b class="edit-link" @click="editNewPayModule(item)">
+                            #{{ item.id }}
+                            <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                수정하기
+                            </VTooltip>
+                        </b>
                     </template>
                     <template #item.note="{ item }">
-                        <b class="edit-link" @click="editNewPayModule(item)">{{ item.note }}</b>
+                        <b class="edit-link" @click="editNewPayModule(item)">
+                            {{ item.note }}
+                            <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                수정하기
+                            </VTooltip>
+                        </b>
                     </template>
                     <template #item.module_type="{ item }">
                         <VChip :color="getModuleTypeColor(item.module_type)">

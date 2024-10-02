@@ -35,6 +35,9 @@ provide('exporter', exporter)
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
                                 #{{ item[_key] }}
+                                <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                    상세보기
+                                </VTooltip>
                             </span>
                             <span v-else-if="_key == `type`">
                                 <VChip :color="store.getSelectIdColor(complaint_types.find(types => types.id === item[_key])?.id)">

@@ -44,6 +44,7 @@ Route::prefix('transactions')->group(function() {
             Route::middleware(['is.edit.able'])->group(function() {
                 Route::post('merchandises/batch', [MchtSettleHistoryController::class, 'batch']);
                 Route::post('merchandises/batch-link-account', [MchtSettleHistoryController::class, 'batchLinkAccount']);
+                Route::post('merchandises/batch-offset-process', [MchtSettleHistoryController::class, 'batchOffsetProcess']);
                 Route::post('merchandises/{id}/add-deduct', [MchtSettleHistoryController::class, 'addDeduct']);
                 Route::post('merchandises/{id}/link-account', [MchtSettleHistoryController::class, 'linkAccount']);
                 Route::post('merchandises/{id}/deposit', [MchtSettleHistoryController::class, 'setDeposit']);
@@ -51,6 +52,7 @@ Route::prefix('transactions')->group(function() {
     
                 Route::post('salesforces/batch', [SalesSettleHistoryController::class, 'batch']);
                 Route::post('salesforces/batch-link-account', [SalesSettleHistoryController::class, 'batchLinkAccount']);
+                Route::post('salesforces/batch-offset-process', [SalesSettleHistoryController::class, 'batchOffsetProcess']);
                 Route::post('salesforces/{id}/add-deduct', [SalesSettleHistoryController::class, 'addDeduct']);
                 Route::post('salesforces/{id}/link-account', [SalesSettleHistoryController::class, 'linkAccount']);
                 Route::post('salesforces/{id}/deposit', [SalesSettleHistoryController::class, 'setDeposit']);

@@ -41,14 +41,17 @@ store.params.page_size = isMaster() ? 200 : 1
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
                                 #{{ item[_key] }}
+                                <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                    상세보기
+                                </VTooltip>
                             </span>
-                            <span v-else-if="_key == `dns`" class="edit-link" @click="store.edit(item['id'])">
+                            <span v-else-if="_key == `dns`">
                                 {{ item[_key] }}
                             </span>
-                            <span v-else-if="_key == `logo_img`" class="edit-link" @click="store.edit(item['id'])">
+                            <span v-else-if="_key == `logo_img`">
                                 <img :src="item.logo_img" style="max-height: 60px; padding: 0.3em;" />
                             </span>
-                            <span v-else-if="_key == `company_name`" class="edit-link" @click="store.edit(item['id'])">
+                            <span v-else-if="_key == `company_name`">
                                 {{ item[_key] }}
                             </span>
                             <span v-else-if="_key == `main_color`">

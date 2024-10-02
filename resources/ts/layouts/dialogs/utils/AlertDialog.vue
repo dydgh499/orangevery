@@ -31,7 +31,7 @@ defineExpose({
 <template>
     <VDialog v-model="visible" persistent :class="size">
         <!-- Dialog close btn -->
-        <DialogCloseBtn @click="visible = !visible" />
+        <DialogCloseBtn @click="onCancel" />
 
         <!-- Dialog Content -->
         <VCard title="알림">

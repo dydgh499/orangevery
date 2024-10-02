@@ -106,17 +106,19 @@ class OperatorController extends Controller
                     return $this->extendResponse(954, $msg, []);
                 else
                 {
-                    [$result, $msg, $datas] = $this->employeePhoneValidate($request);
-                    if($result !== AuthLoginCode::SUCCESS->value)
+                    [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
+                    if($result === AuthLoginCode::SUCCESS->value)
+                    {
+                        $user = $this->saveImages($request, $user, $this->imgs);
+                        $user['user_pw'] = Hash::make($request->input('user_pw').$current);
+                        $user['created_at'] = $current;
+                        $res = $this->operators->create($user);
+    
+                        operLogging(HistoryType::CREATE, $this->target, [], ['msg'=>'운영자는 보안상 이력이 남지 않습니다.'], $user['nick_name']);
+                        return $this->response($res ? 1 : 990, ['id'=>$res->id]);        
+                    }
+                    else
                         return $this->extendResponse($result, $msg, $datas);
-
-                    $user = $this->saveImages($request, $user, $this->imgs);
-                    $user['user_pw'] = Hash::make($request->input('user_pw').$current);
-                    $user['created_at'] = $current;
-                    $res = $this->operators->create($user);
-
-                    operLogging(HistoryType::CREATE, $this->target, [], ['msg'=>'운영자는 보안상 이력이 남지 않습니다.'], $user['nick_name']);
-                    return $this->response($res ? 1 : 990, ['id'=>$res->id]);        
                 }
             }
         }
@@ -147,37 +149,6 @@ class OperatorController extends Controller
             else
                 return $user ? $this->response(0, $user) : $this->response(1000);    
         }
-    }
-
-    private function employeePhoneValidate($request)
-    {
-        $result = AuthLoginCode::SUCCESS->value;
-        $msg    = '';
-        $data   = [];
-        
-        $brand = BrandInfo::getBrandById($request->user()->brand_id);
-        if($brand['pv_options']['paid']['use_head_office_withdraw'])
-        {
-            $result = AuthPhoneNum::validate((string)$request->token);
-            if($result === AuthLoginCode::REQUIRE_PHONE_AUTH->value)
-            {
-                [$code, $msg] = resolve(MessageController::class)->mobileCodeSend($request->user()->brand_id, $request->user()->phone_num, -1);
-                if($code === 0)
-                {
-                    $msg = '직원 정보변경은 본사 휴대폰번호 인증이 필요합니다.<br>'.$request->user()->nick_name.'님에게 인증번호를 보냈습니다.';
-                    $data = [
-                        'phone_num' => $request->user()->phone_num,
-                        'nick_name' => $request->user()->nick_name
-                    ];
-                }
-                else
-                    $result = $code;
-            }
-            else if($result === AuthLoginCode::WRONG_ACCESS->value)
-                $msg = '잘못된 접근입니다.';
-        }
-        return [$result, $msg, $data];
-        
     }
 
     /**
@@ -212,7 +183,7 @@ class OperatorController extends Controller
                     unset($data['phone_num']);
                 }
 
-                [$result, $msg, $datas] = $this->employeePhoneValidate($request);
+                [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
                 if($result !== AuthLoginCode::SUCCESS->value)
                     return $this->extendResponse($result, $msg, $datas);
             }
@@ -261,6 +232,13 @@ class OperatorController extends Controller
         if(Ablilty::isOperator($request))
         {
             $is_me = Ablilty::isMyOperator($request, $id) ? true : false;
+            if($is_me === false)
+            {
+                [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
+                if($result !== AuthLoginCode::SUCCESS->value)
+                    return $this->extendResponse($result, $msg, $datas);
+            }
+
             return $this->_passwordChange($this->operators->where('id', $id), $request, $is_me);
         }
         else
@@ -299,12 +277,11 @@ class OperatorController extends Controller
         if(Ablilty::isOperator($request) && $request->user()->level === 40)
         {
             $result = AuthPhoneNum::validate((string)$request->token);
-            {}
-            [$result, $msg, $datas] = $this->employeePhoneValidate($request);
-            if($result !== AuthLoginCode::SUCCESS->value)
-                return $this->extendResponse($result, $msg, $datas);
-            else
+            [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
+            if($result === AuthLoginCode::SUCCESS->value)
                 return $this->_init2FASecretKey($request, $this->operators->where('id', $id));
+            else
+                return $this->extendResponse($result, $msg, $datas);
         }
         else
             return $this->response(951);

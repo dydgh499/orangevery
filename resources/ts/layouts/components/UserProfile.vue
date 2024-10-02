@@ -2,11 +2,11 @@
 import Google2FACreateDialog from '@/layouts/dialogs/users/Google2FACreateDialog.vue'
 import OperatorDialog from '@/layouts/dialogs/users/OperatorDialog.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
-import PhoneNum2FAVertifyDialog from '@/layouts/dialogs/users/PhoneNum2FAVertifyDialog.vue'
 import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
 import { initialAbility } from '@/plugins/casl/ability'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import router from '@/router'
+import { operatorActionAuthStore } from '@/views/services/operators/useStore'
 import { avatars } from '@/views/users/useStore'
 import { allLevels, axios, getUserLevel, getUserType, pay_token, user_info } from '@axios'
 import corp from '@corp'
@@ -15,13 +15,12 @@ const ability = useAppAbility()
 const password = ref()
 const all_levels = allLevels()
 
-const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
-        
 const imageDialog = ref()
 const operatorDialog = ref()
 const google2FACreateDialog = ref()
-const phoneNum2FAVertifyDialog = ref()
+
+const { headOfficeAuthValidate } = operatorActionAuthStore()
 
 const notice_mark = ref({
     dot: true,
@@ -58,21 +57,9 @@ const show2FAAuthDialog = async () => {
     if(mytype.id === 3)
         snackbar.value.show(`${corp.pv_options.auth.levels.dev_name}는 설정할 수 없습니다.`, 'warning')
     else if(getUserLevel() >= 35 && user_info.value.is_2fa_use) {
-        if(await alert.value.show('운영자 등급부터 재설정시 본사등급의 휴대폰번호 인증이 필요합니다.<br>계속하시겠습니까?')) {
-            // 휴대폰 인증 후 재설정
-            try {
-                const res = await axios.post('/api/v1/bonaejas/mobile-code-head-office-issuence', {
-                    user_name: user_info.value.user_name
-                })
-                snackbar.value.show(res.data.message, 'success')
-                const token = await phoneNum2FAVertifyDialog.value.show(res.data.data.phone_num)
-                if(token !== '')
-                    google2FACreateDialog.value.show()
-            }
-            catch(e:any) {
-                snackbar.value.show(e.response.data.message, 'error') 
-            }
-        }
+        const [result, token] = await headOfficeAuthValidate('운영자 등급부터 재설정시 본사등급의 휴대폰번호 인증이 필요합니다.<br>계속하시겠습니까?')
+        if(result)
+            google2FACreateDialog.value.show()
     }
     else
         google2FACreateDialog.value.show()
@@ -162,7 +149,6 @@ require_2fa.value = noticeOperator2FaStatus()
         <PasswordChangeDialog ref="password"/>
         <ImageDialog ref="imageDialog" :style="`inline-size:20em !important;`"/>
         <Google2FACreateDialog ref="google2FACreateDialog"/>
-        <PhoneNum2FAVertifyDialog ref="phoneNum2FAVertifyDialog"/>
         <OperatorDialog ref="operatorDialog" />
     </VBadge>
 </template>

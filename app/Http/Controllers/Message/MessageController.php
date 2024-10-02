@@ -9,6 +9,7 @@ use App\Models\Merchandise;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
 
+use App\Enums\AuthLoginCode;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Auth\AuthPhoneNum;
@@ -263,5 +264,26 @@ class MessageController extends Controller
         $brand = BrandInfo::getBrandById($request->user()->brand_id);
         AuthPhoneNum::clearValidate($brand, $request->mcht_id, $request->phone_num);
         return $this->response(0);
+    }
+
+    /**
+     * 본사 휴대폰번호 인증 검증
+    */
+    static public function operatorPhoneValidate($request)
+    {
+        $result = AuthLoginCode::SUCCESS->value;
+        $msg    = '';
+        $data   = [];
+        
+        $brand = BrandInfo::getBrandById($request->user()->brand_id);
+        if($brand['pv_options']['free']['bonaeja']['user_id'] !== '')
+        {
+            $result = AuthPhoneNum::validate((string)$request->token);
+            if($result === AuthLoginCode::REQUIRE_PHONE_AUTH->value)
+                $msg = '휴대폰번호 인증이 필요합니다.'; //잘못된 접근
+            else if($result === AuthLoginCode::WRONG_ACCESS->value)
+                $msg = '잘못된 접근입니다.';
+        }
+        return [$result, $msg, $data];
     }
 }

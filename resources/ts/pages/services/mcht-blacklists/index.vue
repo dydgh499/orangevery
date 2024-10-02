@@ -23,16 +23,17 @@ provide('mchtBlackListDlg', mchtBlackListDlg)
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="내용" :metas="metas" :add="false" add_name=""
-            :date_filter_type="DateFilters.NOT_USE">
+        <BaseIndexView placeholder="내용" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.NOT_USE">
             <template #index_extra_field>
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact"
                     variant="outlined" :items="[10, 20, 30, 50, 100, 200]" label="조회 개수" id="page-size-filter" eager
-                    @update:modelValue="store.updateQueryString({ page_size: store.params.page_size })" />
-                    
-                    <VBtn prepend-icon="arcticons:callsblacklist" @click="mchtBlackListDlg.show({id:0})" size="small">
-                        블랙리스트 추가
-                    </VBtn>
+                    @update:modelValue="store.updateQueryString({ page_size: store.params.page_size })"
+                    :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''" />
+
+                <VBtn prepend-icon="arcticons:callsblacklist" @click="mchtBlackListDlg.show({ id: 0 })" size="small"
+                    :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
+                    블랙리스트 추가
+                </VBtn>
             </template>
             <template #headers>
                 <tr>
@@ -54,7 +55,7 @@ provide('mchtBlackListDlg', mchtBlackListDlg)
                         <template v-else>
                             <td v-show="_header.visible" class='list-square'>
                                 <span v-if="_key == 'extra_col'">
-                                    <ExtraMenu :item="item"/>
+                                    <ExtraMenu :item="item" />
                                 </span>
                                 <span v-else>
                                     {{ item[_key] }}

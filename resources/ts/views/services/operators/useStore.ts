@@ -2,7 +2,8 @@ import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import type { Operator, Options } from '@/views/types';
 import { avatars } from '@/views/users/useStore';
-import { getUserLevel } from '@axios';
+import { axios, getUserLevel, user_info } from '@axios';
+import corp from '@corp';
 
 export const operator_levels:Options[] = [
     {id:35, title:'직원'},
@@ -51,6 +52,41 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
         head,
         exporter,
     }
+})
+
+export const operatorActionAuthStore = defineStore('operatorActionAuthStore', () => {
+    const alert = <any>(inject('alert'))
+    const snackbar = <any>(inject('snackbar'))
+    const phoneNum2FAVertifyDialog = <any>inject('phoneNum2FAVertifyDialog')
+
+    const headOfficeAuthValidate = async (message: string) => {  
+        if(corp.pv_options.free.bonaeja.user_id !== '') {
+            if(await alert.value.show(message)) {
+                // 휴대폰 인증 후 재설정
+                try {
+                    const res = await axios.post('/api/v1/bonaejas/mobile-code-head-office-issuence', {
+                        user_name: user_info.value.user_name
+                    })
+                    snackbar.value.show(res.data.message, 'success')
+                    const token = await phoneNum2FAVertifyDialog.value.show(res.data.data.phone_num)
+                    if(token === '')
+                        return [false, '']
+                    else
+                        return [true, token]
+                }
+                catch(e:any) {
+                    snackbar.value.show(e.response.data.message, 'error') 
+                }
+            }
+            return [false, '']
+        }
+        else {
+            snackbar.value.show('문자발송 시스템과 연동되어있지 않아 2FA 인증을 제외하였습니다.<br>문자발송 시스템과 연동하여 보안등급을 강화하는 것을 권고합니다.', 'warning')
+            return [true, '']
+        }
+    }
+
+    return { headOfficeAuthValidate }
 })
 
 export const defaultItemInfo = () => {

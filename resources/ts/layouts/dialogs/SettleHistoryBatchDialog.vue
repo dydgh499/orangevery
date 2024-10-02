@@ -1,9 +1,9 @@
 
 
 <script lang="ts" setup>
-import FinanceVanDialog from '@/layouts/dialogs/services/FinanceVanDialog.vue'
-import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
-import corp from '@corp'
+import FinanceVanDialog from '@/layouts/dialogs/services/FinanceVanDialog.vue';
+import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory';
+import corp from '@corp';
 
 interface Props {
     selected_idxs: number[],
@@ -15,8 +15,9 @@ const props = defineProps<Props>()
 
 const financeDialog = ref()
 const visible = ref(false)
+const snackbar = <any>(inject('snackbar'))
 
-const { batchDeposit, batchCancel, batchLinkAccount } = settlementHistoryFunctionCollect(props.store)
+const { batchDeposit, batchCancel, batchLinkAccount, batchOffsetProcessing } = settlementHistoryFunctionCollect(props.store)
 
 const getTotalSettleAmount = () => {
     return props.selected_idxs.reduce((total, id) => {
@@ -26,7 +27,7 @@ const getTotalSettleAmount = () => {
 }
 
 const getBatchDepositParams = async () => {
-    if (props.selected_idxs) {
+    if (props.selected_idxs.length) {
         const params: any = {
             brand_id: corp.id,
             use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
@@ -41,6 +42,15 @@ const getBatchDepositParams = async () => {
         }
         batchDeposit(props.selected_idxs, props.is_mcht, params)
     }
+    else
+        snackbar.value.show('입금/미입금처리할 정산 이력을 선택해주세요.', 'error')
+}
+
+const offsetProcess = () => {
+    if (props.selected_idxs.length)
+        batchOffsetProcessing(props.selected_idxs, props.is_mcht)
+    else
+        snackbar.value.show('상계처리할 정산 이력을 선택해주세요.', 'error')
 }
 
 const show = () => {
@@ -53,7 +63,7 @@ defineExpose({
 </script>
 <template>
     <div>
-        <VDialog v-model="visible" persistent style="max-width: 600px;">
+        <VDialog v-model="visible" persistent style="max-width: 700px;">
             <DialogCloseBtn @click="visible = !visible" />
             <VCard title="정산이력 일괄작업">
                 <VCardText>
@@ -65,7 +75,11 @@ defineExpose({
                                 size="small">
                                 입금/미입금처리
                             </VBtn>
-                            <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchLinkAccount(props.selected_idxs, props.is_mcht)"
+                            <VBtn prepend-icon="carbon:ibm-event-processing" @click="offsetProcess()" 
+                                size="small" color="info">
+                                상계처리
+                            </VBtn>
+                            <VBtn prepend-icon="ri-bank-card-fill" @click="batchLinkAccount(props.selected_idxs, props.is_mcht)"
                                 color="warning" size="small">
                                 계좌정보 동기화
                             </VBtn>

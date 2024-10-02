@@ -2,9 +2,9 @@
 <script setup lang="ts">
 import router from '@/router'
 import PostReplyView from '@/views/posts/PostReplyView.vue'
-import { types } from '@/views/posts/useStore'
+import { getContentTooltip, moveContent, types } from '@/views/posts/useStore'
 import type { Post } from '@/views/types'
-import { allLevels, getUserLevel, user_info } from '@axios'
+import { allLevels } from '@axios'
 
 interface Props {
     post: Post,
@@ -15,19 +15,6 @@ const props = defineProps<Props>()
 const store = <any>(inject('store'))
 const head = <any>(inject('head'))
 
-const moveContent = (post: Post) => {
-    if(getUserLevel() < 35) {
-        if(post.writer === user_info.value.user_name)
-            store.edit(post.id)
-        else
-            router.push('/posts/view/' + post.id)
-    }
-    else
-        store.edit(post.id)
-}
-provide('store', store)
-provide('head', head)
-
 const getChildDepth = computed(() => {
     return props.depth + 1
 })
@@ -36,8 +23,11 @@ const getChildDepth = computed(() => {
     <tr :style="`background: rgba(var(--v-theme-primary), 5%`">
         <template v-for="(header, key, idx) in head.headers" :key="idx">
             <td v-show="header.visible" :class="key == 'title' ? 'list-square title' : 'list-square'">
-                <span v-if="key == 'id'" class="edit-link" @click="moveContent(props.post)">
+                <span v-if="key == 'id'" class="edit-link" @click="moveContent(props.post, store)">
                     #{{ props.post.id }}
+                    <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                        {{ getContentTooltip(item) }}
+                    </VTooltip>
                 </span>
                 <span v-else-if="key == 'type'">
                     <VChip :color="store.getSelectIdColor(types.find(obj => obj.id === props.post[key])?.id)">
@@ -61,10 +51,13 @@ const getChildDepth = computed(() => {
                     </div>
                 </span>
                 <span v-else-if="key == 'title'" :style="`margin-left: ${props.depth * 20}px`" class="edit-link"
-                    @click="moveContent(props.post)">
+                    @click="moveContent(props.post, store)">
                     <VIcon icon="gridicons:reply" size="20" class="me-2" />
                     <span>
                         RE: {{ props.post.title }}
+                        <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                            {{ getContentTooltip(item) }}
+                        </VTooltip>
                     </span>
                 </span>
                 <span v-else-if="key == 'extra_col'">
