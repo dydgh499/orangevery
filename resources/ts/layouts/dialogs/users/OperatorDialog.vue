@@ -28,6 +28,7 @@ const show = (_operator: Operator) => {
 const isHeadOffice = () => {
     return getUserLevel() >= 40
 }
+
 const isAbleModiy = () => {
     return (isHeadOffice() || (getUserLevel() >= 35 && operator.value.id === user_info.value.id))
 }

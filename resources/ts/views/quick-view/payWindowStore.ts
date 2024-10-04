@@ -94,7 +94,7 @@ export const payWindowStore = () => {
                     }
                 )
                 , '^^_masking_^^').toString())
-        return window.location.origin + '/pay/multiple-hand?e=' + query
+        location.href = window.location.origin + '/pay/multiple-hand?e=' + query
     }
 
     const isVisiableRemainTime = (payment_module: PayModule) => {

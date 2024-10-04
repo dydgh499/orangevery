@@ -55,10 +55,19 @@ const props = defineProps<Props>()
                         <VRow>
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
-                                    <VSwitch hide-details v-model="props.item.paid.use_mcht_blacklist" color="primary" label="가맹점 블랙리스트"/>
+                                    <VSwitch hide-details v-model="props.item.paid.use_cancel_all_allow" color="primary" label="취소옵션 모두허용 추가"/>
                                 </template>
                                 <template #input>
                                     <VSwitch hide-details v-model="props.item.paid.use_part_cancel" color="primary" label="부분취소"/>
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>
+                                    <VSwitch hide-details v-model="props.item.paid.use_mcht_blacklist" color="primary" label="가맹점 블랙리스트"/>
+                                </template>
+                                <template #input>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

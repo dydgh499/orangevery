@@ -102,6 +102,7 @@
         public $use_specified_limit = false;    // 지정시간 제한
         public $use_syslink = false;    //syslink 선정산 사용여부
         public $use_product = false;
+        public $use_cancel_all_allow = false;
 
         public function __construct(array $source)
         {

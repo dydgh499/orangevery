@@ -80,6 +80,8 @@ export const cxl_types = <Options[]>([
     {id: 1, title:'결제이후 +5분허용'},
     {id: 2, title:'당일허용'},
 ])
+if(corp.pv_options.paid.use_cancel_all_allow)
+    cxl_types.push({id:-1, title: '모두허용'})
 
 export const payModFilter = (all_pay_modules:PayModule[], filter:PayModule[], pmod_id:number|null) => {
     if (all_pay_modules.length > 0) {

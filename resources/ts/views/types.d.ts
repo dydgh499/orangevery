@@ -409,6 +409,7 @@ interface PaidOption {
     use_specified_limit: boolean,   // 지정시간 제한
     use_syslink: boolean,
     use_product: boolean,   // 수기단말기 상품선택
+    use_cancel_all_allow: boolean,
 }
 interface AuthOption {
     levels: {

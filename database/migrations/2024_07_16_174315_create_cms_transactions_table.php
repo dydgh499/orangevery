@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('message', 100)->nullable()->default('')->comment('출금결과메세지');
             $table->timestamps();
 
-            $table->unique(['brand_id', 'trans_seq_num'], 'duplicate_unique_key');
+            $table->unique(['brand_id', 'trans_seq_num', 'amount'], 'duplicate_unique_key');
         });
     }
 
