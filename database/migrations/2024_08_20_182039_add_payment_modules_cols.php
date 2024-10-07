@@ -17,7 +17,7 @@ return new class extends Migration
         });
         // 별도의 Schema::table 호출에서 컬럼 속성 변경 및 추가
         Schema::table('payment_modules', function (Blueprint $table) {
-            $table->tinyInteger('pay_window_secure_level')->default(1)->comment('결제창 보안등급(0=결제창 숨김, 1=결제창 노출, 2=PIN 인증, 3=SMS 인증, 4=SCA 인증)')->change();
+            $table->tinyInteger('pay_window_secure_level')->default(1)->comment('결제창 보안등급(0=결제창 숨김, 1=결제창 노출, 2=PIN 인증, 3=SCA 인증)')->change();
             $table->tinyInteger('pay_window_extend_hour')->default(1)->comment('결제창 연장시간');
         });
     }

@@ -26,7 +26,6 @@ const phone_num_format = ref('')
 const valid_total_amount = ref(0)
 
 const urlParams = new URLSearchParams(window.location.search)
-const is_show_pay_button = ref(props.pay_module.pay_window_secure_level >= 3 ? false : true)
 const is_verify_sms = ref(false)
 
 const init = () => {
@@ -223,13 +222,12 @@ const setProcessTableWidth = () => {
 
 const updateToken = (value : string) => {
     if(value.length > 10) {
-        is_show_pay_button.value = true
         is_verify_sms.value = true
     }
 }
 
 const isShowMobileVerification = computed(() => {
-    return props.pay_module.pay_window_secure_level >= 3
+    return props.pay_module.pay_window_secure_level >= 3 && is_verify_sms.value === false
 })
 
 const formatPhoneNum = computed(() => {
@@ -242,11 +240,6 @@ const formatPhoneNum = computed(() => {
         phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3);
     else
         phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 7) + '-' + raw_value.slice(7, 11);
-})
-
-watchEffect(() => {
-    if(props.pay_module.pay_window_secure_level >= 3 && is_verify_sms.value == false)
-        is_show_pay_button.value = false
 })
 
 watchEffect(async () => {
@@ -430,7 +423,7 @@ onMounted(() => {
                 v-if="isShowMobileVerification"
                 @update:token="updateToken($event)" :phone_num="hand_pay_info.buyer_phone" 
                 :merchandise="props.merchandise"/>
-            <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">
+            <VCol cols="12" style="padding: 0;" v-else>
                 <VBtn block @click="pays()">
                     결제하기
                 </VBtn>

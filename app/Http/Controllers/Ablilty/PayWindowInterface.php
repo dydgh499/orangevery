@@ -42,7 +42,7 @@ class PayWindowInterface implements GeneratorInterface
             if($pay_window)
             {
                 Redis::set($key_name, json_encode($pay_window), 'EX', 600);
-                return json_decode(json_encode($pay_window), true);    
+                return json_decode(json_encode($pay_window), true);
             }
             else
                 return null;
@@ -67,6 +67,7 @@ class PayWindowInterface implements GeneratorInterface
             'window_code' => self::create(''), 
         ];
         $pay_window = self::getPayWindow($pmod_id);
+        // 결제창을 생성한적이 있는 경우
         if($pay_window)
         {   // default
             if(Carbon::createFromFormat('Y-m-d H:i:s', $pay_window['holding_able_at']) > Carbon::now())
@@ -76,11 +77,13 @@ class PayWindowInterface implements GeneratorInterface
                 $pay_module = PaymentModule::where('id', $pmod_id)->first();
                 $data['holding_able_at'] = self::getHoldingAbleAt($pay_module);
                 $res = PayWindow::where('pmod_id', $pmod_id)->update($data);
+
+                Redis::set("pay-window-id:".$pmod_id, null, 'EX', 1);
                 return [1, $data];    
             }
         }
         else
-        {
+        {   // 없는 경우
             $pay_module = PaymentModule::where('id', $pmod_id)->first();
             if($pay_module)
             {   //인증, 간편결제는 만료기간 1년, create

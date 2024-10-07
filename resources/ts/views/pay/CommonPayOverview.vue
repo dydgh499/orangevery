@@ -16,7 +16,6 @@ const { mobile } = useDisplay()
 const params_mode = <any>(inject('params_mode'))
 const params = <any>(inject('params'))
 
-const is_show_pay_button = ref(props.pay_module.pay_window_secure_level >= 3 ? false : true)
 const is_verify_sms = ref(false)
 
 const format_amount = ref('0')
@@ -25,13 +24,12 @@ props.common_info.installment = 0
 
 const updateToken = (value : string) => {
     if(value.length > 10) {
-        is_show_pay_button.value = true
         is_verify_sms.value = true
     }
 }
 
 const isShowMobileVerification = computed(() => {
-    return props.pay_module.pay_window_secure_level >= 3
+    return props.pay_module.pay_window_secure_level >= 3 && is_verify_sms.value === false
 })
 
 const filterInstallment = computed(() => {
@@ -56,17 +54,12 @@ const formatPhoneNum = computed(() => {
         phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 7) + '-' + raw_value.slice(7, 11);
 })
 
-
 watchEffect(() => {
     props.common_info.user_agent = mobile ? "WM" : "WP"
     props.common_info.pmod_id = props.pay_module.id
     props.common_info.ord_num = props.pay_module.id + props.pay_code + Date.now().toString().substr(0, 10)
-    is_show_pay_button.value = true
 })
-watchEffect(() => {
-    if(props.pay_module.pay_window_secure_level >= 3 && is_verify_sms.value == false)
-        is_show_pay_button.value = false
-})
+
 watchEffect(() => {
     if(params_mode) {
         props.common_info.item_name = params.value.item_name
@@ -200,7 +193,7 @@ watchEffect(() => {
         :phone_num="props.common_info.buyer_phone" 
         :merchandise="props.merchandise"
     />
-    <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">
+    <VCol cols="12" style="padding: 0;" v-else>
         <VBtn block type="submit">
             결제하기
         </VBtn>
