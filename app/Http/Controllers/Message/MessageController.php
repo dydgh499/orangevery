@@ -283,6 +283,8 @@ class MessageController extends Controller
                 $msg = '휴대폰번호 인증이 필요합니다.'; //잘못된 접근
             else if($result === AuthLoginCode::WRONG_ACCESS->value)
                 $msg = '잘못된 접근입니다.';
+            else if($result === AuthLoginCode::EXPIRED_TOKEN->value)
+                $msg = '만료된 인증입니다. 다시 인증을 시도해주세요.';
         }
         return [$result, $msg, $data];
     }

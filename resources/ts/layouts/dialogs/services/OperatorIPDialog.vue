@@ -1,14 +1,27 @@
 <script setup lang="ts">
 import OperatorIpCard from '@/views/services/operator-ips/OperatorIpCard.vue';
-import { useOperatorIpStore } from '@/views/services/operator-ips/useStore';
+import { OperatorIp } from '@/views/types';
+import { axios } from '@axios';
+import { timerV1 } from '@core/utils/timer';
 
-const { operator_ips } = useOperatorIpStore()
+
+const { countdown_time, countdownTimer, restartTimer } = timerV1(300)
+const operator_ips = ref(<OperatorIp[]>([]))
 const visible = ref(false)
 const token = ref('')
 
-const show = (_token: string) => {
-    visible.value = true
+const show = async (_token: string) => {
     token.value = _token
+    const r = await axios.get('/api/v1/manager/services/operator-ips', {
+        params: {
+            page: 1,
+            page_size: 999,
+            token: token.value,
+        }
+    })
+    operator_ips.value = r.data.content
+    visible.value = true
+    restartTimer()
 }
 
 provide('token', token)
@@ -23,7 +36,7 @@ defineExpose({
             <DialogCloseBtn @click="visible = false" />
             <VCard>
                 <VCardItem>
-                    <OperatorIpCard :key="operator_ips.length" :token="token"/>
+                    <OperatorIpCard :key="operator_ips.length" :operator_ips="operator_ips" :countdown_timer="countdownTimer"/>
                 </VCardItem>
                 <br>
             </VCard>

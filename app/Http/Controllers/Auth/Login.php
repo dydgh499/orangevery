@@ -104,7 +104,8 @@ class Login
         }
         else if($result['result'] === AuthLoginCode::LOCK_ACCOUNT->value)
             $result['msg'] = '패스워드를 3회이상 잘못 입력하여 잠금된 계정입니다. 운영사에게 문의해주세요.';
-
+        else if($result === AuthLoginCode::EXPIRED_TOKEN->value)
+            $result['msg'] = '만료된 인증입니다. 다시 인증을 시도해주세요.';
         return $result;
     }
     

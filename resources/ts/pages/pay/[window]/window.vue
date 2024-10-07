@@ -12,7 +12,7 @@ import corp from '@corp';
 
 const route = useRoute()
 const { isVisiableRemainTime, getPayWindow } = payWindowStore()
-const {remaining_time, expire_time, getRemainTimeColor, restartTimer} = timerV2("00:00:00", 1002)
+const { remaining_time, expire_time, getRemainTimeColor} = timerV2("00:00:00")
 const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(6)
 
 const payment_gateways = ref(<PayGateway[]>[])
@@ -66,7 +66,6 @@ onMounted(async () => {
             params.value = _data.params
 
         expire_time.value = pay_window.value.holding_able_at
-        restartTimer()
     }
     else {
         code.value = _code

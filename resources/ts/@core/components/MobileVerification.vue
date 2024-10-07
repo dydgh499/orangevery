@@ -24,7 +24,7 @@ const button_status = ref(0)
 
 const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(props.totalInput)
 
-const { countdown_timer, countdownTimer, restartTimer } = timerV1(180, 1100)
+const { countdownTimer, restartTimer } = timerV1(180)
 
 digits.value = props.default.split('')
 
@@ -48,10 +48,6 @@ const requestCodeIssuance = async () => {
         })
         snackbar.value.show('휴대폰번호로 인증번호를 보냈습니다!<br>6자리 인증번호를 입력해주세요.', 'success')
         button_status.value = 1
-
-        if (countdown_timer)
-            clearInterval(countdown_timer)
-
         restartTimer()
     }
     catch (e: any) {

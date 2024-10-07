@@ -11,7 +11,7 @@ const visible = ref(false)
 const phone_num = ref('')
 
 const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(6)
-const { countdown_timer, countdownTimer, restartTimer } = timerV1(180, 1102)
+const { countdownTimer, restartTimer } = timerV1(180)
 
 let resolveCallback: (token: string) => void;
 
@@ -19,6 +19,7 @@ const show = async (_phone_num: string) => {
     phone_num.value = _phone_num
     visible.value = true
     digits.value.fill('')
+
     restartTimer()
     return new Promise<string>((resolve) => {
         resolveCallback = resolve;
@@ -30,11 +31,7 @@ const requestCodeIssuance = async () => {
         const res = await axios.post('/api/v1/bonaejas/mobile-code-head-office-issuence', {
             user_name: user_info.value.user_name
         })
-        snackbar.value.show(res.data.message, 'success')
-        
-        if (countdown_timer)
-            clearInterval(countdown_timer)
-
+        snackbar.value.show(res.data.message, 'success')        
         restartTimer()
     }
     catch(e:any) {
@@ -59,7 +56,7 @@ const onAgree = async (fin_number: string) => {
 };
 
 const onCancel = () => {
-    visible.value = false    
+    visible.value = false
     resolveCallback(''); // 취소 버튼 누름
 }
 

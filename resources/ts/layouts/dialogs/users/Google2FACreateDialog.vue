@@ -14,7 +14,7 @@ const errors = ref<Record<string, string | undefined>>({
 const visible = ref(false)
 const qrcode_url = ref('')
 const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(6)
-const { countdown_time, countdownTimer, restartTimer } = timerV1(300, 1101)
+const { countdown_time, countdownTimer, restartTimer } = timerV1(300)
 
 const user_pw = ref('')
 const user_type = getUserType().id === 2 ? 'services/operators' : 'salesforces'

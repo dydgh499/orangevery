@@ -3,15 +3,19 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
 import corp from '@/plugins/corp';
 import { useRequestStore } from '@/views/request';
 import OperatorIpCardTr from '@/views/services/operator-ips/OperatorIpCardTr.vue';
-import { useOperatorIpStore } from '@/views/services/operator-ips/useStore';
 import type { OperatorIp } from '@/views/types';
 
-const { operator_ips } = useOperatorIpStore()
+interface Props {
+    operator_ips: OperatorIp[],
+    countdown_timer: string
+}
+const props = defineProps<Props>()
+
 const { setNullRemove } = useRequestStore()
 const token = <any>(inject('token'))
 
 const addNewOperatorIpCard = () => {
-    operator_ips.push(<OperatorIp>({
+    props.operator_ips.push(<OperatorIp>({
         id: 0,
         brand_id: corp.id,
         enable_ip: '',
@@ -19,14 +23,24 @@ const addNewOperatorIpCard = () => {
     }))
 }
 watchEffect(() => {
-    if(operator_ips !== undefined)
-        setNullRemove(operator_ips)
+    if(props.operator_ips !== undefined)
+        setNullRemove(props.operator_ips)
 })
 </script>
 <template>
     <section>
         <VCardTitle style="margin: 1em 0;">
-            <BaseQuestionTooltip :location="'top'" :text="'운영자 접속허용 IP'" :content="'운영자는 등록된 IP에서만 로그인할 수 있습니다.'"/>
+            <VRow>
+                <VCol md="6">
+                    <BaseQuestionTooltip :location="'top'" :text="'운영자 접속허용 IP'" :content="'운영자는 등록된 IP에서만 로그인할 수 있습니다.'"/>
+                </VCol>
+                <VCol md="6">
+                    <h5 style="text-align: end;">
+                        <span>만료시간:</span>
+                        <span id="countdown" class="text-primary" style="margin-inline-start: 0.5em;">{{ props.countdown_timer }}</span>
+                    </h5>
+                </VCol>
+            </VRow>
         </VCardTitle>
         <VTable class="text-no-wrap" style=" min-width: 100%; margin-bottom: 1em;text-align: center;">
             <thead>
@@ -37,7 +51,7 @@ watchEffect(() => {
                 </tr>
             </thead>
             <tbody>
-                <OperatorIpCardTr v-for="(item, index) in operator_ips"
+                <OperatorIpCardTr v-for="(item, index) in props.operator_ips"
                     :key="item.id" style="margin-top: 1em;" :item="item" :index="index" />
             </tbody>
             <tfoot v-show="Boolean(operator_ips.length == 0)">
@@ -62,4 +76,5 @@ watchEffect(() => {
 :deep(.v-table__wrapper) {
   block-size: auto !important;
 }
+
 </style>

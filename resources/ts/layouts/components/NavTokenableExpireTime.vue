@@ -2,11 +2,8 @@
 import { token_expire_time } from '@axios';
 import { timerV2 } from '@core/utils/timer';
 
-const {remaining_time, getRemainTimeColor, countdown_timer} = timerV2(token_expire_time.value, 1003)
+const { remaining_time, getRemainTimeColor} = timerV2(token_expire_time.value)
 
-onUnmounted(() => {
-    clearInterval(countdown_timer);
-});
 </script>
 <template>
     <span :style="$vuetify.display.smAndDown ? '' : 'margin-right: 1em;'">

@@ -40,9 +40,15 @@ class OperatorIPController extends Controller
     {
         if($request->user()->level >= 40)
         {
-            $query = $this->operator_ips->where('brand_id', $request->user()->brand_id);
-            $data  = $this->getIndexData($request, $query);
-            return $this->response(0, $data);    
+            [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
+            if($result === AuthLoginCode::SUCCESS->value)
+            {
+                $query = $this->operator_ips->where('brand_id', $request->user()->brand_id);
+                $data  = $this->getIndexData($request, $query);
+                return $this->response(0, $data);        
+            }
+            else
+                return $this->extendResponse($result, $msg, $datas);
         }
         else
             return $this->response(951);
