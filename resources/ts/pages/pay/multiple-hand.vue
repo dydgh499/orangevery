@@ -53,9 +53,7 @@ onMounted(async () => {
                 <br>
                 결제하실 정보를 입력해주세요.
             </div>
-            <Suspense>
-                <MultipleHandPayOverview :pay_module="pay_module" :merchandise="merchandise"/>
-            </Suspense>
+            <MultipleHandPayOverview :pay_module="pay_module" :merchandise="merchandise"/>
         </div>
         <br>
         <SalesSlipDialog ref="salesslip" :pgs="payment_gateways" :key="payment_gateways.length"/>
