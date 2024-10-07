@@ -23,14 +23,13 @@ const snackbar = <any>(inject('snackbar'))
 const button_status = ref(0)
 
 const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(props.totalInput)
-
 const { countdownTimer, restartTimer } = timerV1(180)
 
 digits.value = props.default.split('')
 
 if (getUserLevel() >= 35 && props.merchandise.id !== -1) {
     button_status.value = 2
-    emits('update:token', true)
+    emits('update:token', 'csAmkcvmcsIWDIMcFmcvsIC@EVCnoQnoidcvVCDINO')
 }
 
 const handleKeyDownEvent = (index: number) => {
@@ -75,9 +74,8 @@ const verification = async () => {
             snackbar.value.show(e.response.data.message, 'error')
         }
     }
-    else if (button_status.value === 2) {
+    else if (button_status.value === 2) 
         snackbar.value.show('이미 인증에 성공하였습니다.', 'success')
-    }
 }
 </script>
 <template>

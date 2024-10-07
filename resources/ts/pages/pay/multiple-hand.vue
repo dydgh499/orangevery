@@ -46,18 +46,18 @@ onMounted(async () => {
 <template>
     <section>
         <div id="pay-container">
-            <div style="text-align: center;">
+            <div style="padding-bottom: 1em;text-align: center;">
                 <img :src="corp.logo_img || ''" width="100" height="100">
-                <br>
-                <b>환영합니다 !</b>
-                <br>
-                결제하실 정보를 입력해주세요.
+                <div>
+                    <b>환영합니다 !</b>
+                    <br>
+                    <span>결제하실 정보를 입력해주세요.</span>
+                </div>
             </div>
             <MultipleHandPayOverview :pay_module="pay_module" :merchandise="merchandise"/>
         </div>
         <br>
         <SalesSlipDialog ref="salesslip" :pgs="payment_gateways" :key="payment_gateways.length"/>
-
     </section>
 </template>
 <style>
