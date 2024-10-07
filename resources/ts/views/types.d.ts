@@ -164,7 +164,6 @@ export interface Product {
 export interface Merchandise extends MerchandisePropertie, UserPropertie {    
     contact_num: string,
     regular_credit_cards?: RegularCreditCard[],
-    use_pay_verification_mobile: number,
     use_multiple_hand_pay: number,
     phone_auth_limit_s_tm?: string,
     phone_auth_limit_e_tm?: string,
@@ -1002,7 +1001,7 @@ export interface AbnormalConnectionHistory {
     action: string,
     target_key: string,
     target_value: string,
-    target_level: string,
+    target_level: number,
     request_ip: string,
     request_detail: string,
     mobile_type: string,

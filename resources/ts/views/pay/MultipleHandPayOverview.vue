@@ -3,7 +3,6 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import MultipleHandPayForm from '@/views/pay/multiple-hand-pay/MultipleHandPayForm.vue'
 import type { Merchandise, MultipleHandPay, PayModule, SalesSlip } from '@/views/types'
 import { axios } from '@axios'
-import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
 import { cloneDeep } from 'lodash'
 import { VForm } from 'vuetify/components'
@@ -23,10 +22,12 @@ const hand_pay_info = ref(<MultipleHandPay>({}))
 const hand_pay_infos = ref(<MultipleHandPay[]>([]))
 const vForm = ref<VForm>()
 const noti_temp = ref('')
+const phone_num_format = ref('')
 const valid_total_amount = ref(0)
 
 const urlParams = new URLSearchParams(window.location.search)
-const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
+const is_show_pay_button = ref(props.pay_module.pay_window_secure_level >= 3 ? false : true)
+const is_verify_sms = ref(false)
 
 const init = () => {
     if(route.query.temp) {
@@ -223,13 +224,32 @@ const setProcessTableWidth = () => {
 const updateToken = (value : string) => {
     if(value.length > 10) {
         is_show_pay_button.value = true
+        is_verify_sms.value = true
     }
 }
 
-watchEffect(async () => {
-    if (props.merchandise.use_pay_verification_mobile == 0)
-        is_show_pay_button.value = true
+const isShowMobileVerification = computed(() => {
+    return props.pay_module.pay_window_secure_level >= 3
+})
 
+const formatPhoneNum = computed(() => {
+    let raw_value = phone_num_format.value.replace(/\D/g, '');
+    hand_pay_info.value.buyer_phone = raw_value
+    // 휴대폰 번호 마스킹
+    if (raw_value.length <= 3)
+        phone_num_format.value = raw_value;
+    else if (raw_value.length <= 7) 
+        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3);
+    else
+        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 7) + '-' + raw_value.slice(7, 11);
+})
+
+watchEffect(() => {
+    if(props.pay_module.pay_window_secure_level >= 3 && is_verify_sms.value == false)
+        is_show_pay_button.value = false
+})
+
+watchEffect(async () => {
     if (hand_pay_info.value.buyer_name && hand_pay_info.value.buyer_phone) {
         // watchEffect가 잡히지 않는 이유?
     }
@@ -302,10 +322,13 @@ onMounted(() => {
                                         <label>연락처</label>
                                     </VCol>
                                     <VCol cols="8" :md="10">
-                                        <VTextField v-model="hand_pay_info.buyer_phone" type="number" name="buyer_phone"
-                                        variant="underlined"
+                                        <VTextField 
+                                            v-model="phone_num_format" 
+                                            @input="formatPhoneNum"
+                                            variant="underlined"
                                             prepend-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
-                                            :rules="[requiredValidatorV2(hand_pay_info.buyer_phone, '구매자 연락처')]" />
+                                            :rules="[requiredValidatorV2(hand_pay_info.buyer_phone, '구매자 연락처')]" 
+                                        />
                                     </VCol>
                                 </VRow>
                             </VCol>
@@ -404,7 +427,7 @@ onMounted(() => {
     <VCard>
         <VCardText>
             <MobileVerification
-                v-if="corp.pv_options.paid.use_pay_verification_mobile && props.merchandise.use_pay_verification_mobile"
+                v-if="isShowMobileVerification"
                 @update:token="updateToken($event)" :phone_num="hand_pay_info.buyer_phone" 
                 :merchandise="props.merchandise"/>
             <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">

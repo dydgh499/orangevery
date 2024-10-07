@@ -246,4 +246,54 @@ class BatchUpdateMchtController extends BatchUpdateController
         });
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 가맹점이 존재하지 않습니다.');        
     }
+    
+    /**
+     * 휴대폰 최대인증 허용회수 
+    */
+    public function setPhoneAuthLimitCount(Request $request)
+    {
+        $cols = [
+            'phone_auth_limit_count' => $request->phone_auth_limit_count,
+        ];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
+    }
+
+    /**
+     * 휴대폰 최대인증 허용회수 적용시간 
+    */
+    public function setPhoneAuthLimitTime(Request $request)
+    {
+        $cols = [
+            'phone_auth_limit_s_tm' => $request->phone_auth_limit_s_tm,
+            'phone_auth_limit_e_tm' => $request->phone_auth_limit_e_tm,
+        ];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
+    }
+
+    /**
+     * 지정시간 단걸결제금액한도 하향금액 
+    */
+    public function setSpecifiedTimeDisableLimit(Request $request)
+    {
+        $cols = [
+            'specified_time_disable_limit' => $request->specified_time_disable_limit,
+        ];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
+    }
+
+    /**
+     * 지정시간 단걸결제금액한도 하향 적용시간 
+    */
+    public function setSpecifiedTimeDisableTime(Request $request)
+    {
+        $cols = [
+            'single_payment_limit_s_tm' => $request->single_payment_limit_s_tm,
+            'single_payment_limit_e_tm' => $request->single_payment_limit_e_tm,
+        ];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
+    }
 }

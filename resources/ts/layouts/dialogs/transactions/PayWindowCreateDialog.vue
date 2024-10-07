@@ -163,7 +163,7 @@ defineExpose({
                                         <b>{{ url }}</b>
                                     </VCol>
                                 </VRow>
-                                <VRow no-gutters style="padding-top: 12px;" v-if="payment_module.pay_window_secure_level > 1">
+                                <VRow no-gutters style="padding-top: 12px;" v-if="payment_module.pay_window_secure_level === 2 || payment_module.pay_window_secure_level === 4">
                                     <VCol cols="12" :md="4">
                                         <span>PIN 번호</span>
                                     </VCol>

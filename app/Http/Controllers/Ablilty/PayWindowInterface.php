@@ -68,11 +68,11 @@ class PayWindowInterface implements GeneratorInterface
         ];
         $pay_window = self::getPayWindow($pmod_id);
         if($pay_window)
-        {
+        {   // default
             if(Carbon::createFromFormat('Y-m-d H:i:s', $pay_window['holding_able_at']) > Carbon::now())
                 return [0, $pay_window];
             else
-            {
+            {   // update
                 $pay_module = PaymentModule::where('id', $pmod_id)->first();
                 $data['holding_able_at'] = self::getHoldingAbleAt($pay_module);
                 $res = PayWindow::where('pmod_id', $pmod_id)->update($data);
@@ -83,7 +83,7 @@ class PayWindowInterface implements GeneratorInterface
         {
             $pay_module = PaymentModule::where('id', $pmod_id)->first();
             if($pay_module)
-            {   //인증, 간편결제는 만료기간 1년
+            {   //인증, 간편결제는 만료기간 1년, create
                 $data['holding_able_at'] = self::getHoldingAbleAt($pay_module);
                 $res = PayWindow::create($data);
                 return [1, $data];    
@@ -132,7 +132,6 @@ class PayWindowInterface implements GeneratorInterface
                     'payment_modules.module_type',
                     'payment_modules.pay_window_secure_level',
 
-                    'merchandises.use_pay_verification_mobile',
                     'merchandises.use_saleslip_prov',
                     'merchandises.use_saleslip_sell',
                     'merchandises.tax_category_type',
@@ -172,7 +171,6 @@ class PayWindowInterface implements GeneratorInterface
                         'nick_name' => $pay_module->nick_name,
                         'contact_num' => $pay_module->contact_num,
                         'business_num' => $pay_module->mcht_business_num,
-                        'use_pay_verification_mobile' => $pay_module->use_pay_verification_mobile,
                         'use_saleslip_prov' => $pay_module->use_saleslip_prov,
                         'use_saleslip_sell' => $pay_module->use_saleslip_sell,
                         'tax_category_type' => $pay_module->tax_category_type,

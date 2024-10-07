@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import SpecifiedTimeDisablePaymentTr from '@/views/merchandises/specified-time-disable-payments/SpecifiedTimeDisablePaymentTr.vue'
-import { useRequestStore } from '@/views/request'
-import type { Merchandise, SpecifiedTimeDisablePayment } from '@/views/types'
-import { requiredValidatorV2 } from '@validators'
+import SpecifiedTimeDisablePaymentTr from '@/views/merchandises/specified-time-disable-payments/SpecifiedTimeDisablePaymentTr.vue';
+import { useRequestStore } from '@/views/request';
+import type { Merchandise, SpecifiedTimeDisablePayment } from '@/views/types';
+import { requiredValidatorV2 } from '@validators';
 
 interface Props {
     item: Merchandise,
@@ -33,7 +33,7 @@ watchEffect(() => {
     <VRow style="margin-bottom: 1em;">
         <VCol :md="5" :cols="12">
             <VRow no-gutters style="align-items: center;">
-                <VCol md="7" cols="7">단건 결제한도 하향 설정</VCol>
+                <VCol md="7" cols="7">단건 결제한도 하향금액</VCol>
                 <VCol md="5" cols="5">
                     <VTextField v-model="props.item.specified_time_disable_limit" type="number" suffix="만원"
                         :rules="[requiredValidatorV2(props.item.specified_time_disable_limit, '단건 결제한도')]" 

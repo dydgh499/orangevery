@@ -97,6 +97,12 @@ Route::prefix('merchandises')->group(function() {
                 Route::post('set-account-info', [BatchUpdateMchtController::class, 'setAccountInfo']);
                 Route::post('set-show-fee', [BatchUpdateMchtController::class, 'setShowFee']);
                 Route::delete('remove', [BatchUpdateMchtController::class, 'batchRemove']);
+
+                Route::post('set-phone-auth-limit-count', [BatchUpdateMchtController::class, 'setPhoneAuthLimitCount']);
+                Route::post('set-phone-auth-limit-time', [BatchUpdateMchtController::class, 'setPhoneAuthLimitTime']);
+                Route::post('set-specified-time-disable-limit', [BatchUpdateMchtController::class, 'setSpecifiedTimeDisableLimit']);
+                Route::post('set-specified-time-disable-time', [BatchUpdateMchtController::class, 'setSpecifiedTimeDisableTime']);
+                
             });    
             Route::post('{id}/set-settle-hold', [MerchandiseController::class, 'setSettleHold']);
             Route::post('{id}/clear-settle-hold', [MerchandiseController::class, 'clearSettleHold']);

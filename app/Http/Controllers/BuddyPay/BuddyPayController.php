@@ -77,7 +77,6 @@ class BuddyPayController extends Controller
                 'id' => $data['user']->id,
                 'user_name' => $data['user']->user_name,
                 'level' => 10,
-                'use_pay_verification_mobile' => $data['user']->use_pay_verification_mobile,
                 'mcht_option' => [
                     'downward_s_tm' => $data['user']->single_payment_limit_s_tm,
                     'downward_e_tm' => $data['user']->single_payment_limit_e_tm,

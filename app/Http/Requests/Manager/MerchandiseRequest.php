@@ -28,7 +28,6 @@ class MerchandiseRequest extends FormRequest
         'use_saleslip_sell',
         'is_hide_account',
         'use_noti',
-        'use_pay_verification_mobile',
         'use_multiple_hand_pay',
         'use_regular_card',
         'use_collect_withdraw',

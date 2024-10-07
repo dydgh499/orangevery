@@ -57,6 +57,13 @@ const merchandise = reactive<any>({
     business_num: "",
     enabled: 1,
     is_show_fee: 0,
+    phone_auth_limit_count: 0,
+    phone_auth_limit_s_tm:'00:00',
+    phone_auth_limit_e_tm:'00:00',
+
+    specified_time_disable_limit: 0,
+    single_payment_limit_s_tm:'00:00',
+    single_payment_limit_e_tm:'00:00',
 })
 
 const noti = reactive<any>({
@@ -126,6 +133,31 @@ const setNotiUrl = (apply_type: number) => {
         'noti_status': noti.noti_status,
         'send_url': noti.noti_url,
         'note': noti.noti_note,
+    }, apply_type)
+}
+
+const setPhoneAuthLimitCount = (apply_type: number) => {
+    post('set-phone-auth-limit-count', {
+        'phone_auth_limit_count': merchandise.phone_auth_limit_count,
+    }, apply_type)
+}
+
+const setPhoneAuthLimitTime = (apply_type: number) => {
+    post('set-phone-auth-limit-time', {
+        'phone_auth_limit_s_tm': merchandise.phone_auth_limit_s_tm,
+        'phone_auth_limit_e_tm': merchandise.phone_auth_limit_e_tm,
+    }, apply_type)
+}
+
+const setSpecifiedTimeDisableLimit = (apply_type: number) => {
+    post('set-specified-time-disable-limit', {
+        'specified_time_disable_limit': merchandise.specified_time_disable_limit,
+    }, apply_type)
+}
+const setSpecifiedTimeDisableTime = (apply_type: number) => {
+    post('set-specified-time-disable-time', {
+        'single_payment_limit_s_tm': merchandise.single_payment_limit_s_tm,
+        'single_payment_limit_e_tm': merchandise.single_payment_limit_e_tm,
     }, apply_type)
 }
 
@@ -306,7 +338,7 @@ watchEffect(() => {
                                         style="width: 13em;"
                                         label="주민번호(앞)"
                                     />
-                                    <span style="margin: 0.5em;text-align: center;"> - </span>
+                                    <span style="margin: 0.5em 0;text-align: center;"> - </span>
                                     <VTextField 
                                         v-model="resident_num_back" 
                                         maxlength="7"
@@ -422,6 +454,110 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                     </VRow>
+                    <template v-if="corp.pv_options.paid.use_pay_verification_mobile">
+                        <VDivider style="margin: 1em 0;" />
+                        <h4 class="pt-3">결제창 SMS 인증</h4>
+                        <br>
+                        <VRow>
+                            <VCol :md="5" :cols="12">
+                                <VRow no-gutters style="align-items: center;">
+                                    <VCol md="5" cols="12" style="display: flex;">
+                                        <VTextField v-model="merchandise.phone_auth_limit_count" type="number" suffix="회 허용"
+                                            label="최대 인증허용 회수" />                                  
+                                    </VCol>
+                                    <VCol md="7" cols="12">
+                                        <div class="button-cantainer">
+                                            <VBtn variant="tonal" size="small" @click="setPhoneAuthLimitCount(0)">
+                                                즉시적용
+                                                <VIcon end size="18" icon="tabler-direction-sign" />
+                                            </VBtn>
+                                            <VBtn variant="tonal" size="small" color="secondary" @click="setPhoneAuthLimitCount(1)"
+                                                style='margin-left: 0.5em;'>
+                                                예약적용
+                                                <VIcon end size="18" icon="tabler-clock-up" />
+                                            </VBtn>                                
+                                        </div>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol :md="7" :cols="12">
+                                <VRow no-gutters style="align-items: center;">
+                                    <VCol md="6" cols="12" style="display: flex;">
+                                        <VTextField v-model="merchandise.phone_auth_limit_s_tm" type="time" label="적용시작시간"
+                                                style="max-width: 150px;"/>
+                                        <span style="margin: 0.5em 0;text-align: center;"> - </span>
+                                        <VTextField v-model="merchandise.phone_auth_limit_e_tm" type="time" label="적용종료시간"
+                                                style="max-width: 150px;"/>                                        
+                                    </VCol>
+                                    <VCol md="6" cols="12">
+                                        <div class="button-cantainer">
+                                            <VBtn variant="tonal" size="small" @click="setPhoneAuthLimitTime(0)">
+                                                즉시적용
+                                                <VIcon end size="18" icon="tabler-direction-sign" />
+                                            </VBtn>
+                                            <VBtn variant="tonal" size="small" color="secondary" @click="setPhoneAuthLimitTime(1)"
+                                                style='margin-left: 0.5em;'>
+                                                예약적용
+                                                <VIcon end size="18" icon="tabler-clock-up" />
+                                            </VBtn>                                
+                                        </div>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                    </template>
+                    <template v-if="corp.pv_options.paid.use_specified_limit">
+                        <VDivider style="margin: 1em 0;" />
+                        <h4 class="pt-3">지정시간 결제제한</h4>
+                        <br>
+                        <VRow>
+                            <VCol :md="5" :cols="12">
+                                <VRow no-gutters style="align-items: center;">
+                                    <VCol md="5" cols="12" style="display: flex;">
+                                        <VTextField v-model="merchandise.specified_time_disable_limit" type="number" suffix="만원"
+                                            label="단건 결제한도 하향금액" />                                  
+                                    </VCol>
+                                    <VCol md="7" cols="12">
+                                        <div class="button-cantainer">
+                                            <VBtn variant="tonal" size="small" @click="setSpecifiedTimeDisableLimit(0)">
+                                                즉시적용
+                                                <VIcon end size="18" icon="tabler-direction-sign" />
+                                            </VBtn>
+                                            <VBtn variant="tonal" size="small" color="secondary" @click="setSpecifiedTimeDisableLimit(1)"
+                                                style='margin-left: 0.5em;'>
+                                                예약적용
+                                                <VIcon end size="18" icon="tabler-clock-up" />
+                                            </VBtn>                                
+                                        </div>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol :md="7" :cols="12">
+                                <VRow no-gutters style="align-items: center;">
+                                    <VCol md="6" cols="12" style="display: flex;">
+                                        <VTextField v-model="merchandise.single_payment_limit_s_tm" type="time" label="적용시작시간"
+                                                style="max-width: 150px;"/>
+                                        <span style="margin: 0.5em 0;text-align: center;"> - </span>
+                                        <VTextField v-model="merchandise.single_payment_limit_e_tm" type="time" label="적용종료시간"
+                                                style="max-width: 150px;"/>                                        
+                                    </VCol>
+                                    <VCol md="6" cols="12">
+                                        <div class="button-cantainer">
+                                            <VBtn variant="tonal" size="small" @click="setSpecifiedTimeDisableTime(0)">
+                                                즉시적용
+                                                <VIcon end size="18" icon="tabler-direction-sign" />
+                                            </VBtn>
+                                            <VBtn variant="tonal" size="small" color="secondary" @click="setSpecifiedTimeDisableTime(1)"
+                                                style='margin-left: 0.5em;'>
+                                                예약적용
+                                                <VIcon end size="18" icon="tabler-clock-up" />
+                                            </VBtn>                                
+                                        </div>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                    </template>
                 </div>
             </VCardText>
             <VDivider />

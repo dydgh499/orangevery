@@ -8,7 +8,8 @@ import corp from '@corp'
 
 export const pay_window_secure_levels = <Options[]>([
     { id: 0, title: "결제창 숨김" }, { id: 1, title: "결제창 노출" },
-    { id: 2, title: "PIN 인증" }, { id: 3, title: "SCA 인증" },
+    { id: 2, title: "PIN 인증" }, { id: 3, title: "SMS 인증" },
+    { id: 4, title: "SCA 인증" }
 ])
 
 export const simplePays = <StringOptions[]>([

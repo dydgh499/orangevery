@@ -4,7 +4,7 @@ import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { fin_trx_delays } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayModule } from '@/views/types'
-import { axios, isAbleModiy } from '@axios'
+import { axios, getUserLevel, isAbleModiy } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -39,6 +39,7 @@ const tidCreate = async() => {
         }
     }
 }
+
 const midCreate = async() => {
     const mid_code = await midCreateDlg.value.show()
     if(mid_code) {
@@ -49,6 +50,7 @@ const midCreate = async() => {
             snackbar.value.error(r.data.message, 'error')
     }
 }
+
 const payKeyCreate = async() => {
     if(await alert.value.show('정말 결제 KEY를 신규 발급하시겠습니까?<br><br><b>이전 결제 KEY는 더이상 사용할 수 없으니 주의하시기바랍니다.</b>')) {
         try {
@@ -117,7 +119,7 @@ watchEffect(() => {
                         placeholder="PMID 입력" persistent-placeholder />
             </VCol>
         </VRow>
-        <VRow v-if="isAbleModiy(props.item.id)">
+        <VRow v-if="isAbleModiy(props.item.id) && getUserLevel() >= 35">
             <VCol md="5" cols="4">MID</VCol>
             <VCol md="7">
                 <div style="display: flex; flex-direction: row; justify-content: space-between;">
@@ -140,7 +142,7 @@ watchEffect(() => {
             </VCol>
         </VRow>
         <!-- 👉 TID -->
-        <VRow v-if="isAbleModiy(props.item.id)">
+        <VRow v-if="isAbleModiy(props.item.id) && getUserLevel() >= 35">
             <VCol md="5" cols="4">TID</VCol>
             <VCol md="7">
                 <div style="display: flex; flex-direction: row; justify-content: space-between;">
@@ -201,7 +203,7 @@ watchEffect(() => {
             </VCol>
         </VRow>
         <template v-if="props.item.id != 0 && props.item.module_type != 0 && corp.pv_options.paid.use_online_pay">
-            <VRow v-if="isAbleModiy(props.item.id)">
+            <VRow v-if="isAbleModiy(props.item.id) && getUserLevel() >= 35">
                 <VCol md="5" cols="4">
                     <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'"
                         :content="'해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.'"/>
@@ -235,7 +237,7 @@ watchEffect(() => {
         </template>
 
         <template v-if="props.item.id != 0 && corp.pv_options.paid.use_noti">
-            <VRow v-if="isAbleModiy(props.item.id)">
+            <VRow v-if="isAbleModiy(props.item.id) && getUserLevel() >= 35">
                 <VCol md="5" cols="4">
                     <BaseQuestionTooltip :location="'top'" :text="'서명 KEY'"
                         :content="'노티발송시 데이터 위변조 방지 값으로 사용됩니다.'"/>

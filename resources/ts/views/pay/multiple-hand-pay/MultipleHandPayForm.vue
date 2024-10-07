@@ -12,10 +12,30 @@ interface Props {
 }
 const props = defineProps<Props>()
 const multiVForm = ref<VForm>()
-const is_show = ref(false)
+const card_num_format = ref('')
+const format_amount = ref('0')
+const yymm_format = ref('')
 
 const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
+})
+
+const formatCardNum = computed(() => {
+    let raw_value = card_num_format.value.replace(/\D/g, '')
+    props.hand_pay_info.card_num = raw_value
+    card_num_format.value = raw_value.match(/.{1,4}/g)?.join(' ') || ''  
+})
+
+const formatYYmm = computed(() => {
+    let raw_value = yymm_format.value.replace(/\D/g, '')
+    props.hand_pay_info.yymm = raw_value
+    yymm_format.value = raw_value.match(/.{1,2}/g)?.join('/') || ''  
+})
+
+const formatAmount = computed(() => {
+    const parse_amount = parseFloat(format_amount.value.replace(/,/g, "")) || 0;
+    props.hand_pay_info.amount = parse_amount
+    format_amount.value = parse_amount.toLocaleString()
 })
 
 watchEffect(async () => {
@@ -52,10 +72,13 @@ watchEffect(async () => {
                                 <label>상품금액</label>
                             </VCol>
                             <VCol cols="8" :md="8">
-                                <VTextField v-model="props.hand_pay_info.amount" type="number" suffix="₩" name="amount"
+                                <VTextField 
+                                    v-model="format_amount" suffix="₩" 
+                                    @input="formatAmount"
                                     variant="underlined"
                                     placeholder="상품금액을 입력해주세요" prepend-icon="ic:outline-price-change"
-                                    :rules="[requiredValidatorV2(props.hand_pay_info.amount, '상품금액')]" />
+                                    :rules="[requiredValidatorV2(props.hand_pay_info.amount, '상품금액')]" 
+                                />
                             </VCol>
                         </VRow>
                     </VCol>
@@ -78,11 +101,14 @@ watchEffect(async () => {
                         <label>카드번호</label>
                     </VCol>
                     <VCol md="8" cols="8">
-                        <VTextField v-model="props.hand_pay_info.card_num" variant="underlined"
+                        <VTextField  
+                            variant="underlined"
+                            v-model="card_num_format"
+                            @input="formatCardNum"
                             prepend-icon="tabler:credit-card"
                             placeholder="카드번호를 입력해주세요" 
                             :rules="[requiredValidatorV2(props.hand_pay_info.card_num, '카드번호')]"
-                            maxlength="18" autocomplete="cc-number" />
+                            maxlength="22" autocomplete="cc-number" />
                     </VCol>
                 </VRow>
                 <VRow no-gutters style="min-height: 4em;">
@@ -90,10 +116,14 @@ watchEffect(async () => {
                         <label>유효기간</label>
                     </VCol>
                     <VCol md="8" cols="8">
-                        <VTextField v-model="props.hand_pay_info.yymm" placeholder="MMYY" variant="underlined"
+                        <VTextField 
+                            v-model="yymm_format" 
+                            @input="formatYYmm"
+                            placeholder="MM/YY" 
+                            variant="underlined"
                             prepend-icon="ri:pass-expired-line"
-                            :rules="[requiredValidatorV2(props.hand_pay_info.yymm, '유효기간'), lengthValidatorV2(props.hand_pay_info.yymm, 4)]"
-                            maxlength="4" style="min-inline-size: 11em;">
+                            :rules="[requiredValidatorV2(props.hand_pay_info.yymm, '유효기간'), lengthValidatorV2(hand_pay_info.yymm, 4)]"
+                            maxlength="5" style="min-inline-size: 11em;">
                             <VTooltip activator="parent" location="top">
                                 카드의 유효기간 4자리를 입력해주세요.<br>
                                 (MM/YY:0324)

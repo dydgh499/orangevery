@@ -4,6 +4,7 @@ import LastLoginDialog from '@/layouts/dialogs/services/LastLoginDialog.vue';
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue';
 import { StatusColorSetter } from '@/views/searcher';
 import { connection_types, getLevelByChipColor } from '@/views/services/abnormal-connection-histories/useStore';
+import { operator_levels } from '@/views/services/operators/useStore';
 import type { AbnormalConnectionHistory, Popup } from '@/views/types';
 import { allLevels, axios, getUserLevel } from '@axios';
 import { PopupEvent } from '@core/utils/popup';
@@ -75,9 +76,7 @@ setSecureReport()
             <DialogCloseBtn @click="setOpenStatus(popup)" />
         </div>
         <VCard title="보안 리포트">
-            <!-- 작성
-                // TODO: 확인되지 않은 IP 이상접속이 발견되면 개발사측에 공유하여 대처될 수 있도록 공유바랍니다. 
-            -->
+            <h5 style="margin-left: 2em;" class="text-error">확인되지 않은 IP의 이상접속이 발견되면 개발사측에 공유하여 대처될 수 있도록 공유바랍니다. </h5>
             <VCardText>
                 <VRow>
                     <VCol md="6" cols="12">
@@ -182,8 +181,8 @@ setSecureReport()
                                     <td class='list-square'>{{ history.nick_name }}</td>
                                     <td class='list-square'>
                                         <VChip v-if="history.level"
-                                        :color="StatusColorSetter().getSelectIdColor(getLevelByChipColor(history.level))">
-                                            {{ allLevels().find(obj => obj.id === history.level)?.title }}
+                                        :color="history.level === 35 ? 'default' : 'primary'">
+                                            {{ operator_levels.find(obj => obj.id === history.level)?.title }}
                                         </VChip>
                                     </td>
                                     <td class='list-square'>{{ history.created_at }}</td>
@@ -249,7 +248,7 @@ setSecureReport()
                             </td>
                             <td class='list-square'>
                                 <VChip v-if="history['target_level']"
-                                    :color="StatusColorSetter().getSelectIdColor(getLevelByChipColor(history['target_level']))">
+                                    :color="history['target_level'] >= 35 ? (history['target_level'] ? 'default' : 'primary') : StatusColorSetter().getSelectIdColor(getLevelByChipColor(history['target_level']))">
                                         {{ allLevels().find(obj => obj.id === history['target_level'])?.title }}
                                 </VChip>
                                 <span v-else>세션없음</span>

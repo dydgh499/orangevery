@@ -24,7 +24,6 @@ class BulkMerchandiseRequest extends FormRequest
         'acct_bank_code',
     ];
     public $integer_keys = [
-        'use_pay_verification_mobile',
         'use_multiple_hand_pay',
         'use_collect_withdraw',
         'use_regular_card',

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { installments } from '@/views/merchandises/pay-modules/useStore';
 import type { BasePay, Merchandise, Options, PayModule } from '@/views/types';
-import corp from '@corp';
 import { requiredValidatorV2 } from '@validators';
 import { useDisplay } from 'vuetify';
 
@@ -17,7 +16,7 @@ const { mobile } = useDisplay()
 const params_mode = <any>(inject('params_mode'))
 const params = <any>(inject('params'))
 
-const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
+const is_show_pay_button = ref(props.pay_module.pay_window_secure_level >= 3 ? false : true)
 const is_verify_sms = ref(false)
 
 const format_amount = ref('0')
@@ -32,7 +31,7 @@ const updateToken = (value : string) => {
 }
 
 const isShowMobileVerification = computed(() => {
-    return (corp.pv_options.paid.use_pay_verification_mobile && props.merchandise.use_pay_verification_mobile) || props.pay_module.pay_window_secure_level === 3
+    return props.pay_module.pay_window_secure_level >= 3
 })
 
 const filterInstallment = computed(() => {
@@ -62,12 +61,10 @@ watchEffect(() => {
     props.common_info.user_agent = mobile ? "WM" : "WP"
     props.common_info.pmod_id = props.pay_module.id
     props.common_info.ord_num = props.pay_module.id + props.pay_code + Date.now().toString().substr(0, 10)
-
-    if(props.merchandise.use_pay_verification_mobile == 0)
-        is_show_pay_button.value = true
+    is_show_pay_button.value = true
 })
 watchEffect(() => {
-    if(props.pay_module.pay_window_secure_level === 3 && is_verify_sms.value == false)
+    if(props.pay_module.pay_window_secure_level >= 3 && is_verify_sms.value == false)
         is_show_pay_button.value = false
 })
 watchEffect(() => {
