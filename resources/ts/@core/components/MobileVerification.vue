@@ -30,6 +30,7 @@ digits.value = props.default.split('')
 if (getUserLevel() >= 35 && props.merchandise.id !== -1) {
     button_status.value = 2
     emits('update:token', 'csAmkcvmcsIWDIMcFmcvsIC@EVCnoQnoidcvVCDINO')
+    // 토큰 강제 업데이트
 }
 
 const handleKeyDownEvent = (index: number) => {

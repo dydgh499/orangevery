@@ -119,13 +119,13 @@ watchEffect(() => {
                         placeholder="PMID 입력" persistent-placeholder />
             </VCol>
         </VRow>
-        <VRow v-if="isAbleModiy(props.item.id) && getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <VCol md="5" cols="4">MID</VCol>
             <VCol md="7">
                 <div style="display: flex; flex-direction: row; justify-content: space-between;">
                     <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
                         placeholder="MID 입력" persistent-placeholder />
-                    <VBtn type="button" variant="tonal" v-if="isAbleModiy(props.item.id) && props.item.id == 0 && corp.pv_options.paid.use_mid_create"
+                    <VBtn type="button" variant="tonal" v-if="props.item.id == 0 && corp.pv_options.paid.use_mid_create && getUserLevel() >= 35"
                         @click="midCreate()">
                         {{ "생성" }}
                         <VIcon end icon="material-symbols:add-to-home-screen" />
@@ -142,13 +142,14 @@ watchEffect(() => {
             </VCol>
         </VRow>
         <!-- 👉 TID -->
-        <VRow v-if="isAbleModiy(props.item.id) && getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <VCol md="5" cols="4">TID</VCol>
             <VCol md="7">
                 <div style="display: flex; flex-direction: row; justify-content: space-between;">
                     <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
                         placeholder="TID 입력" persistent-placeholder />
-                    <VBtn type="button" variant="tonal" v-if="props.item.id == 0 && corp.pv_options.paid.use_tid_create" @click="tidCreate()">
+                    <VBtn type="button" variant="tonal" v-if="props.item.id == 0 && corp.pv_options.paid.use_tid_create && getUserLevel() >= 35" 
+                        @click="tidCreate()">
                         {{ "생성" }}
                         <VIcon end icon="material-symbols:add-to-home-screen" />
                     </VBtn>
