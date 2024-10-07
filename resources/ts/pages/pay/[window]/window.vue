@@ -92,7 +92,7 @@ onMounted(async () => {
                     </VBtn>
                 </div>
                 <VRow class="match-height">
-                    <VCol v-if="pay_module?.pay_window_secure_level > 1 && sign_in_result === false" style="padding: 3em 1em;">
+                    <VCol v-if="(pay_module?.pay_window_secure_level === 2 || pay_module?.pay_window_secure_level === 4) && sign_in_result === false" style="padding: 3em 1em;">
                         <br>
                         <h4 style="text-align: center;">전달받은 PIN번호를 입력해주세요.</h4>                        
                         <div style=" padding: 1em;text-align: center;">
