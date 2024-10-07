@@ -2,7 +2,6 @@
 import { useRequestStore } from '@/views/request';
 import type { OperatorIp } from '@/views/types';
 import { VCol, VForm } from 'vuetify/components';
-import { operatorActionAuthStore } from '../operators/useStore';
 
 interface Props {
     item: OperatorIp,
@@ -11,22 +10,16 @@ interface Props {
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 const { update, remove } = useRequestStore()
-const { headOfficeAuthValidate } = operatorActionAuthStore()
+const token = <any>inject('token')
 
 const operatorIpupdate = async () => {
-    const [result, token] = await headOfficeAuthValidate('휴대폰번호 인증이 필요합니다.<br>계속하시겠습니까?')
-    if(result) {
-        props.item.token = token
-        await update('/services/operator-ips', props.item, vForm.value, false)
-    }
+    props.item.token = token
+    await update('/services/operator-ips', props.item, vForm.value, false)
 }
 
 const operatorIpDelete = async() => {
-    const [result, token] = await headOfficeAuthValidate('휴대폰번호 인증이 필요합니다.<br>계속하시겠습니까?')
-    if(result) {
-        props.item.token = token
-        await remove('/services/operator-ips', props.item, false)
-    }
+    props.item.token = token
+    await remove('/services/operator-ips', props.item, false)
 }
 </script>
 <template>

@@ -4,10 +4,15 @@ import { useOperatorIpStore } from '@/views/services/operator-ips/useStore';
 
 const { operator_ips } = useOperatorIpStore()
 const visible = ref(false)
+const token = ref('')
 
-const show = () => {
+const show = (_token: string) => {
     visible.value = true
+    token.value = _token
 }
+
+provide('token', token)
+
 defineExpose({
     show
 });
@@ -18,7 +23,7 @@ defineExpose({
             <DialogCloseBtn @click="visible = false" />
             <VCard>
                 <VCardItem>
-                    <OperatorIpCard :key="operator_ips.length"/>
+                    <OperatorIpCard :key="operator_ips.length" :token="token"/>
                 </VCardItem>
                 <br>
             </VCard>

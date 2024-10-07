@@ -140,7 +140,7 @@ const props = defineProps<Props>()
         <VRow v-if="props.item.module_type != 0">
             <VCol md="5" cols="6">
                 <BaseQuestionTooltip :location="'top'" :text="'결제창 보안등급'"
-                    :content="'결제창 숨김: 결제창 사용불가<br>결제창 노출: 결제창 사용가능<br>PIN 인증: 결제창 진입 시 가맹점측에서 발급한 핀번호 인증요구<br>SMS 인증: 결제전 SMS 인증요구<br>SCA 인증: PIN 인증 + 휴대폰번호 인증요구<br><br>수기결제창을 통해 카드도용 결제와 같은 범법행위가 발생할 수 있으니<br>SCA 설정을 강력히 권고합니다.'"/>
+                    :content="'결제창 숨김: 결제창 사용불가<br>결제창 노출: 결제창 사용가능<br>PIN 인증: 결제창 진입 시 가맹점측에서 발급한 핀번호 인증요구<br>SMS 인증: 결제전 SMS 인증요구<br>SCA 인증: PIN + SMS 인증요구<br><br>수기결제창을 통해 카드도용 결제와 같은 범법행위가 발생할 수 있으니<br>SCA 설정을 강력히 권고합니다.'"/>
             </VCol>
             <VCol md="7">
                 <VSelect v-model="props.item.pay_window_secure_level" :items="pay_window_secure_levels" prepend-inner-icon="tabler:shield-lock"

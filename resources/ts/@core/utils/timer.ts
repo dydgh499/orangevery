@@ -1,13 +1,18 @@
-export const timer = (time: number) => {
-    const countdown_time = ref(time)
+export const timerV1 = (init_time: number, timer_id: number)  => {
+    const countdown_time = ref(init_time)
     let countdown_timer = <any>(null)
 
-    const startTimer = () => {
-        countdown_time.value = time
-        countdown_timer = setInterval(timer, 1000)
+    const restartTimer = () => {
+        clearInterval(timer_id)
+        countdown_timer = setInterval(updateRemainingTime, timer_id)
     }
 
-    const timer = () => {
+    const startTimer = () => {
+        countdown_time.value = init_time
+        countdown_timer = setInterval(updateRemainingTime, timer_id)
+    }
+
+    const updateRemainingTime = () => {
         if (countdown_time.value === 0)
             clearInterval(countdown_timer)
         else
@@ -24,17 +29,30 @@ export const timer = (time: number) => {
             return `0:00`
         }
     })
+    
+    startTimer()
     return {
         countdown_time,
         countdown_timer,
         countdownTimer,
-        startTimer,
+        restartTimer,
     }
 }
 
-export const hourTimer = () => {
+export const timerV2 = (init_time:string, timer_id: number) => {
     const remaining_time = ref(<string>("00:00:00"))
     const expire_time = ref(<string>("00:00:00"))
+    let countdown_timer = <any>(null)
+    
+    const restartTimer = () => {
+        clearInterval(timer_id)
+        countdown_timer = setInterval(updateRemainingTime, timer_id)
+    }
+
+    const startTimer = () => {
+        expire_time.value = init_time
+        countdown_timer = setInterval(updateRemainingTime, timer_id)
+    }
 
     const updateRemainingTime = () => {
         const expire = new Date(expire_time.value)
@@ -55,6 +73,7 @@ export const hourTimer = () => {
             remaining_time.value = `${formatted_hours}:${formatted_mins}:${formatted_secs}`
         }
     };
+
     const getRemainTimeColor = computed(() => {
         const expire = new Date(expire_time.value);
         const now = new Date();
@@ -69,10 +88,14 @@ export const hourTimer = () => {
                 return 'text-primary'
         }
     })
+
+    startTimer()
     return {
         remaining_time, 
         expire_time, 
         getRemainTimeColor, 
-        updateRemainingTime
+        updateRemainingTime,
+        countdown_timer,
+        restartTimer,
     }
 }

@@ -2,13 +2,13 @@
 import { payWindowStore } from '@/views/quick-view/payWindowStore';
 import { PayModule } from '@/views/types';
 import { user_info } from '@axios';
-import { hourTimer } from '@core/utils/timer';
+import { timerV2 } from '@core/utils/timer';
 import corp from '@corp';
 
 const snackbar = <any>(inject('snackbar'))
 
 const { move, copy, extend, getPayWindowUrl, renewPayWindow, multiplePayMove, isVisiableRemainTime } = payWindowStore()
-const {remaining_time, expire_time, getRemainTimeColor, updateRemainingTime} = hourTimer()
+const {remaining_time, expire_time, getRemainTimeColor, restartTimer} = timerV2("00:00:00", 1001)
 
 const visible = ref(false)
 const url = ref()
@@ -21,8 +21,8 @@ const show = async (_payment_module: PayModule) => {
     payment_module.value.pay_window = res.data
 
     expire_time.value = payment_module.value.pay_window.holding_able_at
-    intervalId.value = setInterval(updateRemainingTime, 1001);
-
+    restartTimer()
+    
     url.value = getPayWindowUrl(payment_module.value, '')
     visible.value = true
 }

@@ -7,6 +7,7 @@ import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { operator_levels, operatorActionAuthStore, useSearchStore } from '@/views/services/operators/useStore'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
+import { avatars } from '@/views/users/useStore'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 
@@ -17,6 +18,7 @@ const password = ref()
 const imageDialog = ref()
 const operatorDialog = ref()
 const operatorIPDialog = ref()
+
 provide('password', password)
 provide('store', store)
 provide('head', head)
@@ -29,7 +31,7 @@ const showAvatar = (preview: string) => {
 const showOperatorIPDialog = async () => {
     const [result, token] = await headOfficeAuthValidate('접속 허용 IP를 확인하기 위해 휴대폰번호 인증이 필요합니다.<br>계속하시겠습니까?')
     if(result) {
-        operatorIPDialog.value.show()
+        operatorIPDialog.value.show(token)
     }
 }
 
@@ -40,7 +42,7 @@ const showOperatorIPDialog = async () => {
             <template #filter>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="tabler:user-cog" @click="operatorDialog.show({id:0})" size="small" 
+                <VBtn prepend-icon="tabler:user-cog" @click="operatorDialog.show({id:0, profile_img: avatars[Math.floor(Math.random() * avatars.length)]})" size="small" 
                     v-if="getUserLevel() > 35"
                     :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
                     운영자 추가

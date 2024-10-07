@@ -8,12 +8,14 @@ import type { OperatorIp } from '@/views/types';
 
 const { operator_ips } = useOperatorIpStore()
 const { setNullRemove } = useRequestStore()
+const token = <any>(inject('token'))
 
 const addNewOperatorIpCard = () => {
     operator_ips.push(<OperatorIp>({
         id: 0,
         brand_id: corp.id,
         enable_ip: '',
+        token: token,
     }))
 }
 watchEffect(() => {

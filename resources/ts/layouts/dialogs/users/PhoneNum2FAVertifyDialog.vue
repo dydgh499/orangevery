@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { pinInputEvent } from '@/@core/utils/pin_input_event';
-import { axios } from '@/plugins/axios';
+import { axios, user_info } from '@axios';
+import { timerV1 } from '@core/utils/timer';
 
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
@@ -10,15 +11,35 @@ const visible = ref(false)
 const phone_num = ref('')
 
 const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(6)
+const { countdown_timer, countdownTimer, restartTimer } = timerV1(180, 1102)
 
 let resolveCallback: (token: string) => void;
+
 const show = async (_phone_num: string) => {
     phone_num.value = _phone_num
     visible.value = true
     digits.value.fill('')
+    restartTimer()
     return new Promise<string>((resolve) => {
         resolveCallback = resolve;
     });
+}
+
+const requestCodeIssuance = async () => {
+    try {
+        const res = await axios.post('/api/v1/bonaejas/mobile-code-head-office-issuence', {
+            user_name: user_info.value.user_name
+        })
+        snackbar.value.show(res.data.message, 'success')
+        
+        if (countdown_timer)
+            clearInterval(countdown_timer)
+
+        restartTimer()
+    }
+    catch(e:any) {
+        snackbar.value.show(e.response.data.message, 'error') 
+    }
 }
 
 const onAgree = async (fin_number: string) => {
@@ -69,6 +90,13 @@ defineExpose({
                             <VTextField v-for="i in 6" :key="i" :model-value="digits[i - 1]" type="number"
                                 v-bind="defaultStyle" maxlength="1" @input="handleKeyDownEvent(i)" />
                         </div>
+                    </VCol>
+                    <VCol class="retry-container">
+                        <span @click="requestCodeIssuance()" class="text-primary retry-text">인증번호 재발송</span>
+                        <span>
+                            <span>만료시간:</span>
+                            <span id="countdown" class="text-primary">{{ countdownTimer }}</span>
+                        </span>
                     </VCol>
                 </div>
             </VCol>

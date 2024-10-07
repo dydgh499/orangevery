@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { token_expire_time } from '@axios';
-import { hourTimer } from '@core/utils/timer';
+import { timerV2 } from '@core/utils/timer';
 
-const {remaining_time, expire_time, getRemainTimeColor, updateRemainingTime} = hourTimer()
-expire_time.value = token_expire_time.value
-const intervalId = setInterval(updateRemainingTime, 1003);
+const {remaining_time, getRemainTimeColor, countdown_timer} = timerV2(token_expire_time.value, 1003)
 
 onUnmounted(() => {
-    clearInterval(intervalId);
+    clearInterval(countdown_timer);
 });
 </script>
 <template>

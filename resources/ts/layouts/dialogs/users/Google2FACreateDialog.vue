@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { pinInputEvent } from '@/@core/utils/pin_input_event';
 import { axios, getUserLevel, getUserType, user_info } from '@/plugins/axios';
-import { timer } from '@core/utils/timer';
+import { timerV1 } from '@core/utils/timer';
 
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
@@ -14,7 +14,7 @@ const errors = ref<Record<string, string | undefined>>({
 const visible = ref(false)
 const qrcode_url = ref('')
 const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(6)
-const { countdown_time, countdownTimer, startTimer } = timer(300)
+const { countdown_time, countdownTimer, restartTimer } = timerV1(300, 1101)
 
 const user_pw = ref('')
 const user_type = getUserType().id === 2 ? 'services/operators' : 'salesforces'
@@ -38,6 +38,7 @@ const steps = [
 const show = async () => {
     current_step.value = 0
     visible.value = true
+    restartTimer()
 }
 
 const onAgree = async () => {
@@ -70,7 +71,7 @@ const stepUp = async () => {
         axios.post(`/api/v1/manager/${user_type}/${user_info.value.id}/2fa-qrcode`)
         .then(r => {
             qrcode_url.value = r.data.qrcode_url
-            startTimer()
+            restartTimer()
         })
         .catch(e => {
             snackbar.value.show(e.response.data.message, 'error') 

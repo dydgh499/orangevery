@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { timer } from '@/@core/utils/timer';
+import { timerV1 } from '@/@core/utils/timer';
 import { Merchandise } from '@/views/types';
 import { axios, getUserLevel } from '@axios';
 import { pinInputEvent } from '@core/utils/pin_input_event';
@@ -24,7 +24,7 @@ const button_status = ref(0)
 
 const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(props.totalInput)
 
-const { countdown_timer, countdownTimer, startTimer } = timer(180)
+const { countdown_timer, countdownTimer, restartTimer } = timerV1(180, 1100)
 
 digits.value = props.default.split('')
 
@@ -52,12 +52,13 @@ const requestCodeIssuance = async () => {
         if (countdown_timer)
             clearInterval(countdown_timer)
 
-        startTimer()
+        restartTimer()
     }
     catch (e: any) {
         snackbar.value.show(e.response.data.message, 'error')
     }
 }
+
 const verification = async () => {
     if (button_status.value === 0) {
         await requestCodeIssuance()
