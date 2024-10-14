@@ -120,6 +120,7 @@ export interface NavLink extends NavLinkProps, Partial<AclProperties> {
     disable?: boolean
     class?: string
     params?: any
+    query?: any
 }
 
 // 👉 Vertical nav group

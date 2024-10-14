@@ -15,7 +15,7 @@ const lgSize = computed(() => {
 onMounted (() => {
     watchEffect(async () => {        
         if(store.getChartProcess())
-            store.is_skeleton = false
+            store.setSkeleton(false)
     }) 
 
 })
@@ -24,7 +24,7 @@ onMounted (() => {
     <VCol v-for="meta in props.metas" :key="meta.title" cols="12" sm="6" :lg="lgSize">
     <VCard>
         <VCardText class="d-flex justify-space-between">
-            <div v-if="store.is_skeleton">
+            <div v-if="store.getSkeleton()">
                 <span v-html="meta.title"></span>
                 <div class="d-flex align-center gap-2 my-1">
                     <SkeletonBox :width="'3em'"/>

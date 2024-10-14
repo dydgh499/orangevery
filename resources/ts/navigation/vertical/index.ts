@@ -20,7 +20,6 @@ const combinedNavItems = computed(() => {
             ...service.value, 
             ...security.value
         ] as VerticalNavItems;
-        
     }
     else
         return []

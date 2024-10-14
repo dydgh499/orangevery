@@ -4,7 +4,7 @@ import corp from '@corp'
 
 const getUserChildMenu = () => {
     const users = [
-        { title: '가맹점 목록', to: 'merchandises' }
+        { title: '가맹점 목록', to: 'merchandises'}
     ]
     const logs = []
     if(getUserLevel() >= 35) {
@@ -26,15 +26,15 @@ const getUserChildMenu = () => {
             logs.push({
                 title: '하위사업자등록 결과',
                 to: 'merchandises-sub-business-registrations',
-                
+                                
             })
         }
     }
     
     if(isFixplus() === false) 
-        users.push({ title: '장비 관리', to: 'merchandises-terminals' })
+        users.push({ title: '장비 관리', to: 'merchandises-terminals'})
     if(isFixplus() === false || (isFixplus() && getUserLevel() >= 35))
-        users.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules' })
+        users.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
     users.push(...logs)
     return users
 }
@@ -56,7 +56,7 @@ const getAbilitiesMenu = computed(() => {
             title: '영업점 관리',
             icon: { icon: 'ph:share-network' },
             children: [
-                { title: '영업점 목록', to: 'salesforces' },
+                { title: '영업점 목록', to: 'salesforces'},
                 ...sales_child,
             ]
         })

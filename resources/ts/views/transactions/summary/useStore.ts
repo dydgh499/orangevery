@@ -151,12 +151,12 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
         }
     }
 
-    const exporter = async (type: number) => {      
+    const exporter = async () => {      
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
-        printer(type, r.data.content)
+        printer(r.data.content)
     }
     
-    const printer = (type:number, datas: any[]) => {
+    const printer = (datas: any[]) => {
         const keys = Object.keys(head.flat_headers.value)
         for (let i = 0; i <datas.length; i++) {
             datas[i]['total_count'] = (Number(datas[i]['total_appr_count']) +  Number(datas[i]['total_cxl_count']))

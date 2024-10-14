@@ -8,13 +8,12 @@ import RealtimeHistoriesDialog from '@/layouts/dialogs/transactions/RealtimeHist
 import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
 import MchtBlacklistCreateDialog from '@/layouts/dialogs/users/MchtBlacklistCreateDialog.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
+import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
-import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
-import { notiSendHistoryInterface, realtimeHistoryInterface } from '@/views/transactions/transactions'
-import { getDateFormat, getProfitColName, settleIdCol, useSearchStore } from '@/views/transactions/useStore'
+import { getProfitColName } from '@/views/transactions/transacitonsHeader'
+import TransactionsIndexTd from '@/views/transactions/TransactionsIndexTd.vue'
+import { useSearchStore } from '@/views/transactions/useStore'
 import { ItemTypes } from '@core/enums'
 
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
@@ -24,14 +23,10 @@ import { getUserLevel, salesLevels, user_info } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
-const formatTime = <any>(inject('$formatTime'))
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
-const { isSalesCol } = settlementFunctionCollect(store)
 
-const { notiSendResult, notiSendMessage } = notiSendHistoryInterface()
-const { realtimeResult, realtimeMessage } = realtimeHistoryInterface(formatTime)
 
 const salesslip = ref()
 const cancelTran = ref()
@@ -211,77 +206,7 @@ onMounted(() => {
                                     </span>
                                 </div>
                             </span>
-                            <span v-else-if="_key == 'module_type'">
-                                <VChip
-                                    :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
-                                    {{ module_types.find(obj => obj.id === item[_key])?.title }}
-                                </VChip>
-                            </span>
-                            <span v-else-if="_key == 'settle_id'">
-                                <VChip :color="settleIdCol(item, store.params.level) === null ? 'default' : 'success'">
-                                    {{ settleIdCol(item, store.params.level) === null ? '정산안함' : "#" + settleIdCol(item,
-                                    store.params.level)}}
-                                </VChip>
-                            </span>
-                            <span v-else-if="_key == 'settle_dt'">
-                                {{ getDateFormat(item[_key]) }}
-                            </span>
-                            <span v-else-if="_key == 'installment'">
-                                {{ installments.find(inst => inst['id'] === item[_key])?.title }}
-                            </span>
-                            <span v-else-if="_key == 'pg_id'">
-                                {{ pgs.find(pg => pg['id'] === item[_key])?.pg_name }}
-                            </span>
-                            <span v-else-if="_key == 'ps_id'">
-                                {{ pss.find(ps => ps['id'] === item[_key])?.name }}
-                            </span>
-                            <span v-else-if="_key == 'mcht_settle_type'">
-                                {{ settle_types.find(settle_type => settle_type['id'] === item[_key])?.name }}
-                            </span>
-                            <span v-else-if="_key == 'terminal_id'">
-                                {{ terminals.find(terminal => terminal['id'] === item[_key])?.name }}
-                            </span>
-                            <b v-else-if="_key === 'profit'">
-                                {{ Number(item[_key]).toLocaleString() }}
-                            </b>
-                            <span v-else-if="isSalesCol(_key as string)">
-                                {{ Number(item[_key]).toLocaleString() }}
-                            </span>
-                            <span v-else-if="_key.toString().includes('_fee') && _key != 'mcht_settle_fee'">
-                                <VChip v-if="item[_key]">
-                                    {{ (item[_key] * 100).toFixed(3) }} %
-                                </VChip>
-                            </span>
-                            <span v-else-if="_key == 'resident_num'">
-                                <span>{{ item['resident_num_front'] }}</span>
-                                <span style="margin: 0 0.25em;">-</span>
-                                <span v-if="corp.pv_options.free.resident_num_masking">*******</span>
-                                <span v-else>{{ item['resident_num_back'] }}</span>
-                            </span>
-                            <span v-else-if="_key == 'custom_id'">
-                                {{ cus_filters.find(cus => cus.id === item[_key])?.name }}
-                            </span>
-
-                            <span v-else-if="_key == 'noti_send_result'">
-                                <VChip :color="store.getSelectIdColor(notiSendResult(item))">
-                                    {{ notiSendMessage(item) }}
-                                </VChip>
-                            </span>
-                            <span v-else-if="_key == 'realtime_result'">
-                                <VChip :color="store.getSelectIdColor(realtimeResult(item))">
-                                    {{ realtimeMessage(item) }}
-                                </VChip>
-                            </span>
-                            <span v-else-if="_key == 'extra_col'">
-                                <ExtraMenu :item="item" />
-                            </span>
-                            <span v-else-if="_key == 'updated_at'"
-                                :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
-                                {{ item[_key] }}
-                            </span>
-                            <span v-else>
-                                {{ item[_key] }}
-                            </span>
+                            <TransactionsIndexTd v-else :item="item" :_key="_key"/>
                         </td>
                     </template>
                 </tr>

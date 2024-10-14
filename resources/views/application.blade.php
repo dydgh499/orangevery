@@ -93,14 +93,8 @@
     });
   @endif
   const loaderColor = localStorage.getItem("{{ $json['name'] }}-initial-loader-bg") || '#FFFFFF';
-  const primaryColor = "{{ $json['color'] }}" || '#EA5455';
-
-  localStorage.setItem(`{{ $json['name'] }}-lightThemePrimaryColor`, primaryColor)
-  localStorage.setItem(`{{ $json['name'] }}-darkThemePrimaryColor`, primaryColor)
 
   window.corp = {!! json_encode($json, true) !!};
   if (loaderColor)
       document.documentElement.style.setProperty('--initial-loader-bg', loaderColor)
-  if (primaryColor)
-      document.documentElement.style.setProperty('--initial-loader-color', primaryColor)
 </script>

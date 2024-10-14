@@ -61,6 +61,7 @@ declare module '@vue/runtime-core' {
     NotiSendHistoriesDialog: typeof import('./resources/ts/layouts/dialogs/transactions/NotiSendHistoriesDialog.vue')['default']
     OperatorDialog: typeof import('./resources/ts/layouts/dialogs/users/OperatorDialog.vue')['default']
     OperatorHistoryDetailDialog: typeof import('./resources/ts/layouts/dialogs/histories/OperatorHistoryDetailDialog.vue')['default']
+    OperatorIPDialog: typeof import('./resources/ts/layouts/dialogs/services/OperatorIPDialog.vue')['default']
     PasswordAuthDialog: typeof import('./resources/ts/layouts/dialogs/users/PasswordAuthDialog.vue')['default']
     PasswordChangeDialog: typeof import('./resources/ts/layouts/dialogs/users/PasswordChangeDialog.vue')['default']
     PasswordChangeNoticeDialog: typeof import('./resources/ts/layouts/dialogs/users/PasswordChangeNoticeDialog.vue')['default']

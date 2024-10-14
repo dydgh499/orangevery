@@ -70,7 +70,6 @@ export const Header = (path: string, file_name: string) => {
 
     const { exportToExcel, setHeaderStyle } = ExcelExporter(sub_headers, flat_headers, file_name)
 
-
     const _init = (_headers: object) => {
         const getLocalStorageCols = (localstrage_headers: Filter, depth: number) => {
             if(depth > 1)

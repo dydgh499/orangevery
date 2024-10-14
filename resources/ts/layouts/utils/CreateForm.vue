@@ -1,10 +1,12 @@
 a
 <script setup lang="ts">
-import router from '@/router'
-import { useRequestStore } from '@/views/request'
-import type { Tab } from '@/views/types'
-import { getUserLevel, isAbleModiy, user_info } from '@axios'
-import { VForm } from 'vuetify/components'
+import { useDynamicTabStore } from '@/@core/utils/dynamic_tab';
+import router from '@/router';
+import { useRequestStore } from '@/views/request';
+import type { Tab } from '@/views/types';
+import { getUserLevel, isAbleModiy, user_info } from '@axios';
+
+import { VForm } from 'vuetify/components';
 
 interface Props {
     id: number | string,
@@ -18,6 +20,7 @@ const tab = ref(0)
 const vForm = ref<VForm>()
 
 const { formRequest, remove, setOneObject } = useRequestStore()
+const store = useDynamicTabStore()
 
 const disabledConditions = (index: number) => {
     const cond_1 = index == 2 && props.id == 0 && props.path == 'merchandises'
@@ -63,10 +66,17 @@ const authHideConditions = () => {
     }
 }
 
-watchEffect(() => {
-    if (props.id) 
+if (props.id) 
         setOneObject('/' + props.path, Number(props.id), props.item)
-});
+
+watchEffect(() => {
+    if (props.item.id) {
+        if(props.path === 'merchandises')
+            store.titleUpdate(props.item.id, '가맹점', props.item.mcht_name)
+        else if(props.path === 'salesforces')
+            store.titleUpdate(props.item.id, '영업점', props.item.sales_name)
+    }
+})
 
 </script>
 <template>

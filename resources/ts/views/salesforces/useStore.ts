@@ -182,7 +182,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         ])
     }
 
-    const exporter = async (type: number) => {
+    const exporter = async () => {
         const getSalesData = (salesforce: Salesforce) => {            
             let data:any = salesforce
             data['level'] = all_sales.find(obj => obj['id'] === salesforce['level'])?.title as string

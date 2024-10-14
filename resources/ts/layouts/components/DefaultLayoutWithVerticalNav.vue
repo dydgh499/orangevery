@@ -48,6 +48,7 @@ provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
+const current = ref(null)
 
 const passwordChangeWarningValidate = () => {
     const last_change_at = new Date(user_info.value.password_change_at ?? '2024-06-15 17:20:00')
@@ -93,11 +94,12 @@ onMounted(() => {
     fa2RequireNotification()
     
 })
+
 </script>
 
 <template>
     <VerticalNavLayout 
-        :nav-items="navItems" >
+        :nav-items="navItems">
         <!-- 👉 navbar -->
         <template #navbar="{ toggleVerticalOverlayNavActive }">
             <div class="d-flex h-100 align-center">
@@ -124,24 +126,28 @@ onMounted(() => {
                 <UserProfile />
             </div>
         </template>
-
-        <RouterView v-slot="{ Component }">
+        <RouterView v-slot="{ Component, route }">
             <Transition :name="appRouteTransition" mode="out-in">
-                <Component :is="Component" />
+                <KeepAlive :include="['[id]', 'index']" :exclude="['']" :max="20">
+                    <Component :is="Component" :key="route.fullPath" />
+                </KeepAlive>
             </Transition>
-            <Snackbar ref="snackbar" />
-            <PWASnackbar ref="pwaSnackbar"/>
-            <AlertDialog ref="alert" />
-            <LoadingDialog ref="loading" />
-            <HolidayDlg ref="holidayDlg"/>
-
-            <PayWindowCreateDialog ref="payLink"/>
-            <PayWindowShowDialog ref="payShow"/>
-            
-            <PopupDialog ref="popup"/>
-            <PhoneNum2FAVertifyDialog ref="phoneNum2FAVertifyDialog"/>
-            <PasswordChangeNoticeDialog ref="passwordChangeNoticeDialog"/>
         </RouterView>
+
+        
+        <Snackbar ref="snackbar" />
+        <PWASnackbar ref="pwaSnackbar"/>
+        <AlertDialog ref="alert" />
+        <LoadingDialog ref="loading" />
+        <HolidayDlg ref="holidayDlg"/>
+
+        <PayWindowCreateDialog ref="payLink"/>
+        <PayWindowShowDialog ref="payShow"/>
+        
+        <PopupDialog ref="popup"/>
+        <PhoneNum2FAVertifyDialog ref="phoneNum2FAVertifyDialog"/>
+        <PasswordChangeNoticeDialog ref="passwordChangeNoticeDialog"/>
+
         <template #footer>
             <Footer/>
         </template>

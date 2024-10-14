@@ -1,8 +1,9 @@
 <script lang="ts">
-import { useLayouts } from '@layouts'
-import { VerticalNav } from '@layouts/components'
-import type { VerticalNavItems } from '@layouts/types'
-import type { PropType } from 'vue'
+import DynamicTabHeader from '@/@layouts/components/DynamicTabHeader.vue';
+import { useLayouts } from '@layouts';
+import { VerticalNav } from '@layouts/components';
+import type { VerticalNavItems } from '@layouts/types';
+import type { PropType } from 'vue';
 
 export default defineComponent({
   props: {
@@ -16,6 +17,7 @@ export default defineComponent({
     },
   },
   setup(props, { slots }) {
+    const router = useRouter()
     const { y: windowScrollY } = useWindowScroll()
     const { width: windowWidth } = useWindowSize()
     const { _layoutClasses: layoutClasses, isLessThanOverlayNavBreakpoint, isNavbarBlurEnabled } = useLayouts()
@@ -29,8 +31,6 @@ export default defineComponent({
       if (!isLessThanOverlayNavBreakpoint.value(value) && isLayoutOverlayVisible.value)
         isLayoutOverlayVisible.value = false
     })
-
-    const router = useRouter()
     const shallShowPageLoading = ref(false)
 
     return () => {
@@ -81,8 +81,14 @@ export default defineComponent({
 
       const main = h(
         'main',
-        { class: 'layout-page-content' },
+        { class: 'layout-page-content', style: 'margin-block-start: 0 !important;'},
         h('div', { class: 'page-content-container' }, mainChildren),
+      )
+
+      const test = h(
+        DynamicTabHeader,
+        {},
+        {},
       )
 
       // 👉 Footer
@@ -117,6 +123,7 @@ export default defineComponent({
             { class: 'layout-content-wrapper' },
             [
               navbar,
+              test,
               main,
               footer,
             ],

@@ -8,6 +8,7 @@ const getPaymentTestTap = () => {
         payment.push({
             title: '결제 테스트',
             to: 'transactions-pay-test',
+            query: {}
         })
     }
     return payment
@@ -77,7 +78,7 @@ const getSettleManagement = () => {
             if(corp.pv_options.paid.use_collect_withdraw) {
                 settle_childs.push({
                     title: '모아서 출금 관리',
-                    to: 'transactions-settle-collect-withdraws'
+                    to: 'transactions-settle-collect-withdraws',
                 })
             }
             settle_childs.push({
@@ -117,7 +118,7 @@ const getSettleHistoryTap = () => {
         if(getUserLevel() >= 35 && corp.pv_options.paid.use_collect_withdraw) {
             settle_history_childs.push({
                 title: '모아서 출금 이력',
-                to: 'transactions-settle-histories-collect-withdraws'
+                to: 'transactions-settle-histories-collect-withdraws',
             })
         }
         settle_histories.push({

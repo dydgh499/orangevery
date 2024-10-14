@@ -91,10 +91,10 @@ provide('exporter', exporter)
                             </VChip>
                         </span>
                         <span v-else-if="(_key.includes('_limit') || _key === 'pay_dupe_least') && _key != 'pay_dupe_limit'">
-                            <teamplate
+                            <template
                                 v-if="(item.module_type != 0 || _key == 'abnormal_trans_limit' || _key == 'pay_dupe_least') && item[_key] != 0">
                                 {{ item[_key] }}만원
-                            </teamplate>
+                            </template>
                             <template v-else>
                                 -
                             </template>

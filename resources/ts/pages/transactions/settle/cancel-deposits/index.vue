@@ -2,6 +2,7 @@
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
 import { useSearchStore } from '@/views/transactions/settle/cancel-deposits/useStore'
+import { getDateFormat } from '@/views/transactions/transacitonsHeader'
 import { DateFilters } from '@core/enums'
 
 const { 
@@ -14,11 +15,6 @@ const {
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
-
-const getDateFormat = (_settle_dt: number) => {
-    const settle_dt = _settle_dt.toString()
-    return settle_dt.substr(0, 4) + '-' + settle_dt.substr(4, 2) + '-' + settle_dt.substr(6, 2)
-}
 
 </script>
 <template>

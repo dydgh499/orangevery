@@ -45,31 +45,6 @@ const time_picker = ref(true)
 const search = ref(<string>(''))
 const search2 = ref(<string>(''))
 
-const queryToStoreParams = () => {
-    const str_keys = ['search', 'search2', 's_dt', 'e_dt', 'dt']
-    const keys = Object.keys(route.query).filter(key => !str_keys.includes(key));
-    for (let i = 0; i < keys.length; i++) {
-        store.params[keys[i]] = route.query[keys[i]] != null ? parseInt(route.query[keys[i]] as string) : null
-    }
-
-    if (!store.params.page)
-        store.params.page = 1
-    if (!store.params.page_size)
-        store.params.page_size = 20
-
-    if (route.query.search) {
-        store.params.search = route.query.search
-        store.params.search2 = route.query.search2
-        search.value = store.params.search
-        search2.value = store.params.search2
-    }
-    else if(corp.pv_options.free.init_search_filter) {
-        store.params.search = undefined
-        store.params.search2 = undefined
-    }
-    store.updateQueryString(store.params)
-}
-
 const handleEnterKey = (event: KeyboardEvent) => {
     if (event.keyCode === 13) {
         store.setTable()
@@ -98,7 +73,6 @@ else if (props.date_filter_type == DateFilters.SETTLE_RANGE) {
     time_picker.value = false
 }
 init(store)
-queryToStoreParams()
 </script>
 <template>
     <VCol cols="12">
@@ -188,7 +162,7 @@ queryToStoreParams()
                         </VBtn>
                         <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel" 
                             :style="'margin: 0.25em;'" size="small"
-                            @click="exporter(1)">
+                            @click="exporter()">
                             엑셀추출
                         </VBtn>
                         <VBtn prepend-icon="tabler-plus" @click="store.edit(0)" v-if="props.add" 
@@ -269,7 +243,7 @@ queryToStoreParams()
                             검색 필터
                         </VBtn>
                         <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel" size="small"
-                            @click="exporter(1)">
+                            @click="exporter()">
                             엑셀 추출
                         </VBtn>
                         <VBtn prepend-icon="tabler-plus" @click="store.edit(0)" v-if="props.add" size="small">

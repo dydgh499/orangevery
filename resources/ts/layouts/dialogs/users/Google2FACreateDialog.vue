@@ -99,7 +99,7 @@ defineExpose({
                 <VRow>
                     <VCol cols="12" md="4">
                         <AppStepper v-model:current-step="current_step" :isActiveStepValid="true"
-                        direction="vertical" :items="steps"/>
+                            direction="vertical" :items="steps"/>
                     </VCol>
                     <VCol cols="12" md="8">
                             <VForm>

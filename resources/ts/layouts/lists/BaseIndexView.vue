@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import SearchFilterDialog from '@/layouts/dialogs/utils/SearchFilterDialog.vue'
-import BaseIndexChart from '@/layouts/lists/BaseIndexChart.vue'
-import BaseIndexFilter from '@/layouts/lists/BaseIndexFilter.vue'
-import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
+import SearchFilterDialog from '@/layouts/dialogs/utils/SearchFilterDialog.vue';
+import BaseIndexChart from '@/layouts/lists/BaseIndexChart.vue';
+import BaseIndexFilter from '@/layouts/lists/BaseIndexFilter.vue';
+import SkeletonBox from '@/layouts/utils/SkeletonBox.vue';
 
 interface Props {
     placeholder: string,
@@ -32,7 +32,6 @@ onMounted(() => {
             <BaseIndexChart :metas="props.metas"/>
             <VCol>
                 <slot name="filter"></slot>
-                <br>
                 <VCard>
                     <BaseIndexFilter 
                         :placeholder="props.placeholder" 
@@ -51,7 +50,7 @@ onMounted(() => {
                         <!-- 👉 table head -->
                         <thead>
                             <slot name="headers"></slot>
-                            <template v-if="store.is_skeleton">
+                            <template v-if="store.getSkeleton()">
                                 <tr v-for="(item, index) in 15" :key="index">
                                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                                         <template v-if="head.getDepth(_header, 0) != 1">
@@ -78,7 +77,7 @@ onMounted(() => {
                             <slot name="body"></slot>
                         </tbody>
                         <!-- 👉 table footer  -->
-                        <tfoot v-if="!Boolean(store.items.length) && store.is_skeleton == false">
+                        <tfoot v-if="store.pagenation.total_page === 0 && store.getSkeleton() === false">
                             <tr>
                                 <td :colspan="Object.keys(head.flat_headers).length" class='list-square' style="border: 0;">
                                     검색 결과가 없습니다.

@@ -129,14 +129,10 @@ export const Searcher = (path: string) => {
     }
 
     const updateQueryString = (obj: any) => {
-        const is_chart_update = Object.keys(obj).some(key => !['page', 'page_size', 'search', 'search2'].includes(key))
-        const query = {...router.currentRoute.value.query, ...obj}
+        const is_chart_update = Object.keys(obj).some(key => 
+            !['page', 'page_size', 'search', 'search2'].includes(key))
         if(is_chart_update) {
             params.page = 1
-            query.page = 1
-        }
-        router.replace({query: query})
-        if(is_chart_update) {
             setChartProcess()
         }
     }
@@ -154,6 +150,14 @@ export const Searcher = (path: string) => {
         }
         is_skeleton.value = false
         return r.data.content
+    }
+
+    const getSkeleton = () => {
+        return is_skeleton.value
+    }
+
+    const setSkeleton = (value: boolean) => {
+        is_skeleton.value = value
     }
     
     const pagenationCouputed = computed(() => {
@@ -180,7 +184,7 @@ export const Searcher = (path: string) => {
         edit, getChartData, getPercentage,
         get, booleanTypeColor, getSelectIdColor, getAllLevelColor, 
         getAllDataFormat,
-        pagenationCouputed, is_skeleton
+        pagenationCouputed, getSkeleton, setSkeleton
     }
 }
 
@@ -248,6 +252,11 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
     }
 
     const init = (store: any) => {
+        if (!store.params.page)
+            store.params.page = 1
+        if (!store.params.page_size)
+            store.params.page_size = 20
+        
         if (route.query.s_dt && route.query.e_dt) {
             range_date.value[0] = route.query.s_dt as string
             range_date.value[1] = route.query.e_dt as string
@@ -291,20 +300,11 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
         }
     }
     
-    const datePickerRangeUpdater = (store: any) => {
-        console.log(range_date.value)
-        if(range_date.value.includes('to')) {
-            range_date.value = range_date.value.split(' to ')
-            console.log(range_date.value)
-            dateChanged(store)
-        }
-    }
     return {
         getRangeFormat,
         setDateRange,
         init,
         dateChanged,
-        datePickerRangeUpdater,
         range_date,
         date,
         date_selecter,

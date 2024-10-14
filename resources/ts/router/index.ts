@@ -1,3 +1,4 @@
+import { useDynamicTabStore } from '@/@core/utils/dynamic_tab'
 import { axios, getViewType, pay_token } from '@axios'
 import { canNavigate } from '@layouts/plugins/casl'
 import { setupLayouts } from 'virtual:generated-layouts'
@@ -38,6 +39,7 @@ const router = createRouter({
 
 // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach(to => {
+    const store = useDynamicTabStore()
     const isLoggedIn = pay_token.value != ''
     axios.defaults.headers.common['Authorization'] = `Bearer ${pay_token.value}`
 
@@ -45,6 +47,8 @@ router.beforeEach(to => {
         if (canNavigate(to)) {
             if (to.meta.redirectIfLoggedIn && isLoggedIn)
                 return '/'
+            else if(to.href !== '/login')
+                store.add(to)
         }
         else {
             if (isLoggedIn)

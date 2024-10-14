@@ -19,7 +19,7 @@ export const useSearchStore = defineStore('bookApplySearchStore', () => {
     head.flat_headers.value = head.flatten(head.headers.value)
 
     const metas = ref([])
-    const exporter = async (type: number) => {
+    const exporter = async () => {
         let keys = Object.keys(head.flat_headers.value)
         if(store.params.dest_type < 2)
             keys = keys.filter(val => val !== 'pmod_note');

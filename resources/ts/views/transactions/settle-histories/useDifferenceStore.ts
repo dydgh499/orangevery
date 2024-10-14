@@ -559,11 +559,11 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
         },
     ])
 
-    const exporter = async (type: number) => {      
+    const exporter = async () => {      
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
-        printer(type, r.data.content)
+        printer(r.data.content)
     }
-    const printer = (type:number, datas: Transaction[]) => {
+    const printer = (datas: Transaction[]) => {
         const keys = Object.keys(head.flat_headers.value)
         for (let i = 0; i <datas.length; i++) {
             datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string

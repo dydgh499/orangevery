@@ -5,7 +5,6 @@ import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import router from '@/router'
 import { useSkins } from '@core/composable/useSkins'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
-
 // @layouts plugin
 import { AppContentLayoutNav } from '@layouts/enums'
 
@@ -25,7 +24,6 @@ injectSkinClasses()
 const { appRouteTransition } = useThemeConfig()
 const is_pay_link = ref(router.currentRoute.value.path.includes('/pay/'))
 
-
 const alert = ref()
 const snackbar = ref()
 const loading = ref()
@@ -34,29 +32,28 @@ provide('alert', alert)
 provide('snackbar', snackbar)
 provide('loading', loading)
 
+
 </script>
 
 <template>
-        <DefaultLayoutWithVerticalNav 
-            v-if="appContentLayoutNav === AppContentLayoutNav.Vertical && is_pay_link === false"
-            v-bind="layoutAttrs" 
-        />
-        <div 
-            v-else class="d-flex justify-center align-center" 
-            style="height: 100%;flex-direction: column;"
-        >
-        <RouterView v-slot="{ Component }">
-            <Transition :name="appRouteTransition" mode="out-in">
-                <Component :is="Component" />
-            </Transition>
-            <Snackbar ref="snackbar" />
-            <AlertDialog ref="alert" />
-            <LoadingDialog ref="loading" />
-        </RouterView>
-    </div>
+    <section>
+        <DefaultLayoutWithVerticalNav
+            v-if="appContentLayoutNav === AppContentLayoutNav.Vertical && is_pay_link === false" v-bind="layoutAttrs" />
+        <div v-else class="d-flex justify-center align-center" style="height: 100%;flex-direction: column;">
+            <RouterView v-slot="{ Component }">
+                <Transition :name="appRouteTransition" mode="out-in">
+                    <Component :is="Component" />
+                </Transition>
+                <Snackbar ref="snackbar" />
+                <AlertDialog ref="alert" />
+                <LoadingDialog ref="loading" />
+            </RouterView>
+        </div>
+    </section>
 </template>
 
 <style lang="scss">
 // As we are using `layouts` plugin we need its styles to be imported
 @use "@layouts/styles/default-layout";
+
 </style>

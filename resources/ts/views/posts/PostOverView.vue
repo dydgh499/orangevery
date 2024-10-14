@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useDynamicTabStore } from '@/@core/utils/dynamic_tab'
 import Editor from '@/layouts/utils/Editor.vue'
 import { getUserLevel } from '@/plugins/axios'
 import { types } from '@/views/posts/useStore'
@@ -8,13 +9,22 @@ import { requiredValidatorV2 } from '@validators'
 interface Props {
     item: Post,
 }
+
+const route = useRoute()
 const props = defineProps<Props>()
-const getPostTypes = computed(() => {
-    if(getUserLevel() >= 35)
-        return types
-    else {
+const store = useDynamicTabStore()
+
+watchEffect(() => {
+    if(props.item.id === 0 && getUserLevel() < 35)
         props.item.type = 2
-        return [{ id: 2, title: "1:1 문의" }]
+})
+watchEffect(() => {
+    const type = types.find(obj => obj.id === props.item.type)
+    if(type && (route.path.includes('create') || route.path.includes('edit'))) {
+        const idx = store.tabs.findIndex(obj => obj.path === route.path)
+        if(idx !== -1) {
+            store.tabs[idx].title = type.title + ` ${props.item.id ? `수정(#${props.item.id})` : '추가'}`
+        }
     }
 })
 </script>
@@ -31,7 +41,7 @@ const getPostTypes = computed(() => {
                         </VCol>
                         <VCol md="2" cols="8">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.type"
-                                    :items="getPostTypes" prepend-inner-icon="fxemoji-notepage" 
+                                    :items="types" prepend-inner-icon="fxemoji-notepage" 
                                     item-title="title" item-value="id" />
                         </VCol>
                     </VRow>

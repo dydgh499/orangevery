@@ -169,42 +169,42 @@ onMounted(() => {
                                 </span>
                                 <span
                                     v-else-if="(_key.includes('_limit') || _key === 'pay_dupe_least') && _key != 'pay_dupe_limit'">
-                                    <teamplate
+                                    <template
                                         v-if="(item.module_type != 0 || _key == 'abnormal_trans_limit' || _key == 'pay_dupe_least') && item[_key] != 0">
                                         {{ item[_key] }}만원
-                                    </teamplate>
+                                    </template>
                                     <template v-else>
                                         -
                                     </template>
                                 </span>
                                 <span v-else-if="_key === 'pay_disable_tm'">
-                                    <teamplate v-if="item.module_type != 0">
+                                    <template v-if="item.module_type != 0">
                                         {{ item.pay_disable_s_tm }} ~ {{ item.pay_disable_e_tm }}
-                                    </teamplate>
+                                    </template>
                                 </span>
                                 <span v-else-if="_key === 'payment_term_min'">
-                                    <teamplate v-if="item.module_type != 0">
+                                    <template v-if="item.module_type != 0">
                                             {{ item[_key] }}분
-                                    </teamplate>
+                                    </template>
                                     <template v-else>
                                         -
                                     </template>
                                 </span>
                                 <span v-else-if="_key === 'pay_window_secure_level'">
-                                    <teamplate v-if="item.module_type != 0">
+                                    <template v-if="item.module_type != 0">
                                         <VChip
                                             :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
                                             {{ pay_window_secure_levels.find(obj => obj.id === item[_key])?.title }}
                                         </VChip>
-                                    </teamplate>
+                                    </template>
                                     <template v-else>
                                         -
                                     </template>
                                 </span>
                                 <span v-else-if="_key === 'pay_window_extend_hour'">
-                                    <teamplate v-if="item.module_type === 1">
+                                    <template v-if="item.module_type === 1">
                                         {{ pay_window_extend_hours.find(obj => obj.id === item[_key])?.title }}
-                                    </teamplate>
+                                    </template>
                                     <template v-else>
                                         -
                                     </template>

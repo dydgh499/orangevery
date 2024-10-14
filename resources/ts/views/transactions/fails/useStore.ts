@@ -24,9 +24,9 @@ export const useSearchStore = defineStore('failSearchStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 
-    const exporter = async (type: number) => {
+    const exporter = async () => {
         const r = await store.get(store.base_url, { params: store.getAllDataFormat() })
-        printer(type, r.data.content)
+        printer(r.data.content)
     }
 
     const printer = (type: number, datas: FailTransaction[]) => {

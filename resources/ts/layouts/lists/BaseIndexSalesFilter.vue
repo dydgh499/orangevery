@@ -34,13 +34,6 @@ const selectedSalesEvent = (select_idx:number) => {
 }
 
 const init = () => {
-    for (let i = 0; i < 6; i++) {
-        const idx = (5 - i)
-        if (route.query['sales' + idx + '_id'])
-            store.params['sales' + idx + '_id'] = parseInt(route.query['sales' + idx + '_id'] as string)
-        else if (corp.pv_options.free.init_search_filter)
-            store.params['sales' + idx + '_id'] = undefined
-    }
     if (corp.pv_options.free.init_search_filter)
         initAllSales()
 }

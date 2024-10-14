@@ -8,7 +8,6 @@ import authV2LoginDefault1 from '@images/pages/auth-v2-login-default1.png'
 import authV2LoginDefault2 from '@images/pages/auth-v2-login-default2.png'
 import authV2LoginDefault3 from '@images/pages/auth-v2-login-default3.png'
 import authV2LoginDefault4 from '@images/pages/auth-v2-login-default4.png'
-import { themeConfig } from '@themeConfig'
 import { useTheme } from 'vuetify'
 import { VDivider } from 'vuetify/lib/components/index.mjs'
 
@@ -27,13 +26,10 @@ const login_imgs = [
 const color = ref(props.item.theme_css.main_color)
 
 const setPrimaryColor = (color: string) => {
-    localStorage.setItem(`${themeConfig.app.title}-lightThemePrimaryColor`, color)
-    localStorage.setItem(`${themeConfig.app.title}-darkThemePrimaryColor`, color)
     vuetifyTheme.themes.value['light'].colors.primary = color
     vuetifyTheme.themes.value['dark'].colors.primary = color
 
     props.item.theme_css.main_color = color
-    localStorage.setItem(`${themeConfig.app.title}-initial-loader-color`, color)
 }
 const moveNewTap = (url: string) => {
     window.open(url)
