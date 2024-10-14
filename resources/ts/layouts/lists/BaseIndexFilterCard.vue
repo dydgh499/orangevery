@@ -39,6 +39,7 @@ const props = defineProps<Props>()
             </VCol>
         </div>
     </AppCardActions>
+    <br>
 </template>
 <style scoped>
 :deep(.v-card-item) {

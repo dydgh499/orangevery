@@ -32,7 +32,6 @@ onMounted(() => {
             <BaseIndexChart :metas="props.metas"/>
             <VCol>
                 <slot name="filter"></slot>
-                <br>
                 <VCard>
                     <BaseIndexFilter 
                         :placeholder="props.placeholder" 
