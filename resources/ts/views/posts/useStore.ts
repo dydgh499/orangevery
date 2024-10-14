@@ -1,6 +1,5 @@
 import router from '@/router'
 import { Header } from '@/views/headers'
-import { Searcher } from '@/views/searcher'
 import type { Options, Post } from '@/views/types'
 import { getUserLevel, user_info } from '@axios'
 
@@ -17,7 +16,7 @@ export const moveContent = (post: Post, store: any) => {
         if(post.writer === user_info.value.user_name)
             store.edit(post.id)
         else
-            router.push('/posts/view/' + post.id)
+            router.push('/posts/' + post.id)
     }
     else
         store.edit(post.id)
@@ -35,7 +34,6 @@ export const getContentTooltip = (post: Post) => {
         return '상세보기'
 }
 export const useSearchStore = defineStore('postSearchStore', () => {
-    const store = Searcher('posts')
     const head  = Header('posts', '공지사항')
     const headers: Record<string, string> = {
         'id' : 'NO.',
@@ -50,23 +48,9 @@ export const useSearchStore = defineStore('postSearchStore', () => {
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
-
-    const exporter = async () => {
-        const keys = Object.keys(head.flat_headers.value)
-        const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
-        let datas = r.data.content;
-        for (let i = 0; i < datas.length; i++) {
-            datas[i]['type'] = types.find(types => types.id === datas[i]['type'])?.title
-            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
-        }
-        head.exportToExcel(datas)
-    }
-
     
     return {
-        store,
         head,
-        exporter,
     }
 })
 

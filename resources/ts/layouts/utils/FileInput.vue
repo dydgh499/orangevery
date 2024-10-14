@@ -19,7 +19,7 @@ const props = defineProps<Props>()
 const files = ref(<File[]>([]))
 const ext = ref<string>('')
 const previewStyle = `
-    border: 2px solid rgb(130, 130, 130);
+    border: 1px solid rgb(130, 130, 130);
     border-radius: 0.5em;
     margin-block: 0;
     margin-inline: 0.5em;

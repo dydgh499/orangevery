@@ -18,7 +18,7 @@ const files = ref(<File[]>([]))
 const preview = ref<string>('/utils/icons/img-preview.svg')
 const ext = ref<string>(getFileExtension(props.preview))
 const previewStyle = `
-    border: 2px solid rgb(130, 130, 130);
+    border: 1px solid rgb(130, 130, 130);
     border-radius: 0.5em;
     float: inline-end;
     margin-block-end: 0.5em;

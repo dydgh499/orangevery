@@ -27,7 +27,7 @@ watchEffect(() => {
 </script>
 <template>
     <section style="max-width: 1000px; margin-right: auto; margin-left: auto;">
-        <CreateForm :id="0" :path="'posts/view'" :tabs="tabs" :item="post">
+        <CreateForm :id="0" :path="'posts'" :tabs="tabs" :item="post">
             <template #view>
                 <VWindowItem>                    
                     <VRow class="match-height">

@@ -1,17 +1,47 @@
 <script setup lang="ts">
+import { useDynamicTabStore } from '@/@core/utils/dynamic_tab'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import router from '@/router'
 import PostReplyView from '@/views/posts/PostReplyView.vue'
 import { getContentTooltip, moveContent, types, useSearchStore } from '@/views/posts/useStore'
+import { Searcher } from '@/views/searcher'
 import { allLevels, getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 
-const { store, head, exporter } = useSearchStore()
+const route = useRoute()
+const store = Searcher('posts')
+const { head } = useSearchStore()
+const { tabs } = useDynamicTabStore()
+
+const exporter = async () => {
+    const keys = Object.keys(head.flat_headers.value)
+    const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
+    let datas = r.data.content;
+    for (let i = 0; i < datas.length; i++) {
+        datas[i]['type'] = types.find(types => types.id === datas[i]['type'])?.title
+        datas[i] = head.sortAndFilterByHeader(datas[i], keys)
+    }
+    head.exportToExcel(datas)
+}
+
+if(route.query.type !== undefined)
+    store.params.type = Number(route.query.type)
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
+watchEffect(() => {
+    if(store.params.type !== undefined) {
+        const type = types.find(obj => obj.id === store.params.type)
+        if(type && (route.fullPath.includes('/posts?type=') && route.fullPath.includes(store.params.type as string))) {
+            const idx = tabs.findIndex(obj => obj.path === route.fullPath)
+            if(idx !== -1) {
+                tabs[idx].title = type.title
+            }
+        }
+    }
+})
 </script>
 <template>
     <BaseIndexView placeholder="게시글 검색" :metas="[]" :add="true" :add_name="getUserLevel() < 35 ? '1:1 문의' : '게시글'" :date_filter_type="DateFilters.NOT_USE">
@@ -36,7 +66,7 @@ provide('exporter', exporter)
             </tr>
         </template>
         <template #body>
-            <template v-for="(item, index) in store.getItems" :key="index">
+            <template v-for="(item, index) in store.getItems.value" :key="index">
                 <tr>
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" :class="_key == 'title' ? 'list-square title' : 'list-square'">
