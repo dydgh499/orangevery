@@ -119,6 +119,17 @@ if (props.item.id)
 watchEffect(() => {
     setNullRemove(pay_modules)
 })
+
+onDeactivated(() => {
+    const tooltips = document.querySelectorAll('.v-tooltip.v-overlay--active')
+    tooltips.forEach((tooltip) => {
+        tooltip.classList.remove('v-overlay--active')
+        const contents = tooltip.querySelectorAll('.v-overlay__content')
+        contents.forEach((content) => {
+            (content as HTMLElement).style.display = 'none'; // 툴팁 강제 숨김 처리
+        })
+    })
+})
 </script>
 <template>
     <div>

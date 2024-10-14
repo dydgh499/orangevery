@@ -168,6 +168,17 @@ export const Header = (path: string, file_name: string) => {
             _sub_headers.push(getSubHeaderFormat(title, keys[0], keys[keys.length - 1], 'string', keys.length))
     }
 
+    onDeactivated(() => {
+        const tooltips = document.querySelectorAll('.v-tooltip.v-overlay--active')
+        tooltips.forEach((tooltip) => {
+            tooltip.classList.remove('v-overlay--active')
+            const contents = tooltip.querySelectorAll('.v-overlay__content')
+            contents.forEach((content) => {
+                (content as HTMLElement).style.display = 'none'; // 툴팁 강제 숨김 처리
+            })
+        })
+    })
+
     return {
         filter, headers, sub_headers, flat_headers, initHeader, sortAndFilterByHeader,
         flatten, getDepth, getSubHeaderComputed, getSubHeaderFormat, setHeaderStyle,

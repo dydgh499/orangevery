@@ -363,7 +363,6 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         head.exportToExcel(datas)
     }
 
-
     return {
         store,
         head,

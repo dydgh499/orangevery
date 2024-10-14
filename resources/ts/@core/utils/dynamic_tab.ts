@@ -1,6 +1,6 @@
 import { NavGroup, NavLink } from '@/@layouts/types';
 import navItems from '@/navigation/vertical';
-import { user_info } from '@/plugins/axios';
+import { getUserLevel, user_info } from '@/plugins/axios';
 import corp from '@/plugins/corp';
 import router from '@/router';
 import { RouteLocationNormalized } from "vue-router";
@@ -33,7 +33,8 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
                 return nav_title.replaceAll('목록', " ").replaceAll('관리', " ") + '추가'
             }
             const getEditViewTitle = () => {
-                let title = nav_title.replaceAll('목록', " ").replaceAll('관리', " ") + '수정'
+                let title = nav_title.replaceAll('목록', " ").replaceAll('관리', " ")
+                title += getUserLevel() >= 35 ? `수정` : `정보`
                 if(numbers?.length)
                     title += `(#${numbers[0]})`
                 return title
@@ -93,8 +94,9 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
     }
 
     const remove = (index: number) => {
-        if (tabs.length) 
+        if (tabs.length) {
             tabs.splice(index, 1)
+        }
     }
 
     const titleUpdate = (id: number, title: string, user_name: string) => {
@@ -105,9 +107,14 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
     }
 
     watchEffect(() => {
-        if(tabs.length > 20) 
+        if(user_info.value.user_name !== 'undefined' && user_info.value.user_name !== undefined)
+            local_key.value = `${corp.name}-${user_info.value.user_name}-dynamic-tap-headers`  
+    })
+
+    watchEffect(() => {
+        if(tabs.length > 20)
             tabs.splice(0, 1)
-        if(user_info.value.user_name)
+        if(user_info.value.user_name !== 'undefined' && user_info.value.user_name !== undefined)
             localStorage.setItem(local_key.value, JSON.stringify(tabs))
     })
 

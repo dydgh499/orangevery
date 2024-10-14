@@ -127,11 +127,9 @@ onMounted(() => {
             </div>
         </template>
         <RouterView v-slot="{ Component, route }">
-            <Transition :name="appRouteTransition" mode="out-in">
-                <KeepAlive :include="['[id]', 'index']" :exclude="['']" :max="20">
-                    <Component :is="Component" :key="route.fullPath" />
-                </KeepAlive>
-            </Transition>
+            <KeepAlive :include="['[id]', 'index']" :exclude="['']" :max="20">
+                <Component :is="Component" :key="route.fullPath" />
+            </KeepAlive>
         </RouterView>
 
         

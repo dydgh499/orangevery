@@ -74,6 +74,7 @@ const addNewPayModule = async () => {
 
 if (props.item.id)
     Object.assign(pay_modules, await getAllPayModules(props.item.id))
+
 watchEffect(() => {
     setNullRemove(pay_modules)
 })
