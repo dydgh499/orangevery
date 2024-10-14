@@ -20,8 +20,8 @@ watchEffect(() => {
 })
 watchEffect(() => {
     const type = types.find(obj => obj.id === props.item.type)
-    if(type && (route.path.includes('create') || route.path.includes('edit'))) {
-        const idx = store.tabs.findIndex(obj => obj.path === route.path)
+    if(type && (route.fullPath.includes('create') || route.fullPath.includes('edit'))) {
+        const idx = store.tabs.findIndex(obj => obj.path === route.fullPath)
         if(idx !== -1) {
             store.tabs[idx].title = type.title + ` ${props.item.id ? `수정(#${props.item.id})` : '추가'}`
         }

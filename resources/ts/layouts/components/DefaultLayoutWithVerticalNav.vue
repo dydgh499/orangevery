@@ -127,7 +127,7 @@ onMounted(() => {
             </div>
         </template>
         <RouterView v-slot="{ Component, route }">
-            <KeepAlive :include="['[id]', 'index', 'home']" :exclude="['']" :max="20">
+            <KeepAlive :include="['[id]', 'index', 'home', 'reply']" :exclude="['']" :max="20">
                 <Component :is="Component" :key="route.fullPath" />
             </KeepAlive>
         </RouterView>

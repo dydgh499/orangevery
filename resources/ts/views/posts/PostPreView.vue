@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useDynamicTabStore } from '@/@core/utils/dynamic_tab'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import Editor from '@/layouts/utils/Editor.vue'
 import PostContentView from '@/views/posts/PostContentView.vue'
@@ -13,6 +14,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const route = useRoute()
+const store = useDynamicTabStore()
 const errorHandler = <any>(inject('$errorHandler'))
 const ori_posts = ref<Post[]>([])
 
@@ -31,6 +33,18 @@ watchEffect(() => {
         .catch(e => {
             const r = errorHandler(e)
         })
+    }
+})
+
+watchEffect(() => {
+    if(route.query.parent_id) {
+        const type = types.find(obj => obj.id === props.item.type)
+        if(type && (route.fullPath.includes('/reply?') && route.fullPath.includes(route.query.parent_id as string))) {
+            const idx = store.tabs.findIndex(obj => obj.path === route.fullPath)
+            if(idx !== -1) {
+                store.tabs[idx].title = type.title + ` 답변(#${route.query.parent_id})`
+            }
+        }
     }
 })
 </script>
