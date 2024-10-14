@@ -39,7 +39,7 @@ watchEffect(() => {
 watchEffect(() => {
     if(route.query.parent_id) {
         const type = types.find(obj => obj.id === props.item.type)
-        if(type && (route.fullPath.includes('/reply?') && route.fullPath.includes(route.query.parent_id as string))) {
+        if(type && (route.fullPath.includes('posts/reply?') && route.fullPath.includes(route.query.parent_id as string))) {
             const idx = store.tabs.findIndex(obj => obj.path === route.fullPath)
             if(idx !== -1) {
                 store.tabs[idx].title = type.title + ` 답변(#${route.query.parent_id})`
