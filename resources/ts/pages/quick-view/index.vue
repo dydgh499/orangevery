@@ -72,7 +72,7 @@ onMounted(() => {
                             <VIcon end icon="twemoji:adhesive-bandage" />
                         </VBtn>
                         <VBtn variant="tonal" @click="payShow.show(payment_modules[0])" class="shortcut-button"
-                            v-if="payment_modules.length > 0 && payment_modules[0].pay_window_secure_level">
+                            v-if="payment_modules.length > 0 && payment_modules[0].pay_window_secure_level" :key="payment_modules.length">
                             {{ getPaymentModuleNote }}
                             <VIcon end :icon="getPaymentModuleIcon" />
                         </VBtn>

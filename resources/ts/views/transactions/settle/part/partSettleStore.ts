@@ -1,5 +1,4 @@
 import { useDynamicTabStore } from "@/@core/utils/dynamic_tab"
-import corp from "@/plugins/corp"
 import { useRequestStore } from "@/views/request"
 import { cloneDeep } from "lodash"
 
@@ -22,7 +21,6 @@ export const partSettleStore = (store: any, selected: any, dialog: any, table: a
     const snackbar = <any>(inject('snackbar'))
 
     const init = async () => {
-        store.params.dev_use = corp.pv_options.auth.levels.dev_use
         store.params.id = route.params.id
         store.params.level = Number(route.query.level)
 

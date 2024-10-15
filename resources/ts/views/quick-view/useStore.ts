@@ -2,14 +2,13 @@ import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import type { PayModule } from '@/views/types'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
-import { filter } from 'lodash'
 import { ref } from 'vue'
 
-const payment_modules = getUserLevel() == 10 ? await getAllPayModules() : []
 export const useQuickViewStore = defineStore('useQuickViewStore', () => {
-    const hands = ref(<PayModule[]>(filter(payment_modules, { module_type: 1 })))
-    const auths = ref(<PayModule[]>(filter(payment_modules, { module_type: 2 })))
-    const simples = ref(<PayModule[]>(filter(payment_modules, { module_type: 3 })))
+    const payment_modules = ref(<PayModule[]>([]))
+    const hands = ref(<PayModule[]>([]))
+    const auths = ref(<PayModule[]>([]))
+    const simples = ref(<PayModule[]>([]))
 
     const getPayMenuIcon = (module_type: number) => {
         if(module_type === 1)
@@ -90,6 +89,15 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
         }
         return payment_menus
     })
+
+    if(getUserLevel() == 10) {
+        getAllPayModules().then(_payment_modules => {
+            payment_modules.value = _payment_modules
+            hands.value = _payment_modules.filter(obj => obj.module_type === 1)
+            auths.value =_payment_modules.filter(obj => obj.module_type === 2)
+            simples.value = _payment_modules.filter(obj => obj.module_type === 3)    
+        })
+    }
 
     return {
         getPayMenuIcon,

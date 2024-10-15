@@ -114,7 +114,7 @@ export function settlementHistoryFunctionCollect(store: any) {
         if (await alert.value.show('정산매출을 다운로드 하시겠습니까?')) {
             const params: Record<string, string | number> = {
                 page: 1,
-                page_size: 9999999,
+                page_size: 999999,
                 level: is_mcht ? 10 : item.level,
                 use_realtime_deposit: Number(corp.pv_options.paid.use_realtime_deposit)
             };
@@ -127,7 +127,7 @@ export function settlementHistoryFunctionCollect(store: any) {
             const res = await get('/api/v1/manager/transactions', { params: params })
             if (res.status == 200) {
                 snackbar.value.show('엑셀 출력중 입니다..', 'success')
-                printer(1, res.data.content)
+                printer(res.data.content)
                 snackbar.value.show('성공하였습니다.', 'success')
             }
             else
