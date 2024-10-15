@@ -3,6 +3,7 @@ import navItems from '@/navigation/vertical';
 import { getUserLevel, user_info } from '@/plugins/axios';
 import corp from '@/plugins/corp';
 import router from '@/router';
+import { types } from '@/views/posts/useStore';
 import { RouteLocationNormalized } from "vue-router";
 
 interface Tab {
@@ -20,6 +21,7 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
         const edit_pattern = /-edit-\d+/;
         const part_settle_pattern = /-part-\d+/;
         const edit_brand_pattern = /services-brands-edit-\d+/;
+        const post_view_pattern = /-\d+/;
         const getTitle = (nav_title: string) => {            
             const numbers = path.match(/\d+/g);
 
@@ -42,6 +44,12 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
             const getPartSettleViewTitle = () => {
                 return numbers?.length ? nav_title + `(#${numbers[0]})` : nav_title
             }
+            const getPostViewTitle = () => {
+                let title = nav_title
+                if(numbers?.length)
+                    title += `(#${numbers[0]})`
+                return title
+            }
 
             if(edit_brand_pattern.test(path))
                 return nav_title
@@ -53,6 +61,8 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
                 return getEditViewTitle()
             else if(part_settle_pattern.test(path)) 
                 return getPartSettleViewTitle()
+            else if(post_view_pattern.test(path) && path.includes('posts'))
+                return getPostViewTitle()
             else
                 return nav_title
         }
@@ -61,11 +71,15 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
             return tabs.some(obj => obj.path === to.fullPath)
         }
 
-
         const getNavs = () => {
             const navs = <any>([]);
             const [uri, query] = to.fullPath.slice(1).replaceAll('/', '-').split('?')
-            const dest = uri.replace(edit_pattern, "").replace(part_settle_pattern, '').replaceAll('-create', "").replaceAll('-reply', "")
+            const dest = uri
+                .replace(edit_pattern, '')
+                .replace(part_settle_pattern, '')
+                .replace(post_view_pattern, '')
+                .replaceAll('-create', "")
+                .replaceAll('-reply', "")
             const extract = (item: NavLink | NavGroup) => {
                 // 'title'과 'to'가 있는 경우 추출
                 if (item.title && item.to) {
@@ -106,6 +120,18 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
         }
     }
 
+    const postTitleUpdate = (view_type:string, post_type:number, id: number, path: string) => {
+        const type = types.find(obj => obj.id === post_type)
+        if(type) {
+            const idx = tabs.findIndex(obj => obj.path === path)
+            if(idx !== -1) {
+                tabs[idx].title = type.title + `${view_type}(#${id})`    
+                return true
+            }
+        }
+        return false
+    }
+
     watchEffect(() => {
         if(user_info.value.user_name !== 'undefined' && user_info.value.user_name !== undefined)
             local_key.value = `${corp.name}-${user_info.value.user_name}-dynamic-tap-headers`  
@@ -123,6 +149,7 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
         move,
         remove,
         titleUpdate,
+        postTitleUpdate,
         tab,
         tabs,
     }

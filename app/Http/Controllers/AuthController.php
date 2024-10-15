@@ -132,7 +132,7 @@ class AuthController extends Controller
         if($result !== null)
             return $result;
 
-        $result = Login::isSafeAccount(new Merchandise(), $request);    // check merchandise
+        $result = Login::isSafeAccount(Merchandise::with(['onlinePays.payWindows']), $request);    // check merchandise
         if($result !== null)
             return $result;
         else

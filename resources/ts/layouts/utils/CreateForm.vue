@@ -16,6 +16,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
+const route = useRoute()
 const tab = ref(0)
 const vForm = ref<VForm>()
 
@@ -66,6 +67,10 @@ const authHideConditions = () => {
     }
 }
 
+const back = () => {
+    router.replace('/' + props.path.replace('posts/view', 'posts'))
+}
+
 if (props.id) 
         setOneObject('/' + props.path, Number(props.id), props.item)
 
@@ -75,6 +80,13 @@ watchEffect(() => {
             store.titleUpdate(props.item.id, '가맹점', props.item.mcht_name)
         else if(props.path === 'salesforces')
             store.titleUpdate(props.item.id, '영업점', props.item.sales_name)
+        else if(props.path === 'posts') {
+            if(store.postTitleUpdate(' 수정', props.item.type, props.item.id, `/${props.path}/edit/${props.item.id}`) === false)
+                store.postTitleUpdate(' 답변', props.item.type, props.item.id, `/${props.path}/reply?parent_id=${route.query.parent_id}`)
+        }
+        else if(props.path === 'posts/view') {
+            store.postTitleUpdate('', props.item.type, props.item.id, `/${props.path}/${props.item.id}`)
+        }
     }
 })
 
@@ -113,7 +125,7 @@ onDeactivated(() => {
                     <VIcon size="22" icon="tabler-trash" />
                 </VBtn>
             </template>
-            <VBtn type="button" color="warning" @click="router.replace('/' + props.path)">
+            <VBtn type="button" color="warning" @click="back()">
                 뒤로가기
                 <VIcon end size="22" icon="tabler:arrow-back" />
             </VBtn>

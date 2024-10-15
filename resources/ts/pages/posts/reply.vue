@@ -9,10 +9,8 @@ const tabs = <Tab[]>([
 ])
 const id = ref<number>(0)
 const route = useRoute()
+item.parent_id = Number(route.query.parent_id)
 
-watchEffect(() => {
-    item.parent_id = Number(route.query.parent_id)
-})
 </script>
 <template>
     <section style="max-width: 1000px; margin-right: auto; margin-left: auto;">

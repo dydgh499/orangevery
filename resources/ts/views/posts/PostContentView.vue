@@ -16,10 +16,10 @@ const props = defineProps<Props>()
         <VRow class="pt-5">
             <VCol cols="12">
                 <VRow no-gutters style="align-items: center;">
-                    <VCol cols="12" :md="1">
+                    <VCol cols="12" :md="2">
                         <label>제목</label>
                     </VCol>
-                    <VCol cols="12" :md="11">
+                    <VCol cols="12" :md="10">
                         <div class="post-title">{{ props.post?.title }}</div>     
                     </VCol>
                 </VRow>

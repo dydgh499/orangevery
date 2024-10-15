@@ -56,6 +56,14 @@ class Merchandise extends Authenticatable
         return $this->hasMany(NotiUrl::class, 'mcht_id')->where('is_delete', false)->select();
     }
 
+    public function onlinePays()
+    {
+        return $this->hasMany(PaymentModule::class, 'mcht_id')
+            ->where('is_delete', false)
+            ->where('module_type', '!=', 0)
+            ->select(['id', 'mcht_id', 'module_type', 'note', 'pay_window_secure_level']);
+    }
+
     public function paymentModules()
     {
         return $this->hasMany(PaymentModule::class, 'mcht_id')

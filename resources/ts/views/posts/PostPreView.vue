@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useDynamicTabStore } from '@/@core/utils/dynamic_tab'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import Editor from '@/layouts/utils/Editor.vue'
 import PostContentView from '@/views/posts/PostContentView.vue'
@@ -14,39 +13,26 @@ interface Props {
 const props = defineProps<Props>()
 
 const route = useRoute()
-const store = useDynamicTabStore()
 const errorHandler = <any>(inject('$errorHandler'))
 const ori_posts = ref<Post[]>([])
 
-watchEffect(() => {
-    if(route.query.parent_id) {
-        axios.get('/api/v1/manager/posts/' + route.query.parent_id + '/parent')
-        .then(r => {
-            ori_posts.value = r.data
-            if(ori_posts.value.length) {
-                const last_idx = ori_posts.value.length - 1
-                props.item.type = ori_posts.value[last_idx]?.type
-                props.item.title = ori_posts.value[last_idx]?.title
-                props.item.parent_id = ori_posts.value[last_idx]?.id
-            }
-        })
-        .catch(e => {
-            const r = errorHandler(e)
-        })
-    }
-})
-
-watchEffect(() => {
-    if(route.query.parent_id) {
-        const type = types.find(obj => obj.id === props.item.type)
-        if(type && (route.fullPath.includes('posts/reply?') && route.fullPath.includes(route.query.parent_id as string))) {
-            const idx = store.tabs.findIndex(obj => obj.path === route.fullPath)
-            if(idx !== -1) {
-                store.tabs[idx].title = type.title + ` 답변(#${route.query.parent_id})`
-            }
+if(route.query.parent_id) {
+    axios.get('/api/v1/manager/posts/' + route.query.parent_id + '/parent')
+    .then(r => {
+        ori_posts.value = r.data
+        if(ori_posts.value.length) {
+            const last_idx = ori_posts.value.length - 1
+            props.item.type = ori_posts.value[last_idx]?.type
+            props.item.title = ori_posts.value[last_idx]?.title
+            props.item.parent_id = ori_posts.value[last_idx]?.id
         }
-    }
-})
+    })
+    .catch(e => {
+        const r = errorHandler(e)
+    })
+}
+
+
 </script>
 <template>
     <VRow class="match-height">

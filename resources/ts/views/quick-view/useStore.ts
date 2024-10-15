@@ -1,15 +1,12 @@
-import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import type { PayModule } from '@/views/types'
-import { getUserLevel } from '@axios'
+import { getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 import { ref } from 'vue'
 
 export const useQuickViewStore = defineStore('useQuickViewStore', () => {
-    const payment_modules = ref(<PayModule[]>([]))
-    const hands = ref(<PayModule[]>([]))
-    const auths = ref(<PayModule[]>([]))
-    const simples = ref(<PayModule[]>([]))
-
+    const payment_modules = ref(<PayModule[]>(
+        getUserLevel() === 10 ? user_info.value.online_pays : []
+    ))
     const getPayMenuIcon = (module_type: number) => {
         if(module_type === 1)
             return 'fluent-payment-32-regular'
@@ -52,11 +49,16 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
 
     const getPaymentMenu = computed(() => {
         const payment_menus = []
-        if (getUserLevel() == 10) {
-            payment_menus.push(...getPayLinkFormats(hands.value, getPayMenuIcon(1)))
-            payment_menus.push(...getPayLinkFormats(auths.value, getPayMenuIcon(2)))
-            payment_menus.push(...getPayLinkFormats(simples.value, getPayMenuIcon(3)))
+        const moduleTypeFilter = (module_type: number) => {
+            return payment_modules.value.filter(obj => obj.module_type === module_type)            
         }
+
+        if (getUserLevel() == 10) {
+            payment_menus.push(...getPayLinkFormats(moduleTypeFilter(1), getPayMenuIcon(1)))
+            payment_menus.push(...getPayLinkFormats(moduleTypeFilter(2), getPayMenuIcon(2)))
+            payment_menus.push(...getPayLinkFormats(moduleTypeFilter(3), getPayMenuIcon(3)))
+        }
+
         const transactions = {
             title: '매출 관리',
             icon: { icon: 'ic-outline-payments' },
@@ -90,22 +92,10 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
         return payment_menus
     })
 
-    if(getUserLevel() == 10) {
-        getAllPayModules().then(_payment_modules => {
-            payment_modules.value = _payment_modules
-            hands.value = _payment_modules.filter(obj => obj.module_type === 1)
-            auths.value =_payment_modules.filter(obj => obj.module_type === 2)
-            simples.value = _payment_modules.filter(obj => obj.module_type === 3)    
-        })
-    }
-
     return {
         getPayMenuIcon,
         getPayLinkFormats,
         getPaymentMenu,
-        hands,
-        auths,
-        simples,
         payment_modules,
     }
 })
