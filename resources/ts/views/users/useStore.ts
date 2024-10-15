@@ -45,6 +45,7 @@ export const banks = [
     { code: "101", title: " 한국신용정보원"}, { code: "103", title: "SBI저축은행"}, { code: "105", title: "웰컴저축은행"},
     // 임시
     { code: "190", title: "융창저축은행"},
+    { code: "191", title: "청주저축은행"},
     //
     { code:"209", title: "유안타증권" }, { code:"218", title: "KB증권" }, { code:"221", title: "상상인증권" }, { code:"222", title: "한양증권" },
     { code:"223", title: "리딩투자증권" },{ code:"224", title: "BNK투자증권" },{ code:"225", title: "IBK투자증권" }, { code:"227", title: "다올투자증권" },
