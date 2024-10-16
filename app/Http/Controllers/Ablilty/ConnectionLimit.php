@@ -24,7 +24,7 @@ class ConnectionLimit
     static public function validate($request)
     {
         $id = optional($request->user())->id ?: $request->ip();
-        if(self::get($id) > 999)
+        if(self::get($id) > 500)
         {
             AbnormalConnection::tryMecro();
             return false;
