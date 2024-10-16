@@ -7,9 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Ablilty\AbnormalConnection;
-use App\Http\Controllers\Auth\AuthOperatorIP;
-use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\ConnectionLimit;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -73,16 +71,10 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
-            $is_operator = AuthOperatorIP::valiate($brand['id'], $request->ip()) ? true : false;
-            if($is_operator === false)
-            {
-                return Limit::perMinute(1000)->by(optional($request->user())->id ?: $request->ip())->response(function() use($request) {
-                    AbnormalConnection::tryMecro();
-                    return response('Too Many Requests', 429);
-                });    
-            }
-            return null;
+            if(ConnectionLimit::validate($request))
+                return null;
+            else
+                return response('Too Many Requests', 429);
         });
     }
 }

@@ -82,13 +82,15 @@ const accountLockLimits = <Options[]>([
 
                     <CreateHalfVColV2 :mdl="6" :mdr="6">
                         <template #l_name>
-                            <BaseQuestionTooltip location="top" text="고정 테이블 사용" :content="`리스트 화면에서 테이블 헤더가 고정됩니다.`"/>
+                            <BaseQuestionTooltip location="top" text="고정 테이블 사용" :content="`목록화면에서 조회테이블 헤더가 고정됩니다.`"/>
                         </template>
                         <template #l_input>
                             <VSwitch hide-details v-model="props.item.free.use_fix_table_view"
                                 color="primary" />
                         </template>
-                        <template #r_name>고정 테이블 사이즈</template>
+                        <template #r_name>
+                            <BaseQuestionTooltip location="top" text="고정 테이블 사이즈" :content="`목록화면에서 조회테이블의 세로높이 입니다.`"/>
+                        </template>
                         <template #r_input>
                             <VTextField v-model="props.item.free.fix_table_size" placeholder="사이즈 입력"
                                         type="number" suffix="px" v-if="props.item.free.use_fix_table_view" />
