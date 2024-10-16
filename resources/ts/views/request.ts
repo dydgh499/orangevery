@@ -1,5 +1,14 @@
 import { autoInsertPaymentModule } from '@/plugins/fixplus'
 import router from '@/router'
+import { defaultItemInfo as complaintItemInit } from '@/views/complaints/useStore'
+import { defaultItemInfo as notiItemInit } from '@/views/merchandises/noti-urls/useStore'
+import { defaultItemInfo as pmodItemInit } from '@/views/merchandises/pay-modules/useStore'
+import { defaultItemInfo as mchtItemInit } from '@/views/merchandises/useStore'
+import { defaultItemInfo as popupItemInit } from '@/views/popups/useStore'
+import { defaultItemInfo as postItemInit } from '@/views/posts/useStore'
+import { defaultItemInfo as salesItemInit } from '@/views/salesforces/useStore'
+import { defaultItemInfo as transItemInit } from '@/views/transactions/useStore'
+
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
 import type { Merchandise } from '@/views/types'
@@ -12,6 +21,29 @@ export const useRequestStore = defineStore('requestStore', () => {
     const errorHandler = <any>(inject('$errorHandler'))
     const { all_sales, mchts, sales } = useSalesFilterStore()
     const { isMchtBlackList } =  useMchtBlacklistStore()
+
+    const clear = (back_url: string) => {
+        const path = ''
+        const item = {}
+        if (back_url === '/merchandises') 
+            return mchtItemInit()
+        else if (back_url === '/merchandises/pay-modules')
+            return pmodItemInit()
+        else if (back_url === '/merchandises/noti-urls')
+            return notiItemInit()
+        else if (back_url === '/transactions')
+            return transItemInit()
+        else if (back_url === '/salesforces')
+            return salesItemInit()
+        else if (back_url === '/popups')
+            return popupItemInit()
+        else if (back_url === '/posts')
+            return postItemInit()
+        else if (back_url === '/complaints')
+            return complaintItemInit()
+        else
+            return {path, item}
+    }
 
     const deleteTreatment = (back_url: string, is_redirect: boolean, params: any, res: any) => {
         if (res.status === 201) {
@@ -27,10 +59,10 @@ export const useRequestStore = defineStore('requestStore', () => {
                 params.id = res.data.id
                 if (back_url === '/salesforces') {
                     const idx = getLevelByIndex(params.level)
-                    all_sales[idx].push(params)
+                    all_sales[idx].push({ ...params})
                 }
                 else if (back_url === '/merchandises') {
-                    mchts.push(params)
+                    mchts.push({ ...params})
                     mchts.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
                     if(corp.id === 30) {
                         autoInsertPaymentModule(params.id)
@@ -43,11 +75,14 @@ export const useRequestStore = defineStore('requestStore', () => {
                                 if (!sale.under_auto_settings)
                                     sale.under_auto_settings = []
                                 else
-                                    sale.under_auto_settings.push(params)
+                                    sale.under_auto_settings.push({...params})
                             }
                         })
                     })
                 }
+                const { path, item } = clear(back_url)
+                if(path !== '')
+                    Object.assign(params, item)
             }
             if (is_redirect) {
                 if (back_url === '/merchandises/pay-modules')
@@ -60,7 +95,7 @@ export const useRequestStore = defineStore('requestStore', () => {
                     setTimeout(function () { router.replace('/salesforces/edit/' + res.data.sales_id) }, 500)        
                 else if (back_url === '/salesforces')
                     setTimeout(function () { router.push('/salesforces/edit/' + res.data.id) }, 500)
-                else if (back_url === '/merchandises')
+                else if (back_url === '/merchandises') 
                     setTimeout(function () { router.push('/merchandises/edit/' + res.data.id) }, 500)
                 else
                     setTimeout(function () { router.replace(back_url) }, 1000)

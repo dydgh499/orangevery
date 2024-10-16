@@ -102,21 +102,21 @@ watchEffect(() => {
             <VCol md="5" cols="4">API KEY</VCol>
             <VCol md="7">
                 <VTextField type="text" v-model="props.item.api_key" prepend-inner-icon="ic-baseline-vpn-key"
-                        placeholder="API KEY 입력" persistent-placeholder />
+                        placeholder="API KEY 입력" persistent-placeholder maxlength="100"/>
             </VCol>
         </VRow>
         <VRow v-if="isAbleModiy(props.item.id)">
             <VCol md="5" cols="4">SUB KEY</VCol>
             <VCol md="7">
                 <VTextField type="text" v-model="props.item.sub_key" prepend-inner-icon="ic-sharp-key"
-                        placeholder="SUB KEY 입력" persistent-placeholder />
+                        placeholder="SUB KEY 입력" persistent-placeholder maxlength="100"/>
             </VCol>
         </VRow>
         <VRow v-if="isAbleModiy(props.item.id) && corp.pv_options.paid.use_pmid">
             <VCol md="5" cols="4">PMID</VCol>
             <VCol md="7">
                 <VTextField type="text" v-model="props.item.p_mid" prepend-inner-icon="tabler-user"
-                        placeholder="PMID 입력" persistent-placeholder />
+                        placeholder="PMID 입력" persistent-placeholder maxlength="50"/>
             </VCol>
         </VRow>
         <VRow v-if="isAbleModiy(props.item.id)">
@@ -124,7 +124,8 @@ watchEffect(() => {
             <VCol md="7">
                 <div style="display: flex; flex-direction: row; justify-content: space-between;">
                     <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
-                        placeholder="MID 입력" persistent-placeholder />
+                        placeholder="MID 입력" persistent-placeholder
+                        maxlength="50"/>
                     <VBtn type="button" variant="tonal" v-if="props.item.id == 0 && corp.pv_options.paid.use_mid_create && getUserLevel() >= 35"
                         @click="midCreate()">
                         {{ "생성" }}
@@ -147,7 +148,8 @@ watchEffect(() => {
             <VCol md="7">
                 <div style="display: flex; flex-direction: row; justify-content: space-between;">
                     <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
-                        placeholder="TID 입력" persistent-placeholder />
+                        placeholder="TID 입력" persistent-placeholder
+                        maxlength="50"/>
                     <VBtn type="button" variant="tonal" v-if="props.item.id == 0 && corp.pv_options.paid.use_tid_create && getUserLevel() >= 35" 
                         @click="tidCreate()">
                         {{ "생성" }}

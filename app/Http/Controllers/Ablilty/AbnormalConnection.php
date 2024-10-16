@@ -21,6 +21,17 @@ class AbnormalConnection
         return AbnormalConnectionHistory::create($data);
     }
 
+    static private function masking($text)
+    {
+        $mask_size = round(strlen($text) * 0.8);
+        $mask_text = substr($text, 0, strlen($text) - $mask_size);
+        for ($i=0; $i < $mask_size; $i++) 
+        {
+            $mask_text .= '*';
+        }
+        return $mask_text;
+    }
+
     static private function blockIP($min)
     {
         IPInfo::setBlock(request()->ip(), (int)$min*60);
@@ -47,6 +58,8 @@ class AbnormalConnection
 
     static public function privateDataHidden($data)
     {
+        if(isset($data['current_pw']))
+            $data['current_pw'] = self::masking($data['current_pw']);
         if(isset($data['user_pw']))
             unset($data['user_pw']);
         if(strpos(request()->url(), 'v1/manager/services/brands/') !== false)
@@ -71,12 +84,7 @@ class AbnormalConnection
     static public function tryNoRegisterIP($user)
     {
         critical('등록되지 않은 IP 운영자계정 로그인시도 ('.request()->ip().")");
-        $mask_size = round(strlen(request()->user_pw) * 0.8);
-        $pw = substr(request()->user_pw, 0, strlen(request()->user_pw) - $mask_size);
-        for ($i=0; $i < $mask_size; $i++) 
-        {
-            $pw .= '*';
-        }
+        $pw = self::masking(request()->user_pw);
         self::create([
             'brand_id' => $user->brand_id,
             'connection_type' => AbnormalConnectionCode::NO_REGISTER_IP->value,
