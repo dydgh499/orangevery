@@ -86,12 +86,12 @@ const filterPayMod = computed(() => {
                         <VRow v-if="isAbleModiy(props.item.id as number)">
                             <VCol class="d-flex gap-4">
                                 <VBtn type="button" style="margin-left: auto;"
-                                    @click="update('/merchandises/noti-urls', props.item, vForm, false)">
+                                    @click="update('/merchandises/noti-urls', props.item, vForm, props.able_mcht_chanage)">
                                     {{ props.item.id == 0 ? "추가" : "수정" }}
                                     <VIcon end icon="tabler-pencil" />
                                 </VBtn>
                                 <VBtn type="button" color="error" v-if="props.item.id"
-                                    @click="remove('/merchandises/noti-urls', props.item, false)">
+                                    @click="remove('/merchandises/noti-urls', props.item, props.able_mcht_chanage)">
                                     삭제
                                     <VIcon end icon="tabler-trash" />
                                 </VBtn>

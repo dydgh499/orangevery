@@ -74,12 +74,12 @@ onDeactivated(() => {
                             <OptionInfoOverview :item="props.item" />
                             <VCol style="text-align: end;">
                                 <VBtn type="button"
-                                    @click="update('/merchandises/pay-modules', props.item, vForm, false)">
+                                    @click="update('/merchandises/pay-modules', props.item, vForm, props.able_mcht_chanage)">
                                     {{ props.item.id == 0 ? "추가" : "수정" }}
                                     <VIcon end icon="tabler-pencil" />
                                 </VBtn>
                                 <VBtn type="button" color="error" v-if="props.item.id" style="margin-left: 1em;"
-                                    @click="remove('/merchandises/pay-modules', props.item, false)">
+                                    @click="remove('/merchandises/pay-modules', props.item, props.able_mcht_chanage)">
                                     삭제
                                     <VIcon end icon="tabler-trash" />
                                 </VBtn>

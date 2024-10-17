@@ -80,9 +80,12 @@ export const useRequestStore = defineStore('requestStore', () => {
                         })
                     })
                 }
-                const { path, item } = clear(back_url)
-                if(path !== '')
-                    Object.assign(params, item)
+                
+                if (is_redirect) {
+                    const { path, item } = clear(back_url)
+                    if(path !== '')
+                        Object.assign(params, item)
+                }
             }
             if (is_redirect) {
                 if (back_url === '/merchandises/pay-modules')

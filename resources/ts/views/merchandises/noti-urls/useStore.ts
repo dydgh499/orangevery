@@ -43,7 +43,7 @@ export const defaultItemInfo =  () => {
     const path  = 'merchandises/noti-urls'
     const item  = reactive<NotiUrl>({
         id: 0,
-        mcht_id: 0,
+        mcht_id: null,
         send_url: '',
         note: '비고(별칭)',
         noti_status: 1,
