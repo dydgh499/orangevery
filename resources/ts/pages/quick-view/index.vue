@@ -15,6 +15,7 @@ const { getPayMenuIcon, payment_modules } = useQuickViewStore()
 
 const my_level = getUserLevel()
 const payShow  = <any>(inject('payShow'))
+const errorHandler = <any>(inject('$errorHandler'))
 
 const getPaymentModuleNote = computed(() => {
     if(payment_modules.length) {
@@ -41,7 +42,9 @@ onMounted(() => {
     else {
         axios.get('/api/v1/quick-view?level='+my_level)
             .then(r => { transactions.value = r.data as MchtRecentTransactions; })
-            .catch(e => { console.log(e) })
+            .catch(e => { 
+                const r = errorHandler(e)
+            })
     }
 
     watchEffect(() => {

@@ -112,7 +112,7 @@ export const getUserLevel = () => {
 
 export const getViewType = () => {
     const level = getUserLevel()
-    if(level == 10)
+    if(level === 10)
         return 'quick-view'
     else if(level <= 30 && user_info.value.view_type == 0)
         return 'quick-view'
