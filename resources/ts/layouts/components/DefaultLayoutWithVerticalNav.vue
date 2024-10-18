@@ -122,7 +122,7 @@ onMounted(() => {
                 <NavTokenableExpireTime />
                 <NavbarZoomSwitcher />
                 <NavbarThemeSwitcher />
-                <NavbarNotifications v-if="user_info.level >= 35" />
+                <NavbarNotifications v-if="getUserLevel() >= 35" />
                 <UserProfile />
             </div>
         </template>

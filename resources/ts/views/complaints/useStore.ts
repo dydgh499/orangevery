@@ -14,10 +14,9 @@ export const complaint_statuses = <Options[]>[
 ]
 
 export const issuers = [
-    'BC', '국민', '하나', '삼성',
-    '신한', '현대', '롯데', '씨티',
-    '농협', '수협', '우리', '광주',
-    '전북', '제주',
+    'BC', '비씨', '국민', '하나', '삼성',
+    '신한', '현대', '롯데', '씨티', '농협', 
+    '수협', '우리', '광주', '전북', '제주',
 ]
 
 export const useSearchStore = defineStore('complaintSearchStore', () => {

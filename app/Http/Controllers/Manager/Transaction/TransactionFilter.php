@@ -110,8 +110,6 @@ class TransactionFilter
                 return $query->where('transactions.mid', 'like', "%$search%")
                     ->orWhere('transactions.tid', 'like', "%$search%")
                     ->orWhere('transactions.appr_num', 'like', "%$search%")
-                    ->orWhere('transactions.issuer', 'like', "%$search%")
-                    ->orWhere('transactions.acquirer', 'like', "%$search%")
                     ->orWhere('transactions.buyer_phone', 'like', "%$search%")
                     ->orWhere('merchandises.mcht_name', 'like', "%$search%")
                     ->orWhere('merchandises.resident_num', 'like', "%$search%")
@@ -119,6 +117,10 @@ class TransactionFilter
                     ->orWhere('transactions.trx_id', $search)
                     ->orWhere('payment_modules.note', $search);
             });
+        }
+        if($request->issuer && $request->issuer !== '전체')
+        {
+            $query = $query->where('transactions.issuer', 'like', "%$request->issuer%");
         }
         return self::option($query ,$request);
     }

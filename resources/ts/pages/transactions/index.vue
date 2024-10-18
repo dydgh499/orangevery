@@ -8,6 +8,7 @@ import RealtimeHistoriesDialog from '@/layouts/dialogs/transactions/RealtimeHist
 import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
 import MchtBlacklistCreateDialog from '@/layouts/dialogs/users/MchtBlacklistCreateDialog.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { issuers } from '@/views/complaints/useStore'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -52,9 +53,7 @@ provide('notiSendHistoriesDialog', notiSendHistoriesDialog)
 provide('mchtBlackListDlg', mchtBlackListDlg)
 
 store.params.level = 10
-// 개발사 사용여부
-if (Number(corp.pv_options.auth.levels.dev_use))
-    store.params.dev_use = 1
+store.params.issuer = '전체'
 // 실시간이체 사용여부
 if (Number(corp.pv_options.paid.use_realtime_deposit))
     store.params.use_realtime_deposit = 1
@@ -96,8 +95,8 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="상호, MID, TID, 승인번호, 거래번호, 결제모듈 별칭, 주민번호, 사업자번호, 발급사, 매입사, 휴대폰 번호 검색" :metas="metas"
-            :add="user_info.level >= 35" add_name="매출" :date_filter_type="DateFilters.DATE_RANGE">
+        <BaseIndexView placeholder="상호, MID, TID, 승인번호, 거래번호, 결제모듈 별칭, 주민번호, 사업자번호, 휴대폰 번호 검색" :metas="metas"
+            :add="getUserLevel() >= 35" add_name="매출" :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">
@@ -114,6 +113,11 @@ onMounted(() => {
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터"
                                 item-title="name" item-value="id"
                                 @update:modelValue="store.updateQueryString({ mcht_settle_type: store.params.mcht_settle_type })" />
+                        </VCol>
+                        <VCol cols="6" sm="3">
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.issuer"
+                                :items="['전체'].concat(issuers)" label="발급사 필터"
+                                @update:modelValue="store.updateQueryString({ issuer: store.params.issuer })" />
                         </VCol>
                         <VCol cols="6" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"

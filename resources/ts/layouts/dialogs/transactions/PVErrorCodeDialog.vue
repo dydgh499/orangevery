@@ -25,7 +25,7 @@ const setErrorCode = () => {
     errors.value.push(...[
         getErrorContent('403', '잘못된 접근입니다.', '이상접근', ''),
         getErrorContent('405', '지원하지 않는 PG사입니다.', '이상접근', ''),
-        getErrorContent('406', '가맹점을 찾을 수 없습니다.', '결제모듈 삭제 또는 정보 수정 후 기존 결제링크 사용시 발생', '결제링크 재생성'),
+        getErrorContent('406', '가맹점을 찾을 수 없습니다.', '결제모듈 삭제 또는 정보 수정 후 기존 결제링크 사용시 발생<br><b class="text-error">해당 에러는 결제실패 관리 탭에서 확인할 수 없습니다.</b>', '결제링크 재생성'),
         getErrorContent('407', '취소 가능시간이 초과되어 취소가 불가합니다.', '취소 불가능 시간대에 취소시도', '해당 결제모듈에서 취소가능시간 수정'),
         getErrorContent('408', '결제한도를 초과하였습니다. (총 시도액: 000원)', '일,월,연 결제한도 초과', '해당 결제모듈에서 결제한도 수정'),
         getErrorContent('409', '지금은 결제할 수 있는 시간이 아닙니다.', '결제 불가능 시간대에 결제시도', '해당 결제모듈에서 결제가능시간 수정'),
@@ -64,6 +64,7 @@ const setErrorCode = () => {
         ])
     }
     errors.value.push(getErrorContent('426', '계약기간이 만료되었습니다.', '', '결제모듈 정보 -> 계약 종료일 연장'))
+    errors.value.push(getErrorContent('427', '시스템 점검시간입니다.(06:00 ~ 06:05)', '점검시간대에 결제 시도', '06:05 이후 결제가능'))
 
     if(corp.pv_options.paid.use_realtime_deposit) {
         errors.value.push(...[
@@ -87,7 +88,7 @@ defineExpose({
 });
 </script>
 <template>
-    <VDialog v-model="visible">
+    <VDialog v-model="visible" max-width="1300">
         <!-- Dialog close btn -->
         <DialogCloseBtn @click="visible = false" />
         <!-- Dialog Content -->
@@ -104,10 +105,10 @@ defineExpose({
                     </thead>
                     <tbody>
                         <tr v-for="(error, key) in errors" :key="key">
-                            <td class='list-square'><b>{{ error.id }}</b></td>
-                            <td class='list-square'>{{ error.message }}</td>
-                            <td class='list-square'>{{ error.reason }}</td>
-                            <td class='list-square'>{{ error.resolve }}</td>
+                            <td class='list-square'><b v-html="error.id"></b></td>
+                            <td class='list-square'><span v-html="error.message"></span></td>
+                            <td class='list-square'><span v-html="error.reason"></span></td>
+                            <td class='list-square'><span v-html="error.resolve"></span></td>
                         </tr>
                     </tbody>
                 </VTable>

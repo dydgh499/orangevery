@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { issuers } from '@/views/complaints/useStore'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useSearchStore } from '@/views/transactions/summary/useStore'
@@ -19,10 +20,7 @@ provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = 10
-
-// 개발사 사용여부
-if (Number(corp.pv_options.auth.levels.dev_use))
-    store.params.dev_use = 1
+store.params.issuer = '전체'
 // 실시간이체 사용여부
 if (Number(corp.pv_options.paid.use_realtime_deposit))
     store.params.use_realtime_deposit = 1
@@ -77,6 +75,11 @@ onMounted(() => {
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
                                 item-value="id"
                                 @update:modelValue="store.updateQueryString({ mcht_settle_type: store.params.mcht_settle_type })" />                                
+                        </VCol>
+                        <VCol cols="6" sm="3">
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.issuer"
+                                :items="['전체'].concat(issuers)" label="발급사 필터"
+                                @update:modelValue="store.updateQueryString({ issuer: store.params.issuer })" />
                         </VCol>
                         <VCol cols="6" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"

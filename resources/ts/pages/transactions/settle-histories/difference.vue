@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { issuers } from '@/views/complaints/useStore'
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getDifferenceSettleMenual, useSearchStore } from '@/views/transactions/settle-histories/useDifferenceStore'
@@ -21,7 +22,7 @@ provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = 10
-store.params.dev_use = corp.pv_options.auth.levels.dev_use
+store.params.issuer = '전체'
 store.params.use_realtime_deposit = Number(corp.pv_options.paid.use_realtime_deposit)
     
 onMounted(async() => {
@@ -54,6 +55,17 @@ onMounted(async() => {
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
                                 item-value="id"  @update:modelValue="[store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})]"/>
+                        </VCol>
+                        <VCol cols="6" sm="3">
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.issuer"
+                                :items="['전체'].concat(issuers)" label="발급사 필터"
+                                @update:modelValue="store.updateQueryString({ issuer: store.params.issuer })" />
+                        </VCol>
+                        <VCol cols="6" sm="3">
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"
+                                :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 필터"
+                                item-title="title" item-value="id"
+                                @update:modelValue="[store.updateQueryString({ module_type: store.params.module_type })]" />
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>

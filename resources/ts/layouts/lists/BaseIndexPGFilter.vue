@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import { user_info } from '@axios'
-import corp from '@corp'
+import { useStore } from '@/views/services/pay-gateways/useStore';
+import { getUserLevel } from '@axios';
+import corp from '@corp';
 
 interface Props {
     pg: boolean,
@@ -33,11 +33,11 @@ if(corp.pv_options.free.init_search_filter) {
 </script>
 <template>
     <VRow>
-        <VCol cols="6" sm="3" v-if="props.pg && user_info.level > 30">
+        <VCol cols="6" sm="3" v-if="props.pg && getUserLevel() > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.pg_id" :items="[{ id: null, pg_name: '전체' }].concat(pgs)"
                 label="PG사 선택" item-title="pg_name" item-value="id" @update:modelValue="[store.updateQueryString({pg_id: store.params.pg_id})]"/>
         </VCol>
-        <VCol cols="6" sm="3" v-if="props.ps && user_info.level > 30">
+        <VCol cols="6" sm="3" v-if="props.ps && getUserLevel() > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.ps_id"
                 :items="[{ id: null, name: '전체' }].concat(filterPgs)" label="구간 필터" item-title="name" item-value="id"
                id="ps-filter" eager @update:modelValue="store.updateQueryString({ps_id: store.params.ps_id})"  />
@@ -52,7 +52,7 @@ if(corp.pv_options.free.init_search_filter) {
                 :items="[{ id: null, name: '전체' }].concat(terminals)" label="장비 필터" item-title="name" item-value="id"
                id="terminal-filter" eager @update:modelValue="store.updateQueryString({terminal_id: store.params.terminal_id})"  />
         </VCol>
-        <VCol cols="6" sm="3" v-if="props.cus_filter && user_info.level > 30">
+        <VCol cols="6" sm="3" v-if="props.cus_filter && getUserLevel() > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.custom_id"
                 :items="[{ id: null, name: '전체' }].concat(cus_filters)" label="커스텀 필터" item-title="name" item-value="id"
                id="custom-filter" eager @update:modelValue="store.updateQueryString({custom_id: store.params.custom_id})" />

@@ -60,6 +60,7 @@ export const transactionHeader = (table_name: string) => {
         headers_1['appr_num'] = '승인번호'
         headers_1['amount'] = '거래 금액'
         headers_1['installment'] = '할부'
+        headers_1['acquirer'] = '매입사'
         headers_1['card_num'] = '카드번호'
         return headers_1
     }
@@ -149,7 +150,6 @@ export const transactionHeader = (table_name: string) => {
     const getPaymentCols = () => {
         const headers_6:Record<string, string> = {}
         headers_6['issuer'] = '발급사'
-        headers_6['acquirer'] = '매입사'
         headers_6['buyer_name'] = '구매자명'
         headers_6['buyer_phone'] = '구매자 연락처'
         headers_6['item_name'] = '상품명'    
