@@ -116,13 +116,15 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
     }
 
     const updateParams = (params: any) => {
-        const idx = tabs.findIndex(obj => obj.path === location.pathname + location.search)
+        const full_path = (location.pathname + location.search).replaceAll('/build', '')
+        const idx = tabs.findIndex(obj => obj.path === full_path)
         if(idx !== -1)
             tabs[idx].params = params
     }
 
     const getLastParams = () => {
-        const idx = tabs.findIndex(obj => obj.path === location.pathname + location.search)
+        const full_path = (location.pathname + location.search).replaceAll('/build', '')
+        const idx = tabs.findIndex(obj => obj.path === full_path)
         if(idx !== -1)
             return tabs[idx].params
         else
