@@ -3,49 +3,58 @@ import { Workbook } from 'exceljs';
 
 export const ExcelExporter = (sub_headers: Ref<any>, flat_headers: Ref<Filter>, file_name: string) => {
     const setMergeCell = (worksheet:any) => {
-        const row = worksheet.getRow(1)
-        for (let i = 0; i < sub_headers.value.length; i++) {
-            let s_col = null
-            let e_col = null
-            if(sub_headers.value[i].type === 'string') {
-                s_col = worksheet.getColumn(sub_headers.value[i].s_col) 
-                e_col = worksheet.getColumn(sub_headers.value[i].e_col)
-            }
-            else {
-                let min = null;
-                let max = null;
-                let min_col = ''
-                let max_col = ''
-                const keys = Object.keys(flat_headers.value)
-                const filters = keys.filter(key => key.includes(sub_headers.value[i].s_col+"."))
-                for (let j = 0; j < filters.length; j++) {
-                    if(min === null || flat_headers.value[filters[j]].idx < min) {
-                        min_col = filters[j]
-                        min = flat_headers.value[filters[j]].idx
-                    }
-                    if(max === null || flat_headers.value[filters[j]].idx > max) {
-                        max_col = filters[j]
-                        max = flat_headers.value[filters[j]].idx
-                    }
-                }
-                s_col = worksheet.getColumn(min_col)
-                e_col = worksheet.getColumn(max_col)        
-            }
-            worksheet.mergeCells(1, s_col.number, 1, e_col.number)
-            worksheet.getCell(1, s_col.number).value = sub_headers.value[i].ko
-
-            s_col.eachCell((cell: any) => {
-                cell.border = {
-                    left: { style: 'medium', color: { argb: '000000' } },
-                }  
-            })
-            e_col.eachCell((cell: any) => {
-                cell.border = {
-                    right: { style: 'medium', color: { argb: '000000' } },
-                }  
-            })
+        const getStringCellName = (sub_header: any) => {
+            return [sub_header.s_col, sub_header.e_col]
         }
-        setHeaderStyle(row);
+
+        const getOjectCellColName = (sub_header: any) => {
+            let min = null;
+            let max = null;
+            let min_col = ''
+            let max_col = ''
+            const filters = Object.keys(flat_headers.value).filter(key => key.includes(sub_header.s_col+"."))
+            for (let j = 0; j < filters.length; j++) {
+                if(min === null || flat_headers.value[filters[j]].idx < min) {
+                    min_col = filters[j]
+                    min = flat_headers.value[filters[j]].idx
+                }
+                if(max === null || flat_headers.value[filters[j]].idx > max) {
+                    max_col = filters[j]
+                    max = flat_headers.value[filters[j]].idx
+                }
+            }
+            return [min_col, max_col]
+        }
+
+        for (let i = 0; i < sub_headers.value.length; i++) {
+            let min_col = null
+            let max_col = null
+            if(sub_headers.value[i].type === 'string') 
+                [min_col, max_col] = getStringCellName(sub_headers.value[i])
+            else 
+                [min_col, max_col] = getOjectCellColName(sub_headers.value[i])
+
+            if(min_col !== '' && max_col !== '') {
+                const s_col = worksheet.getColumn(min_col)
+                const e_col = worksheet.getColumn(max_col)
+    
+                worksheet.mergeCells(1, s_col.number, 1, e_col.number)
+                worksheet.getCell(1, s_col.number).value = sub_headers.value[i].ko
+    
+                s_col.eachCell((cell: any) => {
+                    cell.border = {
+                        left: { style: 'medium', color: { argb: '000000' } },
+                    }  
+                })
+                e_col.eachCell((cell: any) => {
+                    cell.border = {
+                        right: { style: 'medium', color: { argb: '000000' } },
+                    }  
+                })
+    
+            }
+        }
+        setHeaderStyle(worksheet.getRow(1));
     }
 
     const setHeaderStyle = (row: any) => {
@@ -95,7 +104,14 @@ export const ExcelExporter = (sub_headers: Ref<any>, flat_headers: Ref<Filter>, 
     }
 
     const checkVisiable = (worksheet: any) => {
-
+        for (let i = worksheet.columns.length - 1; i >= 0; i--) {
+            const column = worksheet.columns[i];
+            const key = column.key;
+    
+            if (flat_headers.value[key]?.visible === false) {
+                worksheet.spliceColumns(i + 1, 1); 
+            }
+        }
     }
 
     const exportToExcel = async (datas: object[]) => {
@@ -106,6 +122,7 @@ export const ExcelExporter = (sub_headers: Ref<any>, flat_headers: Ref<Filter>, 
 
         setHeaderRows(worksheet)
         getDataRows(worksheet, datas)
+        
         if(sub_headers.value.length) {
             // sub header setting
             worksheet.spliceRows(1, 0, {});
@@ -115,8 +132,8 @@ export const ExcelExporter = (sub_headers: Ref<any>, flat_headers: Ref<Filter>, 
         else
             setHeaderStyle(worksheet.getRow(1));
 
-        worksheet.views = [{ state: 'frozen', ySplit: 1 }]
-        checkVisiable(worksheet)
+        //checkVisiable(worksheet)
+        worksheet.views = [{ state: 'frozen', ySplit: 1 }];
         try {
             const buffer = await wb.xlsx.writeBuffer(); // 버퍼로 엑셀 데이터 생성
             const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });

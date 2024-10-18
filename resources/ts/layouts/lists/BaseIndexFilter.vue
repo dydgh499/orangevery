@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useDynamicTabStore } from '@/@core/utils/dynamic_tab'
 import { DateSetter } from '@/views/searcher'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { DateFilters } from '@core/enums'
@@ -14,7 +15,6 @@ interface Props {
     sub_search_placeholder?: string,
 }
 
-const route = useRoute()
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
 const head = <any>(inject('head'))
@@ -52,6 +52,17 @@ const handleEnterKey = (event: KeyboardEvent) => {
     }
 }
 
+const getLastParams = () => {
+    const params = useDynamicTabStore().getLastParams()
+    if(params) {
+        Object.assign(store.params, params)
+        if(store.params.search)
+            search.value = store.params.search
+        if(store.params.search2)
+            search.value = store.params.search2
+    }
+}
+
 const useDateSelecter = computed(() => {
     return (
         head.path === 'transactions' || head.path === 'transactions/summary' || 
@@ -72,6 +83,7 @@ else if (props.date_filter_type == DateFilters.SETTLE_RANGE) {
     format.value = { format: 'yyyy-MM-dd' }
     time_picker.value = false
 }
+getLastParams()
 init(store)
 </script>
 <template>

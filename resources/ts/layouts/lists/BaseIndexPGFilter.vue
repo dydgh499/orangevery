@@ -14,11 +14,15 @@ const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
 const store = <any>(inject('store'))
 
 const filterPgs = computed(() => {
-    const filter = pss.filter(item => {
-        return item.pg_id == store.params.pg_id
-    })
-    store.params.ps_id = psFilter(filter, store.params.ps_id)
-    return filter
+    if(store.params.pg_id !== undefined) {
+            const filter = pss.filter(item => {
+            return item.pg_id == store.params.pg_id
+        })
+        store.params.ps_id = psFilter(filter, store.params.ps_id)
+        return filter
+    }
+    else
+        return []
 })
 
 </script>

@@ -1,3 +1,4 @@
+import { useDynamicTabStore } from '@/@core/utils/dynamic_tab';
 import router from '@/router';
 import { useRequestStore } from '@/views/request';
 import type { Pagenation } from '@/views/types';
@@ -139,6 +140,7 @@ export const Searcher = (path: string) => {
     
     const setTable = async() => {
         const p = getParams()
+        useDynamicTabStore().updateParams(p)
         const r = await get(base_url, {params: p})
         if (r.status == 200) {
             let l_page = r.data.total / params.page_size
@@ -261,22 +263,38 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
             range_date.value[0] = route.query.s_dt as string
             range_date.value[1] = route.query.e_dt as string
         }
-        else if (route.query.dt)
-            date.value = route.query.dt as string
+        else if (route.query.dt) {
+            if (store.params.dt)
+                date.value = store.params.dt as string
+            else
+                date.value = route.query.dt as string
+        }
         else {
             if (props.date_filter_type == DateFilters.DATE_RANGE) {
                 const date = new Date()
                 const s_date = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0)
                 const e_date = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59)
-                range_date.value[0] = getDateFormat(s_date)
-                range_date.value[1] = getDateFormat(e_date)
+                if(store.params.s_dt && store.params.e_dt) {
+                    range_date.value[0] = store.params.s_dt as string
+                    range_date.value[1] = store.params.e_dt as string
+                }
+                else {
+                    range_date.value[0] = getDateFormat(s_date)
+                    range_date.value[1] = getDateFormat(e_date)    
+                }
             }
             else if (props.date_filter_type == DateFilters.SETTLE_RANGE) {
                 const date = new Date()
                 const s_date = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0)
                 const e_date = date
-                range_date.value[0] = getDateFormat(s_date)
-                range_date.value[1] = getDateFormat(e_date)
+                if(store.params.s_dt && store.params.e_dt) {
+                    range_date.value[0] = store.params.s_dt as string
+                    range_date.value[1] = store.params.e_dt as string
+                }
+                else {
+                    range_date.value[0] = getDateFormat(s_date)
+                    range_date.value[1] = getDateFormat(e_date)    
+                }
             }
             else if (props.date_filter_type == DateFilters.DATE){
                 date.value = formatDate(new Date())

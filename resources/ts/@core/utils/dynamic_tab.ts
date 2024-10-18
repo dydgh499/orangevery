@@ -9,9 +9,10 @@ import { RouteLocationNormalized } from "vue-router";
 interface Tab {
     title: string;
     path: string;
+    params: any;
 }
 
-export const useDynamicTabStore = defineStore('dynamicTabStore', () => {    
+export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
     const local_key = ref(`${corp.name}-${user_info.value.user_name}-dynamic-tap-headers`)
     const tab = ref(<number>(-1))
     const tabs = reactive<Tab[]>(JSON.parse(localStorage.getItem(local_key.value) || "[]"))
@@ -99,6 +100,7 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
             tabs.push({
                 title: getTitle(nav.title),
                 path: to.fullPath,
+                params: {},
             })
         }
     }
@@ -111,6 +113,20 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
         if (tabs.length) {
             tabs.splice(index, 1)
         }
+    }
+
+    const updateParams = (params: any) => {
+        const idx = tabs.findIndex(obj => obj.path === location.pathname + location.search)
+        if(idx !== -1)
+            tabs[idx].params = params
+    }
+
+    const getLastParams = () => {
+        const idx = tabs.findIndex(obj => obj.path === location.pathname + location.search)
+        if(idx !== -1)
+            return tabs[idx].params
+        else
+            return null
     }
 
     const titleUpdate = (id: number, title: string, user_name: string) => {
@@ -149,6 +165,8 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
         add,
         move,
         remove,
+        updateParams,
+        getLastParams,
         titleUpdate,
         postTitleUpdate,
         tab,
