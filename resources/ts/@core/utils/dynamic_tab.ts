@@ -13,9 +13,12 @@ interface Tab {
 }
 
 export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
-    const local_key = ref(`${corp.name}-${user_info.value.user_name}-dynamic-tap-headers`)
+    const key_name = `${corp.name}-${user_info.value.user_name}-dynamic-tap-headers`
+    const tab_json = JSON.parse(localStorage.getItem(key_name) || "[]")
+    
+    const local_key = ref(key_name)
     const tab = ref(<number>(-1))
-    const tabs = reactive<Tab[]>(JSON.parse(localStorage.getItem(local_key.value) || "[]"))
+    const tabs = reactive<Tab[]>(tab_json)
 
     const add = (to: RouteLocationNormalized) => {        
         const path = to.fullPath.slice(1).replaceAll('/', '-')
