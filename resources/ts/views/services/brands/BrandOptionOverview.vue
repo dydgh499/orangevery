@@ -38,7 +38,7 @@ const accountLockLimits = <Options[]>([
             <VCard>
                 <VCardItem>
                     <VCardTitle>기능 옵션</VCardTitle>
-                    <CreateHalfVColV2 :mdl="6" :mdr="6" class="pt-5">
+                    <CreateHalfVColV2 :mdl="8" :mdr="4" class="pt-5">
                         <template #l_name>MID 중복검사 사용</template>
                         <template #l_input>
                             <VSwitch hide-details v-model="props.item.free.use_mid_duplicate" color="primary" />
@@ -48,13 +48,13 @@ const accountLockLimits = <Options[]>([
                             <VSwitch hide-details v-model="props.item.free.use_tid_duplicate" color="primary" />
                         </template>
                     </CreateHalfVColV2>
-                    <CreateHalfVColV2 :mdl="6" :mdr="6">
+                    <CreateHalfVColV2 :mdl="8" :mdr="4">
                         <template #l_name>
-                            <BaseQuestionTooltip location="top" text="검색옵션 자동 초기화"
-                                    :content="`목록 페이지에서 선택한 검색옵션들이 메뉴 이동시 자동으로 초기화됩니다.`"/>
+                            <BaseQuestionTooltip location="top" text="엑셀 다운로드시 검색필터 적용"
+                                    :content="`검색필터에서 숨김처리한 내용들은 엑셀출력시 출력되지 않습니다.`"/>
                         </template>
                         <template #l_input>
-                                <VSwitch hide-details v-model="props.item.free.init_search_filter" color="primary" />
+                                <VSwitch hide-details v-model="props.item.free.excel_search_filter" color="primary" />
                         </template>
                         <template #r_name>
                             <BaseQuestionTooltip location="top" text="결제모듈 상세보기" :content="`가맹점 정보 - 결제모듈 정보에서 결제모듈이 리스트로 표현됩니다.<br>(가맹점당 결제모듈 여러개 보유시 사용)`"/>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import { getUserLevel } from '@axios';
-import corp from '@corp';
 
 interface Props {
     pg: boolean,
@@ -21,14 +20,6 @@ const filterPgs = computed(() => {
     store.params.ps_id = psFilter(filter, store.params.ps_id)
     return filter
 })
-
-if(corp.pv_options.free.init_search_filter) {
-    store.params.pg_id = undefined
-    store.params.ps_id = undefined
-    store.params.settle_type = undefined
-    store.params.terminal_id = undefined
-    store.params.custom_id = undefined
-}
 
 </script>
 <template>

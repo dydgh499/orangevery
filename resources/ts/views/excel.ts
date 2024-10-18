@@ -93,6 +93,11 @@ export const ExcelExporter = (sub_headers: Ref<any>, flat_headers: Ref<Filter>, 
             worksheet.addRow(row)
         }
     }
+
+    const checkVisiable = (worksheet: any) => {
+
+    }
+
     const exportToExcel = async (datas: object[]) => {
         const date = new Date().toISOString().split('T')[0];
 
@@ -110,7 +115,8 @@ export const ExcelExporter = (sub_headers: Ref<any>, flat_headers: Ref<Filter>, 
         else
             setHeaderStyle(worksheet.getRow(1));
 
-        worksheet.views = [{ state: 'frozen', ySplit: 1 }];
+        worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+        checkVisiable(worksheet)
         try {
             const buffer = await wb.xlsx.writeBuffer(); // 버퍼로 엑셀 데이터 생성
             const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });

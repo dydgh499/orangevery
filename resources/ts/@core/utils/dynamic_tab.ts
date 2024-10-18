@@ -133,14 +133,15 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
     }
 
     watchEffect(() => {
-        if(getUserLevel() >= 10)
+        if(getUserLevel() >= 10) {
             local_key.value = `${corp.name}-${user_info.value.user_name}-dynamic-tap-headers`  
+        }
     })
 
     watchEffect(() => {
         if(tabs.length > 20)
             tabs.splice(0, 1)
-        if(getUserLevel() >= 10)
+        if(getUserLevel() >= 10) 
             localStorage.setItem(local_key.value, JSON.stringify(tabs))
     })
 

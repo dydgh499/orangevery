@@ -33,12 +33,6 @@ const selectedSalesEvent = (select_idx:number) => {
         return [store.updateQueryString({ [sales_id]: store.params[sales_id] }), setUnderSalesFilter(6 - select_idx, store.params)]
 }
 
-const init = () => {
-    if (corp.pv_options.free.init_search_filter)
-        initAllSales()
-}
-
-init()
 </script>
 <template>
     <VRow>

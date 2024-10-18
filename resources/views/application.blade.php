@@ -84,8 +84,9 @@
     document.addEventListener('keydown', function(e) {
         if (
             e.key === 'F12' || // F12
-            (e.ctrlKey && e.shiftKey && e.key === 'I') || // Ctrl+Shift+I
-            (e.ctrlKey && e.shiftKey && e.key === 'J') || // Ctrl+Shift+J
+            (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+            (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+            (e.ctrlKey && e.shiftKey && e.key === 'C') ||
             (e.ctrlKey && e.key === 'U') // Ctrl+U
         ) {
             e.preventDefault();

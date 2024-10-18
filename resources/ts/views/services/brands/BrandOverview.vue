@@ -228,16 +228,6 @@ watchEffect(() => {
                     </VRow>
                 </VCardItem>
             </VCard>
-            <br>
-            <VCard v-if="props.item.use_different_settlement">
-                <VCardItem>
-                    <VCol cols="12">
-                        <VRow>
-                            <DifferentSettlementInfoCard :item="props.item" />
-                        </VRow>
-                    </VCol>
-                </VCardItem>
-            </VCard>
         </VCol>
         <!-- 👉 계약정보 -->
         <VCol cols="12" md="6">
@@ -279,8 +269,9 @@ watchEffect(() => {
                     </VRow>
                 </VCardItem>
             </VCard>
-            <br>
-            <VCard v-if="props.item.pv_options.paid.use_before_brand_info">
+            <template v-if="props.item.pv_options.paid.use_before_brand_info">
+                <br>
+                <VCard>
                 <VCardItem>
                     <VCol cols="12">
                         <VRow>
@@ -289,6 +280,19 @@ watchEffect(() => {
                     </VCol>
                 </VCardItem>
             </VCard>
+            </template>
+            <template v-if="props.item.use_different_settlement">
+                <br>
+                <VCard>
+                    <VCardItem>
+                        <VCol cols="12">
+                            <VRow>
+                                <DifferentSettlementInfoCard :item="props.item" />
+                            </VRow>
+                        </VCol>
+                    </VCardItem>
+                </VCard>
+            </template>
         </VCol>
         <!-- 👉 submit -->
     </VRow>
