@@ -1,4 +1,3 @@
-import { useDynamicTabStore } from '@/@core/utils/dynamic_tab';
 import router from '@/router';
 import { useRequestStore } from '@/views/request';
 import type { Pagenation } from '@/views/types';
@@ -140,7 +139,6 @@ export const Searcher = (path: string) => {
     
     const setTable = async() => {
         const p = getParams()
-        useDynamicTabStore().updateParams(p)
         const r = await get(base_url, {params: p})
         if (r.status == 200) {
             let l_page = r.data.total / params.page_size

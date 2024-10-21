@@ -28,7 +28,14 @@ watchEffect(() => {
         <VChip class="tab-count" color="primary">
             <b>{{ store.tabs.length }}</b>
         </VChip>
+        <div class="tab-close-btn all-close-btn text-error" v-if="store.tabs.length > 1" @click="store.allRemove()">
+            <VIcon :icon="`tabler-x`" size="small"/>
+            <VTooltip activator="parent" location="top" transition="scale-transition">
+                <span>전체 탭 닫기</span>
+            </VTooltip>
+        </div>
     </VCard>
+
 </template>
 <style lang="scss">
 .tab-close-container {
@@ -59,6 +66,13 @@ watchEffect(() => {
   }
 }
 
+.all-close-btn {
+  position: absolute;
+  z-index: 9999;
+  inset-block-start: 0.8em;
+  inset-inline-end: 0.5em;
+}
+
 .tab-close-division {
   display: inline-block;
   background-color: rgba(var(--v-theme-on-surface), 0.15);
@@ -72,8 +86,9 @@ watchEffect(() => {
 .tab-count {
   position: absolute;
   z-index: 9999;
-  inset-block-start: 2px;
-  inset-inline-start: 2px;
+  padding: 0.6em !important;
+  inset-block-start: 1em;
+  inset-inline-start: 0.2em;
 }
 
 </style>

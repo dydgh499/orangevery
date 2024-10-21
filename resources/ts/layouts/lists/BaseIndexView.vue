@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useDynamicTabStore } from '@/@core/utils/dynamic_tab';
 import SearchFilterDialog from '@/layouts/dialogs/utils/SearchFilterDialog.vue';
 import BaseIndexChart from '@/layouts/lists/BaseIndexChart.vue';
 import BaseIndexFilter from '@/layouts/lists/BaseIndexFilter.vue';
@@ -23,6 +24,9 @@ onMounted(() => {
     head.filter = filter.value
     watchEffect(() => {
         store.setTable()
+    })
+    watchEffect(() => {
+        useDynamicTabStore().updateParams(store.params)
     })
 });
 </script>

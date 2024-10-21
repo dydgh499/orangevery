@@ -15,7 +15,7 @@ interface Tab {
 export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
     const key_name = `${corp.name}-${user_info.value.user_name}-dynamic-tap-headers`
     const tab_json = JSON.parse(localStorage.getItem(key_name) || "[]")
-    
+
     const local_key = ref(key_name)
     const tab = ref(<number>(-1))
     const tabs = reactive<Tab[]>(tab_json)
@@ -117,6 +117,14 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
             tabs.splice(index, 1)
         }
     }
+    
+    const allRemove = () => {
+        if (tab.value >= 0 && tab.value < tabs.length) {
+            const _tab: Tab = tabs[tab.value]
+            tabs.splice(0, tabs.length)
+            tabs.push(_tab)
+        }
+    }
 
     const updateParams = (params: any) => {
         const full_path = (location.pathname + location.search).replaceAll('/build', '')
@@ -129,7 +137,7 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
         const full_path = (location.pathname + location.search).replaceAll('/build', '')
         const idx = tabs.findIndex(obj => obj.path === full_path)
         if(idx !== -1)
-            return tabs[idx].params
+            return {...tabs[idx].params}
         else
             return null
     }
@@ -170,6 +178,7 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
         add,
         move,
         remove,
+        allRemove,
         updateParams,
         getLastParams,
         titleUpdate,
@@ -178,4 +187,12 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
         tabs,
     }
 })
+
+function pauseTracking() {
+    throw new Error('Function not implemented.');
+}
+
+function resetTracking() {
+    throw new Error('Function not implemented.');
+}
 
