@@ -65,7 +65,12 @@ watchEffect(() => {
                     <draggable v-model="store.tabs" item-key="path" class="drag-container" @end="onDragEnd">
                         <template #item="{ element, index }">
                             <div class="tab-close-container">
-                                <VTab class="tab-close-title" @click="store.move(element.path)" :class="{ 'v-slide-group-item--active v-tab--selected': store.tab === index }">
+                                <VTab class="tab-close-title" @click="store.move(element.path)"
+                                :class="{
+                                        'v-slide-group-item--active v-tab--selected': store.tab === index,
+                                        'text-secondary': store.tab !== index
+                                    }"
+                                >
                                     <span>{{ element.title }}</span>
                                 </VTab>
                                 <div class="tab-close-btn" v-if="store.tab !== index" @click="store.remove(index)">
