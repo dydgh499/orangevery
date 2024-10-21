@@ -140,7 +140,6 @@ watchEffect(() => {
   color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity)) !important;
   cursor: pointer;
   margin-block: auto;
-  margin-block-start: 0.4em;
   transform: scale(1); /* 초기 상태의 크기 설정 */
   transition: 1s ease all; /* 기본 상태에서의 transition 설정 */
 
