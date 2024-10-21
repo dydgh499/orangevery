@@ -1,5 +1,4 @@
-import { useDynamicTabStore } from '@/@core/utils/dynamic_tab'
-import { axios, getUserLevel, getViewType, pay_token } from '@axios'
+import { axios, getViewType, pay_token } from '@axios'
 import { canNavigate } from '@layouts/plugins/casl'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -46,11 +45,6 @@ router.beforeEach(to => {
         if (canNavigate(to)) {
             if (to.meta.redirectIfLoggedIn && isLoggedIn)
                 return '/'
-            else if(getUserLevel() >= 10)
-            {
-                const store = useDynamicTabStore()
-                store.add(to)
-            }
         }
         else {
             if (isLoggedIn)

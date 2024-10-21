@@ -20,7 +20,7 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
     const tab = ref(<number>(-1))
     const tabs = reactive<Tab[]>(tab_json)
 
-    const add = (to: RouteLocationNormalized) => {        
+    const add = (to: RouteLocationNormalized) => {
         const path = to.fullPath.slice(1).replaceAll('/', '-')
         const edit_pattern = /-edit-\d+/;
         const part_settle_pattern = /-part-\d+/;
@@ -106,6 +106,7 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
                 params: {},
             })
         }
+        return tabs
     }
 
     const move = (path: string) => {
