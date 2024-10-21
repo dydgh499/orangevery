@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import VueApexCharts from 'vue3-apexcharts'
-import { useTheme } from 'vuetify'
-import { hexToRgb } from '@layouts/utils'
+import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 import { useCRMStore } from '@/views/dashboards/crm/crm'
 import type { Series } from '@/views/types'
+import { hexToRgb } from '@layouts/utils'
+import VueApexCharts from 'vue3-apexcharts'
+import { useTheme } from 'vuetify'
 
 const vuetifyTheme = useTheme()
 const { monthly_transactions, getColors, getMonths } = useCRMStore()
@@ -53,9 +54,148 @@ const getSeries = (dates: string[], col: string, sec_col?: string) => {
     return amount
 }
 
+const getChartData = (title: string, icon: string, color: string[], datas: Series[]) => {
+    const currentTheme = vuetifyTheme.current.value.colors
+    const variableTheme = vuetifyTheme.current.value.variables
+    const legendColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
+    const borderColor = `rgba(${hexToRgb(String(variableTheme['border-color']))},${variableTheme['border-opacity']})`
+    const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`
+
+    return {
+        title: title,
+        icon: icon,
+        chartOptions: {
+            chart: {
+                parentHeightOffset: 0,
+                type: 'bar',
+                toolbar: {
+                    show: true,
+                },
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '32%',
+                    startingShape: 'rounded',
+                    borderRadius: 4,
+                    distributed: true,
+                    dataLabels: {
+                        position: 'top',
+                    },
+                },
+            },
+            grid: {
+                show: false,
+                padding: {
+                    top: 0,
+                    bottom: 0,
+                    left: -10,
+                    right: -10,
+                },
+            },
+            colors: color,
+            dataLabels: {
+                enabled: true,
+                formatter(val: number) {
+                    return `${val.toFixed(2)}억`
+                },
+                offsetY: -25,
+                style: {
+                    fontSize: '15px',
+                    colors: [legendColor],
+                    fontWeight: '600',
+                    fontFamily: 'Public Sans',
+                },
+            },
+            legend: {
+                show: false,
+            },
+            tooltip: {
+                enabled: false,
+            },
+            xaxis: {
+                categories: months.value || [],
+                axisBorder: {
+                    show: true,
+                    color: borderColor,
+                },
+                axisTicks: {
+                    show: false,
+                },
+                labels: {
+                    style: {
+                        colors: labelColor,
+                        fontSize: '14px',
+                        fontFamily: 'Public Sans',
+                    },
+                },
+            },
+            yaxis: {
+                labels: {
+                    offsetX: -15,
+                    formatter(val: number) {
+                        return `${val.toFixed(2)}억`
+                    },
+                    style: {
+                        fontSize: '14px',
+                        colors: labelColor,
+                        fontFamily: 'Public Sans',
+                    },
+                    min: 0,
+                    max: 60000,
+                    tickAmount: 6,
+                },
+            },
+            responsive: [
+                {
+                    breakpoint: 1441,
+                    options: {
+                        plotOptions: {
+                            bar: {
+                                columnWidth: '41%',
+                            },
+                        },
+                    },
+                },
+                {
+                    breakpoint: 590,
+                    options: {
+                        plotOptions: {
+                            bar: {
+                                columnWidth: '61%',
+                            },
+                        },
+                        yaxis: {
+                            labels: {
+                                show: false,
+                            },
+                        },
+                        grid: {
+                            padding: {
+                                right: 0,
+                                left: -20,
+                            },
+                        },
+                        dataLabels: {
+                            style: {
+                                fontSize: '12px',
+                                fontWeight: '400',
+                            },
+                        },
+                    },
+                },
+            ],
+        },
+        series: datas,
+    }
+}
+
+const getSkeletonChartData = () => {
+    return Math.round(Math.random() * 10) + 3
+}
+
 watchEffect(() => {
     const currentTheme = vuetifyTheme.current.value.colors
-    if(Object.keys(monthly_transactions).length) {
+    if (Object.keys(monthly_transactions).length) {
         const keys = Object.keys(monthly_transactions.monthly).reverse()
         if (keys.length > 0) {
             serieses.value[0][0].data = getSeries(keys, 'appr', 'amount')
@@ -70,142 +210,8 @@ watchEffect(() => {
             profit_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.warning)},0.16)`, `rgba(${hexToRgb(currentTheme.warning)},1)`)
         }
     }
-
 })
-const getChartData = (title: string, icon:string, color:string[], datas:Series[]) => {
-    const currentTheme = vuetifyTheme.current.value.colors
-    const variableTheme = vuetifyTheme.current.value.variables
-    const legendColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
-    const borderColor = `rgba(${hexToRgb(String(variableTheme['border-color']))},${variableTheme['border-opacity']})`
-    const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`
 
-    return {
-            title: title,
-            icon: icon,
-            chartOptions: {
-                chart: {
-                    parentHeightOffset: 0,
-                    type: 'bar',
-                    toolbar: {
-                        show: true,
-                    },
-                },
-                plotOptions: {
-                    bar: {
-                        columnWidth: '32%',
-                        startingShape: 'rounded',
-                        borderRadius: 4,
-                        distributed: true,
-                        dataLabels: {
-                            position: 'top',
-                        },
-                    },
-                },
-                grid: {
-                    show: false,
-                    padding: {
-                        top: 0,
-                        bottom: 0,
-                        left: -10,
-                        right: -10,
-                    },
-                },
-                colors: color,
-                dataLabels: {
-                    enabled: true,
-                    formatter(val: number) {
-                        return `${val.toFixed(2)}억`
-                    },
-                    offsetY: -25,
-                    style: {
-                        fontSize: '15px',
-                        colors: [legendColor],
-                        fontWeight: '600',
-                        fontFamily: 'Public Sans',
-                    },
-                },
-                legend: {
-                    show: false,
-                },
-                tooltip: {
-                    enabled: false,
-                },
-                xaxis: {
-                    categories: months.value,
-                    axisBorder: {
-                        show: true,
-                        color: borderColor,
-                    },
-                    axisTicks: {
-                        show: false,
-                    },
-                    labels: {
-                        style: {
-                            colors: labelColor,
-                            fontSize: '14px',
-                            fontFamily: 'Public Sans',
-                        },
-                    },
-                },
-                yaxis: {
-                    labels: {
-                        offsetX: -15,
-                        formatter(val: number) {
-                            return `${val.toFixed(2)}억`
-                        },
-                        style: {
-                            fontSize: '14px',
-                            colors: labelColor,
-                            fontFamily: 'Public Sans',
-                        },
-                        min: 0,
-                        max: 60000,
-                        tickAmount: 6,
-                    },
-                },
-                responsive: [
-                    {
-                        breakpoint: 1441,
-                        options: {
-                            plotOptions: {
-                                bar: {
-                                    columnWidth: '41%',
-                                },
-                            },
-                        },
-                    },
-                    {
-                        breakpoint: 590,
-                        options: {
-                            plotOptions: {
-                                bar: {
-                                    columnWidth: '61%',
-                                },
-                            },
-                            yaxis: {
-                                labels: {
-                                    show: false,
-                                },
-                            },
-                            grid: {
-                                padding: {
-                                    right: 0,
-                                    left: -20,
-                                },
-                            },
-                            dataLabels: {
-                                style: {
-                                    fontSize: '12px',
-                                    fontWeight: '400',
-                                },
-                            },
-                        },
-                    },
-                ],
-            },
-            series: datas,
-        }
-}
 const chartConfigs = computed(() => {
     return [
         getChartData('승인', 'fluent-payment-32-regular', appr_colors.value, serieses.value[0]),
@@ -214,14 +220,17 @@ const chartConfigs = computed(() => {
         getChartData('정산', 'tabler-calculator', profit_colors.value, serieses.value[3]),
     ]
 })
+
+
+
 </script>
 
 <template>
     <VCard title="월별 거래량" subtitle="10개월간 거래금 개요">
-        <VCardText>
+        <VCardText v-if="serieses[0][0].data.length">
             <VSlideGroup v-model="currentTab" show-arrows mandatory style="padding: 0.1em 0;">
-                <VSlideGroupItem v-for="(report, index) in chartConfigs" :key="report.title" v-slot="{ isSelected, toggle }"
-                    :value="index">
+                <VSlideGroupItem v-for="(report, index) in chartConfigs" :key="report.title"
+                    v-slot="{ isSelected, toggle }" :value="index">
                     <div style=" width: 110px;height: 89px;"
                         :style="isSelected ? 'border-color:rgb(var(--v-theme-primary)) !important' : ''"
                         :class="isSelected ? 'border' : 'border border-dashed'"
@@ -236,11 +245,33 @@ const chartConfigs = computed(() => {
                         </p>
                     </div>
                 </VSlideGroupItem>
-                <!-- 👉 slider more -->
             </VSlideGroup>
-
-            <VueApexCharts ref="refVueApexChart" :key="currentTab" :options="chartConfigs[Number(currentTab)].chartOptions"
+            <VueApexCharts ref="refVueApexChart" :key="currentTab"
+                :options="chartConfigs[Number(currentTab)].chartOptions"
                 :series="chartConfigs[Number(currentTab)].series" height="240" class="mt-3" />
+        </VCardText>
+        <VCardText v-else>
+            <div style="margin-bottom: 1em;">
+                <SkeletonBox v-for="(index) in 4" :width="'8em'" :height="'5em'" style="margin-right: 2em;"/>
+            </div>
+            <div class="d-flex align-center" style="height: 17em; margin-right: 1em;">
+                <div style=" display: inline-flex; flex-direction: column;">
+                    <SkeletonBox  v-for="(index) in 5" :width="'3.5em'" :height="'1em'" style="margin-top: 1em;margin-right: 0.5em;margin-left: 1em;"/>
+                </div>
+                <div style="width: 100%;">
+                    <div class="align-baseline justify-space-between mt-4" style="display: flex;">
+                        <SkeletonBox v-for="(index) in 10" :width="'3em'" :height="`${getSkeletonChartData()}em`" :key="index" style="margin-left: 3em;"/>
+                    </div>
+                    <div>
+                        <VDivider/>
+                    </div>
+                    <div class="d-flex align-baseline justify-space-between">
+                        <div v-for="(index) in 10" style="width: 3em; margin-top: 0.5em;margin-left: 3em; text-align: center;">
+                            <SkeletonBox  :width="'2em'" :height="`1em`" :key="index"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </VCardText>
     </VCard>
 </template>

@@ -9,6 +9,7 @@ import router from '@/router'
 import { pay_token, user_info } from '@axios'
 import { abilitiesPlugin } from '@casl/vue'
 import '@core-scss/template/index.scss'
+import * as Sentry from '@sentry/vue'
 import '@styles/styles.scss'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -56,6 +57,20 @@ app.provide('$formatTime', function(date: Date) {
         return `00:00:00`
 });
 
+Sentry.init({
+    app,
+    dsn: import.meta.env.VITE_SENTRY_DSN,
+    integrations: [
+      Sentry.browserTracingIntegration({ router }),
+      Sentry.replayIntegration(),
+    ],
+    // Tracing
+    tracesSampleRate: 0.1, 
+    tracePropagationTargets: ["localhost", /^\//],
+    // Session Replay
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
+});
 // Use plugins
 app.use(vuetify)
 app.use(createPinia())

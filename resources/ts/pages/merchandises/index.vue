@@ -42,7 +42,6 @@ onMounted(() => {
         }
     })
 })
-
 </script>
 <template>
     <div>

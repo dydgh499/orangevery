@@ -237,8 +237,9 @@
         }
     }
 
-    function getTargetInfo(int $level)
+    function getTargetInfo($level)
     {
+        $level = (int)$level;
         if($level === 10)
         {
             $target_id = 'mcht_id';
