@@ -187,12 +187,3 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
         tabs,
     }
 })
-
-function pauseTracking() {
-    throw new Error('Function not implemented.');
-}
-
-function resetTracking() {
-    throw new Error('Function not implemented.');
-}
-

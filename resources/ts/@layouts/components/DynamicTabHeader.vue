@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useDynamicTabStore } from '@/@core/utils/dynamic_tab';
+import { getUserLevel } from '@/plugins/axios';
 import draggable, { DragEndEvent } from 'vuedraggable'; // DragEndEvent 타입 사용
 
 const route = useRoute()
@@ -44,9 +45,11 @@ const onDragEnd = (event: DragEndEvent) => {
 };
 
 watchEffect(() => {
-    store.tabs = store.add(route)
-    store.tab = store.tabs.findIndex(obj => obj.path === route.fullPath)
-    scrollToActiveTab()
+    if(getUserLevel() >= 10) {
+        store.tabs = store.add(route)
+        store.tab = store.tabs.findIndex(obj => obj.path === route.fullPath)        
+        scrollToActiveTab()
+    }
 })
 
 </script>

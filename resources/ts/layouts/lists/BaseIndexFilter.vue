@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useDynamicTabStore } from '@/@core/utils/dynamic_tab'
 import { DateSetter } from '@/views/searcher'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { DateFilters } from '@core/enums'
@@ -53,6 +52,7 @@ const handleEnterKey = (event: KeyboardEvent) => {
 }
 
 const getLastParams = () => {
+    /*
     const params = useDynamicTabStore().getLastParams()
     if(params) {
         Object.assign(store.params, params)
@@ -61,6 +61,7 @@ const getLastParams = () => {
         if(store.params.search2)
             search.value = store.params.search2
     }
+    */
 }
 
 const useDateSelecter = computed(() => {
