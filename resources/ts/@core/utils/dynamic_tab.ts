@@ -1,7 +1,6 @@
 import { NavGroup, NavLink } from '@/@layouts/types';
 import navItems from '@/navigation/vertical';
 import { getUserLevel, user_info } from '@/plugins/axios';
-import corp from '@/plugins/corp';
 import router from '@/router';
 import { types } from '@/views/posts/useStore';
 import { RouteLocationNormalized } from "vue-router";
@@ -13,7 +12,7 @@ interface Tab {
 }
 
 export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
-    const key_name = `${corp.name}-${user_info.value.user_name}-dynamic-tap-headers`
+    const key_name = `${user_info.value.id}-${getUserLevel()}-dynamic-tap-headers`
     const tab_json = JSON.parse(localStorage.getItem(key_name) || "[]")
 
     const local_key = ref(key_name)
@@ -164,7 +163,7 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
 
     watchEffect(() => {
         if(getUserLevel() >= 10) {
-            local_key.value = `${corp.name}-${user_info.value.user_name}-dynamic-tap-headers`  
+            local_key.value = `${user_info.value.id}-${getUserLevel()}-dynamic-tap-headers`
         }
     })
 

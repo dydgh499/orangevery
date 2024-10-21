@@ -9,30 +9,30 @@ const tabsWrapper = ref<HTMLElement | null>(null);
 const scrollTabs = (direction: 'left' | 'right') => {
     if (tabsWrapper.value) {
         const scrollAmount = 500
-        tabsWrapper.value.scrollBy({ 
-            left: direction === 'left' ? -scrollAmount : scrollAmount, 
-            behavior: 'smooth' 
+        tabsWrapper.value.scrollBy({
+            left: direction === 'left' ? -scrollAmount : scrollAmount,
+            behavior: 'smooth'
         })
     }
 };
 
 const scrollToActiveTab = async () => {
-  await nextTick(); // DOM이 업데이트된 이후 실행
-  const activeTab = tabsWrapper.value?.querySelector('.v-tab--selected');
-  if (activeTab && tabsWrapper.value) {
-    const wrapperLeft = tabsWrapper.value.scrollLeft;
-    const wrapperWidth = tabsWrapper.value.clientWidth;
-    const tabLeft = (activeTab as HTMLElement).offsetLeft;
-    const tabWidth = (activeTab as HTMLElement).clientWidth;
+    await nextTick(); // DOM이 업데이트된 이후 실행
+    const activeTab = tabsWrapper.value?.querySelector('.v-tab--selected');
+    if (activeTab && tabsWrapper.value) {
+        const wrapperLeft = tabsWrapper.value.scrollLeft;
+        const wrapperWidth = tabsWrapper.value.clientWidth;
+        const tabLeft = (activeTab as HTMLElement).offsetLeft;
+        const tabWidth = (activeTab as HTMLElement).clientWidth;
 
-    // 탭이 화면 바깥에 있는 경우 해당 탭으로 스크롤
-    if (tabLeft < wrapperLeft || tabLeft + tabWidth > wrapperLeft + wrapperWidth) {
-      tabsWrapper.value.scrollTo({ 
-        left: tabLeft - wrapperWidth / 2 + tabWidth / 2, 
-        behavior: 'smooth' 
-      });
+        // 탭이 화면 바깥에 있는 경우 해당 탭으로 스크롤
+        if (tabLeft < wrapperLeft || tabLeft + tabWidth > wrapperLeft + wrapperWidth) {
+            tabsWrapper.value.scrollTo({
+                left: tabLeft - wrapperWidth / 2 + tabWidth / 2,
+                behavior: 'smooth'
+            });
+        }
     }
-  }
 };
 
 const onDragEnd = (event: DragEndEvent) => {
@@ -51,9 +51,8 @@ watchEffect(() => {
 
 </script>
 <template>
-    <VCard style=" padding: 8px 14px;margin: 24px 24px 0;"
-        v-if="store.tabs.length">
-        <div class="tabs-container">
+    <VCard style=" padding: 8px 14px;margin: 24px 24px 0;" v-if="store.tabs.length">
+        <div class="tabs-container" v-if="$vuetify.display.smAndDown === false">
             <VChip class="tab-count" color="primary">
                 <b>{{ store.tabs.length }}</b>
             </VChip>
@@ -61,22 +60,21 @@ watchEffect(() => {
                 <VIcon icon="mdi-chevron-left" />
             </VBtn>
             <div class="tabs-wrapper" ref="tabsWrapper">
-                <div class="v-slide-group--is-overflowing v-tabs v-tabs--horizontal v-tabs--align-tabs-start v-tabs--density-comfortable">
+                <div
+                    class="v-slide-group--is-overflowing v-tabs v-tabs--horizontal v-tabs--align-tabs-start v-tabs--density-comfortable">
                     <draggable v-model="store.tabs" item-key="path" class="drag-container" @end="onDragEnd">
                         <template #item="{ element, index }">
                             <div class="tab-close-container">
-                                <VTab class="tab-close-title" @click="store.move(element.path)"
-                                :class="{
-                                        'v-slide-group-item--active v-tab--selected': store.tab === index,
-                                        'text-secondary': store.tab !== index
-                                    }"
-                                >
+                                <VTab class="tab-close-title" @click="store.move(element.path)" :class="{
+                                    'v-slide-group-item--active v-tab--selected': store.tab === index,
+                                    'text-secondary': store.tab !== index
+                                }">
                                     <span>{{ element.title }}</span>
                                 </VTab>
                                 <div class="tab-close-btn" v-if="store.tab !== index" @click="store.remove(index)">
-                                    <VIcon :icon="`tabler-x`" size="small"/>
+                                    <VIcon :icon="`tabler-x`" size="small" />
                                 </div>
-                                <div class="tab-close-division" v-if="store.tabs.length -1 !== index"></div>
+                                <div class="tab-close-division" v-if="store.tabs.length - 1 !== index"></div>
                             </div>
                         </template>
                     </draggable>
@@ -86,14 +84,38 @@ watchEffect(() => {
                 <VIcon icon="mdi-chevron-right" />
             </VBtn>
             <div class="tab-close-btn all-close-btn text-error" v-if="store.tabs.length > 1" @click="store.allRemove()">
-                <VIcon :icon="`tabler-x`" size="small"/>
+                <VIcon :icon="`tabler-x`" size="small" />
                 <VTooltip activator="parent" location="top" transition="scale-transition">
                     <span>전체 탭 닫기</span>
                 </VTooltip>
             </div>
         </div>
+        <template v-else>
+            <VTabs v-model="store.tab">
+                <template v-for="(t, index) in store.tabs" :key="index">
+                    <div class="tab-close-container">
+                        <VTab class="tab-close-title" @click="store.move(t.path)">
+                            <span>{{ t.title }}</span>
+                        </VTab>
+                        <div class="tab-close-btn" v-if="store.tab !== index" @click="store.remove(index)"
+                            style="margin-top: 0.4em;">
+                            <VIcon :icon="`tabler-x`" size="small" />
+                        </div>
+                        <div class="tab-close-division" v-if="store.tabs.length - 1 !== index"></div>
+                    </div>
+                </template>
+            </VTabs>
+            <VChip class="tab-count" color="primary" style=" position: absolute;z-index: 9999;padding: 0.6em !important;inset-block-start: 1em; inset-inline-start: 0.2em;">
+                <b>{{ store.tabs.length }}</b>
+            </VChip>
+            <div class="tab-close-btn all-close-btn text-error" v-if="store.tabs.length > 1" @click="store.allRemove()" style="position: absolute;z-index: 9999;inset-block-start: 0.8em;inset-inline-end: 0.5em;">
+                <VIcon :icon="`tabler-x`" size="small"/>
+                <VTooltip activator="parent" location="top" transition="scale-transition">
+                    <span>전체 탭 닫기</span>
+                </VTooltip>
+            </div>
+        </template>
     </VCard>
-
 </template>
 <style lang="scss">
 .tabs-container {
@@ -140,12 +162,20 @@ watchEffect(() => {
   color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity)) !important;
   cursor: pointer;
   margin-block: auto;
-  transform: scale(1); /* 초기 상태의 크기 설정 */
-  transition: 1s ease all; /* 기본 상태에서의 transition 설정 */
+  transform: scale(1);
+
+  /* 초기 상태의 크기 설정 */
+  transition: 1s ease all;
+
+  /* 기본 상태에서의 transition 설정 */
 
   &:hover {
-    transform: scale(1.1) rotate(180deg); /* 회전과 크기 조정 함께 적용 */
-    transform-origin: center; /* 회전 중심 설정 */
+    transform: scale(1.1) rotate(180deg);
+
+    /* 회전과 크기 조정 함께 적용 */
+    transform-origin: center;
+
+    /* 회전 중심 설정 */
   }
 }
 
@@ -167,5 +197,4 @@ watchEffect(() => {
   background-color: transparent !important;
   cursor: pointer !important;
 }
-
 </style>
