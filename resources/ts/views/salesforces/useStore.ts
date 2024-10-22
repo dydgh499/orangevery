@@ -237,10 +237,8 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     const snackbar = <any>(inject('snackbar'))
 
     onMounted(async () => { 
-        await classification()
-        await getAllMchts()
-        await feeApplyHistoires()
-        is_sales_loaded.value = true
+        if(await classification() && await getAllMchts() && await feeApplyHistoires())
+            is_sales_loaded.value = true
     })
     const isSalesLoaded = computed(() => { return is_sales_loaded.value })
     const classification = async () => {
@@ -250,24 +248,43 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
             for (let i = 0; i < keys.length; i++) {
                 all_sales[i] = r.data[keys[i]].sort((a:Salesforce, b:Salesforce) => a.sales_name.localeCompare(b.sales_name))
                 sales[i].value = r.data[keys[i]]
-            }        
-        } 
+            }
+            return true
+        }
         catch (error: any) {
             await nextTick()
             snackbar.value?.show(error.response?.data?.message || 'Error occurred', 'error')
             errorHandler?.(error)
+            return false
         }    
     }
 
     const getAllMchts = async() => {
-        const url = '/api/v1/manager/merchandises/all'
-        const r = await axios.get(url)
-        Object.assign(mchts.value, r.data.content.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name)))
+        try {
+            const r = await axios.get('/api/v1/manager/merchandises/all')
+            Object.assign(mchts.value, r.data.content.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name)))    
+            return true
+        }
+        catch (error: any) {
+            await nextTick()
+            snackbar.value?.show(error.response?.data?.message || 'Error occurred', 'error')
+            errorHandler?.(error)
+            return false
+        }    
     }
 
     const feeApplyHistoires = async () => {
-        const r = await axios.get('/api/v1/manager/salesforces/fee-apply-histories')
-        sales_apply_histories.value = r.data
+        try {
+            const r = await axios.get('/api/v1/manager/salesforces/fee-apply-histories')
+            sales_apply_histories.value = r.data    
+            return true
+        }
+        catch (error: any) {
+            await nextTick()
+            snackbar.value?.show(error.response?.data?.message || 'Error occurred', 'error')
+            errorHandler?.(error)
+            return false
+        }    
     }
     
     const hintSalesApplyFee = (sales_id: number): string => {

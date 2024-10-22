@@ -9,7 +9,11 @@ import { useQuickViewStore } from '@/views/quick-view/useStore'
 import type { MchtRecentTransactions } from '@/views/types'
 import { axios, getUserLevel, user_info } from '@axios'
 
-const transactions = ref(<MchtRecentTransactions>({}))
+const transactions = ref(<MchtRecentTransactions>({
+    monthly : {},
+    daily : [],
+    mchts : [],
+}))
 const is_skeleton = ref(true)
 const { getPayMenuIcon, payment_modules } = useQuickViewStore()
 

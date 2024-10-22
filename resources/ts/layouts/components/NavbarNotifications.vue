@@ -12,13 +12,14 @@ const notifications = ref(<Notification[]>[])
 const collectWithdrawDangerDialog = ref()
 const detailWorkStatusDialog = ref()
 const secureReportDialog = ref()
-
+const is_login = ref(false)
 provide('detailWorkStatusDialog', detailWorkStatusDialog)
 
 
 axios.get('/api/v1/manager/posts/recent')
     .then(r => {
         notifications.value = r.data.content as Notification[]
+        is_login.value = true
     })
     .catch(e => {
         const r = errorHandler(e)
@@ -28,12 +29,14 @@ axios.get('/api/v1/manager/posts/recent')
 <template>
     <div class="me-2">
         <Notifications :notifications="notifications" />
-        <Suspense>
-            <CollectWithdrawDangerDialog ref="collectWithdrawDangerDialog"/>
-        </Suspense>
-        <Suspense>
-            <SecureReportDialog ref="secureReportDialog"/>
-        </Suspense>
-        <DetailWorkStatusDialog ref="detailWorkStatusDialog"/>
+        <template v-if="is_login">
+            <Suspense>
+                <CollectWithdrawDangerDialog ref="collectWithdrawDangerDialog" />
+            </Suspense>
+            <Suspense>
+                <SecureReportDialog ref="secureReportDialog"/>
+            </Suspense>
+            <DetailWorkStatusDialog ref="detailWorkStatusDialog"/>
+        </template>
     </div>
 </template>

@@ -153,8 +153,10 @@ export const transactionHeader = (table_name: string) => {
         headers_6['buyer_name'] = '구매자명'
         headers_6['buyer_phone'] = '구매자 연락처'
         headers_6['item_name'] = '상품명'    
-        headers_6['trx_id'] = '거래번호'    
-        headers_6['ori_trx_id'] = '원거래번호'
+        if(getUserLevel() >= 35) {
+            headers_6['trx_id'] = '거래번호'    
+            headers_6['ori_trx_id'] = '원거래번호'    
+        }
         return headers_6
     }
 

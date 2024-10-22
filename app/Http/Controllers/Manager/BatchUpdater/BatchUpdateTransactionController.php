@@ -122,6 +122,33 @@ class BatchUpdateTransactionController extends BatchUpdateController
     }
 
     /**
+     * 장비 타입 적용 
+     */
+    public function setTerminalId(Request $request)
+    {
+        $row = $this->getApplyRow($request, ['terminal_id' => $request->terminal_id]);
+        return $this->batchResponse($row, '매출');
+    }
+
+    /**
+     * MID 적용 
+     */
+    public function setMid(Request $request)
+    {
+        $row = $this->getApplyRow($request, ['mid' => $request->mid]);
+        return $this->batchResponse($row, '매출');
+    }
+
+    /**
+     * MID 적용 
+     */
+    public function setTid(Request $request)
+    {
+        $row = $this->getApplyRow($request, ['tid' => $request->tid]);
+        return $this->batchResponse($row, '매출');
+    }
+
+    /**
      * 일괄삭제
      */
     public function batchRemove(Request $request)

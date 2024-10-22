@@ -32,6 +32,9 @@ Route::prefix('transactions')->group(function() {
                 Route::delete('remove', [BatchUpdateTransactionController::class, 'batchRemove']);
                 Route::post('change-settle-date', [BatchUpdateTransactionController::class, 'changeSettleDate']);
                 Route::post('set-custom-filter', [BatchUpdateTransactionController::class, 'setCustomFilter']);
+                Route::post('set-terminal-id', [BatchUpdateTransactionController::class, 'setTerminalId']);
+                Route::post('set-mid', [BatchUpdateTransactionController::class, 'setMid']);                
+                Route::post('set-tid', [BatchUpdateTransactionController::class, 'setTid']);                
                 Route::post('remove-deposit-fee', [BatchUpdateTransactionController::class, 'removeDepositFee']);
                 Route::post('single-deposit-cancel-job-reservation', [BatchUpdateTransactionController::class, 'singleDepositCancelJobReservation']);
             });

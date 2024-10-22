@@ -61,8 +61,13 @@ const show2FAAuthDialog = async () => {
         if(result)
             google2FACreateDialog.value.show()
     }
-    else
-        google2FACreateDialog.value.show()
+    else {
+        const current_hour = new Date().getHours()
+        if(current_hour < 21 && current_hour > 5)
+            google2FACreateDialog.value.show()
+        else
+            snackbar.value.show(`21:00 ~ 06:00까지 2차인증 설정을 할 수 없습니다.`, 'warning')
+    }
 }
 
 const noticeOperator2FaStatus = () => {

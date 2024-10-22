@@ -42,19 +42,21 @@ const login_histories = ref(<LoginHistory[]>([]))
 const abnormal_s_at = ref(<string>(''))
 const work_status_s_at = ref(<string>(''))
 const current_at = ref(<string>(''))
-const snackbar = <any>(inject('snackbar'))
 
 const setSecureReport = async () => {
     init(popup.value)
     if(getUserLevel() >= 35 && popup.value.visible) {
-        const res = await axios.get('/api/v1/manager/services/abnormal-connection-histories/secure-report')
-        histories.value = res.data.abnormal_connections
-        login_histories.value = res.data.login_histories
-        work_status_by_timezone.value = res.data.work_status_by_timezone
+        try {
+            const res = await axios.get('/api/v1/manager/services/abnormal-connection-histories/secure-report')
+            histories.value = res.data.abnormal_connections
+            login_histories.value = res.data.login_histories
+            work_status_by_timezone.value = res.data.work_status_by_timezone
 
-        current_at.value = res.data.current_at
-        abnormal_s_at.value = res.data.abnormal_s_at
-        work_status_s_at.value = res.data.work_status_s_at
+            current_at.value = res.data.current_at
+            abnormal_s_at.value = res.data.abnormal_s_at
+            work_status_s_at.value = res.data.work_status_s_at
+        }
+        catch (error: any) {}   
     }
 }
 

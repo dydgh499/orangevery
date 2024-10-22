@@ -30,7 +30,7 @@ const {
         batchRemove
     } = batch(emits, '매출', 'transactions')
 
-const { cus_filters } = useStore()
+const { cus_filters, terminals } = useStore()
 const { notiBatchSendByTrans } = notiSendHistoryInterface()
 const { isRealtimeTransaction, singleDepositCancelJobReservation } = realtimeHistoryInterface(formatTime)
 
@@ -38,8 +38,11 @@ const store = <any>(inject('store'))
 const snackbar = <any>(inject('snackbar'))
 
 const transaction = reactive<any>({
+    terminal_id: null,
     custom_id: null,
     settle_dt: null,
+    mid: '',
+    tid: '',
 })
 
 const setSettleDay = async (apply_type: number) => {
@@ -55,6 +58,12 @@ const setSettleDay = async (apply_type: number) => {
     }, apply_type)
 }
 
+const setTerminalId = (apply_type: number) => {
+    post('set-terminal-id', {
+        'terminal_id': transaction.terminal_id,
+    }, apply_type)
+}
+
 const setCustomFilter = (apply_type: number) => {
     post('set-custom-filter', {
         'custom_id': transaction.custom_id,
@@ -63,6 +72,18 @@ const setCustomFilter = (apply_type: number) => {
 
 const removeDepositFee = (apply_type: number) => {
     post('remove-deposit-fee', {}, apply_type)
+}
+
+const setMid = (apply_type: number) => {
+    post('set-mid', {
+        'mid': transaction.mid,
+    }, apply_type)
+}
+
+const setTid = (apply_type: number) => {
+    post('set-tid', {
+        'tid': transaction.tid,
+    }, apply_type)
 }
 
 watchEffect(() => {
@@ -91,10 +112,27 @@ watchEffect(() => {
                 </div>
                 <VDivider style="margin: 1em 0;" />
                 <div style="width: 100%;">
+                    <h4 class="pt-3">개인정보 일괄변경</h4>
+                    <br>
                     <VRow>
                         <VCol :md="6" :cols="12">
-                            <h4 class="pt-3">개인정보 일괄변경</h4>
-                            <br>
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="7" cols="12">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="transaction.terminal_id"
+                                        :items="[{ id: null, type: 0, name: '사용안함' }].concat(terminals)" label="장비타입"
+                                        item-title="name" item-value="id" />
+                                </VCol>
+                                <VCol md="5" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setTerminalId(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="7" cols="12">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="transaction.custom_id"
@@ -111,9 +149,45 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
+                    </VRow>
+                    <VRow>
                         <VCol :md="6" :cols="12">
-                            <h4 class="pt-3">정산 예정일 일괄변경</h4>
-                            <br>
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="7" cols="12">
+                                    <VTextField v-model="transaction.mid" label="MID" />
+                                </VCol>
+                                <VCol md="5" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setMid(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="7" cols="12">
+                                    <VTextField v-model="transaction.tid" label="TID" />
+                                </VCol>
+                                <VCol md="5" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setTid(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                </div>
+                <div style="width: 100%;">      
+                    <h4 class="pt-3">정산 예정일 일괄변경</h4>
+                    <br>      
+                    <VRow>
+                        <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="7" cols="12">
                                     <VTextField v-model="transaction.settle_dt" type="date"
@@ -136,7 +210,7 @@ watchEffect(() => {
                                 <VCol cols="12" md="6" style="display: flex; flex-direction: column;" v-if="corp.pv_options.paid.use_noti">
                                     <h4 class="pt-3">노티 재발송</h4>
                                     <br>
-                                    <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+                                    <div style="display: flex; flex-direction: row; justify-content: space-between;">
                                         <VBtn prepend-icon="tabler-calculator" @click="notiBatchSendByTrans(`batch-retry`, selected_idxs, emits)" size="small">
                                             재발송
                                         </VBtn>
@@ -149,7 +223,7 @@ watchEffect(() => {
                                     <VCol cols="12" md="6" style="display: flex; flex-direction: column;" >
                                         <h4 class="pt-3">부가기능</h4>
                                         <br>
-                                        <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+                                        <div style="display: flex; flex-direction: row; justify-content: space-between;">
                                             <VBtn prepend-icon="tabler-calculator" @click="singleDepositCancelJobReservation(selected_idxs)" size="small" color="warning"
                                                 v-if="isRealtimeTransaction()">
                                                 이체예약취소

@@ -29,7 +29,7 @@ watchEffect(() => {
                 <template v-if="is_skeleton">
                 </template>
                 <template v-else>
-                    <b>{{ props.transactions.length }}</b>개 가맹점 매출액 랭킹
+                    <b>{{ props.transactions.length }}</b>개 가맹점 매출액 순위
                 </template>
             </span>
             <br>
@@ -37,9 +37,11 @@ watchEffect(() => {
                 <template v-if="is_skeleton">
                 </template>
                 <template v-else>
-                    {{ first }} (1위)
-                    ~
-                    {{ end }} ({{ props.transactions.length }}위)
+                    <span v-if="props.transactions.length > 0">
+                        {{ first }} (1위)
+                        ~
+                        {{ end }} ({{ props.transactions.length }}위)
+                    </span>
                 </template>
             </span>
         </VCol>

@@ -9,6 +9,7 @@ import router from '@/router'
 import { pay_token, user_info } from '@axios'
 import { abilitiesPlugin } from '@casl/vue'
 import '@core-scss/template/index.scss'
+import type { Breadcrumb, Event } from '@sentry/types'
 import * as Sentry from '@sentry/vue'
 import '@styles/styles.scss'
 import VueDatePicker from '@vuepic/vue-datepicker'
@@ -65,12 +66,25 @@ Sentry.init({
       Sentry.replayIntegration(),
     ],
     // Tracing
-    tracesSampleRate: 0.1,
+    tracesSampleRate: 0,
     tracePropagationTargets: ["localhost", /^\//],
     // Session Replay
-    replaysSessionSampleRate: 0.1,
+    replaysSessionSampleRate: 0,
     replaysOnErrorSampleRate: 1.0,
-});
+    beforeSend(event: Event): Event | null {
+        if (event.level !== 'error') 
+          return null; // 에러가 아닌 이벤트 무시
+        else
+            return event; // 에러 이벤트 전송
+      },
+      // Breadcrumb에서 에러가 아닌 콘솔 로그 무시
+      beforeBreadcrumb(breadcrumb: Breadcrumb, hint?: { level: string }): Breadcrumb | null {
+        if (breadcrumb.category === 'console' && hint?.level !== 'error')
+          return null; // 에러가 아닌 경우 무시
+        else
+            return breadcrumb;
+      },
+})
 // Use plugins
 app.use(vuetify)
 app.use(createPinia())
