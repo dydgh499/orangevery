@@ -52,12 +52,20 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         head.exportToExcel(datas)        
     }
 
+    const dataToChart = async() => {
+        if (store.getChartProcess() === false) {
+            const r = await store.getChartData()
+            metas.value = table.dataToChart(metas.value, r, store)
+        }
+    }
+
     return {
         store,
         head,
         exporter,
         metas,
         printer,
+        dataToChart,
     }
 })
 

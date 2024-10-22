@@ -21,22 +21,15 @@ const { settle, partSettle, exporter } = partSettleStore(store, selected, dialog
 const { settle_types } = useStore()
 const all_selected = ref()
 
-watchEffect(async () => {
+const dataToChart = async() => {
     if (store.getChartProcess() === false && store.params.s_dt && store.params.e_dt) {
         const r = await store.getChartData()
-        metas[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
-        metas[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
-        metas[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
-        metas[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
-        metas[0]['subtitle'] = r.data.appr.count.toLocaleString() + '건'
-        metas[1]['subtitle'] = r.data.cxl.count.toLocaleString() + '건'
-        metas[2]['subtitle'] = r.data.count.toLocaleString() + '건'
-        metas[3]['subtitle'] = r.data.count.toLocaleString() + '건'
-        metas[0]['percentage'] = r.data.appr.amount ? 100 : 0
-        metas[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
-        metas[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
-        metas[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
+        Object.assign(metas, table.dataToChart(metas, r, store))
     }
+}
+
+watchEffect(async () => {
+    dataToChart()
 })
 watchEffect(() => {
     selected.value = all_selected.value ? store.getItems.value.map(item => item['id']) : []

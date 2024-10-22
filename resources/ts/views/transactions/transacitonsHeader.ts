@@ -72,7 +72,7 @@ export const transactionHeader = (table_name: string) => {
         if(getUserLevel() >= 35) {
             headers_2['mcht_settle_type'] = '가맹점 정산타입'
         }
-        if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
+        if((getUserLevel() === 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
             headers_2['profit'] = '정산금'
             if(table_name !== 'sales-part') {
                 headers_2['settle_dt'] = '가맹점 정산예정일'
@@ -119,7 +119,7 @@ export const transactionHeader = (table_name: string) => {
             headers_4['sales0_fee'] = '수수료'
         }
     
-        if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
+        if((getUserLevel() === 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
             headers_4['mcht_fee'] = '가맹점 수수료'
             headers_4['hold_fee'] = '유보금 수수료'
             headers_4['trx_amount'] = '거래 수수료'
@@ -202,7 +202,7 @@ export const transactionHeader = (table_name: string) => {
                 subtitle: '0건',
             },
         ]
-        if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
+        if((getUserLevel() === 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
             chart.push({
                 icon: 'ic-outline-payments',
                 color: 'warning',
@@ -250,6 +250,30 @@ export const transactionHeader = (table_name: string) => {
         return data
     }
 
+    const dataToChart = (_chart: any, r: any, store: any) => {
+        _chart[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
+        _chart[0]['percentage'] = r.data.appr.amount ? 100 : 0
+        _chart[0]['subtitle'] = r.data.appr.count.toLocaleString() + '건'
+
+        _chart[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
+        _chart[1]['subtitle'] = r.data.cxl.count.toLocaleString() + '건'
+        _chart[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
+
+        _chart[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
+        _chart[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
+        _chart[2]['subtitle'] = r.data.count.toLocaleString() + '건'
+
+        if (getUserLevel() === 10 && user_info.value.is_show_fee === 0) { 
+
+        }
+        else {
+            _chart[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
+            _chart[3]['subtitle'] = r.data.count.toLocaleString() + '건'
+            _chart[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
+        }
+        return _chart
+    }
+
     const headers0:any = getTransactionCols()
     const headers1:any = getMerchandiseCols()
     const headers2:any = getPGCols()
@@ -268,6 +292,7 @@ export const transactionHeader = (table_name: string) => {
         headers5,
         headers6,
         chart,
-        dataToExcelFormat
+        dataToExcelFormat,
+        dataToChart
     }
 }

@@ -3,13 +3,14 @@ import { Header } from '@/views/headers';
 import { useRequestStore } from '@/views/request';
 import { Searcher } from '@/views/searcher';
 import { useStore } from '@/views/services/pay-gateways/useStore';
-import { getUserLevel, user_info } from '@axios';
 import { Workbook } from 'exceljs';
+import { transactionHeader } from '../transacitonsHeader';
 
 
 export const useSearchStore = defineStore('transGroupSearchStore', () => {    
     const store = Searcher('transactions/summary')
     const head  = Header('transactions/summary', '매출 관리')
+    const table = transactionHeader('transactions')
     const headers: Record<string, string> = {
         'user_name': '상호',
         'total_count': '총 거래건수',
@@ -25,47 +26,11 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
+    const metas = ref(table.chart)
+
     const { cus_filters } = useStore()
     const { get } = useRequestStore()
     
-    const metas = ref([
-        {
-            icon: 'ic-outline-payments',
-            color: 'primary',
-            title: '승인액 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-        {
-            icon: 'ic-outline-payments',
-            color: 'error',
-            title: '취소액 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-        {
-            icon: 'ic-outline-payments',
-            color: 'success',
-            title: '매출액 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-    ])
-    if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
-        metas.value.push({
-            icon: 'ic-outline-payments',
-            color: 'warning',
-            title: '정산액 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        })
-    }
-
-
     const mchtGroup = async() => {        
         const date = new Date().toISOString().split('T')[0];
         const wb = new Workbook();
@@ -167,6 +132,13 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
         head.exportToExcel(datas)        
     }
 
+    const dataToChart = async() => {
+        if (store.getChartProcess() === false) {
+            const r = await store.getChartData()
+            metas.value = table.dataToChart(metas.value, r, store)
+        }
+    }
+
     return {
         store,
         head,
@@ -174,5 +146,6 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
         metas,
         printer,
         mchtGroup,
+        dataToChart,
     }
 })

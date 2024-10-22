@@ -112,12 +112,21 @@ th {
 .dp__theme_dark,
 .dp__theme_light {
   --dp-border-color-hover: rgb(var(--v-global-theme-primary)) !important;
-  --dp-border-color: rgb(var(--v-border-color)) !important;
+  --dp-border-color: rgba(var(--v-border-color), 0.7) !important;
   --dp-background-color: rgb(var(--v-theme-surface)) !important;
 }
 
 .dp__calendar {
   min-block-size: 15em !important;
+}
+
+.dp__clear_icon {
+  display: none !important;
+}
+
+.dp__input_icon_pad {
+  padding-block: 0.3em;
+  padding-inline-end: 1em;
 }
 
 :root {

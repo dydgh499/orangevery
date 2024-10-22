@@ -27,7 +27,6 @@ export const useSearchStore = defineStore('transSettlesMchtPartSearchStore', () 
     head.flat_headers.value = head.flatten(head.headers.value)
     const metas = ref(table.chart)
 
-
     return {
         head,
         metas,

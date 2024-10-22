@@ -65,7 +65,7 @@ Sentry.init({
       Sentry.replayIntegration(),
     ],
     // Tracing
-    tracesSampleRate: 0.1, 
+    tracesSampleRate: 0.1,
     tracePropagationTargets: ["localhost", /^\//],
     // Session Replay
     replaysSessionSampleRate: 0.1,

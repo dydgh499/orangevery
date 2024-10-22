@@ -33,7 +33,7 @@ watchEffect(() => {
                 </template>
                 <template v-else>
                     <b>{{ props.transactions.length }}</b>일간 
-                    <span v-if="((getUserLevel() == 10 && user_info.is_show_fee) || getUserLevel() >= 13)">정산</span>
+                    <span v-if="((getUserLevel() === 10 && user_info.is_show_fee) || getUserLevel() >= 13)">정산</span>
                     <span v-else>승인/취소</span>
                     금액
                 </template>                
@@ -58,7 +58,7 @@ watchEffect(() => {
                 <th class="list-square">
                     <span>일자</span>
                 </th>
-                <th class="list-square" v-if="((getUserLevel() == 10 && user_info.is_show_fee) || getUserLevel() >= 13)">
+                <th class="list-square" v-if="((getUserLevel() === 10 && user_info.is_show_fee) || getUserLevel() >= 13)">
                     <span>정산액</span>
                 </th>
                 <th class="list-square">
@@ -91,7 +91,7 @@ watchEffect(() => {
                             </VChip>
                         </span>
                     </td>
-                    <td class="list-square" v-if="((getUserLevel() == 10 && user_info.is_show_fee) || getUserLevel() >= 13)">
+                    <td class="list-square" v-if="((getUserLevel() === 10 && user_info.is_show_fee) || getUserLevel() >= 13)">
                         <span>
                             {{ transaction.profit.toLocaleString() }}원
                         </span>
