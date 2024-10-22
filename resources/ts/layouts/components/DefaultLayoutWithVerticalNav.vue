@@ -49,8 +49,7 @@ provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
 
-const passwordChangeWarningValidate = async () => {
-    await nextTick()
+const passwordChangeWarningValidate = () => {
     const last_change_at = new Date(user_info.value.password_change_at ?? '2024-06-15 17:20:00')
     const now = new Date()
     const diff = now.getTime() - last_change_at.getTime()
@@ -64,8 +63,7 @@ const passwordChangeWarningValidate = async () => {
     }
 }
 
-const fa2RequireNotification = async () => {
-    await nextTick()
+const fa2RequireNotification = () => {
     if(getUserLevel() >= 35 && getUserLevel() < 50) {
         if(user_info.value.is_2fa_use === false) {
             if(corp.pv_options.paid.use_head_office_withdraw)
@@ -82,6 +80,7 @@ const fa2RequireNotification = async () => {
 }
 
 onMounted(async () => {
+    await nextTick()
     axios.get('/api/v1/manager/popups/currently', {
         params: {
             page_size : 10,
@@ -95,8 +94,8 @@ onMounted(async () => {
     .catch(e => { 
         console.log(e) 
     })
-    await passwordChangeWarningValidate()
-    await fa2RequireNotification()    
+    passwordChangeWarningValidate()
+    fa2RequireNotification()    
 })
 
 </script>
