@@ -48,19 +48,24 @@ provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
-const current = ref(null)
 
-const passwordChangeWarningValidate = () => {
+const passwordChangeWarningValidate = async () => {
+    await nextTick()
     const last_change_at = new Date(user_info.value.password_change_at ?? '2024-06-15 17:20:00')
     const now = new Date()
     const diff = now.getTime() - last_change_at.getTime()
 
     const diffInDays = diff / (1000 * 3600 * 24)
-    if(diffInDays >= 90) 
-        passwordChangeNoticeDialog.value.show()
+    if(diffInDays >= 90) {
+        if(passwordChangeNoticeDialog.value)
+            passwordChangeNoticeDialog.value.show()
+        else
+            console.error('passwordChangeNoticeDialog is not initialized');
+    }
 }
 
-const fa2RequireNotification = () => {
+const fa2RequireNotification = async () => {
+    await nextTick()
     if(getUserLevel() >= 35 && getUserLevel() < 50) {
         if(user_info.value.is_2fa_use === false) {
             if(corp.pv_options.paid.use_head_office_withdraw)
@@ -76,7 +81,7 @@ const fa2RequireNotification = () => {
     }
 }
 
-onMounted(() => {
+onMounted(async () => {
     axios.get('/api/v1/manager/popups/currently', {
         params: {
             page_size : 10,
@@ -90,9 +95,8 @@ onMounted(() => {
     .catch(e => { 
         console.log(e) 
     })
-    passwordChangeWarningValidate()
-    fa2RequireNotification()
-    
+    await passwordChangeWarningValidate()
+    await fa2RequireNotification()    
 })
 
 </script>
@@ -132,7 +136,6 @@ onMounted(() => {
             </KeepAlive>
         </RouterView>
 
-        
         <Snackbar ref="snackbar" />
         <PWASnackbar ref="pwaSnackbar"/>
         <AlertDialog ref="alert" />

@@ -26,6 +26,7 @@ const new_password = ref({
 })
 
 const show = (_user_id: number, _user_type: number) => {
+    console.log(1)
     if( _user_type !== 3) {
         user_id.value = _user_id
         user_type.value = _user_type

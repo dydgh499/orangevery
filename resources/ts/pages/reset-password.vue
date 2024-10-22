@@ -66,7 +66,6 @@ const resetPassword = () => {
                 router.replace(route.query.to ? String(route.query.to) : '/')
             })
             .catch(e => {
-                console.log(e.response.data.code)
                 errors.value = e.response.data
             })
     }

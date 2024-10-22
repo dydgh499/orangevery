@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
-import type { MchtRecentTransaction } from '@/views/types'
+import SkeletonBox from '@/layouts/utils/SkeletonBox.vue';
+import type { MchtRecentTransaction } from '@/views/types';
 
 interface Props {
     transactions: MchtRecentTransaction[],
@@ -44,7 +44,7 @@ watchEffect(() => {
             </span>
         </VCol>
     </VCard>
-    <VTable class="text-no-wrap" :style="props.transactions.length > 14 ? 'block-size: 50em !important;' : ''">
+    <VTable class="text-no-wrap" :style="props.transactions && props.transactions.length > 14 ? 'block-size: 50em !important;' : ''">
         <thead>
             <tr>
                 <th class="list-square">

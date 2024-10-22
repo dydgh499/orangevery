@@ -73,8 +73,12 @@
 </html>
 <script>
   document.getElementById('load-custom').onerror = function () {
-      document.getElementById('load-custom').classList.add('hidden');
-      document.getElementById('load-default').classList.remove('hidden');
+    const load_custom = document.getElementById('load-custom');
+    const load_default = document.getElementById('load-default');
+    if(load_custom)
+      load_custom.classList.add('hidden');
+    if(load_default)
+      load_default.classList.remove('hidden');
   }
 
   @if(env('APP_ENV') === 'production' && !in_array($ip, json_decode(env('MASTER_IPS'), true)))
