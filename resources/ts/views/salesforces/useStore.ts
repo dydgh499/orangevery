@@ -233,7 +233,9 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     const sales = Array.from({ length: SALES_LEVEL_SIZE }, () => ref<SalesFilter[]>([]))
     const sales_apply_histories = ref(<any[]>([]))
     const mchts = ref(<Merchandise[]>([]))
-    
+    const errorHandler = <any>(inject('$errorHandler'))
+    const snackbar = <any>(inject('snackbar'))
+
     onMounted(async () => { 
         await classification()
         await getAllMchts()
@@ -242,12 +244,19 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     })
     const isSalesLoaded = computed(() => { return is_sales_loaded.value })
     const classification = async () => {
-        const r = await axios.get('/api/v1/manager/salesforces/classification')
-        const keys = Object.keys(r.data);
-        for (let i = 0; i < keys.length; i++) {
-            all_sales[i] = r.data[keys[i]].sort((a:Salesforce, b:Salesforce) => a.sales_name.localeCompare(b.sales_name))
-            sales[i].value = r.data[keys[i]]
-        }
+        try {
+            const r = await axios.get('/api/v1/manager/salesforces/classification')
+            const keys = Object.keys(r.data)
+            for (let i = 0; i < keys.length; i++) {
+                all_sales[i] = r.data[keys[i]].sort((a:Salesforce, b:Salesforce) => a.sales_name.localeCompare(b.sales_name))
+                sales[i].value = r.data[keys[i]]
+            }        
+        } 
+        catch (error: any) {
+            await nextTick()
+            snackbar.value?.show(error.response?.data?.message || 'Error occurred', 'error')
+            errorHandler?.(error)
+        }    
     }
 
     const getAllMchts = async() => {

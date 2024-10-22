@@ -31,6 +31,7 @@ import { axios, getUserLevel, user_info } from '@axios'
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const loading = <any>(inject('loading'))
+const errorHandler = <any>(inject('$errorHandler'))
 
 const popup = ref()
 const payLink = ref()
@@ -92,7 +93,7 @@ onMounted(async () => {
             popup.value.show(r.data.content)
     })
     .catch(e => { 
-        console.log(e) 
+        const r = errorHandler(e)
     })
     passwordChangeWarningValidate()
     fa2RequireNotification()    
