@@ -1,12 +1,68 @@
+import corp from '@/plugins/corp';
 import { Header } from '@/views/headers';
+import { useSalesFilterStore } from '@/views/salesforces/useStore';
 import { Searcher } from '@/views/searcher';
 import type { Options } from '@/views/types';
+import { useStore } from '../pay-gateways/useStore';
 
 export const history_types = <Options[]>([
     { id: 0, title: "추가" }, { id: 1, title: "수정" }, { id: 3, title: "삭제" },
     { id: 4, title: "로그인" }, { id: 5, title: "변경예약" },
     { id: 6, title: "예약삭제" }, { id: 7, title: "이력삭제" },
 ])
+
+export const replaceVariable = (history_detail: any) => {
+    const { mchts, all_sales } = useSalesFilterStore()
+    const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
+    const changeKeyName = () => {
+        const keys = [
+            'sales0_id','sales1_id','sales2_id','sales3_id','sales4_id','sales5_id',    
+            'sales0_fee','sales1_fee','sales2_fee','sales3_fee','sales4_fee','sales5_fee',
+            'sales0_settle_amount','sales1_settle_amount','sales2_settle_amount',
+            'sales3_settle_amount','sales4_settle_amount','sales5_settle_amount',
+        ]
+        keys.forEach((key) => {
+            if("validation.attributes." + key in history_detail) {
+                const level = key.slice(0, 6)
+                let key_name = corp.pv_options.auth.levels[level+'_name']
+                if(key.includes('fee')) {
+                    key_name += ' 수수료';
+                    history_detail['validation.attributes.'+key] *= 100
+                }
+                else if(key.includes('_settle_amount')) {
+                    key_name += ' 정산금';
+                }
+                history_detail[key_name] =  history_detail['validation.attributes.'+key]
+                delete history_detail['validation.attributes.'+key]
+            }
+        })
+        replaceIdtoName()
+        return history_detail
+    }
+    const replaceIdtoName = () => {
+        const levels = corp.pv_options.auth.levels
+        const _replaceToName = (lists: any[], key: string, name: string) => {
+            if(key in history_detail) {
+                const value = lists.find(obj => obj.id == history_detail[key])
+                history_detail[key] = value ? value[name] : history_detail[key]
+            }
+        }
+        _replaceToName(pgs, "PG사", 'pg_name')
+        _replaceToName(pss, "구간", 'name')
+        _replaceToName(mchts, "가맹점", 'mcht_name')
+        _replaceToName(terminals, "장비", 'name')
+        _replaceToName(settle_types, "정산일", 'name')    
+        _replaceToName(finance_vans, "금융벤 ID", 'nick_name')
+
+        _replaceToName(all_sales[0], levels.sales0_name, 'sales_name')
+        _replaceToName(all_sales[1], levels.sales1_name, 'sales_name')
+        _replaceToName(all_sales[2], levels.sales2_name, 'sales_name')
+        _replaceToName(all_sales[3], levels.sales3_name, 'sales_name')
+        _replaceToName(all_sales[4], levels.sales4_name, 'sales_name')
+        _replaceToName(all_sales[5], levels.sales5_name, 'sales_name')
+    }
+    return changeKeyName()
+}
 
 export const useSearchStore = defineStore('operatorHistorySearchStore', () => {
     const store = Searcher('services/operator-histories')

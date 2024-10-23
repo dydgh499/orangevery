@@ -2,6 +2,7 @@
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import { useRequestStore } from '@/views/request';
 import { useSearchStore } from '@/views/services/book-applies/useStore';
+import { replaceVariable } from '@/views/services/operator-histories/useStore';
 import { getUserLevel } from '@axios';
 import { DateFilters } from '@core/enums';
 
@@ -35,7 +36,7 @@ const destory = async (id: number) => {
 <template>
     <section>
         <div>
-            <BaseIndexView placeholder="변경 값 검색" :metas="metas" :add="false" add_name="예약변경" :date_filter_type="DateFilters.SETTLE_RANGE">
+            <BaseIndexView placeholder="변경 값 검색" :metas="metas" :add="false" add_name="예약변경" :date_filter_type="DateFilters.DATE_RANGE">
                 <template #filter>
                 </template>
                 <template #index_extra_field>
@@ -87,6 +88,9 @@ const destory = async (id: number) => {
                                             삭제
                                             <VIcon size="22" icon="tabler-trash"/>
                                         </VBtn>
+                                    </span>
+                                    <span v-else-if="_key === 'apply_data'">
+                                        {{ replaceVariable(item[_key]) }}
                                     </span>
                                     <span v-else>
                                         {{ item[_key] }}

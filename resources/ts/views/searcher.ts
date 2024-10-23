@@ -62,8 +62,12 @@ const chartSetter = (base_url: string) => {
         params.page = 1
         params.page_size = 999999
         const r = await get(base_url+'/chart', { params: params })
-        chart_process.value = true
-        return r
+        if (r.status == 200) {
+            chart_process.value = true
+            return r
+        }
+        else
+            return null
     }
     const getPercentage = (n:number, d:number) => {
         return d === 0 ? 0 : Number(((n / d) * 100).toFixed(2))

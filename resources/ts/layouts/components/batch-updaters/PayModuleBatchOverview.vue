@@ -205,7 +205,7 @@ watchEffect(() => {
                                 <b>선택된 결제모듈 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
                             </template>
                         </VRadio>
-                        <VRadio :value="1" v-if="getUserLevel() === 40">
+                        <VRadio :value="1" v-if="getUserLevel() >= 40">
                             <template #label>
                                 <b>전체모듈: {{ store.pagenation.total_count }}개</b>
                             </template>

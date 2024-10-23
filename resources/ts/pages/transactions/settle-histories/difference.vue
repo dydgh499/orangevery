@@ -28,15 +28,17 @@ store.params.use_realtime_deposit = Number(corp.pv_options.paid.use_realtime_dep
 onMounted(async() => {
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
-            const r = await store.getChartData()
-            metas[0]['stats'] = r.data.amount.toLocaleString() + ' ￦'
-            metas[1]['stats'] = r.data.vat_amount.toLocaleString() + ' ￦'
-            metas[2]['stats'] = r.data.supply_amount.toLocaleString() + ' ￦'
-            metas[3]['stats'] = r.data.settle_amount.toLocaleString() + ' ￦'
-            metas[0]['percentage'] = r.data.amount ? 100 : 0
-            metas[1]['percentage'] = store.getPercentage(r.data.vat_amount, r.data.amount)
-            metas[2]['percentage'] = store.getPercentage(r.data.supply_amount, r.data.amount)
-            metas[3]['percentage'] = store.getPercentage(r.data.settle_amount, r.data.amount)
+            const r = await store.getChartData()            
+            if(r.status === 200) {
+                metas[0]['stats'] = r.data.amount.toLocaleString() + ' ￦'
+                metas[1]['stats'] = r.data.vat_amount.toLocaleString() + ' ￦'
+                metas[2]['stats'] = r.data.supply_amount.toLocaleString() + ' ￦'
+                metas[3]['stats'] = r.data.settle_amount.toLocaleString() + ' ￦'
+                metas[0]['percentage'] = r.data.amount ? 100 : 0
+                metas[1]['percentage'] = store.getPercentage(r.data.vat_amount, r.data.amount)
+                metas[2]['percentage'] = store.getPercentage(r.data.supply_amount, r.data.amount)
+                metas[3]['percentage'] = store.getPercentage(r.data.settle_amount, r.data.amount)
+            }
         }
     })
     const r = await axios.get('/api/v1/manager/services/brands/different-settlement-infos')

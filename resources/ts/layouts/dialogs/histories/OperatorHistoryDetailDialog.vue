@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useRequestStore } from '@/views/request';
-import { useSalesFilterStore } from '@/views/salesforces/useStore';
-import { history_types } from '@/views/services/operator-histories/useStore';
-import { useStore } from '@/views/services/pay-gateways/useStore';
+import { history_types, replaceVariable } from '@/views/services/operator-histories/useStore';
 import { OperatorHistory } from '@/views/types';
 import corp from '@corp';
 
@@ -24,59 +22,8 @@ const swiper = ref()
 const hide_login = ref(false)
 
 const store = <any>(inject('store'))
-const { mchts, all_sales } = useSalesFilterStore()
-const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
 const getRef = (swiperInstance:any) => {
     swiper.value = swiperInstance
-}
-
-const changeKeyName = (history_detail: any) => {
-    const keys = [
-        'sales0_id','sales1_id','sales2_id','sales3_id','sales4_id','sales5_id',    
-        'sales0_fee','sales1_fee','sales2_fee','sales3_fee','sales4_fee','sales5_fee',
-        'sales0_settle_amount','sales1_settle_amount','sales2_settle_amount',
-        'sales3_settle_amount','sales4_settle_amount','sales5_settle_amount',
-    ]
-    keys.forEach((key) => {
-        if("validation.attributes." + key in history_detail) {
-            const level = key.slice(0, 6)
-            let key_name = corp.pv_options.auth.levels[level+'_name']
-            if(key.includes('fee')) {
-                key_name += ' 수수료';
-                history_detail['validation.attributes.'+key] *= 100
-            }
-            else if(key.includes('_settle_amount')) {
-                key_name += ' 정산금';
-            }
-            history_detail[key_name] =  history_detail['validation.attributes.'+key]
-            delete history_detail['validation.attributes.'+key]
-        }
-    })
-    replaceIdtoName(history_detail)
-    return history_detail
-}
-
-const replaceIdtoName = (history_detail: any) => {
-    const levels = corp.pv_options.auth.levels
-    const _replaceToName = (lists: any[], key: string, name: string) => {
-        if(key in history_detail) {
-            const value = lists.find(obj => obj.id == history_detail[key])
-            history_detail[key] = value ? value[name] : history_detail[key]
-        }
-    }
-    _replaceToName(pgs, "PG사", 'pg_name')
-    _replaceToName(pss, "구간", 'name')
-    _replaceToName(mchts, "가맹점", 'mcht_name')
-    _replaceToName(terminals, "장비", 'name')
-    _replaceToName(settle_types, "정산일", 'name')    
-    _replaceToName(finance_vans, "금융벤 ID", 'nick_name')
-
-    _replaceToName(all_sales[0], levels.sales0_name, 'sales_name')
-    _replaceToName(all_sales[1], levels.sales1_name, 'sales_name')
-    _replaceToName(all_sales[2], levels.sales2_name, 'sales_name')
-    _replaceToName(all_sales[3], levels.sales3_name, 'sales_name')
-    _replaceToName(all_sales[4], levels.sales4_name, 'sales_name')
-    _replaceToName(all_sales[5], levels.sales5_name, 'sales_name')
 }
 
 const show = async (item: any) => {
@@ -89,8 +36,8 @@ const show = async (item: any) => {
     })
     temp_histories.value = res.data
     for (let i = 0; i < temp_histories.value.length; i++) {
-        temp_histories.value[i].before_history_detail = changeKeyName(temp_histories.value[i].before_history_detail)
-        temp_histories.value[i].after_history_detail = changeKeyName(temp_histories.value[i].after_history_detail)
+        temp_histories.value[i].before_history_detail = replaceVariable(temp_histories.value[i].before_history_detail)
+        temp_histories.value[i].after_history_detail = replaceVariable(temp_histories.value[i].after_history_detail)
         if(temp_histories.value[i].history_target === '구분 정보') {
             if(temp_histories.value[i].before_history_detail['타입'] === 0) {
                 delete temp_histories.value[i].after_history_detail['타입']

@@ -10,7 +10,7 @@ interface Props {
 const route = useRoute()
 const props = defineProps<Props>();
 const store = <any>(inject('store'))
-const { sales, all_sales, setUnderSalesFilter, initAllSales } = useSalesFilterStore()
+const { sales, all_sales, setUnderSalesFilter } = useSalesFilterStore()
 const { recursionSalesFilter } = overlap(all_sales, sales)
 const levels = corp.pv_options.auth.levels
 

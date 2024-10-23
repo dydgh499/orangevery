@@ -50,7 +50,7 @@ defineExpose({
                 <br>
                 <h5>오{{ method }}방지를 위해 하기 입력란에 
                     "<b class="text-error">{{ type }} {{select_count}}개 일괄{{ method }}</b>"
-                    을 더 입력해주세요.
+                    을 입력해주세요.
                 </h5>
                 <VTextField v-model="check_text" 
                     :placeholder="`${type} ${select_count}개 일괄${method}`"

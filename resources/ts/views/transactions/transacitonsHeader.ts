@@ -253,25 +253,27 @@ export const transactionHeader = (table_name: string) => {
     }
 
     const dataToChart = (_chart: any, r: any, store: any) => {
-        _chart[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
-        _chart[0]['percentage'] = r.data.appr.amount ? 100 : 0
-        _chart[0]['subtitle'] = r.data.appr.count.toLocaleString() + '건'
-
-        _chart[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
-        _chart[1]['subtitle'] = r.data.cxl.count.toLocaleString() + '건'
-        _chart[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
-
-        _chart[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
-        _chart[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
-        _chart[2]['subtitle'] = r.data.count.toLocaleString() + '건'
-
-        if (getUserLevel() === 10 && user_info.value.is_show_fee === 0) { 
-
-        }
-        else {
-            _chart[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
-            _chart[3]['subtitle'] = r.data.count.toLocaleString() + '건'
-            _chart[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
+        if(r.status === 200) {
+            _chart[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
+            _chart[0]['percentage'] = r.data.appr.amount ? 100 : 0
+            _chart[0]['subtitle'] = r.data.appr.count.toLocaleString() + '건'
+    
+            _chart[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
+            _chart[1]['subtitle'] = r.data.cxl.count.toLocaleString() + '건'
+            _chart[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
+    
+            _chart[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
+            _chart[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
+            _chart[2]['subtitle'] = r.data.count.toLocaleString() + '건'
+    
+            if (getUserLevel() === 10 && user_info.value.is_show_fee === 0) { 
+    
+            }
+            else {
+                _chart[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
+                _chart[3]['subtitle'] = r.data.count.toLocaleString() + '건'
+                _chart[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
+            }
         }
         return _chart
     }
