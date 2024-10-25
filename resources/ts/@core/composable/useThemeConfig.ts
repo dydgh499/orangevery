@@ -1,3 +1,4 @@
+import corp from '@/plugins/corp'
 import { useLayouts } from '@layouts'
 import { themeConfig } from '@themeConfig'
 import { useTheme } from 'vuetify'
@@ -9,7 +10,7 @@ export const useThemeConfig = () => {
     },
     set(value: typeof themeConfig.app.theme.value) {
       themeConfig.app.theme.value = value
-      localStorage.setItem(`${themeConfig.app.title}-theme`, value.toString())
+      localStorage.setItem(`${corp.name}-theme`, value.toString())
 
       // ℹ️ We will not reset semi dark value when turning off dark mode because some user think it as bug
       // if (value !== 'light')
@@ -24,7 +25,7 @@ export const useThemeConfig = () => {
     },
     set(value: typeof themeConfig.verticalNav.isVerticalNavSemiDark.value) {
       themeConfig.verticalNav.isVerticalNavSemiDark.value = value
-      localStorage.setItem(`${themeConfig.app.title}-isVerticalNavSemiDark`, value.toString())
+      localStorage.setItem(`${corp.name}-isVerticalNavSemiDark`, value.toString())
     },
   })
 
@@ -49,7 +50,7 @@ export const useThemeConfig = () => {
 
     watch(theme, val => {
       // ℹ️ We are not using theme.current.colors.surface because watcher is independent and when this watcher is ran `theme` computed is not updated
-      localStorage.setItem(`${themeConfig.app.title}-initial-loader-bg`, vuetifyTheme.themes.value[val].colors.surface)
+      localStorage.setItem(`${corp.name}-initial-loader-bg`, vuetifyTheme.themes.value[val].colors.surface)
     }, {
       immediate: true,
     })
@@ -61,7 +62,7 @@ export const useThemeConfig = () => {
     },
     set(value: typeof themeConfig.app.skin.value) {
       themeConfig.app.skin.value = value
-      localStorage.setItem(`${themeConfig.app.title}-skin`, value)
+      localStorage.setItem(`${corp.name}-skin`, value)
     },
   })
 
@@ -71,7 +72,7 @@ export const useThemeConfig = () => {
     },
     set(value: typeof themeConfig.app.routeTransition.value) {
       themeConfig.app.routeTransition.value = value
-      localStorage.setItem(`${themeConfig.app.title}-transition`, value)
+      localStorage.setItem(`${corp.name}-transition`, value)
     },
   })
 

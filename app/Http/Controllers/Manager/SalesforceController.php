@@ -51,7 +51,7 @@ class SalesforceController extends Controller
                 'contract_img', 'id_img', 'passbook_img', 'bsin_lic_img', 'profile_img',
             ],
             'folders'   => [
-                'contracts', 'ids', 'passbooks', 'bsin_lic', 'profile',
+                'contracts', 'ids', 'passbooks', 'e-ids', 'profiles',
             ],
             'sizes'     => [
                 500, 500, 500, 500, 120,

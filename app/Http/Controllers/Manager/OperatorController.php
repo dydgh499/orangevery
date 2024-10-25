@@ -50,7 +50,7 @@ class OperatorController extends Controller
                 'profile_img',
             ],
             'folders'   => [
-                'profile',
+                'profiles',
             ],
             'sizes'     => [
                500

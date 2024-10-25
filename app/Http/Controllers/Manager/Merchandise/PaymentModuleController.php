@@ -113,6 +113,7 @@ class PaymentModuleController extends Controller
      */
     public function store(PayModuleRequest $request)
     {
+        $brand = BrandInfo::getBrandById($request->user()->brand_id);
         // 같은 브랜드에서 똑같은 값이 존재할 떄
         $isDuplicateId = function($bid, $key, $value) {
             return $this->pay_modules
@@ -120,18 +121,15 @@ class PaymentModuleController extends Controller
                 ->where($key, $value)
                 ->exists();
         };
-
         $data = $request->data();
-        
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-        if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'tid', $data['tid']))
+        if($brand['pv_options']['free']['use_tid_duplicate'] && $data['tid'] !== '' && $isDuplicateId($data['brand_id'], 'tid', $data['tid']))
             return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['tid'=>$data['tid']]);
-        if($request->use_mid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
+        if($brand['pv_options']['free']['use_mid_duplicate'] && $data['tid'] !== '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
             return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid'=>$data['mid']]);
         if($data['pay_window_secure_level'] >= 3)
         {
-            $brand = BrandInfo::getBrandById($request->user()->brand_id);
             if($brand['pv_options']['free']['bonaeja']['user_id'] === '')
                 return $this->extendResponse(1999, '문자발송 플랫폼과 연동되어있지 않아 결제창 보안등급을 설정 할 수 없습니다.<br>계약 이후 사용 가능합니다.');
         }

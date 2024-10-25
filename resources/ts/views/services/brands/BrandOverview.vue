@@ -113,7 +113,7 @@ watchEffect(() => {
                                 <VCol md="8">
                                     <VTextField v-model="props.item.fax_num"
                                         prepend-inner-icon="streamline-emojis:fax-machine" placeholder="팩스번호 입력" persistent-placeholder
-                                        maxlength="200" :rules="[requiredValidatorV2(props.item.fax_num, '팩스번호')]" />
+                                        maxlength="15" :rules="[requiredValidatorV2(props.item.fax_num, '팩스번호')]" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -121,7 +121,7 @@ watchEffect(() => {
                 </VCardItem>
             </VCard>
             <br>
-            <VCard v-if="getUserLevel() == 50">
+            <VCard v-if="getUserLevel() === 50">
                 <VCardItem>
                     <VCardTitle>
                         <BaseQuestionTooltip location="top" text="개발사 정보"

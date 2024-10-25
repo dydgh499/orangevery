@@ -7,7 +7,7 @@ import { useTheme } from 'vuetify'
 
 const vuetifyTheme = useTheme()
 const currentThemeName = vuetifyTheme.name.value
-vuetifyTheme.themes.value[currentThemeName].colors.primary = corp.color
+vuetifyTheme.themes.value[currentThemeName].colors.primary = corp.theme_css.main_color
 themeConfig.app.title = corp.name;
 
 const { syncInitialLoaderTheme, syncVuetifyThemeWithTheme: syncConfigThemeWithVuetifyTheme, isAppRtl } = useThemeConfig()

@@ -45,7 +45,7 @@ class BrandController extends Controller
             ],
             'folders'   => [
                 'logos', 'favicons', 'passbooks',
-                'contracts', 'ids', 'ogs', 'bsin_lic',
+                'contracts', 'ids', 'ogs', 'e-ids',
                 'logins',
             ],
             'sizes'     => [

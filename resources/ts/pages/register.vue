@@ -101,7 +101,7 @@ const sameValidaor = () => {
                     <VNodeRenderer :nodes="themeConfig.app.logo" class="mb-6" />
 
                     <h4 class="text-h4 mb-1 font-weight-bold">
-                        <span class="text-capitalize">{{ themeConfig.app.title }}</span>에 오신것을 환영합니다! 👋🏻
+                        <span class="text-capitalize">{{ corp.name }}</span>에 오신것을 환영합니다! 👋🏻
                     </h4>
                     <p class="mb-0">
                         서비스 운영에 사용할 본사계정을 등록해주세요.

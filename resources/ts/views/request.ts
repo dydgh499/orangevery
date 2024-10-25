@@ -177,16 +177,10 @@ export const useRequestStore = defineStore('requestStore', () => {
     }
 
     const update = async (base_url: string, params: any, vForm: any, is_redirect: boolean = true) => {
-        if(base_url == 'merchandises/pay-modules') {
-            params.use_mid_duplicate = Number(corp.pv_options.free.use_mid_duplicate)
-            params.use_tid_duplicate = Number(corp.pv_options.free.use_tid_duplicate)
-        }
-
-        //payment moduels use_tid_duplicate
         const is_valid = await vForm.validate()
         const { url, reqType } = getBaseSendInfo(base_url, params.id)
         if (is_valid.valid && await alert.value.show('정말 ' + reqType + '하시겠습니까?')) {
-            const res = await request({ url: url, data: params, method: params.id != 0 ? 'put' : 'post' })
+            const res = await request({ url: url, data: params, method: params.id !== 0 ? 'put' : 'post' })
             afterTreatment(base_url, is_redirect, params, res)
             return res
         }
@@ -200,7 +194,7 @@ export const useRequestStore = defineStore('requestStore', () => {
     const remove = async (base_url: string, params: any, is_redirect: boolean = true) => {
         const { url, reqType } = getBaseSendInfo(base_url, params.id)
         if (await alert.value.show('정말 삭제하시겠습니까?')) {
-            const res = await request({ url: url, method: 'delete' })
+            const res = await request({ url: url, data: params, method: 'delete' })
             deleteTreatment(base_url, is_redirect, params, res)
             return res
         }

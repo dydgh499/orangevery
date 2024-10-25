@@ -241,12 +241,11 @@ class DifferenceSettlementHistoryController extends Controller
     /*
     * 차액정산 테스트 업로드
     */
-    static public function differenceSettleRequestTest()
+    static public function differenceSettleRequestTest($ds_ids, $sub_days=1)
     {
-        //DifferenceSettlementHistoryController::differenceSettleRequestTest()
-        $ds_ids      = [3];
+        //DifferenceSettlementHistoryController::differenceSettleRequestTest([3,], 12)
         $date       = Carbon::now();
-        $yesterday  = $date->copy()->subDay(6)->format('Y-m-d');
+        $yesterday  = $date->copy()->subDay($sub_days)->format('Y-m-d');
         foreach($ds_ids as $ds_id)
         {
             $brand = Brand::join('different_settlement_infos', 'brands.id', '=', 'different_settlement_infos.brand_id')

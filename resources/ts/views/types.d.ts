@@ -497,7 +497,7 @@ export interface DifferentSettlementInfo {
 }
 
 export interface OperatorIp {
-    id: number,
+    id: number | string,
     brand_id: number,
     enable_ip: string,
     token?: string,

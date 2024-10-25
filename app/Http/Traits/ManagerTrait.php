@@ -55,8 +55,11 @@ trait ManagerTrait
     // S3
     public function ToS3($folder, $img, $name)
     {
-        $path = $img->store($folder);
-        return env('AWS_URL')."/".$path;
+        $public_folders = ['posts', 'logos', 'favicons', 'logins', 'ogs'];
+        $disk = in_array($folder, $public_folders) ? 's3-public' : 's3';
+        $path = Storage::disk($disk)->putFileAs($folder, $img, $name);
+        $host = $disk === 's3-public' ? env('AWS_PUBLIC_BUCKET_HOST') : env('AWS_PRIVATE_BUCKET_HOST');
+        return "{$host}/{$path}";
     }
     // Cloudinary
     public function ToCloudinary($folder, $img, $name)
@@ -93,9 +96,9 @@ trait ManagerTrait
                 $ext    = $img->extension();                
 		        $name = time().md5(pathinfo($img, PATHINFO_FILENAME)).".$ext";
         
-                if(env('DISK_CONNECTION') == 's3')
+                if(env('FILESYSTEM_DISK') === 's3')
                     $data[$cols[$i]] = $this->ToS3($folders[$i], $img, $name);
-                else if(env('DISK_CONNECTION') == 'cloudinary')
+                else if(env('FILESYSTEM_DISK') === 'cloudinary')
                     $data[$cols[$i]] = $this->ToCloudinary($folders[$i], $img, $name);
                 else
                     $data[$cols[$i]] = $this->ToLocal($folders[$i], $img, $name);
