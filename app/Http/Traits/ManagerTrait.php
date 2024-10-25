@@ -55,7 +55,7 @@ trait ManagerTrait
     // S3
     public function ToS3($folder, $img, $name)
     {
-        $public_folders = ['posts', 'logos', 'favicons', 'logins', 'ogs'];
+        $public_folders = ['posts', 'logos', 'favicons', 'logins', 'ogs', 'profiles'];
         $disk = in_array($folder, $public_folders) ? 's3-public' : 's3';
         $path = Storage::disk($disk)->putFileAs($folder, $img, $name);
         $host = $disk === 's3-public' ? env('AWS_PUBLIC_BUCKET_HOST') : env('AWS_PRIVATE_BUCKET_HOST');
