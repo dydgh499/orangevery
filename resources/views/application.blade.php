@@ -98,8 +98,8 @@
     });
   @endif
   const loaderColor = localStorage.getItem("{{ $json['name'] }}-initial-loader-bg") || '#FFFFFF';
-
   window.corp = {!! json_encode($json, true) !!};
   if (loaderColor)
       document.documentElement.style.setProperty('--initial-loader-bg', loaderColor)
+  document.documentElement.style.setProperty('--initial-loader-color', "{{ $json['color'] }}")
 </script>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
-import VuePdfApp from "vue3-pdf-app";
-import "vue3-pdf-app/dist/icons/main.css";
+import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue';
+import { VuePDF, usePDF } from '@tato30/vue-pdf';
 
 interface Props {
     previewStyle: string,
@@ -12,69 +11,31 @@ interface Props {
 
 const props = defineProps<Props>()
 const imageDialog = ref()
-const config = ref({
-  sidebar: {
-    viewThumbnail: false,
-    viewOutline: false,
-    viewAttachments: false,
-  },
-  secondaryToolbar: {
-    secondaryPresentationMode: true,
-    secondaryOpenFile: false,
-    secondaryPrint: false,
-    secondaryDownload: false,
-    secondaryViewBookmark: false,
-    firstPage: false,
-    lastPage: false,
-    pageRotateCw: false,
-    pageRotateCcw: false,
-    cursorSelectTool: false,
-    cursorHandTool: false,
-    scrollVertical: false,
-    scrollHorizontal: false,
-    scrollWrapped: false,
-    spreadNone: false,
-    spreadOdd: false,
-    spreadEven: false,
-    documentProperties: false,
-  },
-  toolbar: {
-    toolbarViewerLeft: {
-      findbar: false,
-      previous: false,
-      next: false,
-      pageNumber: false,
-    },
-    toolbarViewerRight: {
-      presentationMode: true,
-      openFile: false,
-      print: false,
-      download: true,
-      viewBookmark: false,
-    },
-    toolbarViewerMiddle: {
-      zoomOut: false,
-      zoomIn: false,
-      scaleSelectContainer: false,
-    },
-  },
-  errorWrapper: false,
-})
+
+const current_pdf = ref()
+const { pdf, pages, info } = usePDF(current_pdf)
 
 const openFile = () => {
     if (props.preview != '/utils/icons/img-preview.svg') {
         window.open(props.preview);     
     }
 }
+
+watchEffect (() => {
+    if(props.ext === 'pdf'){        
+        current_pdf.value = props.preview
+    }
+})
 </script>
 <template>
     <section>        
         <template v-if="props.ext === 'pdf'">
-            <VuePdfApp :pdf="props.preview.replace('https://team.payvery.kr', '')" class="preview pdf-viewer" :style="props.previewStyle" page-scale="page-height"
-                :config="config" @click="openFile()" :key="props.preview.replace('https://team.payvery.kr', '')"/>
+            <div :style="props.previewStyle">
+                <VuePDF ref="vpdf" :pdf="pdf" fit-parent :style="{ margin: '0.1em' }" @click="openFile" />
+            </div>
         </template>
         <template v-else>
-            <VImg rounded :src="props.preview" class="preview" @click="imageDialog.show(props.preview)"
+            <VImg rounded :src="props.preview" @click="imageDialog.show(props.preview)"
                 :style="props.previewStyle" />
             <ImageDialog ref="imageDialog" :style="props.style" />
         </template>

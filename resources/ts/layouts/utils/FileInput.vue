@@ -8,8 +8,9 @@ interface Props {
 }
 const getFileExtension = (file_name: string) => {
     if(file_name.length > 0) {
-        const dot = file_name.lastIndexOf('.') + 1
-        return file_name.substring(dot, file_name.length).toLowerCase()
+        const file_names = file_name.split('?')
+        const dot = file_names[0].lastIndexOf('.') + 1
+        return file_names[0].substring(dot, file_names[0].length).toLowerCase()
     }
     else
         return 'png'

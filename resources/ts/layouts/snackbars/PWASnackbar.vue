@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import corp from '@corp'
 import { createCookie, readCookie } from '@/layouts/snackbars/pwa'
-import { template } from 'lodash'
+import corp from '@corp'
 
 const shortcut = corp.dns + '-shortcut'
 const visible = ref(false)
@@ -140,7 +139,7 @@ onMounted(() => {
     <VSnackbar v-model="visible" vertical transaction="scroll-y-reverse-transition" :timeout="60000" variant="flat">
         <template v-if="isMobile.iOS()">
             <div class="pwa-container">
-                <img :src="corp.logo_img || ''" width="80" height="100">
+                <img :src="corp.logo_img || ''" width="80">
                 <span style="margin: 1em 0;font-weight: bold;">앱 설치 없이 홈 화면에서 바로 이용해 보세요!</span>
             </div>
             <div style="text-align: center;">
@@ -159,7 +158,7 @@ onMounted(() => {
         </template>
         <template v-else>
             <div class="pwa-container">
-                <img :src="corp.logo_img || ''" width="100" height="100">
+                <img :src="corp.logo_img || ''" width="100">
                 <span style="margin: 1em 0;font-weight: bold;">바로가기를 생성할까요?</span>
                 <span>앱 설치 없이 홈 화면에서 바로 이용할 수 있습니다. 지금 추가해 보세요!</span>
             </div>
