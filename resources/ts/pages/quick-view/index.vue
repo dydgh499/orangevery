@@ -55,8 +55,6 @@ onMounted(() => {
                 })
         }
     }
-    else
-        location.href = '/'
 })
 
 </script>
