@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 import { useCRMStore } from '@/views/dashboards/crm/crm'
 import { hexToRgb } from '@layouts/utils'
 import VueApexCharts from 'vue3-apexcharts'
@@ -158,14 +159,34 @@ const chartOptions = computed(() => {
             <VCardTitle>결제모듈 사용량</VCardTitle>
             <VCardSubtitle>10개월간 결제모듈 사용량 개요</VCardSubtitle>
         </VCardItem>
-
-        <VCardText>
+        <VCardText v-if="series[0].data.length">
             <VueApexCharts :options="chartOptions" :series="series" height="355" />
+        </VCardText>
+        <VCardText v-else>
+            <div style="float: inline-end;">
+                <SkeletonBox :width="'1em'" :height="`1.5em`"/>
+            </div>
+            <div class="skeleton-container">
+                <div>
+                    <SkeletonBox :width="'20em'" :height="`20em`" :borderRadius="'10em'"/>
+                    <div style="margin-top: 2em;">
+                        <SkeletonBox :width="'20em'" :height="`1em`"/>
+                    </div>
+                </div>
+            </div>
         </VCardText>
     </VCard>
 </template>
 <style scoped>
 :deep(.apexcharts-text) {
   fill: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity)) !important;
+}
+
+.skeleton-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: 368px;
+  text-align: center;
 }
 </style>

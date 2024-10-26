@@ -252,13 +252,16 @@ const chartConfigs = computed(() => {
         </VCardText>
         <VCardText v-else>
             <div style="margin-bottom: 1em;">
-                <SkeletonBox v-for="(index) in 4" :width="'8em'" :height="'5em'" style="margin-right: 2em;"/>
+                <SkeletonBox v-for="(index) in 4" :width="'7em'" :height="'5em'" style="margin-right: 2em;"/>
             </div>
             <div class="d-flex align-center" style="height: 17em; margin-right: 1em;">
                 <div style=" display: inline-flex; flex-direction: column;">
                     <SkeletonBox  v-for="(index) in 5" :width="'3.5em'" :height="'1em'" style="margin-top: 1em;margin-right: 0.5em;margin-left: 1em;"/>
                 </div>
                 <div style="width: 100%;">
+                    <div style="float: inline-end;">
+                        <SkeletonBox :width="'1em'" :height="`1.5em`"/>
+                    </div>
                     <div class="align-baseline justify-space-between mt-4" style="display: flex;">
                         <SkeletonBox v-for="(index) in 10" :width="'3em'" :height="`${getSkeletonChartData()}em`" :key="index" style="margin-left: 3em;"/>
                     </div>
