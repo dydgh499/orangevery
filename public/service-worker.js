@@ -21,20 +21,23 @@ workbox.routing.registerRoute(
     })
 );
 
-// 모든 리소스를 CacheFirst 전략으로 캐시
+
+// 정적 리소스: StaleWhileRevalidate 전략 적용
 workbox.routing.registerRoute(
-    new RegExp('.*'),
-    new workbox.strategies.CacheFirst({
-      cacheName: 'general-cache',
-      plugins: [
-        new workbox.expiration.Plugin({
-          maxEntries: 100, // 최대 캐시 항목 수
-          maxAgeSeconds: 30 * 24 * 60 * 60, // 30일 동안 캐시 유지
-        }),
-      ],
-    })
-  );
-  
+  ({ request }) => 
+    request.destination === 'style' ||
+    request.destination === 'script' ||
+    request.destination === 'image',
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: 'static-cache',
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxEntries: 100, // 최대 100개의 항목 캐시
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30일 동안 캐시 유지
+      }),
+    ],
+  })
+);
   // install 이벤트
   self.addEventListener('install', (event) => {
     console.log('[Service Worker] Installed');

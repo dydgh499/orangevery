@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { useCRMStore } from '@/views/dashboards/crm/crm'
+import { hexToRgb } from '@layouts/utils'
 import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
-import { hexToRgb } from '@layouts/utils'
-import { useCRMStore } from '@/views/dashboards/crm/crm'
 
 const vuetifyTheme = useTheme()
 const { monthly_transactions } = useCRMStore()
@@ -61,6 +61,7 @@ const getPreviousAmount = () => {
 }
 
 watchEffect(() => {
+    console.log(1)
     if(Object.keys(monthly_transactions).length) {
         getPreviousMonths()
         getPreviousAmount()
@@ -72,7 +73,6 @@ const chartOptions = computed(() => {
 
     const borderColor = `rgba(${hexToRgb(String(variableTheme['border-color']))},${variableTheme['border-opacity']})`
     const legendColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
-
     return {
         chart: {
             type: 'radar',
