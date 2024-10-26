@@ -93,6 +93,7 @@ onMounted(async () => {
             popup.value.show(r.data.content)
     })
     .catch(e => { 
+        console.log(e) 
         const r = errorHandler(e)
     })
     passwordChangeWarningValidate()

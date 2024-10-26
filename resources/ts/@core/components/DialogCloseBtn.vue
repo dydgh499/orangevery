@@ -22,9 +22,9 @@ const props = withDefaults(defineProps<Props>(), {
   z-index: 1;
   border-radius: 0.375rem;
   background-color: rgb(var(--v-theme-surface)) !important;
-  block-size: 2rem;
+  block-size: 32px !important;
   color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity)) !important;
-  inline-size: 2rem;
+  inline-size: 32px !important;
   inset-block-start: 0;
   inset-inline-end: 0;
   transform: translate(0.5rem, -0.5rem);

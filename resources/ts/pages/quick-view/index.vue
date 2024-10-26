@@ -41,20 +41,22 @@ const getPaymentModuleIcon = computed(() => {
 })
 
 onMounted(() => {
-    if(my_level >= 35)  //본사
-        router.replace('dashboards')
-    else {
-        axios.get('/api/v1/quick-view?level='+my_level)
-            .then(r => { transactions.value = r.data as MchtRecentTransactions; })
-            .catch(e => { 
-                const r = errorHandler(e)
-            })
+    if(my_level) {
+        if(my_level >= 35)  //본사
+            router.replace('dashboards')
+        else {
+            axios.get('/api/v1/quick-view?level='+my_level)
+                .then(r => { 
+                    transactions.value = r.data as MchtRecentTransactions;
+                    is_skeleton.value = false
+                })
+                .catch(e => { 
+                    const r = errorHandler(e)
+                })
+        }
     }
-
-    watchEffect(() => {
-        if(Object.keys(transactions.value).length)
-            is_skeleton.value = false
-    })
+    else
+        location.href = '/'
 })
 
 </script>

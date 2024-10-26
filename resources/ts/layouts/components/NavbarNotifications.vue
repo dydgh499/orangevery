@@ -13,6 +13,7 @@ const collectWithdrawDangerDialog = ref()
 const detailWorkStatusDialog = ref()
 const secureReportDialog = ref()
 const is_login = ref(false)
+
 provide('detailWorkStatusDialog', detailWorkStatusDialog)
 
 

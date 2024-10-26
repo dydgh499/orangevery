@@ -283,7 +283,7 @@ setSecureReport()
                             </td>
                             <td class='list-square'>
                                 <div style="display: inline-flex; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 0.25em;">
-                                    <VBtn size="small" variant="tonal" @click="iPDetailDialog.show(history['request_detail'])" style="margin-bottom: 0.25em;">상세보기</VBtn>
+                                    <VBtn size="small" variant="tonal" @click="iPDetailDialog.show(history['request_detail'])" style="margin-bottom: 0.25em;">IP 상세보기</VBtn>
                                     <VBtn size="small" variant="tonal" color="error" @click="lastLoginDialog.show(history['request_ip'])">로그인 목록</VBtn>
                                 </div>
                             </td>
