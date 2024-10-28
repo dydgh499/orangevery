@@ -31,9 +31,7 @@ const setPrimaryColor = (color: string) => {
 
     props.item.theme_css.main_color = color
 }
-const moveNewTap = (url: string) => {
-    window.open(url)
-}
+
 watchEffect(() => {
     setPrimaryColor(color.value)
 })

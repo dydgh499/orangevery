@@ -4,24 +4,6 @@ workbox.setConfig({
     debug: false //set to true if you want to see SW in action.
 });
 
-workbox.routing.registerRoute(
-    new RegExp('/storage/images/.*\\.pdf$'), 
-    new workbox.strategies.NetworkFirst({
-      cacheName: 'pdf-cache',
-      networkTimeoutSeconds: 10, 
-      plugins: [
-        new workbox.cacheableResponse.Plugin({
-          statuses: [0, 200],
-        }),
-        new workbox.expiration.Plugin({
-          maxEntries: 50,
-          maxAgeSeconds: 7 * 24 * 60 * 60, 
-        }),
-      ],
-    })
-);
-
-
 // 정적 리소스: StaleWhileRevalidate 전략 적용
 workbox.routing.registerRoute(
   ({ request }) => 
@@ -33,7 +15,7 @@ workbox.routing.registerRoute(
     plugins: [
       new workbox.expiration.Plugin({
         maxEntries: 100, // 최대 100개의 항목 캐시
-        maxAgeSeconds: 30 * 24 * 60 * 60, // 30일 동안 캐시 유지
+        maxAgeSeconds: 3 * 24 * 60 * 60, // 3일 동안 캐시 유지
       }),
     ],
   })

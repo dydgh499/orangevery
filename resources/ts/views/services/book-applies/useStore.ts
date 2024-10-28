@@ -9,9 +9,10 @@ export const useSearchStore = defineStore('bookApplySearchStore', () => {
         'dest_name': '상호',
         'pmod_note': '결제모듈 별칭',
         'change_status': '변경상태',
-        'apply_at': '변경시간',
         'apply_data': '변경 값',
         'created_at': '생성시간',
+        'apply_at': '변경예정시간',
+        'updated_at': '업데이트시간',
         'extra_col': '삭제하기',
     }
     head.sub_headers.value = []

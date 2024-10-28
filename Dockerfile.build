@@ -1,0 +1,35 @@
+# 1단계: 의존성 설치 스테이지
+FROM node:18-alpine AS install
+
+# 필수 패키지 설치
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    cairo-dev \
+    pango-dev \
+    giflib-dev \
+    libjpeg-turbo-dev \
+    freetype-dev
+
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+RUN if ! command -v yarn > /dev/null; then npm install -g yarn; fi
+RUN yarn list --pattern @types/node@18.11.18 || yarn add @types/node@18.11.18 typescript@4.9.5 --dev
+RUN yarn list --pattern @iconify/tools || yarn add @iconify/tools @iconify/types @iconify/utils --dev
+RUN yarn install --network-timeout 600000
+
+# 2단계: 빌드 스테이지
+FROM install AS build
+
+COPY . .
+RUN yarn build
+
+# 3단계: 최종 프로덕션 이미지
+FROM node:18-alpine
+
+WORKDIR /app
+COPY --from=build /app/public/build /app/public/build
+
+CMD ["sh", "-c", "cp -r /app/public/build/* /output"]

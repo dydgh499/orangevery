@@ -6,8 +6,6 @@ import BeforeBrandInfoCard from '@/views/services/brands/before-brand-infos/Befo
 import DifferentSettlementInfoCard from '@/views/services/brands/different-settlement-infos/DifferentSettlementInfoCard.vue'
 import { dev_settle_types } from '@/views/services/brands/useStore'
 import type { Brand } from '@/views/types'
-import { config } from '@layouts/config'
-import { themeConfig } from '@themeConfig'
 import { requiredValidatorV2 } from '@validators'
 
 interface Props {
@@ -15,10 +13,6 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-watchEffect(() => {
-    config.app.title = props.item.name
-    themeConfig.app.title = props.item.name
-})
 </script>
 <template>
     <VRow>

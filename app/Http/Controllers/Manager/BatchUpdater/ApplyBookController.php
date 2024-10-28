@@ -97,10 +97,15 @@ class ApplyBookController extends Controller
 
     public function index(IndexRequest $request)
     {
+        $search = $request->input('search', '');
         $dest_type = (int)$request->dest_type;
         if($dest_type === 0)
         {
-            $query = SalesforceColumnApplyBook::join('salesforces', 'salesforce_column_apply_books.sales_id', '=', 'salesforces.id');
+            $query = SalesforceColumnApplyBook::join('salesforces', 'salesforce_column_apply_books.sales_id', '=', 'salesforces.id')
+                ->where(function ($query) use ($search) {
+                    return $query->where('salesforces.sales_name', 'like', "%$search%")
+                        ->orWhere('salesforce_column_apply_books.apply_data', 'like', "%$search%");
+                });
             $parent = 'salesforce_column_apply_books.';
             $cols = [
                 $parent."*",
@@ -109,7 +114,11 @@ class ApplyBookController extends Controller
         }
         else if($dest_type === 1)
         {
-            $query = MerchandiseColumnApplyBook::join('merchandises', 'merchandise_column_apply_books.mcht_id', '=', 'merchandises.id');
+            $query = MerchandiseColumnApplyBook::join('merchandises', 'merchandise_column_apply_books.mcht_id', '=', 'merchandises.id')
+                ->where(function ($query) use ($search) {
+                    return $query->where('merchandises.mcht_name', 'like', "%$search%")
+                        ->orWhere('merchandise_column_apply_books.apply_data', 'like', "%$search%");
+                });
             $parent = 'merchandise_column_apply_books.';
             $cols = [
                 $parent."*",
@@ -119,7 +128,12 @@ class ApplyBookController extends Controller
         else if($dest_type === 2)
         {
             $query = PaymentModuleColumnApplyBook::join('payment_modules', 'payment_module_column_apply_books.pmod_id', '=', 'payment_modules.id')
-                ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id');
+                ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+                ->where(function ($query) use ($search) {
+                    return $query->where('merchandises.mcht_name', 'like', "%$search%")
+                        ->orWhere('payment_modules.note', 'like', "%$search%")
+                        ->orWhere('payment_module_column_apply_books.apply_data', 'like', "%$search%");
+                });
             $parent = 'payment_module_column_apply_books.';
             $cols  = [
                 $parent."*",

@@ -47,7 +47,3 @@ watchEffect (async () => {
         </template>
     </section>
 </template>
-<style scoped>
-.pdf-container {
-}
-</style>
