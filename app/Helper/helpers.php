@@ -19,8 +19,8 @@
             'cmpay', 'kiwoom', 'wizzpay', 'nestpay', 'e2u','addone',
             'saminching','wgp', 'brightfixC3', 'danal', 'baumpns', 
             'passgo', 'buddypay', 'withpay', 'fixpay', 'galaxiamoneytree',
-            'bkwinners', 'welcome1', 'toss', 'payup', 'wayup', 
-            'nicepay', 'bonacamp', 'onoffkorea', 'ksnet', 'buddypayWZE'
+            'bkwinners', 'welcome1', 'toss', 'payup', 'wayup', 'nicepay', 
+            'bonacamp', 'onoffkorea', 'ksnet', 'buddypayWZE'
         ];
         return $pgs[$pg_type-1];
     }
