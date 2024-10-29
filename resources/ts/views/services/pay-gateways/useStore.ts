@@ -28,7 +28,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:10, name:'코리아결제시스템', rep_name:'박형석', company_name:'(주)코리아결제시스템', business_num:'117-81-85188', phone_num:'02-6953-6010', addr:'서울 강남구 도산대로1길 40 (신사동) 201호'},
         {id:11, name:'더페이원', rep_name:'이일호', company_name:'(주)더페이원', business_num:'860-87-00645', phone_num:'1670-1915', addr:'서울 송파구 송파대로 201 B동 1621~2호 (문정동, 테라타워2)'},
         {id:12, name:'이지피쥐', rep_name:'김도형', company_name:'주식회사 이지피쥐', business_num:'635-81-00256', phone_num:'02-1522-3434', addr:'서울 강남구 도산대로 157 (신사동) 신웅타워2 15층'},
-        {id:13, name:'CM페이', rep_name:'', company_name:'씨엠컴퍼니 주식회사', business_num:'', phone_num:'', addr:''},
+        // {id:13, name:'CM페이', rep_name:'', company_name:'씨엠컴퍼니 주식회사', business_num:'', phone_num:'', addr:''},
         {id:14, name:'키움페이', rep_name: '성백진', company_name: '(주)다우데이타', business_num: '220-81-01733', phone_num: '1588-5984', addr: '서울시 마포구 독막로 311 재화스퀘어 5층'},
         {id:15, name:'위즈페이', rep_name: '이용재', company_name: '(주)유니윌 위즈페이', business_num: '220-85-36623', phone_num: '1544-3267', addr: '서울 강남구 테헤란로 124, 5층 (역삼동, 삼원타워) (주)유니윌 위즈페이'},
         {id:16, name:'네스트페이', rep_name: '김찬수', company_name: '(주)페이네스트', business_num: '139-81-46088', phone_num: '02-431-8333', addr: '서울특별시 송파구 송파대로 201, 테라타워2 A동 905호 (문정동)'},
@@ -40,7 +40,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:22, name:'다날페이', rep_name:'박지만, 백현숙', company_name:'DANAL', business_num:'113-81-44055', phone_num:'1566-3355', addr:'13591 경기도 성남시 분당구 분당로 55 퍼스트타워 9층'},
         {id:23, name:'바움피엔에스', rep_name:'윤건, 안용희', company_name:'바움피엔에스 주식회사', business_num:'836-87-00147', phone_num:'1833-6199', addr:'인천시 연수구 인천타워대로 323 (송도 센트로드 Office A동 2907-9호)'},
         {id:24, name:'워너페이먼츠', rep_name:'황창우', company_name:'(주)워너페이먼츠', business_num:'864-88-01755', phone_num:'031-898-1775', addr:'경기 수원시 영통구 대학로 28, 3층'},
-        {id:25, name:'버디페이', rep_name:'장호은', company_name:'(주)주식회사 버디페이', business_num:'686-81-02591', phone_num:'031-898-1775', addr:'서울특별시 강남구 역삼동 644-35 리엘타워 5층 버디페이'},
+        {id:25, name:'버디페이', rep_name:'장호은', company_name:'(주)버디페이', business_num:'686-81-02591', phone_num:'031-898-1775', addr:'서울특별시 금천구 가산디지털2로 144, 1217~1220호'},
         {id:26, name:'위드페이', rep_name:'오섭규', company_name:'(주)위드페이먼츠', business_num:'858-86-00683', phone_num:'1511-7055', addr:'서울특별시 금천구 벚꽃로 298, 1511, 1512호(가산동, 대륭포스트타워 6차)'},
         {id:27, name:'픽스페이', rep_name:'박용은', company_name:'(주)브라이트픽스', business_num:'235-88-01772', phone_num:'02-6336-0999', addr:'주소 서울특별시 금천구 가산디지털2로 166, 216~217호(가산동, 에이스K1타워)'},
         {id:28, name:'갤럭시아머니트리', rep_name:'신동훈', company_name:'갤럭시아머니트리(주)', business_num:'120–81–60844', phone_num:'1566–0123', addr:'서울특별시 강남구 광평로 281 수서오피스빌딩 15층(수서동)'},
@@ -53,6 +53,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:35, name:'보나캠프', rep_name:'강기성', company_name:'보나캠프(주)', business_num:'320-87-01210', phone_num:'1644-7676', addr:'서울특별시 금천구 범안로 1130, 14층 (가산동, 디지털엠파이어빌딩)'},
         {id:36, name:'온오프코리아', rep_name:'서은교', company_name:' 온오프코리아 주식회사', business_num:'636-88-00753', phone_num:'02-1600-8952', addr:'경기 광명시 오리로619번길 11. 2층(하안동)'},
         {id:37, name:'케이에스넷', rep_name:'서은교', company_name:' (주)케이에스넷', business_num:'120-81-97322', phone_num:'02-3420-5800', addr:'서울특별시 서초구 반포대로 95, 2층(서초동)'},
+        {id:38, name:'버디페이(위지온)', rep_name:'장호은', company_name:'(주)버디페이', business_num:'686-81-02591', phone_num:'031-898-1775', addr:'서울특별시 금천구 가산디지털2로 144, 1217~1220호'},
     ]
 
     const finance_companies = <Options[]>([

@@ -126,7 +126,7 @@ class PaymentModuleController extends Controller
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($brand['pv_options']['free']['use_tid_duplicate'] && $data['tid'] !== '' && $isDuplicateId($data['brand_id'], 'tid', $data['tid']))
             return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['tid'=>$data['tid']]);
-        if($brand['pv_options']['free']['use_mid_duplicate'] && $data['tid'] !== '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
+        if($brand['pv_options']['free']['use_mid_duplicate'] && $data['mid'] !== '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
             return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid'=>$data['mid']]);
         if($data['pay_window_secure_level'] >= 3)
         {

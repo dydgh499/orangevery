@@ -177,7 +177,7 @@ class AbnormalConnectionController extends Controller
     
     public function findLastLogin(Request $request)
     {
-        $_findLastLogin = function($orm, $ip, $type) {
+        $_findLastLogin = function($orm, $request, $ip, $type) {
             $level = $type === 1 ? '10 as level' : 'level';
             if($type === 1)
                 $mutual = 'mcht_name as  mutual';
@@ -187,6 +187,7 @@ class AbnormalConnectionController extends Controller
                 $mutual = "'' as mutual";
 
             return $orm->where('last_login_ip', $ip)
+                ->where('brand_id', $request->user()->brand_id)
                 ->select([
                     DB::raw($level),
                     DB::raw($mutual),
@@ -196,9 +197,9 @@ class AbnormalConnectionController extends Controller
                 ]);
         };
         $ip = $this->aes256_encode($request->connection_ip);
-        $last_logins = $_findLastLogin(new Merchandise, $ip, 1)
-            ->unionAll($_findLastLogin(new Salesforce, $ip, 2))
-            ->unionAll($_findLastLogin(new Operator, $ip, 3))
+        $last_logins = $_findLastLogin(new Merchandise, $request, $ip, 1)
+            ->unionAll($_findLastLogin(new Salesforce, $request, $ip, 2))
+            ->unionAll($_findLastLogin(new Operator, $request, $ip, 3))
             ->get();
         return $this->response(0, $last_logins);
     }
