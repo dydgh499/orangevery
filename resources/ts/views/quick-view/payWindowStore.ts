@@ -1,4 +1,4 @@
-import { PayModule } from '@/views/types';
+import { PayGateway, PayModule } from '@/views/types';
 import { axios } from '@axios';
 import * as CryptoJS from 'crypto-js';
 
@@ -138,9 +138,13 @@ export const payWindowStore = () => {
         return [code, message, params_mode, res.data]
     }
 
+    const isBuddyPayWZEHand = (pay_module: PayModule, payment_gateways: PayGateway[]) => {
+        return pay_module.module_type === 1 && (payment_gateways.length && payment_gateways[0].id === 38)
+    }
+
     return {
         move, copy, extend, send, 
         getPayWindowUrl, renewPayWindow, multiplePayMove,
-        isVisiableRemainTime, getPayWindow
+        isVisiableRemainTime, getPayWindow, isBuddyPayWZEHand
     }
 }

@@ -8658,11 +8658,6 @@ vue3-apexcharts@1.4.1:
   resolved "https://registry.npmjs.org/vue3-apexcharts/-/vue3-apexcharts-1.4.1.tgz"
   integrity sha512-96qP8JDqB9vwU7bkG5nVU+E0UGQn7yYQVqUUCLQMYWDuQyu2vE77H/UFZ1yI+hwzlSTBKT9BqnNG8JsFegB3eg==
 
-vue3-pdf-app@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.npmjs.org/vue3-pdf-app/-/vue3-pdf-app-1.0.3.tgz"
-  integrity sha512-qegWTIF4wYKiocZ3KreB70wRXhqSdXWbdERDyyKzT7d5PbjKbS9tD6vaKkCqh3PzTM84NyKPYrQ3iuwJb60YPQ==
-
 vue3-perfect-scrollbar@1.6.1:
   version "1.6.1"
   resolved "https://registry.npmjs.org/vue3-perfect-scrollbar/-/vue3-perfect-scrollbar-1.6.1.tgz"

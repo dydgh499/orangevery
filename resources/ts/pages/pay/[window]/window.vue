@@ -11,7 +11,7 @@ import { timerV2 } from '@core/utils/timer';
 import corp from '@corp';
 
 const route = useRoute()
-const { isVisiableRemainTime, getPayWindow } = payWindowStore()
+const { isVisiableRemainTime, getPayWindow, isBuddyPayWZEHand } = payWindowStore()
 const { remaining_time, expire_time, getRemainTimeColor} = timerV2("00:00:00")
 const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(6)
 
@@ -111,13 +111,13 @@ onMounted(async () => {
                                     <span>결제하실 정보를 입력해주세요.</span>
                                 </div>
                             </div>
-                            <HandPayOverview 
-                                v-if="pay_module?.module_type === 1"
+                            <HandPayOverview
+                                v-if="pay_module?.module_type === 1 && isBuddyPayWZEHand(payment_gateways) === false"
                                 :pay_module="pay_module" 
                                 :merchandise="merchandise"                             
                             />
                             <AuthPayOverview 
-                                v-else-if="pay_module?.module_type === 2 || pay_module?.module_type === 3"
+                                v-else-if="pay_module?.module_type === 2 || pay_module?.module_type === 3 || isBuddyPayWZEHand(payment_gateways)"
                                 :pay_module="pay_module" 
                                 :merchandise="merchandise"
                                 :pay_window="pay_window"
