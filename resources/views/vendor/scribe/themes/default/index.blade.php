@@ -11,8 +11,8 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/theme-comagain.style.css" media="screen">
-    <link rel="stylesheet" href="/theme-comagain.style.css" media="print">
+    <link rel="stylesheet" href="/utils/docs/theme-comagain.style.css" media="screen">
+    <link rel="stylesheet" href="/utils/docs/theme-comagain.style.css" media="print">
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
 
     <link rel="stylesheet"

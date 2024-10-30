@@ -3,8 +3,10 @@ import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
 import AuthPayOverview from '@/views/pay/AuthPayOverview.vue';
 import HandPayOverview from '@/views/pay/HandPayOverview.vue';
 import MerchandiseSelectOverview from '@/views/pay/MerchandiseSelectOverview.vue';
+import { payWindowStore } from '@/views/quick-view/payWindowStore';
 import type { Merchandise, PayGateway, PayModule, PayWindow } from '@/views/types';
 
+const { isBuddyPayWZEHand } = payWindowStore()
 const payment_gateways = ref(<PayGateway[]>[])
 const merchandise = ref(<Merchandise>({}))
 const pay_module = ref(<PayModule>{module_type: 0})
@@ -41,13 +43,13 @@ provide('salesslip', salesslip)
                         <VCol cols="12" class="d-flex justify-center align-center" v-if="pay_module?.module_type">
                             <div :style="$vuetify.display.smAndDown ? '' : 'min-width: 700px;max-width: 700px;'">
                                 <HandPayOverview 
-                                    v-if="pay_module?.module_type === 1"
+                                    v-if="pay_module?.module_type === 1 && isBuddyPayWZEHand(payment_gateways) === false"
                                     :pay_module="pay_module" 
                                     :merchandise="merchandise"
                                 >
                                 </HandPayOverview>
                                 <AuthPayOverview 
-                                    v-else-if="pay_module?.module_type === 2 || pay_module?.module_type === 3"
+                                    v-else-if="pay_module?.module_type === 2 || pay_module?.module_type === 3 || isBuddyPayWZEHand(payment_gateways)"
                                     :pay_module="pay_module" 
                                     :merchandise="merchandise"
                                     :pay_window="pay_window"

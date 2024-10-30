@@ -138,8 +138,8 @@ export const payWindowStore = () => {
         return [code, message, params_mode, res.data]
     }
 
-    const isBuddyPayWZEHand = (pay_module: PayModule, payment_gateways: PayGateway[]) => {
-        return pay_module.module_type === 1 && (payment_gateways.length && payment_gateways[0].id === 38)
+    const isBuddyPayWZEHand = (payment_gateways: PayGateway[]) => {
+        return (payment_gateways.length && payment_gateways[0].pg_type === 38)
     }
 
     return {
