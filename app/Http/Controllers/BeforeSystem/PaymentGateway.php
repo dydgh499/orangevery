@@ -25,7 +25,7 @@ class PaymentGateway
             ["id" => 10, "pg_name" => '코리아결제시스템', "rep_name" => '박형석', "company_name" => '(주)코리아결제시스템', "business_num" => '117-81-85188', "phone_num" => '02-6953-6010', "addr" => '서울 강남구 도산대로1길 40 (신사동) 201호'],
             ["id" => 11, "pg_name" => '더페이원', "rep_name" => '이일호', "company_name" => '(주)더페이원', "business_num" => '860-87-00645', "phone_num" => '1670-1915', "addr" => '서울 송파구 송파대로 201 B동 1621~2호 (문정동, 테라타워2)'],
             ["id" => 12, "pg_name" => '이지피쥐', "rep_name" => '김도형', "company_name" => '주식회사 이지피쥐', "business_num" => '635-81-00256', "phone_num" => '02-1522-3434', "addr" => '서울 강남구 도산대로 157 (신사동) 신웅타워2 15층'],
-            ["id" => 13, "pg_name" => 'CM페이', "rep_name" => '', "company_name" => '씨엠컴퍼니 주식회사', "business_num" => '', "phone_num" => '', "addr" => ''],
+            ["id" => 13, "pg_name" => '섹터나인', "rep_name" => '김대일', "company_name" => '(주)섹타나인', "business_num" => '113-86-10017', "phone_num" => '02-2276-6800', "addr" => '서울특별시 강남구 논현로 201 (도곡동 907-54)'],
             ["id" => 14, "pg_name" => '키움페이', "rep_name" => '성백진', "company_name" => '(주)다우데이타', "business_num" => '220-81-01733', "phone_num" => '1588-5984', "addr" => '서울시 마포구 독막로 311 재화스퀘어 5층'],
             ["id" => 15, "pg_name" => '위즈페이', "rep_name" => '이용재', "company_name" => '(주)유니윌 위즈페이', "business_num" => '220-85-36623', "phone_num" => '1544-3267', "addr" => '서울 강남구 테헤란로 124, 5층 (역삼동, 삼원타워) (주)유니윌 위즈페이'],
             ["id" => 16, "pg_name" => '네스트페이', "rep_name" => '김찬수', "company_name" => '(주)페이네스트', "business_num" => '139-81-46088', "phone_num" => '02-431-8333', "addr" => '서울특별시 송파구 송파대로 201, 테라타워2 A동 905호 (문정동)'],
@@ -74,8 +74,6 @@ class PaymentGateway
             return array_filter($this->pg_companies, function($item) {return $item['id'] == 11; });
         else if(strpos($pg_name, '이지피쥐') !== false || strpos($pg_name, '이지피지') !== false)
             return array_filter($this->pg_companies, function($item) {return $item['id'] == 12; });
-        else if(strpos($pg_name, 'cm페이') !== false || strpos($pg_name, 'CM페이') !== false)
-            return array_filter($this->pg_companies, function($item) {return $item['id'] == 13; });
         else if(strpos($pg_name, '키움') !== false)
             return array_filter($this->pg_companies, function($item) {return $item['id'] == 14; });
         else if(strpos($pg_name, '위즈') !== false)

@@ -21,9 +21,9 @@ class AbnormalConnection
         return AbnormalConnectionHistory::create($data);
     }
 
-    static private function masking($text)
+    static public function masking($text, $rate=0.8)
     {
-        $mask_size = round(strlen($text) * 0.8);
+        $mask_size = round(strlen($text) * $rate);
         $mask_text = substr($text, 0, strlen($text) - $mask_size);
         for ($i=0; $i < $mask_size; $i++) 
         {

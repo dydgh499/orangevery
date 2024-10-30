@@ -152,3 +152,8 @@ onMounted(async () => {
         <SalesSlipDialog ref="salesslip" :pgs="payment_gateways" :key="payment_gateways.length"/>
     </section>
 </template>
+<style scoped>
+  .v-application__wrap > section {
+    block-size: 100%;
+  }
+</style>

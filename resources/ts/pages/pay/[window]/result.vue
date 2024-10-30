@@ -97,4 +97,7 @@ onMounted(async () => {
   }
 }
 
+.v-application__wrap > section {
+  block-size: 100%;
+}
 </style>

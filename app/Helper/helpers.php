@@ -10,13 +10,14 @@
     use Illuminate\Support\Facades\DB;
     use App\Models\Options\PvOptions;
     use App\Http\Controllers\Ablilty\Ablilty;
+    use App\Http\Controllers\Ablilty\AbnormalConnection;
 
     function getPGType($pg_type)
     {
         $pgs = [
             'paytus', 'koneps', 'aynil', 'welcome', 'hecto', 'lumen',
             'payletter', 'wholebic', 'korpay', 'kppay', 'thepayone', 'ezpg',
-            'cmpay', 'kiwoom', 'wizzpay', 'nestpay', 'e2u','addone',
+            'secta9ine', 'kiwoom', 'wizzpay', 'nestpay', 'e2u','addone',
             'saminching','wgp', 'brightfixC3', 'danal', 'baumpns', 
             'passgo', 'buddypay', 'withpay', 'fixpay', 'galaxiamoneytree',
             'bkwinners', 'welcome1', 'toss', 'payup', 'wayup', 'nicepay', 
@@ -176,6 +177,16 @@
 
     function logging($data, $msg='test')
     {
+        if(isset($data['user_pw']))
+            $data['user_pw'] = AbnormalConnection::masking($data['user_pw']);
+        if(isset($data['current_pw']))
+            $data['current_pw'] = AbnormalConnection::masking($data['current_pw']);
+        if(isset($data['yymm']))
+            $data['yymm'] = AbnormalConnection::masking($data['yymm'], 1);
+        if(isset($data['card_num']))
+            $data['card_num'] = AbnormalConnection::masking($data['card_num']);
+        if(isset($data['auth_num']))
+            $data['auth_num'] = AbnormalConnection::masking($data['auth_num']);
         Log::info($msg, $data);
     }
 
