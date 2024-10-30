@@ -3,8 +3,10 @@ import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore';
 import { useSalesFilterStore } from '@/views/salesforces/useStore';
 import type { PayModule } from '@/views/types';
 import { axios } from '@axios';
+import { payWindowStore } from '../quick-view/payWindowStore';
 
 const { mchts } = useSalesFilterStore()
+const { isBuddyPayWZEHand } = payWindowStore()
 
 const mcht_id = ref(null)
 const pmod_id = ref(null)
@@ -28,7 +30,10 @@ const mchtUpdate = async () => {
 
 const pmodUpdate = async () => {
     try {
-        const res = await axios.get('/api/v1/pay/test?pmod_id='+pmod_id.value)
+        const res = await axios.get('/api/v1/pay/test?pmod_id='+pmod_id.value)        
+        if(isBuddyPayWZEHand(res.data.payment_gateway))
+            res.data.payment_module.module_type = 2
+
         pay_window.value = res.data.pay_window
         pay_module.value = res.data.payment_module
         merchandise.value = res.data.merchandise

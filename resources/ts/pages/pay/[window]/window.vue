@@ -57,6 +57,9 @@ const handleKeyDownEvent = async (index: number) => {
 onMounted(async () => {
     const [_code, _message, _params_mode, _data] = await getPayWindow(route.params.window, route.query.pc)
     if(_code === 200) {
+        if(isBuddyPayWZEHand(_data.payment_gateway))
+            _data.payment_module.module_type = 2
+
         params_mode.value = _params_mode
         pay_window.value = _data.pay_window
         pay_module.value = _data.payment_module
@@ -66,6 +69,7 @@ onMounted(async () => {
             params.value = _data.params
 
         expire_time.value = pay_window.value.holding_able_at
+
     }
     else {
         code.value = _code
@@ -112,12 +116,12 @@ onMounted(async () => {
                                 </div>
                             </div>
                             <HandPayOverview
-                                v-if="pay_module?.module_type === 1 && isBuddyPayWZEHand(payment_gateways) === false"
+                                v-if="pay_module?.module_type === 1"
                                 :pay_module="pay_module" 
                                 :merchandise="merchandise"                             
                             />
                             <AuthPayOverview 
-                                v-else-if="pay_module?.module_type === 2 || pay_module?.module_type === 3 || isBuddyPayWZEHand(payment_gateways)"
+                                v-else-if="pay_module?.module_type === 2 || pay_module?.module_type === 3"
                                 :pay_module="pay_module" 
                                 :merchandise="merchandise"
                                 :pay_window="pay_window"
