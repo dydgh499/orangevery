@@ -174,9 +174,9 @@ export const defaultItemInfo = () => {
                 resident_num_masking: false,
                 pay_module_detail_view: false,
                 secure: {
-                    mcht_id_level: 0,
-                    mcht_pw_level: 0,
-                    account_lock_limit: 0,
+                    mcht_id_level: 2,
+                    mcht_pw_level: 2,
+                    account_lock_limit: 7,
                     sales_id_level: 0,
                     sales_pw_level: 0,
                     login_only_operate: 0

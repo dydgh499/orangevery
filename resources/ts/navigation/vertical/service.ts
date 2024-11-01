@@ -26,7 +26,7 @@ const getAbilitiesMenu = computed(() => {
             operations[0].children.push({
                 title: '운영자 관리',
                 to: 'services-operators',
-                            })    
+            })    
         }
         operations[0].children.push({
             title: '대량 등록',

@@ -118,6 +118,7 @@ class PaymentModuleController extends Controller
         $isDuplicateId = function($bid, $key, $value) {
             return $this->pay_modules
                 ->where('brand_id', $bid)
+                ->where('is_delete', 0)
                 ->where($key, $value)
                 ->exists();
         };
@@ -200,6 +201,7 @@ class PaymentModuleController extends Controller
             return $this->pay_modules
                 ->where('brand_id', $bid)
                 ->where('id', '!=', $pid)
+                ->where('is_delete', 0)
                 ->where($key, $value)
                 ->exists();
         };  // tid 중복해서 사용하는 브랜드들은 ..?
@@ -215,7 +217,7 @@ class PaymentModuleController extends Controller
         {
             if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
                 return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid'=>$data['tid']]);
-            if($request->use_mid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
+            if($request->use_mid_duplicate && $data['mid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
                 return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid'=>$data['mid']]);            
             if($data['pay_window_secure_level'] >= 3)
             {

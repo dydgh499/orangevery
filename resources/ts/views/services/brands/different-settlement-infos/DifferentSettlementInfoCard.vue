@@ -23,8 +23,7 @@ watchEffect(() => {
 </script>
 <template>
     <VCardTitle style="margin: 1em 0;">
-        <BaseQuestionTooltip :location="'top'" :text="'차액정산 정보'" :content="'차액정산에 사용될 계정정보입니다.'">
-        </BaseQuestionTooltip>
+        <BaseQuestionTooltip :location="'top'" :text="'차액정산 정보'" :content="'차액정산에 사용될 계정정보입니다.'"/>
     </VCardTitle>
     <VTable class="text-no-wrap" style=" min-width: 100%; margin-bottom: 1em;text-align: center;">
         <thead>
@@ -43,7 +42,7 @@ watchEffect(() => {
         </tbody>
         <tfoot v-show="Boolean(props.item.id == 0)">
             <tr>
-                <td colspan="4" class="text-center">
+                <td colspan="6" class="text-center">
                     운영사 정보를 추가하신 후 사용 가능합니다.
                 </td>
             </tr>

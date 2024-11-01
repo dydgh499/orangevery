@@ -80,7 +80,7 @@ const setViewType = (apply_type: number) => {
     }, apply_type)
 }
 
-const setAccountInfo= (apply_type: number) => {
+const setAccountInfo = (apply_type: number) => {
     post('set-account-info', {
         'acct_num': salesforces.acct_num,
         'acct_name': salesforces.acct_name,

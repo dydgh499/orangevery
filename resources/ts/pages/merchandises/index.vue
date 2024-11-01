@@ -203,7 +203,7 @@ onMounted(() => {
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'extra_col'">
-                                <UserExtraMenu :item="item" :type="0" :key="item['id']"/>
+                                <UserExtraMenu :item="item" :type="0" :key="item['id']" @init:pay_verfication="initPayVerficationDialog.show($event)"/>
                             </span>
                             <span v-else-if="_key == 'custom_id'">
                                 {{ cus_filters.find(cus => cus.id === item[_key])?.name }}
@@ -222,7 +222,7 @@ onMounted(() => {
          <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.Merchandise"
             @update:select_idxs="selected = $event; store.setTable(); store.getChartData()"/>
         <PasswordChangeDialog ref="password" />
-        <InitPayVerficationDialog ref="initPayVerficationDialog" @init:pay_verfication="initPayVerficationDialog.show($event)"/>
+        <InitPayVerficationDialog ref="initPayVerficationDialog" />
     </div>
 </template>
 

@@ -19,7 +19,6 @@ const { getPayMenuIcon, payment_modules } = useQuickViewStore()
 
 const my_level = getUserLevel()
 const payShow  = <any>(inject('payShow'))
-const errorHandler = <any>(inject('$errorHandler'))
 
 const getPaymentModuleNote = computed(() => {
     if(payment_modules.length) {

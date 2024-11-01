@@ -200,7 +200,7 @@ return [
         'tags' => '태그',
         'files' => '파일',
         'files.*' => '파일',
-        'name' => '이름',   //brand, category, coupon model, option, product
+        'name' => '이름',
         'email' => '이메일',
         'password' => '비밀번호',
         'password_confirmation' => '비밀번호 확인',

@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
             $schedule->call(new RealtimeSendHistoryController(new RealtimeSendHistory))->hourly();
             $schedule->call(new ApplyBookController)->hourly();
             $schedule->call(new FeeChangeHistoryController(new MchtFeeChangeHistory, new SfFeeChangeHistory))->daily();
-            $schedule->command('sanctum:prune-expired --hours=35')->daily();        
+            $schedule->command('sanctum:prune-expired --hours=35')->daily();
             $schedule->call(new DangerTransController(new DangerTransaction))->everySixHours();
     
             // 차액정산

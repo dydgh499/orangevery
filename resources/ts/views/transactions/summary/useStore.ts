@@ -1,4 +1,3 @@
-import router from '@/router';
 import { Header } from '@/views/headers';
 import { useRequestStore } from '@/views/request';
 import { Searcher } from '@/views/searcher';
@@ -37,7 +36,7 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
         const worksheet = wb.addWorksheet("가맹점별 매출집계");
 
         const url = '/api/v1/manager/transactions/merchandises/groups'
-        const r = await get(url, {params: router.currentRoute.value.query})
+        const r = await get(url, {params: store.params})
         const _headers = {
             'mcht_name': '가맹점 상호',
             'resident_num': '주민등록번호',

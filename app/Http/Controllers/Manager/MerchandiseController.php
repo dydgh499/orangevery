@@ -277,7 +277,6 @@ class MerchandiseController extends Controller
                 AbnormalConnection::tryParameterModulationApproach();
                 return $this->response(951);
             }
-            
         }
         else
             return $this->response(1000);

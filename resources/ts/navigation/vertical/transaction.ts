@@ -8,7 +8,6 @@ const getPaymentTestTap = () => {
         payment.push({
             title: '결제 테스트',
             to: 'transactions-pay-test',
-            query: {}
         })
     }
     return payment

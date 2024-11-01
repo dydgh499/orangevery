@@ -59,7 +59,7 @@ const filterPayMod = computed(() => {
                             <template #l_input>
                                 <VTextField v-model="props.item.send_url" type="text" placeholder="https://www.test.com"
                                     :rules="[requiredValidatorV2(props.item.send_url, '발송 URL')]" v-if="isAbleModiy(props.item.id as number)"/>
-                                <span v-else>{{ mchts.find(obj => obj.id === props.item.mcht_id)?.mcht_name }}</span>
+                                <span v-else>{{ props.item.send_url }}</span>
                             </template>
                             <template #r_name>사용여부</template>
                             <template #r_input>

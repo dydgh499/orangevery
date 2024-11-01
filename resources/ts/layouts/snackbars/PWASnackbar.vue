@@ -38,54 +38,56 @@ const close = () => {
 
 onMounted(() => {
     const loadManifest = () => {
-        const extension = (corp.logo_img as string).split('.').pop();
-        let type = '';
-        if (extension === 'svg')
-            type = 'image/svg+xml'
-        else if (extension === 'webp')
-            type = 'image/webp'
-        else
-            type = 'image/png'
+        if(corp.logo_img) {
+            const extension = (corp.logo_img as string).split('.').pop();
+            let type = '';
+            if (extension === 'svg')
+                type = 'image/svg+xml'
+            else if (extension === 'webp')
+                type = 'image/webp'
+            else
+                type = 'image/png'
 
-        const manifest = {
-            "version": "2.1",
-            "comment": corp.name,
-            "lang": "ko",
-            "name": corp.name,
-            "scope": "https://" + corp.dns,
-            "display": "fullscreen",
-            "start_url": "https://" + corp.dns,
-            "short_name": corp.name,
-            "description": "",
-            "orientation": "portrait",
-            "background_color": 'white',
-            "theme_color": 'white',
-            "generated": "true",
-            "icons": [
-                {
-                    "src": corp.logo_img,
-                    "sizes": "48x48 72x72 96x96 128x128 256x256",
-                    "type": type,
-                    "purpose": "any maskable"
-                },
-                {
-                    "src": corp.logo_img,
-                    "sizes": "512x512",
-                    "type": "image/png",
-                    "purpose": "any maskable"
-                },
-                {
-                    "src": corp.logo_img,
-                    "sizes": "512x512",
-                    "type": "image/png",
-                    "purpose": "any maskable"
-                },
-            ]
-        };
-        const stringManifest = JSON.stringify(manifest);
-        const blob = new Blob([stringManifest], { type: 'application/json' });
-        const manifestURL = URL.createObjectURL(blob);
-        document.querySelector('#my-manifest').setAttribute('href', manifestURL);
+            const manifest = {
+                "version": "2.1",
+                "comment": corp.name,
+                "lang": "ko",
+                "name": corp.name,
+                "scope": "https://" + corp.dns,
+                "display": "fullscreen",
+                "start_url": "https://" + corp.dns,
+                "short_name": corp.name,
+                "description": "",
+                "orientation": "portrait",
+                "background_color": 'white',
+                "theme_color": 'white',
+                "generated": "true",
+                "icons": [
+                    {
+                        "src": corp.logo_img,
+                        "sizes": "48x48 72x72 96x96 128x128 256x256",
+                        "type": type,
+                        "purpose": "any maskable"
+                    },
+                    {
+                        "src": corp.logo_img,
+                        "sizes": "512x512",
+                        "type": "image/png",
+                        "purpose": "any maskable"
+                    },
+                    {
+                        "src": corp.logo_img,
+                        "sizes": "512x512",
+                        "type": "image/png",
+                        "purpose": "any maskable"
+                    },
+                ]
+            };
+            const stringManifest = JSON.stringify(manifest);
+            const blob = new Blob([stringManifest], { type: 'application/json' });
+            const manifestURL = URL.createObjectURL(blob);
+            document.querySelector('#my-manifest').setAttribute('href', manifestURL);
+        }
     }
 
     const loadBeforeInstallPrompt = () => {

@@ -234,7 +234,11 @@ class MessageController extends Controller
         $validated = $request->validate(['user_name'=>'required|string']);
 
         $query = Operator::where('brand_id', $request->user()->brand_id)->where('is_delete', false);
-        $head_office = (clone $query)->where('level', 40)->first();
+        $head_office_query = (clone $query)->where('level', 40);
+        if($request->user()->level === 40)
+            $head_office_query = $head_office_query->where('id', '!=', $request->user()->id);
+        $head_office = $head_office_query->first();
+        
         $employee = (clone $query)->where('user_name', $request->user_name)->first();
 
         if(Ablilty::isBrandCheck($request, $employee->brand_id) === false)

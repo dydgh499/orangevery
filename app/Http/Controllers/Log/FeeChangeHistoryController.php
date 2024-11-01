@@ -214,7 +214,7 @@ class FeeChangeHistoryController extends Controller
                     return $this->response(0);
                 }
                 else
-                    return $this->response(1000);                
+                    return $this->response(1000);
             }
         }
         else

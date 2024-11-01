@@ -21,7 +21,7 @@ class BrandInfo
     static private function getBrand($key_name, $key, $value)
     {
         $brand = Redis::get($key_name);
-        if($brand == null || env('APP_ENV', 'local') === 'local')
+        if($brand === null || env('APP_ENV', 'local') === 'local')
         {
             $brand = Brand::where($key, $value)->with(['beforeBrandInfos'])->first();
             if($brand)
