@@ -50,7 +50,6 @@ class MerchandiseRequest extends FormRequest
         'use_saleslip_prov',
         'use_saleslip_sell',
         'use_noti',
-        'use_pay_verification_mobile',
         'use_multiple_hand_pay',
         'use_collect_withdraw',
         'tax_category_type',

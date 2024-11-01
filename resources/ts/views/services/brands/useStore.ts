@@ -212,7 +212,8 @@ export const defaultItemInfo = () => {
                 sales_parent_structure: false,
                 use_specified_limit: false,
                 use_syslink: false,
-                use_product: false
+                use_product: false,
+                use_cancel_all_allow: false
             }),
             auth: reactive<AuthOption>({
                 levels: {

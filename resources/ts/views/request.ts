@@ -100,6 +100,8 @@ export const useRequestStore = defineStore('requestStore', () => {
                     setTimeout(function () { router.push('/salesforces/edit/' + res.data.id) }, 500)
                 else if (back_url === '/merchandises') 
                     setTimeout(function () { router.push('/merchandises/edit/' + res.data.id) }, 500)
+                else if (back_url === '/services/brands') 
+                    setTimeout(function () { router.push('/services/brands/edit/' + res.data.id) }, 500)
                 else
                     setTimeout(function () { router.replace(back_url) }, 1000)
             }

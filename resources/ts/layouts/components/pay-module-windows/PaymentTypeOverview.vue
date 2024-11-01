@@ -132,8 +132,10 @@ const filterPgs = computed(() => {
         <!-- 👉 PG사 -->
         <VRow v-if="isAbleModiy(props.item.id)">
             <VCol md="5" cols="6">
-                <span>PG사</span>
-                <VBtn size="small" variant="tonal" @click="setPGKeyInfo()" style="margin-left: 0.5em;">가져오기</VBtn>
+                <div style="display: flex; flex-direction: row;align-items: center;">
+                    <span>PG사</span>
+                    <VBtn size="small" variant="tonal" @click="setPGKeyInfo()" style="margin-left: 0.5em;">가져오기</VBtn>
+                </div>
             </VCol>
             <VCol md="7" cols="6">
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_id" :items="pgs"

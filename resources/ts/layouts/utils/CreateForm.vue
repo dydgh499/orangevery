@@ -72,7 +72,7 @@ const back = () => {
 }
 
 if (props.id) 
-        setOneObject('/' + props.path, Number(props.id), props.item)
+    setOneObject('/' + props.path, Number(props.id), props.item)
 
 watchEffect(() => {
     if (props.item.id) {

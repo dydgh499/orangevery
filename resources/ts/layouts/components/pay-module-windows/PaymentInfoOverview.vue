@@ -120,18 +120,19 @@ watchEffect(() => {
             </VCol>
         </VRow>
         <VRow v-if="isAbleModiy(props.item.id)">
-            <VCol md="5" cols="4">MID</VCol>
-            <VCol md="7">
-                <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                    <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
-                        placeholder="MID 입력" persistent-placeholder
-                        maxlength="50"/>
-                    <VBtn type="button" variant="tonal" v-if="props.item.id == 0 && corp.pv_options.paid.use_mid_create && getUserLevel() >= 35"
-                        @click="midCreate()">
-                        {{ "생성" }}
-                        <VIcon end icon="material-symbols:add-to-home-screen" />
+            <VCol md="5" cols="4">
+                <div style="display: flex; flex-direction: row;align-items: center;">
+                    <span>MID</span>
+                    <VBtn type="button" variant="tonal" v-if="props.item.id == 0 && corp.pv_options.paid.use_mid_create && getUserLevel() >= 35" 
+                        @click="midCreate()" style="margin-left: 0.5em;" size="small" color="info">
+                        {{ "발급하기" }}
                     </VBtn>
                 </div>
+            </VCol>
+            <VCol md="7">
+                <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
+                    placeholder="MID 입력" persistent-placeholder
+                    maxlength="50"/>
             </VCol>
         </VRow>
         <VRow v-else>
@@ -142,20 +143,20 @@ watchEffect(() => {
                 {{ props.item.mid }}
             </VCol>
         </VRow>
-        <!-- 👉 TID -->
         <VRow v-if="isAbleModiy(props.item.id)">
-            <VCol md="5" cols="4">TID</VCol>
-            <VCol md="7">
-                <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                    <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
-                        placeholder="TID 입력" persistent-placeholder
-                        maxlength="50"/>
+            <VCol md="5" cols="4">
+                <div style="display: flex; flex-direction: row;align-items: center;">
+                    <span>TID</span>
                     <VBtn type="button" variant="tonal" v-if="props.item.id == 0 && corp.pv_options.paid.use_tid_create && getUserLevel() >= 35" 
-                        @click="tidCreate()">
-                        {{ "생성" }}
-                        <VIcon end icon="material-symbols:add-to-home-screen" />
+                        @click="tidCreate()" style="margin-left: 0.5em;" size="small" color="info">
+                        {{ "발급하기" }}
                     </VBtn>
                 </div>
+            </VCol>
+            <VCol md="7">
+                <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
+                    placeholder="TID 입력" persistent-placeholder
+                    maxlength="50"/>
             </VCol>
         </VRow>
         <VRow v-else>
@@ -207,14 +208,18 @@ watchEffect(() => {
         </VRow>
         <template v-if="props.item.id != 0 && props.item.module_type != 0 && corp.pv_options.paid.use_online_pay">
             <VRow v-if="isAbleModiy(props.item.id) && getUserLevel() >= 35">
-                <VCol md="5" cols="4">
-                    <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'"
-                        :content="'해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.'"/>
-                    <VBtn type="button" variant="tonal" @click="payKeyCreate()" style="margin-left: 0.5em;" size="small">
-                        {{ "발급하기" }}
-                    </VBtn>
+                <VCol md="6" cols="4">
+                    <div style="display: flex; flex-direction: row;align-items: center;">
+                        <span>결제 KEY</span>
+                        <VBtn type="button" variant="tonal" @click="payKeyCreate()" style="margin-left: 0.5em;" size="small" color="info">
+                            {{ "발급하기" }}                            
+                            <VTooltip activator="parent" location="top">
+                                해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.
+                            </VTooltip>
+                        </VBtn>
+                    </div>
                 </VCol>
-                <VCol md="7">
+                <VCol md="6">
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <VTextField type="text" v-model="props.item.pay_key" prepend-inner-icon="ic-baseline-vpn-key"
                             persistent-placeholder :disabled="true"/>
@@ -241,18 +246,21 @@ watchEffect(() => {
 
         <template v-if="props.item.id != 0 && corp.pv_options.paid.use_noti">
             <VRow v-if="isAbleModiy(props.item.id) && getUserLevel() >= 35">
-                <VCol md="5" cols="4">
-                    <BaseQuestionTooltip :location="'top'" :text="'서명 KEY'"
-                        :content="'노티발송시 데이터 위변조 방지 값으로 사용됩니다.'"/>
-                    <VBtn type="button" variant="tonal" @click="signKeyCreate()" style="margin-left: 0.5em;" size="small">
-                        {{ "발급하기" }}
-                    </VBtn>
+                <VCol md="6" cols="4">
+                    <div style="display: flex; flex-direction: row;align-items: center;">
+                        <span>서명 KEY</span>
+                        <VBtn type="button" variant="tonal" @click="signKeyCreate()" style="margin-left: 0.5em;" size="small" color="info">
+                            {{ "발급하기" }}
+                            <VTooltip activator="parent" location="top">
+                                노티발송시 데이터 위변조 방지 값으로 사용됩니다.
+                            </VTooltip>
+                        </VBtn>
+                    </div>
                 </VCol>
-                <VCol md="7">
+                <VCol md="6">
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <VTextField type="text" v-model="props.item.sign_key" prepend-inner-icon="ic-baseline-vpn-key"
                             persistent-placeholder :disabled="true"/>
-
                         <VTooltip activator="parent" location="top" v-if="props.item.sign_key">
                             더블클릭해서 서명 KEY를 복사하세요.
                         </VTooltip>
