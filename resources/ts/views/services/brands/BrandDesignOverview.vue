@@ -14,10 +14,10 @@ const props = defineProps<Props>()
 
 const vuetifyTheme = useTheme()
 const login_imgs = [
-    '/storage/images/defaults/logins/1.png',
-    '/storage/images/defaults/logins/2.png',
-    '/storage/images/defaults/logins/3.png',    
-    '/storage/images/defaults/logins/4.png',
+    '/utils/logins/1.png',
+    '/utils/logins/2.png',
+    '/utils/logins/3.png',    
+    '/utils/logins/4.png',
 ]
 const color = ref(props.item.theme_css.main_color)
 

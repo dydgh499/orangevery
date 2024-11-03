@@ -13,7 +13,7 @@ import { themeConfig } from '@themeConfig'
 import { lengthValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators'
 import { VForm } from 'vuetify/components'
 
-const default_img = corp.login_img ? corp.login_img : '/storage/images/defaults/logins/1.png'
+const default_img = corp.login_img ? corp.login_img : '/utils/logins/1.png'
 const authThemeImg = useGenerateImageVariant(default_img, default_img, default_img, default_img, true)
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 
