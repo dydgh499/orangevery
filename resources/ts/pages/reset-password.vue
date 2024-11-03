@@ -7,7 +7,6 @@ import { getUserPasswordValidate } from '@/views/users/useStore'
 import { axios, pay_token, token_expire_time, user_info } from '@axios'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import corp from '@corp'
-import authV2LoginDefault1 from '@images/pages/auth-v2-login-default1.png'
 import authV2MaskDark from '@images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@images/pages/misc-mask-light.png'
 import { VForm } from 'vuetify/components'
@@ -29,7 +28,7 @@ const errors = ref<Record<string, string | undefined>>({
 })
 
 
-const default_img = corp.login_img ? corp.login_img : authV2LoginDefault1
+const default_img = corp.login_img ? corp.login_img : '/storage/images/defaults/logins/1.png'
 const authThemeImg = useGenerateImageVariant(default_img, default_img, default_img, default_img, true)
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 
