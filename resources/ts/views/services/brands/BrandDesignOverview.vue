@@ -4,10 +4,6 @@ import FileLogoInput from '@/layouts/utils/FileLogoInput.vue'
 import KakaotalkPreview from '@/layouts/utils/KakaotalkPreview.vue'
 import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
 import type { Brand } from '@/views/types'
-import authV2LoginDefault1 from '@images/pages/auth-v2-login-default1.png'
-import authV2LoginDefault2 from '@images/pages/auth-v2-login-default2.png'
-import authV2LoginDefault3 from '@images/pages/auth-v2-login-default3.png'
-import authV2LoginDefault4 from '@images/pages/auth-v2-login-default4.png'
 import { useTheme } from 'vuetify'
 import { VDivider } from 'vuetify/lib/components/index.mjs'
 
@@ -18,10 +14,10 @@ const props = defineProps<Props>()
 
 const vuetifyTheme = useTheme()
 const login_imgs = [
-    authV2LoginDefault1,
-    authV2LoginDefault2,
-    authV2LoginDefault3,
-    authV2LoginDefault4,
+    '/storage/images/defaults/logins/1.png',
+    '/storage/images/defaults/logins/2.png',
+    '/storage/images/defaults/logins/3.png',    
+    '/storage/images/defaults/logins/4.png',
 ]
 const color = ref(props.item.theme_css.main_color)
 

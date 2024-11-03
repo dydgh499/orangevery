@@ -5,6 +5,7 @@ import { batch } from '@/layouts/components/batch-updaters/batch'
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Options } from '@/views/types'
@@ -64,6 +65,7 @@ const merchandise = reactive<any>({
     specified_time_disable_limit: 0,
     single_payment_limit_s_tm:'00:00',
     single_payment_limit_e_tm:'00:00',
+    use_noti: 0,
 })
 
 const noti = reactive<any>({
@@ -161,6 +163,12 @@ const setSpecifiedTimeDisableTime = (apply_type: number) => {
     }, apply_type)
 }
 
+const setUseNoti = (apply_type: number) => {
+    post('set-use-noti', {
+        'use_noti': merchandise.use_noti,
+    }, apply_type)
+}
+
 initAllSales()
 
 watchEffect(() => {
@@ -239,11 +247,10 @@ watchEffect(() => {
                                 </template>
                         </template>
                     </VRow>
-                    <VDivider style="margin: 1em 0;" />
+                    <h4 class="pt-3">가맹점 수수료 일괄변경</h4>
+                    <br>                    
                     <VRow>
                         <VCol :md="6" :cols="12">
-                            <h4 class="pt-3">가맹점 수수료 일괄변경</h4>
-                            <br>
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
                                     <div class="batch-container">
@@ -265,7 +272,10 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <template v-if="corp.pv_options.paid.use_noti">
+                    </VRow>
+                    <template v-if="corp.pv_options.paid.use_noti">
+                        <VDivider style="margin: 1em 0;" />
+                        <VRow>
                             <VCol :md="6" :cols="12">
                                 <h4 class="pt-3">노티정보 일괄변경</h4>
                                 <br>
@@ -285,11 +295,38 @@ watchEffect(() => {
                                             </VBtn>
                                         </div>
                                     </VCol>
+                                </VRow>                                
+                            </VCol>
+                            <VCol :md="6" :cols="12">
+                                <h4 class="pt-3">노티사용여부 일괄변경</h4>
+                                <br>
+                                <VRow no-gutters style="align-items: center;">                    
+                                    <VCol md="6" cols="12">
+                                        <div class="batch-container">
+                                            <BooleanRadio :radio="merchandise.use_noti"
+                                                @update:radio="merchandise.use_noti = $event">
+                                                <template #true>활성</template>
+                                                <template #false>비활성</template>
+                                            </BooleanRadio>
+                                        </div>
+                                    </VCol>
+                                    <VCol md="6" cols="12">
+                                        <div class="button-cantainer">
+                                            <VBtn variant="tonal" size="small" @click="setUseNoti(0)">
+                                                즉시적용
+                                                <VIcon end size="18" icon="tabler-direction-sign" />
+                                            </VBtn>
+                                            <VBtn variant="tonal" size="small" color="secondary" @click="setUseNoti(1)"
+                                                style='margin-left: 0.5em;'>
+                                                예약적용
+                                                <VIcon end size="18" icon="tabler-clock-up" />
+                                            </VBtn>
+                                        </div>
+                                    </VCol>
                                 </VRow>
                             </VCol>
-                        </template>
-                    </VRow>
-
+                        </VRow>
+                    </template>
                     <VDivider style="margin: 1em 0;" />
                     <h4 class="pt-3">계좌정보 일괄변경</h4>
                     <br>

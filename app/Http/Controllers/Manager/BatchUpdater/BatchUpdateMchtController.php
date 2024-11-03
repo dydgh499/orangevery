@@ -296,4 +296,16 @@ class BatchUpdateMchtController extends BatchUpdateController
         $row = $this->getApplyRow($request, $cols);
         return $this->batchResponse($row, '가맹점');
     }
+
+    /**
+     * 노티사용 여부 
+    */
+    public function setUseNoti(Request $request)
+    {
+        $cols = [
+            'use_noti' => $request->use_noti,
+        ];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
+    }
 }

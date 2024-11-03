@@ -102,7 +102,7 @@ Route::prefix('merchandises')->group(function() {
                 Route::post('set-phone-auth-limit-time', [BatchUpdateMchtController::class, 'setPhoneAuthLimitTime']);
                 Route::post('set-specified-time-disable-limit', [BatchUpdateMchtController::class, 'setSpecifiedTimeDisableLimit']);
                 Route::post('set-specified-time-disable-time', [BatchUpdateMchtController::class, 'setSpecifiedTimeDisableTime']);
-                
+                Route::post('set-use-noti', [BatchUpdateMchtController::class, 'setUseNoti']);                
             });    
             Route::post('{id}/set-settle-hold', [MerchandiseController::class, 'setSettleHold']);
             Route::post('{id}/clear-settle-hold', [MerchandiseController::class, 'clearSettleHold']);

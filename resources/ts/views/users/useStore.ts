@@ -1,29 +1,4 @@
 import corp from '@corp'
-import avatar_1 from '@images/avatars/avatar_1.svg'
-import avatar_10 from '@images/avatars/avatar_10.svg'
-import avatar_11 from '@images/avatars/avatar_11.svg'
-import avatar_12 from '@images/avatars/avatar_12.svg'
-import avatar_13 from '@images/avatars/avatar_13.svg'
-import avatar_14 from '@images/avatars/avatar_14.svg'
-import avatar_15 from '@images/avatars/avatar_15.svg'
-import avatar_16 from '@images/avatars/avatar_16.svg'
-import avatar_17 from '@images/avatars/avatar_17.svg'
-import avatar_18 from '@images/avatars/avatar_18.svg'
-import avatar_19 from '@images/avatars/avatar_19.svg'
-import avatar_2 from '@images/avatars/avatar_2.svg'
-import avatar_20 from '@images/avatars/avatar_20.svg'
-import avatar_21 from '@images/avatars/avatar_21.svg'
-import avatar_22 from '@images/avatars/avatar_22.svg'
-import avatar_23 from '@images/avatars/avatar_23.svg'
-import avatar_24 from '@images/avatars/avatar_24.svg'
-import avatar_25 from '@images/avatars/avatar_25.svg'
-import avatar_3 from '@images/avatars/avatar_3.svg'
-import avatar_4 from '@images/avatars/avatar_4.svg'
-import avatar_5 from '@images/avatars/avatar_5.svg'
-import avatar_6 from '@images/avatars/avatar_6.svg'
-import avatar_7 from '@images/avatars/avatar_7.svg'
-import avatar_8 from '@images/avatars/avatar_8.svg'
-import avatar_9 from '@images/avatars/avatar_9.svg'
 import { lengthValidator, passwordValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators'
 
 export const banks = [
@@ -76,31 +51,31 @@ export const banks = [
     { code:"458", title: "KDB생명보험" }, { code:"459", title: "에이스아메리칸화재해상보험" }, { code:"460", title: "처브라이프생명보험" }, { code:"494", title: "한국자산관리공사" },
 ]
 export const avatars = [
-    avatar_1,
-    avatar_2,
-    avatar_3,
-    avatar_4,
-    avatar_5,
-    avatar_6,
-    avatar_7,
-    avatar_8,
-    avatar_9,
-    avatar_10,
-    avatar_11,
-    avatar_12,
-    avatar_13,
-    avatar_14,
-    avatar_15,
-    avatar_16,
-    avatar_17,
-    avatar_18,
-    avatar_19,
-    avatar_20,
-    avatar_21,
-    avatar_22,
-    avatar_23,
-    avatar_24,
-    avatar_25,
+    '/storage/images/defaults/avatars/1.svg',
+    '/storage/images/defaults/avatars/2.svg',
+    '/storage/images/defaults/avatars/3.svg',
+    '/storage/images/defaults/avatars/4.svg',
+    '/storage/images/defaults/avatars/5.svg',
+    '/storage/images/defaults/avatars/6.svg',
+    '/storage/images/defaults/avatars/7.svg',
+    '/storage/images/defaults/avatars/8.svg',
+    '/storage/images/defaults/avatars/9.svg',
+    '/storage/images/defaults/avatars/10.svg',
+    '/storage/images/defaults/avatars/11.svg',
+    '/storage/images/defaults/avatars/12.svg',
+    '/storage/images/defaults/avatars/13.svg',
+    '/storage/images/defaults/avatars/14.svg',
+    '/storage/images/defaults/avatars/15.svg',
+    '/storage/images/defaults/avatars/16.svg',
+    '/storage/images/defaults/avatars/17.svg',
+    '/storage/images/defaults/avatars/18.svg',
+    '/storage/images/defaults/avatars/19.svg',
+    '/storage/images/defaults/avatars/20.svg',
+    '/storage/images/defaults/avatars/21.svg',
+    '/storage/images/defaults/avatars/22.svg',
+    '/storage/images/defaults/avatars/23.svg',
+    '/storage/images/defaults/avatars/24.svg',
+    '/storage/images/defaults/avatars/25.svg',
 ]
 
 export const getUserTypeName = (type: number) => {
