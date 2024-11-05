@@ -20,7 +20,7 @@ Object.assign(pay_modules, await getAllPayModules())
         <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
             <template #view>
                 <VWindowItem>
-                    <NotiCard :item="item" :able_mcht_chanage="true" :pay_modules="pay_modules"/>
+                    <NotiCard :item="item" :able_mcht_chanage="true" :pay_modules="pay_modules" :key="pay_modules.length"/>
                 </VWindowItem>
             </template>
         </CreateForm>

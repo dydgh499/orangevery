@@ -236,8 +236,9 @@ class MessageController extends Controller
         $query = Operator::where('brand_id', $request->user()->brand_id)->where('is_delete', false);
         $head_office_query = (clone $query)->where('level', 40);
         if($request->user()->level === 40)
-            $head_office_query = $head_office_query->where('id', '!=', $request->user()->id);
-        $head_office = $head_office_query->first();
+            $head_office = $head_office_query->where('id', $request->user()->id)->first();
+        else
+            $head_office = $head_office_query->first();
         
         $employee = (clone $query)->where('user_name', $request->user_name)->first();
 
