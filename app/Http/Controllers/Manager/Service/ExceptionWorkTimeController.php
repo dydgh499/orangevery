@@ -6,6 +6,8 @@ use App\Models\CollectWithdraw;
 use App\Models\Service\ExceptionWorkTime;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Controllers\Message\MessageController;
+use App\Enums\AuthLoginCode;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
@@ -54,8 +56,14 @@ class ExceptionWorkTimeController extends Controller
             if(EditAbleWorkTime::validate() === false)
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
-            $res = $this->work_times->create($request->data());
-            return $this->response($res ? 1 : 990, ['id'=>$res->id]);
+            [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
+            if($result === AuthLoginCode::SUCCESS->value)
+            {
+                $res = $this->work_times->create($request->data());
+                return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
+            }
+            else
+                return $this->extendResponse($result, $msg, $datas);
         }
         else
             return $this->response(951);
@@ -94,8 +102,14 @@ class ExceptionWorkTimeController extends Controller
             return $this->response(951);
         else
         {
-            $res = $this->work_times->where('id', $id)->update($request->data());
-            return $this->response($res ? 1 : 990, ['id'=>$id]);    
+            [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
+            if($result === AuthLoginCode::SUCCESS->value)
+            {
+                $res = $this->work_times->where('id', $id)->update($request->data());
+                return $this->response($res ? 1 : 990, ['id'=>$id]);
+            }
+            else
+                return $this->extendResponse($result, $msg, $datas);
         }
     }
 

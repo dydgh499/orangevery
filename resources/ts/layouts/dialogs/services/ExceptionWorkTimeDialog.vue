@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useRequestStore } from '@/views/request'
+import { operatorActionAuthStore } from '@/views/services/operators/useStore'
 import type { ExceptionWorkTime, Operator } from '@/views/types'
 import { VForm } from 'vuetify/components'
 
@@ -11,6 +12,7 @@ const formatDate = <any>(inject('$formatDate'))
 const visible = ref(false)
 const vForm = ref<VForm>()
 const operators = ref<Operator[]>([])
+const { headOfficeAuthValidate } = operatorActionAuthStore()
 
 const today = new Date()
 const work_s_dt = ref(formatDate(today))
@@ -25,6 +27,7 @@ const work_time = ref<ExceptionWorkTime>({
     oper_id: null,
     work_s_at: '',
     work_e_at: '',
+    token: '',
 })
 
 const show = async (_work_time: ExceptionWorkTime): Promise<boolean> => {
@@ -37,13 +40,17 @@ const show = async (_work_time: ExceptionWorkTime): Promise<boolean> => {
 }
 
 const onAgree = async () => {
-    work_time.value.work_s_at = work_s_dt.value + " " + work_s_tm.value
-    work_time.value.work_e_at = work_e_dt.value + " " + work_e_tm.value
-    const res = await update(`/services/exception-work-times`, work_time.value, vForm.value, false)
-    if(res.status === 201) {
-        store.setTable()
-        visible.value = false
-        resolveCallback(true); // 동의 버튼 누름        
+    const [result, token] = await headOfficeAuthValidate('예외 작업시간을 추가하기위해 휴대폰번호 인증이 필요합니다.<br>계속하시겠습니까?')
+    if(result) {
+        work_time.value.work_s_at = work_s_dt.value + " " + work_s_tm.value
+        work_time.value.work_e_at = work_e_dt.value + " " + work_e_tm.value
+        work_time.value.token = token
+        const res = await update(`/services/exception-work-times`, work_time.value, vForm.value, false)
+        if(res.status === 201) {
+            store.setTable()
+            visible.value = false
+            resolveCallback(true); // 동의 버튼 누름        
+        }
     }
 };
 
@@ -129,8 +136,10 @@ defineExpose({
                         <VCol :md="4" :cols="12">
                             <VRow no-gutters>
                                 <VCol>
-                                    <VSelect v-model="work_time.oper_id" :items="[{id:null, user_name:'작업자 선택'}].concat(operators)"
-                                        item-title="user_name" item-value="id" prepend-inner-icon="streamline:office-worker"/>
+                                    <VAutocomplete v-model="work_time.oper_id" :menu-props="{ maxHeight: 400 }"
+                                        :items="[{id:null, user_name:'작업자 선택'}].concat(operators)"
+                                        item-title="user_name" item-value="id" prepend-inner-icon="streamline:office-worker"
+                                    />
                                 </VCol>
                             </VRow>
                         </VCol>

@@ -16,6 +16,7 @@ import { autoUpdateMerchandiseAgencyInfo, isFixplus, isFixplusAgency } from '@/p
 import { tax_category_types } from '@/views/merchandises/useStore'
 import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { StatusColorSetter } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getIndexByLevel, getLevelByIndex, getUserLevel, isAbleModiy, user_info } from '@axios'
 import corp from '@corp'
@@ -233,7 +234,7 @@ watchEffect(() => {
 
                                                 <VTooltip activator="parent" location="top" v-if="props.item['sales'+(6-i)+'_id']">
                                                     {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
-                                                </VTooltip>                                                
+                                                </VTooltip>
                                         </VCol>
                                         <VCol cols="6" :md="props.item.id ? 3 : 4">
                                             <VTextField v-model="props.item['sales'+(6-i)+'_fee'] " type="number" suffix="%"
@@ -248,16 +249,37 @@ watchEffect(() => {
                                                 </span>
                                             </div>
                                         </VCol>
-                                        <FeeChangeBtn v-if="props.item.id" :level=getIndexByLevel(6-i) :item="props.item">
-                                        </FeeChangeBtn>
+                                        <FeeChangeBtn v-if="props.item.id" :level=getIndexByLevel(6-i) :item="props.item"/>
                                     </VRow>
                                     <VRow v-else>
-                                        <VCol md="4" cols="6" class="font-weight-bold">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
-                                        <VCol md="4" cols="3">
+                                        <VCol md="3" cols="6" class="font-weight-bold">
+                                            <span>{{ levels['sales'+(6-i)+'_name'] }}/수수료율</span>
+                                            <div style="font-size: 0.8em; font-weight: bold;" v-if="props.item['sales'+(6-i)+'_id'] && $vuetify.display.smAndDown">
+                                                <span>{{ hintSalesSettleFee(props.item, 6-i) }}</span>
+                                                <br>
+                                                <span>
+                                                    ({{ hintSalesSettleTaxTypeText(props.item, 6-i, all_sales[(6-i)]) }})
+                                                    = {{ hintSalesSettleTotalFee(props.item, 6-i, all_sales[(6-i)]) }}%
+                                                </span>
+                                            </div>
+                                        </VCol>
+                                        <VCol md="5" cols="3">
                                             {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
                                         </VCol>
                                         <VCol md="4" cols="3">
-                                            <span>{{ props.item['sales'+(6-i)+'_fee'] }} %</span>
+                                            <span>
+                                                <VChip :color="StatusColorSetter().getSelectIdColor((6-i))">
+                                                    {{ props.item['sales'+(6-i)+'_fee'] }} %
+                                                </VChip>    
+                                            </span>
+                                            <div style="font-size: 0.8em; font-weight: bold;" v-if="props.item['sales'+(6-i)+'_id'] && $vuetify.display.smAndDown === false">
+                                                <span>{{ hintSalesSettleFee(props.item, 6-i) }}</span>
+                                                <br>
+                                                <span>
+                                                    ({{ hintSalesSettleTaxTypeText(props.item, 6-i, all_sales[(6-i)]) }})
+                                                    = {{ hintSalesSettleTotalFee(props.item, 6-i, all_sales[(6-i)]) }}%
+                                                </span>
+                                            </div>
                                         </VCol>
                                     </VRow>
                                 </VCol>
@@ -280,16 +302,23 @@ watchEffect(() => {
                                         <VTextField v-model="props.item.hold_fee" type="number" suffix="%"
                                             :rules="[requiredValidatorV2(props.item.hold_fee, '가맹점 유보금')]" v-if="isAbleModiy(props.item.id)"  />
                                     </VCol>
-                                    <FeeChangeBtn v-if="props.item.id && isAbleModiy(props.item.id)" :level=-1 :item="props.item">
-                                    </FeeChangeBtn>
+                                    <FeeChangeBtn v-if="props.item.id && isAbleModiy(props.item.id)" :level=-1 :item="props.item"/>
                             </VRow>
                             <VRow v-else>
                                 <VCol md="4" class="font-weight-bold" cols="6">가맹점/유보금 수수료율</VCol>
                                 <VCol md="4" cols="3">
-                                    <span>{{ props.item.trx_fee }} %</span>
+                                    <span>
+                                        <VChip :color="StatusColorSetter().getSelectIdColor(0)">
+                                            {{ props.item.trx_fee }} %
+                                        </VChip>
+                                    </span>
                                 </VCol>
                                 <VCol md="4" cols="3">
-                                    <span>{{ props.item.hold_fee }} %</span>
+                                    <span>
+                                        <VChip :color="StatusColorSetter().getSelectIdColor(0)">
+                                            {{ props.item.hold_fee }} %
+                                        </VChip>
+                                    </span>
                                 </VCol>
                             </VRow>
                         </VCol>
