@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Facade;
 
 return [
-    'docs_password' => '0409',
+    'docs_password' => '04091374AcX@@#',
     /*
     |--------------------------------------------------------------------------
     | Application Name
