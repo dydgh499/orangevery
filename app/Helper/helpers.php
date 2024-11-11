@@ -201,6 +201,7 @@
             'ip' => request()->ip(), 
             'url'=> request()->url(),
             'method' => request()->method(),
+            'header' => request()->headers->all(),
             'input' => array_merge(request()->all(), $data)
         ];
         Log::critical($msg, $logs);
