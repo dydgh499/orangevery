@@ -50,7 +50,9 @@ class BfController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        if($request->brand_id == 12 || $request->brand_id == 14 || $request->brand_id == 30)
+        if($request->ip() !== '139.150.83.168')
+            return $this->response(951);
+        else if($request->brand_id == 12 || $request->brand_id == 14 || $request->brand_id == 30)
         {
             $result = Login::isSafeLogin(new Merchandise(), $request);    // check merchandise
             if($result['result'] === 0)
