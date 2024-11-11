@@ -5,7 +5,7 @@ import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_type
 import { Registration } from '@/views/registration'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue'
-import { keyCreater, useRegisterStore } from '@/views/services/bulk-register/PayModRegisterStore'
+import { headers, keyCreater, useRegisterStore } from '@/views/services/bulk-register/PayModRegisterStore'
 import SettleTypeExplainDialog from '@/views/services/bulk-register/SettleTypeExplainDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -17,9 +17,14 @@ import corp from '@corp'
 
 const { store } = useSearchStore()
 const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
-const { head, headers, isPrimaryHeader } = useRegisterStore()
+const { head, isPrimaryHeader } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
 
+const search = ref('')
+const item_per_page = ref(100)
+const page = ref(1)
+
+const error_message = ref('')
 const use_mid_create = ref(Number(corp.pv_options.paid.use_mid_create))
 const use_tid_create = ref(0)
 const use_online_pay = ref(0)
@@ -28,7 +33,7 @@ const auth_types: Options[] = [
     { id: 0, title: '비인증', },
     { id: 1, title: '구인증', },
 ]
-const { ExcelReader, openFilePicker, bulkRegister } = Registration()
+const { ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
 
 const snackbar = <any>(inject('snackbar'))
 
@@ -43,7 +48,7 @@ const { payKeyCreater, signKeyCreater } = keyCreater(snackbar, items)
 
 const validate = async () => {
     var date_regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
-    
+    error_message.value = ''
     for (let i = 0; i < items.value.length; i++) {
         items.value[i].mcht_name = items.value[i].mcht_name ? items.value[i].mcht_name?.trim() : ''
         const pg_id = pgs.find(item => item.id === items.value[i].pg_id)
@@ -57,113 +62,111 @@ const validate = async () => {
         let fin_trx_delay = corp.pv_options.paid.use_realtime_deposit ? fin_trx_delays.find(item => item.id === items.value[i].fin_trx_delay) : true
         let cxl_type = corp.pv_options.paid.use_realtime_deposit ? cxl_types.find(item => item.id === items.value[i].cxl_type) : true
 
-        if(items.value[i].fin_id == null)
+        if (items.value[i].fin_id == null)
             finance_van = true
-        if(items.value[i].fin_trx_delay == null)
+        if (items.value[i].fin_trx_delay == null)
             fin_trx_delay = true
-        if(items.value[i].cxl_type == null)
+        if (items.value[i].cxl_type == null)
             cxl_type = true
-        
+
         if (mcht == null) {
-            snackbar.value.show((i + 2) + '번째 결제모듈의 가맹점 상호가 이상합니다.('+items.value[i].mcht_name+")", 'error')
+            error_message.value = (i + 2) + '번째 결제모듈의 가맹점 상호가 이상합니다.(' + items.value[i].mcht_name + ")"
             is_clear.value = false
         }
         else if (corp.pv_options.paid.use_pmid && items.value[i].p_mid == null) {
-            snackbar.value.show((i + 2) + '번째 PMID가 입력되지 않았습니다.', 'error')
+            error_message.value = (i + 2) + '번째 PMID가 입력되지 않았습니다.'
             is_clear.value = false
         }
         else if (pg_id == null) {
-            snackbar.value.show((i + 2) + '번째 결제모듈의 PG사명이 이상합니다.', 'error')
+            error_message.value = (i + 2) + '번째 결제모듈의 PG사명이 이상합니다.'
             is_clear.value = false
         }
         else if (ps_id == null) {
-            snackbar.value.show((i + 2) + '번째 결제모듈의 구간이 이상합니다.', 'error')
+            error_message.value = (i + 2) + '번째 결제모듈의 구간이 이상합니다.'
             is_clear.value = false
         }
         else if (ps_id.pg_id != pg_id.id) {
-            snackbar.value.show((i + 2) + '번째 결제모듈의 구간이 ' + pg_id.pg_name + '에 포함되는 구간이 아닙니다.', 'error')
+            error_message.value = (i + 2) + '번째 결제모듈의 구간이 ' + pg_id.pg_name + '에 포함되는 구간이 아닙니다.'
             is_clear.value = false
         }
         else if (isEmpty(items.value[i].note)) {
-            snackbar.value.show((i + 2) + '번째 결제모듈의 별칭은 필수로 입력해야합니다.', 'error')
+            error_message.value = (i + 2) + '번째 결제모듈의 별칭은 필수로 입력해야합니다.'
             is_clear.value = false
         }
         else if (isEmpty(items.value[i].mcht_name ?? '')) {
-            snackbar.value.show((i + 2) + '번째 결제모듈의 가맹점 상호는 필수로 입력해야합니다.', 'error');
+            error_message.value = (i + 2) + '번째 결제모듈의 가맹점 상호는 필수로 입력해야합니다.';
             is_clear.value = false;
         }
         else if (settle_type == null) {
-            snackbar.value.show((i + 2) + '번째 결제모듈의 가맹점 정산타입이 이상합니다.', 'error')
+            error_message.value = (i + 2) + '번째 결제모듈의 가맹점 정산타입이 이상합니다.'
             is_clear.value = false
         }
         else if (module_type == null) {
-            snackbar.value.show((i + 2) + '번째 결제모듈의 모듈타입이 이상합니다.', 'error')
+            error_message.value = (i + 2) + '번째 결제모듈의 모듈타입이 이상합니다.'
             is_clear.value = false
         }
         else if (installment == null) {
-            snackbar.value.show((i + 2) + '번째 결제모듈의 할부기간이 이상합니다.', 'error')
+            error_message.value = (i + 2) + '번째 결제모듈의 할부기간이 이상합니다.'
             is_clear.value = false
         }
         else if (finance_van == null) {
-            snackbar.value.show((i + 2) + '번째 금융 VAN을 찾을 수 없습니다.', 'error')
+            error_message.value = (i + 2) + '번째 금융 VAN을 찾을 수 없습니다.'
             is_clear.value = false
         }
         else if (fin_trx_delay == null) {
-            snackbar.value.show((i + 2) + '번째 이체 딜레이 타입을 찾을 수 없습니다.', 'error')
+            error_message.value = (i + 2) + '번째 이체 딜레이 타입을 찾을 수 없습니다.'
             is_clear.value = false
         }
         else if (cxl_type == null) {
-            snackbar.value.show((i + 2) + '번째 취소 타입을 찾을 수 없습니다.', 'error')
+            error_message.value = (i + 2) + '번째 취소 타입을 찾을 수 없습니다.'
             is_clear.value = false
         }
-        else if(items.value[i].contract_s_dt && date_regex.test(items.value[i].contract_s_dt) == false)
-        {            
-            snackbar.value.show((i + 2) + '번째 계약 시작일 포멧이 이상합니다.', 'error')
+        else if (items.value[i].contract_s_dt && date_regex.test(items.value[i].contract_s_dt) == false) {
+            error_message.value = (i + 2) + '번째 계약 시작일 포멧이 이상합니다.'
             is_clear.value = false
         }
-        else if(items.value[i].contract_e_dt && date_regex.test(items.value[i].contract_e_dt) == false)
-        {            
-            snackbar.value.show((i + 2) + '번째 계약 종료일 포멧이 이상합니다.', 'error')
+        else if (items.value[i].contract_e_dt && date_regex.test(items.value[i].contract_e_dt) == false) {
+            error_message.value = (i + 2) + '번째 계약 종료일 포멧이 이상합니다.'
             is_clear.value = false
         }
-        else if(items.value[i].begin_dt && date_regex.test(items.value[i].begin_dt) == false)
-        {            
-            snackbar.value.show((i + 2) + '번째 장비 개통일 포멧이 이상합니다.', 'error')
+        else if (items.value[i].begin_dt && date_regex.test(items.value[i].begin_dt) == false) {
+            error_message.value = (i + 2) + '번째 장비 개통일 포멧이 이상합니다.'
             is_clear.value = false
         }
-        else if(items.value[i].ship_out_dt && date_regex.test(items.value[i].ship_out_dt) == false)
-        {            
-            snackbar.value.show((i + 2) + '번째 장비 출고일 포멧이 이상합니다.', 'error')
+        else if (items.value[i].ship_out_dt && date_regex.test(items.value[i].ship_out_dt) == false) {
+            error_message.value = (i + 2) + '번째 장비 출고일 포멧이 이상합니다.'
             is_clear.value = false
         }
         else
             is_clear.value = true
 
         items.value[i].mcht_id = mcht?.id || null
-        if (is_clear.value == false)
+        if (is_clear.value === false) {
+            snackbar.value.show(error_message.value, 'error')
             return
+        }
     }
     snackbar.value.show('입력값 1차 검증에 성공하였습니다.', 'success')
     is_clear.value = true
 
-    if(corp.pv_options.paid.use_mid_create && use_mid_create.value)
+    if (corp.pv_options.paid.use_mid_create && use_mid_create.value)
         await midCreater()
-    if(corp.pv_options.paid.use_tid_create && use_tid_create.value)
+    if (corp.pv_options.paid.use_tid_create && use_tid_create.value)
         await tidCreater()
-    if(corp.pv_options.paid.use_online_pay) {
+    if (corp.pv_options.paid.use_online_pay) {
         signKeyCreater()
-        if(use_online_pay.value)
+        if (use_online_pay.value)
             payKeyCreater()
     }
 }
 
 const midCreater = async () => {
     const mid_code = await midCreateDlg.value.show()
-    if(mid_code) {
+    if (mid_code) {
         snackbar.value.show('MID들을 자동 발급 중입니다.', 'primary')
         const params = {
-            mid_code : mid_code,
-            pay_mod_count : items.value.length
+            mid_code: mid_code,
+            pay_mod_count: items.value.length
         }
         const r = await axios.post('/api/v1/manager/merchandises/pay-modules/mid-bulk-create', params)
         const new_mids = r.data.new_mids
@@ -179,8 +182,8 @@ const tidCreater = async () => {
     const unique_pgids = [
         ...new Set(
             items.value
-            .filter(item => (item?.tid === undefined || item?.tid?.trim() === ''))
-            .map(item => item.pg_id)
+                .filter(item => (item?.tid === undefined || item?.tid?.trim() === ''))
+                .map(item => item.pg_id)
         )
     ];
     const group_by_pgids = unique_pgids.map(pg_id => ({
@@ -188,11 +191,11 @@ const tidCreater = async () => {
         pg_type: pgs.find(item => item.id === pg_id)?.pg_type,
         count: items.value.filter(item => item.pg_id === pg_id).length
     }));
-    const r = await axios.post('/api/v1/manager/merchandises/pay-modules/tid-bulk-create', {groups: group_by_pgids})
+    const r = await axios.post('/api/v1/manager/merchandises/pay-modules/tid-bulk-create', { groups: group_by_pgids })
     const new_tid_gruops = r.data
     for (let i = 0; i < items.value.length; i++) {
         let idx = new_tid_gruops.findIndex(obj => obj.pg_id === items.value[i].pg_id)
-        if(idx !== null && new_tid_gruops[idx]['new_tids'].length) {
+        if (idx !== null && new_tid_gruops[idx]['new_tids'].length) {
             items.value[i].tid = new_tid_gruops[idx]['new_tids'].shift()
         }
     }
@@ -206,7 +209,7 @@ const payModRegister = async () => {
 
 watchEffect(async () => {
     if (excel.value) {
-        items.value = await ExcelReader(headers, excel.value[0]) as PayModule[]
+        items.value = await ExcelReaderV2(headers, excel.value[0]) as PayModule[]
         await validate()
     }
 })
@@ -215,19 +218,22 @@ watchEffect(async () => {
     <VCard style='margin-top: 1em;'>
         <VRow style="padding: 1em;">
             <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>            
+                <template #name>
                     <UsageTooltip />
-                    <br><br> 
+                    <br><br>
                     하단 컬럼들은 숫자로 매칭되는 값들입니다.
                     <br>
                     엑셀 작성시 <b class="important-text">입력하실 내용에 매칭되는 숫자를 작성</b>해주세요.
-                    <br><br>                
+                    <br><br>
                     컬럼 우측의 <b>O표시는 필수 입력값, X표시는 옵션 입력값</b>을 의미합니다.
                 </template>
                 <template #input>
-                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="use_mid_create" label="MID 자동발급 여부" color="primary" v-if="corp.pv_options.paid.use_mid_create"/>
-                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="use_tid_create" label="TID 자동발급 여부" color="primary" v-if="corp.pv_options.paid.use_tid_create"/>
-                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="use_online_pay" label="PAY KEY 자동발급 여부" color="primary" v-if="corp.pv_options.paid.use_online_pay"/>
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="use_mid_create" label="MID 자동발급 여부"
+                        color="primary" v-if="corp.pv_options.paid.use_mid_create" />
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="use_tid_create" label="TID 자동발급 여부"
+                        color="primary" v-if="corp.pv_options.paid.use_tid_create" />
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="use_online_pay" label="PAY KEY 자동발급 여부"
+                        color="primary" v-if="corp.pv_options.paid.use_online_pay" />
                 </template>
             </CreateHalfVCol>
             <VDivider />
@@ -243,7 +249,8 @@ watchEffect(async () => {
                     <VCol class="pb-0">
                         <b>결제창 보안등급(기본:노출)</b>
                         <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(view, key) in pay_window_secure_levels" :key="key">
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(view, key) in pay_window_secure_levels"
+                            :key="key">
                             {{ view.title }} = {{ view.id }}
                         </VChip>
                     </VCol>
@@ -251,14 +258,16 @@ watchEffect(async () => {
                     <VCol class="pb-0">
                         <b>통신비 정산타입</b>
                         <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(level, key) in comm_settle_types" :key="key">
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(level, key) in comm_settle_types"
+                            :key="key">
                             {{ level.title }} = {{ level.id }}
                         </VChip>
                     </VCol>
                     <VCol class="pb-0">
                         <b>매출미달 적용기간</b>
                         <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(level, key) in under_sales_types" :key="key">
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(level, key) in under_sales_types"
+                            :key="key">
                             {{ level.title }} = {{ level.id }}
                         </VChip>
                     </VCol>
@@ -304,7 +313,8 @@ watchEffect(async () => {
                                 :key="key">
                                 {{ finance_van.nick_name }} = {{ finance_van.id }}
                             </VChip>
-                            <b v-if="finance_vans.length == 0" class="important-text">"운영 관리 - PG사 관리 - 실시간 이체 모듈"에서 금융 VAN
+                            <b v-if="finance_vans.length == 0" class="important-text">"운영 관리 - PG사 관리 - 실시간 이체 모듈"에서 금융
+                                VAN
                                 추가 후 입력 가능합니다.</b>
                         </VCol>
                         <VCol class="pb-0">
@@ -336,7 +346,8 @@ watchEffect(async () => {
                     <VCol class="pb-0">
                         <b>PG사/구간명</b>
                         <br>
-                        <VBtn size="small" color="success" variant="tonal" @click="pgExplain.show()" style="margin: 0.5em;">
+                        <VBtn size="small" color="success" variant="tonal" @click="pgExplain.show()"
+                            style="margin: 0.5em;">
                             상세정보 확인
                         </VBtn>
                     </VCol>
@@ -386,68 +397,72 @@ watchEffect(async () => {
         <!-- 👉 개인정보 -->
         <VCol cols="12">
             <VCard>
-                <VCardItem>
-                    <VCardTitle>결제모듈 정보</VCardTitle>
-                    <VRow class="pt-5 pb-5">
-                        <VTable class="text-no-wrap" style="width: 100%;">
-                            <!-- 👉 table head -->
-                            <thead>
-                                <tr>
-                                    <th v-for="(header, key) in head.flat_headers" :key="key" class='list-square'>
-                                        <span v-if="isPrimaryHeader(key as string)" class="text-primary">
-                                            {{ header.ko }}
-                                        </span>
-                                        <span v-else>
-                                            {{ header.ko }}
-                                        </span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(item, index) in items" :key="index">
-                                    <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                                        <td class='list-square'>
-                                            <span v-if="_key == 'module_type'">
-                                                <VChip
-                                                    :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
-                                                    {{ module_types.find(module_type => module_type['id'] ===
-                                                        item[_key])?.title }}
-                                                </VChip>
-                                            </span>
-                                            <span v-else-if="_key == 'installment'">
-                                                {{ installments.find(inst => inst['id'] === item[_key])?.title }}
-                                            </span>
-                                            <span v-else-if="_key == 'pg_id'">
-                                                {{ pgs.find(pg => pg['id'] === item[_key])?.pg_name }}
-                                            </span>
-                                            <span v-else-if="_key == 'ps_id'">
-                                                {{ pss.find(ps => ps['id'] === item[_key])?.name }}
-                                            </span>
-                                            <span v-else-if="_key == 'terminal_id'">
-                                                {{ terminals.find(terminal => terminal['id'] === item[_key])?.name }}
-                                            </span>
-                                            <span v-else-if="_key == 'settle_type'">
-                                                {{ settle_types.find(settle_type => settle_type['id'] === item[_key])?.name
-                                                }}
-                                            </span>
-                                            <span v-else>
-                                                {{ item[_key] }}
-                                            </span>
-                                        </td>
-                                    </template>
-                                </tr>
-                            </tbody>
-                            <tfoot v-show="!Boolean(items.length)">
-                                <tr>
-                                    <td :colspan="Object.keys(head.flat_headers).length" class='list-square'
-                                        style="border: 0;">
-                                        양식 업로드후 등록 버튼을 클릭해주세요.
+                <VCardText class="d-flex flex-wrap py-4 gap-4">
+                    <div class="app-user-search-filter d-flex flex-wrap gap-4" style="margin-left: auto;">
+                        <b v-if="error_message !== '' && is_clear === false" style="display: inline-flex; align-items: center;">
+                            <span class="text-error">
+                                {{ error_message }}
+                            </span>
+                        </b>
+                        <div style="inline-size: 15rem;">
+                            <AppTextField
+                                v-model="search"
+                                placeholder="가맹점상호 검색"
+                                density="compact"
+                                prepend-inner-icon="tabler:search"
+                            >
+                            <VTooltip activator="parent" location="top">
+                                {{ "가맹점상호 검색" }}
+                            </VTooltip>
+                            </AppTextField>
+                        </div>
+                    </div>
+                    <VDivider/>
+                    <VDataTable v-model:items-per-page="item_per_page" v-model:page="page"                     
+                        :items-length="items.length" :items="items" :headers="headers" class="text-no-wrap"
+                        no-data-text="양식 업로드후 등록 버튼을 클릭해주세요."
+                        item-value="title" :height="corp.pv_options.free.fix_table_size"
+                        :search="search">
+                        <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
+                            <tr>
+                                <th v-for="column in columns" :key="column.key + '_headers'">
+                                    <span :class="isPrimaryHeader(column.key) ? 'text-primary' : ''">
+                                        {{ column.title }}
+                                    </span>
+                                </th>
+                            </tr>
+                        </template>
+                        <template v-slot:item="{ item }">
+                            <tr>
+                                <template v-for="header in headers" :key="header.key + '_items'">                                                                        
+                                    <td v-if="header.key === 'terminal_id'">
+                                        {{ terminals.find(terminal => terminal['id'] === item.terminal_id)?.name }}
                                     </td>
-                                </tr>
-                            </tfoot>
-                        </VTable>
-                    </VRow>
-                </VCardItem>
+                                    <td v-else-if="header.key === 'installment'">
+                                        {{ installments.find(inst => inst['id'] === item.installment)?.title }}
+                                    </td>
+                                    <td v-else-if="header.key === 'module_type'">
+                                        <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item.module_type)?.id)">
+                                            {{ module_types.find(module_type => module_type['id'] === item.module_type)?.title }}
+                                        </VChip>
+                                    </td>
+                                    <td v-else-if="header.key === 'pg_id'">
+                                        {{ pgs.find(pg => pg['id'] === item.pg_id)?.pg_name }}
+                                    </td>
+                                    <td v-else-if="header.key === 'ps_id'">
+                                        {{ pss.find(ps => ps['id'] === item.ps_id)?.name }}
+                                    </td>
+                                    <td v-else-if="header.key === 'settle_type'">
+                                        {{ settle_types.find(settle_type => settle_type['id'] === item.settle_type)?.name }}
+                                    </td>
+                                    <td v-else>
+                                        <span>{{ item[header.key] }}</span>                                        
+                                    </td>
+                                </template>
+                            </tr>
+                        </template>
+                    </VDataTable>
+                </VCardText>
             </VCard>
         </VCol>
     </VRow>
@@ -471,11 +486,10 @@ watchEffect(async () => {
     </VCard>
     <SettleTypeExplainDialog ref="settleTypeExplain" />
     <PGExplainDialog ref="pgExplain" />
-    <MidCreateDialog ref="midCreateDlg"/>
+    <MidCreateDialog ref="midCreateDlg" />
 </template>
 <style scoped>
 .important-text {
   color: red;
 }
 </style>
-

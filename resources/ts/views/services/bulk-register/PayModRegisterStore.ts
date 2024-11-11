@@ -41,6 +41,82 @@ export const keyCreater = (snackbar: any, items: any) => {
     }
 }
 
+const getHeaders = () => {
+    const headers1 = [
+        {title: '가맹점 상호(O)', key: 'mcht_name'},
+        {title: 'PG사명(O)', key: 'pg_id'},
+        {title: '구간(O)', key: 'ps_id'},
+        {title: '가맹점 정산타입(O)', key: 'settle_type'},
+        {title: '입금 수수료(O)', key: 'settle_fee'},
+        {title: '계약 시작일(X)', key: 'contract_s_dt'},
+        {title: '계약 종료일(X)', key: 'contract_e_dt'},
+    ]
+    const headers2 = [
+        {title: '장비 종류(X)', key: 'terminal_id'},
+        {title: '결제모듈 타입(O)', key: 'module_type'},
+        {title: 'API KEY(X)', key: 'api_key'},
+        {title: 'SUB KEY(X)', key: 'sub_key'},
+    ]
+    if(corp.pv_options.paid.use_pmid) {
+        headers2.push({title: 'PMID(O)', key: 'p_mid'})
+    }
+    
+    headers2.push(
+        {title: 'MID(X)',  key: 'mid'},
+        {title: 'TID(X)',  key: 'tid'},
+        {title: '시리얼 번호(X)',  key: 'serial_num'},
+        {title: '통신비(X)',  key: 'comm_settle_fee'},
+        {title: '통신비 정산타입(X)',  key: 'comm_settle_type'},
+        {title: '매출미달 차감금(X)',  key: 'under_sales_amt'},
+        {title: '매출미달 하한금(X)',  key: 'under_sales_limit'},
+        {title: '매출미달 적용기간(X)',  key: 'under_sales_type'},
+        {title: '정산일(X)',  key: 'comm_settle_day'},
+        {title: '정산주체(X)',  key: 'comm_calc_level'},
+        {title: '개통일(X)',  key: 'begin_dt'},
+        {title: '출고일(X)',  key: 'ship_out_dt'},
+        {title: '출고상태(X)',  key: 'ship_out_stat'},
+        {title: '수기결제 여부(O)',  key: 'is_old_auth'},
+        {title: '할부 한도(O)',  key: 'installment'},
+        {title: '결제창 보안등급(X)',  key: 'pay_window_secure_level'},
+        {title: '이상거래 한도(X)',  key: 'abnormal_trans_limit'},
+        {title: '취소 타입(X)',  key: 'cxl_type'},
+        {title: '중복거래 하한금(X)',  key: 'pay_dupe_least'},
+        {title: '별칭(O)',  key: 'note'},
+    )
+    
+    if(corp.pv_options.paid.use_dup_pay_validation) {
+        headers2.push(
+            {title: '동일카드 결제허용 회수(X)', key: 'pay_dupe_limit'}
+        )
+    }
+    if(corp.pv_options.paid.use_pay_limit) {
+        headers2.push(
+            {title: '결제 연 한도(X)', key: 'pay_year_limit'},
+            {title: '결제 월 한도(X)', key: 'pay_month_limit'},
+            {title: '결제 일 한도(X)', key: 'pay_day_limit'},
+            {title: '결제 단건 한도(X)', key: 'pay_single_limit'},
+        )
+    }
+    if(corp.pv_options.paid.use_forb_pay_time) {
+        headers2.push(
+            {title: '결제금지 시작시간(X)', key: 'pay_disable_s_tm'},
+            {title: '결제금지 종료시간(X)', key: 'pay_disable_e_tm'},
+            {title: '결제 일 한도(X)', key: 'pay_day_limit'},
+            {title: '결제 단건 한도(X)', key: 'pay_single_limit'},
+        )
+    }
+    if(corp.pv_options.paid.use_realtime_deposit) {
+        headers2.push(
+            {title: '실시간 사용여부(X)', key: 'use_realtime_deposit'},
+            {title: '이체 모듈 타입(X)', key: 'fin_id'},
+            {title: '이체 딜레이(X)', key: 'fin_trx_delay'},
+        )
+    }
+    return [...headers1, ...headers2]
+}
+
+export const headers = getHeaders()
+
 export const useRegisterStore = defineStore('payModRegisterStore', () => {
     const head  = Header('pay-modules/bulk-register', '결제모듈 대량등록 포멧')
     const headers1: Record<string, string> = {

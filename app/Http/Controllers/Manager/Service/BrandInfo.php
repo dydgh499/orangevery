@@ -26,6 +26,25 @@ class BrandInfo
             $brand = Brand::where($key, $value)->with(['beforeBrandInfos'])->first();
             if($brand)
             {
+                $brand->makeHidden([
+                    'passbook_img',
+                    'id_img',
+                    'contract_img',
+                    'bsin_lic_img',
+                    'pvcy_rep_name',
+                    'note',
+                    'dev_fee',
+                    'deposit_day',
+                    'deposit_amount',
+                    'extra_deposit_amount',
+                    'curr_deposit_amount',
+                    'dev_settle_type',
+                    'last_dpst_at',
+                    'is_transfer',
+                    'is_delete',
+                    'created_at',
+                    'updated_at'
+                ]);
                 Redis::set($key_name, json_encode($brand), 'EX', 600);
                 return json_decode(json_encode($brand), true);
             }

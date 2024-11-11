@@ -136,7 +136,6 @@ onDeactivated(() => {
         <VCard style="margin-top: 1em;">
             <VCardText class="d-flex flex-wrap py-4 gap-4">
                 <div class="app-user-search-filter d-flex flex-wrap gap-4" style="margin-left: auto;">
-                    <!-- 👉 Search  -->
                     <div style="inline-size: 15rem;">
                         <AppTextField
                             v-model="search"
