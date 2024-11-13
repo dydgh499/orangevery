@@ -21,6 +21,7 @@ class CheckUserAgent
     {
         // 정상적인 브라우저의 User-Agent 패턴 목록
         $vaild_user_agents = [
+            'Dalvik/2.1.0',
             'Mozilla/5.0', // 일반적인 브라우저 패턴 (Firefox, Chrome, Safari 등)
             'Opera',       // Opera 브라우저
             'MSIE',        // Internet Explorer

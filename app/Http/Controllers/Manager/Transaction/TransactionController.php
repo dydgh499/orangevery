@@ -128,8 +128,8 @@ class TransactionController extends Controller
         try
         {
             $data = $request->data();
-            $data['dev_fee'] = $request->input('dev_fee', 0)/100;
-            $data['dev_realtime_fee'] = $request->input('dev_realtime_fee', 0)/100;
+            $data['dev_fee'] = (((float)$request->input('dev_fee', 0))/100);
+            $data['dev_realtime_fee'] = (((float)$request->input('dev_realtime_fee', 0))/100);
 
             $data['settle_dt'] = SettleDateCalculator::getSettleDate($request->user()->brand_id, $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'], $data['mcht_settle_type'], 1);
             $data['pg_settle_type'] = 1;
