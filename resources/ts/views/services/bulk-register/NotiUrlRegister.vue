@@ -10,10 +10,10 @@ import type { NotiUrl, PayModule } from '@/views/types'
 import corp from '@corp'
 
 const { store } = useSearchStore()
-const { head, headers } = useRegisterStore()
+const { headers } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
 
-const { ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
+const { ExcelFormatV2, ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
 
 const snackbar = <any>(inject('snackbar'))
 const search = ref('')
@@ -152,7 +152,7 @@ watchEffect(async () => {
     </VRow>
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">
-            <VBtn color="secondary" variant="tonal" @click="head.exportToExcel([])" style="margin-left: auto;">
+            <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('노티주소 대량등록 포멧', headers)" style="margin-left: auto;">
                 양식 다운로드
                 <VIcon end icon="uiw-file-excel" />
             </VBtn>

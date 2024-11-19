@@ -1,4 +1,3 @@
-import { Header } from '@/views/headers'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { Merchandise } from '@/views/types'
 import { banks } from '@/views/users/useStore'
@@ -81,9 +80,7 @@ export const validateItems = (item: Merchandise, i: number, user_names: any, mch
     }
 }
 export const useRegisterStore = defineStore('mchtRegisterStore', () => {
-    const head      = Header('merchandises/bulk-register', '가맹점 대량등록 포멧')
     const levels    = corp.pv_options.auth.levels
-
     const headers = []
     if (levels.sales5_use && getUserLevel() >= 30) {
         headers.push(
@@ -156,16 +153,12 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
         headers.push({title: '다중결제 사용(X)', key: 'use_multiple_hand_pay'})
 
 
-    head.sub_headers.value = []
-    head.headers.value = head.initHeader(headers, {})
-    head.flat_headers.value = head.flatten(head.headers.value)
-
     const isPrimaryHeader = (key: string) => {
         const keys = ['tax_category_type', 'custom_id']
         return keys.includes(key)
     }
 
     return {
-        head, headers, isPrimaryHeader
+        headers, isPrimaryHeader
     }
 })

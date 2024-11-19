@@ -14,7 +14,7 @@ import corp from '@corp'
 
 const { store } = useSearchStore()
 const { pgs, pss, settle_types, terminals, finance_vans, psFilter } = useStore()
-const { head, headers, isPrimaryHeader } = useRegisterStore()
+const { headers, isPrimaryHeader } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
 
 const search = ref('')
@@ -30,7 +30,7 @@ const auth_types: Options[] = [
     { id: 0, title: '비인증', },
     { id: 1, title: '구인증', },
 ]
-const { ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
+const { ExcelFormatV2, ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
 
 const snackbar = <any>(inject('snackbar'))
 
@@ -474,7 +474,7 @@ watchEffect(async () => {
     </VRow>
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">
-            <VBtn color="secondary" variant="tonal" @click="head.exportToExcel([])" style="margin-left: auto;">
+            <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('결제모듈 대량등록 포멧', headers)" style="margin-left: auto;">
                 양식 다운로드
                 <VIcon end icon="uiw-file-excel" />
             </VBtn>

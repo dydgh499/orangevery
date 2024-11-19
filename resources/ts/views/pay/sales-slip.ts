@@ -26,7 +26,7 @@ export const salesSlip = () => {
     }
     
     const getSalesSlipRect = async () => {
-        const sales_slip_rect = document.getElementsByClassName('sales-slip-rect')[0]        
+        const sales_slip_rect = document.getElementsByClassName('sales-slip-rect')[0]
         const canvas = await html2canvas(sales_slip_rect, {
             scale: 2, // 기본값은 1, 더 높은 값으로 설정하면 고해상도로 캡처
             useCORS: true, // 외부 리소스를 로드할 때 CORS 문제가 발생하지 않도록 설정

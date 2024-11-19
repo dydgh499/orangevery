@@ -1,5 +1,4 @@
 import { isEmpty } from '@/@core/utils';
-import { Header } from '@/views/headers';
 import { Merchandise, NotiUrl, PayModule } from '@/views/types';
 
 
@@ -28,7 +27,6 @@ export const validateItems = (item: NotiUrl, i: number, mchts: Merchandise[], pa
 }
 
 export const useRegisterStore = defineStore('NotiUrlRegisterStore', () => {
-    const head = Header('noti-urls/bulk-register', '노티주소 대량등록 포멧')
     const headers = [
         { key: 'mcht_name', title: '가맹점 상호(O)' },
         { key: 'pmod_note', title: '결제모듈 별칭(O)' },
@@ -36,11 +34,7 @@ export const useRegisterStore = defineStore('NotiUrlRegisterStore', () => {
         { key: 'note', title: '별칭(O)' },
         { key: 'send_url', title: '발송 URL(O)' },
     ]
-    head.sub_headers.value = []
-    head.headers.value = head.initHeader(headers, {})
-    head.flat_headers.value = head.flatten(head.headers.value)
-
     return {
-        head, headers
+        headers
     }
 })

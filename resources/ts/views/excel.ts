@@ -1,6 +1,40 @@
 import { Filter } from '@/views/types';
 import { Workbook } from 'exceljs';
 
+export const ExcelStyle = () => {
+    const setHeaderRows = (worksheet:any, key_names: string[], keys: string[]) => {
+        const columns = []
+        for (let i = 0; i < key_names.length; i++) {
+            columns.push({
+                header: key_names[i],
+                key: keys[i],
+                width: 20,
+            })            
+        }
+        worksheet.columns = columns
+        return worksheet.getRow(1)
+    }
+    const setHeaderStyle = (row: any) => {
+        row.font = { bold: true, size: 12, color: {argb: 'FFFFFF'} };
+        row.alignment = { horizontal: 'center', vertical: 'middle' };
+        row.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: '0D47A1' }
+        };
+        row.border = {
+            top: { style: 'thin', color: { argb: '000000' } },
+            left: { style: 'thin', color: { argb: '000000' } },
+            bottom: { style: 'medium', color: { argb: '000000' } },
+            right: { style: 'thin', color: { argb: '000000' } }
+        };
+    }
+    return {
+        setHeaderRows,
+        setHeaderStyle
+    }
+}
+
 export const ExcelExporter = (sub_headers: Ref<any>, flat_headers: Ref<Filter>, file_name: string) => {
     const setMergeCell = (worksheet:any) => {
         const getStringCellName = (sub_header: any) => {
@@ -54,37 +88,7 @@ export const ExcelExporter = (sub_headers: Ref<any>, flat_headers: Ref<Filter>, 
     
             }
         }
-        setHeaderStyle(worksheet.getRow(1));
-    }
-
-    const setHeaderStyle = (row: any) => {
-        row.font = { bold: true, size: 12, color: {argb: 'FFFFFF'} };
-        row.alignment = { horizontal: 'center', vertical: 'middle' };
-        row.fill = {
-            type: 'pattern',
-            pattern: 'solid',
-            fgColor: { argb: '0D47A1' }
-        };
-        row.border = {
-            top: { style: 'thin', color: { argb: '000000' } },
-            left: { style: 'thin', color: { argb: '000000' } },
-            bottom: { style: 'medium', color: { argb: '000000' } },
-            right: { style: 'thin', color: { argb: '000000' } }
-        };
-    }
-
-    const setHeaderRows = (worksheet:any) => {
-        const columns = []
-        const keys = Object.keys(flat_headers.value)
-        for (let i = 0; i < keys.length; i++) {
-            columns.push({
-                header: flat_headers.value[keys[i]].ko,
-                key: keys[i],
-                width: 20,
-            })            
-        }
-        worksheet.columns = columns
-        return worksheet.getRow(1)
+        ExcelStyle().setHeaderStyle(worksheet.getRow(1));
     }
 
     const getDataRows = (worksheet:any, datas: { [key: string]: any}[]) => {
@@ -120,17 +124,18 @@ export const ExcelExporter = (sub_headers: Ref<any>, flat_headers: Ref<Filter>, 
         const wb = new Workbook();
         const worksheet = wb.addWorksheet(file_name);
 
-        setHeaderRows(worksheet)
+        const key_names = Object.keys(flat_headers.value).map(key => flat_headers.value[key]?.ko) as string[]
+        ExcelStyle().setHeaderRows(worksheet, key_names, Object.keys(flat_headers.value))
         getDataRows(worksheet, datas)
         
         if(sub_headers.value.length) {
             // sub header setting
             worksheet.spliceRows(1, 0, {});
             setMergeCell(worksheet)
-            setHeaderStyle(worksheet.getRow(2));
+            ExcelStyle().setHeaderStyle(worksheet.getRow(2));
         }
         else
-            setHeaderStyle(worksheet.getRow(1));
+            ExcelStyle().setHeaderStyle(worksheet.getRow(1));
 
         //checkVisiable(worksheet)
         worksheet.views = [{ state: 'frozen', ySplit: 1 }];
@@ -152,6 +157,5 @@ export const ExcelExporter = (sub_headers: Ref<any>, flat_headers: Ref<Filter>, 
 
     return {
         exportToExcel,
-        setHeaderStyle,
     }
 }

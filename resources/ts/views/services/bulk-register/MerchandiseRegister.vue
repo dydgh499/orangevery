@@ -11,8 +11,8 @@ import { banks } from '@/views/users/useStore'
 import corp from '@corp'
 
 const { cus_filters } = useStore()
-const { head, headers, isPrimaryHeader } = useRegisterStore()
-const { ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
+const { headers, isPrimaryHeader } = useRegisterStore()
+const { ExcelFormatV2, ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
 
 const search = ref('')
 const item_per_page = ref(100)
@@ -286,7 +286,7 @@ watchEffect(async () => {
     </VRow>
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">
-            <VBtn color="secondary" variant="tonal" @click="head.exportToExcel([])" style="margin-left: auto;">
+            <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('가맹점 대량등록 포멧', headers)" style="margin-left: auto;">
                 양식 다운로드
                 <VIcon end icon="uiw-file-excel" />
             </VBtn>

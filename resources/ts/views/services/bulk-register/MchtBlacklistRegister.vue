@@ -6,8 +6,8 @@ import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import type { MchtBlacklist } from '@/views/types'
 import corp from '@corp'
 
-const { head, headers } = useRegisterStore()
-const { ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
+const { headers } = useRegisterStore()
+const { ExcelFormatV2, ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
 
 const snackbar = <any>(inject('snackbar'))
 
@@ -127,7 +127,7 @@ watchEffect(async () => {
     </VRow>
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">
-            <VBtn color="secondary" variant="tonal" @click="head.exportToExcel([])" style="margin-left: auto;">
+            <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('가맹점 블랙리스트 대량등록 포멧', headers)" style="margin-left: auto;">
                 양식 다운로드
                 <VIcon end icon="uiw-file-excel" />
             </VBtn>

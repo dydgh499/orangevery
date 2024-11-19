@@ -10,8 +10,8 @@ import { salesLevels } from '@axios'
 import corp from '@corp'
 
 const { store } = useSearchStore()
-const { head, headers, isPrimaryHeader } = useRegisterStore()
-const { ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
+const { headers, isPrimaryHeader } = useRegisterStore()
+const { ExcelFormatV2, ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
 const snackbar = <any>(inject('snackbar'))
 const all_sales = salesLevels()
 const all_cycles = settleCycles()
@@ -268,7 +268,7 @@ watchEffect(async () => {
     </VRow>
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">
-            <VBtn color="secondary" variant="tonal" @click="head.exportToExcel([])" style="margin-left: auto;">
+            <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('영업점 대량등록 포멧', headers)" style="margin-left: auto;">
                 양식 다운로드
                 <VIcon end icon="uiw-file-excel" />
             </VBtn>

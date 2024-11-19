@@ -1,3 +1,4 @@
+import { ExcelStyle } from '@/views/excel';
 import { Header } from '@/views/headers';
 import { useRequestStore } from '@/views/request';
 import { Searcher } from '@/views/searcher';
@@ -96,7 +97,7 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
             row['trx_tax_amount']    = Number(row['trx_amount'] - row['trx_supply_amount'])
             worksheet.addRow(row)
         }
-        head.setHeaderStyle(worksheet.getRow(1));
+        ExcelStyle().setHeaderStyle(worksheet.getRow(1));
 
         worksheet.views = [{ state: 'frozen', ySplit: 1 }];
         try {

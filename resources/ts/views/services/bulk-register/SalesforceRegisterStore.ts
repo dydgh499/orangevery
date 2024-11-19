@@ -1,4 +1,3 @@
-import { Header } from '@/views/headers';
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
 import { Salesforce } from '@/views/types';
 import { banks } from '@/views/users/useStore';
@@ -51,8 +50,6 @@ export const validateItems = (item: Salesforce, i: number, user_names: any) => {
 }
 
 export const useRegisterStore = defineStore('salesRegisterStore', () => {
-    const head = Header('salesforces/bulk-register', '영업점 대량등록 포멧')
-
     const headers = [
         { key: 'user_name', title : '아이디(O)' },
         { key: 'user_pw', title : '패스워드(O)' },
@@ -72,9 +69,6 @@ export const useRegisterStore = defineStore('salesRegisterStore', () => {
         { key: 'settle_day', title : '정산일(O)' },
         { key: 'view_type', title : '화면 타입(O)' },
     ]
-    head.sub_headers.value = []
-    head.headers.value = head.initHeader(headers, {})
-    head.flat_headers.value = head.flatten(head.headers.value)
 
     const isPrimaryHeader = (key: string) => {
         const keys = ['level', 'settle_tax_type', 'settle_cycle', 'settle_day', 'view_type']
@@ -82,6 +76,6 @@ export const useRegisterStore = defineStore('salesRegisterStore', () => {
     }
 
     return {
-        head, headers, isPrimaryHeader
+        headers, isPrimaryHeader
     }
 })

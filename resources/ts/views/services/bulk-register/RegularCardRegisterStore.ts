@@ -1,5 +1,4 @@
 import { isEmpty } from '@/@core/utils';
-import { Header } from '@/views/headers';
 import { Merchandise, RegularCreditCard } from '@/views/types';
 
 export const validateItems = (item: RegularCreditCard, i: number, mchts:Merchandise[]) => {
@@ -16,17 +15,13 @@ export const validateItems = (item: RegularCreditCard, i: number, mchts:Merchand
 }
 
 export const useRegisterStore = defineStore('regularCardRegisterStore', () => {
-    const head = Header('regular-cards/bulk-register', '단골고객 카드정보 대량등록 포멧')    
     const headers = [
         { key: 'mcht_name', title : '가맹점 상호(O)'},
         { key: 'note', title: '별칭(O)'},
         { key: 'card_num', title: '카드번호(O)'},
     ]
-    head.sub_headers.value = []
-    head.headers.value = head.initHeader(headers, {})
-    head.flat_headers.value = head.flatten(head.headers.value)
 
     return {
-        head, headers
+        headers
     }
 })

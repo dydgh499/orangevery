@@ -1,6 +1,8 @@
 import { bulkAutoInsertPaymentModuleFormat, isFixplus } from '@/plugins/fixplus';
 import { axios } from '@axios';
+import { Workbook } from 'exceljs';
 import * as XLSX from 'xlsx';
+import { ExcelStyle } from './excel';
 
 export const Registration = () => {
     const alert = <any>(inject('alert'))
@@ -15,6 +17,34 @@ export const Registration = () => {
             }
             return newRow;
         });
+    }
+
+    const ExcelFormatV2 = async (file_name:string ,headers: any[]) => {
+        const date = new Date().toISOString().split('T')[0];
+        const wb = new Workbook();
+        const worksheet = wb.addWorksheet(file_name);
+
+        const key_names = headers.map(header => header.title) as string[]
+        const keys = headers.map(header => header.key) as string[]
+        ExcelStyle().setHeaderRows(worksheet, key_names, keys)
+        ExcelStyle().setHeaderStyle(worksheet.getRow(1));
+
+        //checkVisiable(worksheet)
+        worksheet.views = [{ state: 'frozen', ySplit: 1 }];
+        try {
+            const buffer = await wb.xlsx.writeBuffer(); // 버퍼로 엑셀 데이터 생성
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            
+            // 파일 다운로드 링크 생성
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${file_name}_${date}.xlsx`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (err) {
+            console.error('Error creating Excel file:', err);
+        }
     }
 
     const ExcelReaderV2 = (headers: any[], file: File) => {
@@ -72,6 +102,7 @@ export const Registration = () => {
         return result
     }
     return {
+        ExcelFormatV2,
         ExcelReaderV2,
         isEmpty,
         openFilePicker,

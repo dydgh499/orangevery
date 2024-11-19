@@ -1,6 +1,5 @@
 import { isEmpty } from '@/@core/utils';
 import { lengthValidatorV2 } from '@/@core/utils/validators';
-import { Header } from '@/views/headers';
 import { MchtBlacklist } from '@/views/types';
 
 
@@ -14,7 +13,6 @@ export const validateItems = (item: MchtBlacklist, i: number) => {
 }
 
 export const useRegisterStore = defineStore('MchtBlacklistRegisterStore', () => {
-    const head = Header('mcht-blacklists/bulk-register', '가맹점 블랙리스트 대량등록 포멧')
     const headers = [
         { key: 'mcht_name', title: '가맹점 상호(X)' },
         { key: 'nick_name', title: '대표자명(X)' },
@@ -25,11 +23,7 @@ export const useRegisterStore = defineStore('MchtBlacklistRegisterStore', () => 
         { key: 'card_num', title: '카드번호(X)' },
         { key: 'block_reason', title: '차단 사유(O)' },
     ]
-    head.sub_headers.value = []
-    head.headers.value = head.initHeader(headers, {})
-    head.flat_headers.value = head.flatten(head.headers.value)
-
     return {
-        head, headers
+        headers
     }
 })

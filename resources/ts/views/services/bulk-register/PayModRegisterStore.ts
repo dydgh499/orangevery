@@ -1,6 +1,5 @@
 
 
-import { Header } from '@/views/headers';
 import { cxl_types, fin_trx_delays, installments, module_types } from '@/views/merchandises/pay-modules/useStore';
 import { Merchandise, PayModule } from '@/views/types';
 import { isEmpty } from '@core/utils';
@@ -109,7 +108,6 @@ export const validateItems = (item: PayModule, i: number, mchts: Merchandise[]) 
 }
 
 export const useRegisterStore = defineStore('payModRegisterStore', () => {
-    const head  = Header('pay-modules/bulk-register', '결제모듈 대량등록 포멧')
     const getHeaders = () => {
         const headers1 = [
             {title: '가맹점 상호(O)', key: 'mcht_name'},
@@ -196,6 +194,6 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
     const headers = getHeaders()
 
     return {
-        head, headers, isPrimaryHeader
+        headers, isPrimaryHeader
     }
 })

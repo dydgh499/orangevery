@@ -6,10 +6,10 @@ import { useRegisterStore, validateItems } from '@/views/services/bulk-register/
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import type { RegularCreditCard } from '@/views/types'
 
-const { head, headers } = useRegisterStore()
+const { headers } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
 
-const { ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
+const { ExcelFormatV2, ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
 
 const snackbar = <any>(inject('snackbar'))
 
@@ -21,7 +21,6 @@ const excel = ref()
 const items = ref<RegularCreditCard[]>([])
 const is_clear = ref<boolean>(false)
 const error_message = ref('')
-
 
 const validate = () => {
     error_message.value = ''
@@ -131,7 +130,7 @@ watchEffect(async () => {
     </VRow>
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">
-            <VBtn color="secondary" variant="tonal" @click="head.exportToExcel([])" style="margin-left: auto;">
+            <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('단골고객 카드정보 대량등록 포멧', headers)" style="margin-left: auto;">
                 양식 다운로드
                 <VIcon end icon="uiw-file-excel" />
             </VBtn>
