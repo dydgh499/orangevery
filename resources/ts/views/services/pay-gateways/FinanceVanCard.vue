@@ -53,9 +53,9 @@ onMounted(async () => {
                             </VCardTitle>
                             <CreateHalfVColV2 :mdl="5" :mdr="7">
                                 <template #l_name>금융 VAN</template>
-                                <template #l_input>
+                                <template #l_input>                                
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.finance_company_num"
-                                        density="compact" variant="outlined" :items="finance_companies"
+                                        density="compact" variant="outlined" :items="[{id:null, title:'선택안함'}].concat(finance_companies)"
                                         eager item-title="title" item-value="id" :rules="[requiredValidatorV2(props.item.finance_company_num, '금융 VAN')]" />
                                 </template>
                                 <template #r_name>

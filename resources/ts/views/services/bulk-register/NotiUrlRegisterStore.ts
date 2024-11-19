@@ -1,15 +1,41 @@
+import { isEmpty } from '@/@core/utils';
 import { Header } from '@/views/headers';
+import { Merchandise, NotiUrl, PayModule } from '@/views/types';
+
+
+const filterPayModuleNote = (pmod_note: string, mcht_id: number, pay_modules: PayModule[]) => {
+    const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id === mcht_id })
+    return filter.find(obj => obj.note === pmod_note.trim())?.id
+}
+
+export const validateItems = (item: NotiUrl, i: number, mchts: Merchandise[], pay_modules: PayModule[]) => {
+    item.mcht_name = item.mcht_name ? item.mcht_name?.trim() : ''
+    const mcht = mchts.find(item => item.mcht_name == item.mcht_name)
+
+    if (mcht) {
+        item.pmod_id = item.pmod_note == -1 ? -1 : filterPayModuleNote(item.pmod_note, mcht.id, pay_modules) as number
+        if (item.pmod_id === null) 
+            return [false, (i + 1) + '번째 노티의 결제모듈 별칭이 이상합니다.']
+        else if (isEmpty(item.send_url)) 
+            return [false, (i + 2) + '번째 노티주소가 비어있습니다.']
+        else {
+            item.mcht_id = mcht?.id as number
+            return [true, '']
+        }
+    }
+    else
+        return [false, (i + 2) + '번째 노티의 가맹점 상호가 이상합니다.']
+}
 
 export const useRegisterStore = defineStore('NotiUrlRegisterStore', () => {
     const head = Header('noti-urls/bulk-register', '노티주소 대량등록 포멧')
-
-    const headers: Record<string, string> = {
-        mcht_name: '가맹점 상호(O)',
-        pmod_note: '결제모듈 별칭(O)',
-        noti_status: '노티 사용 유무(O)',
-        note: '별칭(O)',
-        send_url: '발송 URL(O)',
-    }
+    const headers = [
+        { key: 'mcht_name', title: '가맹점 상호(O)' },
+        { key: 'pmod_note', title: '결제모듈 별칭(O)' },
+        { key: 'noti_status', title: '노티 사용 유무(O)' },
+        { key: 'note', title: '별칭(O)' },
+        { key: 'send_url', title: '발송 URL(O)' },
+    ]
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)

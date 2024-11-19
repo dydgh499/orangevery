@@ -57,10 +57,11 @@ export const useStore = defineStore('payGatewayStore', () => {
     ]
 
     const finance_companies = <Options[]>([
-        {id:null, title:'선택안함'},
         {id:1, title:'쿠콘'},
         {id:2, title:'헥토파이낸셜'},
         {id:3, title:'웰컴페이먼츠'},
+        {id:4, title:'더즌'},
+        {id:5, title:'하이픈'},
     ])
     
     const is_agency_vans = <Options[]>([
@@ -138,6 +139,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         else
             return ''
     }
+    
     const psFilter = (filter:PaySection[], ps_id:number|null) => {
         if (pss.value.length > 0) {
             if (filter.length > 0) {

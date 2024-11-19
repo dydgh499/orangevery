@@ -2,41 +2,34 @@
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { Registration } from '@/views/registration'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { useRegisterStore } from '@/views/services/bulk-register/RegularCardRegisterStore'
+import { useRegisterStore, validateItems } from '@/views/services/bulk-register/RegularCardRegisterStore'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import type { RegularCreditCard } from '@/views/types'
-import { isEmpty } from '@core/utils'
 
 const { head, headers } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
 
-
-const { ExcelReader, openFilePicker, bulkRegister } = Registration()
+const { ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
 
 const snackbar = <any>(inject('snackbar'))
+
+const search = ref('')
+const item_per_page = ref(100)
+const page = ref(1)
 
 const excel = ref()
 const items = ref<RegularCreditCard[]>([])
 const is_clear = ref<boolean>(false)
+const error_message = ref('')
 
 
 const validate = () => {
+    error_message.value = ''
     for (let i = 0; i < items.value.length; i++) {
-        items.value[i].mcht_name = items.value[i].mcht_name ? items.value[i].mcht_name?.trim() : ''
-        const mcht = mchts.find(item => item.mcht_name == items.value[i].mcht_name)
-        
-        if (mcht == null) {
-            snackbar.value.show((i + 2) + '번째 카드정보의 가맹점 상호가 이상합니다.', 'error')
-            is_clear.value = false
-        }
-        else if(isEmpty(items.value[i].card_num)) {
-            snackbar.value.show((i + 2) + '번째 카드정보의 카드번호를 찾을 수 없습니다.', 'error')
-            is_clear.value = false
-        }
-        else
-            is_clear.value = true
+        const results = validateItems(items.value[i], i, mchts)
+        is_clear.value = results[0] as boolean
+        error_message.value = results[1] as string
 
-        items.value[i].mcht_id = mcht?.id as number
         if (is_clear.value == false)
             return
     }
@@ -49,7 +42,7 @@ const register = async () => {
 }
 watchEffect(async () => {
     if (excel.value) {
-        items.value = await ExcelReader(headers, excel.value[0]) as RegularCreditCard[]
+        items.value = await ExcelReaderV2(headers, excel.value[0]) as RegularCreditCard[]
         validate()
     }
 })
@@ -89,40 +82,50 @@ watchEffect(async () => {
         <!-- 👉 개인정보 -->
         <VCol cols="12">
             <VCard>
-                <VCardItem>
-                    <VCardTitle>결제모듈 정보</VCardTitle>
-                    <VRow class="pt-5 pb-5">
-                        <VTable class="text-no-wrap" style="width: 100%;">
-                            <!-- 👉 table head -->
-                            <thead>
+                <VCardText class="d-flex flex-wrap py-4 gap-4">
+                    <h3>1차 검증 테이블</h3>
+                    <div class="app-user-search-filter d-flex flex-wrap gap-4" style="margin-left: auto;">
+                        <b v-if="error_message !== '' && is_clear === false" style="display: inline-flex; align-items: center;">
+                            <span class="text-error">
+                                {{ error_message }}
+                            </span>
+                        </b>
+                        <div style="inline-size: 15rem;">
+                            <AppTextField
+                                v-model="search"
+                                placeholder="검색"
+                                density="compact"
+                                prepend-inner-icon="tabler:search"
+                            >
+                            </AppTextField>
+                        </div>
+                    </div>
+                    <VDivider/>
+                    <VDataTable v-model:items-per-page="item_per_page" v-model:page="page"                     
+                            :items-length="items.length" :items="items" :headers="headers" class="text-no-wrap"
+                            no-data-text="양식 업로드후 등록 버튼을 클릭해주세요."
+                            item-value="title" :height="corp.pv_options.free.fix_table_size"
+                            :search="search">
+                            <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
                                 <tr>
-                                    <th v-for="(header, key) in head.flat_headers" :key="key" class='list-square'>
-                                        <span>
-                                            {{ header.ko }}
+                                    <th v-for="column in columns" :key="column.key + '_headers'">
+                                        <span :class="'text-primary'">
+                                            {{ column.title }}
                                         </span>
                                     </th>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(item, index) in items" :key="index">
-                                    <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                                        <td class='list-square'>
-                                            {{ item[_key] }}
+                            </template>
+                            <template v-slot:item="{ item }">
+                                <tr>
+                                    <template v-for="header in headers" :key="header.key + '_items'">                                        
+                                        <td>
+                                            {{ item[header.key] }}
                                         </td>
                                     </template>
                                 </tr>
-                            </tbody>
-                            <tfoot v-show="!Boolean(items.length)">
-                                <tr>
-                                    <td :colspan="Object.keys(head.flat_headers).length" class='list-square'
-                                        style="border: 0;">
-                                        양식 업로드후 등록 버튼을 클릭해주세요.
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </VTable>
-                    </VRow>
-                </VCardItem>
+                            </template>
+                    </VDataTable>
+                </VCardText>
             </VCard>
         </VCol>
     </VRow>

@@ -1,23 +1,20 @@
 <script lang="ts" setup>
 import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_types, pay_window_secure_levels, under_sales_types, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { Registration } from '@/views/registration'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue'
-import { headers, keyCreater, useRegisterStore } from '@/views/services/bulk-register/PayModRegisterStore'
-import SettleTypeExplainDialog from '@/views/services/bulk-register/SettleTypeExplainDialog.vue'
+import { keyCreater, useRegisterStore, validateItems } from '@/views/services/bulk-register/PayModRegisterStore'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Options, PayModule } from '@/views/types'
 import { axios, salesLevels } from '@axios'
-import { isEmpty } from '@core/utils'
 import corp from '@corp'
 
-
 const { store } = useSearchStore()
-const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
-const { head, isPrimaryHeader } = useRegisterStore()
+const { pgs, pss, settle_types, terminals, finance_vans, psFilter } = useStore()
+const { head, headers, isPrimaryHeader } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
 
 const search = ref('')
@@ -42,105 +39,38 @@ const items = ref<PayModule[]>([])
 const is_clear = ref<boolean>(false)
 
 const midCreateDlg = ref()
-const settleTypeExplain = ref()
-const pgExplain = ref()
+const finance_van = ref({id: null, title: ''})
+const fin_trx_delay = ref(fin_trx_delays[0])
+
+const comm_settle_type = ref(comm_settle_types[0])
+const under_sales_type = ref(under_sales_types[0])
+const all_level = ref(all_levels[0])
+const module_type = ref(module_types[0])
+const cxl_type = ref(cxl_types[0])
+const pay_window_secure_level = ref(pay_window_secure_levels[0])
+const settle_type = ref(settle_types[0])
+const pg = ref({id: null, pg_name: ''})
+const ps = ref({id: null, name: ''})
+
+const filterPgs = computed(() => {
+    const filter = pss.filter(item => { return item.pg_id === pg.value.id })
+    ps.value.id = psFilter(filter, ps.value.id)
+    return filter
+})
+
+const use_types: Options[] = [
+    { id: 0, title: '미사용'},
+    { id: 1, title: '사용'},
+]
 const { payKeyCreater, signKeyCreater } = keyCreater(snackbar, items)
 
 const validate = async () => {
-    var date_regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
     error_message.value = ''
-    for (let i = 0; i < items.value.length; i++) {
-        items.value[i].mcht_name = items.value[i].mcht_name ? items.value[i].mcht_name?.trim() : ''
-        const pg_id = pgs.find(item => item.id === items.value[i].pg_id)
-        const ps_id = pss.find(item => item.id === items.value[i].ps_id)
-        const settle_type = settle_types.find(item => item.id === items.value[i].settle_type)
-        const module_type = module_types.find(item => item.id === items.value[i].module_type)
-        const installment = installments.find(item => item.id === items.value[i].installment)
-        const mcht = mchts.find(item => item.mcht_name == items.value[i].mcht_name)
+    for (let i = 0; i < items.value.length; i++) {        
+        const results = validateItems(items.value[i], i, mchts)
+        is_clear.value = results[0] as boolean
+        error_message.value = results[1] as string
 
-        let finance_van = corp.pv_options.paid.use_realtime_deposit ? finance_vans.find(item => item.id === items.value[i].fin_id) : true
-        let fin_trx_delay = corp.pv_options.paid.use_realtime_deposit ? fin_trx_delays.find(item => item.id === items.value[i].fin_trx_delay) : true
-        let cxl_type = corp.pv_options.paid.use_realtime_deposit ? cxl_types.find(item => item.id === items.value[i].cxl_type) : true
-
-        if (items.value[i].fin_id == null)
-            finance_van = true
-        if (items.value[i].fin_trx_delay == null)
-            fin_trx_delay = true
-        if (items.value[i].cxl_type == null)
-            cxl_type = true
-
-        if (mcht == null) {
-            error_message.value = (i + 2) + '번째 결제모듈의 가맹점 상호가 이상합니다.(' + items.value[i].mcht_name + ")"
-            is_clear.value = false
-        }
-        else if (corp.pv_options.paid.use_pmid && items.value[i].p_mid == null) {
-            error_message.value = (i + 2) + '번째 PMID가 입력되지 않았습니다.'
-            is_clear.value = false
-        }
-        else if (pg_id == null) {
-            error_message.value = (i + 2) + '번째 결제모듈의 PG사명이 이상합니다.'
-            is_clear.value = false
-        }
-        else if (ps_id == null) {
-            error_message.value = (i + 2) + '번째 결제모듈의 구간이 이상합니다.'
-            is_clear.value = false
-        }
-        else if (ps_id.pg_id != pg_id.id) {
-            error_message.value = (i + 2) + '번째 결제모듈의 구간이 ' + pg_id.pg_name + '에 포함되는 구간이 아닙니다.'
-            is_clear.value = false
-        }
-        else if (isEmpty(items.value[i].note)) {
-            error_message.value = (i + 2) + '번째 결제모듈의 별칭은 필수로 입력해야합니다.'
-            is_clear.value = false
-        }
-        else if (isEmpty(items.value[i].mcht_name ?? '')) {
-            error_message.value = (i + 2) + '번째 결제모듈의 가맹점 상호는 필수로 입력해야합니다.';
-            is_clear.value = false;
-        }
-        else if (settle_type == null) {
-            error_message.value = (i + 2) + '번째 결제모듈의 가맹점 정산타입이 이상합니다.'
-            is_clear.value = false
-        }
-        else if (module_type == null) {
-            error_message.value = (i + 2) + '번째 결제모듈의 모듈타입이 이상합니다.'
-            is_clear.value = false
-        }
-        else if (installment == null) {
-            error_message.value = (i + 2) + '번째 결제모듈의 할부기간이 이상합니다.'
-            is_clear.value = false
-        }
-        else if (finance_van == null) {
-            error_message.value = (i + 2) + '번째 금융 VAN을 찾을 수 없습니다.'
-            is_clear.value = false
-        }
-        else if (fin_trx_delay == null) {
-            error_message.value = (i + 2) + '번째 이체 딜레이 타입을 찾을 수 없습니다.'
-            is_clear.value = false
-        }
-        else if (cxl_type == null) {
-            error_message.value = (i + 2) + '번째 취소 타입을 찾을 수 없습니다.'
-            is_clear.value = false
-        }
-        else if (items.value[i].contract_s_dt && date_regex.test(items.value[i].contract_s_dt) == false) {
-            error_message.value = (i + 2) + '번째 계약 시작일 포멧이 이상합니다.'
-            is_clear.value = false
-        }
-        else if (items.value[i].contract_e_dt && date_regex.test(items.value[i].contract_e_dt) == false) {
-            error_message.value = (i + 2) + '번째 계약 종료일 포멧이 이상합니다.'
-            is_clear.value = false
-        }
-        else if (items.value[i].begin_dt && date_regex.test(items.value[i].begin_dt) == false) {
-            error_message.value = (i + 2) + '번째 장비 개통일 포멧이 이상합니다.'
-            is_clear.value = false
-        }
-        else if (items.value[i].ship_out_dt && date_regex.test(items.value[i].ship_out_dt) == false) {
-            error_message.value = (i + 2) + '번째 장비 출고일 포멧이 이상합니다.'
-            is_clear.value = false
-        }
-        else
-            is_clear.value = true
-
-        items.value[i].mcht_id = mcht?.id || null
         if (is_clear.value === false) {
             snackbar.value.show(error_message.value, 'error')
             return
@@ -223,7 +153,7 @@ watchEffect(async () => {
                     <br><br>
                     하단 컬럼들은 숫자로 매칭되는 값들입니다.
                     <br>
-                    엑셀 작성시 <b class="important-text">입력하실 내용에 매칭되는 숫자를 작성</b>해주세요.
+                    엑셀 작성시 <b class="important-text">입력하실 내용에 매칭되는 코드를 작성</b>해주세요.
                     <br><br>
                     컬럼 우측의 <b>O표시는 필수 입력값, X표시는 옵션 입력값</b>을 의미합니다.
                 </template>
@@ -239,117 +169,217 @@ watchEffect(async () => {
             <VDivider />
             <CreateHalfVCol :mdl="8" :mdr="4">
                 <template #name>
-                    <VCol class="pb-0">
-                        <b>수기결제 여부</b>
+                    <VCol>
+                        <h3 class="pt-3">정산 정보</h3>
                         <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(auth, key) in auth_types" :key="key">
-                            {{ auth.title }} = {{ auth.id }}
-                        </VChip>
-                    </VCol>
-                    <VCol class="pb-0">
-                        <b>결제창 보안등급(기본:노출)</b>
+                        <VRow>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">가맹점 정산타입</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="settle_type"
+                                            :items="settle_types"
+                                            label="가맹점 정산타입 검색"
+                                            :hint="`가맹점 정산타입 코드: ${settle_type.id} `"
+                                            item-title="name" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">PG사</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="pg"
+                                            :items="pgs"
+                                            label="PG사 검색"
+                                            :hint="`PG사 코드: ${pg.id} `"
+                                            item-title="pg_name" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">구간</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="ps"
+                                            :items="filterPgs"
+                                            label="구간 검색"
+                                            :hint="`구간 코드: ${ps.id} `"
+                                            item-title="name" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                        <VDivider style="margin: 1em 0;" />
+                        <h3 class="pt-3">결제 정보</h3>
                         <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(view, key) in pay_window_secure_levels"
-                            :key="key">
-                            {{ view.title }} = {{ view.id }}
-                        </VChip>
-                    </VCol>
-                    <VDivider />
-                    <VCol class="pb-0">
-                        <b>통신비 정산타입</b>
+                        <VRow>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">결제모듈 타입</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="module_type"
+                                            :items="module_types"
+                                            label="결제모듈 타입 검색"
+                                            :hint="`결제모듈 타입 코드: ${module_type.id} `"
+                                            item-title="title" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">수기결제 여부</VCol>
+                                    <VCol md="6">
+                                        <VRow>
+                                            <VChip color="primary" style="margin: 0.5em;" v-for="(auth, key) in auth_types" :key="key">
+                                                {{ auth.title }} = {{ auth.id }}
+                                            </VChip>
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                        <VDivider style="margin: 1em 0;" />
+                        <h3 class="pt-3">제한 정보</h3>
                         <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(level, key) in comm_settle_types"
-                            :key="key">
-                            {{ level.title }} = {{ level.id }}
-                        </VChip>
-                    </VCol>
-                    <VCol class="pb-0">
-                        <b>매출미달 적용기간</b>
+                        <VRow>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">취소 타입</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="cxl_type"
+                                            :items="cxl_types"
+                                            label="취소 타입 검색"
+                                            :hint="`취소 타입 코드: ${cxl_type.id} `"
+                                            item-title="title" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">결제창 보안등급</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="pay_window_secure_level"
+                                            :items="pay_window_secure_levels"
+                                            label="결제창 보안등급 검색"
+                                            :hint="`결제창 보안등급 코드: ${pay_window_secure_level.id} `"
+                                            item-title="title" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                        <VDivider style="margin: 1em 0;" />
+                        <h3 class="pt-3">
+                            <BaseQuestionTooltip :location="'top'" :text="'장비 정보'"
+                        :content="'<b>통신비, 통신비 정산타입, 개통일, 정산일, 정산주체</b>가 설정되어있어야 적용됩니다.<br>ex)<br>통신비: 30,000<br>통신비 정산타입: 개통월 M+2부터 적용<br>개통일: 2023-09-25<br>정산일: 1일<br>정산주체: 가맹점<br><br>통신비 차감적용일: 2023-11-01, 2023-12-01, 2024-01-01 ...'"/>
+                        </h3>
                         <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(level, key) in under_sales_types"
-                            :key="key">
-                            {{ level.title }} = {{ level.id }}
-                        </VChip>
-                    </VCol>
-                    <VCol class="pb-0">
-                        <b>정산주체</b>
-                        <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(level, key) in all_levels" :key="key">
-                            {{ level.title }} = {{ level.id }}
-                        </VChip>
-                    </VCol>
-                    <VDivider />
-                    <VCol class="pb-0">
-                        <b>결제모듈 타입</b>
-                        <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(module, key) in module_types" :key="key">
-                            {{ module.title }} = {{ module.id }}
-                        </VChip>
-                    </VCol>
-                    <VCol class="pb-0">
-                        <b>장비 종류</b>
-                        <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(terminal, key) in terminals" :key="key">
-                            {{ terminal.name }} = {{ terminal.id }}
-                        </VChip>
-                        <b v-if="terminals.length == 0" class="important-text">"운영 관리 - PG사 관리 - 구분 정보"에서 장비 종류 추가 후 입력
-                            가능합니다.</b>
-                    </VCol>
-                    <template v-if="corp.pv_options.paid.use_realtime_deposit">
-                        <VCol class="pb-0">
-                            <b>실시간 사용여부(기본:미사용)</b>
+                        <VRow>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">통신비 정산타입</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="comm_settle_type"
+                                            :items="comm_settle_types"
+                                            label="통신비 정산타입 검색"
+                                            :hint="`통신비 정산타입 코드: ${comm_settle_type.id} `"
+                                            item-title="title" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">매출미달 적용타입</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="under_sales_type"
+                                            :items="under_sales_types"
+                                            label="매출미달 적용타입 검색"
+                                            :hint="`매출미달 적용타입 코드: ${under_sales_type.id} `"
+                                            item-title="title" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">정산주체</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="all_level"
+                                            :items="all_levels"
+                                            label="정산주체 검색"
+                                            :hint="`정산주체 코드: ${all_level.id} `"
+                                            item-title="title" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                        <template v-if="corp.pv_options.paid.use_realtime_deposit">
+                            <VDivider style="margin: 1em 0;" />
+                            <h3 class="pt-3">즉시출금 정보</h3>
                             <br>
-                            <VChip color="primary" style="margin: 0.5em;">
-                                미사용 = 0
-                            </VChip>
-                            <VChip color="primary" style="margin: 0.5em;">
-                                사용 = 1
-                            </VChip>
-                        </VCol>
-                        <VCol class="pb-0">
-                            <b>이체 모듈 타입</b>
-                            <br>
-                            <VChip color="primary" style="margin: 0.5em;" v-for="(finance_van, key) in finance_vans"
-                                :key="key">
-                                {{ finance_van.nick_name }} = {{ finance_van.id }}
-                            </VChip>
-                            <b v-if="finance_vans.length == 0" class="important-text">"운영 관리 - PG사 관리 - 실시간 이체 모듈"에서 금융
-                                VAN
-                                추가 후 입력 가능합니다.</b>
-                        </VCol>
-                        <VCol class="pb-0">
-                            <b>이체 달레이</b>
-                            <br>
-                            <VChip color="primary" style="margin: 0.5em;" v-for="(fin_trx_delay, key) in fin_trx_delays"
-                                :key="key">
-                                {{ fin_trx_delay.title }} = {{ fin_trx_delay.id }}
-                            </VChip>
-                        </VCol>
-                    </template>
-                    <VCol class="pb-0">
-                        <b>취소 타입</b>
-                        <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(cxl_type, key) in cxl_types" :key="key">
-                            {{ cxl_type.title }} = {{ cxl_type.id }}
-                        </VChip>
+                            <VRow>
+                                <VCol md="4" cols="12">
+                                    <VRow>
+                                        <VCol class="font-weight-bold" md="6">실시간 사용여부</VCol>
+                                        <VCol md="6">
+
+                                            <VRow>
+                                                <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
+                                                    {{ cus.title }} = {{ cus.id }}
+                                                </VChip>
+                                            </VRow>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol md="4" cols="12">
+                                    <VRow>
+                                        <VCol class="font-weight-bold" md="6">이체모듈 검색</VCol>
+                                        <VCol md="6">
+                                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="finance_van"
+                                                :items="finance_vans"
+                                                label="이체모듈 검색"
+                                                :hint="`이체모듈 코드: ${finance_van.id} `"
+                                                item-title="title" item-value="id" persistent-hint return-object
+                                            />
+                                            <VTooltip activator="parent" location="top" transition="scale-transition" v-if="finance_vans.length == 0">
+                                                <b>
+                                                    "운영 관리 - PG사 관리 - 실시간 이체모듈"에서 금융 VAN 추가 후 입력 가능합니다.
+                                                </b>
+                                            </VTooltip>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol md="4" cols="12">
+                                    <VRow>
+                                        <VCol class="font-weight-bold" md="6">이체 딜레이 검색</VCol>
+                                        <VCol md="6">
+                                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="fin_trx_delay"
+                                                :items="fin_trx_delays"
+                                                label="이체 딜레이 검색"
+                                                :hint="`이체 딜레이 코드: ${fin_trx_delay.id} `"
+                                                item-title="title" item-value="id" persistent-hint return-object
+                                            />
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </template>
                     </VCol>
+
                 </template>
                 <template #input>
-                    <VCol class="pb-0">
-                        <b>가맹점 정산타입</b>
+                    <VCol>
+                        <b class="important-text">한도, 매출미달 하한금 입력시 주의사항</b>
                         <br>
-                        <VBtn size="small" color="success" variant="tonal" @click="settleTypeExplain.show()"
-                            style="margin: 0.5em;">
-                            상세정보 확인
-                        </VBtn>
-                    </VCol>
-                    <VCol class="pb-0">
-                        <b>PG사/구간명</b>
-                        <br>
-                        <VBtn size="small" color="success" variant="tonal" @click="pgExplain.show()"
-                            style="margin: 0.5em;">
-                            상세정보 확인
-                        </VBtn>
+                        <span>- 만원 단위로 숫자만 입력(예: 100만원=100)</span>
                     </VCol>
                     <VCol>
                         <b>날짜타입 입력시 주의사항</b>
@@ -366,28 +396,6 @@ watchEffect(async () => {
                         <br>
                         <span>- H:i:s 포멧으로 입력(예: 11:00:00)</span>
                     </VCol>
-                    <VCol>
-                        <b class="important-text">한도, 매출미달 하한금 입력시 주의사항</b>
-                        <br>
-                        <span>- 만원 단위로 숫자만 입력(예: 100만원=100)</span>
-                    </VCol>
-                    <VCol>
-                        <b>통신비, 매출미달금 적용 주의사항</b>
-                        <br>
-                        <span>- <b>통신비, 통신비 정산타입, 개통일, 정산일, 정산주체</b>가 설정되어있어야 적용됩니다.</span>
-                        <br>
-                        <span>
-                            <b>- 예시:</b>
-                            <br>통신비: 30,000
-                            <br>통신비 정산타입: 개통월 M+2부터 적용
-                            <br>개통일: 2023-09-25
-                            <br>정산일: 1일
-                            <br>정산주체: 가맹점
-                            <br>
-                            <br>
-                            <b>통신비 차감적용일: 2023-11-01, 2023-12-01, 2024-01-01 ...</b>
-                        </span>
-                    </VCol>
                 </template>
             </CreateHalfVCol>
         </VRow>
@@ -398,6 +406,7 @@ watchEffect(async () => {
         <VCol cols="12">
             <VCard>
                 <VCardText class="d-flex flex-wrap py-4 gap-4">
+                    <h3>1차 검증 테이블</h3>
                     <div class="app-user-search-filter d-flex flex-wrap gap-4" style="margin-left: auto;">
                         <b v-if="error_message !== '' && is_clear === false" style="display: inline-flex; align-items: center;">
                             <span class="text-error">
@@ -407,13 +416,10 @@ watchEffect(async () => {
                         <div style="inline-size: 15rem;">
                             <AppTextField
                                 v-model="search"
-                                placeholder="가맹점상호 검색"
+                                placeholder="검색"
                                 density="compact"
                                 prepend-inner-icon="tabler:search"
                             >
-                            <VTooltip activator="parent" location="top">
-                                {{ "가맹점상호 검색" }}
-                            </VTooltip>
                             </AppTextField>
                         </div>
                     </div>
@@ -484,12 +490,14 @@ watchEffect(async () => {
             </VBtn>
         </VCol>
     </VCard>
-    <SettleTypeExplainDialog ref="settleTypeExplain" />
-    <PGExplainDialog ref="pgExplain" />
     <MidCreateDialog ref="midCreateDlg" />
 </template>
 <style scoped>
 .important-text {
   color: red;
+}
+
+:deep(.v-row) {
+  align-items: center;
 }
 </style>

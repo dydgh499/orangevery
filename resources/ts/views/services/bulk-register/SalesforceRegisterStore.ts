@@ -1,26 +1,77 @@
 import { Header } from '@/views/headers';
+import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
+import { Salesforce } from '@/views/types';
+import { banks } from '@/views/users/useStore';
+import { salesLevels } from '@axios';
+import { isEmpty } from '@core/utils';
+import { lengthValidatorV2 } from '@validators';
+
+export const validateItems = (item: Salesforce, i: number, user_names: any) => {
+    const all_sales = salesLevels()
+    const all_cycles = settleCycles()
+    const all_days = settleDays()
+    const tax_types = settleTaxTypes()
+
+    item.settle_day = item.settle_day == -1 ? null : item.settle_day;
+    const level = all_sales.find(sales => sales.id === item.level)
+    const settle_cycle = all_cycles.find(sales => sales.id === item.settle_cycle)
+    const settle_day = all_days.find(sales => sales.id === item.settle_day)
+    const settle_tax_type = tax_types.find(sales => sales.id === item.settle_tax_type)
+    const acct_bank_name = banks.find(sales => sales.title === item.acct_bank_name)
+    item.resident_num = item.resident_num ? item.resident_num?.trim() : ''
+
+    if(user_names.has(item.user_name)) 
+        return [false, (i + 2) + '번째 아이디가 중복됩니다.('+item.user_name+")"]
+    else if (isEmpty(item.user_name)) 
+        return [false, (i + 2) + '번째 영업점의 아이디는 필수로 입력해야합니다.']
+    else if (isEmpty(item.user_pw)) 
+        return [false, (i + 2) + '번째 영업점의 패스워드는 필수로 입력해야합니다.']
+    else if (isEmpty(item.resident_num)) 
+        return [false, (i + 2) + '번째 영업점의 주민등록번호는 필수로 입력해야합니다.']
+    else if (typeof lengthValidatorV2(item.resident_num, 14) != 'boolean') 
+        return [false, (i + 2) + '번째 영업점의 주민등록번호 포멧이 정확하지 않습니다.']
+    else if (level == null) 
+        return [false, (i + 2) + '번째 영업점의 등급이 이상합니다.']
+    else if (settle_cycle == null) 
+        return [false, (i + 2) + '번째 영업점의 정산주기가 이상합니다.']
+    else if (settle_day == null) 
+        return [false, (i + 2) + '번째 영업점의 정산일이 이상합니다.']
+    else if (settle_tax_type == null) 
+        return [false, (i + 2) + '번째 영업점의 정산세율이 이상합니다.']
+    else if (isEmpty(item.acct_num)) 
+        return [false, (i + 2) + '번째 영업점의 계좌번호는 필수로 입력해야합니다.']
+    else if (isEmpty(item.acct_name)) 
+        return [false, (i + 2) + '번째 영업점의 예금주는 필수로 입력해야합니다.']
+    else if (acct_bank_name == null) 
+        return [false, (i + 2) + '번째 영업점의 입금은행명이 이상합니다.']
+    else {
+        item.acct_bank_code = banks.find(sales => sales.title === item.acct_bank_name)?.code as string
+        return [true, '']
+    }
+}
+
 export const useRegisterStore = defineStore('salesRegisterStore', () => {
     const head = Header('salesforces/bulk-register', '영업점 대량등록 포멧')
 
-    const headers: Record<string, string> = {
-        user_name: '아이디(O)',
-        user_pw: '패스워드(O)', 
-        sales_name: '영업점 상호(0)',
-        level: '등급(O)', 
-        nick_name: '대표자명(O)',
-        addr: '주소(X)', 
-        phone_num: '휴대폰번호(X)', 
-        resident_num: '주민등록번호(O)', 
-        business_num: '사업자등록번호(X)', 
-        sector: '업종(X)',
-        acct_num: '계좌번호(O)',
-        acct_name: '예금주(O)', 
-        acct_bank_name: '입금은행명(O)',
-        settle_tax_type: '정산세율(O)', 
-        settle_cycle: '정산주기(O)', 
-        settle_day: '정산일(O)',
-        view_type: '화면 타입(O)',
-    }
+    const headers = [
+        { key: 'user_name', title : '아이디(O)' },
+        { key: 'user_pw', title : '패스워드(O)' },
+        { key: 'sales_name', title : '영업점 상호(0)' },
+        { key: 'level', title : '등급(O)' }, 
+        { key: 'nick_name', title : '대표자명(O)' },
+        { key: 'addr', title : '주소(X)' }, 
+        { key: 'phone_num', title : '휴대폰번호(X)' }, 
+        { key: 'resident_num', title : '주민등록번호(O)' }, 
+        { key: 'business_num', title : '사업자등록번호(X)' }, 
+        { key: 'sector', title : '업종(X)' },
+        { key: 'acct_num', title : '계좌번호(O)' },
+        { key: 'acct_name', title : '예금주(O)' }, 
+        { key: 'acct_bank_name', title : '입금은행명(O)' },
+        { key: 'settle_tax_type', title : '정산세율(O)' }, 
+        { key: 'settle_cycle', title : '정산주기(O)' }, 
+        { key: 'settle_day', title : '정산일(O)' },
+        { key: 'view_type', title : '화면 타입(O)' },
+    ]
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)

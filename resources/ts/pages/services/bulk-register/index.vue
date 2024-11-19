@@ -8,16 +8,14 @@ import NotiUrlRegister from '@/views/services/bulk-register/NotiUrlRegister.vue'
 import PayModuleRegister from '@/views/services/bulk-register/PayModuleRegister.vue'
 import RegularCardRegister from '@/views/services/bulk-register/RegularCardRegister.vue'
 import SalesforceRegister from '@/views/services/bulk-register/SalesforceRegister.vue'
-
-import CreateForm from '@/layouts/utils/CreateForm.vue'
 import corp from '@corp'
 
+const tab = ref(0)
 const tabs = <Tab[]>([
     { icon: 'tabler-user', title: '영업점 등록' },
     { icon: 'tabler-building-store', title: '가맹점 등록' },
     { icon: 'ic-outline-send-to-mobile', title: '결제모듈 등록' },
 ])
-
 if(corp.pv_options.paid.use_regular_card)
     tabs.push({ icon: 'emojione:credit-card', title: '단골고객 카드정보 등록' })
 if(corp.pv_options.paid.use_mcht_blacklist)
@@ -27,8 +25,14 @@ if(corp.pv_options.paid.use_noti)
 </script>
 <template>
     <section>
-        <CreateForm :id="0" :path="`services/bulk-register`" :tabs="tabs" :item="[]">
-            <template #view>
+        <VTabs v-model="tab" class="v-tabs-pill">
+            <VTab v-for="(t, index) in tabs" :key="index">
+                <VIcon :size="18" :icon="t.icon" class="me-1" />
+                <span>{{ t.title }}</span>
+            </VTab>
+        </VTabs>
+        <VForm ref="vForm" class="mt-5">
+            <VWindow v-model="tab" :touch="false">
                 <VWindowItem>
                     <SalesforceRegister/>
                 </VWindowItem>
@@ -55,7 +59,7 @@ if(corp.pv_options.paid.use_noti)
                         <NotiUrlRegister/>
                     </Suspense>
                 </VWindowItem>
-            </template>
-        </CreateForm>        
+            </VWindow>
+        </VForm>
     </section>
 </template>

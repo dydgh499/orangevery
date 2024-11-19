@@ -1,118 +1,64 @@
 <script lang="ts" setup>
-import BanksExplainDialog from '@/layouts/dialogs/users/BanksExplainDialog.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { Registration } from '@/views/registration'
 import { settleCycles, settleDays, settleTaxTypes, useSearchStore } from '@/views/salesforces/useStore'
-import { useRegisterStore } from '@/views/services/bulk-register/SalesforceRegisterStore'
+import { useRegisterStore, validateItems } from '@/views/services/bulk-register/SalesforceRegisterStore'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
-import type { Options, Salesforce } from '@/views/types'
+import type { Salesforce } from '@/views/types'
 import { banks } from '@/views/users/useStore'
 import { salesLevels } from '@axios'
-import { isEmpty } from '@core/utils'
 import corp from '@corp'
-import { lengthValidatorV2 } from '@validators'
 
 const { store } = useSearchStore()
 const { head, headers, isPrimaryHeader } = useRegisterStore()
-const { ExcelReader, openFilePicker, bulkRegister } = Registration()
+const { ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
 const snackbar = <any>(inject('snackbar'))
 const all_sales = salesLevels()
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
-
-const excel = ref()
-const saleses = ref<Salesforce[]>([])
-const is_clear = ref<boolean>(false)
-const banksExplain = ref()
-const levels = corp.pv_options.auth.levels
-
-const view_types: Options[] = [
+const view_types = [
     { id: 0, title: '간편보기'},
     { id: 1, title: '상세보기'},
 ]
 
+const search = ref('')
+const item_per_page = ref(100)
+const page = ref(1)
+
+const excel = ref()
+const items = ref<Salesforce[]>([])
+const is_clear = ref<boolean>(false)
+const error_message = ref('')
+const bank = ref(banks[0])
+const level = ref(all_sales[0])
+const tax_type = ref(tax_types[0])
+const all_cycle = ref(all_cycles[0])
+const all_day = ref(all_days[0])
+
 const validate = () => {
+    error_message.value = ''
     const user_names = new Set()
-    for (let i = 0; i < saleses.value.length; i++) {
-        saleses.value[i].settle_day = saleses.value[i].settle_day == -1 ? null : saleses.value[i].settle_day;
-        const level = all_sales.find(sales => sales.id === saleses.value[i].level)
-        const settle_cycle = all_cycles.find(sales => sales.id === saleses.value[i].settle_cycle)
-        const settle_day = all_days.find(sales => sales.id === saleses.value[i].settle_day)
-        const settle_tax_type = tax_types.find(sales => sales.id === saleses.value[i].settle_tax_type)
-        const acct_bank_name = banks.find(sales => sales.title === saleses.value[i].acct_bank_name)
-        saleses.value[i].resident_num = saleses.value[i].resident_num ? saleses.value[i].resident_num?.trim() : ''
-
-        if(user_names.has(saleses.value[i].user_name)) {
-            snackbar.value.show((i + 2) + '번째 아이디가 중복됩니다.('+saleses.value[i].user_name+")", 'error')
-            is_clear.value = false
-            return
-        }
-        else
-            user_names.add(saleses.value[i].user_name)
-
-        if (isEmpty(saleses.value[i].user_name)) {
-            snackbar.value.show((i + 2) + '번째 영업점의 아이디는 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isEmpty(saleses.value[i].user_pw)) {
-            snackbar.value.show((i + 2) + '번째 영업점의 패스워드는 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isEmpty(saleses.value[i].resident_num)) {
-            snackbar.value.show((i + 2) + '번째 영업점의 주민등록번호는 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (typeof lengthValidatorV2(saleses.value[i].resident_num, 14) != 'boolean') {
-            snackbar.value.show((i + 2) + '번째 영업점의 주민등록번호 포멧이 정확하지 않습니다.', 'error')
-            is_clear.value = false
-        }
-        else if (level == null) {
-            snackbar.value.show((i + 2) + '번째 영업점의 등급이 이상합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (settle_cycle == null) {
-            snackbar.value.show((i + 2) + '번째 영업점의 정산주기가 이상합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (settle_day == null) {
-            snackbar.value.show((i + 2) + '번째 영업점의 정산일이 이상합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (settle_tax_type == null) {
-            snackbar.value.show((i + 2) + '번째 영업점의 정산세율이 이상합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isEmpty(saleses.value[i].acct_num)) {
-            snackbar.value.show((i + 2) + '번째 영업점의 계좌번호는 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isEmpty(saleses.value[i].acct_name)) {
-            snackbar.value.show((i + 2) + '번째 영업점의 예금주는 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (acct_bank_name == null) {
-            snackbar.value.show((i + 2) + '번째 영업점의 입금은행명이 이상합니다.', 'error')
-            is_clear.value = false
-        }
-        else {
-            saleses.value[i].acct_bank_code = banks.find(sales => sales.title === saleses.value[i].acct_bank_name)?.code as string
-            is_clear.value = true
-        }
+    for (let i = 0; i < items.value.length; i++) {
+        const results = validateItems(items.value[i], i, user_names)
+        is_clear.value = results[0] as boolean
+        error_message.value = results[1] as string
         if (is_clear.value == false)
             return
+        else
+            user_names.add(items.value[i].user_name)
     }
     snackbar.value.show('입력값 1차 검증에 성공하였습니다.', 'success')
     is_clear.value = true
 }
 
-const salesRegister = async () => {
-    if(await bulkRegister('영업점', 'salesforces', saleses.value))
+const register = async () => {
+    if(await bulkRegister('영업점', 'salesforces', items.value))
         location.reload()
 }
 watchEffect(async () => {
     if (excel.value) {
-        saleses.value = await ExcelReader(headers, excel.value[0]) as Salesforce[]
+        items.value = await ExcelReaderV2(headers, excel.value[0]) as Salesforce[]
         validate()
     }
 })
@@ -125,9 +71,9 @@ watchEffect(async () => {
                     <UsageTooltip />
                 </VCol>
                 <VCol>
-                    하단 컬럼들은 숫자로 매칭되는 값들입니다.
+                    하단 검색란들은 숫자로 매칭되는 값들입니다.
                     <br>
-                    엑셀 작성시 <b class="important-text">입력하실 내용에 매칭되는 숫자를 작성</b>해주세요.
+                    엑셀 작성시 <b class="important-text">입력하실 내용에 매칭되는 코드를 작성</b>해주세요.
                 </VCol>
                 <VCol>
                     컬럼 우측의 <b>O표시는 필수 입력값, X표시는 옵션 입력값</b>을 의미합니다.
@@ -136,61 +82,103 @@ watchEffect(async () => {
             <VDivider/>
             <CreateHalfVCol :mdl="8" :mdr="4">
                 <template #name>
-                    <VCol class="pb-0">
-                        <b>등급</b>
+                    <VCol style="padding: 0 2em;">
+                        <h3 class="pt-3">영업점 정보</h3>
                         <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales5_use">
-                            {{ levels.sales5_name }} = 30
-                        </VChip>
-                        <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales4_use">
-                            {{ levels.sales4_name }} = 25
-                        </VChip>
-                        <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales3_use">
-                            {{ levels.sales3_name }} = 20
-                        </VChip>
-                        <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales2_use">
-                            {{ levels.sales2_name }} = 17
-                        </VChip>
-                        <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales1_use">
-                            {{ levels.sales1_name }} = 15
-                        </VChip>
-                        <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales1_use">
-                            {{ levels.sales0_name }} = 13
-                        </VChip>
+                        <VRow>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">은행코드 검색</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank"
+                                            :items="banks"
+                                            label="은행 검색"
+                                            :hint="`은행 코드: ${bank.code} `"
+                                            item-title="title" item-value="code" persistent-hint return-object
+                                        />
+                                    </VCol>
+
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">등급 검색</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="level"
+                                            :items="all_sales"
+                                            label="등급 검색"
+                                            :hint="`등급 코드: ${level.id} `"
+                                            item-title="title" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">화면타입 사용여부</VCol>
+                                    <VCol md="6">
+                                        <VRow>
+                                            <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in view_types" :key="key">
+                                                {{ cus.title }} = {{ cus.id }}
+                                            </VChip>                                            
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                        <VDivider style="margin: 1em 0;" />
+                        <h3 class="pt-3">정산정보</h3>
+                        <br>
+                        <VRow>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">정산세율 검색</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="tax_type"
+                                            :items="tax_types"
+                                            label="정산세율 검색"
+                                            :hint="`정산세율 코드: ${tax_type.id} `"
+                                            item-title="title" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">정산주기 검색</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="all_cycle"
+                                            :items="all_cycles"
+                                            label="등급 검색"
+                                            :hint="`정산주기 코드: ${all_cycle.id} `"
+                                            item-title="title" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">정산일 검색</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="all_day"
+                                            :items="all_days"
+                                            label="정산일 검색"
+                                            :hint="all_day.id === null ? `정산일 코드:` : `정산일 코드: ${all_day.id} `"
+                                            item-title="title" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
                     </VCol>
-                    <VCol class="pb-0">
-                        <b>정산세율</b>
-                        <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(tax_type, key) in tax_types" :key="key">
-                            {{ tax_type.title }} = {{ tax_type.id }}
-                        </VChip>
-                    </VCol>
-                    <VCol class="pb-0">
-                        <b>정산주기</b>
-                        <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(all_cycle, key) in all_cycles" :key="key">
-                            {{ all_cycle.title }} = {{ all_cycle.id }}
-                        </VChip>
-                    </VCol>
-                    <VCol class="pb-0">
-                        <b>정산일</b>
-                        <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(all_day, key) in all_days" :key="key">
-                            {{ all_day.title }} = {{ all_day.id != null ? all_day.id : -1 }}
-                        </VChip>                        
-                    </VCol>
-                    <VCol class="pb-0">
-                        <b>화면타입</b>
-                        <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(view_type, key) in view_types" :key="key">
-                            {{ view_type.title }} = {{ view_type.id }}
-                        </VChip>                        
-                    </VCol>                    
                 </template>
                 <template #input>
-                        <VBtn size="small" color="success" variant="tonal" @click="banksExplain.show()" style="margin: 0.5em;">
-                            입력가능한 입금은행명 확인
-                        </VBtn>
+                    <VCol>
+                        <b>입력가능한 입금은행명 확인</b>
+                        <br>
+                        <span>- 은행코드 검색 목록에 있는 은행명과 동일하게 입력</span>
+                    </VCol>
                     <VCol>
                         <b>사업자등록번호 입력 주의사항</b>
                         <br>
@@ -210,66 +198,71 @@ watchEffect(async () => {
         <!-- 👉 개인정보 -->
         <VCol cols="12">
             <VCard>
-                <VCardItem>
-                    <VCardTitle>영업점 정보</VCardTitle>
-                    <VRow class="pt-5 pb-5">
-                        <VTable class="text-no-wrap" style="width: 100%;">
-                            <!-- 👉 table head -->
-                            <thead>
+                <VCardText class="d-flex flex-wrap py-4 gap-4">
+                    <h3>1차 검증 테이블</h3>
+                    <div class="app-user-search-filter d-flex flex-wrap gap-4" style="margin-left: auto;">
+                        <b v-if="error_message !== '' && is_clear === false" style="display: inline-flex; align-items: center;">
+                            <span class="text-error">
+                                {{ error_message }}
+                            </span>
+                        </b>
+                        <div style="inline-size: 15rem;">
+                            <AppTextField
+                                v-model="search"
+                                placeholder="검색"
+                                density="compact"
+                                prepend-inner-icon="tabler:search"
+                            >
+                            </AppTextField>
+                        </div>
+                    </div>
+                    <VDivider/>
+                    <VDataTable v-model:items-per-page="item_per_page" v-model:page="page"                     
+                            :items-length="items.length" :items="items" :headers="headers" class="text-no-wrap"
+                            no-data-text="양식 업로드후 등록 버튼을 클릭해주세요."
+                            item-value="title" :height="corp.pv_options.free.fix_table_size"
+                            :search="search">
+                            <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
                                 <tr>
-                                    <th v-for="(header, key) in head.flat_headers" :key="key" class='list-square'>
-                                        <span v-if="isPrimaryHeader(key as string)" class="text-primary">
-                                            {{ header.ko }}
-                                        </span>
-                                        <span v-else>
-                                            {{ header.ko }}
+                                    <th v-for="column in columns" :key="column.key + '_headers'">
+                                        <span :class="isPrimaryHeader(column.key) ? 'text-primary' : ''">
+                                            {{ column.title }}
                                         </span>
                                     </th>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(item, index) in saleses" :key="index">
-                                    <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                                        <td class='list-square'>
-                                            <span v-if="_key == 'level'">
-                                                <VChip
-                                                    :color="store.getSelectIdColor(all_sales.find(obj => obj.id === item[_key])?.id)">
-                                                    {{ all_sales.find(sales => sales.id === item[_key])?.title }}
-                                                </VChip>
-                                            </span>
-                                            <span v-else-if="_key == 'settle_cycle'">
-                                                <VChip
-                                                    :color="store.getSelectIdColor(all_cycles.find(obj => obj.id === item[_key])?.id)">
-                                                    {{ all_cycles.find(sales => sales.id === item[_key])?.title }}
-                                                </VChip>
-                                            </span>
-                                            <span v-else-if="_key == 'settle_day'">
-                                                {{ all_days.find(sales => sales.id === item[_key])?.title }}
-                                            </span>
-                                            <span v-else-if="_key == 'settle_tax_type'">
-                                                <VChip
-                                                    :color="store.getSelectIdColor(tax_types.find(obj => obj.id === item[_key])?.id)">
-                                                    {{ tax_types.find(sales => sales.id === item[_key])?.title }}
-                                                </VChip>
-                                            </span>
-                                            <span v-else>
-                                                {{ item[_key] }}
-                                            </span>
+                            </template>
+                            <template v-slot:item="{ item }">
+                                <tr>
+                                    <template v-for="header in headers" :key="header.key + '_items'">
+                                        <td v-if="header.key == 'level'">
+                                            <VChip
+                                                :color="store.getSelectIdColor(all_sales.find(obj => obj.id === item[header.key])?.id)">
+                                                {{ all_sales.find(sales => sales.id === item[header.key])?.title }}
+                                            </VChip>
+                                        </td>
+                                        <td v-else-if="header.key == 'settle_cycle'">
+                                            <VChip
+                                                :color="store.getSelectIdColor(all_cycles.find(obj => obj.id === item[header.key])?.id)">
+                                                {{ all_cycles.find(sales => sales.id === item[header.key])?.title }}
+                                            </VChip>
+                                        </td>
+                                        <td v-else-if="header.key == 'settle_day'">
+                                            {{ all_days.find(sales => sales.id === item[header.key])?.title }}
+                                        </td>
+                                        <td v-else-if="header.key == 'settle_tax_type'">
+                                            <VChip
+                                                :color="store.getSelectIdColor(tax_types.find(obj => obj.id === item[header.key])?.id)">
+                                                {{ tax_types.find(sales => sales.id === item[header.key])?.title }}
+                                            </VChip>
+                                        </td>
+                                        <td v-else>
+                                            {{ item[header.key] }}
                                         </td>
                                     </template>
                                 </tr>
-                            </tbody>
-                            <tfoot v-show="!Boolean(saleses.length)">
-                                <tr>
-                                    <td :colspan="Object.keys(head.flat_headers).length" class='list-square'
-                                        style="border: 0;">
-                                        양식 업로드후 등록 버튼을 클릭해주세요.
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </VTable>
-                    </VRow>
-                </VCardItem>
+                            </template>
+                    </VDataTable>
+                </VCardText>
             </VCard>
         </VCol>
     </VRow>
@@ -285,17 +278,20 @@ watchEffect(async () => {
                 양식 업로드
                 <VIcon end icon="uiw-file-excel" />
             </VBtn>
-            <VBtn type="button" @click="salesRegister()" v-show="is_clear">
+            <VBtn type="button" @click="register()" v-show="is_clear">
                 등록
                 <VIcon end icon="tabler-pencil" />
             </VBtn>
         </VCol>
     </VCard>
-    <BanksExplainDialog ref="banksExplain" />
 </template>
 <style scoped>
 .important-text {
   color: red;
+}
+
+:deep(.v-row) {
+  align-items: center;
 }
 </style>
 

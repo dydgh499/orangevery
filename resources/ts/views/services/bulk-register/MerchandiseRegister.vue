@@ -1,168 +1,69 @@
 <script lang="ts" setup>
-import BanksExplainDialog from '@/layouts/dialogs/users/BanksExplainDialog.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { tax_category_types } from '@/views/merchandises/useStore'
 import { Registration } from '@/views/registration'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { useRegisterStore } from '@/views/services/bulk-register/MerchandiseRegisterStore'
+import { useRegisterStore, validateItems } from '@/views/services/bulk-register/MerchandiseRegisterStore'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Merchandise, Options } from '@/views/types'
 import { banks } from '@/views/users/useStore'
-import { isEmpty } from '@core/utils'
 import corp from '@corp'
-import { lengthValidatorV2 } from '@validators'
-
-interface extendMerchandise extends Merchandise {
-    [key: string]: any;
-}
 
 const { cus_filters } = useStore()
-const { sales } = useSalesFilterStore()
-const { head, headers, levels, isPrimaryHeader } = useRegisterStore()
-const { ExcelReader, openFilePicker, bulkRegister } = Registration()
+const { head, headers, isPrimaryHeader } = useRegisterStore()
+const { ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
 
+const search = ref('')
+const item_per_page = ref(100)
+const page = ref(1)
+
+const error_message = ref('')
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const excel = ref()
-const items = ref<extendMerchandise[]>([])
+const items = ref<Merchandise[]>([])
 const is_clear = ref<boolean>(false)
-const banksExplain = ref()
+
+const bank = ref(banks[0])
+const tax_category_type = ref(tax_category_types[0])
+const cus_filter = ref({id:null, name:''})
+
 const use_types: Options[] = [
-    { id: 0, title: '미사용',},
-    { id: 1, title: '사용',},
+    { id: 0, title: '미사용'},
+    { id: 1, title: '사용'},
 ]
 const { isMchtBlackList } =  useMchtBlacklistStore()
 
 
-const isNotExistSalesforce = (is_use: boolean, sales_idx: number, item_idx: number) => {
-    const sales_id = 'sales' + sales_idx + '_id';
-    const sales_name = 'sales' + sales_idx + '_name';
-    
-    if (is_use && items.value[item_idx][sales_name]) {
-        const salesforce = sales[sales_idx].value.find(sales => sales.sales_name === items.value[item_idx][sales_name])
-        if (salesforce)
-            items.value[item_idx][sales_id] = salesforce.id
-        return salesforce == null ? true : false
-    }
-    else
-        return false
-}
-const isNotExistCustomFilter = (custom_id: number | null) => {
-    if (custom_id) {
-        const filter = cus_filters.find(cus => cus.id === custom_id)
-        return filter == null ? true : false
-    }
-    else
-        return false
-}
 const validate = async() => {
+    error_message.value = ''
     const user_names = new Set()
     const mcht_names = new Set()
     for (let i = 0; i < items.value.length; i++) {
-        const acct_bank_name = banks.find(sales => sales.title === items.value[i].acct_bank_name)
-        items.value[i].sales0_name = items.value[i].sales0_name ? items.value[i].sales0_name?.trim() : null
-        items.value[i].sales1_name = items.value[i].sales1_name ? items.value[i].sales1_name?.trim() : null
-        items.value[i].sales2_name = items.value[i].sales2_name ? items.value[i].sales2_name?.trim() : null
-        items.value[i].sales3_name = items.value[i].sales3_name ? items.value[i].sales3_name?.trim() : null
-        items.value[i].sales4_name = items.value[i].sales4_name ? items.value[i].sales4_name?.trim() : null
-        items.value[i].sales5_name = items.value[i].sales5_name ? items.value[i].sales5_name?.trim() : null
-        items.value[i].resident_num = items.value[i].resident_num ? items.value[i].resident_num.trim() : null
-
-        if(user_names.has(items.value[i].user_name)) {
-            snackbar.value.show((i + 2) + '번째 아이디가 중복됩니다.('+items.value[i].user_name+")", 'error')
-            is_clear.value = false
-            return
-        }
-        else
+        const results = validateItems(items.value[i], i, user_names, mcht_names)
+        is_clear.value = results[0] as boolean
+        error_message.value = results[1] as string
+        
+        if(is_clear.value) {
             user_names.add(items.value[i].user_name)
-
-        if(mcht_names.has(items.value[i].mcht_name)) {
-            snackbar.value.show((i + 2) + '번째 상호가 중복됩니다.('+items.value[i].mcht_name+")", 'error')
-            is_clear.value = false
-            return
-        }
-        else
             mcht_names.add(items.value[i].mcht_name)
-
-        if (isNotExistSalesforce(levels.sales5_use, 5, i)) {
-            snackbar.value.show((i + 2) + '번째 ' + levels.sales5_name + '이(가) 존재하지 않습니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isNotExistSalesforce(levels.sales4_use, 4, i)) {
-            snackbar.value.show((i + 2) + '번째 ' + levels.sales4_name + '이(가) 존재하지 않습니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isNotExistSalesforce(levels.sales3_use, 3, i)) {
-            snackbar.value.show((i + 2) + '번째 ' + levels.sales3_name + '이(가) 존재하지 않습니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isNotExistSalesforce(levels.sales2_use, 2, i)) {
-            snackbar.value.show((i + 2) + '번째 ' + levels.sales2_name + '이(가) 존재하지 않습니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isNotExistSalesforce(levels.sales1_use, 1, i)) {
-            snackbar.value.show((i + 2) + '번째 ' + levels.sales1_name + '이(가) 존재하지 않습니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isNotExistSalesforce(levels.sales0_use, 0, i)) {
-            snackbar.value.show((i + 2) + '번째 ' + levels.sales0_name + '이(가) 존재하지 않습니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isNotExistCustomFilter(items.value[i].custom_id)) {
-            snackbar.value.show((i + 2) + '번째 커스텀필터가 존재하지 않습니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isEmpty(items.value[i].user_name)) {
-            snackbar.value.show((i + 2) + '번째 가맹점의 아이디는 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isEmpty(items.value[i].mcht_name)) {
-            snackbar.value.show((i + 2) + '번째 가맹점의 상호는 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isEmpty(items.value[i].user_pw)) {
-            snackbar.value.show((i + 2) + '번째 가맹점의 패스워드는 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (typeof lengthValidatorV2(items.value[i].resident_num, 14) != 'boolean') {
-            snackbar.value.show((i + 2) + '번째 가맹점의 주민등록번호 포멧이 정확하지 않습니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isEmpty(items.value[i].sector)) {
-            snackbar.value.show((i + 2) + '번째 가맹점의 업종은 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isEmpty(items.value[i].acct_num)) {
-            snackbar.value.show((i + 2) + '번째 가맹점의 계좌번호는 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isEmpty(items.value[i].acct_name)) {
-            snackbar.value.show((i + 2) + '번째 가맹점의 예금주는 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (acct_bank_name == null) {
-            snackbar.value.show((i + 2) + '번째 가맹점의 입금은행명이 이상합니다.', 'error')
-            is_clear.value = false
-        }
-        else {
-            items.value[i].acct_bank_code = banks.find(sales => sales.title === items.value[i].acct_bank_name)?.code as string
-            is_clear.value = true
-        }
-
-        if (Number(corp.pv_options.paid.use_mcht_blacklist)) {
-            let [result, blacklist] = isMchtBlackList(items.value[i])
-            if(result) {
-                is_clear.value = await alert.value.show((i + 2) + '번째 가맹점은 아래이유로 인해 블랙리스트로 등록된 가맹점입니다. 그래도 진행하시겠습니까?<br><br><b style="color:red">'+blacklist?.block_reason+'</b>')
+            if (Number(corp.pv_options.paid.use_mcht_blacklist)) {
+                let [result, blacklist] = isMchtBlackList(items.value[i])
+                if(result) 
+                    is_clear.value = await alert.value.show((i + 2) + '번째 가맹점은 아래이유로 인해 블랙리스트로 등록된 가맹점입니다. 그래도 진행하시겠습니까?<br><br><b style="color:red">'+blacklist?.block_reason+'</b>')
             }
         }
-        if (is_clear.value == false)
+
+        if(is_clear.value === false) {
+            snackbar.value.show(error_message.value, 'error')
             return
+        }
     }
     snackbar.value.show('입력값 1차 검증에 성공하였습니다.', 'success')
     is_clear.value = true
 }
+
 const mchtRegister = async () => {
     if(await bulkRegister('가맹점', 'merchandises', items.value))
         location.reload()
@@ -170,7 +71,7 @@ const mchtRegister = async () => {
 
 watchEffect(async () => {
     if (excel.value) {
-        items.value = await ExcelReader(headers, excel.value[0]) as extendMerchandise[]
+        items.value = await ExcelReaderV2(headers, excel.value[0]) as Merchandise[]
         await validate()
     }
 })
@@ -184,7 +85,7 @@ watchEffect(async () => {
                     <br><br> 
                     하단 컬럼들은 숫자로 매칭되는 값들입니다.
                     <br>
-                    엑셀 작성시 <b class="important-text">입력하실 내용에 매칭되는 숫자를 작성</b>해주세요.
+                    엑셀 작성시 <b class="important-text">입력하실 내용에 매칭되는 코드를 작성</b>해주세요.
                     <br><br>                
                     컬럼 우측의 <b>O표시는 필수 입력값, X표시는 옵션 입력값</b>을 의미합니다.
                 </template>
@@ -193,59 +94,119 @@ watchEffect(async () => {
             </CreateHalfVCol>
             <VDivider/>
             <CreateHalfVCol :mdl="8" :mdr="4">
-                <template #name>                    
-                    <VCol class="pb-0">
-                        <b>사업자 유형</b>
+                <template #name>
+                    <VCol style="padding: 0 2em;">
+                        <h3 class="pt-3">가맹점 정보</h3>
                         <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in tax_category_types" :key="key">
-                            {{ cus.title }} = {{ cus.id }}
-                        </VChip>
-                    </VCol>
-                    <VCol class="pb-0">
-                        <b>커스텀 필터</b>
+                        <VRow>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">은행코드 검색</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank"
+                                            :items="banks"
+                                            label="은행 검색"
+                                            :hint="`은행 코드: ${bank.code} `"
+                                            item-title="title" item-value="code" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">사업자 유형</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="tax_category_type"
+                                            :items="tax_category_types"
+                                            label="사업자 유형 검색"
+                                            :hint="`사업자 유형 코드: ${tax_category_type.id} `"
+                                            item-title="title" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">커스텀 필터 검색</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="cus_filter"
+                                            :items="cus_filters"
+                                            label="커스텀 필터 검색"
+                                            :hint="`커스텀 필터 코드: ${cus_filter.id} `"
+                                            item-title="name" item-value="id" persistent-hint return-object
+                                        />
+                                        <VTooltip activator="parent" location="top" transition="scale-transition" v-if="cus_filters.length == 0">
+                                            <b>"운영 관리 - PG사 관리"에서 커스텀 필터 추가 후 입력 가능합니다.</b>
+                                        </VTooltip>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                        <VDivider style="margin: 1em 0;" />
+                        <h3 class="pt-3">옵션 정보</h3>
                         <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in cus_filters" :key="key">
-                            {{ cus.name }} = {{ cus.id }}
-                        </VChip>
-                        <b v-if="cus_filters.length == 0" class="important-text">"운영 관리 - PG사 관리"에서 커스텀 필터 추가 후 입력 가능합니다.</b>                        
-                    </VCol>
-                    <VCol class="pb-0" v-if="corp.pv_options.paid.use_collect_withdraw">
-                        <b>모아서 출금 사용여부</b>
-                        <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
-                            {{ cus.title }} = {{ cus.id }}
-                        </VChip>
-                    </VCol>
-                    <VCol class="pb-0" v-if="corp.pv_options.paid.use_regular_card">
-                        <b>단골고객 사용여부</b>
-                        <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
-                            {{ cus.title }} = {{ cus.id }}
-                        </VChip>
-                    </VCol>
-                    <VCol class="pb-0" v-if="corp.pv_options.paid.use_pay_verification_mobile">
-                        <b>결제전 휴대폰인증 사용여부</b>
-                        <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
-                            {{ cus.title }} = {{ cus.id }}
-                        </VChip>
-                    </VCol>
-                    <VCol class="pb-0" v-if="corp.pv_options.paid.use_multiple_hand_pay">
-                        <b>다중결제 사용여부</b>
-                        <br>
-                        <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
-                            {{ cus.title }} = {{ cus.id }}
-                        </VChip>
+                        <VRow>
+                            <VCol md="4" cols="12" v-if="corp.pv_options.paid.use_collect_withdraw">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">모아서출금 사용여부</VCol>
+                                    <VCol md="6">
+                                        <VRow>
+                                            <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
+                                                {{ cus.title }} = {{ cus.id }}
+                                            </VChip>
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                            </VCol>                            
+                            <VCol md="4" cols="12" v-if="corp.pv_options.paid.use_regular_card">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">단골고객 사용여부</VCol>
+                                    <VCol md="6">
+                                        <VRow>
+                                            <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
+                                                {{ cus.title }} = {{ cus.id }}
+                                            </VChip>
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">SMS 인증회수 사용여부</VCol>
+                                    <VCol md="6">
+                                        <VRow>
+                                            <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
+                                                {{ cus.title }} = {{ cus.id }}
+                                            </VChip>                                            
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="4" cols="12" v-if="corp.pv_options.paid.use_multiple_hand_pay">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">다중결제 사용여부</VCol>
+                                    <VCol md="6">
+                                        <VRow>
+                                            <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
+                                                {{ cus.title }} = {{ cus.id }}
+                                            </VChip>                                            
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
                     </VCol>
                 </template>
                 <template #input>
-                    <VBtn size="small" color="success" variant="tonal" @click="banksExplain.show()" style="margin: 0.5em;">
-                        입력가능한 입금은행명 확인
-                    </VBtn>
                     <VCol>
                         <b class="important-text">수수료 입력 주의사항</b>
                         <br>
                         <span>- % 제외 및 실수만 입력(예: 5.00)</span>
+                    </VCol>
+                    <VCol>
+                        <b>입력가능한 입금은행명 확인</b>
+                        <br>
+                        <span>- 은행코드 검색 목록에 있는 은행명과 동일하게 입력</span>
                     </VCol>
                     <VCol>
                         <b>사업자등록번호 입력 주의사항</b>
@@ -266,53 +227,60 @@ watchEffect(async () => {
         <!-- 👉 개인정보 -->
         <VCol cols="12">
             <VCard>
-                <VCardItem>
-                    <VCardTitle>가맹점 정보</VCardTitle>
-                    <VRow class="pt-5 pb-5">
-                        <VTable class="text-no-wrap" style="width: 100%;">
-                            <!-- 👉 table head -->
-                            <thead>
-                                <tr>
-                                    <th v-for="(header, key) in head.flat_headers" :key="key" class='list-square'>
-                                        <span v-if="isPrimaryHeader(key as string)" class="text-primary">
-                                            {{ header.ko }}
-                                        </span>
-                                        <span v-else>
-                                            {{ header.ko }}
-                                        </span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(item, index) in items" :key="index">
-                                    <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                                        <td class='list-square'>
-                                            <span v-if="(_key as string).includes('_fee') && _key != 'withdraw_fee' && _key != 'collect_withdraw_fee'">
-                                                <VChip v-if="item[_key]">
-                                                    {{ item[_key] ? (item[_key] as number).toFixed(3)+'%' : ''}}
-                                                </VChip>
-                                            </span>
-                                            <span v-else-if="_key === 'custom_id'">
-                                                {{ cus_filters.find(sales => sales.id === item[_key])?.name }}
-                                            </span>
-                                            <span v-else>
-                                                {{ item[_key] }}
-                                            </span>
-                                        </td>
-                                    </template>
-                                </tr>
-                            </tbody>
-                            <tfoot v-show="!Boolean(items.length)">
-                                <tr>
-                                    <td :colspan="Object.keys(head.flat_headers).length" class='list-square'
-                                        style="border: 0;">
-                                        양식 업로드후 등록 버튼을 클릭해주세요.
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </VTable>
-                    </VRow>
-                </VCardItem>
+                <VCardText class="d-flex flex-wrap py-4 gap-4">
+                    <h3>1차 검증 테이블</h3>
+                    <div class="app-user-search-filter d-flex flex-wrap gap-4" style="margin-left: auto;">
+                        <b v-if="error_message !== '' && is_clear === false" style="display: inline-flex; align-items: center;">
+                            <span class="text-error">
+                                {{ error_message }}
+                            </span>
+                        </b>
+                        <div style="inline-size: 15rem;">
+                            <AppTextField
+                                v-model="search"
+                                placeholder="검색"
+                                density="compact"
+                                prepend-inner-icon="tabler:search"
+                            >
+                            </AppTextField>
+                        </div>
+                    </div>
+                    <VDivider/>
+                    <VDataTable v-model:items-per-page="item_per_page" v-model:page="page"                     
+                        :items-length="items.length" :items="items" :headers="headers" class="text-no-wrap"
+                        no-data-text="양식 업로드후 등록 버튼을 클릭해주세요."
+                        item-value="title" :height="corp.pv_options.free.fix_table_size"
+                        :search="search">
+                        <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
+                            <tr>
+                                <th v-for="column in columns" :key="column.key + '_headers'">
+                                    <span :class="isPrimaryHeader(column.key) ? 'text-primary' : ''">
+                                        {{ column.title }}
+                                    </span>
+                                </th>
+                            </tr>
+                        </template>
+                        <template v-slot:item="{ item }">
+                            <tr>
+                                <template v-for="header in headers" :key="header.key + '_items'">
+                                <td class='list-square'>
+                                    <span v-if="(header.key).includes('_fee') && header.key != 'withdraw_fee' && header.key != 'collect_withdraw_fee'">
+                                        <VChip v-if="item[header.key]">
+                                            {{ item[header.key] ? (item[header.key] as number).toFixed(3)+'%' : ''}}
+                                        </VChip>
+                                    </span>
+                                    <span v-else-if="header.key === 'custom_id'">
+                                        {{ cus_filters.find(sales => sales.id === item[header.key])?.name }}
+                                    </span>
+                                    <span v-else>
+                                        {{ item[header.key] }}
+                                    </span>
+                                </td>
+                            </template>
+                            </tr>
+                        </template>
+                    </VDataTable>
+                </VCardText>
             </VCard>
         </VCol>
     </VRow>
@@ -334,10 +302,13 @@ watchEffect(async () => {
             </VBtn>
         </VCol>
     </VCard>
-    <BanksExplainDialog ref="banksExplain" />
 </template>
 <style scoped>
 .important-text {
   color: red;
+}
+
+:deep(.v-row) {
+  align-items: center;
 }
 </style>
