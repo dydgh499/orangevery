@@ -10,7 +10,7 @@ const { width: windowWidth } = useWindowSize()
 const { mobile } = useDisplay()
 onMounted(() => {
     watchEffect(() => {
-        if(mobile && getUserLevel() < 35)
+        if(mobile.value && getUserLevel() < 35)
             zoom.value = 100
     })
 })

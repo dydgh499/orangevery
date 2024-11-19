@@ -12,7 +12,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const { mobile } = useDisplay()
 const params_mode = <any>(inject('params_mode'))
 const params = <any>(inject('params'))
 
@@ -55,7 +54,8 @@ const formatPhoneNum = computed(() => {
 })
 
 watchEffect(() => {
-    props.common_info.user_agent = mobile ? "WM" : "WP"
+    const { mobile } = useDisplay()
+    props.common_info.user_agent = mobile.value ? "WM" : "WP"
     props.common_info.pmod_id = props.pay_module.id
     props.common_info.ord_num = props.pay_module.id + props.pay_code + Date.now().toString().substr(0, 10)
 })
