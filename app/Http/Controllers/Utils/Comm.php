@@ -59,7 +59,7 @@
                 else if($type === 3)
                     $res = Http::withHeaders($headers)->withBody($params)->timeout(20)->post($url);
                 else if($type === 4)
-                    $res = Http::withHeaders($headers)->withBody($params)->timeout(20)->delete($url);
+                    $res = Http::withHeaders($headers)->withBody(json_encode($params), 'application/json')->timeout(20)->delete($url);
 
                 $code = $res->status();
                 $body = $code < 500 ? $res->json() : $res->body();
