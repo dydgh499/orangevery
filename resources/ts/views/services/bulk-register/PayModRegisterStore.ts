@@ -49,12 +49,12 @@ export const validateItems = (item: PayModule, i: number, mchts: Merchandise[]) 
     const date_regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
 
     item.mcht_name = item.mcht_name ? item.mcht_name?.trim() : ''
-    const pg_id = pgs.find(item => item.id === item.pg_id)
-    const ps_id = pss.find(item => item.id === item.ps_id)
-    const settle_type = settle_types.find(item => item.id === item.settle_type)
-    const module_type = module_types.find(item => item.id === item.module_type)
-    const installment = installments.find(item => item.id === item.installment)
-    const mcht = mchts.find(item => item.mcht_name == item.mcht_name)
+    const pg = pgs.find(a => a.id === item.pg_id)
+    const ps = pss.find(a => a.id === item.ps_id)
+    const settle_type = settle_types.find(a => a.id === item.settle_type)
+    const module_type = module_types.find(a => a.id === item.module_type)
+    const installment = installments.find(a => a.id === item.installment)
+    const mcht = mchts.find(a => a.mcht_name == item.mcht_name)
 
     let finance_van = corp.pv_options.paid.use_realtime_deposit ? finance_vans.find(item => item.id === item.fin_id) : true
     let fin_trx_delay = corp.pv_options.paid.use_realtime_deposit ? fin_trx_delays.find(item => item.id === item.fin_trx_delay) : true
@@ -71,12 +71,12 @@ export const validateItems = (item: PayModule, i: number, mchts: Merchandise[]) 
         return [false, (i + 2) + '번째 결제모듈의 가맹점 상호가 이상합니다.(' + item.mcht_name + ")"]
     else if (corp.pv_options.paid.use_pmid && item.p_mid == null) 
         return [false, (i + 2) + '번째 PMID가 입력되지 않았습니다.']
-    else if (pg_id == null) 
+    else if (pg === null) 
         return [false, (i + 2) + '번째 결제모듈의 PG사명이 이상합니다.']
-    else if (ps_id == null)
+    else if (ps === null)
         return [false, (i + 2) + '번째 결제모듈의 구간이 이상합니다.']
-    else if (ps_id.pg_id != pg_id.id)
-        return [false, (i + 2) + '번째 결제모듈의 구간이 ' + pg_id.pg_name + '에 포함되는 구간이 아닙니다.']
+    else if (ps.pg_id != pg.id)
+        return [false, (i + 2) + '번째 결제모듈의 구간이 ' + pg.pg_name + '에 포함되는 구간이 아닙니다.']
     else if (isEmpty(item.note))
         return [false, (i + 2) + '번째 결제모듈의 별칭은 필수로 입력해야합니다.']
     else if (isEmpty(item.mcht_name ?? ''))
