@@ -1,7 +1,7 @@
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 
-export const useSearchStore = defineStore('payModSearchStore', () => {    
+export const useSearchStore = defineStore('billKeySearchStore', () => {    
     const store = Searcher('merchandises/pay-modules/bill-keys')
     const head  = Header('merchandises/pay-modules/bill-keys', '빌키 관리')
 
