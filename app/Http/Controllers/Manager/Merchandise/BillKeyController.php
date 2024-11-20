@@ -81,7 +81,7 @@ class BillKeyController extends Controller
                 $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key';
                 $data['mid'] = $pay_module->mid;
                 $res = Comm::post($url, $data, [
-                    'Authorization' => 'Bearer '.$pay_module->pay_key
+                    'Authorization' => $pay_module->pay_key
                 ]);
                 if($res['body']['result_cd'] === '0000')
                     return $this->response(1, $res['body']);
@@ -136,7 +136,7 @@ class BillKeyController extends Controller
                 $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key';
                 $data['mid'] = $pay_module->mid;
                 $res = Comm::destroy($url, $data, [
-                    'Authorization' => 'Bearer '.$pay_module->pay_key
+                    'Authorization' => $pay_module->pay_key
                 ]);
                 if($res['body']['result_cd'] === '0000')
                     return $this->response(1, $res['body']);
