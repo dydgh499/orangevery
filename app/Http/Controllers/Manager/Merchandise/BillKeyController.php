@@ -187,6 +187,7 @@ class BillKeyController extends Controller
                             'pmod_id'   => $bill_key->pmod_id,
                             'bill_key'  => $bill_key->bill_key,
                             'ord_num'   => $request->ord_num,
+                            'item_name' => $request->item_name,
                             'buyer_name' => $request->buyer_name,
                             'buyer_phone'=> $request->buyer_phone,
                             'amount'    => $request->amount,

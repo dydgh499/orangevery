@@ -88,11 +88,12 @@ provide('exporter', exporter)
                                     </div>
                                 </span>
                                 <span v-else-if="_key === `extra_col`">
-                                    <VBtn prepend-icon="tabler-trash" size="small" type="button" color="primary" @click="billKeyPayDialog.show(item)">
+                                    <VBtn prepend-icon="tabler:credit-card-pay" size="small" type="button" color="primary" @click="billKeyPayDialog.show(item)"
+                                        style="margin-right: 1em;">
                                         결제
                                     </VBtn>
                                     <VBtn prepend-icon="tabler-trash" size="small" type="button" color="error" @click="remove(item['id'])">
-                                        빌키 삭제
+                                        삭제
                                     </VBtn>
                                 </span>
                                 <span v-else>

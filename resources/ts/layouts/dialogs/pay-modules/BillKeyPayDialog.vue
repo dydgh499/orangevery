@@ -9,6 +9,7 @@ interface BillPayInfo {
     ord_num: string,
     buyer_name: string,
     buyer_phone: string,
+    item_name: string,
     amount: number,
 }
 
@@ -37,10 +38,11 @@ const show = (_bill_key: BillKey)  => {
     visible.value = true
     bill_key.value = _bill_key
     bill_pay_info.value = (<BillPayInfo>{
-        amount: 0,
         ord_num: '',
         buyer_name: '',
         buyer_phone: '',
+        item_name: '',
+        amount: 0,
     })
 }
 
@@ -80,6 +82,25 @@ defineExpose({
             <VCardText>
                 <VForm ref="vForm">
                     <VCol style="padding: 0 12px;">
+                        <VRow>
+                            <VCol md="12" cols="12" style="padding: 0 12px;">
+                                <VRow no-gutters style="min-height: 3.5em;">
+                                    <VCol cols="4" :md="2">
+                                        <label>상품명</label>
+                                    </VCol>
+                                    <VCol cols="8" :md="10">
+                                        <VTextField
+                                            v-model="bill_pay_info.item_name"
+                                            prepend-icon="tabler:shopping-bag"
+                                            maxlength="100" 
+                                            counter
+                                            variant="underlined"
+                                            :rules="[requiredValidatorV2(bill_pay_info.item_name, '상품명')]" 
+                                            placeholder="상품명을 입력해주세요"/>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
                         <VRow>
                             <VCol md="6" cols="12" style="padding: 0 12px;">
                                 <VRow no-gutters style="min-height: 3.5em;">
