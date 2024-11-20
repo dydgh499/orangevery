@@ -157,6 +157,10 @@ watchEffect(() => {
   padding-inline: 0.5em;
 }
 
+.tab-close-title:hover {
+  font-weight: bold !important;
+}
+
 .tab-close-btn {
   display: inline-block;
   border-radius: 0.2rem;
