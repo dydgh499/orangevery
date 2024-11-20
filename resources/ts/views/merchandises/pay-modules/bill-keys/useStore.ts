@@ -10,6 +10,8 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         'mcht_name' : '가맹점 상호',
         'note' : '결제모듈 별칭',
         'bill_key': '빌키',
+        'buyer_name': '구매자명',
+        'buyer_phone': '구매자 번호',
         'issuer': '발급사',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
