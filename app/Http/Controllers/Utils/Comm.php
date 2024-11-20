@@ -58,6 +58,8 @@
                     $res = Http::withHeaders($headers)->timeout(20)->get($url, $params);
                 else if($type === 3)
                     $res = Http::withHeaders($headers)->withBody($params)->timeout(20)->post($url);
+                else if($type === 4)
+                    $res = Http::withHeaders($headers)->withBody($params)->timeout(20)->delete($url);
 
                 $code = $res->status();
                 $body = $code < 500 ? $res->json() : $res->body();
@@ -93,6 +95,11 @@
         static public function bodyPost($url, $params, $headers=[])
         {
             return self::httpSender(3, $url, $params, $headers);
+        }
+
+        static public function destroy($url, $params, $headers=[])
+        {
+            return self::httpSender(4, $url, $params, $headers);
         }
 
         static public function curlPost($url, $params, $headers=[])

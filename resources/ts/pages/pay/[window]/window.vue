@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { pinInputEvent } from '@/@core/utils/pin_input_event';
+import { pinInputEvent } from '@/@core/utils/pinInputEvent';
 import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue';
 import router from '@/router';
 import AuthPayOverview from '@/views/pay/AuthPayOverview.vue';

@@ -62,7 +62,7 @@ trait SettleHistoryTrait
 
                 $res = Comm::post($url, $params);
                 sleep(0.1);
-                if($res['body']['result_cd'] == '0000')
+                if($res['body']['result_cd'] === '0000')
                     return $getDBResponseMessage($this->deposit($orm, $data['id']));
                 else
                     return $this->getRequestResponseMessage($data ,$res['body']['result_msg']);

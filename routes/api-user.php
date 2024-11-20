@@ -9,10 +9,11 @@ use App\Http\Controllers\Manager\Merchandise\RegularCreditCardController;
 use App\Http\Controllers\Manager\Merchandise\NotiUrlController;
 use App\Http\Controllers\Manager\Merchandise\SpecifiedTimeDisablePaymentController;
 use App\Http\Controllers\Manager\Merchandise\ProductController;
+use App\Http\Controllers\Manager\Merchandise\BillKeyController;
+
 
 use App\Http\Controllers\Manager\SalesforceController;
 use App\Http\Controllers\Manager\Salesforce\UnderAutoSettingController;
-
 
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateSalesController;
@@ -118,7 +119,7 @@ Route::prefix('merchandises')->group(function() {
         Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
         Route::get('sub-business-registrations', [SubBusinessRegistrationController::class, 'index']);
     
-        Route::prefix('pay-modules')->group(function() {
+        Route::prefix('pay-modules')->group(function() {               
             Route::middleware(['is.edit.able'])->group(function() {
                 Route::prefix('batch-updaters')->group(function() {
                     Route::post('set-payment-gateway', [BatchUpdatePayModuleController::class, 'setPaymentGateway']);
@@ -151,6 +152,7 @@ Route::prefix('merchandises')->group(function() {
                 Route::post('bulk-register', [PaymentModuleController::class, 'bulkRegister']);
                 Route::post('pg-bulk-updater', [PaymentModuleController::class, 'bulkRegisterPG']);
             });
+            Route::apiResource('bill-keys', BillKeyController::class); 
         });
     });
     

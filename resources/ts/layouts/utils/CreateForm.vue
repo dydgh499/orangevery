@@ -1,6 +1,6 @@
 a
 <script setup lang="ts">
-import { useDynamicTabStore } from '@/@core/utils/dynamic_tab';
+import { useDynamicTabStore } from '@/@core/utils/dynamicTab';
 import router from '@/router';
 import { useRequestStore } from '@/views/request';
 import type { Tab } from '@/views/types';

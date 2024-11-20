@@ -140,7 +140,7 @@ class CMSTransactionController extends Controller
         if(isset($res['body']['data']))
         {
             $res = $res['body']['data'];
-            return $this->extendResponse($res['result_cd'] == "0000" ? 1 : 2000, $res['result_msg'], $res['data']);    
+            return $this->extendResponse($res['result_cd'] === "0000" ? 1 : 2000, $res['result_msg'], $res['data']);    
         }
         else
         {

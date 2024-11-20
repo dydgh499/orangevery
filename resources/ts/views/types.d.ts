@@ -409,6 +409,7 @@ interface PaidOption {
     use_syslink: boolean,
     use_product: boolean,   // 수기단말기 상품선택
     use_cancel_all_allow: boolean,
+    use_bill_key: boolean,  // 빌키 사용 여부
 }
 interface AuthOption {
     levels: {

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { pinInputEvent } from '@/@core/utils/pin_input_event';
+import { pinInputEvent } from '@/@core/utils/pinInputEvent';
 import { axios } from '@/plugins/axios';
 import corp from '@/plugins/corp';
 

@@ -35,6 +35,9 @@ const getUserChildMenu = () => {
         users.push({ title: '장비 관리', to: 'merchandises-terminals'})
     if(isFixplus() === false || (isFixplus() && getUserLevel() >= 35))
         users.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
+    if(getUserLevel() >= 35 && corp.pv_options.paid.use_bill_key)
+        users.push({ title: '빌키 관리', to: 'merchandises-pay-modules-bill-keys'})
+        
     users.push(...logs)
     return users
 }

@@ -1,46 +1,48 @@
-import { isToday } from './index'
+export const inputFormater = () => {
+    const phone_num_format = ref('')
+    const card_num_format = ref('')
+    const yymm_format = ref('')
 
-export const avatarText = (value: string) => {
-  if (!value)
-    return ''
-  const nameArray = value.split(' ')
+    const buyer_phone = ref('')
+    const card_num = ref('')
+    const yymm = ref('')
 
-  return nameArray.map(word => word.charAt(0).toUpperCase()).join('')
-}
+    const formatPhoneNum = computed(() => {
+        let raw_value = phone_num_format.value.replace(/\D/g, '');
+        buyer_phone.value = raw_value
+        // 휴대폰 번호 마스킹
+        if (raw_value.length <= 3)
+            phone_num_format.value = raw_value;
+        else if (raw_value.length <= 7) 
+            phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3);
+        else
+            phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 7) + '-' + raw_value.slice(7, 11);
+    })
+    
+    const formatCardNum = computed(() => {
+        let raw_value = card_num_format.value.replace(/\D/g, '')
+        card_num.value = raw_value
+        card_num_format.value = raw_value.match(/.{1,4}/g)?.join(' ') || ''  
+    })
+    
+    const formatYYmm = computed(() => {
+        let raw_value = yymm_format.value.replace(/\D/g, '')
+        yymm.value = raw_value
+        yymm_format.value = raw_value.match(/.{1,2}/g)?.join('/') || ''  
+    })
 
-// TODO: Try to implement this: https://twitter.com/fireship_dev/status/1565424801216311297
-export const kFormatter = (num: number) => {
-  const regex = /\B(?=(\d{3})+(?!\d))/g
 
-  return Math.abs(num) > 9999 ? `${Math.sign(num) * +((Math.abs(num) / 1000).toFixed(1))}k` : Math.abs(num).toFixed(0).replace(regex, ',')
-}
+    return {
+        phone_num_format,
+        card_num_format,
+        yymm_format,
 
-/**
- * Format and return date in Humanize format
- * Intl docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/format
- * Intl Constructor: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat
- * @param {String} value date to format
- * @param {Intl.DateTimeFormatOptions} formatting Intl object to format with
- */
-export const formatDate = (value: string, formatting: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' }) => {
-  if (!value)
-    return value
+        buyer_phone,
+        card_num,
+        yymm,
 
-  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
-}
-
-/**
- * Return short human friendly month representation of date
- * Can also convert date to only time if date is of today (Better UX)
- * @param {String} value date to format
- * @param {Boolean} toTimeForCurrentDay Shall convert to time if day is today/current
- */
-export const formatDateToMonthShort = (value: string, toTimeForCurrentDay = true) => {
-  const date = new Date(value)
-  let formatting: Record<string, string> = { month: 'short', day: 'numeric' }
-
-  if (toTimeForCurrentDay && isToday(date))
-    formatting = { hour: 'numeric', minute: 'numeric' }
-
-  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
+        formatPhoneNum,
+        formatCardNum,
+        formatYYmm,
+    }
 }

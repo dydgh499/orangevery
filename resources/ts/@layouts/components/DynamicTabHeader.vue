@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useDynamicTabStore } from '@/@core/utils/dynamic_tab';
+import { useDynamicTabStore } from '@/@core/utils/dynamicTab';
 import { getUserLevel } from '@/plugins/axios';
 import draggable, { DragEndEvent } from 'vuedraggable'; // DragEndEvent 타입 사용
 

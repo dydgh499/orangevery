@@ -1,4 +1,4 @@
-import { useDynamicTabStore } from "@/@core/utils/dynamic_tab"
+import { useDynamicTabStore } from "@/@core/utils/dynamicTab"
 import { useRequestStore } from "@/views/request"
 import { cloneDeep } from "lodash"
 

@@ -2,7 +2,7 @@
 import { timerV1 } from '@/@core/utils/timer';
 import { Merchandise } from '@/views/types';
 import { axios, getUserLevel } from '@axios';
-import { pinInputEvent } from '@core/utils/pin_input_event';
+import { pinInputEvent } from '@core/utils/pinInputEvent';
 import corp from '@corp';
 
 interface Props {

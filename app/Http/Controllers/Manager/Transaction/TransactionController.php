@@ -289,7 +289,7 @@ class TransactionController extends Controller
         $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/hand';
         $res = Comm::post($url, $data);
         
-        if($res['body']['result_cd'] == '0000')
+        if($res['body']['result_cd'] === '0000')
             return $this->response(1, $res['body']);
         else
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);
@@ -303,7 +303,7 @@ class TransactionController extends Controller
     {
         $data = $request->all();
         $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/cancel', $data);
-        if($res['body']['result_cd'] == '0000')
+        if($res['body']['result_cd'] === '0000')
             return $this->response(1, $res['body']);
         else
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { pinInputEvent } from '@/@core/utils/pin_input_event';
+import { pinInputEvent } from '@/@core/utils/pinInputEvent';
 import { axios, getUserLevel, getUserType, user_info } from '@/plugins/axios';
 import { timerV1 } from '@core/utils/timer';
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDynamicTabStore } from '@/@core/utils/dynamic_tab'
+import { useDynamicTabStore } from '@/@core/utils/dynamicTab'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import router from '@/router'
 import PostReplyView from '@/views/posts/PostReplyView.vue'

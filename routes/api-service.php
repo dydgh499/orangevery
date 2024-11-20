@@ -52,7 +52,7 @@ Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
             Route::post('operators/{id}/2fa-qrcode/init', [OperatorController::class, 'init2FA']);  
             Route::post('operators/{id}/2fa-qrcode/create-vertify', [OperatorController::class, 'vertify2FAQRLink']);
 
-            Route::post('mcht-blacklists/bulk-register', [MchtBlacklistController::class, 'bulkRegister']);            
+            Route::post('mcht-blacklists/bulk-register', [MchtBlacklistController::class, 'bulkRegister']);
             Route::post('holidays/bulk-register', [HolidayController::class, 'updateHolidays']);
             Route::post('cms-transactions/withdraw', [CMSTransactionController::class, 'withdraw']);
         });

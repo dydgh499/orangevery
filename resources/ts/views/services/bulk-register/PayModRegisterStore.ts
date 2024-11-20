@@ -6,7 +6,6 @@ import { isEmpty } from '@core/utils';
 import corp from '@corp';
 import { useStore } from '../pay-gateways/useStore';
 
-
 export const keyCreater = (snackbar: any, items: any) => {
     const getRandomNumber = (min: number, max: number) => {
         return Math.floor(Math.random() * (max - min + 1)) + min;

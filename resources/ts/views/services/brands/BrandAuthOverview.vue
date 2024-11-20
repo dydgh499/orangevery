@@ -68,6 +68,7 @@ const props = defineProps<Props>()
                                     <VSwitch hide-details v-model="props.item.paid.use_mcht_blacklist" color="primary" label="가맹점 블랙리스트"/>
                                 </template>
                                 <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_bill_key" color="primary" label="빌링결제"/>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
