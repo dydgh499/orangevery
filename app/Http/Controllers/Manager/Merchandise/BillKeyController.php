@@ -78,9 +78,8 @@ class BillKeyController extends Controller
         {
             if($pay_module->pay_key)
             {
-                $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key';
                 $data['mid'] = $pay_module->mid;
-                $res = Comm::post($url, $data, [
+                $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key', $data, [
                     'Authorization' => $pay_module->pay_key
                 ]);
                 if($res['body']['result_cd'] === '0000')
@@ -92,7 +91,7 @@ class BillKeyController extends Controller
                 return $this->apiResponse('PV9999', '결제모듈의 pay key가 존재하지 않습니다.<br>pay key를 생성한 후 빌키를 생성해주세요.');
         }
         else
-            return $this->apiResponse('PV9999', '결제모듈이 존재하지 않습니다.');
+            return $this->extendResponse('1999', '결제모듈이 존재하지 않습니다.');
     }
 
     /**
@@ -131,20 +130,83 @@ class BillKeyController extends Controller
         if(Ablilty::isOperator($request))
         {
             $bill_key = $this->bill_keys->where('id', $id)->first();
-            if($pay_module->pay_key)
+            if($bill_key)
             {
-                $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key';
-                $data['mid'] = $pay_module->mid;
-                $res = Comm::destroy($url, $data, [
-                    'Authorization' => $pay_module->pay_key
-                ]);
-                if($res['body']['result_cd'] === '0000')
-                    return $this->response(1, $res['body']);
+                $pay_module = PaymentModule::where('id', $bill_key->pmod_id)->first();
+                if($pay_module)
+                {
+                    if($pay_module->pay_key)
+                    {
+                        $data = [
+                            'mid' => $pay_module->mid,
+                            'ord_num' => $request->ord_num,
+                            'bill_key' => $bill_key->bill_key,
+                        ];                    
+                        $res = Comm::destroy(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key', $data, [
+                            'Authorization' => $pay_module->pay_key
+                        ]);
+                        if($res['body']['result_cd'] === '0000')
+                            return $this->response(1, $res['body']);
+                        else
+                            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);  
+                    }
+                    else
+                        return $this->extendResponse('1999', '결제모듈의 pay key가 존재하지 않습니다.<br>pay key를 생성한 후 빌키를 생성해주세요.');          
+                }
                 else
-                    return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);    
+                    return $this->extendResponse('1999', '결제모듈이 존재하지 않습니다.');
             }
             else
-                return $this->apiResponse('PV9999', '결제모듈의 pay key가 존재하지 않습니다.<br>pay key를 생성한 후 빌키를 생성해주세요.');
+                return $this->extendResponse('1999', '빌키가 존재하지 않습니다.');
+        }
+        else
+            return $this->response(951);
+    }
+
+    /**
+     * 결제하기
+     *
+     * 운영자 이상 가능
+     *
+     * @urlParam id integer required 빌키 PK
+     */
+    public function hand(Request $request, int $id)
+    {
+        if(Ablilty::isOperator($request))
+        {
+            $bill_key = $this->bill_keys->where('id', $id)->first();
+            if($bill_key)
+            {
+                $pay_module = PaymentModule::where('id', $bill_key->pmod_id)->first();
+                if($pay_module)
+                {
+                    if($pay_module->pay_key)
+                    {
+                        $data = [
+                            'mid'       => $pay_module->mid,
+                            'pmod_id'   => $bill_key->pmod_id,
+                            'bill_key'  => $bill_key->bill_key,
+                            'ord_num'   => $request->ord_num,
+                            'buyer_name' => $request->buyer_name,
+                            'buyer_phone'=> $request->buyer_phone,
+                            'amount'    => $request->amount,
+                        ];
+                        $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key/hand', $data, [
+                            'Authorization' => $pay_module->pay_key
+                        ]);
+                        if($res['body']['result_cd'] === '0000')
+                            return $this->response(1, $res['body']);
+                        else
+                            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);  
+                    }
+                    else
+                        return $this->extendResponse('1999', '결제모듈의 pay key가 존재하지 않습니다.<br>pay key를 생성한 후 빌키를 생성해주세요.');          
+                }  
+                else
+                    return $this->extendResponse('1999', '결제모듈이 존재하지 않습니다.');
+            }
+            else
+                return $this->extendResponse('1999', '빌키가 존재하지 않습니다.');
         }
         else
             return $this->response(951);

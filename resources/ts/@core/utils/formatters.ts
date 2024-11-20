@@ -2,10 +2,12 @@ export const inputFormater = () => {
     const phone_num_format = ref('')
     const card_num_format = ref('')
     const yymm_format = ref('')
+    const format_amount = ref('')
 
     const buyer_phone = ref('')
     const card_num = ref('')
     const yymm = ref('')
+    const amount = ref(0)
 
     const formatPhoneNum = computed(() => {
         let raw_value = phone_num_format.value.replace(/\D/g, '');
@@ -31,18 +33,26 @@ export const inputFormater = () => {
         yymm_format.value = raw_value.match(/.{1,2}/g)?.join('/') || ''  
     })
 
+    const formatAmount = computed(() => {
+        const parse_amount = parseFloat(format_amount.value.replace(/,/g, "")) || 0;
+        amount.value = parse_amount
+        format_amount.value = parse_amount.toLocaleString()
+    })
 
     return {
         phone_num_format,
         card_num_format,
         yymm_format,
+        format_amount,
 
         buyer_phone,
         card_num,
         yymm,
-
+        amount,
+        
         formatPhoneNum,
         formatCardNum,
         formatYYmm,
+        formatAmount,
     }
 }

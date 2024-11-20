@@ -152,6 +152,7 @@ Route::prefix('merchandises')->group(function() {
                 Route::post('bulk-register', [PaymentModuleController::class, 'bulkRegister']);
                 Route::post('pg-bulk-updater', [PaymentModuleController::class, 'bulkRegisterPG']);
             });
+            Route::post('bill-keys/{id}/hand', [BillKeyController::class, 'hand']); 
             Route::apiResource('bill-keys', BillKeyController::class); 
         });
     });

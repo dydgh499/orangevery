@@ -15,7 +15,8 @@ class BillKey extends Model
     protected   $primaryKey   = 'id';
     protected   $guarded      = [];
     protected   $hidden       = [
-        'ori_bill_key'
+        'ori_bill_key',
+        'bill_key',
     ];
 
     protected function oriBillKey(): Attribute

@@ -9,7 +9,6 @@ export const useSearchStore = defineStore('billKeySearchStore', () => {
         'id' : 'NO.',
         'mcht_name' : '가맹점 상호',
         'note' : '결제모듈 별칭',
-        'bill_key': '빌키',
         'buyer_name': '구매자명',
         'buyer_phone': '구매자 번호',
         'issuer': '발급사',

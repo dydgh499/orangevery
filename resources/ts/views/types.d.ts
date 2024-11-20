@@ -1016,3 +1016,11 @@ export interface ExceptionWorkTime {
     work_s_at: string,
     work_e_at: string,
 }
+
+export interface BillKey {
+    id: number,
+    pmod_id: number,
+    buyer_name: string,
+    buyer_phone: string,
+    issuer: string,
+}
