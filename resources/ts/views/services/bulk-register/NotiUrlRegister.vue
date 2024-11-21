@@ -35,8 +35,11 @@ const validate = () => {
         const results = validateItems(items.value[i], i, mchts, pay_modules)
         is_clear.value = results[0] as boolean
         error_message.value = results[1] as string
-        if (is_clear.value == false)
+        if(is_clear.value === false) {
+            error_message.value = '엑셀파일에서 ' + error_message.value
+            snackbar.value.show(error_message.value, 'error')
             return
+        }
     }
     snackbar.value.show('입력값 1차 검증에 성공하였습니다.', 'success')
     is_clear.value = true
@@ -135,7 +138,7 @@ watchEffect(async () => {
                                     <td class='list-square'>
                                         <span v-if="header.key == 'noti_status'">
                                             <VChip :color="store.booleanTypeColor(!item[header.key])">
-                                                {{ noti_statuses.find(noti => noti['id'] === item[_key])?.title }}
+                                                {{ noti_statuses.find(noti => noti['id'] === item[header.key])?.title }}
                                             </VChip>
                                         </span>
                                         <span v-else>

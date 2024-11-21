@@ -101,8 +101,6 @@ export const bulkAutoInsertPaymentModuleFormat = (mcht_ids: number[]) => {
 // 결제모듈 자동등록
 export const autoInsertPaymentModule = (mcht_id: number) => {
     const params:any = getAutoInsertPaymentModuleFormat(mcht_id)
-    params.use_mid_duplicate = Number(corp.pv_options.free.use_mid_duplicate)
-    params.use_tid_duplicate = Number(corp.pv_options.free.use_tid_duplicate)
     axios.post('/api/v1/manager/merchandises/pay-modules', params)
 }
 

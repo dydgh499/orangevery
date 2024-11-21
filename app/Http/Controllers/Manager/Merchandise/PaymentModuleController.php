@@ -196,6 +196,7 @@ class PaymentModuleController extends Controller
      */
     public function update(PayModuleRequest $request, int $id)
     {
+        $brand = BrandInfo::getBrandById($request->user()->brand_id);
         // 같은 브랜드에서 똑같은 값이 존재할 떄
         $isDuplicateId = function($bid, $pid, $key, $value) {
             return $this->pay_modules
@@ -215,9 +216,9 @@ class PaymentModuleController extends Controller
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $data['mcht_id']))
         {
-            if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
+            if($brand['pv_options']['free']['use_tid_duplicate'] && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
                 return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid'=>$data['tid']]);
-            if($request->use_mid_duplicate && $data['mid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
+            if($brand['pv_options']['free']['use_mid_duplicate'] && $data['mid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
                 return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid'=>$data['mid']]);            
             if($data['pay_window_secure_level'] >= 3)
             {
@@ -426,43 +427,5 @@ class PaymentModuleController extends Controller
             ->where('id', $request->id)
             ->update(['sign_key' => $sign_key]);
         return $this->response(0, ['sign_key' => $sign_key]);    
-    }
-
-    static public function keyUpdate()
-    {
-        $i =0;
-        $pmods = PaymentModule::where('brand_id', 4)->where('is_delete', 0)->where('sign_key', '')->get();
-        foreach($pmods as $pmod)
-        {
-            $pmod->sign_key = $pmod->id.Str::random(64 - strlen((string)$pmod->id));
-            $pmod->save();
-            $i++;
-
-        }
-        echo "(ezpg) sign key update: $i\n";
-        $i =0;
-        $pmods = PaymentModule::where('brand_id', 4)->where('module_type', '!=', 0)->where('is_delete', 0)->where('pay_key', '')->get();
-        foreach($pmods as $pmod)
-        {
-            $pmod->pay_key = $pmod->id.Str::random(64 - strlen((string)$pmod->id));
-            $pmod->save();
-            $i++;
-        }
-        echo "(ezpg) pay key update: $i\n";
-        $paydays = PaymentModule::where('brand_id', 6)->where('pg_id', 43)->where('is_delete', 0)
-            ->where('module_type', 1)
-            ->where('sub_key', '!=', '')
-            ->get();
-
-        $i =0;
-        foreach($paydays as $payday)
-        {
-            $ezpg = PaymentModule::where('brand_id', 4)->where('is_delete', 0)->where('mid', $payday->mid)->first();
-            $payday->api_key = $ezpg->pay_key;
-            $payday->sub_key = '';
-            $payday->save();
-            $i++;
-        }
-        echo "(pay day) api key update: $i\n";
     }
 }

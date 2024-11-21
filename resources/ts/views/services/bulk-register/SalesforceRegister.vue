@@ -43,8 +43,12 @@ const validate = () => {
         const results = validateItems(items.value[i], i, user_names)
         is_clear.value = results[0] as boolean
         error_message.value = results[1] as string
-        if (is_clear.value == false)
+
+        if(is_clear.value === false) {
+            error_message.value = '엑셀파일에서 ' + error_message.value
+            snackbar.value.show(error_message.value, 'error')
             return
+        }
         else
             user_names.add(items.value[i].user_name)
     }

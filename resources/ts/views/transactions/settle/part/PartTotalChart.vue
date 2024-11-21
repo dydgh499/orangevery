@@ -8,11 +8,11 @@ const partSettle = <any>(inject('partSettle'))
 
 </script>
 <template>
-    <section>
+    <section style="display: inline-flex; align-items: center;">
         <VBtn prepend-icon="tabler-calculator" @click="partSettle()" v-if="getUserLevel() >= 35" size="small">
             부분정산
         </VBtn>
-        <div v-if="store.params.level === 10">
+        <div v-if="store.params.level === 10" style="padding: 0 1em;">
             <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.use_realtime_deposit"
                 label="실시간 포함" color="primary"
                 @update:modelValue="[store.updateQueryString({ use_realtime_deposit: store.params.use_realtime_deposit })]" />
@@ -20,7 +20,7 @@ const partSettle = <any>(inject('partSettle'))
                 color="error"
                 @update:modelValue="store.updateQueryString({ only_cancel: store.params.only_cancel })" />
         </div>
-        <div v-else>
+        <div v-else  style="padding: 0 1em;">
             <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" @update:modelValue="[store.updateQueryString({is_base_trx: store.params.is_base_trx})]"/>                
             <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_cancel" label="취소 매출 조회"
                     color="error"

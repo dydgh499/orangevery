@@ -71,7 +71,8 @@ const validate = async () => {
         is_clear.value = results[0] as boolean
         error_message.value = results[1] as string
 
-        if (is_clear.value === false) {
+        if(is_clear.value === false) {
+            error_message.value = '엑셀파일에서 ' + error_message.value
             snackbar.value.show(error_message.value, 'error')
             return
         }
@@ -451,6 +452,9 @@ watchEffect(async () => {
                                         <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item.module_type)?.id)">
                                             {{ module_types.find(module_type => module_type['id'] === item.module_type)?.title }}
                                         </VChip>
+                                    </td>
+                                    <td v-else-if="header.key === 'cxl_type'">
+                                        {{ cxl_types.find(cxl_type => cxl_type['id'] === item.cxl_type)?.title }}
                                     </td>
                                     <td v-else-if="header.key === 'pg_id'">
                                         {{ pgs.find(pg => pg['id'] === item.pg_id)?.pg_name }}

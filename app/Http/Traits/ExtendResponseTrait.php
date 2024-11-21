@@ -32,7 +32,7 @@ trait ExtendResponseTrait
         foreach($exceptions as $key => $value)
         {
             if(preg_match('/[0-9]\.[a-z]+[0-9]*_[a-z_-]+$/', $key, $keys)) 
-                $msg .= $this->getMessages($value);
+                $msg .= $this->getMessages($value)."<br>";
         }
         return Response::json(['code'=>1004, 'message'=>$msg], 409, [], JSON_UNESCAPED_UNICODE);
     }

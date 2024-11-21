@@ -55,9 +55,9 @@ export const validateItems = (item: PayModule, i: number, mchts: Merchandise[]) 
     const installment = installments.find(a => a.id === item.installment)
     const mcht = mchts.find(a => a.mcht_name == item.mcht_name)
 
-    let finance_van = corp.pv_options.paid.use_realtime_deposit ? finance_vans.find(item => item.id === item.fin_id) : true
-    let fin_trx_delay = corp.pv_options.paid.use_realtime_deposit ? fin_trx_delays.find(item => item.id === item.fin_trx_delay) : true
-    let cxl_type = corp.pv_options.paid.use_realtime_deposit ? cxl_types.find(item => item.id === item.cxl_type) : true
+    let finance_van = corp.pv_options.paid.use_realtime_deposit ? finance_vans.find(a => a.id === item.fin_id) : true
+    let fin_trx_delay = corp.pv_options.paid.use_realtime_deposit ? fin_trx_delays.find(a => a.id === item.fin_trx_delay) : true
+    let cxl_type = corp.pv_options.paid.use_realtime_deposit ? cxl_types.find(a => a.id === item.cxl_type) : true
 
     if (item.fin_id == null)
         finance_van = true
@@ -67,39 +67,39 @@ export const validateItems = (item: PayModule, i: number, mchts: Merchandise[]) 
         cxl_type = true
 
     if (mcht == null) 
-        return [false, (i + 2) + '번째 결제모듈의 가맹점 상호가 이상합니다.(' + item.mcht_name + ")"]
+        return [false, (i + 2) + '번째줄의 결제모듈의 가맹점 상호가 이상합니다.(' + item.mcht_name + ")"]
     else if (corp.pv_options.paid.use_pmid && item.p_mid == null) 
-        return [false, (i + 2) + '번째 PMID가 입력되지 않았습니다.']
+        return [false, (i + 2) + '번째줄의 PMID가 입력되지 않았습니다.']
     else if (pg === null) 
-        return [false, (i + 2) + '번째 결제모듈의 PG사명이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 결제모듈의 PG사명이 이상합니다.']
     else if (ps === null)
-        return [false, (i + 2) + '번째 결제모듈의 구간이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 결제모듈의 구간이 이상합니다.']
     else if (ps.pg_id != pg.id)
-        return [false, (i + 2) + '번째 결제모듈의 구간이 ' + pg.pg_name + '에 포함되는 구간이 아닙니다.']
+        return [false, (i + 2) + '번째줄의 결제모듈의 구간이 ' + pg.pg_name + '에 포함되는 구간이 아닙니다.']
     else if (isEmpty(item.note))
-        return [false, (i + 2) + '번째 결제모듈의 별칭은 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 결제모듈의 별칭은 필수로 입력해야합니다.']
     else if (isEmpty(item.mcht_name ?? ''))
-        return [false, (i + 2) + '번째 결제모듈의 가맹점 상호는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 결제모듈의 가맹점 상호는 필수로 입력해야합니다.']
     else if (settle_type == null)
-        return [false, (i + 2) + '번째 결제모듈의 가맹점 정산타입이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 결제모듈의 가맹점 정산타입이 이상합니다.']
     else if (module_type == null)
-        return [false, (i + 2) + '번째 결제모듈의 모듈타입이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 결제모듈의 모듈타입이 이상합니다.']
     else if (installment == null) 
-        return [false, (i + 2) + '번째 결제모듈의 할부기간이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 결제모듈의 할부기간이 이상합니다.']
     else if (finance_van == null) 
-        return [false, (i + 2) + '번째 금융 VAN을 찾을 수 없습니다.']
+        return [false, (i + 2) + '번째줄의 금융 VAN을 찾을 수 없습니다.']
     else if (fin_trx_delay == null) 
-        return [false, (i + 2) + '번째 이체 딜레이 타입을 찾을 수 없습니다.']
+        return [false, (i + 2) + '번째줄의 이체 딜레이 타입을 찾을 수 없습니다.']
     else if (cxl_type == null) 
-        return [false, (i + 2) + '번째 취소 타입을 찾을 수 없습니다.']
+        return [false, (i + 2) + '번째줄의 취소 타입을 찾을 수 없습니다.']
     else if (item.contract_s_dt && date_regex.test(item.contract_s_dt) == false) 
-        return [false, (i + 2) + '번째 계약 시작일 포멧이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 계약 시작일 포멧이 이상합니다.']
     else if (item.contract_e_dt && date_regex.test(item.contract_e_dt) == false) 
-        return [false, (i + 2) + '번째 계약 종료일 포멧이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 계약 종료일 포멧이 이상합니다.']
     else if (item.begin_dt && date_regex.test(item.begin_dt) == false) 
-        return [false, (i + 2) + '번째 장비 개통일 포멧이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 장비 개통일 포멧이 이상합니다.']
     else if (item.ship_out_dt && date_regex.test(item.ship_out_dt) == false)
-        return [false, (i + 2) + '번째 장비 출고일 포멧이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 장비 출고일 포멧이 이상합니다.']
     else {
         item.mcht_id = mcht?.id || null
         return [true, '']
@@ -113,7 +113,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
             {title: 'PG사명(O)', key: 'pg_id'},
             {title: '구간(O)', key: 'ps_id'},
             {title: '가맹점 정산타입(O)', key: 'settle_type'},
-            {title: '입금 수수료(O)', key: 'settle_fee'},
+            {title: '입금 수수료(X)', key: 'settle_fee'},
             {title: '계약 시작일(X)', key: 'contract_s_dt'},
             {title: '계약 종료일(X)', key: 'contract_e_dt'},
         ]
@@ -141,7 +141,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
             {title: '개통일(X)',  key: 'begin_dt'},
             {title: '출고일(X)',  key: 'ship_out_dt'},
             {title: '출고상태(X)',  key: 'ship_out_stat'},
-            {title: '수기결제 여부(O)',  key: 'is_old_auth'},
+            {title: '수기결제 여부(X)',  key: 'is_old_auth'},
             {title: '할부 한도(O)',  key: 'installment'},
             {title: '결제창 보안등급(X)',  key: 'pay_window_secure_level'},
             {title: '이상거래 한도(X)',  key: 'abnormal_trans_limit'},
@@ -167,8 +167,6 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
             headers2.push(
                 {title: '결제금지 시작시간(X)', key: 'pay_disable_s_tm'},
                 {title: '결제금지 종료시간(X)', key: 'pay_disable_e_tm'},
-                {title: '결제 일 한도(X)', key: 'pay_day_limit'},
-                {title: '결제 단건 한도(X)', key: 'pay_single_limit'},
             )
         }
         if(corp.pv_options.paid.use_realtime_deposit) {

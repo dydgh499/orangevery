@@ -19,7 +19,7 @@ class BulkNotiUrlRequest extends FormRequest
     ];
     public function bodyParameters()
     {
-        return $this->getDocsParameters($this->keys);
+        return array_merge($this->getDocsParameters($this->integer_keys), $this->getDocsParameters($this->keys));
     }
 
     public function authorize()
@@ -27,11 +27,6 @@ class BulkNotiUrlRequest extends FormRequest
         return $this->user()->tokenCan(35) ? true : false;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         $sub = [
@@ -50,18 +45,7 @@ class BulkNotiUrlRequest extends FormRequest
         $_datas = $this->all();
         for ($i=0; $i < count($_datas) ; $i++)
         {
-            $data = [];
-            $data['brand_id'] = $this->user()->brand_id;
-            for ($j=0; $j < count($this->keys) ; $j++) 
-            {
-                $key = $this->keys[$j];
-                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : '';
-            }
-            for ($j=0; $j < count($this->integer_keys) ; $j++) 
-            {
-                $key = $this->integer_keys[$j];
-                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : 0;
-            }
+            $data = array_merge($this->getParmasBaseKeyV3($_datas[$i], $this->integer_keys, 0), $this->getParmasBaseKeyV3($_datas[$i], $this->keys, ''));
             $datas[] = $data;
         }
         return collect($datas);

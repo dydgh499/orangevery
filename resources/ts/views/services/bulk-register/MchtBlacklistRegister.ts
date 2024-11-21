@@ -5,9 +5,9 @@ import { MchtBlacklist } from '@/views/types';
 
 export const validateItems = (item: MchtBlacklist, i: number) => {
     if(isEmpty(item.block_reason))
-        return [false, (i + 2) + '번째 블랙리스트의 차단사유를 찾을 수 없습니다.']
+        return [false, (i + 2) + '번째줄의 블랙리스트의 차단사유를 찾을 수 없습니다.']
     else if (typeof lengthValidatorV2(item.resident_num, 14) != 'boolean') 
-        return [false, (i + 2) + '번째 가맹점의 주민등록번호 포멧이 정확하지 않습니다.']
+        return [false, (i + 2) + '번째줄의 가맹점의 주민등록번호 포멧이 정확하지 않습니다.']
     else
         return [true, '']
 }

@@ -50,12 +50,13 @@ const validate = async() => {
             mcht_names.add(items.value[i].mcht_name)
             if (Number(corp.pv_options.paid.use_mcht_blacklist)) {
                 let [result, blacklist] = isMchtBlackList(items.value[i])
-                if(result) 
+                if(result)
                     is_clear.value = await alert.value.show((i + 2) + '번째 가맹점은 아래이유로 인해 블랙리스트로 등록된 가맹점입니다. 그래도 진행하시겠습니까?<br><br><b style="color:red">'+blacklist?.block_reason+'</b>')
             }
         }
 
         if(is_clear.value === false) {
+            error_message.value = '엑셀파일에서 ' + error_message.value
             snackbar.value.show(error_message.value, 'error')
             return
         }

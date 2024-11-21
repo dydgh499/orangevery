@@ -41,39 +41,39 @@ export const validateItems = (item: Merchandise, i: number, user_names: any, mch
     item.resident_num = item.resident_num ? item.resident_num.trim() : ''
 
     if(user_names.has(item.user_name)) 
-        return [false, (i + 2) + '번째 아이디가 중복됩니다.('+item.user_name+")"]
+        return [false, (i + 2) + '번째줄의 아이디가 중복됩니다.('+item.user_name+")"]
     else if(mcht_names.has(item.mcht_name)) 
-        return [false, (i + 2) + '번째 상호가 중복됩니다.('+item.mcht_name+")"]
+        return [false, (i + 2) + '번째줄의 상호가 중복됩니다.('+item.mcht_name+")"]
     else if (isNotExistSalesforce(levels.sales5_use, 5, item))
-        return [false, (i + 2) + '번째 ' + levels.sales5_name + '이(가) 존재하지 않습니다.']
+        return [false, (i + 2) + '번째줄의 ' + levels.sales5_name + '이(가) 존재하지 않습니다.']
     else if (isNotExistSalesforce(levels.sales4_use, 4, item)) 
-        return [false, (i + 2) + '번째 ' + levels.sales4_name + '이(가) 존재하지 않습니다.']
+        return [false, (i + 2) + '번째줄의 ' + levels.sales4_name + '이(가) 존재하지 않습니다.']
     else if (isNotExistSalesforce(levels.sales3_use, 3, item)) 
-        return [false, (i + 2) + '번째 ' + levels.sales3_name + '이(가) 존재하지 않습니다.']
+        return [false, (i + 2) + '번째줄의 ' + levels.sales3_name + '이(가) 존재하지 않습니다.']
     else if (isNotExistSalesforce(levels.sales2_use, 2, item)) 
-        return [false, (i + 2) + '번째 ' + levels.sales2_name + '이(가) 존재하지 않습니다.']
+        return [false, (i + 2) + '번째줄의 ' + levels.sales2_name + '이(가) 존재하지 않습니다.']
     else if (isNotExistSalesforce(levels.sales1_use, 1, item)) 
-        return [false, (i + 2) + '번째 ' + levels.sales1_name + '이(가) 존재하지 않습니다.']
+        return [false, (i + 2) + '번째줄의 ' + levels.sales1_name + '이(가) 존재하지 않습니다.']
     else if (isNotExistSalesforce(levels.sales0_use, 0, item)) 
-        return [false, (i + 2) + '번째 ' + levels.sales0_name + '이(가) 존재하지 않습니다.']
+        return [false, (i + 2) + '번째줄의 ' + levels.sales0_name + '이(가) 존재하지 않습니다.']
     else if (isNotExistCustomFilter(item.custom_id)) 
-        return [false, (i + 2) + '번째 커스텀필터가 존재하지 않습니다.']
+        return [false, (i + 2) + '번째줄의 커스텀필터가 존재하지 않습니다.']
     else if (isEmpty(item.user_name)) 
-        return [false, (i + 2) + '번째 가맹점의 아이디는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 가맹점의 아이디는 필수로 입력해야합니다.']
     else if (isEmpty(item.mcht_name)) 
-        return [false, (i + 2) + '번째 가맹점의 상호는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 가맹점의 상호는 필수로 입력해야합니다.']
     else if (isEmpty(item.user_pw)) 
-        return [false, (i + 2) + '번째 가맹점의 패스워드는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 가맹점의 패스워드는 필수로 입력해야합니다.']
     else if (typeof lengthValidatorV2(item.resident_num, 14) != 'boolean') 
-        return [false, (i + 2) + '번째 가맹점의 주민등록번호 포멧이 정확하지 않습니다.']
+        return [false, (i + 2) + '번째줄의 가맹점의 주민등록번호 포멧이 정확하지 않습니다.']
     else if (isEmpty(item.sector)) 
-        return [false, (i + 2) + '번째 가맹점의 업종은 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 가맹점의 업종은 필수로 입력해야합니다.']
     else if (isEmpty(item.acct_num)) 
-        return [false, (i + 2) + '번째 가맹점의 계좌번호는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 가맹점의 계좌번호는 필수로 입력해야합니다.']
     else if (isEmpty(item.acct_name)) 
-        return [false, (i + 2) + '번째 가맹점의 예금주는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 가맹점의 예금주는 필수로 입력해야합니다.']
     else if (banks.find(bank => bank.title === item.acct_bank_name) == null) 
-        return [false, (i + 2) + '번째 가맹점의 입금은행명이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 가맹점의 입금은행명이 이상합니다.']
     else {
         item.acct_bank_code = banks.find(bank => bank.title === item.acct_bank_name)?.code as string
         return [true, '']
@@ -135,8 +135,8 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
         {title: '예금주(O)', key: 'acct_name'},
         {title: '입금은행명(O)', key: 'acct_bank_name'},
         
-        {title: '사업자 유형(O)', key: 'tax_category_type'},
-        {title: '커스텀 필터(O)', key: 'custom_id'},
+        {title: '사업자 유형(X)', key: 'tax_category_type'},
+        {title: '커스텀 필터(X)', key: 'custom_id'},
     )
 
     if(corp.pv_options.paid.use_collect_withdraw) 

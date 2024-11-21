@@ -192,7 +192,6 @@ const { mchts } = useSalesFilterStore()
                             <span v-else class="font-weight-bold">입금상태</span>
                         </template>
                         <template #r_input>
-
                             <BooleanRadio v-if="getUserLevel() >= 35"
                                 :radio="props.item.is_deposit" @update:radio="props.item.is_deposit = $event">
                                 <template #true>입금</template>
