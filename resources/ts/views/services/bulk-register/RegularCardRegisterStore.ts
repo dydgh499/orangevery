@@ -5,9 +5,9 @@ export const validateItems = (item: RegularCreditCard, i: number, mchts:Merchand
     item.mcht_name = item.mcht_name ? item.mcht_name?.trim() : ''
     const mcht = mchts.find(item => item.mcht_name == item.mcht_name)
     if (mcht == null) 
-        return [false, (i + 2) + '번째 카드정보의 가맹점 상호가 이상합니다.']
+        return [false, (i + 2) + '번째줄의 카드정보의 가맹점 상호가 이상합니다.']
     else if(isEmpty(item.card_num)) 
-        return [false, (i + 2) + '번째 카드정보의 카드번호를 찾을 수 없습니다.']
+        return [false, (i + 2) + '번째줄의 카드정보의 카드번호를 찾을 수 없습니다.']
     else {
         item.mcht_id = mcht?.id as number
         return [true, '']
