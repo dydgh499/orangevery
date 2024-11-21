@@ -245,7 +245,7 @@ watchEffect(() => {
                                         style='margin-left: 0.5em;'>
                                         예약적용
                                         <VIcon end size="18" icon="tabler-clock-up" />
-                                    </VBtn>                 
+                                    </VBtn>
                                 </div>
                             </VCol>
                         </VRow>

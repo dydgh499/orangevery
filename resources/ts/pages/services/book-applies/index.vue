@@ -25,6 +25,8 @@ const destory = async (id: number) => {
         dest_type = 'merchandises'
     else if(store.params.dest_type === 2)
         dest_type = 'payment_modules'
+        else if(store.params.dest_type === 3)
+        dest_type = 'noti_urls'
     else 
         return
 
@@ -40,7 +42,7 @@ const destory = async (id: number) => {
                 <template #filter>
                 </template>
                 <template #index_extra_field>
-                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.dest_type" :items="[{ id: 0, title: '영업점' }, {id: 1, title:'가맹점'}, {id: 2, title:'결제모듈'}]"
+                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.dest_type" :items="[{ id: 0, title: '영업점' }, {id: 1, title:'가맹점'}, {id: 2, title:'결제모듈'}, {id: 3, title:'노티주소'}]"
                         density="compact" variant="outlined" item-title="title" item-value="id" label="변경대상"
                         @update:modelValue="store.updateQueryString({dest_type: store.params.dest_type})"
                         :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''"
@@ -72,7 +74,7 @@ const destory = async (id: number) => {
                     <template v-for="(item, index) in store.getItems" :key="index">
                         <tr>
                             <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                                <template v-if="store.params.dest_type < 2 && _key === 'pmod_note'">
+                                <template v-if="store.params.dest_type < 2 && _key === 'note'">
                                 </template>
                                 <td v-else v-show="_header.visible" :class="_key == 'title' ? 'list-square title' : 'list-square'">
                                     <span v-if="_key == 'id'">

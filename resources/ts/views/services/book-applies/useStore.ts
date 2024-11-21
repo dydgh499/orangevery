@@ -7,7 +7,7 @@ export const useSearchStore = defineStore('bookApplySearchStore', () => {
     const headers: Record<string, string | object> = {
         'id': 'NO.',
         'dest_name': '상호',
-        'pmod_note': '결제모듈 별칭',
+        'note': '별칭',
         'change_status': '변경상태',
         'apply_data': '변경 값',
         'created_at': '생성시간',
@@ -23,7 +23,7 @@ export const useSearchStore = defineStore('bookApplySearchStore', () => {
     const exporter = async () => {
         let keys = Object.keys(head.flat_headers.value)
         if(store.params.dest_type < 2)
-            keys = keys.filter(val => val !== 'pmod_note');
+            keys = keys.filter(val => val !== 'note');
 
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         let datas = r.data.content;

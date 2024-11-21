@@ -11,13 +11,8 @@ use App\Http\Controllers\Manager\Merchandise\SpecifiedTimeDisablePaymentControll
 use App\Http\Controllers\Manager\Merchandise\ProductController;
 use App\Http\Controllers\Manager\Merchandise\BillKeyController;
 
-
 use App\Http\Controllers\Manager\SalesforceController;
 use App\Http\Controllers\Manager\Salesforce\UnderAutoSettingController;
-
-use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
-use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateSalesController;
-use App\Http\Controllers\Manager\BatchUpdater\BatchUpdatePayModuleController;
 
 use App\Http\Controllers\Log\SubBusinessRegistration\SubBusinessRegistrationController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
@@ -42,16 +37,6 @@ Route::prefix('salesforces')->group(function() {
             Route::post('{id}/2fa-qrcode/create-vertify', [SalesforceController::class, 'vertify2FAQRLink']);
         });
         Route::middleware(['is.operate'])->group(function() {
-            Route::prefix('batch-updaters')->middleware(['is.edit.able'])->group(function() {
-                Route::post('set-settle-tax-type', [BatchUpdateSalesController::class, 'setSettleTaxType']);
-                Route::post('set-settle-cycle', [BatchUpdateSalesController::class, 'setSettleCycle']);
-                Route::post('set-settle-day', [BatchUpdateSalesController::class, 'setSettleDay']);
-                Route::post('set-is-able-modify-mcht', [BatchUpdateSalesController::class, 'setIsAbleModifyMcht']);
-                Route::post('set-view-type', [BatchUpdateSalesController::class, 'setViewType']);
-                Route::post('set-account-info', [BatchUpdateSalesController::class, 'setAccountInfo']);
-                Route::post('set-note', [BatchUpdateSalesController::class, 'setNote']);
-                Route::delete('remove', [BatchUpdateSalesController::class, 'batchRemove']);   
-            });
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
             Route::middleware(['is.edit.able'])->group(function() {
                 Route::post('{id}/unlock-account', [SalesforceController::class, 'unlockAccount']);
@@ -88,23 +73,7 @@ Route::prefix('merchandises')->group(function() {
     });
 
     Route::middleware(['is.operate'])->group(function() {
-        Route::middleware(['is.edit.able'])->group(function() {
-            Route::prefix('batch-updaters')->group(function() {
-                Route::post('set-noti-url', [BatchUpdateMchtController::class, 'setNotiUrl']);
-                Route::post('set-enabled', [BatchUpdateMchtController::class, 'setEnabled']);
-                Route::post('set-custom-filter', [BatchUpdateMchtController::class, 'setCustomFilter']);
-                Route::post('set-business-num', [BatchUpdateMchtController::class, 'setBusinessNum']);
-                Route::post('set-resident-num', [BatchUpdateMchtController::class, 'setResidentNum']);
-                Route::post('set-account-info', [BatchUpdateMchtController::class, 'setAccountInfo']);
-                Route::post('set-show-fee', [BatchUpdateMchtController::class, 'setShowFee']);
-                Route::delete('remove', [BatchUpdateMchtController::class, 'batchRemove']);
-
-                Route::post('set-phone-auth-limit-count', [BatchUpdateMchtController::class, 'setPhoneAuthLimitCount']);
-                Route::post('set-phone-auth-limit-time', [BatchUpdateMchtController::class, 'setPhoneAuthLimitTime']);
-                Route::post('set-specified-time-disable-limit', [BatchUpdateMchtController::class, 'setSpecifiedTimeDisableLimit']);
-                Route::post('set-specified-time-disable-time', [BatchUpdateMchtController::class, 'setSpecifiedTimeDisableTime']);
-                Route::post('set-use-noti', [BatchUpdateMchtController::class, 'setUseNoti']);                
-            });    
+        Route::middleware(['is.edit.able'])->group(function() { 
             Route::post('{id}/set-settle-hold', [MerchandiseController::class, 'setSettleHold']);
             Route::post('{id}/clear-settle-hold', [MerchandiseController::class, 'clearSettleHold']);
             Route::post('bulk-register', [MerchandiseController::class, 'bulkRegister']);    
@@ -121,28 +90,6 @@ Route::prefix('merchandises')->group(function() {
     
         Route::prefix('pay-modules')->group(function() {               
             Route::middleware(['is.edit.able'])->group(function() {
-                Route::prefix('batch-updaters')->group(function() {
-                    Route::post('set-payment-gateway', [BatchUpdatePayModuleController::class, 'setPaymentGateway']);
-                    Route::post('set-abnormal-trans-limit', [BatchUpdatePayModuleController::class, 'setAbnormalTransLimit']);
-                    Route::post('set-dupe-pay-count-validation', [BatchUpdatePayModuleController::class, 'setDupPayCountValidation']);
-                    Route::post('set-dupe-pay-least-validation', [BatchUpdatePayModuleController::class, 'setDupPayLeastValidation']);
-                    Route::post('set-settle-type', [BatchUpdatePayModuleController::class, 'setSettleType']);
-                    Route::post('set-settle-fee', [BatchUpdatePayModuleController::class, 'setSettleFee']);
-                    Route::post('set-mid', [BatchUpdatePayModuleController::class, 'setMid']);
-                    Route::post('set-tid', [BatchUpdatePayModuleController::class, 'setTid']);
-                    Route::post('set-api-key', [BatchUpdatePayModuleController::class, 'setApiKey']);
-                    Route::post('set-sub-key', [BatchUpdatePayModuleController::class, 'setSubKey']);
-                    Route::post('set-installment', [BatchUpdatePayModuleController::class, 'setInstallment']);
-                    Route::post('set-note', [BatchUpdatePayModuleController::class, 'setNote']);
-                    Route::post('set-pay-limit', [BatchUpdatePayModuleController::class, 'setPayLimit']);
-                    Route::post('set-pay-disable-time', [BatchUpdatePayModuleController::class, 'setForbiddenPayTime']);
-                    Route::post('set-use-realtime-deposit', [BatchUpdatePayModuleController::class, 'setUseRealtimeDeposit']);
-                    Route::post('set-fin-id', [BatchUpdatePayModuleController::class, 'setFinId']);
-                    Route::post('set-payment-term-min', [BatchUpdatePayModuleController::class, 'setPaymentTermMin']);
-                    Route::post('set-pay-window-secure-level', [BatchUpdatePayModuleController::class, 'setPayWindowSecureLevel']);
-                    Route::post('set-pay-window-extend-hour', [BatchUpdatePayModuleController::class, 'setPayWindowExtendHour']);
-                    Route::delete('remove', [BatchUpdatePayModuleController::class, 'batchRemove']);   
-                });
                 Route::post('tid-create', [PaymentModuleController::class, 'tidCreate']);
                 Route::post('mid-create', [PaymentModuleController::class, 'midCreate']);
                 Route::post('mid-bulk-create', [PaymentModuleController::class, 'midBulkCreate']);
@@ -155,7 +102,8 @@ Route::prefix('merchandises')->group(function() {
             Route::post('bill-keys/{id}/hand', [BillKeyController::class, 'hand']); 
             Route::apiResource('bill-keys', BillKeyController::class); 
         });
-    });
+    });   
+    Route::get('noti-urls/chart', [NotiUrlController::class, 'chart']);
     
     Route::apiResource('pay-modules', PaymentModuleController::class);
     Route::apiResource('regular-credit-cards', RegularCreditCardController::class);     

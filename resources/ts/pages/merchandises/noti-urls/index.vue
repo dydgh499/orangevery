@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+
 import { noti_statuses, useSearchStore } from '@/views/merchandises/noti-urls/useStore'
+import { selectFunctionCollect } from '@/views/selected'
 import { getUserLevel } from '@axios'
-import { DateFilters } from '@core/enums'
+import { DateFilters, ItemTypes } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
+const { selected, all_selected } = selectFunctionCollect(store)
+const batchDialog = ref()
 
 provide('store', store)
 provide('head', head)
@@ -21,10 +26,20 @@ provide('exporter', exporter)
                     :sales="true">
                 </BaseIndexFilterCard>
             </template>
+            <template #index_extra_field>
+                <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35"
+                    color="primary" size="small" style="margin: 0.25em;">
+                    일괄작업
+                </VBtn>
+            </template>
             <template #headers>
                 <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                        <span>
+                        <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
+                            <VCheckbox v-model="all_selected" class="check-label" />
+                            <span>선택/취소</span>
+                        </div>
+                        <span v-else>
                             {{ header.ko }}
                         </span>
                     </th>
@@ -43,11 +58,17 @@ provide('exporter', exporter)
                         </template>
                         <template v-else>
                             <td v-show="_header.visible" class='list-square'>
-                                <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
-                                    #{{ item[_key] }}
-                                    <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
-                                        상세보기
-                                    </VTooltip>
+                                <span v-if="_key == `id`">
+                                    <div class='check-label-container'>
+                                        <VCheckbox v-if="getUserLevel() >= 35" v-model="selected" :value="item[_key]"
+                                            class="check-label" />
+                                            <span class="edit-link" @click="store.edit(item['id'])">
+                                                #{{ item[_key] }}
+                                                <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                                    상세보기
+                                                </VTooltip>
+                                            </span>
+                                    </div>
                                 </span>
                                 <span v-else-if="_key == 'noti_status'">
                                     <VChip :color="store.booleanTypeColor(!noti_statuses.find(obj => obj.id === item[_key])?.id)">
@@ -65,6 +86,8 @@ provide('exporter', exporter)
                     </template>
                 </tr>
             </template>
-        </BaseIndexView>
+        </BaseIndexView>        
+        <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.NotiUrl"
+            @update:select_idxs="selected = $event; store.setTable(); store.getChartData()" />
     </div>
 </template>

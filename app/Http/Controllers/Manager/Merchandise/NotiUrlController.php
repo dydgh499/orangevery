@@ -11,6 +11,7 @@ use App\Http\Traits\StoresTrait;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Merchandise\NotiRequest;
 use App\Http\Requests\Manager\BulkRegister\BulkNotiUrlRequest;
+use App\Http\Controllers\Utils\ChartFormat;
 use App\Enums\HistoryType;
 
 use App\Http\Controllers\Controller;
@@ -35,13 +36,18 @@ class NotiUrlController extends Controller
     }
     
     /**
-     * 목록출력
+     * 차트 데이터 출력
      *
      * 가맹점 이상 가능
      */
-    public function index(IndexRequest $request)
+    public function chart(Request $request)
     {
-        $cols = ['noti_urls.*', 'merchandises.mcht_name', 'payment_modules.note as pmod_note'];
+        return $this->response(0, []);
+    }
+
+
+    public function commonSelect($request)
+    {
         $search = $request->input('search', '');
         $query = $this->noti_urls
                 ->join('merchandises', 'noti_urls.mcht_id', '=', 'merchandises.id')
@@ -63,7 +69,18 @@ class NotiUrlController extends Controller
         $query = globalAuthFilter($query, $request, 'merchandises');        
         if($request->mcht_id)
             $query = $query->where('noti_urls.mcht_id', $request->mcht_id);
+        return $query;
+    }
 
+    /**
+     * 목록출력
+     *
+     * 가맹점 이상 가능
+     */
+    public function index(IndexRequest $request)
+    {
+        $cols  = ['noti_urls.*', 'merchandises.mcht_name', 'payment_modules.note as pmod_note'];
+        $query = $this->commonSelect($request);
         $data = $this->getIndexData($request, $query, 'noti_urls.id', $cols, 'noti_urls.created_at');
         return $this->response(0, $data);
     }

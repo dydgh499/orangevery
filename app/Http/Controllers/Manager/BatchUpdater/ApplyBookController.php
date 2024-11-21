@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Manager\BatchUpdater;
 
 use App\Models\Merchandise\PaymentModuleColumnApplyBook;
 use App\Models\Merchandise\MerchandiseColumnApplyBook;
+use App\Models\Merchandise\NotiUrlColumnApplyBook;
 use App\Models\Salesforce\SalesforceColumnApplyBook;
 
 use App\Models\Merchandise\PaymentModule;
+use App\Models\Merchandise\NotiUrl;
 use App\Models\Merchandise;
 use App\Models\Salesforce;
 
@@ -87,11 +89,14 @@ class ApplyBookController extends Controller
         $sales_result = self::updateApplyWaitDatas(new SalesforceColumnApplyBook, new Salesforce, 'sales_id', $apply_at);
         $mcht_result = self::updateApplyWaitDatas(new MerchandiseColumnApplyBook, new Merchandise, 'mcht_id', $apply_at);
         $pmod_result = self::updateApplyWaitDatas(new PaymentModuleColumnApplyBook, new PaymentModule, 'pmod_id', $apply_at);
+        $noti_result = self::updateApplyWaitDatas(new NotiUrlColumnApplyBook, new NotiUrl, 'noti_id', $apply_at);
 
+        
         logging([
-            'salesforces' => $sales_result,
-            'merchandises' => $mcht_result,
-            'payment_modules' => $pmod_result,
+            'salesforces'       => $sales_result,
+            'merchandises'      => $mcht_result,
+            'payment_modules'   => $pmod_result,
+            'noti_urls'         => $noti_result,
         ], 'apply-book-column-scheduler');
     }
 
@@ -138,7 +143,23 @@ class ApplyBookController extends Controller
             $cols  = [
                 $parent."*",
                 "merchandises.mcht_name as dest_name",
-                "payment_modules.note as pmod_note",
+                "payment_modules.note",
+            ];
+        }
+        else if($dest_type === 3)
+        {
+            $query = NotiUrlColumnApplyBook::join('noti_urls', 'noti_urls_column_apply_books.noti_id', '=', 'noti_urls.id')
+                ->join('merchandises', 'noti_urls.mcht_id', '=', 'merchandises.id')
+                ->where(function ($query) use ($search) {
+                    return $query->where('merchandises.mcht_name', 'like', "%$search%")
+                        ->orWhere('noti_urls.note', 'like', "%$search%")
+                        ->orWhere('noti_urls_column_apply_books.apply_data', 'like', "%$search%");
+                });
+            $parent = 'noti_urls_column_apply_books.';
+            $cols  = [
+                $parent."*",
+                "merchandises.mcht_name as dest_name",
+                "noti_urls.note",
             ];
         }
         else
@@ -175,6 +196,8 @@ class ApplyBookController extends Controller
             $query = new MerchandiseColumnApplyBook;
         else if($dest_type === 'payment_modules')
             $query = new PaymentModuleColumnApplyBook;
+        else if($dest_type === 'noti_urls')
+            $query = new NotiUrlColumnApplyBook;
         else
             return $this->extendResponse(1999, '잘못된 변경대상');
 

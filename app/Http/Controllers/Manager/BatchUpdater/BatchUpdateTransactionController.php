@@ -13,7 +13,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
-use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Models\Brand;
 use App\Http\Controllers\Manager\Transaction\SettleAmountCalculator;
 
 use App\Http\Controllers\Controller;
@@ -88,9 +88,9 @@ class BatchUpdateTransactionController extends BatchUpdateController
             ->whereIn('id', $request->selected_idxs)
             ->get();
 
-        $b_info = BrandInfo::getBrandById($request->user()->brand_id);
+        $brand = Brand::where('id', $request->user()->brand_id)->first();
         $trans = json_decode(json_encode($db_trans), true);
-        $trans = SettleAmountCalculator::setSettleAmount($trans, $b_info['dev_settle_type']);
+        $trans = SettleAmountCalculator::setSettleAmount($trans, $brand->dev_settle_type);
         $i=0;
 
         foreach($db_trans as $tran)

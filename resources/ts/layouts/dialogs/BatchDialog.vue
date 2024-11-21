@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import MchtBatchOverview from '@/layouts/components/batch-updaters/MchtBatchOverview.vue'
+import NotiUrlBatchOverview from '@/layouts/components/batch-updaters/NotiUrlBatchOverview.vue'
 import PayModuleBatchOverview from '@/layouts/components/batch-updaters/PayModuleBatchOverview.vue'
 import SalesBatchOverview from '@/layouts/components/batch-updaters/SalesBatchOverview.vue'
 import TransactionBatchOverview from '@/layouts/components/batch-updaters/TransactionBatchOverview.vue'
@@ -36,6 +37,8 @@ defineExpose({
         <SalesBatchOverview :selected_idxs="props.selected_idxs" v-if="props.item_type === ItemTypes.Salesforce"
             @update:select_idxs="emits('update:select_idxs', $event)"/>
         <TransactionBatchOverview :selected_idxs="props.selected_idxs" v-if="props.item_type === ItemTypes.Transaction"
+            @update:select_idxs="emits('update:select_idxs', $event)"/>
+        <NotiUrlBatchOverview :selected_idxs="props.selected_idxs" v-if="props.item_type === ItemTypes.NotiUrl"
             @update:select_idxs="emits('update:select_idxs', $event)"/>
     </VDialog>
 </template>

@@ -22,6 +22,8 @@ declare module '@vue/runtime-core' {
     AppTextField: typeof import('./resources/ts/@core/components/app-form-elements/AppTextField.vue')['default']
     BanksExplainDialog: typeof import('./resources/ts/layouts/dialogs/users/BanksExplainDialog.vue')['default']
     BatchDialog: typeof import('./resources/ts/layouts/dialogs/BatchDialog.vue')['default']
+    BillKeyCreateDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/BillKeyCreateDialog.vue')['default']
+    BillKeyPayDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/BillKeyPayDialog.vue')['default']
     CancelDepositDialog: typeof import('./resources/ts/layouts/dialogs/transactions/CancelDepositDialog.vue')['default']
     CancelPartDialog: typeof import('./resources/ts/layouts/dialogs/transactions/CancelPartDialog.vue')['default']
     CancelTransDialog: typeof import('./resources/ts/layouts/dialogs/transactions/CancelTransDialog.vue')['default']
