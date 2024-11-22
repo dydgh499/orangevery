@@ -10,6 +10,7 @@ use App\Http\Controllers\Manager\Merchandise\NotiUrlController;
 use App\Http\Controllers\Manager\Merchandise\SpecifiedTimeDisablePaymentController;
 use App\Http\Controllers\Manager\Merchandise\ProductController;
 use App\Http\Controllers\Manager\Merchandise\BillKeyController;
+use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
 
 use App\Http\Controllers\Manager\SalesforceController;
 use App\Http\Controllers\Manager\Salesforce\UnderAutoSettingController;
