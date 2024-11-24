@@ -104,12 +104,12 @@ class DifferenceSettlement
                 return [];
 
             $datas = $contents ? $this->service->getDataRecord($contents) : [];
-            logging(['date'=>$req_date, 'data-count'=>count($datas)], $this->service_name."\t $connection_type \t"."difference-settlement-response");
+            logging(['date'=>$req_date, 'data-count'=>count($datas)], $this->service_name."\t $connection_type \t"."difference-settlement-response (O)");
             return $datas;    
         }
         catch(\Throwable $e)
         {
-            error(['date'=>$req_date, 'datas'=>[]], $this->service_name."\t $connection_type \t"."difference-settlement-response-error(". $e->getMessage().")");
+            error(['date'=>$req_date, 'datas'=>[], 'error' => $e->getMessage()], $this->service_name."\t $connection_type \t"."difference-settlement-response (X)");
             return [];
         }
     }
