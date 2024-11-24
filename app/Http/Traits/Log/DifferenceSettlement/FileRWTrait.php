@@ -3,27 +3,27 @@ namespace App\Http\Traits\Log\DifferenceSettlement;
 
 trait FileRWTrait
 {    
-    private function setNtypeField($string, $length)
+    protected function setNtypeField($string, $length)
     {
         return sprintf("%0".$length."s", $string);
     }
 
-    private function setAtypeField($string, $length)
+    protected function setAtypeField($string, $length)
     {    
         return sprintf("%-".$length."s", $string);
     }
     
-    private function getNtypeField($data, $s_idx, $length)
+    protected function getNtypeField($data, $s_idx, $length)
     {
         return (int)substr($data, $s_idx, $length);
     }
 
-    private function getAtypeField($data, $s_idx, $length)
+    protected function getAtypeField($data, $s_idx, $length)
     {
         return ltrim(substr($data, $s_idx, $length));
     }
 
-    private function getMchtSectionName($code)
+    protected function getMchtSectionName($code)
     {
         $mcht_sections = [
             '0' => '영세',

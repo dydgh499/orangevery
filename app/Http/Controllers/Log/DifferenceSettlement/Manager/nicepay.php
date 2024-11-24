@@ -32,7 +32,6 @@ class nicepay implements DifferenceSettlementInterface
             $business_num = str_replace('-', '', $trans[$i]->business_num);
             if($business_num)
             {
-                // amount
                 $total_amount += $trans[$i]->amount;
                 $total_count += 1;
     
@@ -71,7 +70,7 @@ class nicepay implements DifferenceSettlementInterface
             $data = $datas[$i];
             $is_cancel  = $this->getNtypeField($data, 2, 1);    //원래는 A타입으로 읽어야함 내부 로직상 변경
             $req_dt     = $this->getNtypeField($data, 3, 8);
-            $add_field  = (int)$this->getAtypeField($data, 297, 103);
+            $add_field  = (int)$this->getAtypeField($data, 199, 40);
             $mcht_section_code = $this->getAtypeField($data, 239, 1);
             $supply_amount  = $this->getNtypeField($data, 242, 15);
             $vat_amount     = $this->getNtypeField($data, 257, 15);
@@ -79,6 +78,7 @@ class nicepay implements DifferenceSettlementInterface
             $settle_dt = $this->getNtypeField($data, 287, 8);
             $settle_result_code = $this->getAtypeField($data, 295, 2);
             // 정산금이 존재할 때만
+            echo $settle_amount."\n ";
             if($settle_amount > 0)
             {
                 if($is_cancel)
@@ -88,7 +88,7 @@ class nicepay implements DifferenceSettlementInterface
                     $settle_amount *= -1;
                 }
                 $record = [
-                    'trans_id'   => $add_field,
+                    'trans_id'              => $add_field,
                     'settle_result_code'    => $settle_result_code,
                     'settle_result_msg'     => $this->getSettleMessage($settle_result_code),
                     'card_company_result_code'  => '',
@@ -108,11 +108,11 @@ class nicepay implements DifferenceSettlementInterface
                     $record['req_dt']     = Carbon::createFromFormat('Ymd', (string)$req_dt)->format('Y-m-d');
                     $record['settle_dt']  = Carbon::createFromFormat('Ymd', (string)$settle_dt)->format('Y-m-d');
                     if($add_field !== 0)
-                        $records[] = $record;    
+                        $records[] = $record;
                 }
                 catch(\Throwable $e)
                 {
-                    error($record, 'hecto-difference-settlement-get-data('.$e->getMessage().')');
+                    error($record, 'nicepay-difference-settlement-get-data('.$e->getMessage().')');
                 }
             }
         }

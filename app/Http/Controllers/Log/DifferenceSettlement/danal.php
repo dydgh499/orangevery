@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Log\DifferenceSettlement;
 
 use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlementInterface;
 use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlement;
+use App\Enums\DifferenceSettleHectoRecordType;
 use Carbon\Carbon;
 
 class danal extends DifferenceSettlement implements DifferenceSettlementInterface
@@ -18,8 +19,8 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
         $this->RQ_TOTAL_FILTER_SIZE  = 473;
         $this->RQ_END_FILTER_SIZE    = 491;
 
-        $main_config_name   = 'different_settlement_main_'.$this->service_name;
-        $dr_config_name     = 'different_settlement_dr'.$this->service_name;
+        $main_config_name   = 'main_'.$this->service_name;
+        $dr_config_name     = 'dr_'.$this->service_name;
 
         config(['filesystems.disks.'.$main_config_name => [
             'driver' => 'sftp',
@@ -41,13 +42,55 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
         [$this->dr_sftp_connection, $this->dr_connection_stat] = $this->connectSFTPServer($dr_config_name, 'dr');
     }
 
+    private function setTotalRecord($total_count, $total_amount)
+    {
+        $total_records  = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);
+        $total_records .= $this->setNtypeField($total_count, 7);
+        if($total_amount < 0)
+            $total_records .= "-".$this->setNtypeField(abs($total_amount), 17);
+        else
+            $total_records .= $this->setNtypeField($total_amount, 18);;
+        $total_records .= $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE)."\r\n";
+        return $total_records;
+    }
+
     public function request(Carbon $date, $trans)
     {
-        $file_name = $date->copy()->format('ymd');
-        $req_date = $date->copy()->format('Ymd');
-        // 업체명toDANAL_differ.YYYYMM
-        $save_path = "/diff/".$this->brand['rep_mid']."toDANAL_differ.".$file_name;
-        return $this->_request($save_path, $req_date, $trans);
+        if($this->main_connection_stat)
+        {
+            $file_name = $date->copy()->format('ymd');
+            $req_date = $date->copy()->format('Ymd');
+            // 업체명toDANAL_differ.YYYYMM
+            $save_path = "/diff/".$this->brand['rep_mid']."toDANAL_differ.".$file_name;
+            
+            $total_amount = 0;
+            $total_count  = 0;
+            $full_record = $this->setStartRecord($req_date);
+
+            $mids = $trans->pluck($this->PMID_MODE ? 'p_mid' : 'mid')->unique()->all();
+            foreach($mids as $mid)
+            {
+                $mcht_trans = $this->getMidMatchTransctions($trans, $mid);
+                if(count($mcht_trans) > 0)
+                {
+                    $_mid = $this->PMID_MODE ? $mcht_trans[0]->p_mid : $mid;
+                    if(empty($_mid) === false)
+                    {
+                        $header = $this->setHeaderRecord($_mid);
+                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num']);
+                        $total  = $this->setTotalRecord($count, $amount);
+    
+                        $full_record .= $header.$data_records.$total;
+                        $total_count += ($count + 2);   //header, total records
+                        $total_amount += $amount;    
+                    }
+                }
+            }
+            $total_count += 2;  // start, end records
+            $full_record .= $this->setEndRecord($total_count, $total_amount);
+            return $this->upload($save_path, $full_record);
+        }
+        return false;  
     }
 
     public function response(Carbon $date)

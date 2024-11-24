@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Log\DifferenceSettlement;
 
 use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlementInterface;
 use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlement;
+use App\Enums\DifferenceSettleHectoRecordType;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
@@ -26,7 +27,7 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
             'host' => "118.129.171.153",
             'port' => 5555,
             'username' => $brand['sftp_id'],
-            'privateKey' => Storage::disk('local')->get('id_rsa'),
+            'protectedKey' => Storage::disk('local')->get('id_rsa'),
             'passphrase' => $brand['sftp_password'],
             'passive' => false,
         ]]);
@@ -35,7 +36,7 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
             'host' => "118.130.130.27", // 개발서버
             'port' => 5555,
             'username' => $brand['sftp_id'],
-            'privateKey' => Storage::disk('local')->get('id_rsa'),
+            'protectedKey' => Storage::disk('local')->get('id_rsa'),
             'passphrase' => $brand['sftp_password'],
             'passive' => false,
         ]]);
@@ -43,12 +44,49 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
         [$this->dr_sftp_connection, $this->dr_connection_stat] = [null, false];
     }
 
+    protected function setTotalRecord($total_count, $total_amount)
+    {
+        $total_records  = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);
+        $total_records .= $this->setAtypeField($total_count, 7);
+        $total_records .= $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE)."\r\n";
+        return $total_records;
+    }
+
     public function request(Carbon $date, $trans)
     {
-        $req_date = $date->format('Ymd');
-        $brand_business_num = str_replace('-', '', $this->brand['business_num']);  // ?
-        $save_path = "/upload/dfsttm/send/daff_welcome_".$brand_business_num."_".$req_date."_req";        
-        return $this->_request($save_path, $req_date, $trans);
+        if($this->main_connection_stat)
+        {
+            $req_date = $date->format('Ymd');
+            $brand_business_num = str_replace('-', '', $this->brand['business_num']);  // ?
+            $save_path = "/upload/dfsttm/send/daff_welcome_".$brand_business_num."_".$req_date."_req";        
+
+            $total_amount = 0;
+            $total_count  = 0;
+            $full_record = $this->setStartRecord($req_date);
+
+            $mids = $trans->pluck($this->PMID_MODE ? 'p_mid' : 'mid')->unique()->all();
+            foreach($mids as $mid)
+            {
+                $mcht_trans = $this->getMidMatchTransctions($trans, $mid);
+                if(count($mcht_trans) > 0)
+                {
+                    $_mid = $this->PMID_MODE ? $mcht_trans[0]->p_mid : $mid;
+                    if(empty($_mid) === false)
+                    {
+                        $header = $this->setHeaderRecord($_mid);
+                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num']);
+                        $total  = $this->setTotalRecord($count, $amount);
+    
+                        $full_record .= $header.$data_records.$total;
+                        $total_count += $count;    
+                        $total_amount += $amount;
+                    }
+                }
+            }
+            $full_record .= $this->setEndRecord($total_count, $total_amount);
+            return $this->upload($save_path, $full_record);
+        }
+        return false;
     }
 
     public function response(Carbon $date)

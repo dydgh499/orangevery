@@ -38,7 +38,9 @@ class DifferenceSettlement
     }
     
     protected function connectSFTPServer($service_name, $type)
-    {
+    {        
+        if(env('APP_ENV') === 'local')
+            return [null, true];
         try
         {
             $connection = Storage::disk($service_name);
@@ -49,97 +51,70 @@ class DifferenceSettlement
         {
             $connection = null;
             $connection_stat = false;
-            logging(['type'=>$type], $service_name.'-difference-settlement-connection-fail');
+            logging(['type'=>$type], $this->service_name."\t $type \t"."difference-settlement-connection (X)");
         }
         return [$connection, $connection_stat];
     }
 
-    protected function _request($save_path, $req_date, $trans)
+    protected function getMidMatchTransctions($trans, $mid)
     {
-        $sub_count    = 0;
-        $total_amount = 0;
-        $total_count  = 0;
-        $full_record = $this->setStartRecord($req_date);
+        return $trans->filter(function ($tran)use ($mid) {
+            if($this->PMID_MODE)
+                return $tran->p_mid === $mid;
+            else
+                return $tran->mid === $mid;
+        })->values();
+    }
 
-        $mids = $trans->pluck($this->PMID_MODE ? 'p_mid' : 'mid')->unique()->all();
-        foreach($mids as $mid)
-        {
-            $mcht_trans = $trans->filter(function ($tran)use ($mid) {
-                if($this->PMID_MODE)
-                    return $tran->p_mid === $mid;
-                else
-                    return $tran->mid === $mid;
-            })->values();
-
-            if(count($mcht_trans) > 0)
-            {
-                $_mid = $this->PMID_MODE ? $mcht_trans[0]->p_mid : $mid;
-                if($_mid === "")
-                    continue;
-
-                $header = $this->setHeaderRecord($_mid);
-                [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num']);
-                $total  = $this->setTotalRecord($count, $amount);
-
-                $full_record .= $header.$data_records.$total;
-                $total_count += $count;    
-                $total_amount += $amount;
-
-                if($this->service_name === 'danal' || $this->service_name === 'nicepay' || $this->service_name === 'welcome')
-                    $sub_count += 2;  //header, total records
-            }
-        }
-        if($this->service_name === 'danal' || $this->service_name === 'nicepay' || $this->service_name === 'welcome')
-            $sub_count += 2;  // start, end records
-        $full_record .= $this->setEndRecord($total_count + $sub_count, $total_amount);
-
-        $result = false;
+    protected function upload($save_path, $full_record)
+    {
         if($this->main_connection_stat)
         {
-            $result = $this->main_sftp_connection->put($save_path, $full_record);
-            logging(['save_path'=>$save_path], $this->service_name.'-difference-settlement-request (main)');
+            if($this->main_sftp_connection->put($save_path, $full_record))
+            {
+                logging(['save_path'=>$save_path], $this->service_name."\t main \t"."difference-settlement-request (O)");
+                return true;
+            }
+            else
+            {
+                error(['save_path'=>$save_path], $this->service_name."\t main \t"."difference-settlement-request (X)");
+                return false;
+            }    
         }
-        if($this->dr_connection_stat)
-        {
-            $result = $this->dr_sftp_connection->put($save_path, $full_record);
-            logging(['save_path'=>$save_path], $this->service_name.'-difference-settlement-request (dr)');
-        }
-
-        if($result === false)
-            error(['save_path'=>$save_path], $this->service_name.'-difference-settlement-request (fail)');
-        
-        return $result;
+        else
+            return false;
     }
 
     protected function _response($res_path, $req_date)
     {
         try
         {
+            $connection_type = "";
             if($this->main_connection_stat && $this->main_sftp_connection->exists($res_path))
+            {
+                $connection_type = 'MAIN';
                 $contents = $this->main_sftp_connection->get($res_path);
+            }
             else if($this->dr_connection_stat && $this->dr_sftp_connection->exists($res_path))
             {
-                logging([], $this->service_name.'-difference-settlement-main-sftp-connection-fail');
+                $connection_type = 'DR';
                 $contents = $this->dr_sftp_connection->get($res_path);
             }
             else
-            {
-                logging([], $this->service_name.'-difference-settlement-dr-sftp-connection-fail');
-                $contents = null;
-            }
+                return [];
 
             $datas = $contents ? $this->service->getDataRecord($contents) : [];
-            logging(['date'=>$req_date, 'data-count'=>count($datas)], $this->service_name.'-difference-settlement-response');
-            return $datas;
+            logging(['date'=>$req_date, 'data-count'=>count($datas)], $this->service_name."\t $connection_type \t"."difference-settlement-response");
+            return $datas;    
         }
         catch(\Throwable $e)
         {
-            logging(['date'=>$req_date, 'datas'=>[]], $this->service_name.'-difference-settlement-response('. $e->getMessage().")");
-            return null;
+            error(['date'=>$req_date, 'datas'=>[]], $this->service_name."\t $connection_type \t"."difference-settlement-response-error(". $e->getMessage().")");
+            return [];
         }
     }
 
-    private function setStartRecord($req_date)
+    protected function setStartRecord($req_date)
     {
         if($this->service_name == 'galaxiamoneytree')
         {
@@ -162,48 +137,18 @@ class DifferenceSettlement
         }
     }
 
-    private function setHeaderRecord($rep_mid)
+    protected function setHeaderRecord($rep_mid)
     {
-        if($this->service_name == 'galaxiamoneytree')   //갤럭시아는 없음
-            return '';
-        else
-        {
-            $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::HEADER->value, 2);
-            $rep_mid        = $this->setAtypeField($rep_mid, 10);
-            $filter         = $this->setAtypeField('', $this->RQ_HEADER_FILTER_SIZE);
-            return $record_type.$rep_mid.$filter."\r\n";    
-        }
+        $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::HEADER->value, 2);
+        $rep_mid        = $this->setAtypeField($rep_mid, 10);
+        $filter         = $this->setAtypeField('', $this->RQ_HEADER_FILTER_SIZE);
+        return $record_type.$rep_mid.$filter."\r\n";    
     }
 
-    private function setTotalRecord($total_count, $total_amount)
-    {
-        if($this->service_name == 'galaxiamoneytree')   //갤럭시아는 없음
-            return '';
-        else
-        {
-            $total_records  = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);
-
-            if($this->service_name === 'welcome1')
-                $total_records .= $this->setAtypeField($total_count, 7);
-            else
-                $total_records .= $this->setNtypeField($total_count, 7);
-
-            if($this->service_name === 'hecto' || $this->service_name === 'welcome1')
-                $total_records .= $this->setAtypeField($total_amount, 18);
-            else if(($this->service_name === 'nicepay' || $this->service_name === 'danal') && $total_amount < 0)
-                $total_records .= "-".$this->setNtypeField(abs($total_amount), 17);
-            else if($this->service_name !== 'welcome1')
-                $total_records .= $this->setNtypeField($total_amount, 18);
-
-            $total_records .= $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE)."\r\n";
-            return $total_records;
-        }
-    }
-
-    private function setEndRecord($total_count, $total_amount)
+    protected function setEndRecord($total_count, $total_amount)
     {
         if($this->service_name == 'galaxiamoneytree')
-        {            
+        {
             $record_type    = $this->setAtypeField('TR', 2);
             $total_count    = $this->setNtypeField($total_count, 7);
             $total_amount   = $this->setNtypeField($total_amount, 18);

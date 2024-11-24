@@ -20,7 +20,6 @@ declare module '@vue/runtime-core' {
     AppStepper: typeof import('./resources/ts/@core/components/AppStepper.vue')['default']
     AppTextarea: typeof import('./resources/ts/@core/components/app-form-elements/AppTextarea.vue')['default']
     AppTextField: typeof import('./resources/ts/@core/components/app-form-elements/AppTextField.vue')['default']
-    BanksExplainDialog: typeof import('./resources/ts/layouts/dialogs/users/BanksExplainDialog.vue')['default']
     BatchDialog: typeof import('./resources/ts/layouts/dialogs/BatchDialog.vue')['default']
     BillKeyCreateDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/BillKeyCreateDialog.vue')['default']
     BillKeyPayDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/BillKeyPayDialog.vue')['default']
