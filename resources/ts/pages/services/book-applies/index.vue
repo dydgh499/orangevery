@@ -62,7 +62,7 @@ const destory = async (id: number) => {
                     </tr>
                     <tr>
                         <template v-for="(header, key) in head.flat_headers">
-                            <template v-if="store.params.dest_type < 2 && header.ko === '결제모듈 별칭'">
+                            <template v-if="store.params.dest_type < 2 && header.ko === '별칭'">
                             </template>
                             <th v-else :key="key" v-show="header.visible" class='list-square'>
                                 {{ header.ko }}
