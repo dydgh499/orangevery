@@ -89,8 +89,6 @@ class nicepay extends DifferenceSettlement implements DifferenceSettlementInterf
             }
             $total_count += 2;  // start, end records
             $full_record .= $this->setEndRecord($total_count, $total_amount);
-            echo $save_path;
-            Storage::disk('local')->put($save_path, $full_record);
             return $this->upload($save_path, $full_record);
         }
         return false;  
