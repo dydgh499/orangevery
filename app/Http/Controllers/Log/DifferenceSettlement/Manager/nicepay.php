@@ -78,7 +78,6 @@ class nicepay implements DifferenceSettlementInterface
             $settle_dt = $this->getNtypeField($data, 287, 8);
             $settle_result_code = $this->getAtypeField($data, 295, 2);
             // 정산금이 존재할 때만
-            echo $settle_amount."\n ";
             if($settle_amount > 0)
             {
                 if($is_cancel)
