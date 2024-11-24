@@ -114,7 +114,7 @@ class DifferenceSettlement
         }
     }
 
-    protected function setStartRecord($req_date)
+    public function setStartRecord($req_date)
     {
         if($this->service_name == 'galaxiamoneytree')
         {
@@ -137,7 +137,7 @@ class DifferenceSettlement
         }
     }
 
-    protected function setHeaderRecord($rep_mid)
+    public function setHeaderRecord($rep_mid)
     {
         $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::HEADER->value, 2);
         $rep_mid        = $this->setAtypeField($rep_mid, 10);
@@ -145,7 +145,7 @@ class DifferenceSettlement
         return $record_type.$rep_mid.$filter."\r\n";    
     }
 
-    protected function setEndRecord($total_count, $total_amount)
+    public function setEndRecord($total_count, $total_amount)
     {
         if($this->service_name == 'galaxiamoneytree')
         {
