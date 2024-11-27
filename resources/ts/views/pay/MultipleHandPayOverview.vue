@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { inputFormater } from '@/@core/utils/formatters'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import MultipleHandPayForm from '@/views/pay/multiple-hand-pay/MultipleHandPayForm.vue'
 import type { Merchandise, MultipleHandPay, PayModule, SalesSlip } from '@/views/types'
@@ -22,7 +23,11 @@ const hand_pay_info = ref(<MultipleHandPay>({}))
 const hand_pay_infos = ref(<MultipleHandPay[]>([]))
 const vForm = ref<VForm>()
 const noti_temp = ref('')
-const phone_num_format = ref('')
+const {
+    phone_num_format,
+    phone_num,
+    formatPhoneNum,
+} = inputFormater()
 const valid_total_amount = ref(0)
 
 const urlParams = new URLSearchParams(window.location.search)
@@ -230,18 +235,6 @@ const isShowMobileVerification = computed(() => {
     return props.pay_module.pay_window_secure_level >= 3 && is_verify_sms.value === false
 })
 
-const formatPhoneNum = computed(() => {
-    let raw_value = phone_num_format.value.replace(/\D/g, '');
-    hand_pay_info.value.buyer_phone = raw_value
-    // 휴대폰 번호 마스킹
-    if (raw_value.length <= 3)
-        phone_num_format.value = raw_value;
-    else if (raw_value.length <= 7) 
-        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3);
-    else
-        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 7) + '-' + raw_value.slice(7, 11);
-})
-
 watchEffect(async () => {
     if (hand_pay_info.value.buyer_name && hand_pay_info.value.buyer_phone) {
         // watchEffect가 잡히지 않는 이유?
@@ -249,6 +242,9 @@ watchEffect(async () => {
     let is_valid = await vForm.value?.validate()
     hand_pay_info.value.status_icon = is_valid?.valid ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'
     hand_pay_info.value.status_color = is_valid?.valid ? 'success' : 'error'
+})
+watchEffect(() => {
+    hand_pay_info.value.buyer_phone = phone_num.value
 })
 
 watchEffect(() => {

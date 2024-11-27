@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import BillKeyCreateDialog from '@/layouts/dialogs/pay-modules/BillKeyCreateDialog.vue';
-import BillKeyPayDialog from '@/layouts/dialogs/pay-modules/BillKeyPayDialog.vue';
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import { useSearchStore } from '@/views/merchandises/pay-modules/bill-keys/useStore';
@@ -16,7 +15,6 @@ const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 
 const billKeyCreateDialog = ref()
-const billKeyPayDialog = ref()
 
 const remove = async(id: number) => {
     if (await alert.value.show('정말 삭제 하시겠습니까?')) {
@@ -88,10 +86,6 @@ provide('exporter', exporter)
                                     </div>
                                 </span>
                                 <span v-else-if="_key === `extra_col`">
-                                    <VBtn prepend-icon="tabler:credit-card-pay" size="small" type="button" color="primary" @click="billKeyPayDialog.show(item)"
-                                        style="margin-right: 1em;">
-                                        결제
-                                    </VBtn>
                                     <VBtn prepend-icon="tabler-trash" size="small" type="button" color="error" @click="remove(item['id'])">
                                         삭제
                                     </VBtn>
@@ -106,6 +100,5 @@ provide('exporter', exporter)
             </template>
         </BaseIndexView>
         <BillKeyCreateDialog ref="billKeyCreateDialog"/>
-        <BillKeyPayDialog ref="billKeyPayDialog"/>
     </div>
 </template>

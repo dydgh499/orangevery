@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { inputFormater } from '@/@core/utils/formatters';
 import { axios } from '@/plugins/axios';
 import { requiredValidatorV2 } from '@validators';
 
@@ -10,8 +11,11 @@ const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 
 const mcht_id = ref(0)
-const phone_num = ref('')
-const phone_num_format = ref('')
+const {
+    phone_num_format,
+    phone_num,
+    formatPhoneNum,
+} = inputFormater()
 
 const show = (_mcht_id: number) => {
     visible.value = true
@@ -39,17 +43,6 @@ const submit = async() => {
     }
 }
 
-const formatPhoneNum = computed(() => {
-    let raw_value = phone_num_format.value.replace(/\D/g, '');
-    phone_num.value = raw_value
-    // 휴대폰 번호 마스킹
-    if (raw_value.length <= 3)
-        phone_num_format.value = raw_value;
-    else if (raw_value.length <= 7) 
-        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3);
-    else
-        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 7) + '-' + raw_value.slice(7, 11);
-})
 defineExpose({
     show
 })

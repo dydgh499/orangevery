@@ -171,7 +171,7 @@ class BillKeyController extends Controller
      * @urlParam id integer required 빌키 PK
      */
     public function hand(Request $request, int $id)
-    {
+    {   // 테스트를 위한 엔드포인트 입니다.
         if(Ablilty::isOperator($request))
         {
             $bill_key = $this->bill_keys->where('id', $id)->first();

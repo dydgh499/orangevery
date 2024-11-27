@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { inputFormater } from '@/@core/utils/formatters';
 import { payWindowStore } from '@/views/quick-view/payWindowStore';
 import { PayModule } from '@/views/types';
 import corp from '@corp';
@@ -17,11 +18,18 @@ const pay_info = reactive({
     buyer_phone : '',
 })
 const is_sms_link = ref()
-const format_amount = ref('0')
-const phone_num_format = ref('')
 const payment_module = ref()
 const url = ref()
+const {
+    phone_num_format,
+    amount_format,
 
+    phone_num,
+    amount,
+
+    formatPhoneNum,
+    formatAmount,
+} = inputFormater()
 const { copy, send, getPayWindowUrl, renewPayWindow } = payWindowStore()
 
 const show = async (_payment_module: PayModule) => {
@@ -45,22 +53,9 @@ const submit = async () => {
     }
 }
 
-const formatAmount = computed(() => {
-    const parse_amount = parseFloat(format_amount.value.replace(/,/g, "")) || 0;
-    pay_info.amount = parse_amount
-    format_amount.value = parse_amount.toLocaleString()
-})
-
-const formatPhoneNum = computed(() => {
-    let raw_value = phone_num_format.value.replace(/\D/g, '');
-    pay_info.buyer_phone = raw_value
-    // 휴대폰 번호 마스킹
-    if (raw_value.length <= 3)
-        phone_num_format.value = raw_value;
-    else if (raw_value.length <= 7) 
-        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3);
-    else
-        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 7) + '-' + raw_value.slice(7, 11);
+watchEffect(() => {
+    pay_info.amount = amount.value
+    pay_info.buyer_phone = phone_num.value
 })
 
 defineExpose({
@@ -142,7 +137,7 @@ defineExpose({
                                     </VCol>
                                     <VCol cols="12" :md="8">
                                         <VTextField 
-                                            v-model="format_amount" 
+                                            v-model="amount_format" 
                                             suffix="₩" 
                                             name="amount"
                                             @input="formatAmount"

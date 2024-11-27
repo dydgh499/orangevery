@@ -359,6 +359,7 @@ return [
         'dev_realtime_settle_amount' => '개발사 즉시출금 이익금',
         'dev_settle_amount' => '개발사 이익금',
         'mcht_settle_amount' => '가맹점 정산금',
+        'rep_mid' => '대표 MID',
         // fee change history
         'bf_trx_fee' => '이전 수수료',
         'bf_hold_fee' => '이전 유보금 수수료',

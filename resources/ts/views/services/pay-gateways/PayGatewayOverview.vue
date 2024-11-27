@@ -7,7 +7,7 @@ import type { PayGateway } from '@/views/types'
 const {pgs } = useStore()
 const { setNullRemove } = useRequestStore()
 const addNewPG = () => {
-    pgs.push(<PayGateway>({
+    pgs.unshift(<PayGateway>({
         id: 0,
         pg_type: null,
         pg_name: '',

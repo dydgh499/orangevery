@@ -24,7 +24,7 @@ const {
     card_num_format,
     yymm_format,
 
-    buyer_phone,
+    phone_num,
     card_num,
     yymm,
 
@@ -87,7 +87,7 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-    bill_key.value.buyer_phone = buyer_phone.value
+    bill_key.value.buyer_phone = phone_num.value
     bill_key.value.card_num = card_num.value
     bill_key.value.yymm = yymm.value
 })

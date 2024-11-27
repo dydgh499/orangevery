@@ -60,41 +60,6 @@ class BrandController extends Controller
     {
         return $brand_id == env('MAIN_BRAND_ID', 1) ? true : false;
     }
-
-    /**
-     * 차트 데이터 출력
-     *
-     * 브랜드 이상 가능
-     */
-    public function chart(Request $request)
-    {
-        $chart = $this->brands->first([
-            DB::raw("(SUM(deposit_amount) + SUM(extra_deposit_amount)) AS total_deposit_amount"),
-            DB::raw("SUM(deposit_amount) AS deposit_amount"),
-            DB::raw("SUM(extra_deposit_amount) AS extra_deposit_amount"),
-            DB::raw("SUM(curr_deposit_amount) AS curr_deposit_amount"),
-        ]);
-        $total_dev_amount = (int)$this->getTotalDevFee($request);
-        $chart->extra_deposit_amount += $total_dev_amount;
-        $chart->total_deposit_amount += $total_dev_amount;
-        return $this->response(0, $chart);
-    }
-
-    public function getTotalDevFee($request)
-    {
-        if($this->isMainBrand($request->user()->brand_id) && Ablilty::isDevLogin($request))
-        {
-            $s_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d 00:00:00');
-            $e_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d 23:59:59');
-            $sum = Transaction::join('brands', 'transactions.brand_id', '=', 'brands.id')
-                ->where('transactions.trx_at', '>=', $s_dt)
-                ->where('transactions.trx_at', '<=', $e_dt)
-                ->first([DB::raw('SUM(dev_realtime_settle_amount + dev_settle_amount) as dev_realtime_settle_amount')]);
-            return $sum->dev_realtime_settle_amount;
-        }
-        else
-            return 0;
-    }
     
     /**
      * 목록출력
@@ -115,17 +80,13 @@ class BrandController extends Controller
 
         $query  = $query
             ->where('is_delete', false)
-            ->where('name', 'like', "%$search%")
-            ->with(['devAmount']);
+            ->where('name', 'like', "%$search%");
 
         $data   = $this->getIndexData($request, $query);
         foreach ($data['content'] as $content) {
             $content->free = $content->pv_options->free;
             $content->paid = $content->pv_options->paid;
             $content->auth = $content->pv_options->auth;
-            if(count($content->devAmount))
-                $content->extra_deposit_amount += (int)$content->devAmount[0]->dev_percent_amount;
-
             $content->makeHidden(['pv_options']);
         }
         return $this->response(0, $data);

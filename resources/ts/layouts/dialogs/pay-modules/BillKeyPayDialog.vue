@@ -15,9 +15,9 @@ interface BillPayInfo {
 
 const {
     phone_num_format,
-    format_amount,
+    amount_format,
 
-    buyer_phone,
+    phone_num,
     amount,
 
     formatPhoneNum,
@@ -67,7 +67,7 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-    bill_pay_info.value.buyer_phone = buyer_phone.value
+    bill_pay_info.value.buyer_phone = phone_num.value
     bill_pay_info.value.amount = amount.value
 })
 
@@ -141,7 +141,7 @@ defineExpose({
                                     </VCol>
                                     <VCol cols="8" :md="8">
                                         <VTextField 
-                                            v-model="format_amount" suffix="₩" 
+                                            v-model="amount_format" suffix="₩" 
                                             @input="formatAmount"
                                             variant="underlined"
                                             placeholder="상품금액을 입력해주세요" prepend-icon="ic:outline-price-change"

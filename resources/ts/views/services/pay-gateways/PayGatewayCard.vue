@@ -27,12 +27,8 @@ const addNewSection = () => {
     })
 }
 const filterPss = computed(() => {
-    if (props.item.id != 0) {
-        const filter = pss.filter(item => {
-            return item.pg_id == props.item.id;
-        })
-        return filter
-    }
+    if (props.item.id != 0) 
+        return pss.filter(item => { return item.pg_id == props.item.id })
     else
         return []
 })
@@ -49,6 +45,7 @@ watchEffect(() => {
         }
     }
 })
+
 watchEffect(() => {
     setNullRemove(pss)
 })
@@ -68,9 +65,11 @@ watchEffect(() => {
                                     <label>PG사 선택</label>
                                 </VCol>
                                 <VCol md="7">
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_type"
-                                        :items="pg_companies" prepend-inner-icon="ph-buildings" label="PG사 선택"
-                                        item-title="name" item-value="id" single-line :rules="[requiredValidatorV2(props.item.pg_type, 'PG사')]" />
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_type"
+                                        :items="pg_companies"
+                                        prepend-inner-icon="ph-buildings" label="PG사 선택"
+                                        item-title="name" item-value="id" single-line :rules="[requiredValidatorV2(props.item.pg_type, 'PG사')]" 
+                                    />
                                 </VCol>
                             </VRow>
                         </VCol>

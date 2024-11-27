@@ -159,8 +159,6 @@ class BatchUpdatePayModuleController extends BatchUpdateController
         return $this->batchResponse($row, '결제모듈');
     }
 
-    
-
     /**
      * 정산일 일괄적용
      */
@@ -265,6 +263,16 @@ class BatchUpdatePayModuleController extends BatchUpdateController
         return $this->batchResponse($row, '결제모듈');
     }
     
+    /**
+     * 결제모듈 이체 딜레이 일괄적용
+     *
+     */
+    public function setFinTrxDelay(Request $request)
+    {
+        $cols = ['fin_trx_delay' => $request->fin_trx_delay];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '결제모듈');        
+    }
 
     /**
      * 결제모듈 허용간격 일괄적용

@@ -68,17 +68,4 @@ class Brand extends Model
             ->where('is_delete', false)
             ->select();
     }
-    
-    public function devAmount()
-    {
-        request()->merge(['level'=> 50]);
-        $s_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d 00:00:00');
-        $e_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d 23:59:59');
-
-        return $this->hasMany(Transaction::class, 'brand_id')
-            ->where('transactions.trx_at', '>=', $s_dt)
-            ->where('transactions.trx_at', '<=', $e_dt)
-            ->selectRaw('brand_id, SUM(dev_realtime_settle_amount + dev_settle_amount) as dev_percent_amount')
-            ->groupBy('brand_id');
-    }
 }

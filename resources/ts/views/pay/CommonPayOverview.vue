@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { inputFormater } from '@/@core/utils/formatters';
 import { installments } from '@/views/merchandises/pay-modules/useStore';
 import type { BasePay, Merchandise, Options, PayModule } from '@/views/types';
 import { requiredValidatorV2 } from '@validators';
@@ -17,8 +18,15 @@ const params = <any>(inject('params'))
 
 const is_verify_sms = ref(false)
 
-const format_amount = ref('0')
-const phone_num_format = ref('')
+const {
+    phone_num_format,
+    amount_format,
+    phone_num,
+    amount,
+    formatPhoneNum,
+    formatAmount,
+} = inputFormater()
+
 props.common_info.installment = 0
 
 const updateToken = (value : string) => {
@@ -35,24 +43,6 @@ const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
 })
 
-const formatAmount = computed(() => {
-    const parse_amount = parseFloat(format_amount.value.replace(/,/g, "")) || 0;
-    props.common_info.amount = parse_amount
-    format_amount.value = parse_amount.toLocaleString()
-})
-
-const formatPhoneNum = computed(() => {
-    let raw_value = phone_num_format.value.replace(/\D/g, '');
-    props.common_info.buyer_phone = raw_value
-    // 휴대폰 번호 마스킹
-    if (raw_value.length <= 3)
-        phone_num_format.value = raw_value;
-    else if (raw_value.length <= 7) 
-        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3);
-    else
-        phone_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 7) + '-' + raw_value.slice(7, 11);
-})
-
 watchEffect(() => {
     const { mobile } = useDisplay()
     props.common_info.user_agent = mobile.value ? "WM" : "WP"
@@ -61,15 +51,17 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-    if(params_mode) {
+    if(params_mode.value) {
         props.common_info.item_name = params.value.item_name
         props.common_info.buyer_name = params.value.buyer_name
-
         phone_num_format.value = params.value.buyer_phone.toString()
         props.common_info.buyer_phone = params.value.buyer_phone
-
-        format_amount.value = params.value.amount.toString()
+        amount_format.value = params.value.amount.toString()
         props.common_info.amount = params.value.amount
+    }
+    else {
+        props.common_info.buyer_phone = phone_num.value
+        props.common_info.amount = amount.value
     }
 })
 </script>
@@ -157,11 +149,11 @@ watchEffect(() => {
                     <VCol cols="8" :md="8">
                         <div v-if="params_mode" style="display: inline-flex;" class="text-primary">
                             <VIcon size="24" icon="ic:outline-price-change" style="margin-right: 16px;"/>
-                            <h4>{{ format_amount }} 원</h4>
+                            <h4>{{ amount_format }} 원</h4>
                         </div>
                         <VTextField 
                             v-else
-                            v-model="format_amount" suffix="₩" 
+                            v-model="amount_format" suffix="₩" 
                             @input="formatAmount"
                             variant="underlined"
                             placeholder="상품금액을 입력해주세요" prepend-icon="ic:outline-price-change"

@@ -46,7 +46,7 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 
-    const metas = ref()
+    const metas = ref([])
 
     const boolToText = (col: any) => {
         if(typeof col == 'boolean') {
@@ -64,47 +64,6 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
         }
         head.exportToExcel(datas)
     }
-    
-    if(isMaster()) {
-        metas.value = [
-            {
-                icon: 'ic-outline-payments',
-                color: 'primary',
-                title: '총 입금액 합계',
-                stats: '0',
-            },
-            {
-                icon: 'ic-outline-payments',
-                color: 'default',
-                title: '입금액 합계',
-                stats: '0',
-            },
-            {
-                icon: 'ic-outline-payments',
-                color: 'success',
-                title: '부가입금액 합계',
-                stats: '0',
-            },
-            {
-                icon: 'ic-outline-payments',
-                color: 'info',
-                title: '현재입금액 합계',
-                stats: '0',
-            },
-        ]
-    }
-    
-    onMounted(async () => {
-        if(isMaster()) {
-            const r = await store.getChartData()
-            if(r.status == 200) {
-                metas.value[0]['stats'] = parseInt(r.data.total_deposit_amount).toLocaleString() + ' ₩'
-                metas.value[1]['stats'] = parseInt(r.data.deposit_amount).toLocaleString() + '₩'
-                metas.value[2]['stats'] = parseInt(r.data.extra_deposit_amount).toLocaleString() + '₩'
-                metas.value[3]['stats'] = parseInt(r.data.curr_deposit_amount).toLocaleString() + '₩'
-            }
-        }
-    })
 
     return {
         store,

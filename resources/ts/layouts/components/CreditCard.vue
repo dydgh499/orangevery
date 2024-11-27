@@ -93,7 +93,11 @@ watchEffect(() => {
                         </label>
                         <div class="card-item__content">
                             <label for="cardName" class="card-item__info" ref="cardName" v-if="props.is_old_auth">
-                                <div class="card-item__holder">본인확인</div>
+                                <div class="card-item__holder">
+                                    <span v-if="auth_num.length === 6">생년월일</span>
+                                    <span v-else-if="auth_num.length === 10">사업자번호</span>
+                                    <span v-else>본인확인</span>
+                                </div>
                                 <transition name="slide-fade-up">
                                     <div class="card-item__name" v-if="auth_num.length" key="1">
                                         <transition-group name="slide-fade-right">

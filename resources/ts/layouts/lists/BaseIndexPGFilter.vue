@@ -15,9 +15,7 @@ const store = <any>(inject('store'))
 
 const filterPgs = computed(() => {
     if(store.params.pg_id !== undefined) {
-            const filter = pss.filter(item => {
-            return item.pg_id == store.params.pg_id
-        })
+        const filter = pss.filter(item => { return item.pg_id == store.params.pg_id })
         store.params.ps_id = psFilter(filter, store.params.ps_id)
         return filter
     }

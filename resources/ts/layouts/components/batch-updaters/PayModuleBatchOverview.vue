@@ -5,7 +5,7 @@ import { batch } from '@/layouts/components/batch-updaters/batch'
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
-import { abnormal_trans_limits, installments, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore'
+import { abnormal_trans_limits, fin_trx_delays, installments, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
@@ -56,6 +56,7 @@ const pay_module = reactive<any>({
     payment_term_min: 1,
     fin_id: null,
     use_realtime_deposit: 0,
+    fin_trx_delay: 0,
     note: '',
     pg_id: null,
     ps_id: null,
@@ -115,6 +116,12 @@ const setUseRealtimeDeposit = (apply_type: number) => {
 const setFinId = (apply_type: number) => {
     post('set-fin-id', {
         'fin_id': pay_module.fin_id,
+    }, apply_type)
+}
+
+const setFinTrxDelay = (apply_type: number) => {
+    post('set-fin-trx-delay', {
+        'fin_trx_delay': pay_module.fin_trx_delay,
     }, apply_type)
 }
 
@@ -735,6 +742,35 @@ watchEffect(() => {
                                             <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
                                         <VBtn variant="tonal" size="small" color="secondary" @click="setFinId(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <VRow>
+                        <VCol :md="6" :cols="12" >
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12">
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.fin_trx_delay"
+                                        prepend-inner-icon="streamline-emojis:bug" :items="fin_trx_delays" label="이체 딜레이 선택"
+                                        item-title="title" item-value="id" single-line
+                                    />
+                                    <VTooltip activator="parent" location="top">
+                                        모아서 출금을 사용하는 가맹점을 변경할경우 중복출금이 발생할 수 있습니다.<br>
+                                        해당가맹점의 경우 거래중지 이후 변경해주세요.
+                                    </VTooltip>
+                                </VCol>
+                                <VCol md="6" col="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setFinTrxDelay(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setFinTrxDelay(1)"
                                             style='margin-left: 0.5em;'>
                                             예약적용
                                             <VIcon end size="18" icon="tabler-clock-up" />

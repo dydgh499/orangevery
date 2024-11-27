@@ -105,7 +105,8 @@ const addNewPayModule = async () => {
         use_realtime_deposit: 0,
         pay_dupe_least: 0,
         payment_term_min: 1,
-        p_mid: ''
+        p_mid: '',
+        pay_window_extend_hour: 1,
     })
     pay_module.mcht_id = props.item.id
     const res = await payModuleDlg.value.show(pay_module)

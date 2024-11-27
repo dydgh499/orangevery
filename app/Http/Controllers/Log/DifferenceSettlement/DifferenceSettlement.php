@@ -116,12 +116,19 @@ class DifferenceSettlement
 
     public function setStartRecord($req_date)
     {
-        if($this->service_name == 'galaxiamoneytree')
+        if($this->service_name === 'secta9ine')
+        {
+            $record_type    = $this->setAtypeField('HD', 2);
+            $create_dt      = $this->setAtypeField(date('ymd'), 6);
+            $filter         = $this->setAtypeField('', $this->RQ_START_FILTER_SIZE);
+            return $record_type.$create_dt.$filter."\r\n";  
+        }
+        else if($this->service_name == 'galaxiamoneytree')
         {
             $record_type    = $this->setAtypeField('HD', 2);
             $create_dt      = $this->setAtypeField(date('Ymd'), 8);
             $rep_mid        = $this->setAtypeField($this->brand['rep_mid'], 20);
-            $filter         = $this->setAtypeField('', $this->RQ_HEADER_FILTER_SIZE);
+            $filter         = $this->setAtypeField('', $this->RQ_START_FILTER_SIZE);
             return $record_type.$create_dt.$rep_mid.$filter."\r\n";  
         }
         else
@@ -147,12 +154,15 @@ class DifferenceSettlement
 
     public function setEndRecord($total_count, $total_amount)
     {
-        if($this->service_name == 'galaxiamoneytree')
+        if($this->service_name == 'galaxiamoneytree' || $this->service_name === 'secta9ine')
         {
             $record_type    = $this->setAtypeField('TR', 2);
             $total_count    = $this->setNtypeField($total_count, 7);
-            $total_amount   = $this->setNtypeField($total_amount, 18);
-            $filter         = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
+            $filter         = $this->setAtypeField('', $this->RQ_END_FILTER_SIZE);
+            if($total_amount < 0)
+                $total_amount = "-".$this->setNtypeField(abs($total_amount), 17);
+            else
+                $total_amount = $this->setNtypeField($total_amount, 18);
             return $record_type.$total_count.$total_amount.$filter."\r\n";
         }
         else

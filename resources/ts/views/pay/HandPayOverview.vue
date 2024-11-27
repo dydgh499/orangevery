@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { inputFormater } from '@/@core/utils/formatters';
 import CreditCard from '@/layouts/components/CreditCard.vue';
 import CommonPayOverview from '@/views/pay/CommonPayOverview.vue';
 import type { HandPay, Merchandise, PayModule, SalesSlip } from '@/views/types';
@@ -25,9 +26,15 @@ const hand_pay_info = reactive(<HandPay>({
     buyer_name: '',
     installment: 0,
 }))
-const card_num_format = ref('')
-const yymm_format = ref('')
 const vForm = ref<VForm>()
+const {
+    card_num_format,
+    yymm_format,
+    card_num,
+    yymm,
+    formatCardNum,
+    formatYYmm,
+} = inputFormater()
 
 const pay = async () => {
     if (hand_pay_info.pmod_id) {
@@ -54,18 +61,10 @@ const pay = async () => {
         snackbar.value.show('결제모듈을 선택해주세요.', 'error')
 }
 
-const formatCardNum = computed(() => {
-    let raw_value = card_num_format.value.replace(/\D/g, '')
-    hand_pay_info.card_num = raw_value
-    card_num_format.value = raw_value.match(/.{1,4}/g)?.join(' ') || ''  
+watchEffect(() => {
+    hand_pay_info.card_num = card_num.value
+    hand_pay_info.yymm = yymm.value
 })
-
-const formatYYmm = computed(() => {
-    let raw_value = yymm_format.value.replace(/\D/g, '')
-    hand_pay_info.yymm = raw_value
-    yymm_format.value = raw_value.match(/.{1,2}/g)?.join('/') || ''  
-})
-
 </script>
 <template>
     <VCard flat rounded>

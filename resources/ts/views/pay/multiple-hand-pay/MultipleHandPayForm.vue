@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { inputFormater } from '@/@core/utils/formatters'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
 import type { MultipleHandPay, Options, PayModule } from '@/views/types'
 import { lengthValidatorV2, requiredValidatorV2 } from '@validators'
@@ -12,30 +13,21 @@ interface Props {
 }
 const props = defineProps<Props>()
 const multiVForm = ref<VForm>()
-const card_num_format = ref('')
-const format_amount = ref('0')
-const yymm_format = ref('')
+
+const {
+    card_num_format,
+    yymm_format,
+    amount_format,
+    card_num,
+    yymm,
+    amount,
+    formatCardNum,
+    formatYYmm,
+    formatAmount,
+} = inputFormater()
 
 const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
-})
-
-const formatCardNum = computed(() => {
-    let raw_value = card_num_format.value.replace(/\D/g, '')
-    props.hand_pay_info.card_num = raw_value
-    card_num_format.value = raw_value.match(/.{1,4}/g)?.join(' ') || ''  
-})
-
-const formatYYmm = computed(() => {
-    let raw_value = yymm_format.value.replace(/\D/g, '')
-    props.hand_pay_info.yymm = raw_value
-    yymm_format.value = raw_value.match(/.{1,2}/g)?.join('/') || ''  
-})
-
-const formatAmount = computed(() => {
-    const parse_amount = parseFloat(format_amount.value.replace(/,/g, "")) || 0;
-    props.hand_pay_info.amount = parse_amount
-    format_amount.value = parse_amount.toLocaleString()
 })
 
 watchEffect(async () => {
@@ -43,13 +35,19 @@ watchEffect(async () => {
     props.hand_pay_info.card_num.length > 14 &&
     props.hand_pay_info.yymm.length == 4
 
-    if(props.hand_pay_info.is_old_auth) {
+    if(props.pay_module.is_old_auth) {
         valid = valid && props.hand_pay_info.card_pw?.length == 2
         valid = valid && props.hand_pay_info.auth_num?.length as number > 2
     }
 
     props.hand_pay_info.status_icon = valid ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'
     props.hand_pay_info.status_color = valid ? 'success' : 'error'
+})
+
+watchEffect(() => {
+    props.hand_pay_info.card_num = card_num.value
+    props.hand_pay_info.yymm = yymm.value
+    props.hand_pay_info.amount = amount.value
 })
 
 </script>
@@ -73,7 +71,7 @@ watchEffect(async () => {
                             </VCol>
                             <VCol cols="8" :md="8">
                                 <VTextField 
-                                    v-model="format_amount" suffix="₩" 
+                                    v-model="amount_format" suffix="₩" 
                                     @input="formatAmount"
                                     variant="underlined"
                                     placeholder="상품금액을 입력해주세요" prepend-icon="ic:outline-price-change"
