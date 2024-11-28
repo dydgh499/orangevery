@@ -11,7 +11,7 @@ import { timerV2 } from '@core/utils/timer';
 import corp from '@corp';
 
 const route = useRoute()
-const { isVisiableRemainTime, getPayWindow, isBuddyPayWZEHand } = payWindowStore()
+const { isVisiableRemainTime, getPayWindow } = payWindowStore()
 const { remaining_time, expire_time, getRemainTimeColor} = timerV2("00:00:00")
 const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(6)
 
@@ -57,9 +57,6 @@ const handleKeyDownEvent = async (index: number) => {
 onMounted(async () => {
     const [_code, _message, _params_mode, _data] = await getPayWindow(route.params.window, route.query.pc)
     if(_code === 200) {
-        if(isBuddyPayWZEHand(_data.payment_gateway))
-            _data.payment_module.module_type = 2
-
         params_mode.value = _params_mode
         pay_window.value = _data.pay_window
         pay_module.value = _data.payment_module
