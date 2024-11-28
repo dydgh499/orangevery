@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
-import HandPayOverview from '@/views/pay/HandPayOverview.vue'
+import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue';
+import HandPayOverview from '@/views/pay/HandPayOverview.vue';
 import type { Merchandise, PayGateway, PayModule, PayWindow } from '@/views/types';
-import { pay } from '@/views/pay/pay'
-import { axios } from '@axios'
-import corp from '@corp'
+import { axios } from '@axios';
+import corp from '@corp';
 import * as CryptoJS from 'crypto-js';
 
 const route = useRoute()
@@ -12,6 +11,13 @@ const payment_gateways = ref(<PayGateway[]>[])
 const merchandise = ref(<Merchandise>({}))
 const pay_module = ref(<PayModule>{module_type: 0})
 const pay_window = ref(<PayWindow>({}))
+const params_mode = ref(false)
+const params = ref({
+    item_name : '',
+    buyer_name : '',
+    amount : 0,
+    buyer_phone : '',
+})
 const pmod_id = ref()
 
 const snackbar = <any>(inject('snackbar'))
@@ -19,6 +25,8 @@ const errorHandler = <any>(inject('$errorHandler'))
 const salesslip = ref()
 
 provide('salesslip', salesslip)
+provide('params_mode', params_mode)
+provide('params', params)
 
 const decryptQuery = () => {
     const encrypt = decodeURIComponent(route.query.e as string)

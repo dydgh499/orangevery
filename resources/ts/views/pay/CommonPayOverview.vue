@@ -52,11 +52,11 @@ watchEffect(() => {
 
 watchEffect(() => {
     if(params_mode.value) {
+        phone_num_format.value = params.value.buyer_phone.toString()
+        amount_format.value = params.value.amount.toString()
         props.common_info.item_name = params.value.item_name
         props.common_info.buyer_name = params.value.buyer_name
-        phone_num_format.value = params.value.buyer_phone.toString()
         props.common_info.buyer_phone = params.value.buyer_phone
-        amount_format.value = params.value.amount.toString()
         props.common_info.amount = params.value.amount
     }
     else {
