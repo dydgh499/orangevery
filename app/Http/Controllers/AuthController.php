@@ -58,7 +58,7 @@ class AuthController extends Controller
         if($brand)
         {
             //TODO MNWORKS/TYINT 서버 이전 후 필요
-            if(env('APP_ENV') === 'production' && $_SERVER['SERVER_ADDR'] === '211.45.163.74' && in_array($brand['id'], [12, 24]))
+            if(env('APP_ENV') === 'production' && $_SERVER['SERVER_ADDR'] === '211.45.163.74' && in_array($brand['id'], [12, 14]))
             {
                 if($brand['id'] === 12)
                     return redirect()->to('https://new.tyint.kr/build/login');
