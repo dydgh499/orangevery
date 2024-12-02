@@ -54,6 +54,8 @@ class BfController extends Controller
             return $this->response(951);
         else if($request->brand_id == 12 || $request->brand_id == 14 || $request->brand_id == 30)
         {
+            if(env('APP_ENV') === 'production' && $_SERVER['SERVER_ADDR'] === '211.45.163.74')
+                return $this->extendResponse(1000, '서비스 점검중입니다.');
             $result = Login::isSafeLogin(new Merchandise(), $request);    // check merchandise
             if($result['result'] === 0)
             {
