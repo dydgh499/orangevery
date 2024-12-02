@@ -66,7 +66,7 @@ export const useRegisterStore = defineStore('salesRegisterStore', () => {
         { key: 'acct_bank_name', title : '입금은행명(O)' },
         { key: 'settle_tax_type', title : '정산세율(O)' }, 
         { key: 'settle_cycle', title : '정산주기(O)' }, 
-        { key: 'settle_day', title : '정산일(O)' },
+        { key: 'settle_day', title : '정산일(X)' },
         { key: 'view_type', title : '화면 타입(O)' },
     ]
 

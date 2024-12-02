@@ -58,10 +58,12 @@ class AuthController extends Controller
         if($brand)
         {
             //TODO MNWORKS/TYINT 서버 이전 후 필요
-            if(env('APP_ENV') === 'production' && $_SERVER['SERVER_ADDR'] === '211.45.163.74' && in_array($brand['id'], [2,9,15,42,39]))
+            if(env('APP_ENV') === 'production' && $_SERVER['SERVER_ADDR'] === '211.45.163.74' && in_array($brand['id'], [12, 24]))
             {
-                if($brand['id'] === 2)
-                    return redirect()->to('https://b.onechek.co.kr/build/login');
+                if($brand['id'] === 12)
+                    return redirect()->to('https://new.tyint.kr/build/login');
+                else
+                    return redirect()->to('https://new.mnworks.kr/build/login');
             }
     
             $brand['color'] = $brand['theme_css']['main_color'];

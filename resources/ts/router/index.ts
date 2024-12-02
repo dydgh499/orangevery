@@ -35,11 +35,9 @@ const router = createRouter({
     ],
 })
 
-// Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach(to => {
     const isLoggedIn = pay_token.value != ''
     axios.defaults.headers.common['Authorization'] = `Bearer ${pay_token.value}`
-
     if(to.path.startsWith('/pay/') === false) {
         if (canNavigate(to)) {
             if (to.meta.redirectIfLoggedIn && isLoggedIn)

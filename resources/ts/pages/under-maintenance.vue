@@ -34,5 +34,4 @@ const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
       layout: blank
       action: read
       subject: Auth
-      redirectIfLoggedIn: true
 </route>

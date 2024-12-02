@@ -28,7 +28,7 @@ const mchtUpdate = async () => {
 
 const pmodUpdate = async () => {
     try {
-        const res = await axios.get('/api/v1/pay/test?pmod_id='+pmod_id.value)        
+        const res = await axios.get('/api/v1/pay/test?pmod_id='+pmod_id.value)
         pay_window.value = res.data.pay_window
         pay_module.value = res.data.payment_module
         merchandise.value = res.data.merchandise

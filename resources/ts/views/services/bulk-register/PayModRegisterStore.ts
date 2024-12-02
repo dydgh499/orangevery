@@ -70,9 +70,9 @@ export const validateItems = (item: PayModule, i: number, mchts: Merchandise[]) 
         return [false, (i + 2) + '번째줄의 결제모듈의 가맹점 상호가 이상합니다.(' + item.mcht_name + ")"]
     else if (corp.pv_options.paid.use_pmid && item.p_mid == null) 
         return [false, (i + 2) + '번째줄의 PMID가 입력되지 않았습니다.']
-    else if (pg === null) 
+    else if (pg === null || pg === undefined) 
         return [false, (i + 2) + '번째줄의 결제모듈의 PG사명이 이상합니다.']
-    else if (ps === null)
+    else if (ps === null || ps === undefined)
         return [false, (i + 2) + '번째줄의 결제모듈의 구간이 이상합니다.']
     else if (ps.pg_id != pg.id)
         return [false, (i + 2) + '번째줄의 결제모듈의 구간이 ' + pg.pg_name + '에 포함되는 구간이 아닙니다.']
