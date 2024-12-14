@@ -62,6 +62,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:3, title:'웰컴페이먼츠'},
         {id:4, title:'더즌'},
         {id:5, title:'하이픈'},
+        {id:6, title:'네스트페이'},
     ])
     
     const is_agency_vans = <Options[]>([

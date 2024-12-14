@@ -56,22 +56,25 @@ class BfController extends Controller
         {
             if(env('APP_ENV') === 'production' && $_SERVER['SERVER_ADDR'] === '211.45.163.74')
                 return $this->extendResponse(1000, '서비스 점검중입니다.');
-            $result = Login::isSafeLogin(new Merchandise(), $request);    // check merchandise
-            if($result['result'] === 0)
-            {
-                $data = $result['user']->loginAPI(10);
-                $data['user'] = [
-                    'id' => $data['user']->id,
-                    'user_name' => $data['user']->user_name,
-                    'mcht_name' => $data['user']->mcht_name,
-                    'level' => 10,
-                ];
-                return $this->response(0, $data);
-            }
-            else if($result['result'] === -1)
-                return $this->extendResponse(1000, __('auth.not_found_obj'));
             else
-                return $this->extendResponse($result['result'], $result['msg'], $result['data']);
+            {
+                $result = Login::isSafeLogin(new Merchandise(), $request);    // check merchandise
+                if($result['result'] === 0)
+                {
+                    $data = $result['user']->loginAPI(10);
+                    $data['user'] = [
+                        'id' => $data['user']->id,
+                        'user_name' => $data['user']->user_name,
+                        'mcht_name' => $data['user']->mcht_name,
+                        'level' => 10,
+                    ];
+                    return $this->response(0, $data);
+                }
+                else if($result['result'] === -1)
+                    return $this->extendResponse(1000, __('auth.not_found_obj'));
+                else
+                    return $this->extendResponse($result['result'], $result['msg'], $result['data']);    
+            }            
         }
         else
             return $this->response(951);

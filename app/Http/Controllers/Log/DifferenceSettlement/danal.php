@@ -73,10 +73,9 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
                 $mcht_trans = $this->getMidMatchTransctions($trans, $mid);
                 if(count($mcht_trans) > 0)
                 {
-                    $_mid = $this->PMID_MODE ? $mcht_trans[0]->p_mid : $mid;
-                    if(empty($_mid) === false)
+                    if(empty($mid) === false)
                     {
-                        $header = $this->setHeaderRecord($_mid);
+                        $header = $this->setHeaderRecord($mid);
                         [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num']);
                         $total  = $this->setTotalRecord($count, $amount);
     
