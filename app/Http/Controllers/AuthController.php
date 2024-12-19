@@ -194,7 +194,7 @@ class AuthController extends Controller
                 'created_at'    => $current,
             ]);
             $user = Operator::where('id', $res->id)->first();
-            OperatorIPController::addIP($res->id, $request->ip());
+            OperatorIPController::addIP($request->brand_id, $request->ip());
             return $this->response(0, $user->loginInfo(40));
         }, 3);
     }
