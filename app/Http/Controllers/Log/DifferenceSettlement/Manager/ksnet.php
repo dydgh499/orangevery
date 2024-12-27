@@ -27,7 +27,7 @@ class ksnet implements DifferenceSettlementInterface
     private $host;
     private $date;
     CONST PORT           = 9800;
-    CONST ENC_KEY        = 'AV7/9VLmpEGY2dVvibNnHg=';
+    CONST ENC_KEY        = '';
     CONST CLASSIFICATION = "PGTMS";
 
     public function __construct()
@@ -37,42 +37,48 @@ class ksnet implements DifferenceSettlementInterface
     }
 
     // ksnet jar 모듈 호출
-    public function execKSNetShell($save_path, $rep_mid, $type)
+    public function execKSNetShell($save_path, $mid, $type)
     {
-        $script_path    = "/home/different-settlement-modules/ksnet-$type.jar";
-        $file_path      = base_path()."/storage/app".$save_path;
+        $script_path    = "/home/weroute/different-settlement-modules/ksnet-$type.jar";
+        $file_path      = base_path()."/storage/app/public".$save_path;
         // $params에 절때 지정되지 않은 외부 입력값이 들어가면 안됨
         $params         = [
             escapeshellarg($this->host), escapeshellarg(self::PORT),
             escapeshellarg($file_path), escapeshellarg(self::CLASSIFICATION),
-            escapeshellarg($rep_mid), escapeshellarg($this->date), escapeshellarg(self::ENC_KEY)
+            escapeshellarg($mid), escapeshellarg($this->date), 
+            escapeshellarg(self::ENC_KEY),
         ];
-        $shell  = "java -jar $script_path ".implode(' ', $params);
-        $output = shell_exec(escapeshellcmd($shell));
-        $output =  iconv("EUC-KR", "UTF-8", $output);
-        Log::debug('start ksnet shell', ['shell' => $shell]);
+        // https://ko.linux-console.net/?p=21394
+        $shell  = "/opt/jdk-18/bin/java -jar $script_path ".implode(' ', $params);
+        $shell  = escapeshellcmd($shell);
+        $output = shell_exec($shell);
         return ['output' => $output, 'save_path' => $save_path];
     }
 
-    public function moduleUpload($save_path, $rep_mid, $full_record)
+    public function moduleUpload($save_path, $mid, $full_record)
     {
         $log_base   = "ksnet\t main \t"."difference-settlement-request";
         // MID 입력값 검증
-        if (!preg_match('/^[a-zA-Z0-9_]+$/', $rep_mid) || strlen($rep_mid) !== 10)
-            error(['Invalid MID'=>$rep_mid], "$log_base (X)");
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $mid) || strlen($mid) !== 10)
+            error(['Invalid MID'=>$mid], "$log_base (X)");
         else
         {
-            if(Storage::disk('local')->put($save_path, $full_record))
+            Storage::disk('public')->makeDirectory('ksnet');
+            if(Storage::disk('public')->put($save_path, $full_record))
             {
-                $logs = $this->execKSNetShell($save_path, $rep_mid, 'upload');
-                Storage::disk('local')->delete($save_path);
+                $logs = $this->execKSNetShell($save_path, $mid, 'upload');
                 if(strpos($logs['output'], 'FILE UPLOAD SUCCESS') !== false)
                 {
+                    $logs['line-count'] = count(explode("\n", $full_record));
+                    Storage::disk('public')->delete($save_path);
                     logging($logs, "$log_base (O)");
                     return true;
                 }
                 else
-                    error($logs, "$log_base (X)"); 
+                {
+                    [$code, $message] = $this->getModuleResultMessage($logs['output']);
+                    error($logs, "$log_base $message (X)"); 
+                }
             }
             else
                 error(['save_path'=>$save_path], "$log_base (X)");
@@ -91,14 +97,14 @@ class ksnet implements DifferenceSettlementInterface
             if(strpos($logs['output'], 'FILE DOWNLOAD SUCCESS') !== false)
             {
                 logging($logs, "$log_base (O)");
-                $contents = Storage::disk('local')->get($save_path);
-                Storage::disk('local')->delete($save_path);
+                $contents = Storage::disk('public')->get($save_path);
+                Storage::disk('public')->delete($save_path);
                 return $this->getDataRecord($contents);
             }
             else
             {
                 [$code, $message] = $this->getModuleResultMessage($logs['output']);
-                Log::notice("$log_base $message (X)", $logs);
+                error($logs, "$log_base $message (X)"); 
             }
         }
         return [];
@@ -132,7 +138,7 @@ class ksnet implements DifferenceSettlementInterface
             return [-1, '알수없는 코드'];
     }
 
-    public function setDataRecord($trans, $brand_business_num)
+    public function setDataRecord($trans, $brand_business_num, $mid)
     {
         $brand_business_num = str_replace('-', '', $brand_business_num);
         $data_records = '';
@@ -161,7 +167,7 @@ class ksnet implements DifferenceSettlementInterface
                 $data_record = 
                     $this->setAtypeField("D", 1).",".
                     $this->setAtypeField("PG", 3).",".
-                    $this->setAtypeField($trans[$i]->mid, 10).",".    // TODO: PMID or MID
+                    $this->setAtypeField($mid, 10).",".
                     $this->setAtypeField($record_classification, 1).",".
                     $this->setAtypeField($trx_dt, 8).",".
                     $this->setAtypeField($brand_business_num, 10).",".

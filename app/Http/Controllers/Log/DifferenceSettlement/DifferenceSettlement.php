@@ -72,12 +72,12 @@ class DifferenceSettlement
         {
             if($this->main_sftp_connection->put($save_path, $full_record))
             {
-                logging(['save_path'=>$save_path], $this->service_name."\t main \t"."difference-settlement-request (O)");
+                logging(['save_path'=>$save_path, 'line' => count(explode("\n", $full_record))], $this->service_name."\t main \t"."difference-settlement-request (O)");
                 return true;
             }
             else
             {
-                error(['save_path'=>$save_path], $this->service_name."\t main \t"."difference-settlement-request (X)");
+                error(['save_path'=>$save_path, 'line' => count(explode("\n", $full_record))], $this->service_name."\t main \t"."difference-settlement-request (X)");
                 return false;
             }    
         }

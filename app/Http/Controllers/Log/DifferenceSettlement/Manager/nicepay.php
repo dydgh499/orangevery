@@ -21,7 +21,7 @@ class nicepay implements DifferenceSettlementInterface
         '031' => '삼성',
     ];
 
-    public function setDataRecord($trans, $brand_business_num)
+    public function setDataRecord($trans, $brand_business_num, $mid)
     {
         $brand_business_num = str_replace('-', '', $brand_business_num);
         $data_records = '';

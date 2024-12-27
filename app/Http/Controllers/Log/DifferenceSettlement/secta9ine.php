@@ -24,7 +24,7 @@ class secta9ine extends DifferenceSettlement implements DifferenceSettlementInte
         $dr_config_name     = 'different_settlement_dr'.$this->service_name;
         config(['filesystems.disks.'.$main_config_name => [
             'driver' => 'sftp',
-            'host' => "121.133.126.8",
+            'host' => "211.43.193.74",
             'port' => 22,
             'username' => $brand['sftp_id'],
             'password' => $brand['sftp_password'],
@@ -32,14 +32,14 @@ class secta9ine extends DifferenceSettlement implements DifferenceSettlementInte
         ]]);
         config(['filesystems.disks.'.$dr_config_name => [
             'driver' => 'sftp',
-            'host' => "121.133.126.12", // 개발서버
+            'host' => "211.43.193.75", // 개발서버
             'port' => 22,
             'username' => $brand['sftp_id'],
             'password' => $brand['sftp_password'],
             'passive' => false,
         ]]);
-        [$this->main_sftp_connection, $this->main_connection_stat] = $this->connectSFTPServer($main_config_name, 'main');
-        [$this->dr_sftp_connection, $this->dr_connection_stat] = [null, false];
+        [$this->main_sftp_connection, $this->main_connection_stat] = $this->connectSFTPServer($dr_config_name, 'main');
+        [$this->dr_sftp_connection, $this->dr_connection_stat] = $this->connectSFTPServer($dr_config_name, 'dr');
     }
 
     public function request(Carbon $date, $trans)
@@ -50,7 +50,7 @@ class secta9ine extends DifferenceSettlement implements DifferenceSettlementInte
             $req_date = $date->format('Ymd');
             $brand_business_num = str_replace('-', '', $this->brand['business_num']);
             $file_name = $brand_business_num."_REQUEST.$file_date";
-            $save_path = "/$file_name";
+            $save_path = "/send/$file_name";
 
             $total_amount = 0;
             $total_count  = 0;
@@ -62,13 +62,10 @@ class secta9ine extends DifferenceSettlement implements DifferenceSettlementInte
                 $mcht_trans = $this->getMidMatchTransctions($trans, $mid);
                 if(count($mcht_trans) > 0)
                 {
-                    $_mid = $this->PMID_MODE ? $mcht_trans[0]->p_mid : $mid;
-                    if(empty($_mid) === false)
+                    if(empty($mid) === false)
                     {
-                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num']);
-                        $total  = $this->setTotalRecord($count, $amount);
-        
-                        $full_record .= $data_records.$total;
+                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
+                        $full_record .= $data_records;
                         $total_count += ($count + 2);   //header, total records
                         $total_amount += $amount;    
                     }
@@ -87,7 +84,7 @@ class secta9ine extends DifferenceSettlement implements DifferenceSettlementInte
         $req_date = $date->copy()->format('Ymd');
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);
         $file_name = $brand_business_num."RECEIVE.$file_date";
-        $save_path = "/$file_name";
+        $save_path = "/recv/$file_name";
 
         return $this->_response($save_path, $req_date);
     }

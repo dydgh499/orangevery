@@ -23,7 +23,7 @@ class secta9ine implements DifferenceSettlementInterface
         '44' => '우리',
     ];
 
-    public function setDataRecord($trans, $brand_business_num)
+    public function setDataRecord($trans, $brand_business_num, $mid)
     {
         $brand_business_num = str_replace('-', '', $brand_business_num);
         $data_records = '';
@@ -52,7 +52,7 @@ class secta9ine implements DifferenceSettlementInterface
                     $trx_dt.
                     $brand_business_num.
                     $business_num.
-                    $trans[$i]->p_mid.  // TODO: PMID or MID
+                    $mid.
                     $this->setAtypeField($trans[$i]->trx_id, 20).
                     $this->setAtypeField($record_classification, 2).
                     $this->setAtypeField($trans[$i]->ord_num, 40).

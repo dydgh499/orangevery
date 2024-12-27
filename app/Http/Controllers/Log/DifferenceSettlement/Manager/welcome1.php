@@ -22,7 +22,7 @@ class welcome1 implements DifferenceSettlementInterface
         '44' => '우리',
     ];
 
-    public function setDataRecord($trans, $brand_business_num)
+    public function setDataRecord($trans, $brand_business_num, $mid)
     {
         $brand_business_num = str_replace('-', '', $brand_business_num);
         $data_records = '';

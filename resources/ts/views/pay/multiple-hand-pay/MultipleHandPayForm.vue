@@ -50,6 +50,14 @@ watchEffect(() => {
     props.hand_pay_info.amount = amount.value
 })
 
+
+watchEffect(() => {
+    const { mobile } = useDisplay()
+    props.hand_pay_info.user_agent = mobile.value ? "WM" : "WP"
+    props.hand_pay_info.pmod_id = props.pay_module.id
+    props.hand_pay_info.ord_num = props.pay_module.id + "H" + Date.now().toString().substr(0, 10)
+})
+
 </script>
 <template>
     <AppCardActions :actionCollapsed="true">

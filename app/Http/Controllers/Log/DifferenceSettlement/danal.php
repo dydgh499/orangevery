@@ -76,7 +76,7 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
                     if(empty($mid) === false)
                     {
                         $header = $this->setHeaderRecord($mid);
-                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num']);
+                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
                         $total  = $this->setTotalRecord($count, $amount);
     
                         $full_record .= $header.$data_records.$total;

@@ -22,7 +22,7 @@ class hecto implements DifferenceSettlementInterface
         '1015' => 'NH카드',
     ];
 
-    public function setDataRecord($trans, $brand_business_num)
+    public function setDataRecord($trans, $brand_business_num, $mid)
     {
         $brand_business_num = str_replace('-', '', $brand_business_num);
         $data_records = '';

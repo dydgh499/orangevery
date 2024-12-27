@@ -20,7 +20,7 @@ class danal implements DifferenceSettlementInterface
         '031' => '삼성',
         '047' => '롯데',
     ];
-    public function setDataRecord($trans, $brand_business_num)
+    public function setDataRecord($trans, $brand_business_num, $mid)
     {
         $brand_business_num = trim(str_replace('-', '', $brand_business_num));
         $data_records = '';

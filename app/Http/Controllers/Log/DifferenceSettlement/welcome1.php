@@ -70,11 +70,10 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
                 $mcht_trans = $this->getMidMatchTransctions($trans, $mid);
                 if(count($mcht_trans) > 0)
                 {
-                    $_mid = $this->PMID_MODE ? $mcht_trans[0]->p_mid : $mid;
-                    if(empty($_mid) === false)
+                    if(empty($mid) === false)
                     {
-                        $header = $this->setHeaderRecord($_mid);
-                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num']);
+                        $header = $this->setHeaderRecord($mid);
+                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
                         $total  = $this->setTotalRecord($count, $amount);
     
                         $full_record .= $header.$data_records.$total;

@@ -58,10 +58,9 @@ class galaxiamoneytree extends DifferenceSettlement implements DifferenceSettlem
                 $mcht_trans = $this->getMidMatchTransctions($trans);
                 if(count($mcht_trans) > 0)
                 {
-                    $_mid = $this->PMID_MODE ? $mcht_trans[0]->p_mid : $mid;
-                    if(empty($_mid) === false)
+                    if(empty($mid) === false)
                     {
-                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num']);
+                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
                         $full_record .= $data_records;
                         $total_count += $count;    
                         $total_amount += $amount;    
