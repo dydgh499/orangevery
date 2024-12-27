@@ -204,7 +204,7 @@ onMounted(() => {
                         <span v-html="_item.trx_result.result_msg"></span>
                         <br>
                         <template v-if="_item.trx_result.result_cd == '0000'">
-                            <VBtn @click="salesslip.show(_item.trx_result)">승인 영수증 확인</VBtn>
+                            <VBtn @click="salesslip.show(_item.trx_result)" size="small">승인 영수증 확인</VBtn>
                         </template>
                     </template>
                 </td>
@@ -228,7 +228,7 @@ onMounted(() => {
                             <span v-html="_item.cxl_result.result_msg"></span>
                             <br>
                             <template v-if="_item.cxl_result.result_cd == '0000'">
-                                <VBtn @click="salesslip.show(_item.cxl_result)" color="error">취소 영수증 확인</VBtn>
+                                <VBtn @click="salesslip.show(_item.cxl_result)" color="error" size="small">취소 영수증 확인</VBtn>
                             </template>
                         </template>
                     </span>

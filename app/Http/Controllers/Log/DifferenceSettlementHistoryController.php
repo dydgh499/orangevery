@@ -245,11 +245,13 @@ class DifferenceSettlementHistoryController extends Controller
     /*
     * 차액정산 테스트 업로드
     */
-    static public function differenceSettleRequestTest($ds_ids, $sub_days=1)
+    static public function differenceSettleRequestTest($ds_ids, $start_days, $end_days)
     {
         //DifferenceSettlementHistoryController::differenceSettleRequestTest([3,], 1)
         $date       = Carbon::now();
-        $yesterday  = $date->copy()->subDay($sub_days)->format('Y-m-d');
+        $yesterday  = $date->copy()->subDay(1)->format('Y-m-d');
+        $start_day  = $date->copy()->subDay($start_days)->format('Y-m-d');
+        $end_day  = $date->copy()->subDay($end_days)->format('Y-m-d');
         foreach($ds_ids as $ds_id)
         {
             $brand = Brand::join('different_settlement_infos', 'brands.id', '=', 'different_settlement_infos.brand_id')
@@ -266,8 +268,15 @@ class DifferenceSettlementHistoryController extends Controller
                     ->where('merchandises.business_num', '!=', '')
                     ->where('payment_gateways.pg_type', $brand->pg_type)
                     ->where('transactions.brand_id', $brand->brand_id)
-                    ->where('transactions.trx_at', '>=', $yesterday." 00:00:00")
-                    ->where('transactions.trx_at', '<=', date("Y-m-d")." 00:00:00")
+                    ->where(function ($query) {
+                        return $query->where(function ($query) {
+                            return $query->where('transactions.trx_at', '>=', $yesterday." 00:00:00")
+                            ->where('transactions.trx_at', '<=', $yesterday." 23:59:59");
+                        })->orWhere(function ($query) {
+                            return $query->where('transactions.trx_at', '>=', $start_day." 00:00:00")
+                            ->where('transactions.trx_at', '<=', $end_day." 23:59:59");
+                        });
+                    })
                     ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
 
                 $inst = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);
