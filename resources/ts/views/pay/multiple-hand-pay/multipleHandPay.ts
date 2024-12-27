@@ -1,7 +1,6 @@
 import { Merchandise, MultipleHandPay, PayModule, SalesSlip } from "@/views/types"
 import { axios } from '@axios'
 import { cloneDeep } from 'lodash'
-import { useDisplay } from 'vuetify'
 
 export const multipleHandPaySequence = () => {
     const noti_temp = ref('')
@@ -179,8 +178,7 @@ export const multipleHandPaySequence = () => {
         }))
     }
 
-    const addNewHandPay = (pay_module: PayModule) => {
-        const { mobile } = useDisplay()
+    const addNewHandPay = (pay_module: PayModule, mobile: boolean) => {
         const urlParams = new URLSearchParams(window.location.search)
         hand_pay_infos.value.push(<MultipleHandPay><unknown>({
             auth_num: '',
@@ -192,7 +190,7 @@ export const multipleHandPaySequence = () => {
             pmod_id: pay_module.id,
             is_old_auth: pay_module.is_old_auth,
             ord_num: pay_module.id + "H" + Date.now().toString().substr(0, 10),
-            user_agent: mobile.value ? "WM" : "WP",
+            user_agent: mobile ? "WM" : "WP",
         }))
     }
 

@@ -4,6 +4,7 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import MultipleHandPayForm from '@/views/pay/multiple-hand-pay/MultipleHandPayForm.vue'
 import type { Merchandise, PayModule } from '@/views/types'
 import { requiredValidatorV2 } from '@validators'
+import { useDisplay } from 'vuetify'
 import { VForm } from 'vuetify/components'
 import { multipleHandPaySequence } from './multiple-hand-pay/multipleHandPay'
 
@@ -12,6 +13,7 @@ interface Props {
     merchandise: Merchandise,
 }
 
+const { mobile } = useDisplay()
 const props = defineProps<Props>()
 const snackbar = <any>(inject('snackbar'))
 const salesslip = <any>(inject('salesslip'))
@@ -156,7 +158,7 @@ onMounted(() => {
                                 <b style="margin-left: 0.5em;">{{ valid_total_amount.toLocaleString() }}</b>원
                             </VCol>
                             <VCol cols="6">
-                                <VBtn @click="addNewHandPay(props.pay_module)" color="primary" style="width: 100%;float: inline-end;">결제정보 추가</VBtn>
+                                <VBtn @click="addNewHandPay(props.pay_module, mobile)" color="primary" style="width: 100%;float: inline-end;">결제정보 추가</VBtn>
                             </VCol>
                         </VRow>
                     </VCol>
