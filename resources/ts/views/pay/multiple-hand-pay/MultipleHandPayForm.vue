@@ -4,6 +4,7 @@ import { installments } from '@/views/merchandises/pay-modules/useStore'
 import type { MultipleHandPay, Options, PayModule } from '@/views/types'
 import { lengthValidatorV2, requiredValidatorV2 } from '@validators'
 import { computed } from 'vue'
+import { useDisplay } from 'vuetify'
 import { VForm } from 'vuetify/components'
 
 interface Props {

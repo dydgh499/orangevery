@@ -32,7 +32,7 @@ const {
     purchaseStart,
     addNewHandPay,
     init,
-} = multipleHandPaySequence(props.merchandise, props.pay_module)
+} = multipleHandPaySequence()
 
     // 다중 결제 시작
 const pays = async () => {
@@ -47,7 +47,7 @@ const pays = async () => {
         snackbar.value.show('공통 결제정보를 확인해주세요.', 'error')
         return
     }
-    await purchaseStart(total_amount)
+    await purchaseStart(total_amount, props.merchandise)
 }
 
 const updateToken = (value : string) => {
@@ -66,7 +66,7 @@ watchEffect(async () => {
     }
     let is_valid = await vForm.value?.validate()
     hand_pay_info.value.status_icon = is_valid?.valid ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'
-    hand_pay_info.value.status_color = is_valid?.valid ? 'success' : 'error'
+    hand_pay_info.value.status_color = is_valid?.valid ? 'success' : 'error'    
 })
 watchEffect(() => {
     hand_pay_info.value.buyer_phone = phone_num.value
@@ -157,7 +157,7 @@ onMounted(() => {
                                 <b style="margin-left: 0.5em;">{{ valid_total_amount.toLocaleString() }}</b>원
                             </VCol>
                             <VCol cols="6">
-                                <VBtn @click="addNewHandPay()" color="primary" style="width: 100%;float: inline-end;">결제정보 추가</VBtn>
+                                <VBtn @click="addNewHandPay(pay_module)" color="primary" style="width: 100%;float: inline-end;">결제정보 추가</VBtn>
                             </VCol>
                         </VRow>
                     </VCol>

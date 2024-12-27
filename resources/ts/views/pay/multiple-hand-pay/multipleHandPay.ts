@@ -1,8 +1,9 @@
 import { Merchandise, MultipleHandPay, PayModule, SalesSlip } from "@/views/types"
 import { axios } from '@axios'
 import { cloneDeep } from 'lodash'
+import { useDisplay } from 'vuetify'
 
-export const multipleHandPaySequence = (merchandise: Merchandise, pay_module: PayModule) => {
+export const multipleHandPaySequence = () => {
     const noti_temp = ref('')
     const full_processes = ref<any[]>([])
     const hand_pay_info = ref(<MultipleHandPay>({}))
@@ -12,7 +13,7 @@ export const multipleHandPaySequence = (merchandise: Merchandise, pay_module: Pa
     const alert = <any>(inject('alert'))
     const route = useRoute()
 
-    const purchaseStart = async (total_amount: number) => {
+    const purchaseStart = async (total_amount: number, merchandise: Merchandise) => {
         for (let i = 0; i < hand_pay_infos.value.length; i++) {
             if (hand_pay_infos.value[i].status_color != 'success') {
                 snackbar.value.show((i+1) + '번째 결제정보를 확인해주세요.', 'error')
@@ -23,7 +24,7 @@ export const multipleHandPaySequence = (merchandise: Merchandise, pay_module: Pa
             snackbar.value.show('다중결제를 시작합니다...', 'primary')
             trxProcess()
             setProcessTableWidth()
-            await trxResult()
+            await trxResult(merchandise)
             setProcessTableWidth()
             await cxlProcess()
             setProcessTableWidth()
@@ -50,7 +51,7 @@ export const multipleHandPaySequence = (merchandise: Merchandise, pay_module: Pa
     }
 
     // level 2 결제 결과 처리
-    const trxResult = async () => {
+    const trxResult = async (merchandise: Merchandise) => {
         const results = await Promise.all(full_processes.value.map(item => item.trx_process))
         for (let i = 0; i < results.length; i++) {
             full_processes.value[i].trx_result = {
@@ -178,7 +179,8 @@ export const multipleHandPaySequence = (merchandise: Merchandise, pay_module: Pa
         }))
     }
 
-    const addNewHandPay = () => {
+    const addNewHandPay = (pay_module: PayModule) => {
+        const { mobile } = useDisplay()
         const urlParams = new URLSearchParams(window.location.search)
         hand_pay_infos.value.push(<MultipleHandPay><unknown>({
             auth_num: '',
@@ -190,6 +192,7 @@ export const multipleHandPaySequence = (merchandise: Merchandise, pay_module: Pa
             pmod_id: pay_module.id,
             is_old_auth: pay_module.is_old_auth,
             ord_num: pay_module.id + "H" + Date.now().toString().substr(0, 10),
+            user_agent: mobile.value ? "WM" : "WP",
         }))
     }
 
