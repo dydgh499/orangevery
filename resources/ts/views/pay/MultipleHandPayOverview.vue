@@ -144,7 +144,6 @@ onMounted(() => {
                                 </VRow>
                             </VCol>
                         </VRow>
-
                     </VCol>
                     
                     <VCol cols="12">
@@ -157,7 +156,7 @@ onMounted(() => {
                                 <b style="margin-left: 0.5em;">{{ valid_total_amount.toLocaleString() }}</b>원
                             </VCol>
                             <VCol cols="6">
-                                <VBtn @click="addNewHandPay(pay_module)" color="primary" style="width: 100%;float: inline-end;">결제정보 추가</VBtn>
+                                <VBtn @click="addNewHandPay(props.pay_module)" color="primary" style="width: 100%;float: inline-end;">결제정보 추가</VBtn>
                             </VCol>
                         </VRow>
                     </VCol>
