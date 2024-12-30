@@ -268,14 +268,15 @@ class DifferenceSettlementHistoryController extends Controller
                     ->where('merchandises.business_num', '!=', '')
                     ->where('payment_gateways.pg_type', $brand->pg_type)
                     ->where('transactions.brand_id', $brand->brand_id)
-                    ->where(function ($query) use($yesterday, $start_day, $end_day){
-                        return $query->where(function ($query) use($yesterday) {
-                            return $query->where('transactions.trx_at', '>=', $yesterday." 00:00:00")
-                            ->where('transactions.trx_at', '<=', $yesterday." 23:59:59");
-                        })->orWhere(function ($query) use($start_day, $end_day) {
-                            return $query->where('transactions.trx_at', '>=', $start_day." 00:00:00")
-                            ->where('transactions.trx_at', '<=', $end_day." 23:59:59");
-                        });
+                    ->where(function ($query) use ($yesterday, $start_day, $end_day) {
+                        $yesterday_s_dt = "{$yesterday} 00:00:00";
+                        $yesterday_e_dt = "{$yesterday} 23:59:59";
+                        $s_dt = "{$start_day} 00:00:00";
+                        $e_dt = "{$end_day} 23:59:59";                
+
+                        $query
+                            ->whereBetween('transactions.trx_at', [$yesterday_s_dt, $yesterday_e_dt])
+                            ->orWhereBetween('transactions.trx_at', [$s_dt, $e_dt]);
                     })
                     ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
 
