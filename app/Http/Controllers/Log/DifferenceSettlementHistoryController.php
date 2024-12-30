@@ -251,7 +251,7 @@ class DifferenceSettlementHistoryController extends Controller
         $date       = Carbon::now();
         $yesterday  = $date->copy()->subDay(1)->format('Y-m-d');
         $start_day  = $date->copy()->subDay($start_days)->format('Y-m-d');
-        $end_day  = $date->copy()->subDay($end_days)->format('Y-m-d');
+        $end_day    = $date->copy()->subDay($end_days)->format('Y-m-d');
         foreach($ds_ids as $ds_id)
         {
             $brand = Brand::join('different_settlement_infos', 'brands.id', '=', 'different_settlement_infos.brand_id')
