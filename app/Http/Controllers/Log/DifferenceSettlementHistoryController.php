@@ -268,7 +268,7 @@ class DifferenceSettlementHistoryController extends Controller
                     ->where('merchandises.business_num', '!=', '')
                     ->where('payment_gateways.pg_type', $brand->pg_type)
                     ->where('transactions.brand_id', $brand->brand_id)
-                    ->where(function ($query) {
+                    ->where(function ($query) use($yesterday, $start_day, $end_day){
                         return $query->where(function ($query) use($yesterday) {
                             return $query->where('transactions.trx_at', '>=', $yesterday." 00:00:00")
                             ->where('transactions.trx_at', '<=', $yesterday." 23:59:59");
