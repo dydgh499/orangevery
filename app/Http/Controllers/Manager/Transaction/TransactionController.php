@@ -383,30 +383,15 @@ class TransactionController extends Controller
 
     public function _test()
     {
-        $dev_settle_type = DevSettleType::NOT_APPLY->value;
         $db_trans = $this->transactions
-            ->where('mcht_id', 101727)
-            ->where('trx_at', '>=', '2024-06-01 00:00:00')
-            ->where('trx_at', '<=', '2024-06-28 23:59:59')
+            ->where('trx_at', '>=', '2024-12-19 00:00:00')
             ->orderBy('id', 'desc')
             ->get();
 
-        $trans = json_decode(json_encode($db_trans), true);
-        $trans = SettleAmountCalculator::setSettleAmount($trans, $dev_settle_type);
         $i=0;
-
         foreach($db_trans as $tran)
         {
-            $tran->brand_settle_amount = $trans[$i]['brand_settle_amount'];
-            $tran->dev_settle_amount = $trans[$i]['dev_settle_amount'];
-            $tran->dev_realtime_settle_amount = $trans[$i]['dev_realtime_settle_amount'];
-            $tran->mcht_settle_amount = $trans[$i]['mcht_settle_amount'];
-            $tran->sales0_settle_amount = $trans[$i]['sales0_settle_amount'];
-            $tran->sales1_settle_amount = $trans[$i]['sales1_settle_amount'];
-            $tran->sales2_settle_amount = $trans[$i]['sales2_settle_amount'];
-            $tran->sales3_settle_amount = $trans[$i]['sales3_settle_amount'];
-            $tran->sales4_settle_amount = $trans[$i]['sales4_settle_amount'];
-            $tran->sales5_settle_amount = $trans[$i]['sales5_settle_amount'];
+            $tran->settle_dt = SettleDateCalculator::getSettleDate($tran->brand_id, $tran->is_cancel ? $tran->cxl_dt : $tran->trx_dt, $tran->mcht_settle_type, $tran->pg_settle_type);
             $tran->save();
             $i++;
             echo $i."\n";

@@ -48,7 +48,7 @@ class Kernel extends ConsoleKernel
             // 공휴일 업데이트
             $schedule->call(function () {
                 (new HolidayController(new Holiday))->updateNextHolidaysAllBrands();
-            })->yearlyOn(12, 30, '00:00');    
+            })->yearlyOn(12, 1, '00:00');    
         }
     }
 
