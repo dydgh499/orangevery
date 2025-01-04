@@ -16,6 +16,7 @@ use App\Models\CollectWithdraw;
 use App\Models\Merchandise\NotiUrl;
 use App\Models\Merchandise\Product;
 use App\Models\Merchandise\RegularCreditCard;
+use App\Models\Merchandise\ShoppingMall\ShoppingMall;
 use App\Models\Merchandise\SpecifiedTimeDisablePayment;
 
 use App\Models\Log\SettleDeductMerchandise;
@@ -62,6 +63,12 @@ class Merchandise extends Authenticatable
             ->where('is_delete', false)
             ->where('module_type', '!=', 0)
             ->select(['id', 'mcht_id', 'module_type', 'note', 'pay_window_secure_level']);
+    }
+
+    public function shoppingMall()
+    {
+        return $this->hasMany(ShoppingMall::class, 'mcht_id')
+            ->select(['mcht_id', 'window_code']);
     }
 
     public function paymentModules()

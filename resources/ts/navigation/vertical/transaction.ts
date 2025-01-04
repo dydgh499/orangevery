@@ -4,6 +4,12 @@ import corp from '@corp'
 
 const getPaymentTestTap = () => {
     let payment = []
+    if(getUserLevel() >= 35 || getUserLevel() === 10) {
+        payment.push({
+            title: '주문 관리',
+            to: 'transactions-orders',
+        })
+    }
     if(getUserLevel() >= 35) {
         payment.push({
             title: '결제 테스트',

@@ -9,14 +9,16 @@ const payment_gateways = ref(<PayGateway[]>[])
 const merchandise = ref(<Merchandise>({}))
 const pay_module = ref(<PayModule>{module_type: 0})
 const pay_window = ref(<PayWindow>({}))
-const params_mode = ref(false)
+const params_mode = ref(0)
 const params = ref({
     item_name : '',
     buyer_name : '',
     amount : 0,
     buyer_phone : '',
 })
+const auth_token = ref('')
 const salesslip = ref()
+provide('auth_token', auth_token)
 
 provide('payment_gateways', payment_gateways)
 provide('merchandise', merchandise)

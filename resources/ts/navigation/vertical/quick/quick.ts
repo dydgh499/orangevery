@@ -1,38 +1,34 @@
 import { isFixplus } from '@/plugins/fixplus'
 import { useQuickViewStore } from '@/views/quick-view/useStore'
-import { getUserLevel, isAbleModiy, user_info } from '@axios'
+import { getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
 
-const getUserTap = () => {
-    const users = []
-    const children = []
-
-    children.push({ title: '가맹점 목록', to: 'merchandises' })    
+const getMchtChildMenu = () => {
+    const users = (<any>([
+        { heading: 'User information' },
+        {
+            title: '가맹점 관리',
+            icon: { icon: 'tabler-user' },
+            children: [{ title: '가맹점 목록', to: 'merchandises'}]
+        }
+    ]))
     if(isFixplus() === false) {
-        children.push({ title: '장비 관리', to: 'merchandises-terminals' })
+        users[1].children.push({ title: '장비 관리', to: 'merchandises-terminals' })
+        users[1].children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules' })
     }
-    if (isAbleModiy(0) && isFixplus() === false)
-        children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules' })
-    
+    if(corp.pv_options.paid.use_bill_key && getUserLevel() === 10)
+        users[1].children.push({ title: '빌키 관리', to: 'merchandises-pay-modules-bill-keys'})
     if(corp.pv_options.paid.use_noti && (getUserLevel() === 10 && user_info.value.use_noti)) {
-        children.push({
+        users[1].children.push({
             title: '노티 발송이력',
             to: 'merchandises-noti-send-histories',
-        })
-        children.push({
+        },{
             title: '노티 목록',
             to: 'merchandises-noti-urls',
         })
     }
     
-    users.push({ heading: 'User information' })
-    users.push({
-        title: '가맹점 관리',
-        icon: { icon: 'tabler-user' },
-        children: children,
-    })
-
     if(getUserLevel() > 10) {
         users.push({
             title: '영업점 관리',
@@ -42,12 +38,48 @@ const getUserTap = () => {
             ]
         })
     }
+    if(corp.pv_options.paid.use_shop && getUserLevel() === 10) {
+        users.push({
+            title: '미니 쇼핑몰',
+            icon: { icon: 'tabler:shopping-cart' },
+            class: 'shop()',
+            params: user_info.value.shopping_mall[0]
+        })
+    }
+
     return users
+}
+
+const getTransactionMenu = () => {
+    const transactions = {
+        title: '매출 관리',
+        icon: { icon: 'ic-outline-payments' },
+        children: [
+            {
+                title: '상세 조회',
+                to: 'transactions',
+            },
+        ]
+    }
+    if(getUserLevel() > 10) {
+        transactions.children.push({
+            title: '통계 조회',
+            to: 'transactions-summary',
+        })
+    }
+    return transactions
+}
+
+const getSettlementMenu = () => {
+    return {
+        title: '정산 이력',
+        icon: { icon: 'tabler:calendar-time' },
+        to: 'transactions-settle-histories-merchandises',
+    }
 }
 
 const getAbilitiesMenu = computed(() => {
     const { getPaymentMenu } = useQuickViewStore()
-    const payments = getPaymentMenu
     const services = [
         { heading: 'Service' },
         {
@@ -70,9 +102,11 @@ const getAbilitiesMenu = computed(() => {
             icon: { icon: 'tabler-smart-home' },
             to: 'quick-view',
         },
-        ...getUserTap(),
+        ...getMchtChildMenu(),
         { heading: 'Transaction' },
-        ...payments,
+        getPaymentMenu,
+        getTransactionMenu(),
+        getSettlementMenu(),
         ...services,
     ]
 })

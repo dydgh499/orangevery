@@ -57,15 +57,6 @@ class AuthController extends Controller
         $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
         if($brand)
         {
-            //TODO MNWORKS/TYINT 서버 이전 후 필요
-            if(env('APP_ENV') === 'production' && $_SERVER['SERVER_ADDR'] === '211.45.163.74' && in_array($brand['id'], [12, 14]))
-            {
-                if($brand['id'] === 12)
-                    return redirect()->to('https://new.tyint.kr/build/login');
-                else
-                    return redirect()->to('https://new.mnworks.kr/build/login');
-            }
-    
             $brand['color'] = $brand['theme_css']['main_color'];
             $use_bonaeja = $brand['pv_options']['free']['bonaeja']['user_id'] !== '' ? true : false;
             $brand['pv_options']['free']['bonaeja'] = [];
@@ -126,7 +117,7 @@ class AuthController extends Controller
      */
     public function signIn(LoginRequest $request)
     {
-        $result = Login::isSafeAccount(new Operator(), $request);    // check operator
+        $result = Login::isSafeAccount(Operator::where('is_active', true), $request);    // check operator
         if($result !== null)
             return $result;
         
@@ -134,7 +125,7 @@ class AuthController extends Controller
         if($result !== null)
             return $result;
 
-        $result = Login::isSafeAccount(Merchandise::with(['onlinePays.payWindows']), $request);    // check merchandise
+        $result = Login::isSafeAccount(Merchandise::with(['onlinePays.payWindows', 'shoppingMall']), $request);    // check merchandise
         if($result !== null)
             return $result;
         else

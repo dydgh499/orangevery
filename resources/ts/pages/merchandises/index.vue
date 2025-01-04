@@ -1,25 +1,27 @@
 <script setup lang="ts">
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { useSearchStore } from '@/views/merchandises/useStore'
-import { selectFunctionCollect } from '@/views/selected'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
+import ShoppingMallDialog from '@/layouts/dialogs/shopping-mall/ShoppingMallDialog.vue';
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import { useSearchStore } from '@/views/merchandises/useStore';
+import { selectFunctionCollect } from '@/views/selected';
+import { useStore } from '@/views/services/pay-gateways/useStore';
+import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
 
-import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
-import InitPayVerficationDialog from '@/layouts/dialogs/users/InitPayVerficationDialog.vue'
-import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
+import BatchDialog from '@/layouts/dialogs/BatchDialog.vue';
+import InitPayVerficationDialog from '@/layouts/dialogs/users/InitPayVerficationDialog.vue';
+import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue';
 
-import { module_types } from '@/views/merchandises/pay-modules/useStore'
-import { getUserLevel, isAbleModiy } from '@axios'
-import { DateFilters, ItemTypes } from '@core/enums'
-import corp from '@corp'
+import { module_types } from '@/views/merchandises/pay-modules/useStore';
+import { getUserLevel, isAbleModiy } from '@axios';
+import { DateFilters, ItemTypes } from '@core/enums';
+import corp from '@corp';
 
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { pgs, settle_types, cus_filters } = useStore()
 const password  = ref()
 const batchDialog = ref()
+const shoppingMallDialog = ref()
 const initPayVerficationDialog = ref()
 
 provide('password', password)
@@ -72,6 +74,12 @@ onMounted(() => {
                 <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small"
                     style="margin: 0.25em;">
                     일괄작업
+                </VBtn>
+                <VBtn
+                    color="info" v-if="corp.pv_options.paid.use_shop"
+                    prepend-icon="material-symbols:work-history-outline" @click="shoppingMallDialog.show(-1)"
+                    size="small" :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
+                    쇼핑몰 관리
                 </VBtn>
                 <div :style="$vuetify.display.smAndDown ? 'margin-top: 1em' : ''">
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.settle_hold" label="지급보류건 조회"
@@ -135,6 +143,13 @@ onMounted(() => {
                                 <select class="custom-select">
                                     <option v-for="(payment_module, key) in item['payment_modules']" :key="key">
                                         {{ settle_types.find(obj => obj.id === payment_module['settle_type'])?.name }}
+                                    </option>
+                                </select>
+                            </span>
+                            <span v-else-if="_key == 'p_mids'">
+                                <select class="custom-select">
+                                    <option v-for="(payment_module, key) in item['payment_modules']" :key="key">
+                                        {{ payment_module['p_mid'] }}
                                     </option>
                                 </select>
                             </span>
@@ -222,6 +237,7 @@ onMounted(() => {
          <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.Merchandise"
             @update:select_idxs="selected = $event; store.setTable(); store.getChartData()"/>
         <PasswordChangeDialog ref="password" />
+        <ShoppingMallDialog ref="shoppingMallDialog"/>
         <InitPayVerficationDialog ref="initPayVerficationDialog" />
     </div>
 </template>

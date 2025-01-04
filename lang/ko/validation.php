@@ -373,5 +373,42 @@ return [
         'aft_sales_id' => '이후 영업점',
         'bf_sales_name' => '이전 영업점 상호',
         'aft_sales_name' => '이후 영업점 상호',
+        //
+        
+        'sales5_settlement' => '정산여부',
+        'sales4_settlement' => '정산여부',
+        'sales3_settlement' => '정산여부',
+        'sales2_settlement' => '정산여부',
+        'sales1_settlement' => '정산여부',
+        'sales0_settlement' => '정산여부',
+
+        'fee_type' => '수수료 타입',
+        'tax_free_fee' => '영세 수수료',        
+        'ent1_fee' => '중소1 수수료',
+        'ent2_fee' => '중소2 수수료',
+        'ent3_fee' => '중소3 수수료',
+        
+        'business_type' => '사업자 타입',
+        'corp_registration_num' => '법인등록번호',
+
+        'settle_mng_email' => '정산 담당자 이메일',
+        'settle_mng_phone' => '정산 담당자 휴대폰번호',
+        'settle_mng_name' => '정산 담당자 명',
+
+        'oper_mng_email' => '운영 담당자 이메일',
+        'oper_mng_phone' => '운영 담당자 휴대폰번호',
+        'oper_mng_name' => '운영 담당자 명',
+
+        'corp_docs_img' => '법인 구비서류',
+        'aml_docs_img' => 'AML서류',
+        'other_docs_img' => '기타 서류',
+        
+        'warrant_item' => '담보',
+        'warrant_amount' => '담보금액',
+
+        'warrant_s_dt' => '담보 적용 시작일',
+        'warrant_e_dt' => '담보 적용 종료일',
+        'operator_ablilty_group_id' => '권한그룹',
+        'group_name' => '그룹명',
     ],
 ];

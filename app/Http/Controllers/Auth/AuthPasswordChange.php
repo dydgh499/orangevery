@@ -51,7 +51,8 @@ class AuthPasswordChange
 
     static public function updateFirstPassword($result, $user_pw)
     {
-        $orm = $result['data']['level'] === 10 ? Merchandise::with(['onlinePays.payWindows']) : new Salesforce;
+        
+        $orm = $result['data']['level'] === 10 ? Merchandise::with(['onlinePays.payWindows', 'shoppingMall']) : new Salesforce;
         $user = $orm
             ->where('brand_id', $result['data']['brand_id'])
             ->where('user_name', $result['data']['user_name'])

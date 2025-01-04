@@ -3,6 +3,7 @@ import AlertDialog from '@/layouts/dialogs/utils/AlertDialog.vue'
 import LoadingDialog from '@/layouts/dialogs/utils/LoadingDialog.vue'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import router from '@/router'
+import ShoppingMallHeader from '@/views/shop/ShoppingMallHeader.vue'
 import { useSkins } from '@core/composable/useSkins'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 // @layouts plugin
@@ -22,8 +23,7 @@ const { layoutAttrs, injectSkinClasses } = useSkins()
 injectSkinClasses()
 
 const { appRouteTransition } = useThemeConfig()
-const is_pay_link = ref(router.currentRoute.value.path.includes('/pay/'))
-
+const customer_link = ref(router.currentRoute.value.path.includes('/pay/') || router.currentRoute.value.path.includes('/shop/'))
 const alert = ref()
 const snackbar = ref()
 const loading = ref()
@@ -38,8 +38,19 @@ provide('loading', loading)
 <template>
     <section>
         <DefaultLayoutWithVerticalNav
-            v-if="appContentLayoutNav === AppContentLayoutNav.Vertical && is_pay_link === false" v-bind="layoutAttrs" />
-        <div v-else class="d-flex justify-center align-center" style="height: 100%;flex-direction: column;">
+            v-if="appContentLayoutNav === AppContentLayoutNav.Vertical && customer_link === false" v-bind="layoutAttrs" />
+        <div v-else-if="router.currentRoute.value.path.includes('/shop/')" class="d-flex justify-center align-center custom-warpper">
+            <ShoppingMallHeader/>
+            <RouterView v-slot="{ Component }">
+                <Transition :name="appRouteTransition" mode="out-in">
+                    <Component :is="Component" />
+                </Transition>
+                <Snackbar ref="snackbar" />
+                <AlertDialog ref="alert" />
+                <LoadingDialog ref="loading" />
+            </RouterView>
+        </div>
+        <div v-else class="d-flex justify-center align-center custom-warpper">
             <RouterView v-slot="{ Component }">
                 <Transition :name="appRouteTransition" mode="out-in">
                     <Component :is="Component" />
@@ -55,5 +66,10 @@ provide('loading', loading)
 <style lang="scss">
 // As we are using `layouts` plugin we need its styles to be imported
 @use "@layouts/styles/default-layout";
+
+.custom-warpper {
+  flex-direction: column;
+  block-size: 100%;
+}
 
 </style>

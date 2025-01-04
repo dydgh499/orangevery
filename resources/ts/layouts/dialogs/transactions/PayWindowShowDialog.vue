@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PayWindowCreateDialog from '@/layouts/dialogs/transactions/PayWindowCreateDialog.vue';
 import { payWindowStore } from '@/views/quick-view/payWindowStore';
 import { PayModule } from '@/views/types';
 import { user_info } from '@axios';
@@ -11,6 +12,7 @@ const { move, copy, extend, getPayWindowUrl, renewPayWindow, multiplePayMove, is
 const { remaining_time, expire_time, getRemainTimeColor, clearTimer} = timerV2("00:00:00")
 
 const visible = ref(false)
+const payLink = ref()
 const url = ref()
 const payment_module = ref()
 
@@ -84,8 +86,9 @@ defineExpose({
 
             
             <VCardText class="d-flex justify-end gap-3 flex-wrap">
-                <VBtn @click="move(url)" size="small">이동</VBtn>
+                <VBtn @click="move(url)" size="small">새탭에서 열기</VBtn>
                 <VBtn @click="copy(url)" size="small" color="warning">주소복사</VBtn>
+                <VBtn @click="payLink.show(payment_module)" size="small" color="info">결제창 생성</VBtn>
                 <VBtn @click="extendPayWindow()" size="small" color="error" 
                     v-if="isVisiableRemainTime(payment_module)"
                 >유효기간 연장</VBtn>
@@ -95,6 +98,7 @@ defineExpose({
             </VCardText>
         </VCard>
     </VDialog>
+    <PayWindowCreateDialog ref="payLink"/>
 </template>
 <style scoped>
 :deep(.v-row) {

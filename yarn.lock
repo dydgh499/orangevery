@@ -8544,6 +8544,11 @@ vue-cli-plugin-vuetify@~2.5.8:
     semver "^7.1.2"
     shelljs "^0.8.3"
 
+vue-daum-postcode@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/vue-daum-postcode/-/vue-daum-postcode-1.2.1.tgz#c589d11925fe17001f9d9f4d91c89661091b6d6f"
+  integrity sha512-TSR6rmVhQOKPy+NrgD3os2XKDa1k6G6RmmxX1Nm1xHTxlY1WQU25kKgPAUO61nXZEkP8ZSbhLuplpb2Y1aQzoQ==
+
 vue-demi@*, vue-demi@>=0.14.0:
   version "0.14.6"
   resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.6.tgz"

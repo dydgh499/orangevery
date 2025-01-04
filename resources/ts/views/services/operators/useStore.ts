@@ -21,6 +21,7 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
         'nick_name' : '성명',
         'phone_num' : '연락처',
         'is_2fa_use': '2FA 사용',
+        'is_notice_realtime_warning': '송금 경고사항 알림',
     }
 
     if(getUserLevel() >= 35) {
@@ -28,6 +29,7 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
         headers['locked_at'] = '계정잠금시간'
     }
     
+    headers['is_active'] = '활성화 여부'
     headers['created_at'] = '생성시간'
     headers['updated_at'] = '업데이트시간'
 
@@ -101,6 +103,8 @@ export const defaultItemInfo = () => {
         profile_img: avatars[Math.floor(Math.random() * avatars.length)],
         created_at: null,
         updated_at: null,
+        is_notice_realtime_warning: 0,
+        is_active: 1
     })
     return {
         path, item

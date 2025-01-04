@@ -93,6 +93,18 @@ const showOperatorIPDialog = async () => {
                                         {{ item[_key] ? 'LOCK' : 'X' }}
                                     </VChip>
                                 </span>
+                                <span v-else-if="_key == 'is_active'">
+                                    <VChip :color="store.booleanTypeColor(!item[_key])" v-if="item['level'] >= 35">
+                                        {{ item[_key] ? '활성화' : '비활성화' }}
+                                    </VChip>
+                                    <span v-else>-</span>
+                                </span>
+                                <span v-else-if="_key == 'is_notice_realtime_warning'">
+                                    <VChip :color="store.booleanTypeColor(!item[_key])" v-if="item['level'] >= 35">
+                                        {{ item[_key] ? 'ON' : 'OFF' }}
+                                    </VChip>
+                                    <span v-else>-</span>
+                                </span>
                                 <span v-else-if="_key == 'is_2fa_use'">
                                     <VChip :color="store.booleanTypeColor(!item[_key])">
                                         {{ item[_key] ? 'O' : 'X' }}

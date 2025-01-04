@@ -11,9 +11,10 @@ import { defaultItemInfo as transItemInit } from '@/views/transactions/useStore'
 
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
-import type { Merchandise } from '@/views/types'
+import type { Category, Merchandise } from '@/views/types'
 import { axios, getLevelByIndex } from '@axios'
 import corp from '@corp'
+import { useCategoryStore } from './merchandises/shopping-mall/categories/useStore'
 
 export const useRequestStore = defineStore('requestStore', () => {
     const alert = <any>(inject('alert'))
@@ -21,6 +22,7 @@ export const useRequestStore = defineStore('requestStore', () => {
     const errorHandler = <any>(inject('$errorHandler'))
     const { all_sales, mchts, sales } = useSalesFilterStore()
     const { isMchtBlackList } =  useMchtBlacklistStore()
+    const { categories } = useCategoryStore()
 
     const clear = (back_url: string) => {
         const path = ''
@@ -80,7 +82,10 @@ export const useRequestStore = defineStore('requestStore', () => {
                         })
                     })
                 }
-                
+                else if (back_url === '/merchandises/shopping-mall/categories') {
+                    categories.push({ ...params})
+                    categories.sort((a:Category, b:Category) => a.category_name.localeCompare(b.category_name))
+                }
                 if (is_redirect) {
                     const { path, item } = clear(back_url)
                     if(path !== '')

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Manager\Merchandise;
+namespace App\Http\Requests\Manager\PaymentModule;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
@@ -24,7 +24,7 @@ class BillKeyCreateRequest extends FormRequest
 
     public function authorize()
     {
-        return $this->user()->tokenCan(35) ? true : false;
+        return true;
     }
 
     public function rules()
@@ -64,7 +64,7 @@ class BillKeyCreateRequest extends FormRequest
             else
                 return '';
         };
-        $data = array_merge($this->getParmasBaseKeyV2($this->keys), $this->getParmasBaseKeyV2($this->integer_keys));
+        $data = array_merge($this->getParmasBaseKeyV2($this->keys, ''), $this->getParmasBaseKeyV2($this->integer_keys, 0));
         $data['yymm'] = $getYYMM($data['yymm']);
         return $data;
     }

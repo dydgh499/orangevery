@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ablilty;
 
 use App\Http\Controllers\Manager\CodeGenerator\GeneratorInterface;
 use App\Models\Merchandise\PaymentModule;
+use App\Models\Service\PaymentGateway;
 use App\Models\Merchandise\PayWindow;
 use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
@@ -11,12 +12,13 @@ use Illuminate\Support\Str;
 
 class PayWindowInterface implements GeneratorInterface
 {
+    CONST REDIS_KEEP_SEC = 60;
     static public function publishCode($window_code, $length)
     {
         return $window_code.strtoupper(Str::random($length - strlen($window_code)));
     }
 
-    static public function create($generate_code, $length=8)
+    static public function create($generate_code, $length=10)
     {
         do {
             $window_code = self::publishCode($generate_code, $length);
@@ -41,7 +43,7 @@ class PayWindowInterface implements GeneratorInterface
             $pay_window = PayWindow::where('pmod_id', $pmod_id)->first();
             if($pay_window)
             {
-                Redis::set($key_name, json_encode($pay_window), 'EX', 600);
+                Redis::set($key_name, json_encode($pay_window), 'EX', self::REDIS_KEEP_SEC);
                 return json_decode(json_encode($pay_window), true);
             }
             else
@@ -125,14 +127,15 @@ class PayWindowInterface implements GeneratorInterface
         {
             $pay_module = PayWindow::join('payment_modules', 'payment_windows.pmod_id', '=', 'payment_modules.id')
                 ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-                ->join('payment_gateways', 'payment_modules.pg_id', '=', 'payment_gateways.id')
                 ->where('payment_windows.window_code', $window_code)
                 ->first([
                     'payment_modules.id',
+                    'payment_modules.pg_id',
                     'payment_modules.mcht_id',
                     'payment_modules.is_old_auth',
                     'payment_modules.installment',
                     'payment_modules.module_type',
+                    'payment_modules.is_able_bill_key',
                     'payment_modules.pay_window_secure_level',
 
                     'merchandises.use_saleslip_prov',
@@ -140,59 +143,50 @@ class PayWindowInterface implements GeneratorInterface
                     'merchandises.tax_category_type',
                     'merchandises.mcht_name',
                     'merchandises.contact_num',
-                    'merchandises.business_num as mcht_business_num',
+                    'merchandises.business_num',
                     'merchandises.nick_name',
-                    'merchandises.addr as mcht_addr',
-
-                    'payment_gateways.id as pg_id',
-                    'payment_gateways.pg_type',
-                    'payment_gateways.phone_num',
-                    'payment_gateways.company_name',
-                    'payment_gateways.business_num',
-                    'payment_gateways.rep_name',
-                    'payment_gateways.addr',
+                    'merchandises.addr',
 
                     'payment_windows.holding_able_at',
                     'payment_windows.window_code',
                 ]);
             if($pay_module)
             {
-                $data = [
-                    'payment_gateway' => [
-                        'id'            => $pay_module->pg_id,
-                        'pg_type'       => $pay_module->pg_type,
-                        'company_name'  => $pay_module->company_name,
-                        'business_num'  => $pay_module->business_num,
-                        'phone_num'     => $pay_module->phone_num,
-                        'rep_name'      => $pay_module->rep_name,
-                        'addr'          => $pay_module->addr,
-                    ],
-                    'merchandise' => [
-                        'id' => $pay_module->mcht_id,
-                        'addr' => $pay_module->mcht_addr,
-                        'mcht_name' => $pay_module->mcht_name,
-                        'nick_name' => $pay_module->nick_name,
-                        'contact_num' => $pay_module->contact_num,
-                        'business_num' => $pay_module->mcht_business_num,
-                        'use_saleslip_prov' => $pay_module->use_saleslip_prov,
-                        'use_saleslip_sell' => $pay_module->use_saleslip_sell,
-                        'tax_category_type' => $pay_module->tax_category_type,
-                    ],
-                    'payment_module' => [
-                        'id'            => $pay_module->id,
-                        'mcht_id'       => $pay_module->mcht_id,
-                        'is_old_auth'   => $pay_module->is_old_auth,
-                        'installment'   => $pay_module->installment,
-                        'module_type'   => $pay_module->module_type,
-                        'pay_window_secure_level' => $pay_module->pay_window_secure_level
-                    ],
-                    'pay_window' => [
-                        'window_code' => $pay_module->window_code,
-                        'holding_able_at' => $pay_module->holding_able_at,
-                    ]
-                ];
-                Redis::set($key_name, json_encode($data), 'EX', 300);
-                return $data;
+                $pg = self::getPaymentGateway($pay_module->pg_id);
+                if(count($pg))
+                {
+                    $data = [
+                        'merchandise' => [
+                            'id' => $pay_module->mcht_id,
+                            'addr' => $pay_module->addr,
+                            'mcht_name' => $pay_module->mcht_name,
+                            'nick_name' => $pay_module->nick_name,
+                            'contact_num' => $pay_module->contact_num,
+                            'business_num' => $pay_module->business_num,
+                            'use_saleslip_prov' => $pay_module->use_saleslip_prov,
+                            'use_saleslip_sell' => $pay_module->use_saleslip_sell,
+                            'tax_category_type' => $pay_module->tax_category_type,
+                        ],
+                        'payment_module' => [
+                            'id'            => $pay_module->id,
+                            'mcht_id'       => $pay_module->mcht_id,
+                            'is_old_auth'   => $pay_module->is_old_auth,
+                            'installment'   => $pay_module->installment,
+                            'module_type'   => $pay_module->module_type,
+                            'is_able_bill_key' => $pay_module->is_able_bill_key,
+                            'pay_window_secure_level' => $pay_module->pay_window_secure_level
+                        ],
+                        'pay_window' => [
+                            'window_code' => $pay_module->window_code,
+                            'holding_able_at' => $pay_module->holding_able_at,
+                        ]
+                    ];
+                    $data['payment_gateway'] = $pg;
+                    Redis::set($key_name, json_encode($data), 'EX', self::REDIS_KEEP_SEC);
+                    return $data;
+                }
+                else
+                    return null;
             }
             else
                 return null;
@@ -220,6 +214,7 @@ class PayWindowInterface implements GeneratorInterface
 
         $params = [
             'amount'        => $request->amount,
+            'item_img'      => $request->input('product_img', ''),
             'item_name'     => $request->item_name,
             'buyer_name'    => $request->buyer_name,
             'buyer_phone'   => $request->buyer_phone,
@@ -232,5 +227,24 @@ class PayWindowInterface implements GeneratorInterface
     static public function auth($window_code, $pin_code)
     {
         return PayWindow::where('window_code', $window_code)->where('pin_code', $pin_code)->exists();
+    }
+
+    static public function getPaymentGateway($pg_id)
+    {
+        $pg = PaymentGateway::where('id', $pg_id)->first();
+        if($pg)
+        {
+            return [
+                'id'            => $pg->id,
+                'pg_type'       => $pg->pg_type,
+                'company_name'  => $pg->company_name,
+                'business_num'  => $pg->business_num,
+                'phone_num'     => $pg->phone_num,
+                'rep_name'      => $pg->rep_name,
+                'addr'          => $pg->addr,
+            ];
+        }
+        else
+            return [];
     }
 }

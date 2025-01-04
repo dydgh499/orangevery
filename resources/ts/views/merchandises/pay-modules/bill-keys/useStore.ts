@@ -12,9 +12,9 @@ export const useSearchStore = defineStore('billKeySearchStore', () => {
         'buyer_name': '구매자명',
         'buyer_phone': '구매자 번호',
         'issuer': '발급사',
+        'card_num': '카드번호',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
-        'extra_col': '더보기',
     }
 
     head.sub_headers.value = []

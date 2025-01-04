@@ -1,0 +1,266 @@
+<?php
+
+namespace App\Http\Controllers\Manager\PaymentModule;
+
+use App\Enums\AuthLoginCode;
+
+use App\Models\PaymentModule\BillKey;
+use App\Models\Merchandise\PaymentModule;
+
+use App\Http\Traits\ManagerTrait;
+use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\Models\EncryptDataTrait;
+
+use App\Http\Requests\Manager\IndexRequest;
+
+use App\Http\Requests\Manager\PaymentModule\BillKeyCreateRequest;
+use App\Http\Requests\Manager\PaymentModule\BillKeyUpdateRequest;
+use App\Http\Requests\Manager\PaymentModule\BillKeyPayRequest;
+
+use App\Http\Controllers\Utils\Comm;
+use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\PayWindowInterface;
+use App\Http\Controllers\Message\MessageController;
+use App\Http\Controllers\Controller;
+
+use Illuminate\Http\Request;
+
+/**
+ * @group Bill Key API
+ *
+ * 빌키 API입니다.
+ */
+class BillKeyController extends Controller
+{
+    use ManagerTrait, ExtendResponseTrait, EncryptDataTrait;
+    protected $bill_keys, $merchandises;
+
+    public function __construct(BillKey $bill_keys)
+    {
+        $this->bill_keys = $bill_keys;
+        $this->target = '빌키';
+        $this->imgs = [];
+    }
+    
+    public function defaultValidate($request, string $window_code)
+    {
+        // TODO: token 인증 변경 필요
+        [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
+        if($result === 0)
+        {
+            $pay_window = PayWindowInterface::getPayInfo($window_code);
+            if($pay_window)
+            {
+                $pay_module = PaymentModule::where('id', $pay_window['payment_module']['id'])->first();
+                if($pay_module)
+                {
+                    if($pay_module->pay_key)
+                        return [0, '', $pay_window, $pay_module];
+                    else
+                        return [1999, '결제모듈의 pay key가 존재하지 않습니다.<br>pay key를 생성한 후 빌키를 생성해주세요.', $pay_window, $pay_module];
+                }  
+                else
+                    return [1999, '결제모듈이 존재하지 않습니다.', null, null];
+            }
+            else
+                return [1999, '존재하지 않은 결제창 입니다.', null, null];
+        }
+        else
+            return [$result, $msg, null, null];
+    }
+
+    public function billKeyValidate($request, string $window_code, int $id)
+    {
+        [$result, $msg, $pay_window, $pay_module] = $this->defaultValidate($request, $window_code);
+        if($result === 0)
+        {
+            $bill_key = $this->bill_keys->where('id', $id)->first();
+            if($bill_key)
+            {
+                if($pay_window['payment_module']['id'] === $bill_key->pmod_id)
+                    return [0, '', $bill_key, $pay_module];
+                else
+                    return [951, '', $bill_key, null];
+            }
+            else
+                return [1999, '존재하지 빌키 입니다.', null, null];
+        }
+        else
+            return [$result, $msg, null, null];
+    }
+
+    /**
+     * 목록출력
+     *
+     * 운영자 이상 가능
+     */
+    public function managerIndex(IndexRequest $request)
+    {
+        $cols = ['bill_keys.*', 'merchandises.mcht_name', 'payment_modules.note'];
+        $search = $request->input('search', '');
+        $query = $this->bill_keys
+            ->join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
+            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            ->where('merchandises.is_delete', false)
+            ->where(function ($query) use ($search) {
+                return $query->where('merchandises.mcht_name', 'like', "%$search%");
+            });
+        $query = globalSalesFilter($query, $request, 'merchandises');
+        $query = globalAuthFilter($query, $request, 'merchandises');        
+        $query = globalPGFilter($query, $request, 'payment_modules');
+        if(Ablilty::isMerchandise($request))
+            $query = $query->where('payment_modules.mcht_id', $request->user()->id);
+        else if(Ablilty::isSalesforce($request))
+            return $this->response(951);
+
+        $data = $this->getIndexData($request, $query, 'bill_keys.id', $cols, 'bill_keys.created_at');
+        return $this->response(0, $data);
+    }
+    /** 
+     * 빌키정보 리턴
+    */
+    public function index(Request $request, string $window_code)
+    {
+        $request->validate(['token' => 'required', 'buyer_phone'=>'required']);
+        [$result, $msg, $pay_window, $pay_module] = $this->defaultValidate($request, $window_code);
+        if($result === 0)
+        {
+            $bill_keys = $this->bill_keys
+                ->where('pmod_id', $pay_window['payment_module']['id'])
+                ->where('buyer_phone', $this->aes256_encode($request->buyer_phone))
+                ->get([
+                'id', 'issuer', 'card_num', 'buyer_name', 'buyer_phone',
+            ]);
+            return $this->response(0, $bill_keys);
+        }
+        else if($result === 951)
+            return $this->response(951);
+        else
+            return $this->extendResponse(1999, $msg);
+    }
+
+    /**
+     * 빌키생성
+     *
+     * 운영자 이상 가능
+     *
+     */
+    public function store(BillKeyCreateRequest $request, string $window_code)
+    {
+        [$result, $msg, $pay_window, $pay_module] = $this->defaultValidate($request, $window_code);
+        if($result === 0)
+        {
+            $data = $request->data();
+            $data['mid'] = $pay_module->mid;
+            $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key', $data, [
+                'Authorization' => $pay_module->pay_key
+            ]);
+            if($res['body']['result_cd'] === '0000')
+                return $this->response(1, $res['body']);
+            else
+                return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);    
+        }
+        else if($result === 951)
+            return $this->response(951);
+        else
+            return $this->extendResponse(1999, $msg);
+    }
+
+    /**
+     * 단일조회
+     *
+     * 운영자 이상 가능
+     *
+     * @urlParam id integer required 빌키 PK
+     */
+    public function show(Request $request, int $id)
+    {
+
+    }
+
+    /**
+     * 업데이트
+     *
+     * 운영자 이상 가능
+     *
+     * @urlParam id integer required 빌키 PK
+     */
+    public function update(BillKeyUpdateRequest $request, string $window_code, int $id)
+    {
+        [$result, $msg, $bill_key, $pay_module] = $this->billKeyValidate($request, $window_code, $id);
+        if($result === 0)
+        {
+            $data = $request->data();
+            $data['buyer_name'] = $this->aes256_encode($data['buyer_name']);
+            $data['buyer_phone'] = $this->aes256_encode($data['buyer_phone']);
+            $this->bill_keys->where('id', $id)->update($data);
+            return $this->response(0);
+        }
+        else if($result === 951)
+            return $this->response(951);
+        else
+            return $this->extendResponse(1999, $msg);
+    }
+
+    /**
+     * 단일삭제
+     *
+     * 운영자
+     * 
+     * @urlParam id integer required 빌키 PK
+     */
+    public function destroy(Request $request, string $window_code, int $id)
+    {
+        [$result, $msg, $bill_key, $pay_module] = $this->billKeyValidate($request, $window_code, $id);
+        if($result === 0)
+        {
+            $data = [
+                'mid' => $pay_module->mid,
+                'ord_num' => $request->ord_num,
+                'bill_key' => $bill_key->bill_key,
+            ];
+            $res = Comm::destroy(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key', $data, [
+                'Authorization' => $pay_module->pay_key
+            ]);
+            if($res['body']['result_cd'] === '0000')
+                return $this->response(1, $res['body']);
+            else
+                return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);  
+        }
+        else if($result === 951)
+            return $this->response(951);
+        else
+            return $this->extendResponse(1999, $msg);
+    }
+
+    /**
+     * 결제하기
+     *
+     * 운영자 이상 가능
+     *
+     * @urlParam id integer required 빌키 PK
+     */
+    public function pay(BillKeyPayRequest $request, string $window_code, int $id)
+    {
+        [$result, $msg, $bill_key, $pay_module] = $this->billKeyValidate($request, $window_code, $id);
+        if($result === 0)
+        {
+            $data = array_merge($request->data(), [
+                'mid'       => $pay_module->mid,
+                'pmod_id'   => $bill_key->pmod_id,
+                'bill_key'  => $bill_key->bill_key,
+            ]);
+            $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key/hand', $data, [
+                'Authorization' => $pay_module->pay_key
+            ]);
+            if($res['body']['result_cd'] === '0000')
+                return $this->response(1, $res['body']);
+            else
+                return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);  
+        }
+        else if($result === 951)
+            return $this->response(951);
+        else
+            return $this->extendResponse(1999, $msg);
+    }
+}

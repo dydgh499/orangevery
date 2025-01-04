@@ -32,23 +32,33 @@ class Kernel extends ConsoleKernel
     {
         if((int)env('SCHEDULE_ON', 1))
         {
-            $schedule->call(new RealtimeSendHistoryController(new RealtimeSendHistory))->hourly();
-            $schedule->call(new ApplyBookController)->hourly();
-            $schedule->call(new FeeChangeHistoryController(new MchtFeeChangeHistory, new SfFeeChangeHistory))->daily();
-            $schedule->command('sanctum:prune-expired --hours=35')->daily();
-            $schedule->call(new DangerTransController(new DangerTransaction))->everySixHours();
-    
-            // 차액정산
+            $schedule->call(function () {
+                (new ApplyBookController)->__invoke();
+            })->hourly();
+            
+            $schedule->call(function () {
+                (new DangerTransController(new DangerTransaction))->__invoke();
+            })->everySixHours();
+
+            $schedule->call(function () {
+                (new FeeChangeHistoryController(new MchtFeeChangeHistory, new SfFeeChangeHistory))->__invoke();
+            })->daily();
+
+            // 차액정산 처리
             $schedule->call(function () {
                 (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleRequest();
             })->dailyAt("00:30");
+
             $schedule->call(function () {
                 (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleResponse();
             })->dailyAt("09:00");
+
             // 공휴일 업데이트
             $schedule->call(function () {
                 (new HolidayController(new Holiday))->updateNextHolidaysAllBrands();
-            })->yearlyOn(12, 1, '00:00');    
+            })->yearlyOn(12, 1, '00:00');
+
+            $schedule->command('sanctum:prune-expired --hours=35')->daily();
         }
     }
 

@@ -7,7 +7,7 @@ export const payWindowStore = () => {
     const errorHandler = <any>(inject('$errorHandler'))
 
     const move = (url : string) => {
-        location.href = url
+        window.open(url, '_blank', "toolbar=no,scrollbars=no,resizable=no,status=no,menubar=no,width=1000, height=800")
     }
 
     const copy = (value : string, type='결제링크') => {
@@ -58,15 +58,7 @@ export const payWindowStore = () => {
         }
     }
 
-    const getPayWindowUrl = (payment_module: PayModule, param_code: string) => {
-        let type = '';
-        if(payment_module.module_type === 1)
-            type = 'hand'
-        else if(payment_module.module_type === 2)
-            type = 'auth'
-        else if(payment_module.module_type === 3)
-            type = 'simple'
-    
+    const getPayWindowUrl = (payment_module: PayModule, param_code: string) => {    
         let url = window.location.origin + '/pay/' + payment_module.pay_window?.window_code  + '/window'
         if(param_code.length > 0)
             url += '?pc=' + param_code

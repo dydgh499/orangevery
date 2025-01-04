@@ -27,9 +27,9 @@ export const emailValidator = (value: unknown) => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
     if (Array.isArray(value))
-        return value.every(val => re.test(String(val))) || '이메일 필드는 유효한 이메일이어야 합니다.'
+        return value.every(val => re.test(String(val))) || '올바른 이메일을 입력해주세요.'
 
-    return re.test(String(value)) || '이메일 필드는 유효한 이메일이어야 합니다.'
+    return re.test(String(value)) || '올바른 이메일을 입력해주세요.'
 }
 
 // 👉 Password Validator
@@ -94,19 +94,9 @@ export const lengthValidatorV2 = (value: unknown, length: number) => {
     return String(value).length === length || `${length}자 이어야 합니다.`
 }
 
-// 👉 Alpha-dash Validator
-export const alphaDashValidator = (value: unknown) => {
-    if (isEmpty(value))
-        return true
-
-    const valueAsString = String(value)
-
-    return /^[0-9A-Z_-]*$/i.test(valueAsString) || '모든 문자가 유효하지 않습니다.'
-}
-
 // custom
 export const businessNumValidator = (value: string) => {
-    return (/^[0-9]{10}$/.test(value)) || '유효한 사업자등록번호를 입력하세요.'
+    return (/^[0-9]{10}$/.test(value)) || '올바른 사업자등록번호를 입력하세요.'
 }
 
 export const extensionValidator = (files: File[], values: string[]) => {

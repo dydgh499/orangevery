@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import corp from '@/plugins/corp'
 import { fin_trx_delays } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayModule } from '@/views/types'
 import { axios, getUserLevel, isAbleModiy } from '@axios'
-import corp from '@corp'
+import { requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: PayModule,
@@ -19,7 +19,7 @@ const midCreateDlg = <any>(inject('midCreateDlg'))
 const is_readonly_fin_trx_delay = ref(false)
 const occuerred_sale_load = ref(false)
 
-const { pgs, finance_vans } = useStore()
+const { pgs, finance_vans, settle_types } = useStore()
 
 const tidCreate = async() => {
     if(await alert.value.show('정말 TID를 신규 발급하시겠습니까?')) {
@@ -98,131 +98,126 @@ watchEffect(() => {
 </script>
 <template>
     <VCardItem>
-        <VRow v-if="isAbleModiy(props.item.id)">
-            <VCol md="5" cols="4">API KEY</VCol>
-            <VCol md="7">
-                <VTextField type="text" v-model="props.item.api_key" prepend-inner-icon="ic-baseline-vpn-key"
-                        placeholder="API KEY 입력" persistent-placeholder maxlength="100"/>
-            </VCol>
-        </VRow>
-        <VRow v-if="isAbleModiy(props.item.id)">
-            <VCol md="5" cols="4">SUB KEY</VCol>
-            <VCol md="7">
-                <VTextField type="text" v-model="props.item.sub_key" prepend-inner-icon="ic-sharp-key"
-                        placeholder="SUB KEY 입력" persistent-placeholder maxlength="100"/>
-            </VCol>
-        </VRow>
-        <VRow v-if="isAbleModiy(props.item.id) && corp.pv_options.paid.use_pmid">
-            <VCol md="5" cols="4">PMID</VCol>
-            <VCol md="7">
-                <VTextField type="text" v-model="props.item.p_mid" prepend-inner-icon="tabler-user"
-                        placeholder="PMID 입력" persistent-placeholder maxlength="50"/>
-            </VCol>
-        </VRow>
-        <VRow v-if="isAbleModiy(props.item.id)">
-            <VCol md="5" cols="4">
-                <div style="display: flex; flex-direction: row;align-items: center;">
-                    <span>MID</span>
-                    <VBtn type="button" variant="tonal" v-if="props.item.id == 0 && corp.pv_options.paid.use_mid_create && getUserLevel() >= 35" 
+        <VCardSubtitle style="display: flex; justify-content: space-between;">
+            <template v-if="isAbleModiy(props.item.id)">
+                <BaseQuestionTooltip :location="'top'" :text="'계약 및 결제정보'"
+                :content="`결제일이 계약 시작일 ~ 계약 종료일에 포함되지 않을 시 결제가 불가능합니다.<br>
+                입력하지 않을 시 검증하지 않으며 <b>온라인 결제</b>만 적용 가능합니다.`"
+                />
+                <div style="display: inline-block;">
+                    <VBtn type="button" variant="tonal" v-if="corp.pv_options.paid.use_mid_create && props.item.id == 0 && getUserLevel() >= 35" 
                         @click="midCreate()" style="margin-left: 0.5em;" size="small" color="info">
-                        {{ "발급하기" }}
+                        {{ "MID 발급" }}
+                    </VBtn>
+                    <VBtn type="button" variant="tonal" v-if="corp.pv_options.paid.use_tid_create && props.item.id == 0 && getUserLevel() >= 35" 
+                        @click="tidCreate()" style="margin-left: 0.5em;" size="small" color="info">
+                        {{ "TID 발급" }}
                     </VBtn>
                 </div>
+            </template>
+            <span v-else>계약 및 결제정보</span>
+        </VCardSubtitle>
+        <br>
+
+        <VRow v-if="isAbleModiy(props.item.id)">
+            <VCol md="6" cols="12" v-if="corp.pv_options.paid.use_bill_key">
+                <VSwitch hide-details :false-value=0 :true-value=1 
+                    v-model="props.item.is_able_bill_key"
+                    label="빌키결제 사용" color="primary"
+                    v-if="props.item.module_type === 1"
+                />
             </VCol>
-            <VCol md="7">
+            <VCol md="6" cols="12">
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type" :items="settle_types"
+                        prepend-inner-icon="ic-outline-send-to-mobile" item-title="name" item-value="id" label="정산일"
+                        :rules="[requiredValidatorV2(props.item.settle_type, '정산일')]" />
+            </VCol>
+        </VRow>
+        <VRow v-else>
+            <VCol md="5" cols="6" v-if="corp.pv_options.paid.use_bill_key && props.item.module_type != 0">
+                <span class="font-weight-bold">빌키결제 사용</span>    
+            </VCol>
+            <VCol md="7" cols="6" v-if="corp.pv_options.paid.use_bill_key && props.item.module_type != 0">
+                    {{ props.item.is_able_bill_key ? "O" : "X" }}
+            </VCol>
+            <VCol md="5" cols="6">
+                <span class="font-weight-bold">정산일</span>    
+            </VCol>
+            <VCol md="7" cols="6">
+                {{ settle_types.find(obj => obj.id === props.item.settle_type)?.name }}
+            </VCol>
+        </VRow>
+        <VRow v-if="isAbleModiy(props.item.id)">
+            <VCol md="6" cols="12">
                 <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
-                    placeholder="MID 입력" persistent-placeholder
+                    placeholder="MID 입력" persistent-placeholder label="MID"
+                    maxlength="50"/>
+            </VCol>
+            <VCol md="6">
+                <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
+                    placeholder="TID 입력" persistent-placeholder label="TID"
                     maxlength="50"/>
             </VCol>
         </VRow>
         <VRow v-else>
-            <VCol md="5" cols="4">
+            <VCol md="5" cols="6">
                 <span class="font-weight-bold">MID</span>
             </VCol>
-            <VCol md="7">
+            <VCol md="7" cols="6">
                 {{ props.item.mid }}
             </VCol>
-        </VRow>
-        <VRow v-if="isAbleModiy(props.item.id)">
-            <VCol md="5" cols="4">
-                <div style="display: flex; flex-direction: row;align-items: center;">
-                    <span>TID</span>
-                    <VBtn type="button" variant="tonal" v-if="props.item.id == 0 && corp.pv_options.paid.use_tid_create && getUserLevel() >= 35" 
-                        @click="tidCreate()" style="margin-left: 0.5em;" size="small" color="info">
-                        {{ "발급하기" }}
-                    </VBtn>
-                </div>
-            </VCol>
-            <VCol md="7">
-                <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
-                    placeholder="TID 입력" persistent-placeholder
-                    maxlength="50"/>
-            </VCol>
-        </VRow>
-        <VRow v-else>
-            <VCol md="5" cols="4">
+            <VCol md="5" cols="6">
                 <span class="font-weight-bold">TID</span>
             </VCol>
-            <VCol md="7">
+            <VCol md="7" cols="6">
                 {{ props.item.tid }}
             </VCol>
         </VRow>
-
         <VRow v-if="isAbleModiy(props.item.id)">
-            <VCol md="5" cols="5">계약 시작일</VCol>
-            <VCol md="7">
+            <VCol md="6" cols="12">
                 <AppDateTimePicker 
                     v-model="props.item.contract_s_dt" 
                     prepend-inner-icon="ic-baseline-calendar-today"
                     placeholder="시작일 입력"
+                    label="계약 시작일"
                     />
             </VCol>
-        </VRow>
-        <VRow v-else>
-            <VCol md="5" cols="5"><span class="font-weight-bold">계약 시작일</span></VCol>
-            <VCol md="7">
-                {{ props.item.contract_s_dt }}
-            </VCol>
-        </VRow>
-
-        <VRow v-if="isAbleModiy(props.item.id)">
-            <VCol md="5" cols="5">
-                <BaseQuestionTooltip :location="'top'" :text="'계약 종료일'"
-                    :content="'결제일이 계약 시작일 ~ 계약 종료일에 포함되지 않을 시 결제가 불가능합니다.<br>입력하지 않을 시 검증하지 않으며 <b>온라인 결제</b>만 적용 가능합니다.'"/>
-            </VCol>
-            <VCol md="7">
+            <VCol md="6">
                 <AppDateTimePicker 
                     v-model="props.item.contract_e_dt" 
                     prepend-inner-icon="ic-baseline-calendar-today" 
                     placeholder="종료일 입력" 
+                    label="계약 종료일"
                     />
             </VCol>
         </VRow>
         <VRow v-else>
-            <VCol md="5" cols="5">
+            <VCol md="5" cols="6"><span class="font-weight-bold">계약 시작일</span></VCol>
+            <VCol md="7" cols="6">
+                {{ props.item.contract_s_dt }}
+            </VCol>
+            <VCol md="5" cols="6">
                 <span class="font-weight-bold">계약 종료일</span>    
             </VCol>
-            <VCol md="7">
+            <VCol md="7" cols="6">
                 {{ props.item.contract_e_dt }}
             </VCol>
         </VRow>
-        <template v-if="props.item.id != 0 && props.item.module_type != 0 && corp.pv_options.paid.use_online_pay">
-            <VRow v-if="isAbleModiy(props.item.id) && getUserLevel() >= 35">
-                <VCol md="6" cols="4">
-                    <div style="display: flex; flex-direction: row;align-items: center;">
-                        <span>결제 KEY</span>
-                        <VBtn type="button" variant="tonal" @click="payKeyCreate()" style="margin-left: 0.5em;" size="small" color="info">
-                            {{ "발급하기" }}                            
-                            <VTooltip activator="parent" location="top">
-                                해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.
-                            </VTooltip>
-                        </VBtn>
-                    </div>
+
+        <template v-if="corp.pv_options.paid.use_online_pay && props.item.id != 0 && props.item.module_type != 0">
+            <VRow v-if="isAbleModiy(props.item.id)">
+                <VCol md="4" cols="4">
+                    <VBtn type="button" variant="tonal" @click="payKeyCreate()" size="small" color="info">
+                        {{ "결제 KEY 발급" }}                            
+                        <VTooltip activator="parent" location="top">
+                            해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.
+                        </VTooltip>
+                    </VBtn>
                 </VCol>
-                <VCol md="6">
+                <VCol md="8" cols="8">
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <VTextField type="text" v-model="props.item.pay_key" prepend-inner-icon="ic-baseline-vpn-key"
-                            persistent-placeholder :disabled="true"/>
+                            label="결제 KEY" :disabled="true"/>
                         <VTooltip activator="parent" location="top">
                             더블클릭해서 결제 KEY를 복사하세요.
                         </VTooltip>
@@ -230,7 +225,7 @@ watchEffect(() => {
                 </VCol>
             </VRow>
             <VRow v-else>
-                <VCol md="5" cols="4">
+                <VCol md="5" cols="6">
                     <span class="font-weight-bold">결제 KEY</span>    
                 </VCol>
                 <VCol md="7" cols="12">
@@ -244,23 +239,20 @@ watchEffect(() => {
             </VRow>
         </template>
 
-        <template v-if="props.item.id != 0 && corp.pv_options.paid.use_noti">
-            <VRow v-if="isAbleModiy(props.item.id) && getUserLevel() >= 35">
-                <VCol md="6" cols="4">
-                    <div style="display: flex; flex-direction: row;align-items: center;">
-                        <span>서명 KEY</span>
-                        <VBtn type="button" variant="tonal" @click="signKeyCreate()" style="margin-left: 0.5em;" size="small" color="info">
-                            {{ "발급하기" }}
-                            <VTooltip activator="parent" location="top">
-                                노티발송시 데이터 위변조 방지 값으로 사용됩니다.
-                            </VTooltip>
-                        </VBtn>
-                    </div>
+        <template v-if="corp.pv_options.paid.use_noti && props.item.id != 0">
+            <VRow v-if="isAbleModiy(props.item.id)">
+                <VCol md="4" cols="4">
+                    <VBtn type="button" variant="tonal" @click="signKeyCreate()" size="small" color="info">
+                        {{ "서명 KEY 발급" }}
+                        <VTooltip activator="parent" location="top">
+                            노티발송시 데이터 위변조 방지 값으로 사용됩니다.
+                        </VTooltip>
+                    </VBtn>
                 </VCol>
-                <VCol md="6">
+                <VCol md="8" cols="12">
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <VTextField type="text" v-model="props.item.sign_key" prepend-inner-icon="ic-baseline-vpn-key"
-                            persistent-placeholder :disabled="true"/>
+                            :disabled="true" label="서명 KEY"/>
                         <VTooltip activator="parent" location="top" v-if="props.item.sign_key">
                             더블클릭해서 서명 KEY를 복사하세요.
                         </VTooltip>
@@ -268,7 +260,7 @@ watchEffect(() => {
                 </VCol>
             </VRow>
             <VRow v-else>
-                <VCol md="5" cols="4">
+                <VCol md="5" cols="6">
                     <span class="font-weight-bold">서명 KEY</span>    
                 </VCol>
                 <VCol md="7" cols="12">
@@ -281,39 +273,55 @@ watchEffect(() => {
                 </VCol>
             </VRow>
         </template>
-        
-        <template v-if="isAbleModiy(props.item.id) && corp.pv_options.paid.use_realtime_deposit">
+
+        <template v-if="corp.pv_options.paid.use_finance_van_deposit">
             <VDivider style="margin: 1em 0;" />
-            <VRow>
-                <VCol md="5" cols="5">실시간 사용여부</VCol>
-                <VCol md="7">
-                    <BooleanRadio :radio="props.item.use_realtime_deposit"
-                            @update:radio="props.item.use_realtime_deposit = $event">
-                            <template #true>사용</template>
-                            <template #false>미사용</template>
-                    </BooleanRadio>
+            <VCardSubtitle>즉시출금 정보</VCardSubtitle>
+            <br>
+            <VRow v-if="isAbleModiy(props.item.id)">
+                <VCol md="6">
+                    <VSwitch hide-details :false-value=0 :true-value=1 
+                        v-model="props.item.use_realtime_deposit"
+                        label="즉시출금 사용" color="warning"
+                        />
+                </VCol>
+                <VCol md="6" cols="6">                    
+                    <VTextField v-model="props.item.settle_fee" type="number" suffix="₩" label="이체 수수료"
+                            :rules="[requiredValidatorV2(props.item.settle_fee, '이체 수수료')]" />
                 </VCol>
             </VRow>
-            <VRow>
-                <VCol md="5" cols="5">이체 모듈 타입</VCol>
-                <VCol md="7">
+            <VRow v-else>
+                <VCol md="5" cols="6">
+                    <span class="font-weight-bold">즉시출금 사용여부</span>
+                </VCol>
+                <VCol md="7" cols="6">
+                    {{ props.item.use_realtime_deposit ? "O" : "X" }}
+                </VCol>
+                <VCol md="5" cols="6">
+                    <span class="font-weight-bold">이체 수수료</span>
+                </VCol>
+                <VCol md="7" cols="6">
+                    {{ props.item.settle_fee }} ₩
+                </VCol>
+            </VRow>
+
+            <VRow v-if="isAbleModiy(props.item.id)">
+                <VCol md="6" cols="12">
                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_id" :items="finance_vans"
-                            prepend-inner-icon="streamline-emojis:ant" label="모듈 타입 선택" item-title="nick_name"
-                            item-value="id" single-line />
+                        prepend-inner-icon="streamline-emojis:ant" label="이체모듈 타입" item-title="nick_name"
+                        item-value="id" />
                 </VCol>
-            </VRow>
-            <VRow>
-                <VCol md="5" cols="5">이체 딜레이</VCol>
-                <VCol md="7">
+                <VCol md="6">
                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_trx_delay"
-                        :items="fin_trx_delays" prepend-inner-icon="streamline-emojis:bug" label="이체 딜레이 선택"
-                        item-title="title" item-value="id" single-line :readonly="is_readonly_fin_trx_delay"/>
+                        :items="fin_trx_delays" prepend-inner-icon="streamline-emojis:bug" label="이체딜레이 선택"
+                        item-title="title" item-value="id" :readonly="is_readonly_fin_trx_delay"/>
                     <VTooltip activator="parent" location="top">
                         사고 방지를 위해 결제모듈이 최초거래가 발생한 순간부터 이체 딜레이를 수정할 수 없습니다.
                     </VTooltip>
                 </VCol>
             </VRow>
         </template>
+
     </VCardItem>
 </template>
 <style scoped>

@@ -34,7 +34,7 @@ watchEffect (async () => {
 <template>
     <section>        
         <template v-if="props.ext === 'pdf'">
-            <div :style="props.previewStyle" class="pdf-container">
+            <div :style="props.previewStyle" class="pdf-container preview-content">
                 <div :style="{ margin: '0.1em' }">
                     <VuePDF ref="vpdf" :pdf="pdf" fit-parent @click="openFile" />
                 </div>
@@ -42,7 +42,7 @@ watchEffect (async () => {
         </template>
         <template v-else>
             <VImg rounded :src="props.preview" @click="imageDialog.show(props.preview)"
-                :style="props.previewStyle" />
+                :style="props.previewStyle" class="preview-content"/>
             <ImageDialog ref="imageDialog" :style="props.style" />
         </template>
     </section>

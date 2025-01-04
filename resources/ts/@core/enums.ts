@@ -44,3 +44,9 @@ export const ItemTypes = {
     Transaction: 3,
     NotiUrl: 4,
 } as const
+
+export const PayParamTypes = {
+    None : 0,
+    SMS : 1,
+    SHOP : 2,
+} as const

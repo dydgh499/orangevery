@@ -1,4 +1,3 @@
-a
 <script setup lang="ts">
 import { useDynamicTabStore } from '@/@core/utils/dynamicTab';
 import router from '@/router';

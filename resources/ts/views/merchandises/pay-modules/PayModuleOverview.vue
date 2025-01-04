@@ -36,7 +36,6 @@ const { pgs, pss, settle_types } = useStore()
 const pay_modules = reactive<PayModule[]>([])
 const payModuleDlg = ref()
 
-// Update data table options
 const updateOptions = (options: any) => {
     page.value = options.page
     sortBy.value = options.sortBy[0]?.key
@@ -61,7 +60,7 @@ const editNewPayModule = async (item: PayModule) => {
 const addNewPayModule = async () => {
     const pay_module = <PayModule>({
         id: 0,
-        mcht_id: null,
+        mcht_id: props.item.id,
         pg_id: null,
         ps_id: null,
         terminal_id: null,
@@ -69,6 +68,7 @@ const addNewPayModule = async () => {
         module_type: 0,
         api_key: '',
         sub_key: '',
+        p_mid: '',
         mid: '',
         tid: '',
         serial_num: '',
@@ -92,8 +92,8 @@ const addNewPayModule = async () => {
         pay_month_limit: 0,
         pay_day_limit: 0,
         pay_single_limit: 0,
-        pay_disable_s_tm: null,
-        pay_disable_e_tm: null,
+        pay_disable_s_tm: '00:00',
+        pay_disable_e_tm: '00:00',
         pay_window_secure_level: 0,
         pay_key: '',
         filter_issuers: [],
@@ -105,10 +105,9 @@ const addNewPayModule = async () => {
         use_realtime_deposit: 0,
         pay_dupe_least: 0,
         payment_term_min: 1,
-        p_mid: '',
-        pay_window_extend_hour: 1,
+        pay_window_extend_hour: 25,
+        is_able_bill_key: 0,
     })
-    pay_module.mcht_id = props.item.id
     const res = await payModuleDlg.value.show(pay_module)
     if(res)
         pay_modules.unshift(<PayModule>(pay_module))

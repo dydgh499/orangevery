@@ -2,17 +2,25 @@
 
 namespace App\Http\Controllers\Manager\Merchandise;
 
-use App\Models\Merchandise\Product;
+use App\Models\Merchandise\ShoppingMall\Product;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\StoresTrait;
 
 use App\Http\Requests\Manager\IndexRequest;
-use App\Enums\HistoryType;
+use App\Http\Requests\Manager\Merchandise\ShoppingMall\ProductRequest;
+use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\ShoppingMallWindowInterface;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+/**
+ * @group Bill Key API
+ *
+ * 수기단말기 상품 API입니다.
+ */
+class HandHeldTerminalProductController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
     protected $products;

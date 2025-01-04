@@ -10,17 +10,16 @@ defineProps<{
 }>()
 
 const payShow  = <any>(inject('payShow'))
-const payLink  = <any>(inject('payLink'))
 
 const { width: windowWidth } = useWindowSize()
 const { isVerticalNavMini, dynamicI18nProps } = useLayouts()
 const hideTitleAndBadge = isVerticalNavMini(windowWidth)
 
 const TapFunctionNavi = (item: NavLink) => {
-    if(item.class == 'direct()')
-        payLink.value.show(item.params)
-    else if(item.class == 'select()')
+    if(item.class == 'payWindow()')
         payShow.value.show(item.params)
+    else if(item.class === `shop()`)
+        window.open(window.location.origin + `/shop/${item.params.window_code}`, '_blank', "toolbar=no,scrollbars=no,resizable=no,status=no,menubar=no,width=1000, height=1200")
 }
 </script>
 

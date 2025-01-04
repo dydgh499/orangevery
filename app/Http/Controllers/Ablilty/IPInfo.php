@@ -100,7 +100,7 @@ class IPInfo
 
     static public function validate($request)
     {
-        if(Ablilty::isDevOffice($request) || $request->ip() === '127.0.0.1')
+        if(Ablilty::isDevOffice($request) || env('APP_ENV') === 'local')
             return true;
         else
         {

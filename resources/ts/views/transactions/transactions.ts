@@ -118,7 +118,6 @@ export const notiSendHistoryInterface = () => {
     }
 }
 
-
 export const realtimeHistoryInterface = (formatTime: any) => {
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))

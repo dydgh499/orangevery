@@ -8,8 +8,8 @@ use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
 use App\Http\Controllers\Manager\Merchandise\RegularCreditCardController;
 use App\Http\Controllers\Manager\Merchandise\NotiUrlController;
 use App\Http\Controllers\Manager\Merchandise\SpecifiedTimeDisablePaymentController;
-use App\Http\Controllers\Manager\Merchandise\ProductController;
-use App\Http\Controllers\Manager\Merchandise\BillKeyController;
+use App\Http\Controllers\Manager\Merchandise\HandHeldTerminalProductController;
+use App\Http\Controllers\Manager\PaymentModule\BillKeyController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
 
 use App\Http\Controllers\Manager\SalesforceController;
@@ -18,6 +18,14 @@ use App\Http\Controllers\Manager\Salesforce\UnderAutoSettingController;
 use App\Http\Controllers\Log\SubBusinessRegistration\SubBusinessRegistrationController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\NotiSendHistoryController;
+
+//
+use App\Http\Controllers\Manager\AuthInfo\AuthInfoController;
+use App\Http\Controllers\Manager\Merchandise\ShoppingMall\CategoryController;
+use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ProductController;
+use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ProductOptionController;
+use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ProductOptionGroupController;
+use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ShopController;
 
 Route::prefix('salesforces')->group(function() {
     Route::post('{id}/password-change', [SalesforceController::class, 'passwordChange']);
@@ -52,6 +60,7 @@ Route::prefix('merchandises')->group(function() {
     // 가맹점만 시간영향받지않고 패스워드 초기화 및 unlock 가능
     Route::post('{id}/password-change', [MerchandiseController::class, 'passwordChange']);
     Route::post('{id}/unlock-account', [MerchandiseController::class, 'unlockAccount']);
+    Route::middleware(['is.operate'])->get('{id}/shop-code', [ShopController::class, 'shopCode']);
     Route::get('chart', [MerchandiseController::class, 'chart']);
     Route::get('all', [MerchandiseController::class, 'all']);   
     Route::get('terminals', [TerminalController::class, 'index']);   
@@ -67,7 +76,13 @@ Route::prefix('merchandises')->group(function() {
         Route::post('batch-retry', [NotiSendHistoryController::class, 'batchRetry']);    
     });
 
-    //FIXPLUS
+    Route::prefix('shopping-mall')->group(function() {
+        Route::apiResource('categories', CategoryController::class);
+        Route::apiResource('products', ProductController::class);
+        Route::apiResource('product-options', ProductOptionController::class);
+        Route::apiResource('product-option-groups', ProductOptionGroupController::class);
+    });
+
     Route::middleware(['is.edit.able'])->group(function() {
         Route::post('fee-change-histories/{user}/set-fee', [FeeChangeHistoryController::class, 'apply']);
         Route::post('batch-updaters/{user}/set-fee', [BatchUpdateMchtController::class, 'feeApply']);
@@ -82,6 +97,7 @@ Route::prefix('merchandises')->group(function() {
             Route::post('noti-urls/bulk-register', [NotiUrlController::class, 'bulkRegister']);
     
             Route::apiResource('products', ProductController::class);
+            Route::apiResource('handheld-terminal-products', HandHeldTerminalProductController::class);
             Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
             Route::delete('fee-change-histories/batch-remove', [FeeChangeHistoryController::class, 'deleteMerchandiseBatch']);
             Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
@@ -103,6 +119,7 @@ Route::prefix('merchandises')->group(function() {
             Route::apiResource('bill-keys', BillKeyController::class); 
         });
     });   
+    Route::get('pay-modules/bill-keys', [BillKeyController::class, 'managerIndex']); 
     Route::get('noti-urls/chart', [NotiUrlController::class, 'chart']);
     
     Route::apiResource('pay-modules', PaymentModuleController::class);

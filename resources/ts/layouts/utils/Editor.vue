@@ -59,7 +59,7 @@ watchEffect(() => {
 </script>
 <template>
     <div style="display: block;">
-        <QuillEditor v-model:content="content" contentType="html" :modules="modules" theme="snow" :toolbar="getUserLevel() < 35 ? 'minimal' : 'full'" placeholder="게시글 내용을 작성하세요."/>
+        <QuillEditor v-model:content="content" contentType="html" :modules="modules" theme="snow" :toolbar="getUserLevel() < 35 ? 'minimal' : 'full'" placeholder="내용을 작성하세요."/>
     </div>
 </template>
 

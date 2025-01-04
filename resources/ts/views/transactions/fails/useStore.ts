@@ -29,7 +29,7 @@ export const useSearchStore = defineStore('failSearchStore', () => {
         printer(r.data.content)
     }
 
-    const printer = (type: number, datas: FailTransaction[]) => {
+    const printer = (datas: FailTransaction[]) => {
         const keys = Object.keys(head.flat_headers.value)
         for (let i = 0; i < datas.length; i++) {
             datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import ProductTr from '@/views/merchandises/products/ProductCardTr.vue'
-import { useRequestStore } from '@/views/request'
-import type { Merchandise, Product } from '@/views/types'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
+import ProductTr from '@/views/merchandises/products/ProductCardTr.vue';
+import { useRequestStore } from '@/views/request';
+import type { Merchandise, Product } from '@/views/types';
 
 interface Props {
     item: Merchandise,
@@ -29,8 +29,7 @@ watchEffect(() => {
 </script>
 <template>
     <VCardTitle style="margin-bottom: 1em;">
-        <BaseQuestionTooltip :location="'top'" :text="'상품정보 세팅'" :content="'수기단말기에 표기되는 상품정보입니다.'">
-        </BaseQuestionTooltip>
+        <BaseQuestionTooltip :location="'top'" :text="'상품정보 세팅'" :content="'수기단말기에 표기되는 상품정보입니다.'"/>
     </VCardTitle>
     <VTable style="width: 100%;margin-bottom: 1em;text-align: center;">
         <thead>

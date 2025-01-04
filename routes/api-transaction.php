@@ -20,6 +20,7 @@ use App\Http\Controllers\Manager\Settle\RepMerchandiseController;
 use App\Http\Controllers\Manager\Settle\CancelDepositController;
 
 use App\Http\Controllers\Log\CollectWithdrawHistoryController;
+use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ShopController;
 
 Route::prefix('transactions')->group(function() {          
     Route::middleware(['is.operate'])->group(function() {
@@ -74,6 +75,8 @@ Route::prefix('transactions')->group(function() {
     Route::get('summary/chart', [TransactionSummaryController::class, 'chart']);
     Route::get('summary', [TransactionSummaryController::class, 'index']);
     Route::get('dangers', [DangerTransController::class, 'index']);
+    Route::get('orders', [ShopController::class, 'order']);
+    
     Route::delete('dangers/{id}', [DangerTransController::class, 'destroy']);
     Route::post('dangers/{id}/checked', [DangerTransController::class, 'checked']);
     Route::post('dangers/batch-checked', [DangerTransController::class, 'batchChecked']);            

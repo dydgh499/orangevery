@@ -104,6 +104,7 @@
         public $use_product = false;
         public $use_cancel_all_allow = false;
         public $use_bill_key = false; // 빌키사용 여부
+        public $use_shop = false;
 
         public function __construct(array $source)
         {

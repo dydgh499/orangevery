@@ -19,7 +19,7 @@ const getFileExtension = (file_name: string) => {
 const props = defineProps<Props>()
 const files = ref(<File[]>([]))
 const ext = ref<string>('')
-const previewStyle = `
+const preview_style = `
     border: 1px solid rgb(130, 130, 130);
     border-radius: 0.5em;
     margin-block: 0;
@@ -52,20 +52,25 @@ watchEffect(() => {
 <template>
     <VRow no-gutters style="align-items: flex-start;">
         <VCol cols="12" md="6">
-            <VFileInput accept="*" v-model="files" :label="label"  @change="upload()" v-if="isAbleModiy(0)">
-                <template #selection="{ fileNames }">
-                <template v-for="fileName in fileNames" :key="fileName">
-                    <VChip label size="small" variant="outlined" color="primary" class="me-2">
-                        {{ fileName }}
-                    </VChip>
+            <template v-if="isAbleModiy(0)">
+                <VFileInput accept=".jpg,.bmp,.png,.jpeg,.webp,.pdf" v-model="files" :label="label"  @change="upload()" >
+                    <template #selection="{ fileNames }">
+                    <template v-for="fileName in fileNames" :key="fileName">
+                        <VChip label size="small" variant="outlined" color="primary" class="me-2">
+                            {{ fileName }}
+                        </VChip>
+                    </template>
                 </template>
+                </VFileInput>
+                <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                    jpg,bmp,png,jpeg,webp,pdf만 업로드 가능합니다.
+                </VTooltip>
             </template>
-            </VFileInput>
-            <span v-else>{{ label.replace(' 업로드', ' 이미지') }}</span>
+            <span v-else>{{ label.replace(' 업로드', '') }}</span>
         </VCol>
         <VCol cols="12" md="6">
             <DialogCloseBtn class="close-btn" @click="remove()" v-if="props.preview !== '/utils/icons/img-preview.svg' && files.length === 0 && isAbleModiy(0)"/>
-            <Preview :preview="props.preview" :style="``" :preview-style="previewStyle" class="preview" :ext="ext"/>
+            <Preview :preview="props.preview" :style="``" :preview-style="preview_style" class="preview" :ext="ext"/>
         </VCol>
     </VRow>
 </template>

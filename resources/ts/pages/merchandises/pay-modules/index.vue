@@ -195,7 +195,7 @@ onMounted(() => {
                                 <span v-else-if="_key === 'pay_window_secure_level'">
                                     <template v-if="item.module_type != 0">
                                         <VChip
-                                            :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
+                                            :color="store.getSelectIdColor(item[_key])">
                                             {{ pay_window_secure_levels.find(obj => obj.id === item[_key])?.title }}
                                         </VChip>
                                     </template>

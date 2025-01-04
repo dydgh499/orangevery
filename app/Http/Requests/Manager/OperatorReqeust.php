@@ -19,9 +19,14 @@ class OperatorReqeust extends FormRequest
         'profile_img',
     ];
     
+    public $integer_keys = [
+        'is_notice_realtime_warning',
+        'is_active',
+    ];
+
     public function authorize()
     {
-        return $this->user()->tokenCan($this->id ? 35 : 40) ? true : false;
+        return $this->user()->tokenCan(35) ? true : false;
     }
 
     /**
@@ -38,17 +43,17 @@ class OperatorReqeust extends FormRequest
             'level' => 'required',
             'profile_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
         ];
-        return $this->getRules($this->keys, $sub);
+        return $this->getRules(array_merge($this->keys, $this->integer_keys, $this->image_keys), $sub);
     }
 
     public function attributes()
     {
-        return $this->getAttributes($this->keys);
+        return $this->getAttributes(array_merge($this->keys, $this->integer_keys, $this->image_keys));
     }
 
     public function bodyParameters()
     {
-        $params = $this->getDocsParameters($this->keys);
+        $params = $this->getDocsParameters(array_merge($this->keys, $this->integer_keys, $this->image_keys));
         return $params;
     }
 

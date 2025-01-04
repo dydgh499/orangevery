@@ -38,7 +38,7 @@ class secta9ine extends DifferenceSettlement implements DifferenceSettlementInte
             'password' => $brand['sftp_password'],
             'passive' => false,
         ]]);
-        [$this->main_sftp_connection, $this->main_connection_stat] = $this->connectSFTPServer($dr_config_name, 'main');
+        [$this->main_sftp_connection, $this->main_connection_stat] = $this->connectSFTPServer($main_config_name, 'main');
         [$this->dr_sftp_connection, $this->dr_connection_stat] = $this->connectSFTPServer($dr_config_name, 'dr');
     }
 

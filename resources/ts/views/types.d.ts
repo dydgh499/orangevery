@@ -205,6 +205,8 @@ export interface Operator extends BasePropertie {
     result?: number,
     appr_num?: number,
     above_phone_num?: number,
+    is_notice_realtime_warning: number,
+    is_active: number,
 }
 
 export interface PayWindow {
@@ -265,6 +267,7 @@ export interface PayModule {
     pay_key?: string,
     sign_key?: string,
     pay_window?: PayWindow | null,
+    is_able_bill_key: number,
 }
 
 export interface PayGateway {
@@ -410,6 +413,7 @@ interface PaidOption {
     use_product: boolean,   // 수기단말기 상품선택
     use_cancel_all_allow: boolean,
     use_bill_key: boolean,  // 빌키 사용 여부
+    use_shop: boolean, // 쇼핑몰 사용여부
 }
 interface AuthOption {
     levels: {
@@ -783,26 +787,35 @@ export interface NotiSendHistory {
     created_at: datetime,
 }
 
-export interface BasePay {
-    pmod_id: number,
+export interface UserPayInfo {    
+    buyer_name: string,
+    buyer_phone: string,
+    addr?: string,
+    detail_addr?: string,
+    note?: string,
+    option_groups?: string,
+}
+
+export interface BasePayInfo extends UserPayInfo{
+    pmod_id: number | null,
     amount: number,
     user_agent: string,
     item_name: string,
-    buyer_name: string,
-    buyer_phone: string,
     installment: number,
     ord_num: string,
     temp?: string,
 }
 
-export interface HandPay extends BasePay {
+export interface HandPayInfo {
     card_num: string,
     yymm: string,
     auth_num?: string,
     card_pw?: string,
 }
 
-export interface AuthPay extends BasePay {
+export interface HandPay extends BasePayInfo, HandPayInfo {}
+
+export interface AuthPay extends BasePayInfo {
     return_url: string,
     route?: string,
 }
@@ -1023,4 +1036,109 @@ export interface BillKey {
     buyer_name: string,
     buyer_phone: string,
     issuer: string,
+    card_num?: string,
+}
+
+// ++ 241209
+
+export interface UserDocument {
+    id : number,
+    user_type: number,
+    business_num : string,
+    passbook_img : string,
+    id_img : string,
+    contract_img : string,
+    bsin_lic_img : string,
+    corp_docs_img : string,
+    aml_docs_img  : string,
+    other_docs_img  : string,
+    
+    passbook_file? : File | undefined,
+    id_file? : File | undefined,
+    contract_file? : File | undefined,
+    bsin_lic_file? : File | undefined,
+    corp_docs_file? : File | undefined,
+    aml_docs_file?  : File | undefined,
+    other_docs_file?  : File | undefined,
+}
+
+export interface AuthInfo {
+    id: number,
+    nick_name: string,
+    phone_num: string,
+    mcht_id?: number,
+    sales_id?: number,
+    oper_id?: number,
+    user_type?: number,
+}
+
+
+export interface OperatorAbliltyGroup {
+    id: number,
+    group_name: string,
+    level: number,
+    ablilty: Ablilty[],
+    is_active: number,
+}
+
+export interface DefaultAblilty {
+    use: number,
+    create: number,
+    read: number,
+    update: number,
+    delete: number,
+    all: number,
+}
+export interface Ablilty extends DefaultAblilty{
+    ablilty_id: number,
+    ablilty_name: string,
+}
+
+export interface Category {
+    id: number,
+    mcht_id: number,
+    category_name: string,
+    products?: Product[],
+}
+
+export interface Product {
+    id: number,
+    pmod_id: number,
+    category_id: number,
+    product_name: string,
+    product_amount: number,
+    product_img: string,
+    product_file? : File | undefined,
+    content: string,
+    product_option_groups? : ProductOptionGroup[],
+}
+
+export interface ProductOptionGroup {
+    id: number,
+    product_id: number,
+    group_name: string,
+    is_able_count: number,
+    is_able_duplicate: number,
+    product_options: ProductOption[],
+}
+
+export interface ProductOption {
+    id: number,
+    group_id: number,
+    option_name: string,
+    option_price: number,
+}
+
+export interface OptionGroup {
+    group_id?: number,
+    option_id: number,
+    option_name: string,
+    option_price: number,
+    count: number,
+}
+export interface Order {
+    groups: OptionGroup[],
+    total_amount: number,
+    addr: string,
+    detail_addr: string,
 }

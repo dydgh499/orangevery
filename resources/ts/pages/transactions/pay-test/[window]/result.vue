@@ -27,7 +27,7 @@ const businessNumMasking = () => {
 }
 
 onMounted(async () => {
-    const [_code, _message, _params_mode, _data] = await getPayWindow(route.params.window, route.query.pc)
+    const [_code, _message, _params_mode, _data] = await getPayWindow(route.params.window, route.query.pc, null, null)
     if(_code === 200) {
         sales_slip.value = {
             ..._data.merchandise,
@@ -64,7 +64,7 @@ onMounted(async () => {
                                 <VIcon size="40" icon="line-md:emoji-frown-twotone" color="error"/>                        
                             </div>
                             <br>
-                            <h3 style="text-align: center;">거래결과창을 사용할 수 없습니다. </h3>
+                            <h3 style="text-align: center;">거래결과창을 사용할 수 없습니다.</h3>
                             <div style=" padding: 1em;text-align: center;">
                                 <h4>- {{ window_message }} -</h4>
                             </div>

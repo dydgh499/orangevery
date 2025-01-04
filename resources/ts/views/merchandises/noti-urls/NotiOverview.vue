@@ -4,7 +4,7 @@ import { getAllNotiUrls } from '@/views/merchandises/noti-urls/useStore'
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
 import type { Merchandise, NotiUrl, PayModule } from '@/views/types'
-import { isAbleModiy } from '@axios'
+import { getUserLevel } from '@axios'
 
 interface Props {
     item: Merchandise,
@@ -34,7 +34,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VCard style="margin-top: 1em;" v-if="isAbleModiy(0)">
+    <VCard style="margin-top: 1em;" v-if="getUserLevel() === 10 || getUserLevel() >= 35">
         <VCol class="d-flex gap-4">
             <VBtn type="button" style="margin-left: auto;" @click="addNewNotiUrl">
                 노티 신규추가
@@ -42,7 +42,7 @@ watchEffect(() => {
             </VBtn>
         </VCol>
     </VCard>
-    <VCard style="margin-top: 1em;" v-if="isAbleModiy(0) === false && noti_urls.length === 0">
+    <VCard style="margin-top: 1em;" v-if="noti_urls.length === 0">
         <VCol class="d-flex gap-4">
             등록된 노티정보가 없습니다.
         </VCol>

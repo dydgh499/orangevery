@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import BillKeyCreateDialog from '@/layouts/dialogs/pay-modules/BillKeyCreateDialog.vue';
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import { useSearchStore } from '@/views/merchandises/pay-modules/bill-keys/useStore';
 import { selectFunctionCollect } from '@/views/selected';
-import { axios, getUserLevel } from '@axios';
 import { DateFilters } from '@core/enums';
 
 const alert = <any>(inject('alert'))
@@ -13,26 +11,6 @@ const errorHandler = <any>(inject('$errorHandler'))
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-
-const billKeyCreateDialog = ref()
-
-const remove = async(id: number) => {
-    if (await alert.value.show('정말 삭제 하시겠습니까?')) {
-        try {
-            const r = await axios.delete(`/api/v1/manager/merchandises/pay-modules/bill-keys/${id}`, {
-                params: {
-                    ord_num : id + "BD" + Date.now().toString().substr(0, 10)
-                }
-            })
-            snackbar.value.show('성공하였습니다.', 'success')
-            store.setTable()
-        }
-        catch (e: any) {
-            snackbar.value.show(e.response.data.message, 'error')
-            const r = errorHandler(e)
-        }
-    }
-}
 
 provide('store', store)
 provide('head', head)
@@ -48,9 +26,6 @@ provide('exporter', exporter)
                     :sales="true"/>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="tabler-sport-billard" @click="billKeyCreateDialog.show()" size="small" v-if="getUserLevel() >= 35">
-                    빌키 추가
-                </VBtn>
             </template>
             <template #headers>
                 <tr>
@@ -85,11 +60,6 @@ provide('exporter', exporter)
                                         <span>#{{ item[_key] }}</span>
                                     </div>
                                 </span>
-                                <span v-else-if="_key === `extra_col`">
-                                    <VBtn prepend-icon="tabler-trash" size="small" type="button" color="error" @click="remove(item['id'])">
-                                        삭제
-                                    </VBtn>
-                                </span>
                                 <span v-else>
                                     {{ item[_key] }}
                                 </span>
@@ -99,6 +69,5 @@ provide('exporter', exporter)
                 </tr>
             </template>
         </BaseIndexView>
-        <BillKeyCreateDialog ref="billKeyCreateDialog"/>
     </div>
 </template>

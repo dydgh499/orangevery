@@ -61,6 +61,7 @@ app.provide('$formatTime', function(date: Date) {
 Sentry.init({
     app,
     dsn: import.meta.env.VITE_SENTRY_DSN,
+    environment: import.meta.env.APP_ENV,
     integrations: [
       Sentry.browserTracingIntegration({ router }),
       Sentry.replayIntegration(),
@@ -72,6 +73,8 @@ Sentry.init({
     replaysSessionSampleRate: 0,
     replaysOnErrorSampleRate: 1.0,
     beforeSend(event: Event): Event | null {
+        if (process.env.APP_ENV === 'local')
+            return null; // 개발 환경에서는 전송을 하지 않음
         if (event.level !== 'error') 
           return null; // 에러가 아닌 이벤트 무시
         else

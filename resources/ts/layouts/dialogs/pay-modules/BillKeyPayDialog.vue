@@ -9,6 +9,7 @@ interface BillPayInfo {
     ord_num: string,
     buyer_name: string,
     buyer_phone: string,
+    card_num: string,
     item_name: string,
     amount: number,
 }
@@ -50,7 +51,7 @@ const submit = async() => {
     const is_valid = await vForm.value.validate()
     if (is_valid.valid) {
         if(await alert.value.show('정말 결제하시겠습니까?')) {
-            axios.post(`/api/v1/manager/merchandises/pay-modules/bill-keys/${bill_key.value.id}/hand`, bill_pay_info.value).then(r => {
+            axios.post(`/api/v1/manager/merchandises/pay-modules/bill-keys/${bill_key.value.id}/pay`, bill_pay_info.value).then(r => {
                 visible.value = false
                 snackbar.value.show('성공하였습니다.', 'success')
             })
@@ -78,7 +79,7 @@ defineExpose({
 <template>
     <VDialog v-model="visible" persistent max-width="800">
         <DialogCloseBtn @click="visible = false" />
-        <VCard title="빌키 생성">
+        <VCard title="빌키 결제">
             <VCardText>
                 <VForm ref="vForm">
                     <VCol style="padding: 0 12px;">
@@ -127,7 +128,7 @@ defineExpose({
                                             @input="formatPhoneNum"
                                             variant="underlined"
                                             prepend-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
-                                            :rules="[requiredValidatorV2(buyer_phone, '구매자 연락처')]"
+                                            :rules="[requiredValidatorV2(phone_num, '구매자 연락처')]"
                                             />
                                     </VCol>
                                 </VRow>

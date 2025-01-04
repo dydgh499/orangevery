@@ -6,6 +6,7 @@ import { operator_levels, operatorActionAuthStore } from '@/views/services/opera
 import type { Operator } from '@/views/types';
 import { avatars } from '@/views/users/useStore';
 import { getUserLevel, user_info } from '@axios';
+import corp from '@corp';
 import { lengthValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators';
 import { VForm } from 'vuetify/components';
 
@@ -221,6 +222,50 @@ defineExpose({
                                             {{ operator_levels.find(obj => obj.id === operator.level)?.title }}
                                         </VChip>
                                     </span>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <VRow v-if="isAbleModiy()">
+                        <VCol md="6" cols=12>
+                            <VRow style="align-items: center;float: inline-end;">
+                                <VCol>
+                                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="operator.is_notice_realtime_warning" label="송금 경고사항 알림"
+                                        color="warning" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol md="6" cols=12>
+                            <VRow style="align-items: center;float: inline-end;">
+                                <VCol>
+                                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="operator.is_active" label="활성화 여부"
+                                        color="success" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <VRow v-else>
+                        <VCol md="6" cols=12>
+                            <VRow style="align-items: center;" v-if="corp.pv_options.paid.use_finance_van_deposit || corp.pv_options.paid.use_head_office_withdraw">
+                                <VCol :md="6" cols="6">
+                                    <b>송금 경고사항 알림</b>
+                                </VCol>
+                                <VCol :md="6">
+                                    <VChip :color="operator.is_notice_realtime_warning ? 'success' : 'default'">
+                                        {{ operator.is_notice_realtime_warning ? 'ON' : 'OFF' }}
+                                    </VChip>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol md="6" cols=12>
+                            <VRow style="align-items: center;">
+                                <VCol :md="6" cols="6">
+                                    <b>활성화 여부</b>
+                                </VCol>
+                                <VCol :md="6">
+                                    <VChip :color="operator.is_active ? 'success' : 'default'">
+                                        {{ operator.is_active ? '활성화' : '비활성화' }}
+                                    </VChip>
                                 </VCol>
                             </VRow>
                         </VCol>

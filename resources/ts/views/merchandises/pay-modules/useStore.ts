@@ -162,6 +162,8 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         }
         if(getUserLevel() > 10) {
             headers_4['settle_type'] = '정산일'
+            if(getUserLevel() >= 35)
+                headers_4['p_mid'] = 'PMID'
             headers_4['mid'] = 'MID'
             headers_4['tid'] = 'TID'    
         }
@@ -271,7 +273,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     head.getSubHeaderCol('PG사 정보', headers2, sub_headers)
     head.getSubHeaderCol('결제/취소 정보', headers3, sub_headers)
     head.getSubHeaderCol('단말기 정보', headers4, sub_headers)
-    head.getSubHeaderCol('이상거래 설정정보', headers5, sub_headers)
+    head.getSubHeaderCol('FDS 설정정보', headers5, sub_headers)
     head.getSubHeaderCol('제한 정보', headers6, sub_headers)
     head.getSubHeaderCol('결제 한도', headers7, sub_headers)
     head.getSubHeaderCol('실시간 정보', headers8, sub_headers)

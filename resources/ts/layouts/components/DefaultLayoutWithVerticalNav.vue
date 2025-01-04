@@ -13,7 +13,6 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
 import { VerticalNavLayout } from '@layouts'
 
 import HolidayDlg from '@/layouts/dialogs/services/HolidayDlg.vue'
-import PayWindowCreateDialog from '@/layouts/dialogs/transactions/PayWindowCreateDialog.vue'
 import PayWindowShowDialog from '@/layouts/dialogs/transactions/PayWindowShowDialog.vue'
 import PasswordChangeNoticeDialog from '@/layouts/dialogs/users/PasswordChangeNoticeDialog.vue'
 import PhoneNum2FAVertifyDialog from '@/layouts/dialogs/users/PhoneNum2FAVertifyDialog.vue'
@@ -34,7 +33,6 @@ const loading = <any>(inject('loading'))
 const errorHandler = <any>(inject('$errorHandler'))
 
 const popup = ref()
-const payLink = ref()
 const payShow = ref()
 const pwaSnackbar = ref()
 const holidayDlg = ref()
@@ -42,7 +40,6 @@ const phoneNum2FAVertifyDialog = ref()
 const passwordChangeNoticeDialog = ref()
 
 provide('popup', popup)
-provide('payLink', payLink)
 provide('payShow', payShow)
 provide('holidayDlg', holidayDlg)
 provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
@@ -142,8 +139,6 @@ onMounted(async () => {
         <AlertDialog ref="alert" />
         <LoadingDialog ref="loading" />
         <HolidayDlg ref="holidayDlg"/>
-
-        <PayWindowCreateDialog ref="payLink"/>
         <PayWindowShowDialog ref="payShow"/>
         
         <PopupDialog ref="popup"/>

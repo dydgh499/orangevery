@@ -355,94 +355,96 @@ watchEffect(() => {
                 <VDivider style="margin: 1em 0;" />
                 <h4 class="pt-3">제한정보 일괄변경</h4>
                 <br>
-                <VRow v-if="corp.pv_options.paid.use_pay_limit">
-                    <VCol :md="6" :cols="12">
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol md="6" cols="12">
-                                <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_single_limit"
-                                        type="number" suffix="만원" label="단건 결제 한도"/>
-                            </VCol>
-                            <VCol md="6">
-                                <div class="button-cantainer">
-                                    <VBtn variant="tonal" size="small" @click="setPayLimit('single', 0)">
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                    <VBtn variant="tonal" size="small" color="secondary" @click="setPayLimit('single', 1)"
-                                        style='margin-left: 0.5em;'>
-                                        예약적용
-                                        <VIcon end size="18" icon="tabler-clock-up" />
-                                    </VBtn>                 
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </VCol>
-                    <VCol :md=6>
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol md="6" cols="12">
-                                <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_day_limit"
-                                        type="number" suffix="만원" label="일 결제 한도"/>
+                <template v-if="corp.pv_options.paid.use_pay_limit">
+                    <VRow>
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12">
+                                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_single_limit"
+                                            type="number" suffix="만원" label="단건 결제 한도"/>
                                 </VCol>
-                            <VCol md="6">
-                                <div class="button-cantainer">
-                                    <VBtn variant="tonal" size="small" @click="setPayLimit('day', 0)">
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                    <VBtn variant="tonal" size="small" color="secondary" @click="setPayLimit('day', 1)"
-                                        style='margin-left: 0.5em;'>
-                                        예약적용
-                                        <VIcon end size="18" icon="tabler-clock-up" />
-                                    </VBtn>                 
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </VCol>
-                </VRow>
-                <VRow v-if="corp.pv_options.paid.use_pay_limit">
-                    <VCol :md="6" :cols="12">
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol md="6" cols="12">
-                                <VTextField prepend-inner-icon="tabler-currency-won"
-                                        v-model="pay_module.pay_month_limit" type="number" suffix="만원" label="월 결제 한도"/>
-                            </VCol>
-                            <VCol md="6">
-                                <div class="button-cantainer">
-                                    <VBtn variant="tonal" size="small" @click="setPayLimit('month', 0)">
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                    <VBtn variant="tonal" size="small" color="secondary" @click="setPayLimit('month', 1)"
-                                        style='margin-left: 0.5em;'>
-                                        예약적용
-                                        <VIcon end size="18" icon="tabler-clock-up" />
-                                    </VBtn>                 
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </VCol>
-                    <VCol :md=6>
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol md="6" cols="12">
-                                <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_year_limit"
-                                type="number" suffix="만원" label="연 결제 한도"/>
+                                <VCol md="6">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setPayLimit('single', 0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setPayLimit('single', 1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>                 
+                                    </div>
                                 </VCol>
-                            <VCol md="6">
-                                <div class="button-cantainer">
-                                    <VBtn variant="tonal" size="small" @click="setPayLimit('year', 0)">
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                    <VBtn variant="tonal" size="small" color="secondary" @click="setPayLimit('year', 1)"
-                                        style='margin-left: 0.5em;'>
-                                        예약적용
-                                        <VIcon end size="18" icon="tabler-clock-up" />
-                                    </VBtn>                 
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </VCol>
-                </VRow>
+                            </VRow>
+                        </VCol>
+                        <VCol :md=6>
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12">
+                                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_day_limit"
+                                            type="number" suffix="만원" label="일 결제 한도"/>
+                                    </VCol>
+                                <VCol md="6">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setPayLimit('day', 0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setPayLimit('day', 1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>                 
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <VRow>
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12">
+                                    <VTextField prepend-inner-icon="tabler-currency-won"
+                                            v-model="pay_module.pay_month_limit" type="number" suffix="만원" label="월 결제 한도"/>
+                                </VCol>
+                                <VCol md="6">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setPayLimit('month', 0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setPayLimit('month', 1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>                 
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md=6>
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12">
+                                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_year_limit"
+                                    type="number" suffix="만원" label="연 결제 한도"/>
+                                    </VCol>
+                                <VCol md="6">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setPayLimit('year', 0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setPayLimit('year', 1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>                 
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                </template>
                 <VRow>
                     <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">

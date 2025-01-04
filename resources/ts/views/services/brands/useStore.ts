@@ -173,7 +173,8 @@ export const defaultItemInfo = () => {
                 use_syslink: false,
                 use_product: false,
                 use_cancel_all_allow: false,
-                use_bill_key: false
+                use_bill_key: false,
+                use_shop: false,
             }),
             auth: reactive<AuthOption>({
                 levels: {

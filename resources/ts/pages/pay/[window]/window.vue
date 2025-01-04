@@ -7,6 +7,7 @@ import HandPayOverview from '@/views/pay/HandPayOverview.vue';
 import { payWindowStore } from '@/views/quick-view/payWindowStore';
 import type { Merchandise, PayGateway, PayModule, PayWindow } from '@/views/types';
 import { axios } from '@axios';
+import { PayParamTypes } from '@core/enums';
 import { timerV2 } from '@core/utils/timer';
 import corp from '@corp';
 
@@ -19,13 +20,16 @@ const payment_gateways = ref(<PayGateway[]>[])
 const merchandise = ref(<Merchandise>({}))
 const pay_module = ref(<PayModule>{module_type: 0})
 const pay_window = ref(<PayWindow>({}))
-const params_mode = ref(false)
+const params_mode = ref(0)
 const params = ref({
+    item_img: '',
     item_name : '',
     buyer_name : '',
     amount : 0,
     buyer_phone : '',
+    product_option_groups: [],
 })
+const auth_token = ref('')
 const salesslip = ref()
 
 const code = ref(200)
@@ -33,11 +37,11 @@ const message = ref()
 const sign_in_result = ref(false)
 
 const snackbar = <any>(inject('snackbar'))
-const errorHandler = <any>(inject('$errorHandler'))
 
 provide('salesslip', salesslip)
 provide('params_mode', params_mode)
 provide('params', params)
+provide('auth_token', auth_token)
 
 const handleKeyDownEvent = async (index: number) => {
     handleKeyDown(index)
@@ -55,13 +59,14 @@ const handleKeyDownEvent = async (index: number) => {
 }
 
 onMounted(async () => {
-    const [_code, _message, _params_mode, _data] = await getPayWindow(route.params.window, route.query.pc)
+    const [_code, _message, _params_mode, _data] = await getPayWindow(route.params.window, route.query.pc, route.params.shop_window, route.params.product_id)
     if(_code === 200) {
-        params_mode.value = _params_mode
+        params_mode.value = _params_mode        
         pay_window.value = _data.pay_window
         pay_module.value = _data.payment_module
         merchandise.value = _data.merchandise
         payment_gateways.value = [_data.payment_gateway]
+
         if(params_mode.value)
             params.value = _data.params
 
@@ -79,22 +84,25 @@ onMounted(async () => {
     <section>
         <VCard rounded>
             <VCardText style="padding: 0.5em;">
-                <div style="position: absolute; display: flex; width: 100%; justify-content: space-between;" v-if="pay_module?.module_type > 0 || code !== 200">
-                    <div style="display: inline-flex; flex-direction: column;" v-if="isVisiableRemainTime(pay_module)">
-                        <h5>결제창 유효시간</h5>
-                        <b :class="getRemainTimeColor">{{ remaining_time }}</b>
+                <template v-if="params_mode !== PayParamTypes.SHOP">
+                    <div
+                        style="position: absolute; display: flex; width: 100%; justify-content: space-between;" v-if="pay_module?.module_type > 0 || code !== 200">
+                        <div style="display: inline-flex; flex-direction: column;" v-if="isVisiableRemainTime(pay_module)">
+                            <h5>결제창 유효시간</h5>
+                            <b :class="getRemainTimeColor">{{ remaining_time }}</b>
+                        </div>
+                        <VBtn
+                            @click="router.back()" size="small" 
+                            color="warning"
+                            style="margin-right: 1em;">
+                            뒤로가기
+                        </VBtn>
                     </div>
-                    <VBtn
-                        @click="router.back()" size="small" 
-                        color="warning"
-                        style="margin-right: 1em;">
-                        뒤로가기
-                    </VBtn>
-                </div>
+                </template>
                 <VRow class="match-height">
                     <VCol v-if="(pay_module?.pay_window_secure_level === 2 || pay_module?.pay_window_secure_level === 4) && sign_in_result === false" style="padding: 3em 1em;">
                         <br>
-                        <h4 style="text-align: center;">전달받은 PIN번호를 입력해주세요.</h4>                        
+                        <h4 style="text-align: center;">전달받은 PIN번호를 입력해주세요.</h4>
                         <div style=" padding: 1em;text-align: center;">
                             <div ref="ref_opt_comp" class="d-flex align-center gap-4">
                                 <VTextField v-for="i in 6" :key="i" :model-value="digits[i - 1]" 
@@ -104,7 +112,9 @@ onMounted(async () => {
                     </VCol>
                     <VCol cols="12" v-else-if="pay_module?.module_type > 0" class="d-flex justify-center align-center">
                         <div :style="$vuetify.display.smAndDown ? '' : 'min-width: 700px; max-width: 700px;'">
-                            <div style="padding-bottom: 1em;text-align: center;">
+                            <div
+                                v-if="params_mode !== PayParamTypes.SHOP" 
+                                style="padding-bottom: 1em;text-align: center;">
                                 <img :src="corp.logo_img || ''" width="80">
                                 <div>
                                     <b>환영합니다 !</b>

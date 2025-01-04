@@ -11,6 +11,7 @@ use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Manager\CodeGenerator\TidGenerator;
 use App\Http\Controllers\Manager\CodeGenerator\MidGenerator;
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
+use App\Http\Controllers\Manager\PaymentModule\VisiableSetter;
 
 use App\Http\Requests\Manager\BulkRegister\BulkPayModuleRequest;
 use App\Http\Requests\Manager\BulkRegister\BulkPayModulePGRequest;
@@ -102,6 +103,10 @@ class PaymentModuleController extends Controller
 
         $query = $this->commonSelect($request);
         $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
+        foreach($data['content'] as $content) 
+        {
+            VisiableSetter::set($content, $request);
+        }
         return $this->response(0, $data);
     }
 
@@ -179,7 +184,10 @@ class PaymentModuleController extends Controller
             if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                 return $this->response(951);
             if(Ablilty::isOperator($request) || Ablilty::isMyMerchandise($request, $data->mcht_id) || Ablilty::isUnderMerchandise($request, $data->mcht_id))
+            {
+                VisiableSetter::set($data, $request);
                 return $this->response(0, $data);
+            }
             else
                 return $this->response(951);
         }
@@ -284,30 +292,26 @@ class PaymentModuleController extends Controller
      */
     public function all(Request $request)
     {
-        $request->merge([
-            'page' => 1,
-            'page_size' => 999999,
-        ]);
-
-        if(Ablilty::isSalesforce($request) || Ablilty::isOperator($request))
-        {
-            $cols = ['payment_modules.*'];
-            $with = [];
-        }
+        if(Ablilty::isOperator($request) === false && isset($request->mcht_id) === false)
+            return $this->response(951);
+        if(Ablilty::isMerchandise($request) && (Ablilty::isMyMerchandise($request, $request->mcht_id) === false))
+            return $this->response(951);
         else
         {
-            $cols = [
-                'payment_modules.pay_window_secure_level',
-                'payment_modules.id',
-                'payment_modules.module_type',
-                'payment_modules.note',
-            ];
-            $with = ['payWindows'];
+            $request->merge([
+                'page' => 1,
+                'page_size' => 999999,
+            ]);
+            $cols = ['payment_modules.*'];
+            $query = $this->commonSelect($request);
+            $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
+            
+            foreach($data['content'] as $content) 
+            {
+                VisiableSetter::set($content, $request);
+            }
+            return $this->response(0, $data);    
         }
-
-        $query = $this->commonSelect($request)->with($with);
-        $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
-        return $this->response(0, $data);
     }
     
     /**

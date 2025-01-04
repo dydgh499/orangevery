@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Log\DifferenceSettlement;
 use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlementInterface;
 use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlement;
 use App\Enums\DifferenceSettleHectoRecordType;
+use App\Models\Merchandise\PaymentModule;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
@@ -13,7 +14,7 @@ class ksnet extends DifferenceSettlement implements DifferenceSettlementInterfac
     public function __construct($brand)
     {
         parent::__construct($brand);
-        $this->PMID_MODE  = false;
+        $this->PMID_MODE  = true;
         $this->RQ_PG_NAME = "X";
         $this->RQ_START_FILTER_SIZE  = 0;
         $this->RQ_HEADER_FILTER_SIZE = 0;
@@ -24,12 +25,12 @@ class ksnet extends DifferenceSettlement implements DifferenceSettlementInterfac
     public function request(Carbon $date, $trans)
     {
         $file_name = $date->format('Ymd');
-        $save_path = "/ksnet/REQUEST-$file_name.csv";
-        $full_record = "";
 
         $mids = $trans->pluck($this->PMID_MODE ? 'p_mid' : 'mid')->unique()->all();
         foreach($mids as $mid)
         {
+            $full_record = "";
+            $save_path = "/ksnet/REQUEST-$file_name-$mid.csv";
             $mcht_trans = $this->getMidMatchTransctions($trans, $mid);
             if(count($mcht_trans) > 0)
             {
@@ -38,19 +39,34 @@ class ksnet extends DifferenceSettlement implements DifferenceSettlementInterfac
                     [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
                     $full_record .= $data_records;
                 }
+                if(strlen($full_record) > 0)
+                    $this->service->moduleUpload($save_path, $mid, $full_record);
             }
         }
-        if(strlen($full_record) > 0)
-            return $this->service->moduleUpload($save_path, $this->brand['rep_mid'], $full_record);
-        else
-            return true;
+        return true;
     }
 
     public function response(Carbon $date)
     {
         $file_name = $date->format('Ymd');
-        $save_path = "/ksnet/RESPONSE-$file_name.csv";
-        return $this->service->moduleDownload($save_path, $this->brand['rep_mid']);
+
+        $datas  = [];
+        $col    = $this->PMID_MODE ? 'p_mid' : 'mid';
+
+        $payment_modules = PaymentModule::join('payment_gateways', 'payment_modules.pg_id', '=', 'payment_gateways.id')
+            ->where('payment_gateways.pg_type', 37)
+            ->groupBy("payment_modules.$col")
+            ->get(["payment_modules.$col"])
+            ->toArray();
+
+        foreach($payment_modules as $payment_module)
+        {
+            $mid = $payment_module[$col];
+            $save_path = "/ksnet/RESPONSE-$file_name-$mid.csv";
+            if (preg_match('/^[a-zA-Z0-9_]+$/', $mid) && strlen($mid) === 10)
+                $datas = array_merge($datas, $this->service->moduleDownload($save_path, $mid));
+        }
+        return $datas;
     }
 
     public function registerRequest(Carbon $date, $mchts, $sub_business_regi_infos)

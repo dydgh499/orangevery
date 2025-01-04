@@ -144,7 +144,7 @@ export const useSearchStore = defineStore('terminalSearchStore', () => {
     head.getSubHeaderCol('PG사 정보', headers2, sub_headers)
     head.getSubHeaderCol('결제/취소 정보', headers3, sub_headers)
     head.getSubHeaderCol('단말기 정보', headers4, sub_headers)
-    head.getSubHeaderCol('이상거래 설정정보', headers5, sub_headers)
+    head.getSubHeaderCol('FDS 설정정보', headers5, sub_headers)
     head.getSubHeaderCol('통신비 정보', headers6, sub_headers)
     head.getSubHeaderCol('기타 정보', headers7, sub_headers)
 

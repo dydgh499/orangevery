@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { useRequestStore } from '@/views/request'
-import type { Product } from '@/views/types'
-import { VForm } from 'vuetify/components'
+import { useRequestStore } from '@/views/request';
+import type { Product } from '@/views/types';
+import { VForm } from 'vuetify/components';
 
 interface Props {
     item: Product,
@@ -29,12 +29,12 @@ const { update, remove } = useRequestStore()
         <td class="text-center" style="width: 10%;">
             <VCol class="d-flex gap-4">
                 <VBtn type="button" color="default" variant="text"
-                    @click="update('/merchandises/products', props.item, vForm, false)">
+                    @click="update('/merchandises/handheld-terminal-products', props.item, vForm, false)">
                     {{ props.item.id == 0 ? "추가" : "수정" }}
                     <VIcon end icon="tabler-pencil" />
                 </VBtn>
                 <VBtn type="button" color="default" variant="text" v-if="props.item.id"
-                    @click="remove('/merchandises/products', props.item, false)">
+                    @click="remove('/merchandises/handheld-terminal-products', props.item, false)">
                     삭제
                     <VIcon end icon="tabler-trash" />
                 </VBtn>

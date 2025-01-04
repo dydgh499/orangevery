@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Controllers\Auth\AuthOperatorIP;
 use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\ShoppingMallWindowInterface;
 
 use Illuminate\Support\Facades\Hash;
 use App\Enums\HistoryType;
@@ -126,8 +127,11 @@ class Login
         if($result['user'])
         {
             if(isset($result['user']->mcht_name))
+            {                
                 $result['user']->level = 10;
-
+                if(count($result['user']->shoppingMall) === 0)
+                    $result['user']->shopping_mall = ShoppingMallWindowInterface::renew($result['user']->id);
+            }
             if($result['user']->is_lock)
                 $result['result'] = AuthLoginCode::LOCK_ACCOUNT->value;
             else if(AuthPasswordChange::HashCheck($result['user'], $request->user_pw))

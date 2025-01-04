@@ -40,6 +40,13 @@ const pmodUpdate = async () => {
     }
 }
 
+const filterPayModule = computed(() => {
+    return pay_modules.value.filter(item => { 
+        return item.mcht_id === mcht_id.value && item.module_type > 0
+    })
+})
+
+
 </script>
 <template>
     <VCardTitle><b>테스트 가맹점 정보</b></VCardTitle>
@@ -65,7 +72,7 @@ const pmodUpdate = async () => {
                         <label>결제모듈</label>
                     </VCol>
                     <VCol cols="8" :md="9">
-                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="pmod_id" :items="pay_modules"
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="pmod_id" :items="filterPayModule"
                             variant="underlined"
                             prepend-icon="ic-outline-send-to-mobile" item-title="note" item-value="id" single-line
                             placeholder="테스트 결제모듈 선택" 

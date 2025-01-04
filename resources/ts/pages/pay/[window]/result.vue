@@ -27,7 +27,7 @@ const businessNumMasking = () => {
 }
 
 onMounted(async () => {
-    const [_code, _message, _params_mode, _data] = await getPayWindow(route.params.window, route.query.pc)
+    const [_code, _message, _params_mode, _data] = await getPayWindow(route.params.window, route.query.pc, null, null)
     if(_code === 200) {
         sales_slip.value = {
             ..._data.merchandise,

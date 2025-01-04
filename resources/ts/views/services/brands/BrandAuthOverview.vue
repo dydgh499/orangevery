@@ -276,7 +276,7 @@ const props = defineProps<Props>()
                                     <VSwitch hide-details v-model="props.item.paid.use_hide_account" color="primary" label="가맹점 계좌숨김"/>
                                 </template>
                                 <template #input>
-                                    
+                                    <VSwitch hide-details v-model="props.item.paid.use_shop" color="primary" label="쇼핑몰 사용"/>                                    
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

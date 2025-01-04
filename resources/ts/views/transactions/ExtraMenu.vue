@@ -102,7 +102,21 @@ const blacklist = () => {
     })
 }
 const isCancelSafeDate = () => {
-    return getUserLevel() == 10 && props.item.trx_dt == formatDate(new Date())
+    if(getUserLevel() === 10) {
+        if(props.item.cxl_type === 1)
+        {
+            const able_at = (new Date(props.item.trx_dttm as string)).getTime() + (5 * 60000)
+            const offset_at = able_at - new Date() 
+            return offset_at > 0 ? true : false
+        }
+        else if(props.item.cxl_type === 2 && props.item.trx_dt == formatDate(new Date()))
+            return true
+        else if(props.item.cxl_type === -1)
+            return true
+    }
+    else if(getUserLevel() >= 35)
+        return true
+    return false
 }
 
 const isUseCancelDeposit = () => {
@@ -175,7 +189,7 @@ const isUseCancelDeposit = () => {
                     <VListItemTitle>취소매출생성</VListItemTitle>
                 </VListItem>
                 <VListItem value="cancel" class="pg-cancel" @click="payCanceled()"
-                    v-if="(isCancelSafeDate() || getUserLevel() >= 35) && props.item.is_cancel == 0 && realtimeResult(props.item) != StatusColors.Success">
+                    v-if="isCancelSafeDate() && props.item.is_cancel == 0 && realtimeResult(props.item) != StatusColors.Success">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:world-cancel" />
                     </template>

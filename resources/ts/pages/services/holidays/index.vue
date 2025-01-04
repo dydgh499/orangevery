@@ -24,7 +24,6 @@ const bulkRegister = async () => {
         <VCol>
             <VCard>
                 <VLayout style="z-index: 0;">
-                    <!-- 👉 Navigation drawer -->
                     <VNavigationDrawer width="290" absolute touchless location="start"
                         class="calendar-add-event-drawer" :temporary="$vuetify.display.mdAndDown">
                         <div style="display: flex; flex-direction: column;margin: 22.5px;">
@@ -64,7 +63,7 @@ const bulkRegister = async () => {
                         </VCard>
                         <VDivider />
                         <div style="padding: 1em; text-align: end;">
-                            <h5>1. 매년 12월 30일 다음연도 공휴일이 일괄 추가됩니다.</h5>
+                            <h5>1. 매년 12월 1일 다음연도 공휴일이 일괄 추가됩니다.</h5>
                             <h5>2. 추가/수정된 공휴일은 작업 후 5분 이후에 정산내용에 반영됩니다.</h5>
                         </div>
                     </VMain>

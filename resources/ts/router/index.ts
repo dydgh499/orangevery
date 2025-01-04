@@ -38,7 +38,7 @@ const router = createRouter({
 router.beforeEach(to => {
     const isLoggedIn = pay_token.value != ''
     axios.defaults.headers.common['Authorization'] = `Bearer ${pay_token.value}`
-    if(to.path.startsWith('/pay/') === false) {
+    if(to.path.startsWith('/pay/') === false && to.path.startsWith('/shop/') === false) {
         if (canNavigate(to)) {
             if (to.meta.redirectIfLoggedIn && isLoggedIn)
                 return '/'

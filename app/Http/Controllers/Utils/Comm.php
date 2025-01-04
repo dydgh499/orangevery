@@ -18,6 +18,8 @@
             else if($type === 3)
                 return 'body-post';
             else if($type === 4)
+                return 'delete';
+            else if($type === 5)
                 return 'curl-post';
             else
                 return 'unknown';
@@ -105,7 +107,7 @@
         static public function curlPost($url, $params, $headers=[])
         {
             $rand_num = rand(1000, 9999);
-            self::preTreatment(4, $url, $params, $headers, $rand_num);
+            self::preTreatment(5, $url, $params, $headers, $rand_num);
             $res = [];
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -120,7 +122,7 @@
 
             $res['code'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
-            self::afterTreatment(4, $url, $res, $rand_num);
+            self::afterTreatment(5, $url, $res, $rand_num);
             return $res;
         }
     }

@@ -24,9 +24,7 @@ if(isFixplus()) {
 else {
     tabs.push({ icon: 'tabler-user-check', title: '개인정보' })
     tabs.push({ icon: 'tabler-building-store', title: '가맹점정보' })
-
-    if(getUserLevel() > 10)
-        tabs.push({ icon: 'ic-outline-send-to-mobile', title: '결제모듈정보' })
+    tabs.push({ icon: 'ic-outline-send-to-mobile', title: '결제모듈정보(가맹점 추가 후 가능)' })
     if(corp.pv_options.paid.use_noti) 
         tabs.push({ icon: 'emojione:envelope', title: '노티정보(가맹점 추가 후 가능)' })
 }

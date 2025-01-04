@@ -58,7 +58,6 @@
         <div class="loading-logo">
           <img src="{{ $json['logo_img'] }}" alt="Logo" id='load-custom'/>
           <div class="hidden" alt="Logo" id='load-default'>
-            <!-- 로고 없을때 기본 페이베리 이미지 -->
               <img src="/utils/logo.svg" alt="Logo" />
           </div>
         </div>

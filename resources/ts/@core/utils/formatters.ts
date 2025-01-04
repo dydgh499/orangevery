@@ -25,12 +25,7 @@ export const inputFormater = () => {
     const formatBusinessNum = computed(() => {
         let raw_value = business_num_format.value.replace(/\D/g, '');
         business_num.value = raw_value
-        if (raw_value.length <= 3)
-            business_num_format.value = raw_value;
-        else if (raw_value.length <= 5)
-            business_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3);
-        else
-            business_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 5) + '-' + raw_value.slice(5, 10);
+        business_num_format.value = changeBusinessFormat(raw_value)
     })
     
     const formatCardNum = computed(() => {
@@ -51,6 +46,16 @@ export const inputFormater = () => {
         amount_format.value = parse_amount.toLocaleString()
     })
 
+    const changeBusinessFormat = (value: string) => {
+        if (value.length <= 3)
+            return value;
+        else if (value.length <= 5)
+            return value.slice(0, 3) + '-' + value.slice(3);
+        else
+            return value.slice(0, 3) + '-' + value.slice(3, 5) + '-' + value.slice(5, 10);
+
+    }
+
     return {
         business_num_format,
         phone_num_format,
@@ -69,5 +74,7 @@ export const inputFormater = () => {
         formatCardNum,
         formatYYmm,
         formatAmount,
+
+        changeBusinessFormat
     }
 }

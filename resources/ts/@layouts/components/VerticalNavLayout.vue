@@ -85,7 +85,7 @@ export default defineComponent({
         h('div', { class: 'page-content-container' }, mainChildren),
       )
 
-      const test = h(
+      const dynamicHeader = h(
         DynamicTabHeader,
         {},
         {},
@@ -123,7 +123,7 @@ export default defineComponent({
             { class: 'layout-content-wrapper' },
             [
               navbar,
-              test,
+              dynamicHeader,
               main,
               footer,
             ],

@@ -12,6 +12,8 @@ use App\Http\Controllers\Manager\Service\CMSTransactionController;
 
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\QuickView\PayWindowController;
+use App\Http\Controllers\Manager\PaymentModule\BillKeyController;
+use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ShopController;
 
 use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 
@@ -31,8 +33,17 @@ Route::prefix('v1')->group(function() {
     Route::get('pay/sales-slip/{ord_num}', [PayWindowController::class, 'salesSlip']);
     Route::prefix('pay')->group(function() {
         Route::middleware(['log.route'])->get('test', [PayWindowController::class, 'testWindow']);
-        Route::post('{window_code}/auth', [PayWindowController::class, 'auth']);
+        Route::prefix('{window_code}')->group(function() {
+            Route::post('auth', [PayWindowController::class, 'auth']);
+            Route::post('bill-keys/{id}/pay', [BillKeyController::class, 'pay']);
+            Route::apiResource('bill-keys', BillKeyController::class); 
+        });
         Route::get('{window_code}', [PayWindowController::class, 'window']);
+    });
+    Route::prefix('shopping-mall')->group(function() {
+        Route::get('{shop_window}', [ShopController::class, 'index']);
+        Route::get('{shop_window}/{id}', [ShopController::class, 'show']);
+        Route::get('{shop_window}/{id}/{pay_window}', [ShopController::class, 'getProductCode']);
     });
     Route::post('transactions/hand-pay', [TransactionController::class, 'handPay']);
     Route::post('transactions/pay-cancel', [TransactionController::class, 'payCancel']);
