@@ -21,9 +21,9 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
         'nick_name' : '성명',
         'phone_num' : '연락처',
         'is_2fa_use': '2FA 사용',
-        'is_notice_realtime_warning': '송금 경고사항 알림',
     }
-
+    if(corp.pv_options.paid.use_realtime_deposit || corp.pv_options.paid.use_finance_van_deposit)
+        headers['is_notice_realtime_warning'] = '송금 경고사항 알림'
     if(getUserLevel() >= 35) {
         headers['is_lock'] = '계정잠김여부'
         headers['locked_at'] = '계정잠금시간'
