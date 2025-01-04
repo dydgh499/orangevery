@@ -4,7 +4,7 @@ import corp from '@corp'
 
 const getPaymentTestTap = () => {
     let payment = []
-    if(getUserLevel() >= 35 || getUserLevel() === 10) {
+    if(corp.pv_options.paid.use_shop && (getUserLevel() >= 35 || getUserLevel() === 10)) {
         payment.push({
             title: '주문 관리',
             to: 'transactions-orders',
