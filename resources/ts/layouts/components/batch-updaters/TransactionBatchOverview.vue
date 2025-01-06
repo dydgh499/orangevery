@@ -7,8 +7,9 @@ import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { notiSendHistoryInterface, realtimeHistoryInterface } from '@/views/transactions/transactions'
-import { getUserLevel } from '@axios'
+import { getIndexByLevel, getUserLevel } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -31,10 +32,12 @@ const {
     } = batch(emits, '매출', 'transactions')
 
 const { cus_filters, terminals } = useStore()
+const { sales, initAllSales } = useSalesFilterStore()
 const { notiBatchSendByTrans } = notiSendHistoryInterface()
 const { isRealtimeTransaction, singleDepositCancelJobReservation } = realtimeHistoryInterface(formatTime)
 
 const store = <any>(inject('store'))
+const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 
 const transaction = reactive<any>({
@@ -44,6 +47,17 @@ const transaction = reactive<any>({
     mid: '',
     tid: '',
 })
+const levels = corp.pv_options.auth.levels
+
+const setSalesFee = async (sales_idx: number, apply_type: number) => {
+    if(await alert.value.show('<b>영업점 및 수수료율 변경시 변경될 수수료율로인해 정산금액이 변경될 수 있습니다.</b>')) {
+        post(`salesforces/set-fee`, {
+            'sales_fee': parseFloat(transaction['sales' + sales_idx + "_fee"]),
+            'sales_id': transaction['sales' + sales_idx + "_id"],
+            'level': getIndexByLevel(sales_idx),
+        }, apply_type)
+    }
+}
 
 const setSettleDay = async (apply_type: number) => {
     for (let i = 0; i < selected_idxs.value.length; i++) {
@@ -112,96 +126,107 @@ watchEffect(() => {
                 </div>
                 <VDivider style="margin: 1em 0;" />
                 <div style="width: 100%;">
+                    <h4 class="pt-3">상위 영업점 일괄변경</h4>
+                    <br>
+                    <VRow no-gutters style="align-items: center; margin-bottom: 0.5em;">
+                            <template v-for="i in 6" :key="i">
+                                <template v-if="levels['sales' + (6 - i) + '_use'] && getUserLevel() >= getIndexByLevel(6 - i)">
+                                    <VCol md="4" cols="12" style="margin-bottom: 0.5em;">
+                                        <div class="batch-container">
+                                            <VAutocomplete :menu-props="{ maxHeight: 400 }"
+                                                v-model="transaction['sales' + (6 - i) + '_id']" :items="sales[6 - i].value"
+                                                item-title="sales_name"
+                                                item-value="id" 
+                                                :label="`${ levels['sales' + (6 - i) + '_name'] } 선택`"
+                                                >
+                                            </VAutocomplete>
+                                            <VTextField v-model="transaction['sales' + (6 - i) + '_fee']" type="number"
+                                                suffix="%" 
+                                                :label="`수수료율`"
+                                                style="max-width: 8em;"/>
+                                        </div>
+                                    </VCol>
+                                    <VCol md="2" cols="12" style="margin-bottom: 0.5em;">
+                                        <div class="button-cantainer" style="margin-right: 0.5em;">
+                                            <VBtn variant="tonal" size="small" @click="setSalesFee(6 - i, 0)">
+                                                즉시적용
+                                                <VIcon end size="18" icon="tabler-direction-sign" />
+                                            </VBtn>
+                                        </div>
+                                    </VCol>
+                                </template>
+                        </template>
+                    </VRow>
+                    <VDivider style="margin: 0.5em 0;" />
                     <h4 class="pt-3">개인정보 일괄변경</h4>
                     <br>
-                    <VRow>
-                        <VCol :md="6" :cols="12">
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol md="7" cols="12">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="transaction.terminal_id"
-                                        :items="[{ id: null, type: 0, name: '사용안함' }].concat(terminals)" label="장비타입"
-                                        item-title="name" item-value="id" />
-                                </VCol>
-                                <VCol md="5" cols="12">
-                                    <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setTerminalId(0)">
-                                            즉시적용
-                                            <VIcon end size="18" icon="tabler-direction-sign" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                            </VRow>
+                    <VRow no-gutters style="align-items: center;">
+                        <VCol md="3" cols="8">
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="transaction.terminal_id"
+                                :items="[{ id: null, type: 0, name: '사용안함' }].concat(terminals)" label="장비타입"
+                                item-title="name" item-value="id" />
                         </VCol>
-                        <VCol :md="6" :cols="12">
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol md="7" cols="12">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="transaction.custom_id"
-                                            :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)" label="커스텀 필터"
-                                            item-title="name" item-value="id" />
-                                </VCol>
-                                <VCol md="5" cols="12">
-                                    <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setCustomFilter(0)">
-                                            즉시적용
-                                            <VIcon end size="18" icon="tabler-direction-sign" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                            </VRow>
+                        <VCol md="3" cols="4">
+                            <div class="button-cantainer">
+                                <VBtn variant="tonal" size="small" @click="setTerminalId(0)" style="margin-right: 0.5em;">
+                                    즉시적용
+                                    <VIcon end size="18" icon="tabler-direction-sign" />
+                                </VBtn>
+                            </div>
+                        </VCol>
+                        <VCol md="3" cols="8">
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="transaction.custom_id"
+                                    :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)" label="커스텀 필터"
+                                    item-title="name" item-value="id" />
+                        </VCol>
+                        <VCol md="3" cols="4">
+                            <div class="button-cantainer">
+                                <VBtn variant="tonal" size="small" @click="setCustomFilter(0)" style="margin-right: 0.5em;">
+                                    즉시적용
+                                    <VIcon end size="18" icon="tabler-direction-sign" />
+                                </VBtn>
+                            </div>
                         </VCol>
                     </VRow>
-                    <VRow>
-                        <VCol :md="6" :cols="12">
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol md="7" cols="12">
-                                    <VTextField v-model="transaction.mid" label="MID" />
-                                </VCol>
-                                <VCol md="5" cols="12">
-                                    <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setMid(0)">
-                                            즉시적용
-                                            <VIcon end size="18" icon="tabler-direction-sign" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                            </VRow>
+                    <VRow no-gutters style="align-items: center;">
+                        <VCol md="3" cols="8">
+                            <VTextField v-model="transaction.mid" label="MID" />
                         </VCol>
-                        <VCol :md="6" :cols="12">
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol md="7" cols="12">
-                                    <VTextField v-model="transaction.tid" label="TID" />
-                                </VCol>
-                                <VCol md="5" cols="12">
-                                    <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setTid(0)">
-                                            즉시적용
-                                            <VIcon end size="18" icon="tabler-direction-sign" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                            </VRow>
+                        <VCol md="3" cols="4">
+                            <div class="button-cantainer">
+                                <VBtn variant="tonal" size="small" @click="setMid(0)" style="margin-right: 0.5em;">
+                                    즉시적용
+                                    <VIcon end size="18" icon="tabler-direction-sign" />
+                                </VBtn>
+                            </div>
+                        </VCol>
+                        <VCol md="3" cols="8">
+                            <VTextField v-model="transaction.tid" label="TID" />
+                        </VCol>
+                        <VCol md="3" cols="4">
+                            <div class="button-cantainer">
+                                <VBtn variant="tonal" size="small" @click="setTid(0)" style="margin-right: 0.5em;">
+                                    즉시적용
+                                    <VIcon end size="18" icon="tabler-direction-sign" />
+                                </VBtn>
+                            </div>
                         </VCol>
                     </VRow>
-                </div>
-                <div style="width: 100%;">      
+                    <VDivider style="margin: 0.5em 0;" /> 
                     <h4 class="pt-3">정산 예정일 일괄변경</h4>
                     <br>      
-                    <VRow>
-                        <VCol :md="6" :cols="12">
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol md="7" cols="12">
-                                    <VTextField v-model="transaction.settle_dt" type="date"
-                                       label="정산예정일" />
-                                </VCol>
-                                <VCol md="5" cols="12">
-                                    <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setSettleDay(0)">
-                                            즉시적용
-                                            <VIcon end size="18" icon="tabler-direction-sign" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                            </VRow>
+                    <VRow no-gutters style="align-items: center;">
+                        <VCol md="3" cols="8">
+                            <VTextField v-model="transaction.settle_dt" type="date"
+                                label="정산예정일" />
+                        </VCol>
+                        <VCol md="3" cols="4">
+                            <div class="button-cantainer">
+                                <VBtn variant="tonal" size="small" @click="setSettleDay(0)" style="margin-right: 0.5em;">
+                                    즉시적용
+                                    <VIcon end size="18" icon="tabler-direction-sign" />
+                                </VBtn>
+                            </div>
                         </VCol>
                     </VRow>
                     <template v-if="getUserLevel() >= 35">

@@ -36,6 +36,7 @@ Route::prefix('transactions')->group(function() {
                 Route::post('set-terminal-id', [BatchUpdateTransactionController::class, 'setTerminalId']);
                 Route::post('set-mid', [BatchUpdateTransactionController::class, 'setMid']);                
                 Route::post('set-tid', [BatchUpdateTransactionController::class, 'setTid']);                
+                Route::post('salesforces/set-fee', [BatchUpdateTransactionController::class, 'salesFeeApply']);
                 Route::post('remove-deposit-fee', [BatchUpdateTransactionController::class, 'removeDepositFee']);
                 Route::post('single-deposit-cancel-job-reservation', [BatchUpdateTransactionController::class, 'singleDepositCancelJobReservation']);
             });

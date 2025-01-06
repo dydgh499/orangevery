@@ -14,6 +14,7 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
 use App\Models\Brand;
+use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Manager\Transaction\SettleAmountCalculator;
 
 use App\Http\Controllers\Controller;
@@ -155,5 +156,48 @@ class BatchUpdateTransactionController extends BatchUpdateController
     {
         $row = $this->transactionBatch($request)->delete();
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 매출이 존재하지 않습니다.');
+    }
+
+    public function salesFeeApply(Request $request)
+    {
+        $db_trans = $this->transactionBatch($request)->get();
+        $idx  = globalLevelByIndex($request->level);
+
+        $sales_id_field = "sales{$idx}_id";
+        $sales_fee_field = "sales{$idx}_fee";
+        foreach($db_trans as $tran)
+        {
+            $tran->{$sales_id_field} = $request->sales_id;
+            $tran->{$sales_fee_field} = $request->sales_fee / 100;
+        }
+        
+        $brand = Brand::where('id', $request->user()->brand_id)->first();
+        $trans = SettleAmountCalculator::setSettleAmount(
+            json_decode(json_encode($db_trans), true), 
+            $brand->dev_settle_type
+        );
+
+        foreach($db_trans as $key => $tran)
+        {
+            $fields = [
+                'brand_settle_amount',
+                'dev_realtime_settle_amount',
+                'dev_settle_amount',
+                'sales5_settle_amount',
+                'sales4_settle_amount',
+                'sales3_settle_amount',
+                'sales2_settle_amount',
+                'sales1_settle_amount',
+                'sales0_settle_amount',
+                'mcht_settle_amount',
+            ];
+
+            foreach ($fields as $field) 
+            {
+                $tran->{$field} = $trans[$key][$field];
+            }
+            $tran->save();
+        }
+        return $this->batchResponse(count($db_trans), '매출');
     }
 }
