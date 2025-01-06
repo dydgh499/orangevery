@@ -30,6 +30,13 @@ const props = defineProps<Props>()
                 />
             </VCol>
         </VRow>
+        <VRow>
+            <VCol md="6">
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.installment" :items="installments"
+                prepend-inneer-icon="fluent-credit-card-clock-20-regular" label="할부한도" item-title="title"
+                item-value="id" />
+            </VCol>
+        </VRow>
         
         <template v-if="props.item.module_type != 0">
             <VDivider style="margin: 1em 0;" />
@@ -40,11 +47,6 @@ const props = defineProps<Props>()
                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.cxl_type" :items="cxl_types" prepend-inner-icon="tabler:world-cancel"
                             label="취소타입" item-title="title" item-value="id" />
                 </VCol>
-                <VCol md="6">
-                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.installment" :items="installments"
-                    prepend-inneer-icon="fluent-credit-card-clock-20-regular" label="할부한도" item-title="title"
-                    item-value="id" />
-                </VCol>
             </VRow>
             <VRow v-else>
                 <VCol md="5" cols="6">
@@ -52,12 +54,6 @@ const props = defineProps<Props>()
                 </VCol>
                 <VCol md="7" cols="6">
                     {{ cxl_types.find(obj => obj.id === props.item.cxl_type)?.title }}
-                </VCol>
-                <VCol md="5" cols="6">
-                    <span class="font-weight-bold">할부한도</span>
-                </VCol>
-                <VCol md="7" cols="6">
-                    {{ installments.find(obj => obj.id === props.item.installment)?.title }}
                 </VCol>
             </VRow>
 

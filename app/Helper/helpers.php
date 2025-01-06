@@ -21,7 +21,7 @@
             'saminching','wgp', 'brightfixC3', 'danal', 'baumpns', 
             'passgo', 'buddypay', 'withpay', 'fixpay', 'galaxiamoneytree',
             'bkwinners', 'welcome1', 'toss', 'payup', 'wayup', 'nicepay', 
-            'bonacamp', 'onoffkorea', 'ksnet', 'buddypayWZE'
+            'bonacamp', 'onoffkorea', 'ksnet', 'buddypayWZE', 'seedpayment',
         ];
         return $pgs[$pg_type-1];
     }

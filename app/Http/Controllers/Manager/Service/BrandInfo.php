@@ -41,6 +41,7 @@ class BrandInfo
                     'dev_settle_type',
                     'last_dpst_at',
                     'is_transfer',
+                    'p2p_app_dns',
                     'is_delete',
                     'created_at',
                     'updated_at'

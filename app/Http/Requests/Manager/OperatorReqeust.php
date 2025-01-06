@@ -59,7 +59,7 @@ class OperatorReqeust extends FormRequest
 
     public function data()
     {
-        $data = array_merge($this->getParmasBaseKey(), $this->getParamsBaseFile($this->image_keys));
+        $data = array_merge($this->getParmasBaseKey(), $this->getParmasBaseKeyV2($this->integer_keys, 0), $this->getParamsBaseFile($this->image_keys));
         $data['brand_id'] = $this->user()->brand_id;
         return $data;
     }
