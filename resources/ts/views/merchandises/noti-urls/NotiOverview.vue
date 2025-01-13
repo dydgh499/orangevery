@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import NotiCard from '@/views/merchandises/noti-urls/NotiCard.vue'
-import { getAllNotiUrls } from '@/views/merchandises/noti-urls/useStore'
+import { getAllNotiUrls, notiViewable } from '@/views/merchandises/noti-urls/useStore'
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
 import type { Merchandise, NotiUrl, PayModule } from '@/views/types'
-import { getUserLevel } from '@axios'
 
 interface Props {
     item: Merchandise,
@@ -34,7 +33,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VCard style="margin-top: 1em;" v-if="getUserLevel() === 10 || getUserLevel() >= 35">
+    <VCard style="margin-top: 1em;" v-if="notiViewable()">
         <VCol class="d-flex gap-4">
             <VBtn type="button" style="margin-left: auto;" @click="addNewNotiUrl">
                 노티 신규추가

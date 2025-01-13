@@ -286,36 +286,39 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     head.flat_headers.value = head.flatten(head.headers.value)
     const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
 
-    const metas = ref([
-        {
-            icon: 'tabler-user-check',
-            color: 'primary',
-            title: '금월 추가된 결제모듈',
-            stats: '0',
-            percentage: 0,
-        },
-        {
-            icon: 'tabler-user-exclamation',
-            color: 'error',
-            title: '금월 감소한 결제모듈',
-            percentage: 0,
-            stats: '0',
-        },
-        {
-            icon: 'tabler-user-check',
-            color: 'primary',
-            title: '금주 추가된 결제모듈',
-            percentage: 0,
-            stats: '0',
-        },
-        {
-            icon: 'tabler-user-exclamation',
-            color: 'error',
-            title: '금주 감소한 결제모듈',
-            percentage: 0,
-            stats: '0',
-        },
-    ])
+    const metas = ref(<any>[])
+    if(getUserLevel() > 10) {
+        metas.value = [
+            {
+                icon: 'tabler-user-check',
+                color: 'primary',
+                title: '금월 추가된 결제모듈',
+                stats: '0',
+                percentage: 0,
+            },
+            {
+                icon: 'tabler-user-exclamation',
+                color: 'error',
+                title: '금월 감소한 결제모듈',
+                percentage: 0,
+                stats: '0',
+            },
+            {
+                icon: 'tabler-user-check',
+                color: 'primary',
+                title: '금주 추가된 결제모듈',
+                percentage: 0,
+                stats: '0',
+            },
+            {
+                icon: 'tabler-user-exclamation',
+                color: 'error',
+                title: '금주 감소한 결제모듈',
+                percentage: 0,
+                stats: '0',
+            },
+        ]
+    }
 
     const exporter = async () => {
         const keys = Object.keys(head.flat_headers.value)

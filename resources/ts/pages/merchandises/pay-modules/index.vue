@@ -23,7 +23,7 @@ provide('exporter', exporter)
 
 onMounted(() => {
     watchEffect(async () => {
-        if (store.getChartProcess() === false) {
+        if (store.getChartProcess() === false && getUserLevel() > 10) {
             const r = await store.getChartData()
             if(r.status === 200) {
                 metas[0]['stats'] = r.data.this_month_add.toLocaleString()
