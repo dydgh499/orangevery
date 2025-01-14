@@ -31,12 +31,12 @@ class HandPayRequest extends FormRequest
     public function rules(): array
     {
         $sub = [
-            'pmod_id' => 'required|numeric',
-            'yymm' => 'required|numeric',
+            'pmod_id' => 'required|integer',
+            'yymm' => 'required|integer',
             'card_num' => 'required|string',
             'buyer_name' => 'required|string',
             'buyer_phone' => 'required|string',
-            'installment' => 'required|numeric',
+            'installment' => 'required|integer',
             'amount' => 'required|string',
             'ord_num'   => 'required|string',
             'item_name' => 'required|string',

@@ -8,7 +8,7 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
 use App\Http\Requests\Manager\IndexRequest;
-use App\Http\Requests\Manager\FinanceRequest;
+use App\Http\Requests\Manager\Service\FinanceRequest;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;

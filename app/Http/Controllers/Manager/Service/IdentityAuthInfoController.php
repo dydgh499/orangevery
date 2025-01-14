@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Manager\Service;
 
-use App\Models\Service\BeforeBrandInfo;
+use App\Models\Service\IdentityAuthInfo;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
@@ -11,7 +11,7 @@ use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 
 use App\Http\Requests\Manager\BulkRegister\BulkRegularCardRequest;
-use App\Http\Requests\Manager\Service\BeforeBrandInfoRequest;
+use App\Http\Requests\Manager\Service\IdentityAuthInfoRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -21,14 +21,14 @@ use Illuminate\Http\Request;
  *
  * 이전 운영사 정보 API 입니다.
  */
-class BeforeBrandInfoController extends Controller
+class IdentityAuthInfoController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $before_brand_infos;
+    protected $identity_auth_infos;
 
-    public function __construct(BeforeBrandInfo $before_brand_infos)
+    public function __construct(IdentityAuthInfo $identity_auth_infos)
     {
-        $this->before_brand_infos = $before_brand_infos;
+        $this->identity_auth_infos = $identity_auth_infos;
     }
 
     /**
@@ -49,14 +49,13 @@ class BeforeBrandInfoController extends Controller
      * 본사 이상 가능
      *
      */
-    public function store(BeforeBrandInfoRequest $request)
+    public function store(IdentityAuthInfoRequest $request)
     {
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
-        $data = $request->data();
-        $res = $this->before_brand_infos->create($data);
-        return $this->response($res ? 1 : 990, ['id'=>$res->id, 'brand_id'=>$data['brand_id']]);
+        $res = $this->identity_auth_infos->create($request->data());
+        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
 
     /**
@@ -69,7 +68,7 @@ class BeforeBrandInfoController extends Controller
      */
     public function show($id)
     {
-        $data = $this->before_brand_infos->where('id', $id)->first();
+        $data = $this->identity_auth_infos->where('id', $id)->first();
         return $this->response($data ? 0 : 1000, $data);
     }
 
@@ -81,13 +80,13 @@ class BeforeBrandInfoController extends Controller
      * @urlParam id integer required 정기등록카드 PK
      * @return \Illuminate\Http\Response
      */
-    public function update(BeforeBrandInfoRequest $request, int $id)
+    public function update(IdentityAuthInfoRequest $request, int $id)
     {
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
-        $data = $request->data();
-        $res  = $this->before_brand_infos->where('id', $id)->update($data);
+        $data = $this->identity_auth_infos->encrypt($request->data());
+        $res  = $this->identity_auth_infos->where('id', $id)->update($data);
         return $this->response($res ? 1 : 990, ['id'=>$id, 'brand_id'=>$data['brand_id']]);
     }
 
@@ -103,7 +102,8 @@ class BeforeBrandInfoController extends Controller
     {
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-        $res = $this->before_brand_infos->where('id', $id)->delete();
+
+        $res = $this->identity_auth_infos->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 }

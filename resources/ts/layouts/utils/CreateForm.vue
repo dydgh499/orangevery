@@ -30,15 +30,16 @@ const disabledConditions = (index: number) => {
 }
 
 const hideConditions = () => {
-    const cond_1 = tab.value == 2 && props.path === 'merchandises' ? false : true
-    const cond_2 = tab.value == 3 && props.path === 'merchandises' ? false : true
+    const cond_1 = tab.value === 2 && props.path === 'merchandises' ? false : true
+    const cond_2 = tab.value === 3 && props.path === 'merchandises' ? false : true
     const cond_3 = props.path === 'merchandises/pay-modules' ? false : true
     const cond_4 = props.path === 'merchandises/noti-urls' ? false : true
     const cond_5 = props.path === 'services/pay-gateways' ? false : true
     const cond_6 = props.path === 'services/bulk-register' ? false : true
     const cond_7 = props.path === 'posts/view' ? false : true
+    const cond_8 = tab.value === 3 && props.path === 'services/brands' ? false : true
 
-    return cond_1 && cond_2 && cond_3 && cond_4 && cond_5 && cond_6 && cond_7
+    return cond_1 && cond_2 && cond_3 && cond_4 && cond_5 && cond_6 && cond_7 && cond_8
 }
 
 const authHideConditions = () => {

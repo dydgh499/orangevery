@@ -65,6 +65,7 @@ class AuthController extends Controller
                 'min_balance_limit' => $brand['pv_options']['free']['bonaeja']['min_balance_limit'],
                 'is_use' => $use_bonaeja,
             ];
+            unset($brand['pv_options']['p2p']);
             return response(view('application', ['json' => $brand, 'ip'=>$request->ip()]))
                 ->withCookie('XSRF-TOKEN', csrf_token());
         }
@@ -77,7 +78,7 @@ class AuthController extends Controller
     */
     public function resetPassword(Request $request)
     {
-        $request->validate(['token' => 'required', 'user_pw' => 'required', 'level'=>'required|numeric']);
+        $request->validate(['token' => 'required', 'user_pw' => 'required', 'level'=>'required|integer']);
 
         $result = AuthPasswordChange::getTokenContent($request->token);
         if($result['result'] === AuthLoginCode::SUCCESS->value)

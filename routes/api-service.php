@@ -8,6 +8,7 @@ use App\Http\Controllers\Manager\Service\BeforeBrandInfoController;
 use App\Http\Controllers\Manager\Service\ExceptionWorkTimeController;
 use App\Http\Controllers\Manager\Service\AbnormalConnectionController;
 use App\Http\Controllers\Manager\Service\DifferentSettlementInfoController;
+use App\Http\Controllers\Manager\Service\IdentityAuthInfoController;
 
 use App\Http\Controllers\Manager\Service\MchtBlacklistController;
 use App\Http\Controllers\Manager\Service\HeadOfficeAccountController;
@@ -59,6 +60,8 @@ Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
     
         Route::apiResource('brands/before-brand-infos', BeforeBrandInfoController::class);
         Route::apiResource('brands/different-settlement-infos', DifferentSettlementInfoController::class);        
+        Route::apiResource('brands/identity-auth-infos', IdentityAuthInfoController::class);        
+        
         Route::apiResource('operator-ips', OperatorIPController::class);
         Route::apiResource('brands', BrandController::class);
     

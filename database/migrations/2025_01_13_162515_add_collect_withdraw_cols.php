@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('brands', function (Blueprint $table) {
-            $table->string('p2p_app_dns')->default('')->comment('p2p app DNS');
+        Schema::table('collect_withdraws', function (Blueprint $table) {
+            $table->integer('fin_id')->nullable()->comment('실시간 이체 ID');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('brands', function (Blueprint $table) {
-            $table->dropColumn('p2p_app_dns');
+        Schema::table('collect_withdraws', function (Blueprint $table) {
+            $table->dropColumn('fin_id');
         });
     }
 };

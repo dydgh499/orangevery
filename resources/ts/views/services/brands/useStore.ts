@@ -1,18 +1,26 @@
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
-import type { AuthOption, Brand, FreeOption, Options, PaidOption, ThemeCSS } from '@/views/types';
+import type { AuthOption, Brand, FreeOption, Options, P2pAppOption, PaidOption, ThemeCSS } from '@/views/types';
 import { getUserLevel } from '@axios';
 import corp from '@corp';
 
 export const isMaster = () => {
     return getUserLevel() >= 50 && corp.id == parseInt(import.meta.env.VITE_MAIN_BRAND_ID as string)
 }
+
 export const dev_settle_types = <Options[]>([
     {id:0, title:'적용안함'},
     {id:1, title:'본사이익 대비 방식'},
     {id:2, title:'전체매출 대비 방식'},
     {id:3, title:'수수료 차감 방식'},
 ])
+
+export const identity_auth_types = <Options[]>([
+    {id:0, title:'보내자(SMS)'},
+    {id:1, title:'카카오 본인인증(더즌)'},
+    {id:2, title:'카카오 1원인증(더즌)'},
+])
+
 export const useSearchStore = defineStore('brandSearchStore', () => {
     const store = Searcher('services/brands')
     const head = Header('services/brands', '서비스 관리')
@@ -77,6 +85,123 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
 
 export const defaultItemInfo = () => {
     const path = 'services/brands'
+
+    const freeOption = () => {
+        return <FreeOption>({
+            use_search_date_detail: true,
+            sales_slip: {
+                merchandise: {
+                    company_name: '',
+                    rep_name: '',
+                    phone_num: '',
+                    business_num: '',
+                    addr: ''
+                }
+            },
+            bonaeja: {
+                user_id: '',
+                api_key: '',
+                sender_phone: '',
+                receive_phone: '',
+                min_balance_limit: 0
+            },
+            default: {
+                installment: 0,
+                abnormal_trans_limit: 0,
+                is_show_fee: 0,
+
+            },
+            use_tid_duplicate: false,
+            use_mid_duplicate: false,
+            use_fix_table_view: true,
+            fix_table_size: 749,
+            excel_search_filter: false,
+            resident_num_masking: false,
+            pay_module_detail_view: false,
+            secure: {
+                mcht_id_level: 2,
+                mcht_pw_level: 2,
+                account_lock_limit: 7,
+                sales_id_level: 0,
+                sales_pw_level: 0,
+                login_only_operate: 0,
+            }
+        })
+    }
+
+    const paidOption = () => {
+        return <PaidOption>({
+            use_acct_verification: false,
+            use_hand_pay_sms: false,
+            use_realtime_deposit: false,
+            use_issuer_filter: false,
+            use_dup_pay_validation: false,
+            use_forb_pay_time: false,
+            use_pay_limit: false,
+            subsidiary_use_control: false,
+            use_online_pay: false,
+            use_tid_create: false,
+            use_mid_create: false,
+            use_pay_verification_mobile: false,
+            use_regular_card: false,
+            use_collect_withdraw: false,
+            use_withdraw_fee: false,
+            use_noti: false,
+            use_head_office_withdraw: false,
+            use_collect_withdraw_scheduler: false,
+            use_finance_van_deposit: false,
+            use_pmid: false,
+            use_before_brand_info: false,
+            use_multiple_hand_pay: false,
+            use_mcht_blacklist: false,
+            use_part_cancel: false,
+            use_settle_hold: false,
+            use_hide_account: false,
+            sales_parent_structure: false,
+            use_specified_limit: false,
+            use_syslink: false,
+            use_product: false,
+            use_cancel_all_allow: false,
+            use_bill_key: false,
+            use_shop: false,
+        })
+    }
+
+    const authOption = () => {
+        return <AuthOption>({
+            levels: {
+                dev_use: false,
+                dev_name: '개발사',
+                sales5_use: false,
+                sales5_name: '지사',
+                sales4_use: true,
+                sales4_name: '영업점',
+                sales3_use: true,
+                sales3_name: '지사',
+                sales2_use: true,
+                sales2_name: '총판',
+                sales1_use: true,
+                sales1_name: '대리점',
+                sales0_use: true,
+                sales0_name: '하위대리점'
+            },
+            visibles: {
+                abnormal_trans_sales: true,
+            }
+        })
+    }
+
+    const p2pAppOption = () => {
+        return <P2pAppOption>({
+            pg_id: null,
+            ps_id: null,
+            module_type: 2,
+            ci_validate: 0,
+            account_validate: 0,
+            contract_validate: 0,
+        })
+    }
+
     const item = reactive<Brand>({
         id: 0,
         dns: '',
@@ -102,101 +227,10 @@ export const defaultItemInfo = () => {
         deposit_day: 1,
         deposit_amount: 1000000,
         pv_options: {
-            free: reactive<FreeOption>({
-                use_search_date_detail: true,
-                sales_slip: {
-                    merchandise: {
-                        company_name: '',
-                        rep_name: '',
-                        phone_num: '',
-                        business_num: '',
-                        addr: ''
-                    }
-                },
-                bonaeja: {
-                    user_id: '',
-                    api_key: '',
-                    sender_phone: '',
-                    receive_phone: '',
-                    min_balance_limit: 0
-                },
-                default: {
-                    installment: 0,
-                    abnormal_trans_limit: 0,
-                    is_show_fee: 0
-                },
-                use_tid_duplicate: false,
-                use_mid_duplicate: false,
-                use_fix_table_view: true,
-                fix_table_size: 749,
-                excel_search_filter: false,
-                resident_num_masking: false,
-                pay_module_detail_view: false,
-                secure: {
-                    mcht_id_level: 2,
-                    mcht_pw_level: 2,
-                    account_lock_limit: 7,
-                    sales_id_level: 0,
-                    sales_pw_level: 0,
-                    login_only_operate: 0
-                }
-            }),
-            paid: reactive<PaidOption>({
-                use_acct_verification: false,
-                use_hand_pay_sms: false,
-                use_realtime_deposit: false,
-                use_issuer_filter: false,
-                use_dup_pay_validation: false,
-                use_forb_pay_time: false,
-                use_pay_limit: false,
-                subsidiary_use_control: false,
-                use_online_pay: false,
-                use_tid_create: false,
-                use_mid_create: false,
-                use_pay_verification_mobile: false,
-                use_regular_card: false,
-                use_collect_withdraw: false,
-                use_withdraw_fee: false,
-                use_noti: false,
-                use_head_office_withdraw: false,
-                use_collect_withdraw_scheduler: false,
-                use_finance_van_deposit: false,
-                use_pmid: false,
-                use_before_brand_info: false,
-                use_multiple_hand_pay: false,
-                use_mcht_blacklist: false,
-                use_part_cancel: false,
-                use_settle_hold: false,
-                use_hide_account: false,
-                sales_parent_structure: false,
-                use_specified_limit: false,
-                use_syslink: false,
-                use_product: false,
-                use_cancel_all_allow: false,
-                use_bill_key: false,
-                use_shop: false,
-            }),
-            auth: reactive<AuthOption>({
-                levels: {
-                    dev_use: false,
-                    dev_name: '개발사',
-                    sales5_use: false,
-                    sales5_name: '지사',
-                    sales4_use: true,
-                    sales4_name: '영업점',
-                    sales3_use: true,
-                    sales3_name: '지사',
-                    sales2_use: true,
-                    sales2_name: '총판',
-                    sales1_use: true,
-                    sales1_name: '대리점',
-                    sales0_use: true,
-                    sales0_name: '하위대리점'
-                },
-                visibles: {
-                    abnormal_trans_sales: true,
-                }
-            })
+            free: reactive<FreeOption>(freeOption()),
+            paid: reactive<PaidOption>(paidOption()),
+            auth: reactive<AuthOption>(authOption()),
+            p2p: reactive<P2pAppOption>(p2pAppOption()),
         },
         theme_css: reactive<ThemeCSS>({
             main_color: '#5E35B1',
@@ -218,9 +252,9 @@ export const defaultItemInfo = () => {
         use_different_settlement: 0,
         before_brand_infos: [],
         different_settlement_infos: [],
-        operator_ips: []
+        operator_ips: [],
+        identity_auth_infos: []
     })
-
 
     return {
         path, item

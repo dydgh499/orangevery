@@ -55,6 +55,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:37, name:'케이에스넷', rep_name:'서은교', company_name:' (주)케이에스넷', business_num:'120-81-97322', phone_num:'02-3420-5800', addr:'서울특별시 서초구 반포대로 95, 2층(서초동)'},
         {id:38, name:'버디페이(위지온)', rep_name:'장호은', company_name:'(주)버디페이', business_num:'686-81-02591', phone_num:'031-898-1775', addr:'서울특별시 금천구 가산디지털2로 144, 1217~1220호'},
         {id:39, name:'씨드페이먼츠', rep_name:'김찬호', company_name:'주식회사 씨드파이낸셜', business_num:'320-86-02487', phone_num:'02-861-7717', addr:'서울특별시 금천구 가산디지털2로 144, 5층 507,508호(가산동, 현대 테라타워)'},
+        {id:40, name:'위루트파이넨셜', rep_name:'길민홍', company_name:'위루트파이낸셜(주)', business_num:'456-81-01313', phone_num:'1811-7717', addr:'서울특별시 금천구 디지털로9길 99, 스타밸리 1013호'},
     ]
 
     const finance_companies = <Options[]>([

@@ -157,9 +157,9 @@ class CMSTransactionController extends Controller
     public function withdraw(Request $request)
     {
         $validated = $request->validate([
-            'fin_id' => 'required|numeric',
-            'head_office_acct_id' => 'required|numeric',
-            'withdraw_amount' => 'required|numeric',
+            'fin_id' => 'required|integer',
+            'head_office_acct_id' => 'required|integer',
+            'withdraw_amount' => 'required|integer',
             'note' => 'required|string',
             'token' => 'required|string',
         ]);

@@ -89,7 +89,7 @@ class PostController extends Controller
     /**
      * 추가
      *
-     * 마스터 이상 가능
+     * 본사 이상 가능
      *
      */
     public function store(PostRequest $request)
@@ -127,7 +127,7 @@ class PostController extends Controller
     /**
      * 업데이트
      *
-     * 마스터 이상 가능
+     * 본사 이상 가능
      *
      * @urlParam id integer required 공지사항 PK
      * @return \Illuminate\Http\Response
@@ -142,7 +142,7 @@ class PostController extends Controller
     /**
      * 단일삭제
      *
-     * 마스터 이상 가능
+     * 본사 이상 가능
      *
      * @urlParam id integer required 공지사항 PK
      * @return \Illuminate\Http\Response

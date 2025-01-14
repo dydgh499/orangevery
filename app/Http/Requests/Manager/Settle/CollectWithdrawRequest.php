@@ -25,7 +25,7 @@ class CollectWithdrawRequest extends FormRequest
     public function rules(): array
     {
         $sub = [
-            'withdraw_amount' => 'required|numeric',
+            'withdraw_amount' => 'required|integer',
         ];
         return $this->getRules($this->keys, $sub);
     }

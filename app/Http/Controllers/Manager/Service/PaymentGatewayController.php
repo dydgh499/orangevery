@@ -8,7 +8,7 @@ use App\Models\Service\PaymentSection;
 use App\Models\Service\Classification;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Requests\Manager\PayGatewayRequest;
+use App\Http\Requests\Manager\Service\PayGatewayRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Ablilty\Ablilty;

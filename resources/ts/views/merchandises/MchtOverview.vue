@@ -468,7 +468,7 @@ watchEffect(() => {
                                                     <BooleanRadio :radio="props.item.use_saleslip_prov"
                                                         @update:radio="props.item.use_saleslip_prov = $event">
                                                         <template #true>PG사</template>
-                                                        <template #false>본사</template>
+                                                        <template #false>운영사</template>
                                                     </BooleanRadio>
                                                 </div>
                                             </VCol>
@@ -482,7 +482,7 @@ watchEffect(() => {
                                                     <BooleanRadio :radio="props.item.use_saleslip_sell"
                                                         @update:radio="props.item.use_saleslip_sell = $event">
                                                         <template #false>가맹점</template>
-                                                        <template #true>본사</template>
+                                                        <template #true>운영사</template>
                                                     </BooleanRadio>
                                                 </div>
                                             </VCol>

@@ -68,7 +68,7 @@ class BatchUpdateTransactionController extends BatchUpdateController
     {
         if($request->user()->tokenCan(35))
         {
-            $validated = $request->validate(['selected_idxs.*'=>'required|numeric']);
+            $validated = $request->validate(['selected_idxs.*'=>'required|integer']);
             $url = $this->base_noti_url.'/single-deposit-cancel-job-reservation';
             $res = Comm::post($url, [
                 'trx_ids' => $request->selected_idxs,

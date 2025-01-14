@@ -78,9 +78,9 @@ class BulkMerchandiseRequest extends FormRequest
             '*.acct_name' => 'required',
             '*.acct_bank_name' => 'required',
             '*.acct_bank_code' => 'required',
-            '*.use_multiple_hand_pay' => 'nullable|numeric',
-            '*.use_collect_withdraw' => 'nullable|numeric',
-            '*.use_regular_card' => 'nullable|numeric',
+            '*.use_multiple_hand_pay' => 'nullable|integer',
+            '*.use_collect_withdraw' => 'nullable|integer',
+            '*.use_regular_card' => 'nullable|integer',
             '*.hold_fee' => 'nullable|numeric',
             '*.trx_fee' => 'nullable|numeric',
             '*.sales0_fee' => 'nullable|numeric',
@@ -89,9 +89,9 @@ class BulkMerchandiseRequest extends FormRequest
             '*.sales3_fee' => 'nullable|numeric',
             '*.sales4_fee' => 'nullable|numeric',
             '*.sales5_fee' => 'nullable|numeric',
-            '*.collect_withdraw_fee' => 'nullable|numeric',
-            '*.withdraw_fee' => 'nullable|numeric',
-            '*.tax_category_type' => 'nullable|numeric',
+            '*.collect_withdraw_fee' => 'nullable|integer',
+            '*.withdraw_fee' => 'nullable|integer',
+            '*.tax_category_type' => 'nullable|integer',
         ];
         return $sub;
     }

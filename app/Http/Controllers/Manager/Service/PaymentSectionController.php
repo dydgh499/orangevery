@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Manager\Service;
 use App\Models\Service\PaymentSection;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Requests\Manager\PaySectionRequest;
+use App\Http\Requests\Manager\Service\PaySectionRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Ablilty\Ablilty;

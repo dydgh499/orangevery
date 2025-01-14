@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Manager;
+namespace App\Http\Requests\Manager\Service;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
 
-class PopupRequest extends FormRequest
+class PaySectionRequest extends FormRequest
 {
     use FormRequestTrait;
     public $keys = [
-        'popup_title',
-        'popup_content',
-        'open_s_dt',
-        'open_e_dt',
+        'pg_id',
+        'name',
+        'trx_fee',
     ];
 
     public function authorize()
@@ -20,13 +19,17 @@ class PopupRequest extends FormRequest
         return $this->user()->tokenCan(10) ? true : false;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
     public function rules()
     {
         $sub = [
-            'popup_title' => 'required',
-            'popup_content' => 'required',
-            'open_s_dt' => 'required',
-            'open_e_dt' => 'required',
+            'pg_id' => 'required',
+            'name' => 'required',
+            'trx_fee' => 'required',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -41,11 +44,11 @@ class PopupRequest extends FormRequest
         $params = $this->getDocsParameters($this->keys);
         return $params;
     }
-
     public function data()
     {
         $data = $this->getParmasBaseKey();
         $data['brand_id'] = $this->user()->brand_id;
+        $data['trx_fee'] = (float)$data['trx_fee']/100;
         return $data;
     }
 }

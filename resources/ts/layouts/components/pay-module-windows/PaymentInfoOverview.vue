@@ -274,7 +274,7 @@ watchEffect(() => {
             </VRow>
         </template>
 
-        <template v-if="corp.pv_options.paid.use_finance_van_deposit">
+        <template v-if="corp.pv_options.paid.use_realtime_deposit">
             <VDivider style="margin: 1em 0;" />
             <VCardSubtitle>즉시출금 정보</VCardSubtitle>
             <br>

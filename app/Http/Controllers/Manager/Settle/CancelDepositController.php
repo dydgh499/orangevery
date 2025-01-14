@@ -68,7 +68,7 @@ class CancelDepositController extends Controller
     /**
      * 추가
      *
-     * 마스터 이상 가능
+     * 본사 이상 가능
      */
     public function store(CancelDepositRequest $request)
     {
@@ -105,7 +105,7 @@ class CancelDepositController extends Controller
     /**
      * 업데이트
      *
-     * 마스터 이상 가능
+     * 본사 이상 가능
      *
      * @urlParam id integer required 정기등록카드 PK
      * @return \Illuminate\Http\Response
@@ -121,7 +121,7 @@ class CancelDepositController extends Controller
     /**
      * 단일삭제
      *
-     * 마스터 이상 가능
+     * 본사 이상 가능
      *
      * @urlParam id integer required 정기등록카드 PK
      * @return \Illuminate\Http\Response

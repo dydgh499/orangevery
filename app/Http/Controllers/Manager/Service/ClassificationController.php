@@ -18,7 +18,7 @@ use App\Enums\HistoryType;
 /**
  * @group Classification API
  *
- * 구분 관리 메뉴에서 사용될 API 입니다. 조회를 제외하고 마스터 이상권한이 요구됩니다.
+ * 구분 관리 메뉴에서 사용될 API 입니다. 조회를 제외하고 본사 이상권한이 요구됩니다.
  */
 class ClassificationController extends Controller
 {

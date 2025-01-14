@@ -18,7 +18,7 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         $sub = [
-            'brand_id'  => 'required|numeric',
+            'brand_id'  => 'required|integer',
             'user_name' => 'required|string',
             'user_pw'   => 'required|string',
         ];

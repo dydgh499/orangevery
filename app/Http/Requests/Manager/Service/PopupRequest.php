@@ -1,26 +1,18 @@
 <?php
 
-namespace App\Http\Requests\Manager;
+namespace App\Http\Requests\Manager\Service;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
 
-class PayGatewayRequest extends FormRequest
+class PopupRequest extends FormRequest
 {
     use FormRequestTrait;
     public $keys = [
-        'pg_type',
-        'pg_name',
-        'rep_name',
-        'company_name',
-        'business_num',
-        'phone_num',
-        'addr',
-        'settle_type',
-        'p_mid',
-        'mid',
-        'api_key',
-        'sub_key',
+        'popup_title',
+        'popup_content',
+        'open_s_dt',
+        'open_e_dt',
     ];
 
     public function authorize()
@@ -31,13 +23,10 @@ class PayGatewayRequest extends FormRequest
     public function rules()
     {
         $sub = [
-            'pg_type' => 'required',
-            'pg_name' => 'required',
-            'rep_name' => 'nullable',
-            'company_name' => 'nullable',
-            'business_num' => 'nullable',
-            'phone_num' => 'nullable',
-            'addr' => 'nullable',
+            'popup_title' => 'required',
+            'popup_content' => 'required',
+            'open_s_dt' => 'required',
+            'open_e_dt' => 'required',
         ];
         return $this->getRules($this->keys, $sub);
     }

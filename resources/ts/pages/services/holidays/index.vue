@@ -14,7 +14,7 @@ const { post } = useRequestStore()
 const { holidays, updateFilter, calendarOptions } = useHolidayStore()
 
 const bulkRegister = async () => {
-    if (await alert.value.show('정말 금년도 공휴일을 대량으로 읽어오시겠습니까?')) {
+    if (await alert.value.show('정말 공휴일을 읽어오시겠습니까?')) {
         const r = await post('/api/v1/manager/services/holidays/bulk-register', {}, true)
     }
 }
@@ -49,7 +49,7 @@ const bulkRegister = async () => {
                         <VDivider />
                         <div style="display: flex; flex-direction: column;margin: 22.5px;">
                             <VBtn prepend-icon="material-symbols:holiday-village" @click="bulkRegister()" color="warning">
-                                금년 공휴일 대량업데이트
+                                공휴일 업데이트
                             </VBtn>
                         </div>
                     </VNavigationDrawer>

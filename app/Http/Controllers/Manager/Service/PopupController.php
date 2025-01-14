@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Manager\Service;
 use App\Models\Service\Popup;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Requests\Manager\PopupRequest;
+use App\Http\Requests\Manager\Service\PopupRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
 use Carbon\Carbon;

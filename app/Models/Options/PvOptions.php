@@ -30,9 +30,9 @@
         ];
         
         public $default = [
-            'installment' => 0,
+            'installment'   => 0,
             'abnormal_trans_limit' => 0,
-            'is_show_fee' => 0,
+            'is_show_fee'   => 0,
         ];
         
         public $secure = [
@@ -60,13 +60,16 @@
             $this->default['installment'] = $this->initIntKey($this->default, 'installment', 0);
             $this->default['is_show_fee'] = $this->initIntKey($this->default, 'is_show_fee', 0);
             $this->default['abnormal_trans_limit'] = $this->initIntKey($this->default, 'abnormal_trans_limit', 0);
-            
+
             $this->secure['mcht_id_level'] = $this->initIntKey($this->secure, 'mcht_id_level', 1);
             $this->secure['mcht_pw_level'] = $this->initIntKey($this->secure, 'mcht_pw_level', 2);
             $this->secure['sales_id_level'] = $this->initIntKey($this->secure, 'sales_id_level', 1);
             $this->secure['sales_pw_level'] = $this->initIntKey($this->secure, 'sales_pw_level', 2);
             $this->secure['account_lock_limit'] = $this->initIntKey($this->secure, 'account_lock_limit', 5);
             $this->secure['login_only_operate'] = $this->initIntKey($this->secure, 'login_only_operate', 0);
+
+            $this->secure['ci_validate'] = $this->initIntKey($this->secure, 'ci_validate', 0);
+            $this->secure['account_validate'] = $this->initIntKey($this->secure, 'account_validate', 0);
         }
     }
 
@@ -102,9 +105,9 @@
         public $use_specified_limit = false;    // 지정시간 제한
         public $use_syslink = false;    //syslink 선정산 사용여부
         public $use_product = false;
-        public $use_cancel_all_allow = false;
-        public $use_bill_key = false; // 빌키사용 여부
-        public $use_shop = false;
+        public $use_cancel_all_allow = false;   //전체취소 사용여부
+        public $use_bill_key = false;   // 빌키사용 여부
+        public $use_shop = false;       // 쇼핑몰 사용여부
 
         public function __construct(array $source)
         {
@@ -148,11 +151,31 @@
         }
     }
 
+    class P2pAppOption
+    {
+        public $pg_id = null;
+        public $ps_id = null;
+        public $module_type = 2;
+        public $ci_validate = false;
+        public $account_validate = false;
+        public $contract_validate = false;
+        
+        public function __construct(array $source)
+        {
+            foreach ($source as $property => $value) 
+            {
+                if (property_exists($this, $property)) 
+                    $this->$property = $value ? (int)$value : null;
+            }
+        }
+    }
+
     class PvOptions
     {
         public FreeOption $free;
         public PaidOption $paid;
         public AuthOption $auth;
+        public P2pAppOption $p2p;
 
         public function __construct(string $pv_options)
         {
@@ -160,6 +183,7 @@
             $this->free = new FreeOption(isset($json['free']) ? $json['free'] : []);
             $this->paid = new PaidOption(isset($json['paid']) ? $json['paid'] : []);
             $this->auth = new AuthOption(isset($json['auth']) ? $json['auth'] : []);
+            $this->p2p  = new P2pAppOption(isset($json['p2p']) ? $json['p2p'] : []);
         }
     }
 ?>

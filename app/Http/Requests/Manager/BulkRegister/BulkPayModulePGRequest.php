@@ -34,9 +34,9 @@ class BulkPayModulePGRequest extends FormRequest
     {
         $sub = [
             '*' => 'required|array',
-            '*.mcht_id' => 'required|numeric',
-            '*.pg_id' => 'required|numeric',
-            '*.ps_id' => 'required|numeric',
+            '*.mcht_id' => 'required|integer',
+            '*.pg_id' => 'required|integer',
+            '*.ps_id' => 'required|integer',
         ];
         return $sub;
     }

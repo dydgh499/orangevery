@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Redis;
 /**
  * @group Brand API
  *
- * 브랜드 관리 메뉴에서 사용될 API 입니다. 조회를 제외하고 마스터 이상권한이 요구됩니다.
+ * 브랜드 관리 메뉴에서 사용될 API 입니다. 조회를 제외하고 본사 이상권한이 요구됩니다.
  */
 class BrandController extends Controller
 {
@@ -112,19 +112,12 @@ class BrandController extends Controller
      */
     public function show(Request $request, int $id)
     {
-        $cond_1 = Ablilty::isDevLogin($request);
         if(Ablilty::isBrandCheck($request, $id, true) === false)
-            return $this->response(951);
-        else if($cond_1 === false && $id === 1)
             return $this->response(951);
         else
         {
-            $with = ['beforeBrandInfos', 'differentSettlementInfos'];
-            if($cond_1)
-                $with[] = 'operatorIps';
-
             $data = $this->brands->where('id', $id)
-                ->with($with)
+                ->with(['beforeBrandInfos', 'differentSettlementInfos', 'identityAuthInfos'])
                 ->first();
 
             return $this->response($data ? 0 : 1000, $data);

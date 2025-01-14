@@ -44,6 +44,11 @@ class Kernel extends ConsoleKernel
                 (new FeeChangeHistoryController(new MchtFeeChangeHistory, new SfFeeChangeHistory))->__invoke();
             })->daily();
 
+            // 공휴일 업데이트
+            $schedule->call(function () {
+                (new HolidayController(new Holiday))->updateHolidaysAllBrands();
+            })->daily();
+
             // 차액정산 처리
             $schedule->call(function () {
                 (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleRequest();
@@ -53,10 +58,7 @@ class Kernel extends ConsoleKernel
                 (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleResponse();
             })->dailyAt("09:00");
 
-            // 공휴일 업데이트
-            $schedule->call(function () {
-                (new HolidayController(new Holiday))->updateNextHolidaysAllBrands();
-            })->yearlyOn(12, 1, '00:00');
+
 
             $schedule->command('sanctum:prune-expired --hours=35')->daily();
         }

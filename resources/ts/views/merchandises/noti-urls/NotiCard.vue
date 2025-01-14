@@ -1,9 +1,9 @@
 <script lang="ts" setup>
+import { notiViewable } from '@/views/merchandises/noti-urls/useStore';
 import { payModFilter } from '@/views/merchandises/pay-modules/useStore';
 import { useRequestStore } from '@/views/request';
 import { useSalesFilterStore } from '@/views/salesforces/useStore';
 import type { NotiUrl, PayModule } from '@/views/types';
-import { getUserLevel } from '@axios';
 import { requiredValidatorV2, urlValidator } from '@validators';
 import { VForm } from 'vuetify/components';
 
@@ -51,11 +51,11 @@ const filterPayMod = computed(() => {
                             <VCardSubtitle></VCardSubtitle>
                             <br>
 
-                            <VRow v-if="getUserLevel() === 10 || getUserLevel() >= 35">
+                            <VRow v-if="notiViewable()">
                                 <VCol md="6" cols="12">
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pmod_id"
                                     :items="[{ id: -1, note: '전체' }].concat(filterPayMod)" prepend-inner-icon="ic-outline-send-to-mobile"
-                                    label="발송 결제모듈" item-title="note" item-value="id" v-if="getUserLevel() === 10 || getUserLevel() >= 35"/>
+                                    label="발송 결제모듈" item-title="note" item-value="id"/>
                                 </VCol>
                                 <VCol md="6">
                                     <VSwitch hide-details :false-value=0 :true-value=1 
@@ -73,7 +73,7 @@ const filterPayMod = computed(() => {
                                 </VCol>
                             </VRow>
 
-                            <VRow v-if="getUserLevel() === 10 || getUserLevel() >= 35">
+                            <VRow v-if="notiViewable()">
                                 <VCol cols="12">
                                     <VTextField v-model="props.item.send_url"
                                     label="발송 URL"
@@ -90,7 +90,7 @@ const filterPayMod = computed(() => {
                                 </VCol>
                             </VRow>
 
-                            <VRow v-if="getUserLevel() === 10 || getUserLevel() >= 35">
+                            <VRow v-if="notiViewable()">
                                 <VCol cols="12">
                                     <VTextField v-model="props.item.note" counter label="별칭"
                                         prepend-inner-icon="twemoji-spiral-notepad" maxlength="190" auto-grow/>
@@ -105,7 +105,7 @@ const filterPayMod = computed(() => {
                                 </VCol>
                             </VRow>
                         
-                        <VRow v-if="getUserLevel() === 10 || getUserLevel() >= 35">
+                        <VRow v-if="notiViewable()">
                             <VCol class="d-flex gap-4">
                                 <VBtn type="button" style="margin-left: auto;"
                                     @click="update('/merchandises/noti-urls', props.item, vForm, props.able_mcht_chanage)">

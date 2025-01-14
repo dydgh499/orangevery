@@ -1,17 +1,26 @@
 <?php
 
-namespace App\Http\Requests\Manager;
+namespace App\Http\Requests\Manager\Service;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
 
-class PaySectionRequest extends FormRequest
+class PayGatewayRequest extends FormRequest
 {
     use FormRequestTrait;
     public $keys = [
-        'pg_id',
-        'name',
-        'trx_fee',
+        'pg_type',
+        'pg_name',
+        'rep_name',
+        'company_name',
+        'business_num',
+        'phone_num',
+        'addr',
+        'settle_type',
+        'p_mid',
+        'mid',
+        'api_key',
+        'sub_key',
     ];
 
     public function authorize()
@@ -19,17 +28,16 @@ class PaySectionRequest extends FormRequest
         return $this->user()->tokenCan(10) ? true : false;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         $sub = [
-            'pg_id' => 'required',
-            'name' => 'required',
-            'trx_fee' => 'required',
+            'pg_type' => 'required',
+            'pg_name' => 'required',
+            'rep_name' => 'nullable',
+            'company_name' => 'nullable',
+            'business_num' => 'nullable',
+            'phone_num' => 'nullable',
+            'addr' => 'nullable',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -44,11 +52,11 @@ class PaySectionRequest extends FormRequest
         $params = $this->getDocsParameters($this->keys);
         return $params;
     }
+
     public function data()
     {
         $data = $this->getParmasBaseKey();
         $data['brand_id'] = $this->user()->brand_id;
-        $data['trx_fee'] = (float)$data['trx_fee']/100;
         return $data;
     }
 }

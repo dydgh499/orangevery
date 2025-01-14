@@ -79,30 +79,52 @@ class HolidayController extends Controller
         return $holidays;
     }
 
+    public function filterAlreadyExistHoliday($holidays, $brand_id, $this_year)
+    {
+        $datas  = [];
+        $cur_time   = date('Y-m-d H:i:s');
+        $exist_holidays = $this->holidays
+            ->where('brand_id', $brand_id)
+            ->where('rest_dt', '>=', $this_year."-01-01")
+            ->get()
+            ->toArray();
+
+        foreach($holidays as $holiday)
+        {
+            $idx = array_search($holiday['rest_dt'], array_column($exist_holidays, 'rest_dt'));
+            if($idx === false)
+            {   // 이미 등록되지 않을 경우에만
+                $holiday['brand_id'] = $brand_id;
+                $holiday['created_at'] = $cur_time;
+                $holiday['updated_at'] = $cur_time;
+                $datas[] = $holiday;
+            }
+        }
+        return $datas;
+    }
+
     /*
      * 공휴일 자동등록 (매년 12월 30일 내년꺼 등록)
      */
-    public function updateNextHolidaysAllBrands()
+    public function updateHolidaysAllBrands()
     {
-        $datas      = [];
-        $cur_time   = date('Y-m-d H:i:s');
-        $next_year  = (int)Carbon::now()->format('Y') + 1;
-        $holidays   = $this->getOneYearHolidays($next_year);
+        $this_year  = (int)Carbon::now()->format('Y');
+        $holidays   = array_merge(
+                $this->getOneYearHolidays($this_year), 
+                $this->getOneYearHolidays($this_year + 1)
+        );
+
         $brand_ids  = Brand::where('is_delete', false)->pluck('id')->all();
-        foreach($holidays as $holiday)
+        foreach($brand_ids as $brand_id)
         {
-            foreach($brand_ids as $brand_id)
+            $datas = $this->filterAlreadyExistHoliday($holidays, $brand_id, $this_year);
+            if(count($datas))
             {
-                $data = $holiday;
-                $data['brand_id'] = $brand_id;
-                $data['created_at'] = $cur_time;
-                $data['updated_at'] = $cur_time;
-                $datas[] = $data;
+                logging($datas, 'update-holiday-brand');
+                $res = $this->manyInsert($this->holidays, $datas);    
             }
         }
-
-        $res = $this->manyInsert($this->holidays, $datas);
-        return $this->response($res ? 1 : 990);
+        return $this->response(1);
     }
 
     /*
@@ -110,29 +132,15 @@ class HolidayController extends Controller
      */
     public function updateHolidays(Request $request)
     {
-        $is_already_parse = $this->holidays
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('rest_dt', date('Y')."-01-01")
-            ->exists();
-        if($is_already_parse)
-            return $this->extendResponse(1999, '이미 대량으로 읽어온 공휴일이 존재합니다.');
-        else
-        {
-            $datas      = [];
-            $cur_time   = date('Y-m-d H:i:s');
-            $holidays   = $this->getOneYearHolidays(date('Y'));
-            foreach($holidays as $holiday)
-            {
-                $data = $holiday;
-                $data['brand_id']   = $request->user()->brand_id;
-                $data['created_at'] = $cur_time;
-                $data['updated_at'] = $cur_time;
-                $datas[] = $data;
-            }
-    
+        $this_year  = (int)Carbon::now()->format('Y');
+        $holidays   = array_merge(
+                $this->getOneYearHolidays($this_year), 
+                $this->getOneYearHolidays($this_year + 1)
+        );
+        $datas = $this->filterAlreadyExistHoliday($holidays, $request->user()->brand_id, $this_year);
+        if(count($datas))
             $res = $this->manyInsert($this->holidays, $datas);
-            return $this->response($res ? 1 : 990);
-        }
+        return $this->response($res ? 1 : 990);
     }
 
     /**

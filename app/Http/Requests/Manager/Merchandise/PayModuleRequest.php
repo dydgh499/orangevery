@@ -100,8 +100,8 @@ class PayModuleRequest extends FormRequest
             'is_old_auth' => 'required',
             'use_realtime_deposit' => 'required',
             'pay_window_secure_level' => 'required',
-            'comm_settle_fee' => 'required|numeric',
-            'under_sales_amt' => 'nullable|numeric',
+            'comm_settle_fee' => 'required|integer',
+            'under_sales_amt' => 'nullable|integer',
         ];
         return $this->getRules($this->keys, $sub);
     }

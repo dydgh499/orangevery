@@ -370,6 +370,7 @@ interface FreeOption {
         installment: number,
         abnormal_trans_limit: number,
         is_show_fee: number,
+
     },
     secure: {
         mcht_id_level: number,
@@ -378,6 +379,8 @@ interface FreeOption {
         sales_id_level: number,
         sales_pw_level: number,
         login_only_operate: number,
+        ci_validate: number,
+        account_validate: number,
     }
 }
 interface PaidOption {
@@ -437,6 +440,16 @@ interface AuthOption {
         abnormal_trans_sales: boolean,
     }
 }
+
+interface P2pAppOption {
+    pg_id: number | null,
+    ps_id: number | null,
+    module_type: number,
+    ci_validate: number,
+    account_validate: number,
+    contract_validate: number,
+}
+
 interface ThemeCSS {
     main_color: string,
 }
@@ -470,6 +483,7 @@ export interface Brand extends Contract {
         free: FreeOption,
         paid: PaidOption,
         auth: AuthOption,
+        p2p: P2pAppOption,
     },
     is_transfer: number,
     deposit_day: number,
@@ -482,6 +496,7 @@ export interface Brand extends Contract {
     use_different_settlement: number,
     before_brand_infos: BeforeBrandInfo[],
     different_settlement_infos: DifferentSettlementInfo[],
+    identity_auth_infos: IdentityAuthInfo[],
     operator_ips: OperatorIp[],
     updated_at: datetime,
     created_at: datetime,
@@ -1136,9 +1151,19 @@ export interface OptionGroup {
     option_price: number,
     count: number,
 }
+
 export interface Order {
     groups: OptionGroup[],
     total_amount: number,
     addr: string,
     detail_addr: string,
+}
+
+export interface IdentityAuthInfo {
+    id: number,
+    identitiy_auth_type: number,
+    corp_code: string,
+    api_key: string,
+    sub_key: string,
+    enc_key: string,
 }

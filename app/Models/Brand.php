@@ -11,6 +11,7 @@ use App\Models\Transaction;
 use App\Models\Service\OperatorIP;
 use App\Models\Service\BeforeBrandInfo;
 use App\Models\Service\DifferentSettlementInfo;
+use App\Models\Service\IdentityAuthInfo;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Http\Traits\Models\AttributeTrait;
@@ -66,6 +67,12 @@ class Brand extends Model
     {
         return $this->hasMany(DifferentSettlementInfo::class, 'brand_id')
             ->where('is_delete', false)
+            ->select();
+    }
+
+    public function identityAuthInfos()
+    {
+        return $this->hasMany(IdentityAuthInfo::class, 'brand_id')
             ->select();
     }
 }
