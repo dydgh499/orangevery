@@ -67,9 +67,6 @@
             $this->secure['sales_pw_level'] = $this->initIntKey($this->secure, 'sales_pw_level', 2);
             $this->secure['account_lock_limit'] = $this->initIntKey($this->secure, 'account_lock_limit', 5);
             $this->secure['login_only_operate'] = $this->initIntKey($this->secure, 'login_only_operate', 0);
-
-            $this->secure['ci_validate'] = $this->initIntKey($this->secure, 'ci_validate', 0);
-            $this->secure['account_validate'] = $this->initIntKey($this->secure, 'account_validate', 0);
         }
     }
 
