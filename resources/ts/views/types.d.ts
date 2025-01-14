@@ -379,8 +379,6 @@ interface FreeOption {
         sales_id_level: number,
         sales_pw_level: number,
         login_only_operate: number,
-        ci_validate: number,
-        account_validate: number,
     }
 }
 interface PaidOption {
