@@ -36,68 +36,7 @@ const hecto = () => {
     - 기 전송된 차액 정산 매출 데이터로 카드사에 환급 정산 요청 ( 헥토파이낸셜 자체 처리 ) <br>
     ( 차액 정산 반송 된 건에 대해서는 환급 정산 처리 불가하므로 차액 정산 반송 관리 必 ) <br>
     <br>
-    <h3>1.4 차액정산 결과 코드(헥토파이낸셜 검증 결과 코드)</h3>
-    오류코드 오류메시지<br>
-    <div class="v-table v-theme--light v-table--density-default text-no-wrap">
-        <div class="v-table__wrapper different-settle-menual">
-            <table>
-                <thead>
-                    <tr>
-                        <th class='list-square'>코드</th>
-                        <th class='list-square'>응답 메세지</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class='list-square'>0000</td>
-                        <td class='list-square'>정상</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>1101</td>
-                        <td class='list-square'>상점ID 미 존재</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>1102</td>
-                        <td class='list-square'>차액 정산 비대상 가맹점</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>1103</td>
-                        <td class='list-square'>영중소 사업자번호 아님</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>1201</td>
-                        <td class='list-square'>해당거래 미 존재</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>1202</td>
-                        <td class='list-square'>원거래 매입금액 불일치</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>1203</td>
-                        <td class='list-square'>원거래 매입금액과 하위사업자 매출액 불일치 </td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>1301</td>
-                        <td class='list-square'>매입전 취소 거래 </td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>1302</td>
-                        <td class='list-square'>당일 취소 거래</td>
-                    </tr> 
-                    <tr>
-                        <td class='list-square'>1401</td>
-                        <td class='list-square'>차액 정산 매입결과 미수신</td>
-                    </tr> 
-                    <tr>
-                        <td class='list-square'>9999</td>
-                        <td class='list-square'>기타오류 (PG사 문의) (ex. 중복 전송, 최종하위사업자번호 오류 등. ) </td>
-                    </tr>    
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <br>
-    <h3>1.5 진행 순서</h3>
+    <h3>1.4 진행 순서</h3>
     1. 차액 정산 진행 <br>
     2. 반기 단위로 직전 반기에 전송된 차액 정산 일반 매출 구간 사업자 중 환급 대상 사업자의 매출 내역을 환급 정산 요청 ( 헥토파이낸셜(자체처리) -> 카드사 ) <br>
     3. 환급 정산 지급 ( 별도의 결과 파일 제공 되지 않으며 정산 내역으로 확인 필요 )<br>
@@ -151,95 +90,6 @@ const welcome = () => {
             </table>
         </div>
     </div>
-    <br>
-    <h3>1.3 차액정산 결과 코드(웰컴페이먼츠 결과 코드)</h3>
-    오류코드 오류메시지<br>
-    <div class="v-table v-theme--light v-table--density-default text-no-wrap">
-        <div class="v-table__wrapper different-settle-menual">
-            <table>
-                <thead>
-                    <tr>
-                        <th class='list-square'>코드</th>
-                        <th class='list-square'>응답 메세지</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class='list-square'>01</td>
-                    <td class='list-square'>카드사별 구분값 오류(미존재 또는 불일치)</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>02</td>
-                    <td class='list-square'>매출금액 오류(원매출금액과 하위사업자 매출액 SUM의 불일치) </td>
-                </tr>
-                <tr>
-                    <td class='list-square'>03</td>
-                    <td class='list-square'>중복접수(기 처리된 내역을 전송)</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>04</td>
-                    <td class='list-square'>원매입 반송(원매출 미존재 또는 매출금액 오류 등) </td>
-                </tr>
-                <tr>
-                    <td class='list-square'>05</td>
-                    <td class='list-square'>매입취소구분 오류(원매출과 하위매출의 정상/취소 불일치)</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>06</td>
-                    <td class='list-square'>매입전송일자 오류</td>
-                </tr>         
-                <tr>
-                    <td class='list-square'>07</td>
-                    <td class='list-square'>승인일자 오류</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>08</td>
-                    <td class='list-square'>승인번호 오류(원승인번호에 해당하는 매출 미존재</td>
-                </tr> 
-                <tr>
-                    <td class='list-square'>09</td>
-                    <td class='list-square'>가맹점번호 오류1(가맹점번호가 SPACE이거나 미등록가맹점) </td>
-                </tr> 
-                <tr>
-                    <td class='list-square'>10</td>
-                    <td class='list-square'>가맹점번호 오류2(차액정산 가맹점 번호가 아님) </td>
-                </tr>          
-                <tr>
-                    <td class='list-square'>11</td>
-                    <td class='list-square'>카드번호 오류</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>12</td>
-                    <td class='list-square'>중간하위사업자 오류(전자금융업자 미해당사업자 등)</td>
-                </tr>      
-                <tr>
-                    <td class='list-square'>13</td>
-                    <td class='list-square'>차액정산 지연접수</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>14</td>
-                    <td class='list-square'>카드사별 구분값 정상건 반송<br>
-                    (A,B,C로 구성된 장바구니 거래에서 C의 카드사별 구분값이 오류인 경우 C는 01번 코드로 회신
-                    하나,<br>A,B는 카드사별 구분값이 정상임에도 C로 인해 반송되는 것이므로 14번 코드로 구별하여 
-                    회신) </td>
-                </tr>
-                <tr>
-                    <td class='list-square'>15</td>
-                    <td class='list-square'>매출이 전체 취소된 이후, +차액정산 접수시 반송<br>
-                    (반송조건 추가 사유 : -차액정산(취소) 접수가 지연 되는 케이스 막고자 함)</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>98</td>
-                    <td class='list-square'>롯데카드 기타 오류 중 기 승인/취소 완료된 거래</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>99</td>
-                    <td class='list-square'>기타</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 </div><br>`
 }
 
@@ -256,39 +106,6 @@ const danal = () => {
     Ex) 거래일자(D) : 2023년 01월 07일(토) <br>
     차액 정산 요청 파일 ( 가맹점 -> 다날 ) : 2023년 01월 08일(일) <br>
     차액 정산 결과 파일 ( 다날 -> 가맹점 ) : 2023년 01월 17일(화) <br>
-    <br>
-    <h3>1.2 차액정산 결과 코드(다날 결과 코드)</h3>
-    오류코드 오류메시지<br>
-    <div class="v-table v-theme--light v-table--density-default text-no-wrap">
-        <div class="v-table__wrapper different-settle-menual">
-            <table>
-                <thead>
-                    <tr>
-                        <th class='list-square'>코드</th>
-                        <th class='list-square'>응답 메세지</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class='list-square'>00</td>
-                        <td class='list-square'>정상</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>01</td>
-                        <td class='list-square'>매출정보 오류</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>02</td>
-                        <td class='list-square'>정보 오류 (사업자번호, 가맹점번호 불일치 등)</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>99</td>
-                        <td class='list-square'>기타 오류</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 </div>`
 }
 
@@ -305,67 +122,6 @@ const galaxiamoneytree = () => {
     Ex) 거래일자(D) : 2023년 01월 07일(토) <br>
     차액 정산 요청 파일 ( 가맹점 -> 갤럭시아머니트리 ) : 2023년 01월 08일(일) <br>
     차액 정산 결과 파일 ( 갤럭시아머니트리 -> 가맹점 ) : 2023년 01월 13일(금) <br>
-    <br>
-    <h3>1.2 차액정산 결과 코드(갤럭시아머니트리 결과 코드)</h3>
-    오류코드 오류메시지<br>
-    <div class="v-table v-theme--light v-table--density-default text-no-wrap">
-        <div class="v-table__wrapper different-settle-menual">
-            <table>
-                <thead>
-                    <tr>
-                        <th class='list-square'>코드</th>
-                        <th class='list-square'>응답 메세지</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class='list-square'>00</td>
-                        <td class='list-square'>정상</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>01</td>
-                        <td class='list-square'>승인취소 거래건</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>02</td>
-                        <td class='list-square'>매출금액 오류</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>03</td>
-                        <td class='list-square'>중복 접수</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>04</td>
-                        <td class='list-square'>원거래 매입 거절건</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>05</td>
-                        <td class='list-square'>매입취소구분 오류</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>06</td>
-                        <td class='list-square'>일반사업자</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>07</td>
-                        <td class='list-square'>차액정산 지연접수자</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>08</td>
-                        <td class='list-square'>원거래 없음</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>09</td>
-                        <td class='list-square'>차액정산 대상아님</td>
-                    </tr>
-                    <tr>
-                        <td class='list-square'>99</td>
-                        <td class='list-square'>기타 오류</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 </div>`
 }
 
@@ -441,7 +197,6 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
     if(getUserLevel() >= 35) {
         headers['pg_id'] = 'PG사'
         headers['ps_id'] = '구간'
-        headers['ps_fee'] = '구간 수수료'
         headers['mcht_section_code'] = '가맹점 구간'
         headers['settle_dt'] = '정산 예정일'
     }

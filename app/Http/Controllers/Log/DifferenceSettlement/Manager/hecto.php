@@ -93,8 +93,7 @@ class hecto extends DifferenceSettlementBase implements DifferenceSettlementInte
             $settle_amount  = $this->getNtypeField($data, 290, 15);
             $settle_dt = $this->getNtypeField($data, 305, 8);
             $settle_result_code = $this->getAtypeField($data, 313, 4);
-            $card_company_result_code = $this->getAtypeField($data, 317, 2);
-            // 정산금이 존재할 때만
+
             if($is_cancel)
             {
                 $supply_amount *= -1;
