@@ -118,6 +118,7 @@ class DifferenceSettlementHistoryController extends Controller
     public function retry(Request $request)
     {
         $this->difference_settlement_histories
+            ->whereNotIn('settle_result_code', ['00', '0000'])
             ->whereIn('id', $request->selected)
             ->update([
                 'settle_result_code' => '51',
