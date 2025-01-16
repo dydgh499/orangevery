@@ -9,7 +9,7 @@ use App\Http\Controllers\Manager\Service\HolidayController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\DangerTransController;
 use App\Http\Controllers\Log\RealtimeSendHistoryController;
-use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
+use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlementBatchController;
 use App\Http\Controllers\Manager\BatchUpdater\ApplyBookController;
 
 use App\Models\Log\DifferenceSettlementHistory;
@@ -51,11 +51,11 @@ class Kernel extends ConsoleKernel
 
             // 차액정산 처리
             $schedule->call(function () {
-                (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleRequest();
+                (new DifferenceSettlementBatchController())->differenceSettleRequest();
             })->dailyAt("00:30");
 
             $schedule->call(function () {
-                (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleResponse();
+                (new DifferenceSettlementBatchController())->differenceSettleResponse();
             })->dailyAt("09:00");
 
 

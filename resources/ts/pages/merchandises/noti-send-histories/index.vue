@@ -54,7 +54,7 @@ const getResponseBody = (body: string) => {
             </template>
             <template #index_extra_field>
                 
-                <VBtn prepend-icon="tabler-calculator" @click="batchRetry()" size="small" v-if="getUserLevel() >= 35">
+                <VBtn prepend-icon="gridicons:reply" @click="batchRetry()" size="small" v-if="getUserLevel() >= 35">
                     노티 재발송
                 </VBtn>
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.result_status" 

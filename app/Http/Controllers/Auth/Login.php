@@ -130,7 +130,7 @@ class Login
             {                
                 $result['user']->level = 10;
                 if(count($result['user']->shoppingMall) === 0)
-                    $result['user']->shopping_mall = ShoppingMallWindowInterface::renew($result['user']->id);
+                    $result['user']->shoppingMall = ShoppingMallWindowInterface::renew($result['user']->id);
             }
             if($result['user']->is_lock)
                 $result['result'] = AuthLoginCode::LOCK_ACCOUNT->value;

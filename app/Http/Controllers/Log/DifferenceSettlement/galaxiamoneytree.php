@@ -48,6 +48,7 @@ class galaxiamoneytree extends DifferenceSettlement implements DifferenceSettlem
             $req_date = $date->format('Ymd');
             $save_path = "/request/".$this->brand['rep_mid']."_REQUEST.".$req_date;
 
+            $full_histories = [];
             $total_amount = 0;
             $total_count  = 0;
             $full_record = $this->setStartRecord($req_date);
@@ -56,21 +57,24 @@ class galaxiamoneytree extends DifferenceSettlement implements DifferenceSettlem
             foreach($mids as $mid)
             {
                 $mcht_trans = $this->getMidMatchTransctions($trans);
-                if(count($mcht_trans) > 0)
+                if(empty($mid) === false)
                 {
-                    if(empty($mid) === false)
-                    {
-                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
-                        $full_record .= $data_records;
-                        $total_count += $count;    
-                        $total_amount += $amount;    
-                    }
+                    [$data_records, $count, $amount, $temp_histories] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
+                    
+                    $full_histories = array_merge($full_histories, $temp_histories);
+                    $full_record .= $data_records;
+                    $total_count += $count;    
+                    $total_amount += $amount;    
                 }
+                else
+                    $full_histories = array_merge($full_histories, $this->service->getMidEmptyHistoryObjects($mcht_trans));                
             }
             $full_record .= $this->setEndRecord($total_count, $total_amount);
-            return $this->upload($save_path, $full_record);
+            if($this->upload($save_path, $full_record))
+                return $this->setCreatedAt($full_histories);  
         }
-        return false;
+        return [];
+
     }
 
     public function response(Carbon $date)

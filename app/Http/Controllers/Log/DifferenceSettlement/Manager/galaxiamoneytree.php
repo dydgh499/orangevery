@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Log\DifferenceSettlement\Manager;
 
 use App\Http\Controllers\Log\DifferenceSettlement\Manager\DifferenceSettlementInterface;
+use App\Http\Controllers\Log\DifferenceSettlement\Manager\DifferenceSettlementBase;
 use App\Http\Traits\Log\DifferenceSettlement\FileRWTrait;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Carbon\Carbon;
 
-class galaxiamoneytree implements DifferenceSettlementInterface
+class galaxiamoneytree extends DifferenceSettlementBase implements DifferenceSettlementInterface
 {
     use FileRWTrait;
     public $mcht_cards = [
@@ -24,9 +25,10 @@ class galaxiamoneytree implements DifferenceSettlementInterface
     public function setDataRecord($trans, $brand_business_num, $mid)
     {
         $brand_business_num = str_replace('-', '', $brand_business_num);
-        $data_records = '';
-        $total_amount = 0;
-        $total_count = 0;
+        $data_histories = [];
+        $data_records   = '';
+        $total_amount   = 0;
+        $total_count    = 0;
         for ($i=0; $i < count($trans); $i++) 
         {
             $business_num = str_replace('-', '', $trans[$i]->business_num);
@@ -59,7 +61,10 @@ class galaxiamoneytree implements DifferenceSettlementInterface
 
                 $data_records .= $data_record."\n";
                 $total_count += 1;
+                array_push($data_histories, $this->getSettlementHistoryObejct($trans[$i]->id));
             }
+            else
+                array_push($data_histories, $this->getSettlementHistoryObejct($trans[$i]->id, '-100'));
         }
         return [$data_records, $total_count, $total_amount];
     }
@@ -79,7 +84,6 @@ class galaxiamoneytree implements DifferenceSettlementInterface
             $req_dt     = $this->getNtypeField($data, 3, 8);
             $add_field  = $this->getAtypeField($data, 147, 30);
             $mcht_section_code = $this->getAtypeField($data, 177, 1);
-
             $settle_amount  = $this->getNtypeField($data, 178, 15);
 
             $supply_amount  = round((int)$settle_amount/1.1);
@@ -87,45 +91,23 @@ class galaxiamoneytree implements DifferenceSettlementInterface
 
             $settle_dt = date('Ymd');
             $settle_result_code = $this->getAtypeField($data, 193, 2);
-            // 정산금이 존재할 때만
-            if($settle_amount > 0)
+
+            $record = $this->getSettlementResponseObejct($add_field, $settle_result_code, $this->getSettleMessage($settle_result_code), $mcht_section_code, $cur_date);
+            if($settle_result_code === '00')
             {
-                if($is_cancel)
-                {
-                    $supply_amount *= -1;
-                    $vat_amount *= -1;
-                    $settle_amount *= -1;
-                }
-    
-                $req_dt     = Carbon::createFromFormat('Ymd', (string)$req_dt)->format('Y-m-d');
-                $settle_dt  = Carbon::createFromFormat('Ymd', (string)$settle_dt)->format('Y-m-d');
-                if((int)$add_field != 0)
-                {
-                    $records[] = [
-                        'trans_id'   => $add_field,
-                        'settle_result_code'    => $settle_result_code,
-                        'settle_result_msg'     => $this->getSettleMessage($settle_result_code),
-                        'card_company_result_code'  => '',
-                        'card_company_result_msg'   => '',
-                        'mcht_section_code' => $mcht_section_code,
-                        'mcht_section_name'  => $this->getMchtSectionName($mcht_section_code),
-                        'req_dt'    => $req_dt,
-                        'settle_dt' => $settle_dt,
-                        'supply_amount' => $supply_amount,
-                        'vat_amount' => $vat_amount,
-                        'settle_amount' => $settle_amount,
-                        'created_at' => $cur_date,
-                        'updated_at' => $cur_date,
-                    ];
-                }
+                $record = array_merge(
+                    $record,
+                    $this->getSettlementResponseSuccess($settle_dt, $supply_amount, $vat_amount, $settle_amount)
+                );
             }
+            $records = $this->setSettlementResponseList($records, $record, 'galaxiamoneytree');
         }
         return $records;
     }
 
-    private function getSettleMessage($code)
+    public function getSettleMessage($code)
     {
-        $card_compnay_codes = [
+        $settle_codes = [
             '00' => '정상처리',
             '01' => '승인취소 거래건',
             '02' => '매출금액 오류',
@@ -137,8 +119,8 @@ class galaxiamoneytree implements DifferenceSettlementInterface
             '08' => '원거래 없음',
             '09' => '차액정산 대상아님',
             '99' => '기타',
-        ];            
-        return isset($card_compnay_codes[$code]) ? $card_compnay_codes[$code] : '알수없는 코드';
+        ];
+        return isset($settle_codes[$code]) ? $settle_codes[$code] : '알수없는 코드';
     }
 
     public function registerRequest($brand, $req_date, $mchts, $sub_business_regi_infos)

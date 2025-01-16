@@ -812,6 +812,7 @@ export interface UserPayInfo {
 export interface BasePayInfo extends UserPayInfo{
     pmod_id: number | null,
     amount: number,
+    delivery_type: number,
     user_agent: string,
     item_name: string,
     installment: number,

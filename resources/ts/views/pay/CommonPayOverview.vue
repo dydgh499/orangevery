@@ -30,7 +30,7 @@ const {
 } = inputFormater()
 
 props.common_info.installment = 0
-
+props.common_info.delivery_type = false
 const updateToken = (value : string) => {
     auth_token.value = value
     if(value.length > 10) {
@@ -79,6 +79,7 @@ watchEffect(() => {
     <VTextField v-model="props.common_info.addr" type="visible" name="addr" style="display: none;" />
     <VTextField v-model="props.common_info.detail_addr" type="visible" name="detail_addr" style="display: none;" />
     <VTextField v-model="props.common_info.note" type="visible" name="note" style="display: none;" />
+    
     <VCol style="padding: 0 12px;">
         <template v-if="params_mode === PayParamTypes.SHOP">
             <ProductOverview :common_info="props.common_info" :pay_module="props.pay_module"/>
@@ -149,8 +150,8 @@ watchEffect(() => {
             <slot name="bill_key"></slot> 
         </template>
         </CommonOverview>
-        <slot name="extra_info"></slot> 
-        <DeliveryOverview :user_pay_info="props.common_info" v-if="params_mode === PayParamTypes.SHOP"/>
+        <slot name="extra_info"></slot>
+        <DeliveryOverview :user_pay_info="props.common_info" v-if="params_mode === PayParamTypes.SHOP && props.common_info.delivery_type === true"/>
     </VCol>
     <br>
     <MobileVerification 
@@ -160,6 +161,16 @@ watchEffect(() => {
         :merchandise="props.merchandise"
     />
     <template v-else>
+        <VRow v-if="params_mode === PayParamTypes.SHOP">
+        <VDivider/>
+        <VCol cols="12" :md="12" class="mb-3">
+                <VCheckbox 
+                    v-model="props.common_info.delivery_type" class="check-label" 
+                    label="배송여부" style="align-items: end;" 
+                    :false-value=false :true-value=true
+                />
+            </VCol>
+        </VRow>
         <VCol cols="12" style="padding: 0;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <VBtn block type="submit">

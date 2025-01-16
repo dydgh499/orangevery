@@ -167,7 +167,8 @@ class NotiUrlController extends Controller
         $current = date('Y-m-d H:i:s');
         $datas = $request->data();
 
-        $noti_urls = $datas->map(function ($data) use($current) {
+        $noti_urls = $datas->map(function ($data) use($request, $current) {
+            $data['brand_id']   = $request->user()->brand_id;
             $data['created_at'] = $current;
             $data['updated_at'] = $current;
             return $data;

@@ -96,96 +96,8 @@ const hecto = () => {
             </table>
         </div>
     </div>
-    <h3>1.5 카드사 결과 코드</h3>
-    오류코드 오류메시지<br>
-    <div class="v-table v-theme--light v-table--density-default text-no-wrap">
-    <div class="v-table__wrapper different-settle-menual">
-        <table>
-            <thead>
-                <tr>
-                    <th class='list-square'>코드</th>
-                    <th class='list-square'>응답 메세지</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class='list-square'>00</td>
-                    <td class='list-square'>정상</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>01</td>
-                    <td class='list-square'>카드사별 구분값 오류(미존재 또는 불일치)</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>02</td>
-                    <td class='list-square'>매출금액 오류(원매출금액과 하위사업자 매출액 SUM의 불일치) </td>
-                </tr>
-                <tr>
-                    <td class='list-square'>03</td>
-                    <td class='list-square'>중복접수(기 처리된 내역을 전송)</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>04</td>
-                    <td class='list-square'>원매입 반송(원매출 미존재 또는 매출금액 오류 등) </td>
-                </tr>
-                <tr>
-                    <td class='list-square'>05</td>
-                    <td class='list-square'>매입취소구분 오류(원매출과 하위매출의 정상/취소 불일치)</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>06</td>
-                    <td class='list-square'>매입전송일자 오류</td>
-                </tr>         
-                <tr>
-                    <td class='list-square'>07</td>
-                    <td class='list-square'>승인일자 오류</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>08</td>
-                    <td class='list-square'>승인번호 오류(원승인번호에 해당하는 매출 미존재</td>
-                </tr> 
-                <tr>
-                    <td class='list-square'>09</td>
-                    <td class='list-square'>가맹점번호 오류1(가맹점번호가 SPACE이거나 미등록가맹점) </td>
-                </tr> 
-                <tr>
-                    <td class='list-square'>10</td>
-                    <td class='list-square'>가맹점번호 오류2(차액정산 가맹점 번호가 아님) </td>
-                </tr>          
-                <tr>
-                    <td class='list-square'>11</td>
-                    <td class='list-square'>카드번호 오류</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>12</td>
-                    <td class='list-square'>중간하위사업자 오류(전자금융업자 미해당사업자 등)</td>
-                </tr>      
-                <tr>
-                    <td class='list-square'>13</td>
-                    <td class='list-square'>차액정산 지연접수</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>14</td>
-                    <td class='list-square'>카드사별 구분값 정상건 반송<br>
-                    (A,B,C로 구성된 장바구니 거래에서 C의 카드사별 구분값이 오류인 경우 C는 01번 코드로 회신
-                    하나,<br>A,B는 카드사별 구분값이 정상임에도 C로 인해 반송되는 것이므로 14번 코드로 구별하여 
-                    회신)</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>15</td>
-                    <td class='list-square'>매출이 전체 취소된 이후, +차액정산 접수시 반송<br>
-                    (반송조건 추가 사유 : -차액정산(취소) 접수가 지연 되는 케이스 막고자 함)</td>
-                </tr>
-                <tr>
-                    <td class='list-square'>99</td>
-                    <td class='list-square'>기타</td>
-                </tr>
-            </tbody>
-        </table>
-        </div>
-    </div>
     <br>
-    <h3>1.6 진행 순서</h3>
+    <h3>1.5 진행 순서</h3>
     1. 차액 정산 진행 <br>
     2. 반기 단위로 직전 반기에 전송된 차액 정산 일반 매출 구간 사업자 중 환급 대상 사업자의 매출 내역을 환급 정산 요청 ( 헥토파이낸셜(자체처리) -> 카드사 ) <br>
     3. 환급 정산 지급 ( 별도의 결과 파일 제공 되지 않으며 정산 내역으로 확인 필요 )<br>
@@ -473,13 +385,56 @@ export const getDifferenceSettleMenual = (different_settlement_infos: DifferentS
     return html
 }
 
+export const getDifferenceSettlementResultCode = (settle_result_code: string) => {
+    if(settle_result_code === '00' || settle_result_code === '0000')
+        return 'success'
+    else if(settle_result_code === '50')
+        return 'primary'
+    else if(settle_result_code === '51')
+        return 'default'
+    else
+        return 'error';
+}
+
+export const getDifferenceSettlemenMchtCode = (mcht_settle_type: string) => {
+    if(mcht_settle_type === '0')
+        return 'success'
+    else if(mcht_settle_type === '1')
+        return 'info'
+    else if(mcht_settle_type === '2')
+        return 'primary'
+    else if(mcht_settle_type === '3')
+        return 'error'
+    else if(mcht_settle_type === '4')
+        return 'error'
+    else
+        return 'default';
+}
+
+export const status_codes = [
+    {id: 0, title: '전체'},
+    {id: 1, title: '성공'},
+    {id: 2, title: '모든에러'},
+    {id: 50, title: '업로드 완료'},
+    {id: 51, title: '재업로드'},
+    {id: -101, title: 'MID 누락'},
+    {id: -100, title: '가맹점 사업자번호 오기입'},
+]
+
+export const mcht_settle_types = [
+    {id: '0', title: '영세'},
+    {id: '1', title: '중소1'},
+    {id: '2', title: '중소2'},
+    {id: '3', title: '중소3'},
+    {id: '4', title: '일반'},
+]
+
 export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchStore', () => {    
     const store = Searcher('transactions/settle-histories/difference')
     const head  = Header('transactions/settle-histories/difference', '차액정산 이력')
     const headers: Record<string, string> = {
         'id': 'NO.',
         'settle_result_msg': '정산 결과',
-        'card_company_result_msg': '카드사 결과',
         'module_type': '거래 타입',
     }
     const { pgs, pss, terminals } = useStore()
@@ -487,7 +442,7 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
         headers['pg_id'] = 'PG사'
         headers['ps_id'] = '구간'
         headers['ps_fee'] = '구간 수수료'
-        headers['mcht_section_name'] = '가맹점 구간'
+        headers['mcht_section_code'] = '가맹점 구간'
         headers['settle_dt'] = '정산 예정일'
     }
     headers['mcht_name'] = '가맹점'
@@ -501,7 +456,7 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
     headers['installment'] = '할부'
     if(getUserLevel() >= 13) {
         headers['mid'] = 'MID'
-        headers['tid'] = 'TID'    
+        headers['tid'] = 'TID'
     }
     if(getUserLevel() >= 35) {
         headers['custom_id'] = '커스텀필터'
@@ -510,17 +465,6 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
     headers['appr_num'] = '승인번호'    
     headers['issuer'] = '발급사'
     headers['acquirer'] = '매입사'
-
-    headers['card_num'] = '카드번호'
-    headers['buyer_name'] = '구매자명'
-    headers['buyer_phone'] = '구매자 연락처'
-    
-    headers['item_name'] = '상품명'
-    if(getUserLevel() >= 13)
-    {
-        headers['ord_num'] = '주문번호'
-        headers['trx_id'] = '거래번호'
-    }    
     headers['created_at'] = '생성시간'
     headers['updated_at'] = '업데이트시간'
     

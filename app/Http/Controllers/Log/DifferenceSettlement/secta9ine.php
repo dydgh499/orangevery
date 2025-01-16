@@ -52,6 +52,7 @@ class secta9ine extends DifferenceSettlement implements DifferenceSettlementInte
             $file_name = $brand_business_num."_REQUEST.$file_date";
             $save_path = "/send/$file_name";
 
+            $full_histories = [];
             $total_amount = 0;
             $total_count  = 0;
             $full_record = $this->setStartRecord($req_date);
@@ -60,22 +61,24 @@ class secta9ine extends DifferenceSettlement implements DifferenceSettlementInte
             foreach($mids as $mid)
             {
                 $mcht_trans = $this->getMidMatchTransctions($trans, $mid);
-                if(count($mcht_trans) > 0)
+                if(empty($mid) === false)
                 {
-                    if(empty($mid) === false)
-                    {
-                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
-                        $full_record .= $data_records;
-                        $total_count += ($count + 2);   //header, total records
-                        $total_amount += $amount;    
-                    }
+                    [$data_records, $count, $amount, $temp_histories] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
+
+                    $full_histories = array_merge($full_histories, $temp_histories);
+                    $full_record .= $data_records;
+                    $total_count += ($count + 2);   //header, total records
+                    $total_amount += $amount;    
                 }
+                else
+                    $full_histories = array_merge($full_histories, $this->service->getMidEmptyHistoryObjects($mcht_trans));
             }
             $total_count += 2;  // start, end records
             $full_record .= $this->setEndRecord($total_count, $total_amount);
-            return $this->upload($save_path, $full_record);
+            if($this->upload($save_path, $full_record))
+                return $this->setCreatedAt($full_histories); 
         }
-        return false;  
+        return [];
     }
 
     public function response(Carbon $date)
@@ -84,9 +87,9 @@ class secta9ine extends DifferenceSettlement implements DifferenceSettlementInte
         $req_date = $date->copy()->format('Ymd');
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);
         $file_name = $brand_business_num."RECEIVE.$file_date";
-        $save_path = "/recv/$file_name";
+        $res_path = "/recv/$file_name";
 
-        return $this->_response($save_path, $req_date);
+        return $this->_response($res_path, $req_date);
     }
 
     public function registerRequest(Carbon $date, $mchts, $sub_business_regi_infos)

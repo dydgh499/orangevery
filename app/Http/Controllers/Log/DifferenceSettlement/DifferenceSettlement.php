@@ -40,18 +40,24 @@ class DifferenceSettlement
     protected function connectSFTPServer($service_name, $type)
     {        
         if(env('APP_ENV') === 'local')
-            return [null, true];
-        try
         {
-            $connection = Storage::disk($service_name);
-            $connection->directories(); //connection check
+            $connection = Storage::disk('public');
             $connection_stat = true;
         }
-        catch(\Throwable $e)
+        else
         {
-            $connection = null;
-            $connection_stat = false;
-            logging(['type'=>$type], $this->service_name."\t $type \t"."difference-settlement-connection (X)");
+            try
+            {
+                $connection = Storage::disk($service_name);
+                $connection->directories(); //connection check
+                $connection_stat = true;
+            }
+            catch(\Throwable $e)
+            {
+                $connection = null;
+                $connection_stat = false;
+                logging(['type'=>$type], $this->service_name."\t $type \t"."difference-settlement-connection (X)");
+            }    
         }
         return [$connection, $connection_stat];
     }
@@ -66,6 +72,18 @@ class DifferenceSettlement
         })->values();
     }
 
+    public function setCreatedAt($data_histories)
+    {
+        $cur_at = date("Y-m-d H:i:s");
+        for ($i=0; $i < count($data_histories) ; $i++) 
+        { 
+            $data_histories[$i]['created_at'] = $cur_at;
+            $data_histories[$i]['updated_at'] = $cur_at;
+
+        }
+        return $data_histories;
+    }
+    
     protected function upload($save_path, $full_record)
     {
         if($this->main_connection_stat)
@@ -83,6 +101,22 @@ class DifferenceSettlement
         }
         else
             return false;
+    }
+
+    
+
+    public function setGroupbySettleResultCode($records)
+    {
+        $grouped_records = [];
+        foreach ($records as $record) 
+        {
+            $settle_result_code = $record['settle_result_code'];
+            if (!isset($grouped_records[$settle_result_code]))
+                $grouped_records[$settle_result_code] = [];
+
+            $grouped_records[$settle_result_code][] = $record;
+        }
+        return $grouped_records;
     }
 
     protected function _response($res_path, $req_date)
@@ -105,7 +139,7 @@ class DifferenceSettlement
 
             $datas = $contents ? $this->service->getDataRecord($contents) : [];
             logging(['date'=>$req_date, 'data-count'=>count($datas)], $this->service_name."\t $connection_type \t"."difference-settlement-response (O)");
-            return $datas;    
+            return $this->setGroupbySettleResultCode($datas);
         }
         catch(\Throwable $e)
         {

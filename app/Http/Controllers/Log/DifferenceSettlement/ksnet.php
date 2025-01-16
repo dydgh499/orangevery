@@ -25,25 +25,27 @@ class ksnet extends DifferenceSettlement implements DifferenceSettlementInterfac
     public function request(Carbon $date, $trans)
     {
         $file_name = $date->format('Ymd');
-
         $mids = $trans->pluck($this->PMID_MODE ? 'p_mid' : 'mid')->unique()->all();
+        $full_histories = [];
         foreach($mids as $mid)
         {
             $full_record = "";
             $save_path = "/ksnet/REQUEST-$file_name-$mid.csv";
             $mcht_trans = $this->getMidMatchTransctions($trans, $mid);
-            if(count($mcht_trans) > 0)
+            if(empty($mid) === false)
             {
-                if(empty($mid) === false)
-                {
-                    [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
-                    $full_record .= $data_records;
-                }
+                [$data_records, $count, $amount, $temp_histories] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
+                $full_record .= $data_records;
+
+                $full_histories = array_merge($full_histories, $temp_histories);
                 if(strlen($full_record) > 0)
                     $this->service->moduleUpload($save_path, $mid, $full_record);
             }
+            else
+                $full_histories = array_merge($full_histories, $this->service->getMidEmptyHistoryObjects($mcht_trans));
         }
-        return true;
+
+        return $this->setCreatedAt($full_histories);  
     }
 
     public function response(Carbon $date)

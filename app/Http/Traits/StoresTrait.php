@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\DB;
 
 trait StoresTrait
 {
-    public function manyInsert($orm, $datas)
+    public function getPieces($datas, $peice_size=900)
     {
         $pieces = [];
         $piece = [];
         for($i=0; $i<count($datas); $i++)
         {
             array_push($piece, $datas[$i]);
-            if(count($piece)%900 == 0)
+            if(count($piece) % $peice_size == 0)
             {
                 array_push($pieces, $piece);
                 $piece = [];
@@ -22,7 +22,12 @@ trait StoresTrait
         }
         if(count($piece) > 0)
             array_push($pieces, $piece);
+        return $pieces;
+    }
 
+    public function manyInsert($orm, $datas)
+    {
+        $pieces = $this->getPieces($datas);
         return DB::transaction(function () use($orm, $pieces) {
             for($i=0; $i<count($pieces); $i++)
             {

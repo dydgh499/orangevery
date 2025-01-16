@@ -236,10 +236,10 @@ watchEffect(() => {
                                     <h4 class="pt-3">노티 재발송</h4>
                                     <br>
                                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                                        <VBtn prepend-icon="tabler-calculator" @click="notiBatchSendByTrans(`batch-retry`, selected_idxs, emits)" size="small">
+                                        <VBtn prepend-icon="gridicons:reply" @click="notiBatchSendByTrans(`batch-retry`, selected_idxs, emits)" size="small">
                                             재발송
                                         </VBtn>
-                                        <VBtn prepend-icon="tabler-calculator" @click="notiBatchSendByTrans(`batch-self-retry`, selected_idxs, emits)" v-if="getUserLevel() >= 50" size="small" color="info">
+                                        <VBtn prepend-icon="gridicons:reply" @click="notiBatchSendByTrans(`batch-self-retry`, selected_idxs, emits)" v-if="getUserLevel() >= 50" size="small" color="info">
                                             개발사 재발송
                                         </VBtn>
                                     </div>

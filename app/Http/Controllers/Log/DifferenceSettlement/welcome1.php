@@ -60,6 +60,7 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
             $brand_business_num = str_replace('-', '', $this->brand['business_num']);  // ?
             $save_path = "/upload/dfsttm/send/daff_welcome_".$brand_business_num."_".$req_date."_req";        
 
+            $full_histories = [];
             $total_amount = 0;
             $total_count  = 0;
             $full_record = $this->setStartRecord($req_date);
@@ -68,31 +69,31 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
             foreach($mids as $mid)
             {
                 $mcht_trans = $this->getMidMatchTransctions($trans, $mid);
-                if(count($mcht_trans) > 0)
+                if(empty($mid) === false)
                 {
-                    if(empty($mid) === false)
-                    {
-                        $header = $this->setHeaderRecord($mid);
-                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
-                        $total  = $this->setTotalRecord($count, $amount);
-    
-                        $full_record .= $header.$data_records.$total;
-                        $total_count += $count;    
-                        $total_amount += $amount;
-                    }
+                    $header = $this->setHeaderRecord($mid);
+                    [$data_records, $count, $amount, $temp_histories] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
+                    $total  = $this->setTotalRecord($count, $amount);
+
+                    $full_histories = array_merge($full_histories, $temp_histories);
+                    $full_record .= $header.$data_records.$total;
+                    $total_count += $count;    
+                    $total_amount += $amount;
                 }
+                else
+                    $full_histories = array_merge($full_histories, $this->service->getMidEmptyHistoryObjects($mcht_trans));
             }
             $full_record .= $this->setEndRecord($total_count, $total_amount);
-            return $this->upload($save_path, $full_record);
+            if($this->upload($save_path, $full_record))
+                return $this->setCreatedAt($full_histories);
         }
-        return false;
+        return [];
     }
 
     public function response(Carbon $date)
     {
         $req_date = $date->copy()->format('Ymd');
-        // DANALto업체명_differ.YYYYMM
-        $brand_business_num = str_replace('-', '', $this->brand['business_num']);  // ?
+        $brand_business_num = str_replace('-', '', $this->brand['business_num']);
         $res_path = "/upload/dfsttm/send/daff_welcome_".$brand_business_num."_".$req_date."sply";
         return $this->_response($res_path, $req_date);
     }
@@ -100,8 +101,7 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
     public function registerRequest(Carbon $date, $mchts, $sub_business_regi_infos)
     {
         $req_date = $date->copy()->format('Ymd');
-        // DANALto업체명_differ.YYYYMM
-        $brand_business_num = str_replace('-', '', $this->brand['business_num']);  // ?
+        $brand_business_num = str_replace('-', '', $this->brand['business_num']);
         $save_path = "/upload/dfsttm/send/merc_welcome_".$brand_business_num."_".$req_date."req";
         return $this->_registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos);
     }

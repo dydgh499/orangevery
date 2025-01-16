@@ -56,7 +56,8 @@ class hecto extends DifferenceSettlement implements DifferenceSettlementInterfac
         {
             $req_date = $date->format('Ymd');
             $save_path = "/edi_req/ST_PRFT_REQ_".$req_date;
-            
+
+            $full_histories = [];
             $total_amount = 0;
             $total_count  = 0;
             $full_record = $this->setStartRecord($req_date);
@@ -65,19 +66,19 @@ class hecto extends DifferenceSettlement implements DifferenceSettlementInterfac
             foreach($mids as $mid)
             {
                 $mcht_trans = $this->getMidMatchTransctions($trans, $mid);
-                if(count($mcht_trans) > 0)
+                if(empty($mid) === false)
                 {
-                    if(empty($mid) === false)
-                    {
-                        $header = $this->setHeaderRecord($mid);
-                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
-                        $total  = $this->setTotalRecord($count, $amount);
-    
-                        $full_record .= $header.$data_records.$total;
-                        $total_count += $count;    
-                        $total_amount += $amount;
-                    }
+                    $header = $this->setHeaderRecord($mid);
+                    [$data_records, $count, $amount, $temp_histories] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
+                    $total  = $this->setTotalRecord($count, $amount);
+
+                    $full_histories = array_merge($full_histories, $temp_histories);
+                    $full_record .= $header.$data_records.$total;
+                    $total_count += $count;    
+                    $total_amount += $amount;
                 }
+                else
+                    $full_histories = array_merge($full_histories, $this->service->getMidEmptyHistoryObjects($mcht_trans));
             }
             $full_record .= $this->setEndRecord($total_count, $total_amount);
             if($this->dr_connection_stat)
@@ -87,9 +88,10 @@ class hecto extends DifferenceSettlement implements DifferenceSettlementInterfac
                 else
                     logging(['save_path'=>$save_path], $this->service_name."\t DR \t"."difference-settlement-request (X)");
             }
-            return $this->upload($save_path, $full_record);
+            if($this->upload($save_path, $full_record))
+                return $this->setCreatedAt(array_values($full_histories));
         }
-        return false;  
+        return [];
     }
 
     public function response(Carbon $date)

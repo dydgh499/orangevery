@@ -41,10 +41,12 @@ Route::prefix('transactions')->group(function() {
                 Route::post('single-deposit-cancel-job-reservation', [BatchUpdateTransactionController::class, 'singleDepositCancelJobReservation']);
             });
         });
-    
+
         Route::prefix('settle-histories')->group(function() {
             Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
             Route::get('difference/chart', [DifferenceSettlementHistoryController::class, 'chart']);
+            Route::post('difference/retry', [DifferenceSettlementHistoryController::class, 'retry']);
+
             Route::apiResource('collect-withdraws', CollectWithdrawHistoryController::class);    
             Route::middleware(['is.edit.able'])->group(function() {
                 Route::post('merchandises/batch', [MchtSettleHistoryController::class, 'batch']);

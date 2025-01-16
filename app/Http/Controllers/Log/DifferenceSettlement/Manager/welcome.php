@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Log\DifferenceSettlement\Manager;
 
 use App\Models\Transaction;
 use App\Http\Controllers\Log\DifferenceSettlement\Manager\DifferenceSettlementInterface;
+use App\Http\Controllers\Log\DifferenceSettlement\Manager\DifferenceSettlementBase;
 use App\Http\Traits\Log\DifferenceSettlement\FileRWTrait;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Carbon\Carbon;
 
-class welcome1 implements DifferenceSettlementInterface
+class welcome1 extends DifferenceSettlementBase implements DifferenceSettlementInterface
 {
     use FileRWTrait;
     public $mcht_cards = [
@@ -26,9 +27,10 @@ class welcome1 implements DifferenceSettlementInterface
     public function setDataRecord($trans, $brand_business_num, $mid)
     {
         $brand_business_num = str_replace('-', '', $brand_business_num);
-        $data_records = '';
-        $total_amount = 0;
-        $total_count = 0;
+        $data_histories = [];
+        $data_records   = '';
+        $total_amount   = 0;
+        $total_count    = 0;
         for ($i=0; $i < count($trans); $i++) 
         { 
             $business_num = str_replace('-', '', $trans[$i]->business_num);
@@ -62,31 +64,18 @@ class welcome1 implements DifferenceSettlementInterface
 
                 $data_records .= $data_record."\n";
                 $total_count += 1;
+                array_push($data_histories, $this->getSettlementHistoryObejct($trans[$i]->id));
             }
-        }
-        return [$data_records, $total_count, $total_amount];
-    }
-
-    private function replaceTransId($records)
-    {
-        $trx_ids = array_column($records, 'trans_id');
-        $trans = Transaction::whereIn('trx_id', $trx_ids)->get(['id', 'trx_id'])->toArray();
-        
-        for ($i=0; $i < count($records); $i++) 
-        { 
-            $idx = array_search($records[$i]['trans_id'], array_column($trans, 'trx_id'));
-            if($idx !== false)
-                $records[$i]['trans_id'] = $trans[$idx]['id'];
             else
-                $records[$i]['trans_id'] = null;
+                array_push($data_histories, $this->getSettlementHistoryObejct($trans[$i]->id, '-100'));
         }
-        return $records;
+        return [$data_records, $total_count, $total_amount, $data_histories];
     }
 
     public function getDataRecord($contents)
     {
-        $records = [];
-        $cur_date = date('Y-m-d H:i:s');
+        $records    = [];
+        $cur_date   = date('Y-m-d H:i:s');
         $lines = explode("\n", $contents);
         $datas = array_values(array_filter($lines, function($line) {
             return substr($line, 0, 2) === DifferenceSettleHectoRecordType::DATA->value;
@@ -103,64 +92,40 @@ class welcome1 implements DifferenceSettlementInterface
             $settle_amount  = $supply_amount + $vat_amount;
             $settle_dt = $this->getNtypeField($data, 134, 8);
             $settle_result_code = $this->getAtypeField($data, 142, 2);
-            // 정산금이 존재할 때만
-            if($supply_amount > 0)
-            {
-                if($is_cancel)
-                {
-                    $supply_amount *= -1;
-                    $vat_amount *= -1;
-                    $settle_amount *= -1;
-                }
-    
-                $req_dt     = Carbon::createFromFormat('Ymd', (string)$req_dt)->format('Y-m-d');
-                $settle_dt  = Carbon::createFromFormat('Ymd', (string)$settle_dt)->format('Y-m-d');
-                if($settle_result_code === '00')
-                {   // 웰컴 2차는 예약필드가 없음
-                    $records[] = [
-                        'trans_id'   => $trx_id,
-                        'settle_result_code'    => $settle_result_code,
-                        'settle_result_msg'     => $this->getSettleMessage($settle_result_code),
-                        'card_company_result_code'  => '',
-                        'card_company_result_msg'   => '',
-                        'mcht_section_code' => $mcht_section_code,
-                        'mcht_section_name'  => $this->getMchtSectionName($mcht_section_code),
-                        'req_dt'    => null,
-                        'settle_dt' => $settle_dt,
-                        'supply_amount' => $supply_amount,
-                        'vat_amount' => $vat_amount,
-                        'settle_amount' => $settle_amount,
-                        'created_at' => $cur_date,
-                        'updated_at' => $cur_date,
-                    ];
-                }
-            }
-        }
 
-        $records = $this->replaceTransId($records);
-        return $records;
+            $record = $this->getSettlementResponseObejct($trx_id, $settle_result_code, $this->getSettleMessage($settle_result_code), $mcht_section_code, $cur_date);
+            if($settle_result_code === '00')
+            {
+                $record = array_merge(
+                    $record,
+                    $this->getSettlementResponseSuccess($settle_dt, $supply_amount, $vat_amount, $settle_amount)
+                );
+            }
+            $records = $this->setSettlementResponseList($records, $record, 'welcome');
+        }
+        return $this->replaceTransId($records);
     }
 
-    private function getSettleMessage($code)
+    public function getSettleMessage($code)
     {
-        $card_compnay_codes = [
+        $settle_codes = [
             '00' => '정상',
-            '01' => '카드사별 구분값 오류(미존재 또는 불일치)',
-            '02' => '매출금액 오류(원매출금액과 하위사업자 매출액 SUM의 불일치)',
-            '03' => '중복접수(기 처리된 내역을 전송)',
-            '04' => '원매입 반송(원매출 미존재 또는 매출금액 오류 등)',
-            '05' => '매입취소구분 오류(원매출과 하위매출의 정상/취소 불일치)',
+            '01' => '카드사별 구분값 오류', // (미존재 또는 불일치)
+            '02' => '매출금액 오류',    // (원매출금액과 하위사업자 매출액 SUM의 불일치)
+            '03' => '중복접수',         // (기 처리된 내역을 전송)
+            '04' => '원매입 반송',      // (원매출 미존재 또는 매출금액 오류 등)
+            '05' => '매입취소구분 오류', // (원매출과 하위매출의 정상/취소 불일치)
             '06' => '매입전송일자 오류',
             '07' => '승인일자 오류',
-            '08' => '승인번호 오류(원승인번호에 해당하는 매출 미존재)',
-            '09' => '가맹점번호 오류1(가맹점번호가 SPACE이거나 미등록가맹점)',
-            '10' => '가맹점번호 오류2(차액정산 가맹점 번호가 아님)',
+            '08' => '승인번호 오류',    // (원승인번호에 해당하는 매출 미존재)
+            '09' => '가맹점번호 오류1', // (가맹점번호가 SPACE이거나 미등록가맹점)
+            '10' => '가맹점번호 오류2',
             '11' => '카드번호 오류',
-            '12' => '중간하위사업자 오류(전자금융업자 미해당사업자 등)',
+            '12' => '중간하위사업자 오류',  // (전자금융업자 미해당사업자 등)
             '13' => '차액정산 지연접수',
-            '14' => '카드사별 구분값 정상건 반송 (A,B,C로 구성된 장바구니 거래에서 C의 카드사별 구분값이 오류인 경우 C는 01번 코드로 회신하나, A,B는 카드사별 구분값이 정상임에도 C로 인해 반송되는 것이므로 14번 코드로 구별하여 회신)',
+            '14' => '카드사별 구분값 정상건 반송', // (A,B,C로 구성된 장바구니 거래에서 C의 카드사별 구분값이 오류인 경우 C는 01번 코드로 회신하나, A,B는 카드사별 구분값이 정상임에도 C로 인해 반송되는 것이므로 14번 코드로 구별하여 회신)
             '99' => '기타',
-            'A1' => '매입원장에 데이터 없음(acqu_dt, state_cd, tid 확인 필요)',
+            'A1' => '매입원장에 데이터 없음',   // (acqu_dt, state_cd, tid 확인 필요)
             'A2' => '미매입 거래',
             'A3' => '매입 요청처리중 거래',
             'A4' => '매입 반송 거래',
@@ -168,7 +133,26 @@ class welcome1 implements DifferenceSettlementInterface
             'A6' => '보류 해제 거래',
             'A9' => '기타오류',
         ];
-        return isset($card_compnay_codes[$code]) ? $card_compnay_codes[$code] : '알수없는 코드';
+        return isset($settle_codes[$code]) ? $settle_codes[$code] : '알수없는 코드';
+    }
+
+    private function replaceTransId($records)
+    {
+        if(count($records))
+        {
+            $trx_ids = array_column($records, 'trans_id');
+            $trans = Transaction::whereIn('trx_id', $trx_ids)->get(['id', 'trx_id'])->toArray();
+            
+            for ($i=0; $i < count($records); $i++) 
+            { 
+                $idx = array_search($records[$i]['trans_id'], array_column($trans, 'trx_id'));
+                if($idx !== false)
+                    $records[$i]['trans_id'] = $trans[$idx]['id'];
+                else
+                    $records[$i]['trans_id'] = null;
+            }    
+        }
+        return $records;
     }
 
     public function registerRequest($brand, $req_date, $mchts, $sub_business_regi_infos)

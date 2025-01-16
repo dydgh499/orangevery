@@ -64,6 +64,7 @@ class nicepay extends DifferenceSettlement implements DifferenceSettlementInterf
             $file_name = $file_date."_MD_".$brand_business_num.".00";
             $save_path = "/EDI_MARGIN/$file_name";
 
+            $full_histories = [];
             $total_amount = 0;
             $total_count  = 0;
             $full_record = $this->setStartRecord($req_date);
@@ -72,25 +73,26 @@ class nicepay extends DifferenceSettlement implements DifferenceSettlementInterf
             foreach($mids as $mid)
             {
                 $mcht_trans = $this->getMidMatchTransctions($trans, $mid);
-                if(count($mcht_trans) > 0)
+                if(empty($mid) === false)
                 {
-                    if(empty($mid) === false)
-                    {
-                        $header = $this->setHeaderRecord($mid);
-                        [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
-                        $total  = $this->setTotalRecord($count, $amount);
-        
-                        $full_record .= $header.$data_records.$total;
-                        $total_count += ($count + 2);   //header, total records
-                        $total_amount += $amount;    
-                    }
+                    $header = $this->setHeaderRecord($mid);
+                    [$data_records, $count, $amount, $temp_histories] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
+                    $total  = $this->setTotalRecord($count, $amount);
+
+                    $full_histories = array_merge($full_histories, $temp_histories);
+                    $full_record .= $header.$data_records.$total;
+                    $total_count += ($count + 2);   //header, total records
+                    $total_amount += $amount;    
                 }
+                else
+                    $full_histories = array_merge($full_histories, $this->service->getMidEmptyHistoryObjects($mcht_trans));
             }
             $total_count += 2;  // start, end records
             $full_record .= $this->setEndRecord($total_count, $total_amount);
-            return $this->upload($save_path, $full_record);
+            if($this->upload($save_path, $full_record))
+                return $this->setCreatedAt($full_histories); 
         }
-        return false;  
+        return [];
     }
 
     public function response(Carbon $date)
