@@ -31,7 +31,7 @@ class nicepay extends DifferenceSettlementBase implements DifferenceSettlementIn
         $total_count    = 0;
         for ($i=0; $i < count($trans); $i++) 
         { 
-            $business_num = str_replace('-', '', $trans[$i]->business_num);
+            $business_num = trim(str_replace('-', '', $trans[$i]->business_num));
             if($business_num)
             {
                 $total_amount += $trans[$i]->amount;

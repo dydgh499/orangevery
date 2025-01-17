@@ -31,7 +31,7 @@ class galaxiamoneytree extends DifferenceSettlementBase implements DifferenceSet
         $total_count    = 0;
         for ($i=0; $i < count($trans); $i++) 
         {
-            $business_num = str_replace('-', '', $trans[$i]->business_num);
+            $business_num = trim(str_replace('-', '', $trans[$i]->business_num));
             if($business_num)
             {
                 $appr_type  = $trans[$i]->is_cancel ? "1" : "0";

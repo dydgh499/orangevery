@@ -148,7 +148,7 @@ class ksnet extends DifferenceSettlementBase implements DifferenceSettlementInte
         $total_count    = 0;
         for ($i=0; $i < count($trans); $i++) 
         { 
-            $business_num = str_replace('-', '', $trans[$i]->business_num);
+            $business_num = trim(str_replace('-', '', $trans[$i]->business_num));
             if($business_num)
             {
                 $amount = abs($trans[$i]->amount);
