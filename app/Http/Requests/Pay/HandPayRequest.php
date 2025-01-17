@@ -32,11 +32,11 @@ class HandPayRequest extends FormRequest
     {
         $sub = [
             'pmod_id' => 'required|integer',
-            'yymm' => 'required|integer',
+            'yymm' => 'required',
             'card_num' => 'required|string',
             'buyer_name' => 'required|string',
             'buyer_phone' => 'required|string',
-            'installment' => 'required|integer',
+            'installment' => 'required',
             'amount' => 'required|string',
             'ord_num'   => 'required|string',
             'item_name' => 'required|string',

@@ -12,7 +12,6 @@ use App\Http\Controllers\Log\RealtimeSendHistoryController;
 use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlementBatchController;
 use App\Http\Controllers\Manager\BatchUpdater\ApplyBookController;
 
-use App\Models\Log\DifferenceSettlementHistory;
 use App\Models\Log\MchtFeeChangeHistory;
 use App\Models\Log\RealtimeSendHistory;
 use App\Models\Log\SfFeeChangeHistory;
@@ -57,8 +56,6 @@ class Kernel extends ConsoleKernel
             $schedule->call(function () {
                 (new DifferenceSettlementBatchController())->differenceSettleResponse();
             })->dailyAt("09:00");
-
-
 
             $schedule->command('sanctum:prune-expired --hours=35')->daily();
         }
