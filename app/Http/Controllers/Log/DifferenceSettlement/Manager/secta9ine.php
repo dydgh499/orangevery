@@ -26,7 +26,7 @@ class secta9ine extends DifferenceSettlementBase implements DifferenceSettlement
 
     public function setDataRecord($trans, $brand_business_num, $mid)
     {
-        $brand_business_num = str_replace('-', '', $brand_business_num);
+        $brand_business_num = trim(str_replace('-', '', $brand_business_num));
         $data_histories = [];
         $data_records   = '';
         $total_amount   = 0;
