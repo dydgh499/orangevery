@@ -110,6 +110,7 @@ class DifferenceSettlementBatchController extends Controller
             $partial_results = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
                 ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
                 ->whereIn('transactions.id', $chunk)
+                ->where('payment_modules.use_different_settlement', 1)
                 ->get([
                     'transactions.id', 'transactions.ord_num', 
                     'transactions.is_cancel', 'transactions.cxl_seq', 
@@ -139,7 +140,7 @@ class DifferenceSettlementBatchController extends Controller
 
         foreach($brands as $brand) 
         {
-            $ids = $this->getRequestTransIds($brand, $date, $date);
+            $ids = $this->getRequestTransIds($brand, $yesterday, $yesterday);
             $this->differenceSettlementRequestProcess($brand, $date, $ids);
         }
     }

@@ -29,9 +29,9 @@ class danal extends DifferenceSettlementBase implements DifferenceSettlementInte
         $total_amount   = 0;
         $total_count    = 0;
         for ($i=0; $i < count($trans); $i++)
-        { 
+        {
             $business_num = trim(str_replace('-', '', $trans[$i]->business_num));
-            if($business_num)
+            if(strlen($business_num) === 10)
             {
                 $appr_type  = $trans[$i]->is_cancel ? "1" : "0";
                 $part_cxl_type = $trans[$i]->is_cancel ? $trans[$i]->cxl_seq : '0'; // 부분취소 차수 (승인:0, N회차: N)

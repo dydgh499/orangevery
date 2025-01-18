@@ -27,6 +27,8 @@ export const validateItems = (item: Salesforce, i: number, user_names: any) => {
         return [false, (i + 2) + '번째줄의 영업점의 패스워드는 필수로 입력해야합니다.']
     else if (isEmpty(item.resident_num)) 
         return [false, (i + 2) + '번째줄의 영업점의 주민등록번호는 필수로 입력해야합니다.']
+    else if (typeof lengthValidatorV2(item.business_num, 10) != 'boolean') 
+        return [false, (i + 2) + '번째줄의 가맹점의 사업자번호 포멧이 정확하지 않습니다.']    
     else if (typeof lengthValidatorV2(item.resident_num, 14) != 'boolean') 
         return [false, (i + 2) + '번째줄의 영업점의 주민등록번호 포멧이 정확하지 않습니다.']
     else if (level == null) 

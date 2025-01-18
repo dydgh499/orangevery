@@ -67,6 +67,7 @@ const addNewPayModule = async () => {
         payment_term_min: 1,
         p_mid: '',
         is_able_bill_key: 0,
+        is_different_settlement: 1,
     })
     pay_modules.unshift(<PayModule>(pay_module))
 }

@@ -268,6 +268,7 @@ export interface PayModule {
     sign_key?: string,
     pay_window?: PayWindow | null,
     is_able_bill_key: number,
+    is_different_settlement: number,
 }
 
 export interface PayGateway {

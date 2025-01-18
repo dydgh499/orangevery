@@ -137,6 +137,15 @@ const filterPgs = computed(() => {
                     </BooleanRadio>                
                 </VCol>
             </VRow>
+            <VRow v-if="corp.use_different_settlement">
+                <VCol md="5" cols="5">차액정산 활성화</VCol>
+                <VCol md="7">
+                    <VSwitch hide-details :false-value=0 :true-value=1 
+                        v-model="props.item.is_different_settlement" 
+                        label="" color="error" />
+                </VCol>
+            </VRow>
+            
             <template v-else>
                 <VRow v-if="props.item.module_type == 1">
                     <VCol md="5" cols="5">

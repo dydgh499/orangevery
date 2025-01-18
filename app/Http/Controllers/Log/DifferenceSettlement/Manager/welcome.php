@@ -34,7 +34,7 @@ class welcome1 extends DifferenceSettlementBase implements DifferenceSettlementI
         for ($i=0; $i < count($trans); $i++) 
         { 
             $business_num = trim(str_replace('-', '', $trans[$i]->business_num));
-            if($business_num)
+            if(strlen($business_num) === 10)
             {
                 $appr_type  = $trans[$i]->is_cancel ? "1" : "0";
                 $trx_dt     = $trans[$i]->is_cancel ? $trans[$i]->cxl_dt : $trans[$i]->trx_dt;
