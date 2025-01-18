@@ -86,7 +86,7 @@ class IdentityAuthInfoController extends Controller
 
         $data = $this->identity_auth_infos->encrypt($request->data());
         $res  = $this->identity_auth_infos->where('id', $id)->update($data);
-        return $this->response($res ? 1 : 990, ['id'=>$id, 'brand_id'=>$data['brand_id']]);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
     /**

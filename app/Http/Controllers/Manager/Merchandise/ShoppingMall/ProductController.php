@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Manager\Merchandise\ShoppingMall;
 use App\Models\Merchandise\ShoppingMall\Product;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Traits\StoresTrait;
 
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Merchandise\ShoppingMall\ProductRequest;
@@ -16,13 +15,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 /**
- * @group Bill Key API
+ * @group Product API
  *
  * 상품 API입니다.
  */
 class ProductController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait;
+    use ManagerTrait, ExtendResponseTrait;
     protected $products, $merchandises;
 
     public function __construct(Product $products)
@@ -91,7 +90,7 @@ class ProductController extends Controller
     }
 
     /**
-     * 빌키생성
+     * 추가
      *
      * 가맹점 이상 가능
      *

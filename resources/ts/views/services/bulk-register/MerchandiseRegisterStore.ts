@@ -130,7 +130,6 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
         {title: '주소(O)', key: 'addr'},
         {title: '휴대폰번호(O)', key: 'phone_num'},
         {title: '주민등록번호(X)', key: 'resident_num'},
-        
         {title: '사업자등록번호(X)', key: 'business_num'},
         {title: '업종(O)', key: 'sector'},
         {title: '계좌번호(O)', key: 'acct_num'},

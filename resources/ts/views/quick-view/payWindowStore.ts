@@ -1,5 +1,6 @@
 import { PayModule } from '@/views/types';
 import { axios } from '@axios';
+import { PayParamTypes } from '@core/enums';
 import * as CryptoJS from 'crypto-js';
 
 export const payWindowStore = () => {
@@ -69,7 +70,7 @@ export const payWindowStore = () => {
         try {
             return await axios.get(`/api/v1/quick-view/pay-modules/${payment_module.id}/pay-window-renew`, {
                 params: params
-            })    
+            })
         }
         catch (e: any) {
             snackbar.value.show(e.response.data.message, 'error')
@@ -105,21 +106,27 @@ export const payWindowStore = () => {
             return false
     }
 
-    const getPayWindow = async (window: string | string[], pc: string | string[]) => {
+    const getPayWindow = async (window: string | string[], pc: string | string[], shop_window: string | string[] | null, product_id: string | string[] | null) => {
         let code = 200
         let message = ''
-        let params_mode = false
+        let params_mode = 0
         let res = null
         try {
-            res = await axios.get('/api/v1/pay/' + window, { params : { pc: pc }})
+            res = await axios.get('/api/v1/pay/' + window, { params : {
+                 pc: pc,
+                 sw: shop_window,
+                 pi: product_id,
+            }})
             if(pc && pc.length && res.data.params === null) {
                 code = 409
                 message = '상품정보를 찾을 수 없습니다. 결제창을 재생성해주세요.'
             }
             else {
-                if(res.data.params && Object.keys(res.data.params)) {
-                    params_mode = true
-                }
+                
+                if(shop_window && product_id) 
+                    params_mode = PayParamTypes.SHOP
+                else if(res.data.params && Object.keys(res.data.params)) 
+                    params_mode = PayParamTypes.SMS
             }
         }
         catch (e: any) {

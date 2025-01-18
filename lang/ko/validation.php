@@ -127,6 +127,7 @@ return [
         'brand_id'  => '브랜드',
         'user_name' => '유저 ID',
         'user_pw'   => '패스워드',
+        'user_pw_check' => '패스워드 재확인',
         'login_type'=> '로그인 타입',
         'profile_img' => '프로필 이미지',
         //brand
@@ -410,5 +411,18 @@ return [
         'warrant_e_dt' => '담보 적용 종료일',
         'operator_ablilty_group_id' => '권한그룹',
         'group_name' => '그룹명',
+        //
+        'category_name' => '카테고리명',
+        'product_name' => '상품명',
+        'product_id' => '상품 ID',
+        'category_id' => '카테고리 ID',
+        'product_amount' => '상품가격',
+        'option_name' => '옵션명',
+        'group_id' => '그룹 ID',
+        'option_price' => '옵션가격',
+        'writer' => '작성자',
+        'is_reply' => '답변여부',
+        'detail_addr' => '상세주소',
+        'option_groups' => '옵션그룹',
     ],
 ];

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Log;
 
 use App\Models\Log\OperatorHistory;
+use App\Models\Operator;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -11,6 +12,7 @@ use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\Options\PvOptions;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\Models\EncryptDataTrait;
 use Illuminate\Http\Request;
 
 /**
@@ -20,7 +22,7 @@ use Illuminate\Http\Request;
  */
 class OperatorHistoryContoller extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, EncryptDataTrait;
     protected $operator_histories;
 
     public function __construct(OperatorHistory $operator_histories)
@@ -32,9 +34,8 @@ class OperatorHistoryContoller extends Controller
     private function commonSelect($request)
     {
         $search = $request->input('search', '');
-        $query  = $this->operator_histories
-            ->join('operators', 'operator_histories.oper_id', '=', 'operators.id')
-            ->where('operator_histories.brand_id', $request->user()->brand_id);
+        $query  = Operator::join('operator_histories', 'operators.id', '=', 'operator_histories.oper_id');
+			->where('operator_histories.brand_id', $request->user()->brand_id);
             
         if($request->history_type !== null)
             $query = $query->where('operator_histories.history_type', $request->history_type);
@@ -85,9 +86,7 @@ class OperatorHistoryContoller extends Controller
         ];
 
         $query = $this->commonSelect($request)->groupBy('operator_histories.oper_id');
-        // 총 레코드 수를 구할 때, select를 최소화하여 count만 가져옵니다.
         $total = (clone $query)->get('operator_histories.oper_id')->count();
-        // 페이지네이션을 위한 쿼리
         $content = $query
                     ->orderBy(DB::raw("MAX(operator_histories.created_at)"), 'desc')
                     ->offset($sp)

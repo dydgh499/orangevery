@@ -21,7 +21,7 @@ class secta9ine extends DifferenceSettlement implements DifferenceSettlementInte
         $this->RQ_END_FILTER_SIZE    = 150;
         
         $main_config_name   = 'different_settlement_main_'.$this->service_name;
-        $dr_config_name     = 'different_settlement_dr'.$this->service_name;
+        $dr_config_name     = 'different_settlement_dr_'.$this->service_name;
         config(['filesystems.disks.'.$main_config_name => [
             'driver' => 'sftp',
             'host' => "211.43.193.74",

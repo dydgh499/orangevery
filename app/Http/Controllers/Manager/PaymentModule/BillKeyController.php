@@ -11,8 +11,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
 
-use App\Http\Requests\Manager\IndexRequest;
-
+use App\Http\Requests\Manager\PaymentModule\BillKeyIndexRequest;
 use App\Http\Requests\Manager\PaymentModule\BillKeyCreateRequest;
 use App\Http\Requests\Manager\PaymentModule\BillKeyUpdateRequest;
 use App\Http\Requests\Manager\PaymentModule\BillKeyPayRequest;
@@ -117,9 +116,11 @@ class BillKeyController extends Controller
         return $this->response(0, $data);
     }
     /** 
-     * 빌키정보 리턴
+     * 빌키정보 조회
+     * 
+     * 특정 휴대폰번호로 매핑된 빌키정보들을 조회합니다.<br><b>본인인증 작업이 전처리로 요구됩니다.</b>
     */
-    public function index(Request $request, string $window_code)
+    public function index(BillKeyIndexRequest $request, string $window_code)
     {
         $request->validate(['token' => 'required', 'buyer_phone'=>'required']);
         [$result, $msg, $pay_window, $pay_module] = $this->defaultValidate($request, $window_code);
@@ -142,8 +143,7 @@ class BillKeyController extends Controller
     /**
      * 빌키생성
      *
-     * 운영자 이상 가능
-     *
+     * 특정 휴대폰번호로 매핑된 빌키정보들을 조회합니다.<br><b>본인인증 작업이 전처리로 요구됩니다.</b>
      */
     public function store(BillKeyCreateRequest $request, string $window_code)
     {
@@ -167,9 +167,7 @@ class BillKeyController extends Controller
     }
 
     /**
-     * 단일조회
-     *
-     * 운영자 이상 가능
+     * 단일조회 (사용안함)
      *
      * @urlParam id integer required 빌키 PK
      */
@@ -181,7 +179,7 @@ class BillKeyController extends Controller
     /**
      * 업데이트
      *
-     * 운영자 이상 가능
+     * 특정 휴대폰번호로 매핑된 빌키기본정보를 업데이트 합니다.<br><b>본인인증 작업이 전처리로 요구됩니다.</b>
      *
      * @urlParam id integer required 빌키 PK
      */
@@ -205,7 +203,7 @@ class BillKeyController extends Controller
     /**
      * 단일삭제
      *
-     * 운영자
+     * 특정 휴대폰번호로 매핑된 빌키정보를 삭제합니다.<br><b>본인인증 작업이 전처리로 요구됩니다.</b>
      * 
      * @urlParam id integer required 빌키 PK
      */
@@ -236,7 +234,7 @@ class BillKeyController extends Controller
     /**
      * 결제하기
      *
-     * 운영자 이상 가능
+     * 빌키결제
      *
      * @urlParam id integer required 빌키 PK
      */

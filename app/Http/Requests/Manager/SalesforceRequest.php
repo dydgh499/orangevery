@@ -106,10 +106,10 @@ class SalesforceRequest extends FormRequest
         $params = array_merge($params, $this->getDocsParameters($this->integer_keys));
         $params = array_merge($params, $this->getDocsParameters($this->nullable_keys));
         
-        $params['passbook_file']['description']  .= '(max-width:500px 이상은 리사이징)';
-        $params['contract_file']['description']  .= '(max-width:500px 이상은 리사이징)';
-        $params['bsin_lic_file']['description']  .= '(max-width:500px 이상은 리사이징)';
-        $params['id_file']['description']    .= '(max-width:500px 이상은 리사이징)';
+        $params['passbook_file']['description']  .= '(max-width:500px )';
+        $params['contract_file']['description']  .= '(max-width:500px )';
+        $params['bsin_lic_file']['description']  .= '(max-width:500px )';
+        $params['id_file']['description']    .= '(max-width:500px )';
         return $params;
     }
     public function data()

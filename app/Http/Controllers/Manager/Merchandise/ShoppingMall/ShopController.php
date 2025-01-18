@@ -23,7 +23,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 /**
- * @group Bill Key API
+ * @group Shopping Mall API
  *
  * 쇼핑몰 API입니다.
  */
@@ -38,7 +38,7 @@ class ShopController extends Controller
     }
     
     /**
-     * 목록출력
+     * 카테고리 목록출력
      *
      */
     public function index(string $shop_window)
@@ -47,7 +47,7 @@ class ShopController extends Controller
     }
 
     /**
-     * 단일조회
+     * 상품 단일조회
      *
      */
     public function show(string $shop_window, int $id)

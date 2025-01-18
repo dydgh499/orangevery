@@ -49,7 +49,7 @@ const id = ref<number>(0)
                     <VWindowItem>
                         <MchtOverview :item="item"/>
                     </VWindowItem>
-                    <VWindowItem v-if="getUserLevel() > 10">
+                    <VWindowItem>
                         <Suspense>
                             <PayModuleOverview :item="item" v-if="corp.pv_options.free.pay_module_detail_view"/>
                             <PayModuleOldOverview :item="item" v-else/>

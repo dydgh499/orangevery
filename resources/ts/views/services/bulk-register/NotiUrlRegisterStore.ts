@@ -1,7 +1,6 @@
 import { isEmpty } from '@/@core/utils';
 import { Merchandise, NotiUrl, PayModule } from '@/views/types';
 
-
 const filterPayModuleNote = (pmod_note: string, mcht_id: number, pay_modules: PayModule[]) => {
     const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id === mcht_id })
     return filter.find(obj => obj.note === pmod_note ? pmod_note.trim() : '')?.id
@@ -31,7 +30,7 @@ export const useRegisterStore = defineStore('NotiUrlRegisterStore', () => {
     const headers = [
         { key: 'mcht_name', title: '가맹점 상호(O)' },
         { key: 'pmod_note', title: '결제모듈 별칭(X)' },
-        { key: 'noti_status', title: '노티 사용여부(X)' },
+        { key: 'noti_status', title: '노티 사용여부(O)' },
         { key: 'note', title: '별칭(X)' },
         { key: 'send_url', title: '발송 URL(O)' },
     ]

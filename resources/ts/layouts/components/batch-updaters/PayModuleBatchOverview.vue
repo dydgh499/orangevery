@@ -212,7 +212,7 @@ watchEffect(() => {
                                 <b>선택된 결제모듈 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
                             </template>
                         </VRadio>
-                        <VRadio :value="1" v-if="getUserLevel() >= 40">
+                        <VRadio :value="1" v-if="getUserLevel() === 40">
                             <template #label>
                                 <b>전체모듈: {{ store.pagenation.total_count }}개</b>
                             </template>
@@ -260,7 +260,7 @@ watchEffect(() => {
                 </VRow>
 
                 <VDivider style="margin: 1em 0;" />
-                <h4 class="pt-3">이상거래 설정정보 일괄변경</h4>
+                <h4 class="pt-3">FDS 설정정보 일괄변경</h4>
                 <br>
                 <VRow>
                     <VCol :md="6" :cols="12">

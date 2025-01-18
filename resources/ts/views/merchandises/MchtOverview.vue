@@ -330,7 +330,6 @@ watchEffect(() => {
                 </VCardItem>
             </VCard>
         </VCol>
-        <!-- 👉 계약정보 -->
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
@@ -625,6 +624,9 @@ watchEffect(() => {
                                                 <VTextField v-model="props.item.phone_auth_limit_count" type="number" suffix="회 허용"
                                                     :rules="[requiredValidatorV2(props.item.phone_auth_limit_count, '최대 인증허용 회수')]" 
                                                     style="max-width: 120px; margin-right: 1em;"/>
+                                                    <VTooltip activator="parent" location="top" transition="scale-transition">
+                                                        <span>0 입력시 검증하지 않습니다.</span>
+                                                    </VTooltip>
                                             </VCol>                                   
                                         </VRow>
                                     </VCol>

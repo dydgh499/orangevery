@@ -9,13 +9,13 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\BrandRequest;
 use App\Http\Requests\Manager\IndexRequest;
-use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 
 /**

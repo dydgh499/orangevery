@@ -110,7 +110,7 @@ class DifferenceSettlementBatchController extends Controller
             $partial_results = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
                 ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
                 ->whereIn('transactions.id', $chunk)
-                ->where('payment_modules.use_different_settlement', 1)
+                ->where('payment_modules.is_different_settlement', 1)
                 ->get([
                     'transactions.id', 'transactions.ord_num', 
                     'transactions.is_cancel', 'transactions.cxl_seq', 

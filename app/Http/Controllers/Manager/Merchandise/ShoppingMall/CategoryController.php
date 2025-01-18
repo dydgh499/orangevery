@@ -6,7 +6,6 @@ use App\Models\Merchandise\ShoppingMall\Category;
 use App\Models\Merchandise\ShoppingMall\ShoppingMall;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Traits\StoresTrait;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Requests\Manager\IndexRequest;
@@ -18,13 +17,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 /**
- * @group Category Key API
+ * @group Category API
  *
  * 카테고리 API입니다.
  */
 class CategoryController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait;
+    use ManagerTrait, ExtendResponseTrait;
     protected $categories;
 
     public function __construct(Category $categories)

@@ -105,7 +105,10 @@ class ksnet extends DifferenceSettlementBase implements DifferenceSettlementInte
             else
             {
                 [$code, $message] = $this->getModuleResultMessage($logs['output']);
-                error($logs, "$log_base $message (X)"); 
+                if($code === '0104')
+                    Log::warning("$log_base $message (X)", $logs);
+                else
+                    error($logs, "$log_base $message (X)"); 
             }
         }
         return [];

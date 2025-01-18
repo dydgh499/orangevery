@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager\Service;
 
+use App\Models\Operator;
 use App\Models\Service\Popup;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -58,8 +59,7 @@ class PopupController extends Controller
     {
         $cols = ['operators.user_name', 'operators.profile_img', 'popups.id', 'popups.popup_title', 'popups.open_s_dt', 'popups.open_e_dt', 'popups.created_at', 'popups.updated_at'];
         $search = $request->input('search', '');
-        $query  = $this->popups
-            ->join('operators', 'popups.oper_id', '=', 'operators.id')
+        $query = Operator::join('popups', 'operators.id', '=', 'popups.oper_id')
             ->where('popups.brand_id', $request->user()->brand_id)
             ->where('popups.is_delete', false)
             ->where('popups.popup_title', 'like', "%$search%");

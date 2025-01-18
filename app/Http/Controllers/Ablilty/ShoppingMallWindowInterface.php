@@ -99,7 +99,7 @@ class ShoppingMallWindowInterface implements GeneratorInterface
         if($data !== null)
             return json_decode($data, true);
         else
-        {   //payment_windows 가 없을 경우 빈 값 리턴
+        {
             $data = Product::join('categories', 'products.category_id', '=', 'categories.id')
                 ->join('shopping_malls', 'categories.mcht_id', '=', 'shopping_malls.mcht_id')
                 ->join('payment_windows', 'products.pmod_id', '=', 'payment_windows.pmod_id')

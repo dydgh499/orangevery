@@ -51,7 +51,7 @@ class DifferentSettlementInfoController extends Controller
     {
         $data = $request->data();
         $res = $this->different_settlement_infos->create($data);
-        return $this->response($res ? 1 : 990, ['id'=>$res->id, 'brand_id'=>$data['brand_id']]);
+        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
 
     /**
@@ -80,7 +80,7 @@ class DifferentSettlementInfoController extends Controller
     {
         $data = $request->data();
         $res  = $this->different_settlement_infos->where('id', $id)->update($data);
-        return $this->response($res ? 1 : 990, ['id'=>$id, 'brand_id'=>$data['brand_id']]);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
     /**

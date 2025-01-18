@@ -20,7 +20,7 @@ class hecto extends DifferenceSettlement implements DifferenceSettlementInterfac
         $this->RQ_END_FILTER_SIZE    = 391;
 
         $main_config_name   = 'different_settlement_main_'.$this->service_name;
-        $dr_config_name     = 'different_settlement_dr'.$this->service_name;
+        $dr_config_name     = 'different_settlement_dr_'.$this->service_name;
         config(['filesystems.disks.'.$main_config_name => [
             'driver' => 'sftp',
             'host' => "61.252.169.33",

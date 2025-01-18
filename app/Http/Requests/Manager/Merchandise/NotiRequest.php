@@ -50,7 +50,6 @@ class NotiRequest extends FormRequest
     public function data()
     {
         $data = $this->getParmasBaseKey();
-        $data['brand_id'] = $this->user()->brand_id;
         return $data;
     }
 }

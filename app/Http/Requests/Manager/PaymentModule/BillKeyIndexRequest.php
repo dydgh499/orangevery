@@ -5,12 +5,13 @@ namespace App\Http\Requests\Manager\PaymentModule;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
 
-class BillKeyUpdateRequest extends FormRequest
+class BillKeyIndexRequest extends FormRequest
 {
     use FormRequestTrait;
     public $keys = [
         'buyer_name',
         'buyer_phone',
+        'request_at',
     ];
 
     public $integer_keys = [];
@@ -25,8 +26,9 @@ class BillKeyUpdateRequest extends FormRequest
         $sub = [
             'buyer_name' => 'required',
             'buyer_phone' => 'required',
+            'request_at' => 'required',
         ];
-        return $this->getRules($this->keys, $sub);
+        return $this->getRules(array_merge($this->keys, $this->integer_keys), $sub);
     }
 
     public function attributes()
@@ -37,18 +39,13 @@ class BillKeyUpdateRequest extends FormRequest
     public function bodyParameters()
     {
         $params = array_merge($this->getDocsParameters($this->keys), $this->getDocsParameters($this->integer_keys));
-        $params['buyer_name']['example']    = 'È«±æµ¿';
+        $params['buyer_name']['example']    = 'í™ê¸¸ë™';
         $params['buyer_phone']['example']   = '01012345678';
         $params['request_at']['example']    = '2025-01-06 00:49:32';
 
-        $params['buyer_name']['description']    = '¿äÃ»´ç½Ã ÀÎÁõÀÚ ÈŞ´ëÆù ¹øÈ£';
-        $params['buyer_phone']['description']   = '¿äÃ»´ç½Ã ÀÎÁõÀÚ ¼º¸í';
-        $params['request_at']['description']    = 'º»ÀÎÀÎÁõ ¿äÃ»½Ã°£';
+        $params['buyer_name']['description']    = 'ìš”ì²­ë‹¹ì‹œ ì¸ì¦ì íœ´ëŒ€í° ë²ˆí˜¸';
+        $params['buyer_phone']['description']   = 'ìš”ì²­ë‹¹ì‹œ ì¸ì¦ì ì„±ëª…';
+        $params['request_at']['description']    = 'ë³¸ì¸ì¸ì¦ ìš”ì²­ì‹œê°„';
         return $params;
-    }
-
-    public function data()
-    {
-        return array_merge($this->getParmasBaseKeyV2($this->keys, ''), $this->getParmasBaseKeyV2($this->integer_keys, 0));
     }
 }

@@ -131,12 +131,17 @@ export const getDifferenceSettleMenual = (different_settlement_infos: DifferentS
     {
         if(different_settlement_infos[i].pg_type === 5)
             html += hecto()
+        else if(different_settlement_infos[i].pg_type === 13)
+            html += seact9ine()
         else if(different_settlement_infos[i].pg_type === 30)
             html += welcome()
         else if(different_settlement_infos[i].pg_type === 22)
             html += danal()
         else if(different_settlement_infos[i].pg_type === 28)
             html += galaxiamoneytree()
+        else if(different_settlement_infos[i].pg_type === 37)
+            html += ksnet()
+
     }
     return html
 }

@@ -254,7 +254,7 @@ const filterPgs = computed(() => {
                                     prepend-inner-icon="tabler-currency-won" placeholder="유보금미달 알림금"
                                     persistent-placeholder suffix="만원" />
                             </template>
-                            <template #r_name>수신자번호</template>
+                            <template #r_name>포인트 하한금 알림번호</template>
                             <template #r_input>
                                 <VTextField type="number" v-model="props.item.free.bonaeja.receive_phone"
                                         prepend-inner-icon="tabler-device-mobile" placeholder="01012345678"

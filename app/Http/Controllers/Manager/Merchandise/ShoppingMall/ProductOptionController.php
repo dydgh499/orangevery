@@ -85,7 +85,7 @@ class ProductOptionController extends Controller
     /**
      * 업데이트
      *
-     * @urlParam id integer옵션 ID
+     * @urlParam id integer required 옵션 ID
      */
     public function update(ProductOptionRequest $request, int $id)
     {
