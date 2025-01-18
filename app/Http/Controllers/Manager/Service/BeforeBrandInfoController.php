@@ -10,7 +10,6 @@ use App\Http\Traits\StoresTrait;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 
-use App\Http\Requests\Manager\BulkRegister\BulkRegularCardRequest;
 use App\Http\Requests\Manager\Service\BeforeBrandInfoRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;

@@ -107,9 +107,11 @@ class RegularCreditCardController extends Controller
     public function bulkRegister(BulkRegularCardRequest $request)
     {
         $current = date('Y-m-d H:i:s');
+        $brand_id = $request->user()->brand_id;
         $datas = $request->data();
 
-        $cards = $datas->map(function ($data) use($current) {
+        $cards = $datas->map(function ($data) use($current, $brand_id) {
+            $data['brand_id'] = $brand_id;
             $data['created_at'] = $current;
             $data['updated_at'] = $current;
             return $data;

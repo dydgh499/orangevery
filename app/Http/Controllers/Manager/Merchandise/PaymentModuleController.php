@@ -14,7 +14,6 @@ use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Controllers\Manager\PaymentModule\VisiableSetter;
 
 use App\Http\Requests\Manager\BulkRegister\BulkPayModuleRequest;
-use App\Http\Requests\Manager\BulkRegister\BulkPayModulePGRequest;
 use App\Http\Requests\Manager\Merchandise\PayModuleRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
@@ -338,25 +337,6 @@ class PaymentModuleController extends Controller
             $res = $this->manyInsert($this->pay_modules, $pay_modules);
             return $this->response($res ? 1 : 990);
         }
-    }
-
-    /**
-     * 구간 일괄변경
-     *
-     * 운영자 이상 가능
-     */
-    public function bulkRegisterPG(BulkPayModulePGRequest $request)
-    {
-        $datas = $request->data();
-        foreach($datas as $data)
-        {
-            $this->pay_modules->where('mcht_id', $data['mcht_id'])
-                ->update([
-                    'pg_id' => $data['pg_id'],
-                    'ps_id' => $data['ps_id'],
-                ]);
-        }
-        return $this->response(1);        
     }
     
     /**

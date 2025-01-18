@@ -47,17 +47,10 @@ class BulkRegularCardRequest extends FormRequest
         $_datas = $this->all();
         for ($i=0; $i < count($_datas) ; $i++)
         {
-            $data = [];
-            for ($j=0; $j < count($this->keys) ; $j++) 
-            {
-                $key = $this->keys[$j];
-                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : '';
-            }
-            for ($j=0; $j < count($this->integer_keys) ; $j++) 
-            {
-                $key = $this->integer_keys[$j];
-                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : 0;
-            }
+            $data = array_merge(
+                $this->getParmasBaseKeyV3($_datas[$i], $this->integer_keys, 0), 
+                $this->getParmasBaseKeyV3($_datas[$i], $this->keys, '')
+            );
             $datas[] = $data;
         }
         return collect($datas);

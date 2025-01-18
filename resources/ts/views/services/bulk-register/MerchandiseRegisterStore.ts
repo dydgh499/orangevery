@@ -153,7 +153,8 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
         headers.push({title: '결제전 휴대폰 인증(X)', key: 'use_pay_verification_mobile'})
     if(corp.pv_options.paid.use_multiple_hand_pay)
         headers.push({title: '다중결제 사용(X)', key: 'use_multiple_hand_pay'})
-
+    if(corp.pv_options.paid.use_noti)
+        headers.push({title: '노티 사용(X)', key: 'use_noti'})
 
     const isPrimaryHeader = (key: string) => {
         const keys = ['tax_category_type', 'custom_id']

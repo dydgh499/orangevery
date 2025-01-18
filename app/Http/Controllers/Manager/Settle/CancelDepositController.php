@@ -8,7 +8,6 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Controllers\Manager\Transaction\SettleDateCalculator;
 
-use App\Http\Requests\Manager\BulkRegister\BulkRegularCardRequest;
 use App\Http\Requests\Manager\Settle\CancelDepositRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;

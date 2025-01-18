@@ -45,7 +45,10 @@ class BulkNotiUrlRequest extends FormRequest
         $_datas = $this->all();
         for ($i=0; $i < count($_datas) ; $i++)
         {
-            $data = array_merge($this->getParmasBaseKeyV3($_datas[$i], $this->integer_keys, 0), $this->getParmasBaseKeyV3($_datas[$i], $this->keys, ''));
+            $data = array_merge(
+                $this->getParmasBaseKeyV3($_datas[$i], $this->integer_keys, 0), 
+                $this->getParmasBaseKeyV3($_datas[$i], $this->keys, '')
+            );
             $datas[] = $data;
         }
         return collect($datas);

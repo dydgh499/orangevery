@@ -38,6 +38,7 @@ class BulkMerchandiseRequest extends FormRequest
         'collect_withdraw_fee',
         'withdraw_fee',
         'tax_category_type',
+        'use_noti',
     ];
     public $nullable_keys = [
         'custom_id',
@@ -102,22 +103,11 @@ class BulkMerchandiseRequest extends FormRequest
         $_datas = $this->all();
         for ($i=0; $i < count($_datas) ; $i++)
         {
-            $data = [];
-            for ($j=0; $j < count($this->keys) ; $j++) 
-            {
-                $key = $this->keys[$j];
-                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : '';
-            }
-            for ($j=0; $j < count($this->integer_keys); $j++) 
-            {
-                $key = $this->integer_keys[$j];
-                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : 0;
-            }
-            for ($j=0; $j < count($this->nullable_keys); $j++) 
-            {
-                $key = $this->nullable_keys[$j];
-                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : null;
-            }
+            $data = array_merge(
+                $this->getParmasBaseKeyV3($_datas, $this->keys, ''),
+                $this->getParmasBaseKeyV3($_datas, $this->integer_keys, 0),
+                $this->getParmasBaseKeyV3($_datas, $this->nullable_keys, null)
+            );
             $data['hold_fee']   /= 100; 
             $data['trx_fee']    /= 100; 
             $data['sales0_fee']  /= 100; 
@@ -126,7 +116,7 @@ class BulkMerchandiseRequest extends FormRequest
             $data['sales3_fee']  /= 100; 
             $data['sales4_fee']  /= 100; 
             $data['sales5_fee']  /= 100; 
-            array_push($datas, $data);
+            $datas[] = $data;
         }
         return collect($datas);
     }

@@ -114,7 +114,6 @@ Route::prefix('merchandises')->group(function() {
                 Route::post('pay-key-create', [PaymentModuleController::class, 'payKeyCreate']);
                 Route::post('sign-key-create', [PaymentModuleController::class, 'signKeyCreate']);
                 Route::post('bulk-register', [PaymentModuleController::class, 'bulkRegister']);
-                Route::post('pg-bulk-updater', [PaymentModuleController::class, 'bulkRegisterPG']);
             });
             Route::apiResource('bill-keys', BillKeyController::class); 
         });

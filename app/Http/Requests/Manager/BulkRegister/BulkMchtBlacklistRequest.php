@@ -8,7 +8,7 @@ use App\Http\Traits\FormRequestTrait;
 class BulkMchtBlacklistRequest extends FormRequest
 {
     use FormRequestTrait;
-    public $string_keys = [
+    public $keys = [
         'mcht_name',
         'nick_name',
         'phone_num',
@@ -45,7 +45,8 @@ class BulkMchtBlacklistRequest extends FormRequest
         $_datas = $this->all();
         for ($i=0; $i < count($_datas) ; $i++)
         {
-            $data = array_merge(['brand_id'=>$this->user()->brand_id], $this->getParmasBaseKeyV3($_datas[$i], $this->string_keys, ''));
+            $data = $this->getParmasBaseKeyV3($_datas, $this->keys, '');
+            $data['brand_id'] = $this->user()->brand_id;
             $datas[] = $data;
         }
         return collect($datas);

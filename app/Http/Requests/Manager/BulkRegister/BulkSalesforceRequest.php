@@ -71,13 +71,8 @@ class BulkSalesforceRequest extends FormRequest
         $_datas = $this->all();
         for ($i=0; $i < count($_datas) ; $i++)
         { 
-            $data = [];
-            for ($j=0; $j < count($this->keys) ; $j++) 
-            {
-                $key = $this->keys[$j];
-                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : null;
-            }
-            array_push($datas, $data);
+            $data = $this->getParmasBaseKeyV3($_datas[$i], $this->keys, '');
+            $datas[] = $data;
         }
         return collect($datas);
     }

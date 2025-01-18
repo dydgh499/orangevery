@@ -120,8 +120,11 @@ class BulkPayModuleRequest extends FormRequest
         $_datas = $this->all();
         for ($i=0; $i < count($_datas) ; $i++)
         { 
-            $data = array_merge($this->getParmasBaseKeyV3($_datas[$i], $this->integer_keys, 0), $this->getParmasBaseKeyV3($_datas[$i], $this->string_keys, ''));
-            $data = array_merge($data, $this->getParmasBaseKeyV3($_datas[$i], $this->nullable_keys, null));
+            $data = array_merge(
+                $this->getParmasBaseKeyV3($_datas[$i], $this->integer_keys, 0), 
+                $this->getParmasBaseKeyV3($_datas[$i], $this->string_keys, ''),
+                $this->getParmasBaseKeyV3($_datas[$i], $this->nullable_keys, null)
+            );
             $data['payment_term_min'] = 1;
             $data['pay_window_extend_hour'] = 1;
             array_push($datas, $data);

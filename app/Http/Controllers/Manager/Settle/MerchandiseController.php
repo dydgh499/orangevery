@@ -44,10 +44,11 @@ class MerchandiseController extends Controller
 
     protected function getTerminalSettleIds($request, $level, $target_id)
     {
+        $search  = $request->input('search', '');
         $query = PaymentModule::terminalSettle($level)
             ->where('merchandises.mcht_name', 'like', "%".$request->search."%")
             ->where('merchandises.use_collect_withdraw', false);
-            
+
         if($request->pg_id)
             $query = $query->where('payment_modules.pg_id', $request->pg_id);
         if($request->ps_id)
@@ -65,6 +66,7 @@ class MerchandiseController extends Controller
 
     private function commonQuery($request)
     {
+        $search  = $request->input('search', '');
         $validated = $request->validate(['s_dt'=>'required|date', 'e_dt'=>'required|date']);
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
@@ -79,7 +81,7 @@ class MerchandiseController extends Controller
 
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
             ->where('use_collect_withdraw', false)
-            ->where('mcht_name', 'like', "%".$request->search."%")
+            ->where('merchandises.mcht_name', 'like', "%".$search."%")
             ->orWhere(function ($query) use($terminal_settle_ids) {
                 $query->whereIn('id', $terminal_settle_ids);
             });
