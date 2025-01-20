@@ -16,6 +16,7 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
+use App\Http\Requests\Manager\BulkRegister\BulkMerchandiseRequest;
 use App\Http\Requests\Manager\MerchandiseRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
