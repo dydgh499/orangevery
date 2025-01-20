@@ -34,7 +34,7 @@ class OperatorHistoryContoller extends Controller
     private function commonSelect($request)
     {
         $search = $request->input('search', '');
-        $query  = Operator::join('operator_histories', 'operators.id', '=', 'operator_histories.oper_id');
+        $query  = Operator::join('operator_histories', 'operators.id', '=', 'operator_histories.oper_id')
 			->where('operator_histories.brand_id', $request->user()->brand_id);
             
         if($request->history_type !== null)
