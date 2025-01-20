@@ -66,7 +66,7 @@ class ComponentBase extends MerchandiseRegistrationBase
     public function getMidEmptyHistoryObjects($trans)
     {
         $datas = [];
-        foreach($mcht_trans as $tran)
+        foreach($trans as $tran)
         {
             $datas[] = $this->getSettlementHistoryObejct($tran->id, '-101');
         }
