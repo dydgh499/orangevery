@@ -63,12 +63,13 @@ class ComponentBase extends MerchandiseRegistrationBase
         ];
     }
 
-    public function getMidEmptyHistoryObjects($trans)
+    public function getMidEmptyHistoryObjects($mcht_trans)
     {
         $datas = [];
-        foreach($trans as $tran)
+        foreach($mcht_trans as $tran)
         {
             $datas[] = $this->getSettlementHistoryObejct($tran->id, '-101');
         }
+        return $datas;
     }
 }
