@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Log\DifferenceSettlement;
+namespace App\Http\Controllers\Log\DifferenceSettlement\Container;
 
-use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlementInterface;
-use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlement;
+use App\Http\Controllers\Log\DifferenceSettlement\Container\ContainerInterface;
+use App\Http\Controllers\Log\DifferenceSettlement\Container\ContainerBase;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Carbon\Carbon;
 
-class hecto extends DifferenceSettlement implements DifferenceSettlementInterface
+class hecto extends ContainerBase implements ContainerInterface
 {
     public function __construct($brand)
     {
         parent::__construct($brand);
-        $this->PMID_MODE  = false;
+        $this->PMID_MODE  = true;
         $this->RQ_PG_NAME = "SETTLEBANK";
         $this->RQ_START_FILTER_SIZE  = 370;
         $this->RQ_HEADER_FILTER_SIZE = 388;
@@ -84,9 +84,9 @@ class hecto extends DifferenceSettlement implements DifferenceSettlementInterfac
             if($this->dr_connection_stat)
             {
                 if($this->dr_sftp_connection->put($save_path, $full_record))
-                    logging(['save_path'=>$save_path], $this->service_name."\t DR \t"."difference-settlement-request (O)");
+                    logging(['save_path'=>$save_path], $this->service_name."\t DR \t"."difference-settlement-upload (O)");
                 else
-                    logging(['save_path'=>$save_path], $this->service_name."\t DR \t"."difference-settlement-request (X)");
+                    logging(['save_path'=>$save_path], $this->service_name."\t DR \t"."difference-settlement-upload (X)");
             }
             if($this->upload($save_path, $full_record))
                 return $this->setCreatedAt(array_values($full_histories));
@@ -96,22 +96,42 @@ class hecto extends DifferenceSettlement implements DifferenceSettlementInterfac
 
     public function response(Carbon $date)
     {
-        $req_date = $date->copy()->format('Ymd');
-        $res_path = "/edi_rsp/ST_PRFT_RSP_".$req_date;
-        return $this->_response($res_path, $req_date);
+        $download_date = $date->copy()->format('Ymd');
+        $download_path = "/edi_rsp/ST_PRFT_RSP_".$download_date;
+        $contents = $this->download($download_path);
+        if($contents !== "")
+        {
+            $datas = $this->service->getDataRecord($contents);
+            return $this->setGroupbyResultCode($datas, 'settle_result_code');
+        }
+        else
+            return [];
     }
 
-    public function registerRequest(Carbon $date, $mchts, $sub_business_regi_infos)
+    public function setRegistrationDataRecord(Carbon $date, $sub_business_regi_infos)
     {
-        $req_date = $date->format('Ymd');
-        $save_path = "/edi_req/ST_BIZREG_REQ_".$req_date;
-        return $this->_registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos);
+        $upload_date = $date->format('Ymd');
+        $upload_path = "/edi_req/ST_BIZREG_REQ_".$upload_date;
+
+        [$full_record, $datas] = $this->service->setRegistrationDataRecord($this->brand, $upload_date, $sub_business_regi_infos);
+        if($this->upload($upload_path, $full_record, 'merchandise-registration-upload'))
+            return $this->setGroupbyResultCode($datas, 'registration_code');
+        else
+            return [];
     }
 
-    public function registerResponse(Carbon $date)
+    public function getRegistrationDataRecord(Carbon $date)
     {
-        $req_date = $date->format('Ymd');
-        $save_path = "/edi_req/ST_BIZREG_RSP_".$req_date;
-        return $this->_registerResponse($save_path, $req_date);
+        $download_date = $date->format('Ymd');
+        $download_path = "/edi_req/ST_BIZREG_RSP_".$download_date;
+
+        $contents = $this->download($download_path, 'merchandise-registration-download');
+        if($contents !== "")
+        {
+            $datas = $this->service->getRegistrationDataRecord($contents);
+            return $this->setGroupbyResultCode($datas, 'registration_code');
+        }
+        else
+            return [];
     }
 }

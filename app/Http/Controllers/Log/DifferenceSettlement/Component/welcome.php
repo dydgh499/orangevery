@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Log\DifferenceSettlement\Manager;
+namespace App\Http\Controllers\Log\DifferenceSettlement\Component;
 
 use App\Models\Transaction;
-use App\Http\Controllers\Log\DifferenceSettlement\Manager\DifferenceSettlementInterface;
-use App\Http\Controllers\Log\DifferenceSettlement\Manager\DifferenceSettlementBase;
+use App\Http\Controllers\Log\DifferenceSettlement\Component\ComponentInterface;
+use App\Http\Controllers\Log\DifferenceSettlement\Component\ComponentBase;
 use App\Http\Traits\Log\DifferenceSettlement\FileRWTrait;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Carbon\Carbon;
 
-class welcome1 extends DifferenceSettlementBase implements DifferenceSettlementInterface
+class welcome1 extends ComponentBase implements ComponentInterface
 {
     use FileRWTrait;
     public $mcht_cards = [
@@ -85,7 +85,7 @@ class welcome1 extends DifferenceSettlementBase implements DifferenceSettlementI
             $data = $datas[$i];
             $is_cancel  = $this->getNtypeField($data, 2, 1);
 
-            $trx_id  = $this->getAtypeField($data, 3, 15);
+            $trx_id  = (int)$this->getAtypeField($data, 3, 15);
             $mcht_section_code = $this->getAtypeField($data, 88, 1);
             $supply_amount  = $this->getNtypeField($data, 89, 15);
             $vat_amount     = $this->getNtypeField($data, 104, 15);
@@ -93,6 +93,13 @@ class welcome1 extends DifferenceSettlementBase implements DifferenceSettlementI
             $settle_dt = $this->getNtypeField($data, 134, 8);
             $settle_result_code = $this->getAtypeField($data, 142, 2);
 
+            if($is_cancel)
+            {
+                $supply_amount *= -1;
+                $vat_amount *= -1;
+                $settle_amount *= -1;
+            }
+            
             $record = $this->getSettlementResponseObejct($trx_id, $settle_result_code, $this->getSettleMessage($settle_result_code), $mcht_section_code, $cur_date);
             if($settle_result_code === '00')
             {
@@ -155,13 +162,13 @@ class welcome1 extends DifferenceSettlementBase implements DifferenceSettlementI
         return $records;
     }
 
-    public function registerRequest($brand, $req_date, $mchts, $sub_business_regi_infos)
+    public function setRegistrationDataRecord($brand, $req_date, $sub_business_regi_infos)
     {
-        return '';
+        return ['', []];
     }
 
-    public function registerResponse($content)
+    public function getRegistrationDataRecord($content)
     {
-        return '';
+        return [];
     }
 }

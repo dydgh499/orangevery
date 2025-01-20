@@ -1,32 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Log\DifferenceSettlement\Manager;
+namespace App\Http\Controllers\Log\DifferenceSettlement\Component;
+
+use App\Http\Controllers\Log\DifferenceSettlement\Component\MerchandiseRegistrationBase;
 use Carbon\Carbon;
 
-class DifferenceSettlementBase
+class ComponentBase extends MerchandiseRegistrationBase
 {
-    public function getBaseSettleCodes()
-    {
-        return [
-            '-101'  => 'MID 누락',
-            '-100'  => '가맹점 사업자번호 오기입',
-            '50'    => '업로드 완료',
-            '51'    => '재업로드',
-        ];
-    }
-
-    public function getMchtSectionName($code)
-    {
-        $mcht_sections = [
-            '0' => '영세',
-            '1' => '중소1',
-            '2' => '중소2',
-            '3' => '중소3',
-            '4' => '일반',
-        ];
-        return isset($mcht_sections[$code]) ? $mcht_sections[$code] : '알수없는 코드';        
-    }
-
     public function getSettlementResponseObejct($trans_id, $settle_result_code, $settle_result_msg, $mcht_section_code, $cur_date)
     {
         return [

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Log\DifferenceSettlement;
+namespace App\Http\Controllers\Log\DifferenceSettlement\Container;
 
 use App\Http\Traits\Log\DifferenceSettlement\FileRWTrait;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
-class DifferenceSettlement
+class ContainerBase
 {
     use FileRWTrait;
     protected $brand   = null;
@@ -26,7 +26,7 @@ class DifferenceSettlement
         $this->brand = $brand;
         $this->service_name = basename(str_replace('\\', '/', get_class($this)));
 
-        $path = "App\Http\Controllers\Log\DifferenceSettlement\Manager\\".$this->service_name;
+        $path = "App\Http\Controllers\Log\DifferenceSettlement\Component\\".$this->service_name;
         try
         {
             $this->service = new $path();
@@ -56,7 +56,7 @@ class DifferenceSettlement
             {
                 $connection = null;
                 $connection_stat = false;
-                error(['type'=>$type], $this->service_name."\t $type \t"."difference-settlement-connection (X)");
+                logging(['type'=>$type], $this->service_name."\t $type \t"."difference-settlement-connection (X)");
             }    
         }
         return [$connection, $connection_stat];
@@ -84,18 +84,29 @@ class DifferenceSettlement
         return $data_histories;
     }
     
-    protected function upload($save_path, $full_record)
+    public function setUpdatedAt($data_histories)
+    {
+        $cur_at = date("Y-m-d H:i:s");
+        for ($i=0; $i < count($data_histories) ; $i++) 
+        { 
+            $data_histories[$i]['updated_at'] = $cur_at;
+
+        }
+        return $data_histories;
+    }
+
+    protected function upload($save_path, $full_record, $message = 'difference-settlement-upload')
     {
         if($this->main_connection_stat)
         {
             if($this->main_sftp_connection->put($save_path, $full_record))
             {
-                logging(['save_path'=>$save_path, 'line' => count(explode("\n", $full_record))], $this->service_name."\t main \t"."difference-settlement-request (O)");
+                logging(['save_path'=>$save_path, 'line' => count(explode("\n", $full_record))], $this->service_name."\t main \t"."$message (O)");
                 return true;
             }
             else
             {
-                error(['save_path'=>$save_path, 'line' => count(explode("\n", $full_record))], $this->service_name."\t main \t"."difference-settlement-request (X)");
+                error(['save_path'=>$save_path, 'line' => count(explode("\n", $full_record))], $this->service_name."\t main \t"."$message (X)");
                 return false;
             }    
         }
@@ -103,49 +114,53 @@ class DifferenceSettlement
             return false;
     }
 
-    
+    protected function download($download_path, $message = 'difference-settlement-download')
+    {
+        try
+        {
+            $connection_type = "";
+            if($this->main_connection_stat && $this->main_sftp_connection->exists($download_path))
+            {
+                $connection_type = 'MAIN';
+                $contents  = $this->main_sftp_connection->get($download_path);
+            }
+            else if($this->dr_connection_stat && $this->dr_sftp_connection->exists($download_path))
+            {
+                $connection_type = 'DR';
+                $contents = $this->dr_sftp_connection->get($download_path);
+            }
+            else
+                $contents = "";
+            if($contents !== "")
+            {
+                logging(['download_path'=>$download_path, 'line' => count(explode("\n", $contents))], $this->service_name."\t $connection_type \t"."$message (O)");
+                return $contents;   
+            }
+            else
+            {
+                error(['download_path'=>$download_path, 'line' => count(explode("\n", $contents))], $this->service_name."\t $connection_type \t"."$message (X)");
+                return "";
+            }
+        }
+        catch(\Throwable $e)
+        {
+            error(['download_path'=>$download_path, 'error' => $e->getMessage()], $this->service_name."\t $connection_type \t"."$message (X)");
+            return [];
+        }
+    }
 
-    public function setGroupbySettleResultCode($records)
+    public function setGroupbyResultCode($records, $key)
     {
         $grouped_records = [];
         foreach ($records as $record) 
         {
-            $settle_result_code = $record['settle_result_code'];
+            $settle_result_code = $record[$key];
             if (!isset($grouped_records[$settle_result_code]))
                 $grouped_records[$settle_result_code] = [];
 
             $grouped_records[$settle_result_code][] = $record;
         }
         return $grouped_records;
-    }
-
-    protected function _response($res_path, $req_date)
-    {
-        try
-        {
-            $connection_type = "";
-            if($this->main_connection_stat && $this->main_sftp_connection->exists($res_path))
-            {
-                $connection_type = 'MAIN';
-                $contents = $this->main_sftp_connection->get($res_path);
-            }
-            else if($this->dr_connection_stat && $this->dr_sftp_connection->exists($res_path))
-            {
-                $connection_type = 'DR';
-                $contents = $this->dr_sftp_connection->get($res_path);
-            }
-            else
-                return [];
-
-            $datas = $contents ? $this->service->getDataRecord($contents) : [];
-            logging(['date'=>$req_date, 'data-count'=>count($datas)], $this->service_name."\t $connection_type \t"."difference-settlement-response (O)");
-            return $this->setGroupbySettleResultCode($datas);
-        }
-        catch(\Throwable $e)
-        {
-            error(['date'=>$req_date, 'datas'=>[], 'error' => $e->getMessage()], $this->service_name."\t $connection_type \t"."difference-settlement-response (X)");
-            return [];
-        }
     }
 
     public function setStartRecord($req_date)
@@ -205,39 +220,6 @@ class DifferenceSettlement
             $total_count    = $this->setNtypeField($total_count, 7);
             $filter         = $this->setAtypeField('', $this->RQ_END_FILTER_SIZE);
             return $record_type.$total_count.$filter."\r\n";
-        }
-    }
-
-    public function _registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos)
-    {
-        $full_record = $this->service->registerRequest($this->brand, $req_date, $mchts, $sub_business_regi_infos);
-        if($this->main_connection_stat)
-            $result = $this->main_sftp_connection->put($save_path, $full_record);
-        if($this->dr_connection_stat)
-            $result = $this->dr_sftp_connection->put($save_path, $full_record);
-        logging(['result'=>$result, 'save_path'=>$save_path], $this->service_name.'-sub-business-registration-request');
-        return $result;
-    }
-
-    public function _registerResponse($res_path, $req_date)
-    {
-        try
-        {
-            if($this->main_connection_stat && $this->main_sftp_connection->exists($res_path))
-                $contents = $this->main_sftp_connection->get($res_path);
-            else if($this->dr_connection_stat && $this->dr_sftp_connection->exists($res_path))
-                $contents = $this->dr_sftp_connection->get($res_path);
-            else
-                $contents = null;
-
-            $datas = $contents ? $this->service->registerResponse($contents) : [];
-            logging(['date'=>$req_date, 'datas'=>$datas, 'contents'=>$contents], $this->service_name.'-sub-business-registration-response');
-            return $datas;
-        }
-        catch(\Throwable $e)
-        {
-            logging(['date'=>$req_date, 'datas'=>[]], $this->service_name.'-sub-business-registration-response('. $e->getMessage().")");
-            return [];
         }
     }
 }

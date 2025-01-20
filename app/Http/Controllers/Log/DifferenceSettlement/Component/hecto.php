@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Log\DifferenceSettlement\Manager;
+namespace App\Http\Controllers\Log\DifferenceSettlement\Component;
 
-use App\Http\Controllers\Log\DifferenceSettlement\Manager\DifferenceSettlementInterface;
-use App\Http\Controllers\Log\DifferenceSettlement\Manager\DifferenceSettlementBase;
+use App\Http\Controllers\Log\DifferenceSettlement\Component\ComponentInterface;
+use App\Http\Controllers\Log\DifferenceSettlement\Component\ComponentBase;
 use App\Http\Traits\Log\DifferenceSettlement\FileRWTrait;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Carbon\Carbon;
 
-class hecto extends DifferenceSettlementBase implements DifferenceSettlementInterface
+class hecto extends ComponentBase implements ComponentInterface
 {
     use FileRWTrait;
     public $mcht_cards = [
@@ -76,12 +76,9 @@ class hecto extends DifferenceSettlementBase implements DifferenceSettlementInte
 
     public function getDataRecord($contents)
     {
-        $records = [];
-        $cur_date = date('Y-m-d H:i:s');
-        $lines = explode("\n", $contents);
-        $datas = array_values(array_filter($lines, function($line) {
-            return substr($line, 0, 2) === DifferenceSettleHectoRecordType::DATA->value;
-        }));
+        $records    = [];
+        $cur_date   = date('Y-m-d H:i:s');
+        $datas      = $this->getDataLines($contents, DifferenceSettleHectoRecordType::DATA->value);
         for ($i=0; $i < count($datas); $i++) 
         { 
             $data = $datas[$i];
@@ -132,7 +129,7 @@ class hecto extends DifferenceSettlementBase implements DifferenceSettlementInte
         return isset($settle_codes[$code]) ? $settle_codes[$code] : '알수없는 코드';
     }
 
-    public function registerRequest($brand, $req_date, $mchts, $sub_business_regi_infos)
+    public function setRegistrationDataRecord($brand, $req_date, $sub_business_regi_infos)
     {
         $getHeader = function($brand, $req_date) {
             return 
@@ -141,50 +138,36 @@ class hecto extends DifferenceSettlementBase implements DifferenceSettlementInte
                 $this->setAtypeField('', 490).
                 "\r\n";
         };
-        $getDatas = function($brand, $mchts, $sub_business_regi_infos) {
-            $full_records = '';
-            $upload = [
-                'new_count' => 0, 
-                'remove_count' => 0, 
-                'modify_count' => 0,
-                'total_count' => 0,
-            ];
+        $getDatas = function($brand, $sub_business_regi_infos) {
+            [$data_records, $upload, $datas] = $this->getRegisterTotalFormat();
             $yesterday = Carbon::now()->subDay(1)->format('Ymd');
             for ($i=0; $i < count($sub_business_regi_infos); $i++) 
             { 
                 $sub_business_regi_info = $sub_business_regi_infos[$i];
-                $mcht = $mchts->first(function ($mcht) use ($sub_business_regi_info) {
-                    return $mcht->business_num === $sub_business_regi_info->business_num;
-                });
-                if($mcht)
-                {
-                    $records = $this->setAtypeField("RD", 2);
-                    $records .= $this->setAtypeField($sub_business_regi_info->registration_type, 2);
-                    $records .= $this->setAtypeField($brand['rep_mid'], 10);
-                    $records .= $this->setAtypeField($sub_business_regi_info->card_company_code, 3);
-                    $records .= $this->setAtypeField(str_replace('-', '', $mcht->business_num), 10);
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->sector), 20);
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->mcht_name), 40);
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->addr), 100);
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->nick_name), 40);
-                    $records .= $this->setAtypeField(str_replace('-', '', $mcht->phone_num), 11);
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->email), 40);   //이메일 필드
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->website_url), 80);   //웹사이트 URL 필드
-                    $records .= $this->setNtypeField($yesterday, 8);
-                    $records .= $this->setAtypeField('', 128);
-                    $records .= "\r\n";      
-                    $full_records .= $records;
-                    
-                    if($sub_business_regi_info->registration_type === 0)
-                        $upload['new_count']++;
-                    else if($sub_business_regi_info->registration_type === 1)
-                        $upload['remove_count']++;
-                    else if($sub_business_regi_info->registration_type === 2)
-                        $upload['modify_count']++;
-                    $upload['total_count']++;
-                }
+                $brand_business_num = trim(str_replace('-', '', $brand['business_num']));
+                $business_num       = trim(str_replace('-', '', $sub_business_regi_info->business_num));
+                $phone_num          = trim(str_replace('-', '', $sub_business_regi_info->phone_num));
+                $records = $this->setAtypeField("RD", 2);
+                $records .= $this->setAtypeField($sub_business_regi_info->registration_type, 2);
+                $records .= $this->setAtypeField($brand['rep_mid'], 10);
+                $records .= $this->setAtypeField($sub_business_regi_info->card_company_code, 3);
+                $records .= $this->setAtypeField($business_num, 10);
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->sector), 20);
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->mcht_name), 40);
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->addr), 100);
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->nick_name), 40);
+                $records .= $this->setAtypeField($phone_num, 11);
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->email), 40);   //이메일 필드
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->website_url), 80);   //웹사이트 URL 필드
+                $records .= $this->setNtypeField($yesterday, 8);
+                $records .= $this->setAtypeField('', 128);
+                $records .= "\r\n";      
+                $data_records .= $records;
+                
+                $upload = $this->setRegisterCount($sub_business_regi_info, $upload);
+                $datas[] = $this->getRegisterRequestObject($sub_business_regi_info->id);
             }
-            return [$full_records, $upload];
+            return [$data_records, $upload, $datas];
         };
         $getTrailer = function($upload) {
             return 
@@ -196,15 +179,15 @@ class hecto extends DifferenceSettlementBase implements DifferenceSettlementInte
                 $this->setAtypeField('', 458).
                 "\r\n";
         };
-        [$datas, $upload] = $getDatas($brand, $mchts, $sub_business_regi_infos);
+        [$data_records, $upload, $datas] = $getDatas($brand, $sub_business_regi_infos);
 
         $records  = $getHeader($brand, $req_date);
-        $records .= $datas;
+        $records .= $data_records;
         $records .= $getTrailer($upload);
-        return $records;
+        return [$records, $datas];
     }
 
-    public function registerResponse($content)
+    public function getRegistrationDataRecord($content)
     {
         $pgResultMessage = function($code) {
             $result_codes = [
@@ -216,25 +199,26 @@ class hecto extends DifferenceSettlementBase implements DifferenceSettlementInte
             ];
             return isset($result_codes[$code]) ? $result_codes[$code] : '알수없는 코드';
         };
-        $records = [];
-        $lines = explode("\n", $content);
-        $datas = array_values(array_filter($lines, function($line) {
-            return substr($line, 0, 2) === 'RD';
-        }));
-        for ($i=0; $i < count($datas); $i++) 
+
+        $records = $this->getDataLines($content, "RD");
+        $datas   = [];
+
+        for ($i=0; $i < count($records); $i++) 
         { 
-            /*
-                $data = iconv('EUC-KR', 'UTF-8', $datas[$i]);
-                $add_field      = $this->getNtypeField($data, 372, 12);
-                $pg_result_code = $this->getNtypeField($data, 371, 2);  
-                $pg_result_msg  = $pgResultMessage($pg_result_code);
-                $record = [
-                    'id' => (int)$add_field,
-                    'registration_result' => (int)$pg_result_code,
-                    'registration_msg' => $pg_result_msg,
-                ];
-            */
+            $record  = iconv('EUC-KR', 'UTF-8', $records[$i]);
+            $id      = $this->getNtypeField($record, 372, 12);
+            $pg_result_code = $this->getNtypeField($record, 371, 2);  
+            $pg_result_msg  = $pgResultMessage($pg_result_code);
+            $data = [
+                'id' => (int)$id,
+                'registration_code' => $pg_result_code,
+                'registration_msg'  => $pg_result_msg,
+            ];
+            if($settle_result_code === '00')
+                $data = array_merge($data, $this->getRegisterResponseSuccess(date('Ymd')));
+            
+            $datas = $this->setRegisterResponseList($datas, $data, 'hecto');
         }
-        return $records;
+        return $datas;
     }
 }

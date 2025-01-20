@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Log\DifferenceSettlement\Manager;
 
-use App\Http\Controllers\Log\DifferenceSettlement\Manager\DifferenceSettlementInterface;
-use App\Http\Controllers\Log\DifferenceSettlement\Manager\DifferenceSettlementBase;
+use App\Http\Controllers\Log\DifferenceSettlement\Component\ComponentInterface;
+use App\Http\Controllers\Log\DifferenceSettlement\Component\ComponentBase;
 use App\Http\Traits\Log\DifferenceSettlement\FileRWTrait;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Carbon\Carbon;
 
-class nicepay extends DifferenceSettlementBase implements DifferenceSettlementInterface
+class nicepay extends ComponentBase implements ComponentInterface
 {
     use FileRWTrait;
     public $mcht_cards = [
@@ -105,51 +105,45 @@ class nicepay extends DifferenceSettlementBase implements DifferenceSettlementIn
         return isset($settle_codes[$code]) ? $settle_codes[$code] : '알수없는 코드';
     }
 
-    public function registerRequest($brand, $req_date, $mchts, $sub_business_regi_infos)
+    public function setRegistrationDataRecord($brand, $req_date, $sub_business_regi_infos)
     {
         $getHeader = function($brand, $req_date) {
             return 
                 $this->setAtypeField("HD", 2).
                 $this->setNtypeField($req_date, 8).
-                $this->setAtypeField('', 490).
-                "\r\n";
+                $this->setAtypeField('', 490)
+                ."\r\n";
         };
-        $getDatas = function($brand, $mchts, $sub_business_regi_infos) {
-            $seq = 1;
-            $full_records = '';
-            $upload = [
-                'new_count' => 0, 
-                'remove_count' => 0, 
-                'modify_count' => 0,
-                'total_count' => 0,
-            ];
+        $getDatas = function($brand, $sub_business_regi_infos) {
+            [$data_records, $upload, $datas] = $this->getRegisterTotalFormat();
             $yesterday = Carbon::now()->subDay(1)->format('Ymd');
             for ($i=0; $i < count($sub_business_regi_infos); $i++) 
-            { 
+            {
                 $sub_business_regi_info = $sub_business_regi_infos[$i];
-                $mcht = $mchts->first(function ($mcht) use ($sub_business_regi_info) {
-                    return $mcht->business_num === $sub_business_regi_info->business_num;
-                });
+                $brand_business_num = trim(str_replace('-', '', $brand['business_num']));
+                $business_num       = trim(str_replace('-', '', $sub_business_regi_info->business_num));
+                $phone_num          = trim(str_replace('-', '', $sub_business_regi_info->phone_num));
+
                 if($mcht)
                 {
-                    if(substr_count($mcht->phone_num, '-') === 2)
+                    if(substr_count($phone_num, '-') === 2)
                     {
-                        $nums = explode('-', $mcht->phone_num);
+                        $nums = explode('-', $phone_num);
                         $region_num = $nums[0];
                         $number_1 = $nums[1];
                         $number_2 = $nums[2];
                     }
-                    else if(strlen($mcht->phone_num) === 9)
+                    else if(strlen($phone_num) === 9)
                     {
-                        $region_num = substr($mcht->phone_num, 0, 2);
-                        $number_1 = substr($mcht->phone_num, 2, 4);
-                        $number_2 = substr($mcht->phone_num, 6, 4);
+                        $region_num = substr($phone_num, 0, 2);
+                        $number_1 = substr($phone_num, 2, 4);
+                        $number_2 = substr($phone_num, 6, 4);
                     }
-                    else if(strlen($mcht->phone_num) === 10)
+                    else if(strlen($phone_num) === 10)
                     {
-                        $region_num = substr($mcht->phone_num, 0, 3);
-                        $number_1 = substr($mcht->phone_num, 3, 4);
-                        $number_2 = substr($mcht->phone_num, 7, 4);
+                        $region_num = substr($phone_num, 0, 3);
+                        $number_1 = substr($phone_num, 3, 4);
+                        $number_2 = substr($phone_num, 7, 4);
                     }
                     else
                     {
@@ -158,38 +152,32 @@ class nicepay extends DifferenceSettlementBase implements DifferenceSettlementIn
                         $number_2 = '5678';
                     }
                     $records = $this->setAtypeField("RD", 2);
-                    $records .= $this->setAtypeField($sub_business_regi_info->registration_type, 2);
-                    $records .= $this->setAtypeField($brand['business_num'], 10);
-                    $records .= $this->setAtypeField($sub_business_regi_info->card_company_code, 3);
-                    $records .= $this->setAtypeField(str_replace('-', '', $mcht->business_num), 10);
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->sector), 20);  // 업종명(하위몰)
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->mcht_name), 40);
-                    $records .= $this->setNtypeField('000000', 6); // 우편번호(하위몰)
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->addr), 100);
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->nick_name), 40);   // 대표자명(하위몰)
-                    
+                    $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
+                    $records .= $this->setNtypeField($brand_business_num, 10);
+                    $records .= $this->setNtypeField($sub_business_regi_info->card_company_code, 3);
+                    $records .= $this->setNtypeField($business_num, 10);
+
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->sector), 20);
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->mcht_name), 40);
+                    $records .= $this->setNtypeField('00000', 6);   //우편번호
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->addr), 100);
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->nick_name), 40);
                     $records .= $this->setNtypeField($region_num, 3);  //지역번호 필드
                     $records .= $this->setNtypeField($number_1, 4);   //국번번호 필드
                     $records .= $this->setNtypeField($number_2, 4);   //개별번호 필드
-
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->email), 40);   //이메일 필드
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->website_url), 80);   //웹사이트 URL 필드
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->email), 40);   //이메일 필드
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->website_url), 80);   //웹사이트 URL 필드
                     $records .= $this->setNtypeField($yesterday, 8);
-                    $records .= $this->setNtypeField($seq, 12);
+                    $records .= $this->setAtypeField($sub_business_regi_info->id, 12);
                     $records .= $this->setAtypeField('', 116);
-                    $records .= "\r\n";      
-                    $full_records .= $records;
-                    
-                    if($sub_business_regi_info->registration_type === 0)
-                        $upload['new_count']++;
-                    else if($sub_business_regi_info->registration_type === 1)
-                        $upload['remove_count']++;
-                    else if($sub_business_regi_info->registration_type === 2)
-                        $upload['modify_count']++;
-                    $upload['total_count']++;
-                    $seq++;
+                    $records .= "\r\n";
+                    $data_records .= $records;
+
+                    $upload = $this->setRegisterCount($sub_business_regi_info, $upload);
+                    $datas[] = $this->getRegisterRequestObject($sub_business_regi_info->id);
                 }
             }
+
             return [$full_records, $upload];
         };
         $getTrailer = function($upload) {
@@ -202,15 +190,17 @@ class nicepay extends DifferenceSettlementBase implements DifferenceSettlementIn
                 $this->setAtypeField('', 458).
                 "\r\n";
         };
-        [$datas, $upload] = $getDatas($brand, $mchts, $sub_business_regi_infos);
+
+        [$data_records, $upload, $datas] = $getDatas($brand, $sub_business_regi_infos);
 
         $records  = $getHeader($brand, $req_date);
-        $records .= $datas;
+        $records .= $data_records;
         $records .= $getTrailer($upload);
-        return $records;
+
+        return [$records, $datas];
     }
 
-    public function registerResponse($content)
+    public function getRegistrationDataRecord($content)
     {
         $pgResultMessage = function($code) {
             $result_codes = [
@@ -218,29 +208,30 @@ class nicepay extends DifferenceSettlementBase implements DifferenceSettlementIn
                 '01' => '미정의 등록구분 값',
                 '02' => '미정의 카드사코드 값',
                 '03' => '필수 값 누락',
-                '04' => '중복사업자번호(하위몰)',
+                '04' => '온라인 미등록 가맹점번호',
             ];
             return isset($result_codes[$code]) ? $result_codes[$code] : '알수없는 코드';
         };
-        $records = [];
-        $lines = explode("\n", $content);
-        $datas = array_values(array_filter($lines, function($line) {
-            return substr($line, 0, 2) === 'RD';
-        }));
-        for ($i=0; $i < count($datas); $i++) 
-        { 
-            /*
-            $data = iconv('EUC-KR', 'UTF-8', $datas[$i]);
-            $add_field      = $this->getNtypeField($data, 372, 12);
-            $pg_result_code = $this->getNtypeField($data, 371, 2);  
-            $pg_result_msg  = $pgResultMessage($pg_result_code);
-            $record = [
-                'id' => (int)$add_field,
-                'registration_result' => (int)$pg_result_code,
-                'registration_msg' => $pg_result_msg,
+        $records = $this->getDataLines($content, "RD");
+        $datas   = [];
+
+        for ($i=0; $i < count($records); $i++) 
+        {
+            $record = iconv('EUC-KR', 'UTF-8', $records[$i]);
+            $id      = $this->getNtypeField($record, 466, 6);
+            $req_dt  = $this->getAtypeField($record, 460, 6);
+            $result_code  = $this->getAtypeField($record, 474, 2);
+
+            $data = [
+                'id'     => (int)$id,
+                'registration_code' => $result_code,
+                'registration_msg'  => $pgResultMessage($result_code),
             ];
-            */
+            if($settle_result_code === '00')
+                $data = array_merge($data, $this->getRegisterResponseSuccess("20".$req_dt));
+
+            $datas = $this->setRegisterResponseList($datas, $data, 'secta9ine');
         }
-        return $records;
+        return $datas;
     }
 }

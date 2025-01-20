@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Log\DifferenceSettlement;
+namespace App\Http\Controllers\Log\DifferenceSettlement\Container;
 
-use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlementInterface;
-use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlement;
+use App\Http\Controllers\Log\DifferenceSettlement\Container\ContainerInterface;
+use App\Http\Controllers\Log\DifferenceSettlement\Container\ContainerBase;
 use App\Enums\DifferenceSettleHectoRecordType;
 use App\Models\Merchandise\PaymentModule;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
-class ksnet extends DifferenceSettlement implements DifferenceSettlementInterface
+class ksnet extends ContainerBase implements ContainerInterface
 {
     public function __construct($brand)
     {
@@ -71,25 +71,13 @@ class ksnet extends DifferenceSettlement implements DifferenceSettlementInterfac
         return $datas;
     }
 
-    public function registerRequest(Carbon $date, $mchts, $sub_business_regi_infos)
+    public function setRegistrationDataRecord(Carbon $date, $sub_business_regi_infos)
     {
-        $file_date = $date->format('ymd');
-        $req_date = $date->copy()->format('Ymd');
-        $brand_business_num = str_replace('-', '', $this->brand['business_num']);
-        $file_name = $file_date."_RS_".$brand_business_num.".00";
-
-        $save_path = "/EDI_MARGIN/$file_name";
-        return $this->_registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos);
+        return [];
     }
 
-    public function registerResponse(Carbon $date)
+    public function getRegistrationDataRecord(Carbon $date)
     {
-        $file_date = $date->format('ymd');
-        $req_date = $date->copy()->format('Ymd');
-        $brand_business_num = str_replace('-', '', $this->brand['business_num']);
-        $file_name = $file_date."_RR_".$brand_business_num.".00";
-
-        $save_path = "/EDI_MARGIN/RECV/$file_name";
-        return $this->_registerResponse($save_path, $req_date);
+        return [];
     }
 }

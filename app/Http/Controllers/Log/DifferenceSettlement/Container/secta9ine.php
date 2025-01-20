@@ -1,30 +1,30 @@
 <?php
 
-namespace App\Http\Controllers\Log\DifferenceSettlement;
+namespace App\Http\Controllers\Log\DifferenceSettlement\Container;
 
-use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlementInterface;
-use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlement;
+use App\Http\Controllers\Log\DifferenceSettlement\Container\ContainerInterface;
+use App\Http\Controllers\Log\DifferenceSettlement\Container\ContainerBase;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
-class nicepay extends DifferenceSettlement implements DifferenceSettlementInterface
+class secta9ine extends ContainerBase implements ContainerInterface
 {
     public function __construct($brand)
     {
         parent::__construct($brand);
-        $this->PMID_MODE  = false;
-        $this->RQ_PG_NAME = "NICEPAY";
-        $this->RQ_START_FILTER_SIZE  = 370;
-        $this->RQ_HEADER_FILTER_SIZE = 388;
-        $this->RQ_TOTAL_FILTER_SIZE  = 373;
-        $this->RQ_END_FILTER_SIZE    = 391;
+        $this->PMID_MODE  = true;
+        $this->RQ_PG_NAME = "X";
+        $this->RQ_START_FILTER_SIZE  = 192;
+        $this->RQ_HEADER_FILTER_SIZE = 0;
+        $this->RQ_TOTAL_FILTER_SIZE  = 0;
+        $this->RQ_END_FILTER_SIZE    = 150;
         
         $main_config_name   = 'different_settlement_main_'.$this->service_name;
-        $dr_config_name     = 'different_settlement_dr'.$this->service_name;
+        $dr_config_name     = 'different_settlement_dr_'.$this->service_name;
         config(['filesystems.disks.'.$main_config_name => [
             'driver' => 'sftp',
-            'host' => "121.133.126.8",
+            'host' => "211.43.193.74",
             'port' => 22,
             'username' => $brand['sftp_id'],
             'password' => $brand['sftp_password'],
@@ -32,7 +32,7 @@ class nicepay extends DifferenceSettlement implements DifferenceSettlementInterf
         ]]);
         config(['filesystems.disks.'.$dr_config_name => [
             'driver' => 'sftp',
-            'host' => "121.133.126.12", // 개발서버
+            'host' => "211.43.193.75", // 개발서버
             'port' => 22,
             'username' => $brand['sftp_id'],
             'password' => $brand['sftp_password'],
@@ -42,18 +42,6 @@ class nicepay extends DifferenceSettlement implements DifferenceSettlementInterf
         [$this->dr_sftp_connection, $this->dr_connection_stat] = [null, false];
     }
 
-    private function setTotalRecord($total_count, $total_amount)
-    {
-        $total_records  = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);
-        $total_records .= $this->setNtypeField($total_count, 7);
-        if($total_amount < 0)
-            $total_records .= "-".$this->setNtypeField(abs($total_amount), 17);
-        else
-            $total_records .= $this->setNtypeField($total_amount, 18);
-        $total_records .= $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE)."\r\n";
-        return $total_records;
-    }
-
     public function request(Carbon $date, $trans)
     {
         if($this->main_connection_stat)
@@ -61,8 +49,8 @@ class nicepay extends DifferenceSettlement implements DifferenceSettlementInterf
             $file_date = $date->format('ymd');
             $req_date = $date->format('Ymd');
             $brand_business_num = str_replace('-', '', $this->brand['business_num']);
-            $file_name = $file_date."_MD_".$brand_business_num.".00";
-            $save_path = "/EDI_MARGIN/$file_name";
+            $file_name = $brand_business_num."_REQUEST.$file_date";
+            $save_path = "/send/$file_name";
 
             $full_histories = [];
             $total_amount = 0;
@@ -75,12 +63,10 @@ class nicepay extends DifferenceSettlement implements DifferenceSettlementInterf
                 $mcht_trans = $this->getMidMatchTransctions($trans, $mid);
                 if(empty($mid) === false)
                 {
-                    $header = $this->setHeaderRecord($mid);
                     [$data_records, $count, $amount, $temp_histories] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num'], $mid);
-                    $total  = $this->setTotalRecord($count, $amount);
 
                     $full_histories = array_merge($full_histories, $temp_histories);
-                    $full_record .= $header.$data_records.$total;
+                    $full_record .= $data_records;
                     $total_count += ($count + 2);   //header, total records
                     $total_amount += $amount;    
                 }
@@ -97,34 +83,46 @@ class nicepay extends DifferenceSettlement implements DifferenceSettlementInterf
 
     public function response(Carbon $date)
     {
-        $file_date = $date->format('ymd');
-        $req_date = $date->copy()->format('Ymd');
+        $download_date = $date->format('ymd');
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);
-        $file_name = $file_date."_SD_".$brand_business_num.".00";
+        $download_path = "/recv/".$brand_business_num."_RECEIVE.$download_date";
 
-        $save_path = "/EDI_MARGIN/RECV/$file_name";
-        return $this->_response($save_path, $req_date);
+        $contents = $this->download($download_path);
+        if($contents !== "")
+        {
+            $datas = $this->service->getDataRecord($contents);
+            return $this->setGroupbyResultCode($datas, 'settle_result_code');
+        }
+        else
+            return [];
     }
 
-    public function registerRequest(Carbon $date, $mchts, $sub_business_regi_infos)
+    public function setRegistrationDataRecord(Carbon $date, $sub_business_regi_infos)
     {
-        $file_date = $date->format('ymd');
-        $req_date = $date->copy()->format('Ymd');
+        $upload_date = $date->copy()->format('ymd');
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);
-        $file_name = $file_date."_RS_".$brand_business_num.".00";
+        $upload_path = "/send/".$brand_business_num."_REQUEST_INFO.".$upload_date;
 
-        $save_path = "/EDI_MARGIN/$file_name";
-        return $this->_registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos);
+        [$full_record, $datas] = $this->service->setRegistrationDataRecord($this->brand, $upload_date, $sub_business_regi_infos);
+        if($this->upload($upload_path, $full_record, 'merchandise-registration-upload'))
+            return $this->setGroupbyResultCode($datas, 'registration_code');
+        else
+            return [];
     }
 
-    public function registerResponse(Carbon $date)
+    public function getRegistrationDataRecord(Carbon $date)
     {
-        $file_date = $date->format('ymd');
-        $req_date = $date->copy()->format('Ymd');
+        $download_date = $date->format('ymd');
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);
-        $file_name = $file_date."_RR_".$brand_business_num.".00";
+        $download_path = "/recv/".$brand_business_num."_RECEIVE_INFO.".$upload_date;
 
-        $save_path = "/EDI_MARGIN/RECV/$file_name";
-        return $this->_registerResponse($save_path, $req_date);
+        $contents = $this->download($download_path, 'merchandise-registration-download');
+        if($contents !== "")
+        {
+            $datas = $this->service->getRegistrationDataRecord($contents);
+            return $this->setGroupbyResultCode($datas, 'registration_code');
+        }
+        else
+            return [];
     }
 }

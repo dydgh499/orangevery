@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Log\DifferenceSettlement;
+namespace App\Http\Controllers\Log\DifferenceSettlement\Container;
 
-use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlementInterface;
-use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlement;
+use App\Http\Controllers\Log\DifferenceSettlement\Container\ContainerInterface;
+use App\Http\Controllers\Log\DifferenceSettlement\Container\ContainerBase;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Carbon\Carbon;
 
-class galaxiamoneytree extends DifferenceSettlement implements DifferenceSettlementInterface
+class galaxiamoneytree extends ContainerBase implements ContainerInterface
 {
     public function __construct($brand)
     {
@@ -67,32 +67,54 @@ class galaxiamoneytree extends DifferenceSettlement implements DifferenceSettlem
                     $total_amount += $amount;    
                 }
                 else
-                    $full_histories = array_merge($full_histories, $this->service->getMidEmptyHistoryObjects($mcht_trans));                
+                    $full_histories = array_merge($full_histories, $this->service->getMidEmptyHistoryObjects($mcht_trans));
             }
             $full_record .= $this->setEndRecord($total_count, $total_amount);
             if($this->upload($save_path, $full_record))
-                return $this->setCreatedAt($full_histories);  
+                return $this->setCreatedAt($full_histories); 
         }
         return [];
-
     }
 
     public function response(Carbon $date)
     {
-        $req_date = $date->copy()->format('Ymd');
-        $res_path = "/receive/".$this->brand['rep_mid']."_RECEIVE.".$req_date;
-        return $this->_response($res_path, $req_date);
+        $download_date = $date->copy()->format('Ymd');
+        $download_path = "/receive/".$this->brand['rep_mid']."_RECEIVE.".$download_date;
+
+        $contents = $this->download($download_path);
+        if($contents !== "")
+        {
+            $datas = $this->service->getDataRecord($contents);
+            return $this->setGroupbyResultCode($datas, 'settle_result_code');
+        }
+        else
+            return [];
     }
 
-    public function registerRequest(Carbon $date, $mchts, $sub_business_regi_infos)
+    public function setRegistrationDataRecord(Carbon $date, $sub_business_regi_infos)
     {
-        $req_date = $date->format('Ymd');
-        $save_path = "/request/".$this->brand['rep_mid']."_REQUEST_INFO.".$req_date;
-        return $this->_registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos);
+        $upload_date = $date->format('Ymd');
+        $upload_path = "/request/".$this->brand['rep_mid']."_REQUEST_INFO.".$upload_date;
+
+        [$full_record, $datas] = $this->service->setRegistrationDataRecord($this->brand, $upload_date, $sub_business_regi_infos);
+        if($this->upload($upload_path, $full_record, 'merchandise-registration-upload'))
+            return $this->setGroupbyResultCode($datas, 'registration_code');
+        else
+            return [];
     }
     
-    public function registerResponse($res_path, $req_date)
+    public function getRegistrationDataRecord(Carbon $date)
     {
-        
+        $download_date = $date->format('Ymd');
+        $download_path = "/receive/".$this->brand['rep_mid']."_RECEIVE_INFO.".$download_date;
+
+        $contents = $this->download($download_path, 'merchandise-registration-download');
+        if($contents !== "")
+        {
+            $datas = $this->service->getRegistrationDataRecord($contents);
+            return $this->setGroupbyResultCode($datas, 'registration_code');
+        }
+        else
+            return [];
     }
 }

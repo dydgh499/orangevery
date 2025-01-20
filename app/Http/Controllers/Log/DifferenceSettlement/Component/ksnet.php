@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Log\DifferenceSettlement\Manager;
+namespace App\Http\Controllers\Log\DifferenceSettlement\Component;
 
 use App\Models\Transaction;
-use App\Http\Controllers\Log\DifferenceSettlement\Manager\DifferenceSettlementInterface;
-use App\Http\Controllers\Log\DifferenceSettlement\Manager\DifferenceSettlementBase;
+use App\Http\Controllers\Log\DifferenceSettlement\Component\ComponentInterface;
+use App\Http\Controllers\Log\DifferenceSettlement\Component\ComponentBase;
 use App\Http\Traits\Log\DifferenceSettlement\FileRWTrait;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
-class ksnet extends DifferenceSettlementBase implements DifferenceSettlementInterface
+class ksnet extends ComponentBase implements ComponentInterface
 {
     use FileRWTrait;
     public $mcht_cards = [
@@ -28,7 +28,7 @@ class ksnet extends DifferenceSettlementBase implements DifferenceSettlementInte
     private $host;
     private $date;
     CONST PORT           = 9800;
-    CONST ENC_KEY        = '';
+    CONST ENC_KEY        = 'AV7/9VLmpEGY2dVvibNnHg=';
     CONST CLASSIFICATION = "PGTMS";
 
     public function __construct()
@@ -58,7 +58,7 @@ class ksnet extends DifferenceSettlementBase implements DifferenceSettlementInte
 
     public function moduleUpload($save_path, $mid, $full_record)
     {
-        $log_base   = "ksnet\t main \t"."difference-settlement-request";
+        $log_base   = "ksnet\t main \t"."difference-settlement-upload";
         // MID 입력값 검증
         if (!preg_match('/^[a-zA-Z0-9_]+$/', $mid) || strlen($mid) !== 10)
             error(['Invalid MID'=>$mid], "$log_base (X)");
@@ -207,7 +207,7 @@ class ksnet extends DifferenceSettlementBase implements DifferenceSettlementInte
             $data = explode(',', $datas[$i]);
 
             $is_cancel  = $data[3];
-            $trx_id     = $data[12];
+            $trx_id     = (int)$data[12];
             $settle_result_code = $data[13];
             $mcht_section_code  = $data[14];
             $settle_amount  = (int)$data[16];
@@ -215,6 +215,13 @@ class ksnet extends DifferenceSettlementBase implements DifferenceSettlementInte
 
             $supply_amount = round($settle_amount/1.1);
             $vat_amount = $settle_amount - $settle_amount;
+
+            if($is_cancel)
+            {
+                $supply_amount *= -1;
+                $vat_amount *= -1;
+                $settle_amount *= -1;
+            }
 
             $record = $this->getSettlementResponseObejct($trx_id, $settle_result_code, $this->getSettleMessage($settle_result_code), $mcht_section_code, $cur_date);
             if($settle_result_code === '00')
@@ -261,13 +268,13 @@ class ksnet extends DifferenceSettlementBase implements DifferenceSettlementInte
         return isset($settle_codes[$code]) ? $settle_codes[$code] : '알수없는 코드';
     }
 
-    public function registerRequest($brand, $req_date, $mchts, $sub_business_regi_infos)
+    public function setRegistrationDataRecord($brand, $req_date, $sub_business_regi_infos)
     {
-        return '';
+        return ['', []];
     }
 
-    public function registerResponse($content)
+    public function getRegistrationDataRecord($content)
     {
-        return '';
+        return [];
     }
 }
