@@ -104,9 +104,9 @@ class BulkMerchandiseRequest extends FormRequest
         for ($i=0; $i < count($_datas) ; $i++)
         {
             $data = array_merge(
-                $this->getParmasBaseKeyV3($_datas, $this->keys, ''),
-                $this->getParmasBaseKeyV3($_datas, $this->integer_keys, 0),
-                $this->getParmasBaseKeyV3($_datas, $this->nullable_keys, null)
+                $this->getParmasBaseKeyV3($_datas[$i], $this->keys, ''),
+                $this->getParmasBaseKeyV3($_datas[$i], $this->integer_keys, 0),
+                $this->getParmasBaseKeyV3($_datas[$i], $this->nullable_keys, null)
             );
             $data['hold_fee']   /= 100; 
             $data['trx_fee']    /= 100; 

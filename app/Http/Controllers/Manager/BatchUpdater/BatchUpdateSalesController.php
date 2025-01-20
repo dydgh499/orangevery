@@ -12,6 +12,11 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
+use App\Http\Requests\Manager\BulkRegister\BulkSalesforceRequest;
+
+use App\Http\Controllers\Auth\AuthPasswordChange;
+use Illuminate\Support\Facades\Hash;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -141,5 +146,41 @@ class BatchUpdateSalesController extends BatchUpdateController
     {
         $row = $this->salesforceBatch($request)->update(['is_delete' => true]);
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 영업점이 존재하지 않습니다.');
+    }
+
+    
+    public function bulkRegister(BulkSalesforceRequest $request)
+    {
+        $current = date('Y-m-d H:i:s');
+        $brand_id = $request->user()->brand_id;
+        $datas = $request->data();
+
+        $exist_names = $this->isExistBulkUserName($brand_id, $datas->pluck('user_name')->all());
+        $exist_sales = $this->isExistBulkMutual($this->salesforces, $brand_id, 'sales_name', $datas->pluck('sales_name')->all());
+        
+        if(count($exist_names))
+            return $this->extendResponse(1000, join(',', $exist_names).'는 이미 존재하는 아이디 입니다.');
+        else if(count($exist_sales))
+            return $this->extendResponse(1000, join(',', $exist_sales).'는 이미 존재하는 상호 입니다.');
+        else
+        {
+            foreach($datas as $data)
+            {
+                [$result, $msg] = AuthPasswordChange::registerValidate($data['user_name'], $data['user_pw']);
+                if($result === false)
+                    return $this->extendResponse(954, $data['user_name']." ".$msg, []);
+            }
+
+            $salesforces = $datas->map(function ($data) use($current, $brand_id) {
+                $data['user_pw'] = Hash::make($data['user_pw'].$current);
+                $data['brand_id'] = $brand_id;
+                $data['created_at'] = $current;
+                $data['updated_at'] = $current;
+                return $data;
+            })->toArray();
+
+            $res = $this->manyInsert($this->salesforces, $salesforces);
+            return $this->response($res ? 1 : 990);
+        }
     }
 }

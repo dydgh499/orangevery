@@ -130,7 +130,7 @@ class HolidayController extends Controller
     /*
      * 공휴일 대량 업데이트
      */
-    public function updateHolidays(Request $request)
+    public function register(Request $request)
     {
         $this_year  = (int)Carbon::now()->format('Y');
         $holidays   = array_merge(

@@ -104,7 +104,7 @@ class RegularCreditCardController extends Controller
      *
      * 운영자 이상 가능
      */
-    public function bulkRegister(BulkRegularCardRequest $request)
+    public function register(BulkRegularCardRequest $request)
     {
         $current = date('Y-m-d H:i:s');
         $brand_id = $request->user()->brand_id;

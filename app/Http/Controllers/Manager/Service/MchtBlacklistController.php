@@ -110,7 +110,7 @@ class MchtBlacklistController extends Controller
      * 대량등록
      *
      */
-    public function bulkRegister(BulkMchtBlacklistRequest $request)
+    public function register(BulkMchtBlacklistRequest $request)
     {
         $current = date('Y-m-d H:i:s');
         $datas = $request->data();

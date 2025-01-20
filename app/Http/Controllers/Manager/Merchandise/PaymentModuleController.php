@@ -13,7 +13,6 @@ use App\Http\Controllers\Manager\CodeGenerator\MidGenerator;
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Controllers\Manager\PaymentModule\VisiableSetter;
 
-use App\Http\Requests\Manager\BulkRegister\BulkPayModuleRequest;
 use App\Http\Requests\Manager\Merchandise\PayModuleRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
@@ -310,32 +309,6 @@ class PaymentModuleController extends Controller
                 VisiableSetter::set($content, $request);
             }
             return $this->response(0, $data);    
-        }
-    }
-    
-    /**
-     * 결제모듈 대량등록
-     *
-     * 운영자 이상 가능
-     */
-    public function bulkRegister(BulkPayModuleRequest $request)
-    {
-        $current = date('Y-m-d H:i:s');
-        $brand_id = $request->user()->brand_id;
-        $datas = $request->data();
-        if(count($datas) > 1000)
-            return $this->extendResponse(1000, '결제모듈은 한번에 최대 1000개까지 등록할 수 있습니다.');
-        else
-        {
-            $pay_modules = $datas->map(function ($data) use($current, $brand_id) {
-                $data['brand_id'] = $brand_id;
-                $data['created_at'] = $current;
-                $data['updated_at'] = $current;
-                return $data;
-            })->toArray();
-
-            $res = $this->manyInsert($this->pay_modules, $pay_modules);
-            return $this->response($res ? 1 : 990);
         }
     }
     

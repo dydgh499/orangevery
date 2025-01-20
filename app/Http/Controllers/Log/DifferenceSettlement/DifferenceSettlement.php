@@ -56,7 +56,7 @@ class DifferenceSettlement
             {
                 $connection = null;
                 $connection_stat = false;
-                logging(['type'=>$type], $this->service_name."\t $type \t"."difference-settlement-connection (X)");
+                error(['type'=>$type], $this->service_name."\t $type \t"."difference-settlement-connection (X)");
             }    
         }
         return [$connection, $connection_stat];

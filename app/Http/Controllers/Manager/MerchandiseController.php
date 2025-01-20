@@ -409,54 +409,6 @@ class MerchandiseController extends Controller
     }
 
     /**
-     * 대량등록
-     *
-     * 운영자 이상 가능
-     */
-    public function bulkRegister(BulkMerchandiseRequest $request)
-    {
-        $current = date('Y-m-d H:i:s');
-        $brand_id = $request->user()->brand_id;
-        $datas = $request->data();
-        if(count($datas) > 1000)
-            return $this->extendResponse(1000, '가맹점은 한번에 최대 1000개까지 등록할 수 있습니다.');
-        else
-        {
-            $exist_names = $this->isExistBulkUserName($brand_id, $datas->pluck('user_name')->all());
-            $exist_mchts = $this->isExistBulkMutual($this->merchandises, $brand_id, 'mcht_name', $datas->pluck('mcht_name')->all());
-    
-            if(count($exist_names))
-                return $this->extendResponse(1000, join(',', $exist_names).'는 이미 존재하는 아이디 입니다.');
-            else if(count($exist_mchts))
-                return $this->extendResponse(1000, join(',', $exist_mchts).'는 이미 존재하는 상호 입니다.');
-            else
-            {
-                foreach($datas as $data)
-                {
-                    [$result, $msg] = AuthPasswordChange::registerValidate($data['user_name'], $data['user_pw']);
-                    if($result === false)
-                        return $this->extendResponse(954, $data['user_name']." ".$msg, []);    
-                }
-    
-                $merchandises = $datas->map(function ($data) use($current, $brand_id) {
-                    $data['user_pw'] = Hash::make($data['user_pw'].$current);
-                    $data['brand_id'] = $brand_id;
-                    $data['created_at'] = $current;
-                    $data['updated_at'] = $current;
-                    return $data;
-                })->toArray();
-                $res = $this->manyInsert($this->merchandises, $merchandises);
-                $mcht_ids = $this->merchandises
-                        ->where('brand_id', $brand_id)
-                        ->where('created_at', $current)
-                        ->pluck('id')->all();
-
-                return $this->response($res ? 1 : 990, $mcht_ids);
-            }    
-        }
-    }
-
-    /**
      * 지급보류
      */
     public function setSettleHold(Request $request, $id)

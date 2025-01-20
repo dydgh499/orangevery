@@ -45,7 +45,7 @@ class BulkMchtBlacklistRequest extends FormRequest
         $_datas = $this->all();
         for ($i=0; $i < count($_datas) ; $i++)
         {
-            $data = $this->getParmasBaseKeyV3($_datas, $this->keys, '');
+            $data = $this->getParmasBaseKeyV3($_datas[$i], $this->keys, '');
             $data['brand_id'] = $this->user()->brand_id;
             $datas[] = $data;
         }

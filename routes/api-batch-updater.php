@@ -6,6 +6,10 @@ use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateSalesController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdatePayModuleController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateNotiUrlController;
+use App\Http\Controllers\Manager\Merchandise\RegularCreditCardController;
+
+use App\Http\Controllers\Manager\Service\HolidayController;
+use App\Http\Controllers\Manager\Service\MchtBlacklistController;
 
 Route::prefix('salesforces/batch-updaters')->group(function() {
     Route::post('set-settle-tax-type', [BatchUpdateSalesController::class, 'setSettleTaxType']);
@@ -16,6 +20,7 @@ Route::prefix('salesforces/batch-updaters')->group(function() {
     Route::post('set-account-info', [BatchUpdateSalesController::class, 'setAccountInfo']);
     Route::post('set-note', [BatchUpdateSalesController::class, 'setNote']);
     Route::delete('remove', [BatchUpdateSalesController::class, 'batchRemove']);   
+    Route::post('register', [BatchUpdateSalesController::class, 'register']);
 });
     
 Route::prefix('merchandises/batch-updaters')->group(function() {
@@ -33,6 +38,9 @@ Route::prefix('merchandises/batch-updaters')->group(function() {
     Route::post('set-specified-time-disable-limit', [BatchUpdateMchtController::class, 'setSpecifiedTimeDisableLimit']);
     Route::post('set-specified-time-disable-time', [BatchUpdateMchtController::class, 'setSpecifiedTimeDisableTime']);
     Route::post('set-use-noti', [BatchUpdateMchtController::class, 'setUseNoti']);                
+    Route::post('register', [BatchUpdateMchtController::class, 'register']);                
+    Route::post('regular-credit-cards/register', [RegularCreditCardController::class, 'register']);
+    Route::post('noti-urls/register', [BatchUpdateNotiUrlController::class, 'register']);
 });
     
 Route::prefix('merchandises/pay-modules/batch-updaters')->group(function() {       
@@ -56,6 +64,7 @@ Route::prefix('merchandises/pay-modules/batch-updaters')->group(function() {
     Route::post('set-payment-term-min', [BatchUpdatePayModuleController::class, 'setPaymentTermMin']);
     Route::post('set-pay-window-secure-level', [BatchUpdatePayModuleController::class, 'setPayWindowSecureLevel']);
     Route::post('set-pay-window-extend-hour', [BatchUpdatePayModuleController::class, 'setPayWindowExtendHour']);
+    Route::post('register', [BatchUpdatePayModuleController::class, 'register']);
     Route::delete('remove', [BatchUpdatePayModuleController::class, 'batchRemove']);   
 });
 
@@ -64,4 +73,9 @@ Route::prefix('merchandises/noti-urls/batch-updaters')->group(function() {
     Route::post('set-noti-status', [BatchUpdateNotiUrlController::class, 'setNotiStatus']);
     Route::post('set-note', [BatchUpdateNotiUrlController::class, 'setNote']);
     Route::delete('remove', [BatchUpdateNotiUrlController::class, 'batchRemove']);       
+});
+
+Route::prefix('services/batch-updaters')->group(function() { 
+    Route::post('mcht-blacklists/register', [MchtBlacklistController::class, 'register']);
+    Route::post('holidays/register', [HolidayController::class, 'register']);
 });

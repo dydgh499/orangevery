@@ -10,7 +10,6 @@ use App\Http\Traits\StoresTrait;
 
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Merchandise\NotiRequest;
-use App\Http\Requests\Manager\BulkRegister\BulkNotiUrlRequest;
 use App\Http\Controllers\Utils\ChartFormat;
 use App\Enums\HistoryType;
 
@@ -155,25 +154,5 @@ class NotiUrlController extends Controller
             operLogging(HistoryType::DELETE, $this->target, $noti, ['id' => $id], $noti->note);
         }
         return $this->response($res, $data);
-    }
-
-    /**
-     * 대량등록
-     *
-     * 운영자 이상 가능
-     */
-    public function bulkRegister(BulkNotiUrlRequest $request)
-    {
-        $current = date('Y-m-d H:i:s');
-        $datas = $request->data();
-
-        $noti_urls = $datas->map(function ($data) use($request, $current) {
-            $data['brand_id']   = $request->user()->brand_id;
-            $data['created_at'] = $current;
-            $data['updated_at'] = $current;
-            return $data;
-        })->toArray();
-        $res = $this->manyInsert($this->noti_urls, $noti_urls);
-        return $this->response($res ? 1 : 990);
     }
 }

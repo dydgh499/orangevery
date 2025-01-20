@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Manager\BatchUpdater;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateController;
 use App\Http\Controllers\Manager\BatchUpdater\MerchandiseFeeUpdater;
 use App\Http\Controllers\Manager\MerchandiseController;
+
+use App\Http\Requests\Manager\BulkRegister\BulkMerchandiseRequest;
+
 use App\Models\Merchandise;
 use App\Models\Merchandise\NotiUrl;
 use App\Models\Merchandise\PaymentModule;
@@ -17,9 +20,11 @@ use App\Http\Traits\StoresTrait;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Auth\AuthOperatorIP;
+use App\Http\Controllers\Auth\AuthPasswordChange;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * @group Merchandise-Batch-Updater API
@@ -307,5 +312,54 @@ class BatchUpdateMchtController extends BatchUpdateController
         ];
         $row = $this->getApplyRow($request, $cols);
         return $this->batchResponse($row, '가맹점');
+    }
+    
+    /**
+     * 대량등록
+     *
+     * 운영자 이상 가능
+     */
+    public function register(BulkMerchandiseRequest $request)
+    {
+        $current = date('Y-m-d H:i:s');
+        $brand_id = $request->user()->brand_id;
+        $datas = $request->data();
+        if(count($datas) > 1000)
+            return $this->extendResponse(1000, '가맹점은 한번에 최대 1000개까지 등록할 수 있습니다.');
+        else
+        {
+            $exist_names = $this->isExistBulkUserName($brand_id, $datas->pluck('user_name')->all());
+            $exist_mchts = $this->isExistBulkMutual($this->merchandises, $brand_id, 'mcht_name', $datas->pluck('mcht_name')->all());
+    
+            if(count($exist_names))
+                return $this->extendResponse(1000, join(',', $exist_names).'는 이미 존재하는 아이디 입니다.');
+            else if(count($exist_mchts))
+                return $this->extendResponse(1000, join(',', $exist_mchts).'는 이미 존재하는 상호 입니다.');
+            else
+            {
+                foreach($datas as $data)
+                {
+                    [$result, $msg] = AuthPasswordChange::registerValidate($data['user_name'], $data['user_pw']);
+                    if($result === false)
+                        return $this->extendResponse(954, $data['user_name']." ".$msg, $datas);    
+                }
+    
+                $merchandises = $datas->map(function ($data) use($current, $brand_id) {
+                    $data['user_pw'] = Hash::make($data['user_pw'].$current);
+                    $data['brand_id'] = $brand_id;
+                    $data['created_at'] = $current;
+                    $data['updated_at'] = $current;
+                    return $data;
+                })->toArray();
+                $res = $this->manyInsert($this->merchandises, $merchandises);
+                $mcht_ids = $this->merchandises
+                        ->where('brand_id', $brand_id)
+                        ->where('created_at', $current)
+                        ->pluck('id')
+                        ->all();
+
+                return $this->response($res ? 1 : 990, $mcht_ids);
+            }    
+        }
     }
 }

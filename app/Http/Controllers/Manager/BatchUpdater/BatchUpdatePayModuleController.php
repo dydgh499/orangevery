@@ -8,6 +8,7 @@ use App\Http\Controllers\Manager\BatchUpdater\MerchandiseFeeUpdater;
 
 use App\Models\Merchandise\PaymentModule;
 use App\Models\Merchandise\PaymentModuleColumnApplyBook;
+use App\Http\Requests\Manager\BulkRegister\BulkPayModuleRequest;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -306,5 +307,31 @@ class BatchUpdatePayModuleController extends BatchUpdateController
         $cols = ['pay_window_extend_hour' => $request->pay_window_extend_hour];
         $row = $this->getApplyRow($request, $cols);
         return $this->batchResponse($row, '결제모듈');
+    }
+    
+    /**
+     * 결제모듈 대량등록
+     *
+     * 운영자 이상 가능
+     */
+    public function register(BulkPayModuleRequest $request)
+    {
+        $current = date('Y-m-d H:i:s');
+        $brand_id = $request->user()->brand_id;
+        $datas = $request->data();
+        if(count($datas) > 1000)
+            return $this->extendResponse(1000, '결제모듈은 한번에 최대 1000개까지 등록할 수 있습니다.');
+        else
+        {
+            $pay_modules = $datas->map(function ($data) use($current, $brand_id) {
+                $data['brand_id'] = $brand_id;
+                $data['created_at'] = $current;
+                $data['updated_at'] = $current;
+                return $data;
+            })->toArray();
+
+            $res = $this->manyInsert($this->pay_modules, $pay_modules);
+            return $this->response($res ? 1 : 990);
+        }
     }
 }

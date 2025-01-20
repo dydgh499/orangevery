@@ -19,7 +19,6 @@ use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 
 use App\Http\Controllers\Auth\AuthPasswordChange;
-use App\Http\Requests\Manager\BulkRegister\BulkSalesforceRequest;
 use App\Http\Requests\Manager\SalesforceRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Utils\ChartFormat;
@@ -374,40 +373,5 @@ class SalesforceController extends Controller
         }
         else
             return $this->response(951);
-    }
-
-    public function bulkRegister(BulkSalesforceRequest $request)
-    {
-        $current = date('Y-m-d H:i:s');
-        $brand_id = $request->user()->brand_id;
-        $datas = $request->data();
-
-        $exist_names = $this->isExistBulkUserName($brand_id, $datas->pluck('user_name')->all());
-        $exist_sales = $this->isExistBulkMutual($this->salesforces, $brand_id, 'sales_name', $datas->pluck('sales_name')->all());
-        
-        if(count($exist_names))
-            return $this->extendResponse(1000, join(',', $exist_names).'는 이미 존재하는 아이디 입니다.');
-        else if(count($exist_sales))
-            return $this->extendResponse(1000, join(',', $exist_sales).'는 이미 존재하는 상호 입니다.');
-        else
-        {
-            foreach($datas as $data)
-            {
-                [$result, $msg] = AuthPasswordChange::registerValidate($data['user_name'], $data['user_pw']);
-                if($result === false)
-                    return $this->extendResponse(954, $data['user_name']." ".$msg, []);
-            }
-
-            $salesforces = $datas->map(function ($data) use($current, $brand_id) {
-                $data['user_pw'] = Hash::make($data['user_pw'].$current);
-                $data['brand_id'] = $brand_id;
-                $data['created_at'] = $current;
-                $data['updated_at'] = $current;
-                return $data;
-            })->toArray();
-
-            $res = $this->manyInsert($this->salesforces, $salesforces);
-            return $this->response($res ? 1 : 990);
-        }
     }
 }

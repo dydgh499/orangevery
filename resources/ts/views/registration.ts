@@ -85,13 +85,13 @@ export const Registration = () => {
         let result = false
         if (await alert.value.show('정말 '+name + ' ' + items.length + '개를 대량 등록하시겠습니까?')) {
             try {
-                const r = await axios.post('/api/v1/manager/'+path+'/bulk-register', items)
+                const r = await axios.post('/api/v1/manager/'+path+'/batch-updaters/register', items)
                 snackbar.value.show('성공하였습니다.', 'success')
                 result = true
 
                 if(name === '가맹점' && isFixplus()) {
                     const pay_modules = bulkAutoInsertPaymentModuleFormat(r.data)
-                    await axios.post('/api/v1/manager/merchandises/pay-modules/bulk-register', pay_modules)
+                    await axios.post('/api/v1/manager/merchandises/pay-modules/batch-updaters/register', pay_modules)
                 }
             }
             catch (e: any) {

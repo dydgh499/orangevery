@@ -49,7 +49,6 @@ Route::prefix('salesforces')->group(function() {
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
             Route::middleware(['is.edit.able'])->group(function() {
                 Route::post('{id}/unlock-account', [SalesforceController::class, 'unlockAccount']);
-                Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);
             });
         Route::apiResource('under-auto-settings', UnderAutoSettingController::class);    
     });
@@ -92,10 +91,7 @@ Route::prefix('merchandises')->group(function() {
         Route::middleware(['is.edit.able'])->group(function() { 
             Route::post('{id}/set-settle-hold', [MerchandiseController::class, 'setSettleHold']);
             Route::post('{id}/clear-settle-hold', [MerchandiseController::class, 'clearSettleHold']);
-            Route::post('bulk-register', [MerchandiseController::class, 'bulkRegister']);    
-            Route::post('regular-credit-cards/bulk-register', [RegularCreditCardController::class, 'bulkRegister']);
-            Route::post('noti-urls/bulk-register', [NotiUrlController::class, 'bulkRegister']);
-    
+
             Route::apiResource('products', ProductController::class);
             Route::apiResource('handheld-terminal-products', HandHeldTerminalProductController::class);
             Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
@@ -113,7 +109,6 @@ Route::prefix('merchandises')->group(function() {
                 Route::post('tid-bulk-create', [PaymentModuleController::class, 'tidBulkCreate']);
                 Route::post('pay-key-create', [PaymentModuleController::class, 'payKeyCreate']);
                 Route::post('sign-key-create', [PaymentModuleController::class, 'signKeyCreate']);
-                Route::post('bulk-register', [PaymentModuleController::class, 'bulkRegister']);
             });
             Route::apiResource('bill-keys', BillKeyController::class); 
         });

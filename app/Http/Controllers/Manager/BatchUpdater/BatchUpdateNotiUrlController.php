@@ -12,6 +12,8 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
+use App\Http\Requests\Manager\BulkRegister\BulkNotiUrlRequest;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -108,5 +110,26 @@ class BatchUpdateNotiUrlController extends BatchUpdateController
     {
         $row = $this->notiUrlBatch($request)->update(['is_delete' => true]);
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 노티주소가 존재하지 않습니다.');
+    }
+    
+
+    /**
+     * 대량등록
+     *
+     * 운영자 이상 가능
+     */
+    public function register(BulkNotiUrlRequest $request)
+    {
+        $current = date('Y-m-d H:i:s');
+        $datas = $request->data();
+
+        $noti_urls = $datas->map(function ($data) use($request, $current) {
+            $data['brand_id']   = $request->user()->brand_id;
+            $data['created_at'] = $current;
+            $data['updated_at'] = $current;
+            return $data;
+        })->toArray();
+        $res = $this->manyInsert($this->noti_urls, $noti_urls);
+        return $this->response($res ? 1 : 990);
     }
 }
