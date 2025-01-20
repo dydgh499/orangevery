@@ -72,7 +72,7 @@ class Handler extends ExceptionHandler
         });
         $this->renderable(function (ValidationException $e, $request) {
             $exceptions = $e->errors();
-            if($request->is('*/bulk-register*'))
+            if($request->is('*/batch-updaters*register'))
                 return $this->storesResponse($exceptions);
             else
             {
