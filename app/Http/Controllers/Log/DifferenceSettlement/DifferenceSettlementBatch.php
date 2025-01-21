@@ -73,6 +73,7 @@ class DifferenceSettlementBatch extends MerchandiseRegistrationBatch
                     'transactions.id', 'transactions.ord_num', 
                     'transactions.is_cancel', 'transactions.cxl_seq', 
                     'transactions.cxl_dt', 'transactions.trx_dt', 
+                    'transactions.trx_at',  // nice
                     'transactions.trx_id', 'transactions.ori_trx_id', 
                     'transactions.mid', 'transactions.amount', 
                     'merchandises.business_num', 'payment_modules.p_mid', 
