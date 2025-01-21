@@ -114,7 +114,7 @@ class secta9ine extends ContainerBase implements ContainerInterface
     {
         $download_date = $date->format('ymd');
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);
-        $download_path = "/recv/".$brand_business_num."_RECEIVE_INFO.".$upload_date;
+        $download_path = "/recv/".$brand_business_num."_RECEIVE_INFO.".$download_date;
 
         $contents = $this->download($download_path, 'merchandise-registration-download');
         if($contents !== "")
