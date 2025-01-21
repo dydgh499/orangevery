@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Log\DifferenceSettlement\Manager;
+namespace App\Http\Controllers\Log\DifferenceSettlement\Component;
 
 use App\Http\Controllers\Log\DifferenceSettlement\Component\ComponentInterface;
 use App\Http\Controllers\Log\DifferenceSettlement\Component\ComponentBase;
