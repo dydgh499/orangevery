@@ -196,6 +196,7 @@ export const defaultItemInfo = () => {
             pg_id: null,
             ps_id: null,
             module_type: 2,
+            is_old_auth: 0,
             ci_validate: 0,
             account_validate: 0,
             contract_validate: 0,

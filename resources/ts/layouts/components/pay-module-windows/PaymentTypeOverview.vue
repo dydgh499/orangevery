@@ -144,18 +144,17 @@ const filterPgs = computed(() => {
                         v-model="props.item.is_different_settlement" 
                         label="" color="error" />
                 </VCol>
+            </VRow>            
+        </template>
+        <template v-else>
+            <VRow v-if="props.item.module_type == 1">
+                <VCol md="5" cols="5">
+                    <span class="font-weight-bold">수기결제 타입</span>
+                </VCol>
+                <VCol md="7">
+                    {{ props.item.is_old_auth ? "구인증" : "비인증" }}
+                </VCol>
             </VRow>
-            
-            <template v-else>
-                <VRow v-if="props.item.module_type == 1">
-                    <VCol md="5" cols="5">
-                        <span class="font-weight-bold">수기결제 타입</span>
-                    </VCol>
-                    <VCol md="7">
-                        {{ props.item.is_old_auth ? "구인증" : "비인증" }}
-                    </VCol>
-                </VRow>
-            </template>
         </template>
     </VCardItem>
 </template>

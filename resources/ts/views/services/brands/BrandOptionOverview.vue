@@ -328,10 +328,10 @@ const filterPgs = computed(() => {
                                     item-value="id" />
                             </template>
                             <template #r_name>
-                                <BaseQuestionTooltip location="top" text="CI 본인인증" :content="`카카오 본인인증입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
+                                수기결제 타입
                             </template>
                             <template #r_input>
-                                <VSwitch hide-details v-model="props.item.p2p.ci_validate"
+                                <VSwitch hide-details v-model="props.item.p2p.is_old_auth"
                                     color="primary" :false-value=0 :true-value=1 />
                             </template>
                         </CreateHalfVColV2>
@@ -351,6 +351,19 @@ const filterPgs = computed(() => {
                                     color="primary" :false-value=0 :true-value=1 />
                         </template>
                     </CreateHalfVColV2>
+                    <CreateHalfVColV2 :mdl="5" :mdr="7">
+                            <template #l_name>
+                                <BaseQuestionTooltip location="top" text="CI 본인인증" :content="`카카오 본인인증입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
+                            </template>
+                            <template #l_input>
+                                <VSwitch hide-details v-model="props.item.p2p.ci_validate"
+                                    color="primary" :false-value=0 :true-value=1 />
+                            </template>
+                            <template #r_name>
+                            </template>
+                            <template #r_input>
+                            </template>
+                        </CreateHalfVColV2>
                     </div>
                 </VCardItem>
             </VCard>
