@@ -101,27 +101,32 @@ class SalesforceController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        // 영업점이면서, 종속구조사용
-        $b_info = BrandInfo::getBrandById($request->user()->brand_id);
-        if($b_info['pv_options']['paid']['sales_parent_structure'])
+        if(Ablilty::isOperator($request) || Ablilty::isSalesforce($request))
         {
-            [$total_count, $content] =SalesforceOverlap::OverlapSearch($request);
-            $data = [
-                'page'      => $request->page, 
-                'page_size' => $request->page_size,
-                'total'     => $total_count,
-                'content'   => $content
-            ];
-            return $this->response(0, $data);
+            // 영업점이면서, 종속구조사용
+            $b_info = BrandInfo::getBrandById($request->user()->brand_id);
+            if($b_info['pv_options']['paid']['sales_parent_structure'])
+            {
+                [$total_count, $content] =SalesforceOverlap::OverlapSearch($request);
+                $data = [
+                    'page'      => $request->page, 
+                    'page_size' => $request->page_size,
+                    'total'     => $total_count,
+                    'content'   => $content
+                ];
+                return $this->response(0, $data);
+            }
+            else
+            {
+                $query = $this->commonSelect($request);
+                $query->with(['underAutoSettings']);
+        
+                $data = $this->getIndexData($request, $query);
+                return $this->response(0, $data);    
+            }
         }
         else
-        {
-            $query = $this->commonSelect($request);
-            $query->with(['underAutoSettings']);
-    
-            $data = $this->getIndexData($request, $query);
-            return $this->response(0, $data);    
-        }
+            return $this->response(951);
     }
 
     /**

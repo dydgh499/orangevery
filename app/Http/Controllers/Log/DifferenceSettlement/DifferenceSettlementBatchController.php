@@ -77,7 +77,7 @@ class DifferenceSettlementBatchController extends DifferenceSettlementBatch
     */
     static public function differenceSettleRequestTest($ds_ids, $start_days, $end_days)
     {
-        //DifferenceSettlementBatchController::differenceSettleRequestTest([1,2], 50, 1)
+        //DifferenceSettlementBatchController::differenceSettleRequestTest([3], 110, 100)
         $inst       = new DifferenceSettlementBatchController();
         $date       = Carbon::now();
         $yesterday  = $date->copy()->subDay(1)->format('Y-m-d');
