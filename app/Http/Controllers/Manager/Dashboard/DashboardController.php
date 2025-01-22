@@ -75,33 +75,44 @@ class DashboardController extends Controller
     {
         $select = '(counts.cur_mon_count - counts.last_month_count) / NULLIF(counts.last_month_count, 1) * 100 AS cur_increase_rate';
         $increase = $this->increase($orm, $table, $brand_id, $select, 'SUM(is_delete = 0)');        
-
-        $datas = [
-            'cur_increase_rate' => (float)$increase['cur_increase_rate'],
-            'total' => (clone $query)->where('is_delete', 0)->count(),
-            'graph' => [],
-        ];
-        $monthly = $query
-            ->select(
-                DB::raw("DATE_FORMAT(updated_at, '%Y-%m') as month"),
-                DB::raw("SUM(is_delete = 0) as add_count"),
-                DB::raw("SUM(is_delete = 1) as del_count"),
-            )
-            ->where('updated_at', '>=', now()->subMonthNoOverflow(4))
-            ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%Y-%m')"))
-            ->orderBy('month')
-            ->get();
-        foreach($monthly as $month)
+        if($increase)
         {
-            //$total += $month->add_count;
-            $month_total = $month->add_count + $month->del_count;
-            $datas['graph'][$month->month] = [
-                'add_rate' => $month->add_count/$month_total,
-                'del_rate' => $month->del_count/$month_total,
-                'add_count' => (int)$month->add_count,
-                'del_count' => (int)$month->del_count,
+            $datas = [
+                'cur_increase_rate' => (float)$increase['cur_increase_rate'],
+                'total' => (clone $query)->where('is_delete', 0)->count(),
+                'graph' => [],
+            ];
+            $monthly = $query
+                ->select(
+                    DB::raw("DATE_FORMAT(updated_at, '%Y-%m') as month"),
+                    DB::raw("SUM(is_delete = 0) as add_count"),
+                    DB::raw("SUM(is_delete = 1) as del_count"),
+                )
+                ->where('updated_at', '>=', now()->subMonthNoOverflow(4))
+                ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%Y-%m')"))
+                ->orderBy('month')
+                ->get();
+            foreach($monthly as $month)
+            {
+                //$total += $month->add_count;
+                $month_total = $month->add_count + $month->del_count;
+                $datas['graph'][$month->month] = [
+                    'add_rate' => $month->add_count/$month_total,
+                    'del_rate' => $month->del_count/$month_total,
+                    'add_count' => (int)$month->add_count,
+                    'del_count' => (int)$month->del_count,
+                ];
+            }
+        }
+        else
+        {
+            $datas = [
+                'cur_increase_rate' => 0,
+                'total' => 0,
+                'graph' => [],
             ];
         }
+
         return $datas;
     }
 

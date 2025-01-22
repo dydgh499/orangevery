@@ -67,11 +67,7 @@ trait ManagerTrait
     {
         $public_folders = ['posts', 'logos', 'favicons', 'logins', 'ogs', 'profiles'];
         $disk = in_array($folder, $public_folders) ? 'n-cloud-public' : 'n-cloud';
-        $path = Storage::disk($disk)->put("$folder/$name", $img);
-        Storage::disk($disk)->put($folder, file_get_contents($img));
-        Storage::disk($disk)->put($folder, file_get_contents($img), 'public');
         $path = Storage::disk($disk)->putFileAs($folder, $img, $name);
-        logging(['path' => $path, "$folder/$name", 'type' => $disk]);
         $host = $disk === 'n-cloud-public' ? env('NCLOUD_PUBLIC_BUCKET') : env('NCLOUD_PRIVATE_BUCKET');
         return "{$host}/{$path}";
     }

@@ -11,6 +11,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
 
+use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\PaymentModule\BillKeyIndexRequest;
 use App\Http\Requests\Manager\PaymentModule\BillKeyCreateRequest;
 use App\Http\Requests\Manager\PaymentModule\BillKeyUpdateRequest;

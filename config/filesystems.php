@@ -78,6 +78,9 @@ return [
             'region' => env('NCLOUD_DEFAULT_REGION'),
             'bucket' => env('NCLOUD_PRIVATE_BUCKET'),
             'endpoint' => env('NCLOUD_ENDPOINT'),
+            'url' => '',
+            'use_path_style_endpoint' => false,
+            'throw' => false,
         ],
         'n-cloud-public' => [
             'driver' => 's3',
@@ -86,6 +89,9 @@ return [
             'region' => env('NCLOUD_DEFAULT_REGION'),
             'bucket' => env('NCLOUD_PUBLIC_BUCKET'),
             'endpoint' => env('NCLOUD_ENDPOINT'),
+            'url' => '',
+            'use_path_style_endpoint' => false,
+            'throw' => false,
         ],
     ],
 
