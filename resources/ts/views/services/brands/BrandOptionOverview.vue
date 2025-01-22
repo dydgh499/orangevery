@@ -328,7 +328,7 @@ const filterPgs = computed(() => {
                                     item-value="id" />
                             </template>
                             <template #r_name>
-                                수기결제 타입
+                                수기 구인증 여부
                             </template>
                             <template #r_input>
                                 <VSwitch hide-details v-model="props.item.p2p.is_old_auth"

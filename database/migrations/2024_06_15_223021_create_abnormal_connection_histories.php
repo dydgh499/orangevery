@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('target_key')->default('')->comment('대상');
             $table->tinyInteger('target_level')->default(0)->comment('대상등급');
             $table->string('target_value', 4000)->default('')->comment('값');
-            $table->string('request_ip', 20)->default('')->comment('접속 IP');
+            $table->string('request_ip', 50)->default('')->comment('접속 IP');
             $table->string('request_detail', 500)->default('')->comment('접속 상세정보');
             $table->string('mobile_type', 10)->default('')->comment('이동통신 여부');
             $table->string('comment')->default('')->comment('메모사항');
