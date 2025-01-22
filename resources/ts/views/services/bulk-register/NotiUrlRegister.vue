@@ -28,7 +28,6 @@ const pay_modules = reactive<PayModule[]>([])
 
 Object.assign(pay_modules, await getAllPayModules())
 
-
 const validate = () => {
     error_message.value = ''
     for (let i = 0; i < items.value.length; i++) {

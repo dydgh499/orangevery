@@ -40,7 +40,6 @@ Route::prefix('merchandises/batch-updaters')->group(function() {
     Route::post('set-use-noti', [BatchUpdateMchtController::class, 'setUseNoti']);
     Route::post('register', [BatchUpdateMchtController::class, 'register']);
     Route::post('regular-credit-cards/register', [RegularCreditCardController::class, 'register']);
-	Route::post('noti-urls/register', [BatchUpdateNotiUrlController::class, 'register']);
 });
     
 Route::prefix('merchandises/pay-modules/batch-updaters')->group(function() {       
@@ -73,9 +72,11 @@ Route::prefix('merchandises/noti-urls/batch-updaters')->group(function() {
     Route::post('set-noti-status', [BatchUpdateNotiUrlController::class, 'setNotiStatus']);
     Route::post('set-note', [BatchUpdateNotiUrlController::class, 'setNote']);
     Route::delete('remove', [BatchUpdateNotiUrlController::class, 'batchRemove']);       
+	Route::post('register', [BatchUpdateNotiUrlController::class, 'register']);
 });
-
-Route::prefix('services/batch-updaters')->group(function() { 
-    Route::post('mcht-blacklists/register', [MchtBlacklistController::class, 'register']);
-    Route::post('holidays/register', [HolidayController::class, 'register']);
+Route::prefix('services/mcht-blacklists/batch-updaters')->group(function() { 
+    Route::post('register', [MchtBlacklistController::class, 'register']);
+});
+Route::prefix('services/holidays/batch-updaters')->group(function() { 
+    Route::post('register', [HolidayController::class, 'register']);
 });

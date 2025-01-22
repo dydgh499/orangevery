@@ -32,7 +32,6 @@ class BulkNotiUrlRequest extends FormRequest
         $sub = [
             '*' => 'required|array',
             '*.mcht_id' => 'required',
-            '*.note' => 'required',
             '*.send_url' => 'required',
             '*.noti_status' => 'required',
         ];

@@ -15,7 +15,7 @@ const { holidays, updateFilter, calendarOptions } = useHolidayStore()
 
 const bulkRegister = async () => {
     if (await alert.value.show('정말 공휴일을 읽어오시겠습니까?')) {
-        const r = await post('/api/v1/manager/services/batch-updaters/holidays/register', {}, true)
+        const r = await post('/api/v1/manager/services/holidays/batch-updaters/register', {}, true)
     }
 }
 </script>
