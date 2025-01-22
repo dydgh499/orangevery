@@ -70,6 +70,23 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
         ],
+
+        'n-cloud' => [
+            'driver' => 's3',
+            'key' => env('NCLOUD_ACCESS_KEY_ID'),
+            'secret' => env('NCLOUD_SECRET_ACCESS_KEY'),
+            'region' => env('NCLOUD_DEFAULT_REGION'),
+            'bucket' => env('NCLOUD_PRIVATE_BUCKET'),
+            'endpoint' => env('NCLOUD_ENDPOINT'),
+        ],
+        'n-cloud-public' => [
+            'driver' => 's3',
+            'key' => env('NCLOUD_ACCESS_KEY_ID'),
+            'secret' => env('NCLOUD_SECRET_ACCESS_KEY'),
+            'region' => env('NCLOUD_DEFAULT_REGION'),
+            'bucket' => env('NCLOUD_PUBLIC_BUCKET'),
+            'endpoint' => env('NCLOUD_ENDPOINT'),
+        ],
     ],
 
     /*

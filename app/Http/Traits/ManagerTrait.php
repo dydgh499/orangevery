@@ -61,6 +61,21 @@ trait ManagerTrait
         $host = $disk === 's3-public' ? env('AWS_PUBLIC_BUCKET_HOST') : env('AWS_PRIVATE_BUCKET_HOST');
         return "{$host}/{$path}";
     }
+
+    // NCloud
+    public function ToNCloud($folder, $img, $name)
+    {
+        $public_folders = ['posts', 'logos', 'favicons', 'logins', 'ogs', 'profiles'];
+        $disk = in_array($folder, $public_folders) ? 'n-cloud-public' : 'n-cloud';
+        $path = Storage::disk($disk)->put("$folder/$name", $img);
+        Storage::disk($disk)->put($folder, file_get_contents($img));
+        Storage::disk($disk)->put($folder, file_get_contents($img), 'public');
+        $path = Storage::disk($disk)->putFileAs($folder, $img, $name);
+        logging(['path' => $path, "$folder/$name", 'type' => $disk]);
+        $host = $disk === 'n-cloud-public' ? env('NCLOUD_PUBLIC_BUCKET') : env('NCLOUD_PRIVATE_BUCKET');
+        return "{$host}/{$path}";
+    }
+
     // Cloudinary
     public function ToCloudinary($folder, $img, $name)
     {
@@ -95,9 +110,11 @@ trait ManagerTrait
                 $img    = $request->file($params[$i]);
                 $ext    = $img->extension();                
 		        $name = time().md5(pathinfo($img, PATHINFO_FILENAME)).".$ext";
-        
+
                 if(env('FILESYSTEM_DISK') === 's3')
                     $data[$cols[$i]] = $this->ToS3($folders[$i], $img, $name);
+                if(env('FILESYSTEM_DISK') === 'n-cloud')
+                    $data[$cols[$i]] = $this->ToNCloud($folders[$i], $img, $name);
                 else if(env('FILESYSTEM_DISK') === 'cloudinary')
                     $data[$cols[$i]] = $this->ToCloudinary($folders[$i], $img, $name);
                 else
