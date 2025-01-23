@@ -204,14 +204,14 @@ class BatchUpdateMchtController extends BatchUpdateController
         foreach($mcht_ids as $mcht_id)
         {
             $registered = $registered_notis->first(function($noti) use ($mcht_id) {
-                return $noti->mcht_id == $mcht_id;
+                return $noti->mcht_id === $mcht_id;
             });
             if($registered)
             {
             }
             else
             {
-                $data[] = [
+                $datas[] = [
                     'brand_id' => $request->user()->brand_id,
                     'mcht_id' => $mcht_id,
                     'pmod_id' => -1,
@@ -224,8 +224,6 @@ class BatchUpdateMchtController extends BatchUpdateController
             }
         }
         $res = $this->manyInsert(new NotiUrl, $datas);
-        $row = $this->merchandises->whereIn('id', $mcht_ids)->update(['use_noti' => true]);
-
         $message = count($datas).'개의 노티가 추가되었습니다.';
         $res_data = ['registered_notis'=>$registered_notis->pluck('id'), 'count'=>count($datas)];
         if($registered_notis && $registered_notis->count())

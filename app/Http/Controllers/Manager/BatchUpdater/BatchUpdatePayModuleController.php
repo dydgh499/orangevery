@@ -203,6 +203,17 @@ class BatchUpdatePayModuleController extends BatchUpdateController
     }
 
     /**
+     * PMID 일괄적용
+     *
+     */
+    public function setPmid(Request $request)
+    {
+        $cols = ['p_mid' => $request->p_mid];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '결제모듈');
+    }
+
+    /**
      * API KEY 일괄적용
      *
      */

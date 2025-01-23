@@ -45,18 +45,16 @@ class Kernel extends ConsoleKernel
 
             // 공휴일 업데이트
             $schedule->call(function () {
-                (new HolidayController(new Holiday))->updateHoliday();
+                (new HolidayController(new Holiday))->updateHolidaysAllBrands();
             })->daily();
 
             // 차액정산 처리
             $schedule->call(function () {
                 (new DifferenceSettlementBatchController())->differenceSettleRequest();
-                (new DifferenceSettlementBatchController())->merchandiseRegistrationRequest();
             })->dailyAt("00:30");
 
             $schedule->call(function () {
                 (new DifferenceSettlementBatchController())->differenceSettleResponse();
-                (new DifferenceSettlementBatchController())->merchandiseRegistrationResponse();
             })->dailyAt("09:00");
 
             $schedule->command('sanctum:prune-expired --hours=35')->daily();

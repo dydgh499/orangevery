@@ -1,6 +1,5 @@
 
 <script setup lang="ts">
-import { isFixplus } from '@/plugins/fixplus'
 import FixplusOverview from '@/views/merchandises/FixplusOverview.vue'
 import MchtOverview from '@/views/merchandises/MchtOverview.vue'
 import NotiOverview from '@/views/merchandises/noti-urls/NotiOverview.vue'
@@ -19,7 +18,7 @@ const route = useRoute()
 const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([])
 
-if(isFixplus()) {
+if(corp.pv_options.paid.sales_parent_structure) {
     tabs.push({ icon: 'tabler-user-check', title: '가맹점정보' })
 }
 else {
@@ -38,7 +37,7 @@ watchEffect(() => {
     <section>
         <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
             <template #view>
-                <template v-if="corp.id === 30">
+                <template v-if="corp.pv_options.paid.sales_parent_structure">
                     <VWindowItem>
                         <FixplusOverview :item="item" :key="id"/>
                     </VWindowItem>

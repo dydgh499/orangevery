@@ -106,7 +106,7 @@ class HolidayController extends Controller
     /*
      * 공휴일 자동등록 (매년 12월 30일 내년꺼 등록)
      */
-    public function updateHolidaysAllBrands()
+    public function updateHoliday()
     {
         $this_year  = (int)Carbon::now()->format('Y');
         $holidays   = array_merge(
@@ -140,7 +140,7 @@ class HolidayController extends Controller
         $datas = $this->filterAlreadyExistHoliday($holidays, $request->user()->brand_id, $this_year);
         if(count($datas))
             $res = $this->manyInsert($this->holidays, $datas);
-        return $this->response($res ? 1 : 990);
+        return $this->response(1);
     }
 
     /**

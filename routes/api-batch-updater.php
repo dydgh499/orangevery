@@ -51,6 +51,7 @@ Route::prefix('merchandises/pay-modules/batch-updaters')->group(function() {
     Route::post('set-settle-fee', [BatchUpdatePayModuleController::class, 'setSettleFee']);
     Route::post('set-mid', [BatchUpdatePayModuleController::class, 'setMid']);
     Route::post('set-tid', [BatchUpdatePayModuleController::class, 'setTid']);
+    Route::post('set-pmid', [BatchUpdatePayModuleController::class, 'setPmid']);
     Route::post('set-api-key', [BatchUpdatePayModuleController::class, 'setApiKey']);
     Route::post('set-sub-key', [BatchUpdatePayModuleController::class, 'setSubKey']);
     Route::post('set-installment', [BatchUpdatePayModuleController::class, 'setInstallment']);

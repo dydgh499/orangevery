@@ -46,6 +46,7 @@ const pay_module = reactive<any>({
     settle_fee: 0,
     mid: '',
     tid: '',
+    p_mid: '',
     api_key: '',
     sub_key: '',
     installment: 0,
@@ -145,6 +146,11 @@ const setMid = (apply_type: number) => {
 const setTid = (apply_type: number) => {
     post('set-tid', {
         'tid': pay_module.tid,
+    }, apply_type)
+}
+const setPmid = (apply_type: number) => {
+    post('set-pmid', {
+        'p_mid': pay_module.p_mid,
     }, apply_type)
 }
 
@@ -646,6 +652,26 @@ watchEffect(() => {
                                         <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                     <VBtn variant="tonal" size="small" color="secondary" @click="setNote(1)"
+                                        style='margin-left: 0.5em;'>
+                                        예약적용
+                                        <VIcon end size="18" icon="tabler-clock-up" />
+                                    </VBtn>                 
+                                </div>
+                            </VCol>
+                        </VRow>
+                    </VCol>
+                    <VCol :md=6 v-if="corp.pv_options.paid.use_pmid">
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol md="6" cols="12">
+                                <VTextField v-model="pay_module.p_mid" label="PMID"  />
+                            </VCol>
+                            <VCol md="6">
+                                <div class="button-cantainer">
+                                    <VBtn variant="tonal" size="small" @click="setPmid(0)">
+                                        즉시적용
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
+                                    </VBtn>
+                                    <VBtn variant="tonal" size="small" color="secondary" @click="setPmid(1)"
                                         style='margin-left: 0.5em;'>
                                         예약적용
                                         <VIcon end size="18" icon="tabler-clock-up" />

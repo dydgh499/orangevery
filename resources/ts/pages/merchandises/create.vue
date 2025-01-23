@@ -1,6 +1,5 @@
 
 <script setup lang="ts">
-import { isFixplus } from '@/plugins/fixplus'
 import FixplusOverview from '@/views/merchandises/FixplusOverview.vue'
 import MchtOverview from '@/views/merchandises/MchtOverview.vue'
 import NotiOverview from '@/views/merchandises/noti-urls/NotiOverview.vue'
@@ -9,7 +8,6 @@ import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOvervie
 import UserOverview from '@/views/users/UserOverview.vue'
 
 import CreateForm from '@/layouts/utils/CreateForm.vue'
-import { getUserLevel } from '@/plugins/axios'
 import { notiViewable } from '@/views/merchandises/noti-urls/useStore'
 import { defaultItemInfo } from '@/views/merchandises/useStore'
 import type { Tab } from '@/views/types'
@@ -19,7 +17,7 @@ const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([])
 
 
-if(isFixplus()) {
+if(corp.pv_options.paid.sales_parent_structure) {
     tabs.push({ icon: 'tabler-user-check', title: '가맹점정보' })
 }
 else {

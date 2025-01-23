@@ -86,7 +86,6 @@ export const Registration = () => {
         let result = false
         if (await alert.value.show('정말 '+name + ' ' + items.length + '개를 대량 등록하시겠습니까?')) {
             try {
-                console.log(path)
                 const r = await axios.post('/api/v1/manager/' + path + '/batch-updaters/register', items)
                 snackbar.value.show('성공하였습니다.', 'success')
                 result = true
