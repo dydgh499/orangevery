@@ -149,7 +149,7 @@ class BatchUpdateSalesController extends BatchUpdateController
     }
 
     
-    public function bulkRegister(BulkSalesforceRequest $request)
+    public function register(BulkSalesforceRequest $request)
     {
         $current = date('Y-m-d H:i:s');
         $brand_id = $request->user()->brand_id;
