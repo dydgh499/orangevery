@@ -1,6 +1,7 @@
 
 <script setup lang="ts">
 import CreateForm from '@/layouts/utils/CreateForm.vue'
+import corp from '@/plugins/corp'
 import FixplusOverview from '@/views/salesforces/FixplusOverview.vue'
 import SalesforceOverview from '@/views/salesforces/SalesforceOverview.vue'
 import { defaultItemInfo } from '@/views/salesforces/useStore'
