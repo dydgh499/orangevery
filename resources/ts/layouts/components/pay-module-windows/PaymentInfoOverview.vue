@@ -100,10 +100,7 @@ watchEffect(() => {
     <VCardItem>
         <VCardSubtitle style="display: flex; justify-content: space-between;">
             <template v-if="isAbleModiy(props.item.id)">
-                <BaseQuestionTooltip :location="'top'" :text="'계약 및 결제정보'"
-                :content="`결제일이 계약 시작일 ~ 계약 종료일에 포함되지 않을 시 결제가 불가능합니다.<br>
-                입력하지 않을 시 검증하지 않으며 <b>온라인 결제</b>만 적용 가능합니다.`"
-                />
+                계약 및 결제정보
                 <div style="display: inline-block;">
                     <VBtn type="button" variant="tonal" v-if="corp.pv_options.paid.use_mid_create && props.item.id == 0 && getUserLevel() >= 35" 
                         @click="midCreate()" style="margin-left: 0.5em;" size="small" color="info">
@@ -120,13 +117,6 @@ watchEffect(() => {
         <br>
 
         <VRow v-if="isAbleModiy(props.item.id)">
-            <VCol md="6" cols="12" v-if="corp.pv_options.paid.use_bill_key">
-                <VSwitch hide-details :false-value=0 :true-value=1 
-                    v-model="props.item.is_able_bill_key"
-                    label="빌키결제 사용" color="primary"
-                    v-if="props.item.module_type === 1"
-                />
-            </VCol>
             <VCol md="6" cols="12">
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type" :items="settle_types"
                         prepend-inner-icon="ic-outline-send-to-mobile" item-title="name" item-value="id" label="정산일"
@@ -134,12 +124,6 @@ watchEffect(() => {
             </VCol>
         </VRow>
         <VRow v-else>
-            <VCol md="5" cols="6" v-if="corp.pv_options.paid.use_bill_key && props.item.module_type != 0">
-                <span class="font-weight-bold">빌키결제 사용</span>    
-            </VCol>
-            <VCol md="7" cols="6" v-if="corp.pv_options.paid.use_bill_key && props.item.module_type != 0">
-                    {{ props.item.is_able_bill_key ? "O" : "X" }}
-            </VCol>
             <VCol md="5" cols="6">
                 <span class="font-weight-bold">정산일</span>    
             </VCol>
@@ -190,6 +174,10 @@ watchEffect(() => {
                     label="계약 종료일"
                     />
             </VCol>
+            <VTooltip activator="parent" location="top" transition="scale-transition">
+                결제일이 계약 시작일 ~ 계약 종료일에 포함되지 않을 시 결제가 불가능합니다.<br>
+                입력하지 않을 시 검증하지 않으며 <b>온라인 결제</b>만 적용 가능합니다.
+            </VTooltip>
         </VRow>
         <VRow v-else>
             <VCol md="5" cols="6"><span class="font-weight-bold">계약 시작일</span></VCol>

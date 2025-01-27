@@ -42,9 +42,12 @@ class DifferenceSettlementBatch extends MerchandiseRegistrationBatch
     // 차액 요청 거래 ID 중복 필터링
     public function filterDuplicateTransIds($full_histories)
     {
-        $exist_trans_ids = DifferenceSettlementHistory::whereIn('trans_id', array_column($full_histories, 'trans_id'))
-            ->pluck('trans_id')
-            ->all();
+        $exist_trans_ids = [];
+        foreach (array_chunk(array_column($full_histories, 'trans_id'), 3000) as $chunk) {
+            $exist_trans_ids = array_merge($exist_trans_ids, DifferenceSettlementHistory::whereIn('trans_id', $chunk)
+                ->pluck('trans_id')
+                ->all());
+        }
         if(count($exist_trans_ids))
         {
             $filtered_histories = array_values(array_filter($full_histories, function ($history) use ($exist_trans_ids) {

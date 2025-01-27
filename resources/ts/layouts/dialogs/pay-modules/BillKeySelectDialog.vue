@@ -11,19 +11,24 @@ const auth_token = <any>(inject('auth_token'))
 const visible = ref(false)
 const bill_keys = ref(<BillKey[]>([]))
 const merchandise = ref(<Merchandise>({ id: -1 }))
-const hand_pay_info = ref(<HandPay>{})
+const hand_pay = ref(<HandPay>{})
 const pay_window = ref(<string>(''))
+const request_at = ref('')
 
 const billKeyCreateDialog = ref()
 const billKeyModifyDialog = ref()
 const mobileVerfication = ref()
 let resolveCallback: (bill_key: BillKey | null) => void;
 
-const show = (_pay_window: string, _hand_pay_info: HandPay) => {
-    if (_hand_pay_info.buyer_name.trim() === '' && _hand_pay_info.buyer_phone.trim() === '')
-        snackbar.value.show('구매자명 및 연락처 정보를 입력해주세요.', 'warning')
+const show = (_pay_window: string, _hand_pay: HandPay) => {
+    if(_hand_pay.buyer_name.trim() === '')
+        snackbar.value.show('구매자명을 입력해주세요.', 'warning')
+    else if(_hand_pay.buyer_phone.trim() === '')
+        snackbar.value.show('연락처를 입력해주세요.', 'warning')
+    else if(_hand_pay.resident_num_front?.trim() === '')
+    snackbar.value.show('생년월일을 입력해주세요.', 'warning')
     else {
-        hand_pay_info.value = _hand_pay_info
+        hand_pay.value = _hand_pay
         pay_window.value = _pay_window
         visible.value = true
     }
@@ -37,6 +42,7 @@ const processAuth = async (token: string) => {
     // 본인인증 시퀀스
     if(token.length >= 10) {
         auth_token.value = token
+        request_at.value = getYmdHis()
         await getCardInfo()
     }
 }
@@ -45,21 +51,23 @@ const getCardInfo = async () => {
     const res = await axios.get(`/api/v1/pay/${pay_window.value}/bill-keys`, {
         params: {
             token: auth_token.value,
-            buyer_name: hand_pay_info.value.buyer_name,
-            buyer_phone: hand_pay_info.value.buyer_phone,
+            buyer_name: hand_pay.value.buyer_name,
+            buyer_phone: hand_pay.value.buyer_phone,
+            resident_num_front: hand_pay.value.resident_num_front,
+            request_at: request_at.value,
         }
     })
     bill_keys.value = res.data
 }
 
 const addCardInfo = async () => {
-    const res = await billKeyCreateDialog.value.show(true, hand_pay_info.value, pay_window.value)
+    const res = await billKeyCreateDialog.value.show(hand_pay.value, pay_window.value, request_at.value)
     if (res)
         await getCardInfo()
 }
 
 const modifyCardInfo = async (bill_key: BillKey) => {
-    const res = await billKeyModifyDialog.value.show(bill_key, pay_window.value)
+    const res = await billKeyModifyDialog.value.show(bill_key, pay_window.value, request_at.value)
     if (res)
         await getCardInfo()
 }
@@ -73,6 +81,18 @@ const onCancel = () => {
     visible.value = false
     resolveCallback(null)
 };
+
+const getYmdHis = () => {
+    const date = new Date()
+    const year  = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day   = String(date.getDate()).padStart(2, '0')
+    const hour  = String(date.getHours()).padStart(2, '0')
+    const min   = String(date.getMinutes()).padStart(2, '0')
+    const sec   = String(date.getSeconds()).padStart(2, '0')
+    const mill  = String(date.getMilliseconds()).padStart(4, '0')
+    return `${year}-${month}-${day} ${hour}:${min}:${sec}.${mill}`;
+}
 
 const isClearAuth = computed(() => {
     return auth_token.value.length >= 10
@@ -91,7 +111,7 @@ defineExpose({
                     입력하신 <b>구매자정보</b>로 본인인증을 진행합니다.
                 </span>
                 <VDivider style="margin: 1em 0;" />
-                <MobileVerification block :totalInput="6" :phone_num="hand_pay_info.buyer_phone"
+                <MobileVerification block :totalInput="6" :phone_num="hand_pay.buyer_phone"
                     :merchandise="merchandise" @update:token="processAuth($event)" ref="mobileVerfication" />
             </VCardText>
             <template v-else>

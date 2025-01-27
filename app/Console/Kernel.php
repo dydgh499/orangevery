@@ -57,7 +57,7 @@ class Kernel extends ConsoleKernel
             $schedule->call(function () {
                 (new DifferenceSettlementBatchController())->differenceSettleResponse();
                 (new DifferenceSettlementBatchController())->merchandiseRegistrationResponse();
-            })->dailyAt("09:00");
+            })->dailyAt("13:00");
 
             $schedule->command('sanctum:prune-expired --hours=35')->daily();
         }

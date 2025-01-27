@@ -8,41 +8,21 @@ export const registration_types = [
     {id:2, title:'변경'},
 ]
 
-export const registrationResults = (registration_result: number) => {
-    if(registration_result === -1)
-        return '신청대기'
-    else if(registration_result === -5)
-        return '신청중'
-    else if(registration_result === 0)
-        return '완료'
-    else
-        return '실패'
-}
-
-export const registrationResultColor = (registration_result: number) => {
-    if(registration_result === -1)
-        return "default"    
-    else if(registration_result === -5)
-            return "primary"
-    else if(registration_result === 0)
-        return "success"
-    else
-        return "error"
-}
-
 export const useSearchStore = defineStore('subBusinessRegistrationSearchStore', () => {
     const store     = Searcher('merchandises/sub-business-registrations')
     const head      = Header('merchandises/sub-business-registrations', '하위사업자등록 결과')
 
     const headers: Record<string, string> = {
         'id': 'NO.',
-        'business_num': '사업자번호',
-        'pg_type': 'PG사',
-        'card_company_name': '카드사명',
+        'registration_code': '등록상태',
+        'registration_msg' : '결과 메세지',
         'registration_type': '등록타입',
-        'registration_result': '등록상태',        
-        'registration_msg': '결과 메세지',
-        'created_at' : '생성시간',
+        'card_company_name': '카드사명',
+        'pg_type': '원천사',
+        'mcht_name': '가맹점 상호',
+        'business_num': '사업자번호',
+        'registration_dt'  : '가입일',
+        'req_dt'           : '요청일',
         'updated_at' : '업데이트시간'
     }
 

@@ -68,7 +68,7 @@ class ProductController extends Controller
         $cols = [
             'categories.category_name', 'merchandises.mcht_name',
             'products.*',  'payment_modules.note as pmod_note', 
-            'payment_modules.pay_window_secure_level', 'payment_modules.is_able_bill_key'
+            'payment_modules.pay_window_secure_level',
         ];
         $search = $request->input('search', '');
         $query  = $this->products

@@ -39,7 +39,6 @@ class PayModuleRequest extends FormRequest
     public $boolean_keys = [
         'is_old_auth',
         'use_realtime_deposit',
-        'is_able_bill_key',
     ];
     public $nullable_keys = [
         'contract_s_dt',

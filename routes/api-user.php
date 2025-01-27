@@ -9,7 +9,7 @@ use App\Http\Controllers\Manager\Merchandise\RegularCreditCardController;
 use App\Http\Controllers\Manager\Merchandise\NotiUrlController;
 use App\Http\Controllers\Manager\Merchandise\SpecifiedTimeDisablePaymentController;
 use App\Http\Controllers\Manager\Merchandise\HandHeldTerminalProductController;
-use App\Http\Controllers\Manager\PaymentModule\BillKeyController;
+use App\Http\Controllers\Manager\Merchandise\BillKeyController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
 
 use App\Http\Controllers\Manager\SalesforceController;
@@ -63,6 +63,7 @@ Route::prefix('merchandises')->group(function() {
     Route::get('chart', [MerchandiseController::class, 'chart']);
     Route::get('all', [MerchandiseController::class, 'all']);   
     Route::get('terminals', [TerminalController::class, 'index']);   
+    Route::middleware(['is.edit.able'])->delete('bill-keys/batch-updaters/remove', [BatchUpdateBillKeyController::class, 'batchRemove']);
 
     Route::get('pay-modules/chart', [PaymentModuleController::class, 'chart']);
     Route::get('pay-modules/all', [PaymentModuleController::class, 'all']);
@@ -113,7 +114,7 @@ Route::prefix('merchandises')->group(function() {
             Route::apiResource('bill-keys', BillKeyController::class); 
         });
     });   
-    Route::get('pay-modules/bill-keys', [BillKeyController::class, 'managerIndex']); 
+    Route::get('bill-keys', [BillKeyController::class, 'managerIndex']); 
     Route::get('noti-urls/chart', [NotiUrlController::class, 'chart']);
     
     Route::apiResource('pay-modules', PaymentModuleController::class);

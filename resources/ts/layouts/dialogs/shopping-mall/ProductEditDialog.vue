@@ -214,10 +214,6 @@ defineExpose({
                     </VRow>
                     <VRow>
                         <VCol cols="12" class="d-flex gap-4">
-                            <VBtn type="button" color="default" variant="tonal" v-if="product.id" @click="shopPreview()">
-                                쇼핑몰 미리보기
-                                <VIcon end icon="tabler:shopping-cart" />
-                            </VBtn>
                             <VBtn type="button" style="margin-left: auto;" @click="productUpdate()">
                                 {{ product.id == 0 ? "추가" : "수정" }}
                                 <VIcon end icon="tabler-pencil" />

@@ -135,7 +135,6 @@ class PayWindowInterface implements GeneratorInterface
                     'payment_modules.is_old_auth',
                     'payment_modules.installment',
                     'payment_modules.module_type',
-                    'payment_modules.is_able_bill_key',
                     'payment_modules.pay_window_secure_level',
 
                     'merchandises.use_saleslip_prov',
@@ -173,7 +172,6 @@ class PayWindowInterface implements GeneratorInterface
                             'is_old_auth'   => $pay_module->is_old_auth,
                             'installment'   => $pay_module->installment,
                             'module_type'   => $pay_module->module_type,
-                            'is_able_bill_key' => $pay_module->is_able_bill_key,
                             'pay_window_secure_level' => $pay_module->pay_window_secure_level
                         ],
                         'pay_window' => [

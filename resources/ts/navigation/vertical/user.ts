@@ -16,7 +16,7 @@ const getMchtChildMenu = () => {
 
     if(getUserLevel() >= 35) {
 	    if(corp.pv_options.paid.use_bill_key)
-    	    users.children.push({ title: '빌키 관리', to: 'merchandises-pay-modules-bill-keys'})
+    	    users.children.push({ title: '빌키 관리', to: 'merchandises-bill-keys'})
         users.children.push({ title: '수수료율 변경이력', to: 'merchandises-fee-change-histories'})
     }
     if((getUserLevel() >= 35 || getUserLevel() === 10) && corp.pv_options.paid.use_noti) {

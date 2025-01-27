@@ -267,7 +267,6 @@ export interface PayModule {
     pay_key?: string,
     sign_key?: string,
     pay_window?: PayWindow | null,
-    is_able_bill_key: number,
     is_different_settlement: number,
 }
 
@@ -371,7 +370,6 @@ interface FreeOption {
         installment: number,
         abnormal_trans_limit: number,
         is_show_fee: number,
-
     },
     secure: {
         mcht_id_level: number,
@@ -805,16 +803,17 @@ export interface NotiSendHistory {
 export interface UserPayInfo {    
     buyer_name: string,
     buyer_phone: string,
+    delivery_type: boolean,
     addr?: string,
     detail_addr?: string,
     note?: string,
     option_groups?: string,
+    resident_num_front?: string,
 }
 
-export interface BasePayInfo extends UserPayInfo{
+export interface BasePayInfo extends UserPayInfo {
     pmod_id: number | null,
     amount: number,
-    delivery_type: number,
     user_agent: string,
     item_name: string,
     installment: number,
@@ -822,19 +821,19 @@ export interface BasePayInfo extends UserPayInfo{
     temp?: string,
 }
 
-export interface HandPayInfo {
+export interface HandPay extends BasePayInfo {
     card_num: string,
     yymm: string,
     auth_num?: string,
     card_pw?: string,
 }
 
-export interface HandPay extends BasePayInfo, HandPayInfo {}
-
 export interface AuthPay extends BasePayInfo {
     return_url: string,
     route?: string,
 }
+
+export interface BillPay extends BasePayInfo {}
 
 export interface MultipleHandPay extends HandPay {
     status_color?: string,
@@ -1012,7 +1011,7 @@ export interface SubBusinessRegistration {
     pg_type: number,
     registration_msg: number,
     registration_type: number,
-    registration_result: number,
+    registration_code: number,
     card_company_name: number,
 }
 

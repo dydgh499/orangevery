@@ -10,7 +10,6 @@ export const useSearchStore = defineStore('productSearchStore', () => {
         'mcht_name' : '가맹점 상호',
         'pmod_note' : '결제모듈 별칭',
         'pay_window_secure_level' : '결제창 보안등급',
-        'is_able_bill_key' : '빌키 가능여부',
         'product_img': '대표 이미지',
         'category_name' : '카테고리명',
         'product_name' : '상품명',

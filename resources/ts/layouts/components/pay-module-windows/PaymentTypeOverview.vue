@@ -144,7 +144,7 @@ const filterPgs = computed(() => {
                         v-model="props.item.is_different_settlement" 
                         label="" color="error" />
                 </VCol>
-            </VRow>            
+            </VRow>
         </template>
         <template v-else>
             <VRow v-if="props.item.module_type == 1">

@@ -51,7 +51,7 @@ const submit = async() => {
     const is_valid = await vForm.value.validate()
     if (is_valid.valid) {
         if(await alert.value.show('정말 결제하시겠습니까?')) {
-            axios.post(`/api/v1/manager/merchandises/pay-modules/bill-keys/${bill_key.value.id}/pay`, bill_pay_info.value).then(r => {
+            axios.post(`/api/v1/manager/merchandises/bill-keys/${bill_key.value.id}/pay`, bill_pay_info.value).then(r => {
                 visible.value = false
                 snackbar.value.show('성공하였습니다.', 'success')
             })

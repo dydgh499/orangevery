@@ -94,11 +94,6 @@ provide('exporter', exporter)
                                         {{ pay_window_secure_levels.find(obj => obj.id === item[_key])?.title }}
                                     </VChip>
                                 </span>
-                                <span v-else-if="_key === 'is_able_bill_key'">
-                                    <VChip :color="store.booleanTypeColor(!item[_key])">
-                                        {{ item[_key] ? '가능' : '불가' }}
-                                    </VChip>
-                                </span>
                                 <span v-else>
                                     {{ item[_key] }}
                                 </span>

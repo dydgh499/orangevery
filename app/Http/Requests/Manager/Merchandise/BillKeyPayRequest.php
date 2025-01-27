@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Manager\PaymentModule;
+namespace App\Http\Requests\Manager\Merchandise;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
@@ -20,7 +20,9 @@ class BillKeyPayRequest extends FormRequest
         'note',
     ];
 
-    public $integer_keys = [];
+    public $integer_keys = [
+        'installment',
+    ];
 
     public function authorize()
     {

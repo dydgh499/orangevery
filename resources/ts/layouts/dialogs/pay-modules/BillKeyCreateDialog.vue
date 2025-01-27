@@ -24,14 +24,14 @@ const errorHandler = <any>(inject('$errorHandler'))
 const auth_token = <any>(inject('auth_token'))
 
 const bill_key = ref(<BillKeyCreate>{})
-const is_pay_window = ref(true)
 const pay_window = ref('')
+const request_at = ref('')
 
 let resolveCallback: (isAgreed: boolean) => void;
-const show = (_is_pay_window: boolean, _hand_pay_info: BillKeyCreate, _pay_window: string) => {
+const show = (_hand_pay: BillKeyCreate, _pay_window: string, _request_at: string) => {
     pay_window.value = _pay_window
-    is_pay_window.value = _is_pay_window
-    bill_key.value = _hand_pay_info
+    request_at.value = _request_at
+    bill_key.value = _hand_pay
     visible.value = true
 
     return new Promise<boolean>((resolve) => {
@@ -44,7 +44,10 @@ const submit = async () => {
     if (is_valid.valid) {
         if (await alert.value.show('정말 빌키를 생성하시겠습니까?')) {
             axios.post(`/api/v1/pay/${pay_window.value}/bill-keys`, 
-                Object.assign(bill_key.value, {token: auth_token.value})
+                Object.assign(bill_key.value, {
+                    token: auth_token.value, 
+                    request_at: request_at.value
+                })
             ).then(r => {
                 snackbar.value.show('성공하였습니다.', 'success')
                 onAgree()
@@ -86,10 +89,10 @@ defineExpose({
                     <VCol style="padding: 0 12px;">
                         <CommonOverview 
                             :user_pay_info="bill_key"
-                            :params_mode="is_pay_window ? PayParamTypes.SMS : 0" 
-                            :params="is_pay_window ? bill_key : {}" 
+                            :params_mode="PayParamTypes.SMS" 
+                            :params="bill_key" 
                         />
-                        <CardOverview :hand_pay_info="bill_key" :is_old_auth="1" />
+                        <CardOverview :hand_pay="bill_key" :is_old_auth="1" />
                     </VCol>
                 </VForm>
             </VCardText>

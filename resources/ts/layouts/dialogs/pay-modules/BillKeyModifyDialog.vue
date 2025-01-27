@@ -15,6 +15,8 @@ const auth_token = <any>(inject('auth_token'))
 
 const bill_key = ref(<BillKey>{})
 const pay_window = ref('')
+const request_at = ref('')
+
 const {
     phone_num_format,
     phone_num,
@@ -23,10 +25,11 @@ const {
 
 let resolveCallback: (isAgreed: boolean) => void;
 
-const show = (_bill_key: BillKey, _pay_window: string) => {
+const show = (_bill_key: BillKey, _pay_window: string, _request_at: string) => {
     phone_num.value = _bill_key.buyer_phone
     phone_num_format.value = _bill_key.buyer_phone.toString()
     pay_window.value = _pay_window
+    request_at.value = _request_at
     bill_key.value = _bill_key
     visible.value = true
 
@@ -42,6 +45,7 @@ const submit = async () => {
             axios.post(`/api/v1/pay/${pay_window.value}/bill-keys/${bill_key.value.id}`, 
                 Object.assign(bill_key.value, {
                     token: auth_token.value,
+                    request_at: request_at.value
                 })
             ).then(r => {
                 snackbar.value.show('성공하였습니다.', 'success')
@@ -62,6 +66,7 @@ const remove = async () => {
         axios.delete(`/api/v1/pay/${pay_window.value}/bill-keys/${bill_key.value.id}`, {
             params: {
                 token: auth_token.value,
+                request_at: request_at.value,
                 ord_num: bill_key.value.id + "BD" + Date.now().toString().substr(0, 10),
             }
         }).then(r => {

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Manager\PaymentModule;
+namespace App\Http\Controllers\Manager\Merchandise;
 
 use App\Enums\AuthLoginCode;
 
-use App\Models\PaymentModule\BillKey;
+use App\Models\Merchandise\BillKey;
 use App\Models\Merchandise\PaymentModule;
 
 use App\Http\Traits\ManagerTrait;
@@ -12,10 +12,10 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
 
 use App\Http\Requests\Manager\IndexRequest;
-use App\Http\Requests\Manager\PaymentModule\BillKeyIndexRequest;
-use App\Http\Requests\Manager\PaymentModule\BillKeyCreateRequest;
-use App\Http\Requests\Manager\PaymentModule\BillKeyUpdateRequest;
-use App\Http\Requests\Manager\PaymentModule\BillKeyPayRequest;
+use App\Http\Requests\Manager\Merchandise\BillKeyIndexRequest;
+use App\Http\Requests\Manager\Merchandise\BillKeyCreateRequest;
+use App\Http\Requests\Manager\Merchandise\BillKeyUpdateRequest;
+use App\Http\Requests\Manager\Merchandise\BillKeyPayRequest;
 
 use App\Http\Controllers\Utils\Comm;
 use App\Http\Controllers\Ablilty\Ablilty;
@@ -58,7 +58,7 @@ class BillKeyController extends Controller
                         return [0, '', $pay_window, $pay_module];
                     else
                         return [1999, '결제모듈의 pay key가 존재하지 않습니다.<br>pay key를 생성한 후 빌키를 생성해주세요.', $pay_window, $pay_module];
-                }  
+                }
                 else
                     return [1999, '결제모듈이 존재하지 않습니다.', null, null];
             }
@@ -96,22 +96,25 @@ class BillKeyController extends Controller
      */
     public function managerIndex(IndexRequest $request)
     {
-        $cols = ['bill_keys.*', 'merchandises.mcht_name', 'payment_modules.note'];
+        $cols = ['bill_keys.*', 'merchandises.mcht_name'];
         $search = $request->input('search', '');
         $query = $this->bill_keys
             ->join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
-            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-            ->where('merchandises.is_delete', false)
-            ->where(function ($query) use ($search) {
-                return $query->where('merchandises.mcht_name', 'like', "%$search%");
+            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id');
+
+        if($search)
+        {
+            $query = $query->where(function ($query) use ($search) {
+                return $query->where('bill_keys.buyer_phone', 'like', "%".$this->aes256_encode($request->buyer_phone)."%")
+                    ->where('bill_keys.buyer_name', 'like', "%".$this->aes256_encode($request->buyer_name)."%");
             });
-        $query = globalSalesFilter($query, $request, 'merchandises');
-        $query = globalAuthFilter($query, $request, 'merchandises');        
-        $query = globalPGFilter($query, $request, 'payment_modules');
+        }
         if(Ablilty::isMerchandise($request))
-            $query = $query->where('payment_modules.mcht_id', $request->user()->id);
+            $query = $query->where('merchandises.id', $request->user()->id);
         else if(Ablilty::isSalesforce($request))
             return $this->response(951);
+        else
+            $cols[] = 'payment_modules.pg_id';
 
         $data = $this->getIndexData($request, $query, 'bill_keys.id', $cols, 'bill_keys.created_at');
         return $this->response(0, $data);
@@ -128,10 +131,15 @@ class BillKeyController extends Controller
         if($result === 0)
         {
             $bill_keys = $this->bill_keys
-                ->where('pmod_id', $pay_window['payment_module']['id'])
-                ->where('buyer_phone', $this->aes256_encode($request->buyer_phone))
+                ->join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
+                ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+                ->where('bill_keys.pmod_id', $pay_module->id)
+                ->where('bill_keys.buyer_phone', $this->aes256_encode($request->buyer_phone))
+                ->where('bill_keys.buyer_name', $this->aes256_encode($request->buyer_name))
                 ->get([
-                'id', 'issuer', 'card_num', 'buyer_name', 'buyer_phone',
+                'bill_keys.id', 'bill_keys.issuer', 
+                'bill_keys.card_num', 
+                'bill_keys.buyer_name', 'bill_keys.buyer_phone', 
             ]);
             return $this->response(0, $bill_keys);
         }

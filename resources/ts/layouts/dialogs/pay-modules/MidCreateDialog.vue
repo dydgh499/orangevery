@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import corp from '@corp'
 
 const mid_code  = ref(null)
 const mid_codes = ref(<string[]>([]))
@@ -26,16 +25,11 @@ const selected = () => {
 }
 
 watchEffect(() => {
-    if(corp.id === 19) {
-        mid_codes.value = [
-            'BUDM_DO',
-            'BUDM_DR',
-            'BUDM_OP',
-            'BUDM_OR',
-        ]
-    }
-    else
-        mid_codes.value = []
+    mid_codes.value = [
+        'M',
+        'G',
+        'V',
+    ]
 })
 
 const handleEvent = (event: KeyboardEvent) => {

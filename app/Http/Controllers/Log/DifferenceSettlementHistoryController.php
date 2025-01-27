@@ -26,12 +26,10 @@ class DifferenceSettlementHistoryController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $difference_settlement_histories;
-    protected $base_path = "App\Http\Controllers\Log\DifferenceSettlement\\";
 
     public function __construct(DifferenceSettlementHistory $difference_settlement_histories)
     {
         $this->difference_settlement_histories = $difference_settlement_histories; 
-        $this->base_path = "App\Http\Controllers\Log\DifferenceSettlement\\";
     }
 
     public function commonSelect($request)
@@ -51,7 +49,6 @@ class DifferenceSettlementHistoryController extends Controller
         if($request->only_appr)
             $query = $query->where('transactions.is_cancel', 0);
         return $query;
-
     }
 
     public function index(IndexRequest $request)

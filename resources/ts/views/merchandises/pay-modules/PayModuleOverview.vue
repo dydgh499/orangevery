@@ -106,7 +106,6 @@ const addNewPayModule = async () => {
         pay_dupe_least: 0,
         payment_term_min: 1,
         pay_window_extend_hour: 25,
-        is_able_bill_key: 0,
         is_different_settlement: 1,
     })
     const res = await payModuleDlg.value.show(pay_module)

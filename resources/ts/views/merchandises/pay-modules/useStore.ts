@@ -426,7 +426,6 @@ export const defaultItemInfo =  () => {
         payment_term_min: 1,
         p_mid: '',
         pay_window_extend_hour: 1,
-        is_able_bill_key: 0,
         is_different_settlement: 1,
     })
     //카드사 필터 및 다른 필터옵션들

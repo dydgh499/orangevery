@@ -145,11 +145,7 @@ watchEffect(() => {
                 </VCol>
             </VRow>
         </template>
-        <CommonOverview :user_pay_info="props.common_info" :params_mode="params_mode" :params="params" >
-        <template #bill_key>
-            <slot name="bill_key"></slot> 
-        </template>
-        </CommonOverview>
+        <CommonOverview :user_pay_info="props.common_info" :params_mode="params_mode" :params="params"/>
         <slot name="extra_info"></slot>
         <DeliveryOverview :user_pay_info="props.common_info" v-if="params_mode === PayParamTypes.SHOP && props.common_info.delivery_type === true"/>
     </VCol>

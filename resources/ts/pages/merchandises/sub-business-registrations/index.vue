@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useSearchStore, registration_types, registrationResults, registrationResultColor } from '@/views/merchandises/sub-business-registrations/useStore'
+import { useSearchStore, registration_types } from '@/views/merchandises/sub-business-registrations/useStore'
+import { getDifferenceSettlementResultCode, status_codes } from '@/views/transactions/settle-histories/useDifferenceStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
-import { template } from 'lodash'
 
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
@@ -20,11 +20,18 @@ onMounted(() => {})
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="가맹점명 검색" :metas="metas" :add="false" add_name="가맹점"
+        <BaseIndexView placeholder="가맹점 상호, 사업자번호 검색" :metas="metas" :add="false" add_name="가맹점"
             :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                     :sales="true">
+                    <template #sales_extra_field>
+                        <VCol cols="6" sm="3">
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.status_code"
+                                    :items="status_codes" :label="`결과 필터`" item-title="title" item-value="id"
+                                    @update:modelValue="store.updateQueryString({ level: store.params.status_code })" />
+                        </VCol>
+                    </template>
                     <template #pg_extra_field>
                     </template>
                 </BaseIndexFilterCard>
@@ -58,14 +65,14 @@ onMounted(() => {})
                             <span v-else-if="_key == 'pg_type'">
                                 {{ pgs.find(pg => pg['pg_type'] === item[_key])?.pg_name }}
                             </span>
+                            <span v-else-if="_key === 'registration_code'">
+                                <VChip :color="getDifferenceSettlementResultCode(item['registration_code'])">
+                                    {{ item[_key] }}
+                                </VChip>                                
+                            </span>
                             <span v-else-if="_key === 'registration_type'">
                                 <VChip :color="store.getSelectIdColor(item[_key] + 2)">
                                     {{ registration_types.find(obj => obj.id === item[_key]).title }}
-                                </VChip>
-                            </span>
-                            <span v-else-if="_key === 'registration_result'">
-                                <VChip :color="registrationResultColor(item[_key])">
-                                    {{ registrationResults(item[_key]) }}
                                 </VChip>
                             </span>
                             <span v-else>

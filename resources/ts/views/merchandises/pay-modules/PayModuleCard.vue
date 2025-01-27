@@ -25,15 +25,6 @@ const md = ref<number>(3)
 
 provide('midCreateDlg', midCreateDlg)
 
-onMounted(() => {
-    watchEffect(() => {
-        if(corp.id !== 30)
-            md.value = (props.item.module_type == 0 || props.item.module_type == 1) && isAbleModiy(0) ? 3 : 4
-        else
-            md.value = 4
-    })
-})
-
 onDeactivated(() => {
     const tooltips = document.querySelectorAll('.v-tooltip.v-overlay--active')
     tooltips.forEach((tooltip) => {
@@ -62,7 +53,7 @@ onDeactivated(() => {
                     </VCol>
                     <template v-if="corp.id !== 30">
                         <VDivider :vertical="$vuetify.display.mdAndUp" />
-                        <VCol cols="12" :md="md" v-if="props.item.module_type < 2">
+                        <VCol cols="12" :md="md">
                             <VCardTitle>장비정보</VCardTitle>
                             <TerminalInfoOverview :item="props.item" />
                         </VCol>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { pinInputEvent } from '@/@core/utils/pinInputEvent';
 import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue';
-import router from '@/router';
 import AuthPayOverview from '@/views/pay/AuthPayOverview.vue';
+import BillPayOverview from '@/views/pay/BillPayOverview.vue';
 import HandPayOverview from '@/views/pay/HandPayOverview.vue';
 import { payWindowStore } from '@/views/quick-view/payWindowStore';
 import type { Merchandise, PayGateway, PayModule, PayWindow } from '@/views/types';
@@ -84,19 +84,13 @@ onMounted(async () => {
     <section>
         <VCard rounded>
             <VCardText style="padding: 0.5em;">
-                <template v-if="params_mode !== PayParamTypes.SHOP">
+                <template v-if="params_mode !== PayParamTypes.SHOP && isVisiableRemainTime(pay_module) && code === 200">
                     <div
-                        style="position: absolute; display: flex; width: 100%; justify-content: space-between;" v-if="pay_module?.module_type > 0 || code !== 200">
-                        <div style="display: inline-flex; flex-direction: column;" v-if="isVisiableRemainTime(pay_module)">
+                        style="position: absolute; display: flex; width: 100%; justify-content: space-between;">
+                        <div style="display: inline-flex; flex-direction: column;">
                             <h5>결제창 유효시간</h5>
                             <b :class="getRemainTimeColor">{{ remaining_time }}</b>
                         </div>
-                        <VBtn
-                            @click="router.back()" size="small" 
-                            color="warning"
-                            style="margin-right: 1em;">
-                            뒤로가기
-                        </VBtn>
                     </div>
                 </template>
                 <VRow class="match-height">
@@ -127,8 +121,14 @@ onMounted(async () => {
                                 :pay_module="pay_module" 
                                 :merchandise="merchandise"                             
                             />
+                            <BillPayOverview
+                                v-if="pay_module?.module_type === 4"
+                                :pay_module="pay_module" 
+                                :merchandise="merchandise"
+                                :pay_window="pay_window"
+                            />
                             <AuthPayOverview 
-                                v-else-if="pay_module?.module_type === 2 || pay_module?.module_type === 3"
+                                v-else
                                 :pay_module="pay_module" 
                                 :merchandise="merchandise"
                                 :pay_window="pay_window"

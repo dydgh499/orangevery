@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Requests\Manager\PaymentModule;
+namespace App\Http\Requests\Manager\Merchandise;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
 
-class BillKeyIndexRequest extends FormRequest
+class BillKeyUpdateRequest extends FormRequest
 {
     use FormRequestTrait;
     public $keys = [
         'buyer_name',
         'buyer_phone',
-        'request_at',
     ];
 
-    public $integer_keys = [];
+    public $integer_keys = [
+    ];
 
     public function authorize()
     {
@@ -47,5 +47,10 @@ class BillKeyIndexRequest extends FormRequest
         $params['buyer_phone']['description']   = '요청당시 인증자 성명';
         $params['request_at']['description']    = '본인인증 요청시간';
         return $params;
+    }
+
+    public function data()
+    {
+        return array_merge($this->getParmasBaseKeyV2($this->keys, ''), $this->getParmasBaseKeyV2($this->integer_keys, 0));
     }
 }
