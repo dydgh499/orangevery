@@ -21,12 +21,6 @@ return new class extends Migration
         Schema::table('sub_business_registrations', function (Blueprint $table) {
             $table->string('registration_code', 3)->change();
         });
-        Schema::table('sub_business_registrations', function (Blueprint $table) {
-            $table->foreign('mcht_id', 'mcht_id_fk')
-                ->references('id')
-                ->on('merchandises')
-                ->onDelete('SET NULL');
-        });
     }
 
     /**

@@ -27,6 +27,9 @@ export const module_types = <Options[]>([
     { id: 0, title: "장비" }, { id: 1, title: "수기결제" },
     { id: 2, title: "인증결제" }, { id: 3, title: "간편결제" },
 ])
+if(corp.pv_options.paid.use_bill_key)
+    module_types.push({ id: 3, title: "빌키결제" })
+
 export const installments = <Options[]>([
     { id: 0, title: "일시불" }, { id: 2, title: "2개월" },
     { id: 3, title: "3개월" }, { id: 4, title: "4개월" },
