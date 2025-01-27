@@ -122,7 +122,7 @@ onMounted(async () => {
                                 :merchandise="merchandise"                             
                             />
                             <BillPayOverview
-                                v-if="pay_module?.module_type === 4"
+                                v-else-if="pay_module?.module_type === 4"
                                 :pay_module="pay_module" 
                                 :merchandise="merchandise"
                                 :pay_window="pay_window"
