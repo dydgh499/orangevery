@@ -245,7 +245,7 @@ class ContainerBase
 
     protected function logging($connection_type, $message, $data, $level=0)
     {
-        $base_message = $this->service_name."\t $connection_type \t"."$message";
+        $base_message = $this->service_name."\t\t $connection_type \t"."$message";
         if($level === 0)
             logging($data, "$base_message (O)");
         else if($level === 1)
