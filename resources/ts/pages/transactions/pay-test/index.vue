@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue';
 import AuthPayOverview from '@/views/pay/AuthPayOverview.vue';
+import BillPayOverview from '@/views/pay/BillPayOverview.vue';
 import HandPayOverview from '@/views/pay/HandPayOverview.vue';
 import MerchandiseSelectOverview from '@/views/pay/MerchandiseSelectOverview.vue';
 import type { Merchandise, PayGateway, PayModule, PayWindow } from '@/views/types';
@@ -46,10 +47,15 @@ provide('salesslip', salesslip)
                                     v-if="pay_module?.module_type === 1"
                                     :pay_module="pay_module" 
                                     :merchandise="merchandise"
-                                >
-                                </HandPayOverview>
+                                />
+                                <BillPayOverview
+                                    v-else-if="pay_module?.module_type === 4"
+                                    :pay_module="pay_module" 
+                                    :merchandise="merchandise"
+                                    :pay_window="pay_window"
+                                />
                                 <AuthPayOverview 
-                                    v-else-if="pay_module?.module_type === 2 || pay_module?.module_type === 3"
+                                    v-else
                                     :pay_module="pay_module" 
                                     :merchandise="merchandise"
                                     :pay_window="pay_window"
