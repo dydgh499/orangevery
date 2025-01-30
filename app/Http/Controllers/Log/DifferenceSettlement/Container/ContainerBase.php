@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Log\DifferenceSettlement\Container;
 use App\Http\Traits\Log\DifferenceSettlement\FileRWTrait;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class ContainerBase
@@ -33,7 +34,10 @@ class ContainerBase
         }
         catch(\Throwable $e)
         {   // pg사 발견못함
-            logging(['message' => $e->getMessage()], 'DifferenceSettlement - PG사가 없습니다.('.$this->service_name.")");
+            $this->logging('MAIN', 'difference-settlement-container', [
+                'message'   => $e->getMessage(),
+                'detail'    => 'PG Not Found('.$this->service_name.")",
+            ], 2);
         }
     }
     
@@ -56,8 +60,8 @@ class ContainerBase
             {
                 $connection = null;
                 $connection_stat = false;
-                logging(['type'=>$type], $this->service_name."\t $type \t"."difference-settlement-connection (X)");
-            }    
+                $this->logging($type, 'difference-settlement-connection', [], 2);
+            }
         }
         return [$connection, $connection_stat];
     }
@@ -97,28 +101,36 @@ class ContainerBase
 
     protected function upload($save_path, $full_record, $message = 'difference-settlement-upload')
     {
+        $connection_type = 'MAIN';
+        $data = [
+            'upload_path'   => $save_path, 
+            'line'          => count(explode("\n", $full_record))
+        ];
         if($this->main_connection_stat)
         {
             if($this->main_sftp_connection->put($save_path, $full_record))
             {
-                logging(['save_path'=>$save_path, 'line' => count(explode("\n", $full_record))], $this->service_name."\t main \t"."$message (O)");
+                $this->logging($connection_type, $message, $data, 0);
                 return true;
             }
             else
             {
-                error(['save_path'=>$save_path, 'line' => count(explode("\n", $full_record))], $this->service_name."\t main \t"."$message (X)");
+                $this->logging($connection_type, $message, $data, 2);
                 return false;
             }    
         }
         else
+        {
+            $this->logging($connection_type, $message, $data, 2);
             return false;
+        }
     }
 
     protected function download($download_path, $message = 'difference-settlement-download')
     {
+        $connection_type = "";
         try
         {
-            $connection_type = "";
             if($this->main_connection_stat && $this->main_sftp_connection->exists($download_path))
             {
                 $connection_type = 'MAIN';
@@ -131,20 +143,28 @@ class ContainerBase
             }
             else
                 $contents = "";
+
+            $data = [
+                'download_path' => $download_path, 
+                'line'          => count(explode("\n", $contents))
+            ];
             if($contents !== "")
             {
-                logging(['download_path'=>$download_path, 'line' => count(explode("\n", $contents))], $this->service_name."\t $connection_type \t"."$message (O)");
+                $this->logging($connection_type, $message, $data, 0);
                 return $contents;   
             }
             else
             {
-                error(['download_path'=>$download_path, 'line' => count(explode("\n", $contents))], $this->service_name."\t $connection_type \t"."$message (X)");
+                $this->logging($connection_type, $message, $data, 1);
                 return "";
             }
         }
         catch(\Throwable $e)
         {
-            error(['download_path'=>$download_path, 'error' => $e->getMessage()], $this->service_name."\t $connection_type \t"."$message (X)");
+            $this->logging($connection_type, $message, [
+                'download_path' => $download_path, 
+                'error'         => $e->getMessage()
+            ], 2);
             return [];
         }
     }
@@ -221,5 +241,16 @@ class ContainerBase
             $filter         = $this->setAtypeField('', $this->RQ_END_FILTER_SIZE);
             return $record_type.$total_count.$filter."\r\n";
         }
+    }
+
+    protected function logging($connection_type, $message, $data, $level=0)
+    {
+        $base_message = $this->service_name."\t $connection_type \t"."$message";
+        if($level === 0)
+            logging($data, "$base_message (O)");
+        else if($level === 1)
+            Log::warning("$base_message (X)", $data);
+        else if($level === 2)
+            error($data, "$base_message (X)");
     }
 }

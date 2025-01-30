@@ -124,61 +124,57 @@ class nicepay extends ComponentBase implements ComponentInterface
                 $business_num       = trim(str_replace('-', '', $sub_business_regi_info->business_num));
                 $phone_num          = trim(str_replace('-', '', $sub_business_regi_info->phone_num));
 
-                if($mcht)
+                if(substr_count($phone_num, '-') === 2)
                 {
-                    if(substr_count($phone_num, '-') === 2)
-                    {
-                        $nums = explode('-', $phone_num);
-                        $region_num = $nums[0];
-                        $number_1 = $nums[1];
-                        $number_2 = $nums[2];
-                    }
-                    else if(strlen($phone_num) === 9)
-                    {
-                        $region_num = substr($phone_num, 0, 2);
-                        $number_1 = substr($phone_num, 2, 4);
-                        $number_2 = substr($phone_num, 6, 4);
-                    }
-                    else if(strlen($phone_num) === 10)
-                    {
-                        $region_num = substr($phone_num, 0, 3);
-                        $number_1 = substr($phone_num, 3, 4);
-                        $number_2 = substr($phone_num, 7, 4);
-                    }
-                    else
-                    {
-                        $region_num = '02';
-                        $number_1 = '1234';
-                        $number_2 = '5678';
-                    }
-                    $records = $this->setAtypeField("RD", 2);
-                    $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
-                    $records .= $this->setNtypeField($brand_business_num, 10);
-                    $records .= $this->setNtypeField($sub_business_regi_info->card_company_code, 3);
-                    $records .= $this->setNtypeField($business_num, 10);
-
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->sector), 20);
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->mcht_name), 40);
-                    $records .= $this->setNtypeField('00000', 6);   //우편번호
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->addr), 100);
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->nick_name), 40);
-                    $records .= $this->setNtypeField($region_num, 3);  //지역번호 필드
-                    $records .= $this->setNtypeField($number_1, 4);   //국번번호 필드
-                    $records .= $this->setNtypeField($number_2, 4);   //개별번호 필드
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->email), 40);   //이메일 필드
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->website_url), 80);   //웹사이트 URL 필드
-                    $records .= $this->setNtypeField($yesterday, 8);
-                    $records .= $this->setAtypeField($sub_business_regi_info->id, 12);
-                    $records .= $this->setAtypeField('', 116);
-                    $records .= "\r\n";
-                    $data_records .= $records;
-
-                    $upload = $this->setRegisterCount($sub_business_regi_info, $upload);
-                    $datas[] = $this->getRegisterRequestObject($sub_business_regi_info->id);
+                    $nums = explode('-', $phone_num);
+                    $region_num = $nums[0];
+                    $number_1 = $nums[1];
+                    $number_2 = $nums[2];
                 }
-            }
+                else if(strlen($phone_num) === 9)
+                {
+                    $region_num = substr($phone_num, 0, 2);
+                    $number_1 = substr($phone_num, 2, 4);
+                    $number_2 = substr($phone_num, 6, 4);
+                }
+                else if(strlen($phone_num) === 10)
+                {
+                    $region_num = substr($phone_num, 0, 3);
+                    $number_1 = substr($phone_num, 3, 4);
+                    $number_2 = substr($phone_num, 7, 4);
+                }
+                else
+                {
+                    $region_num = '02';
+                    $number_1 = '1234';
+                    $number_2 = '5678';
+                }
+                $records = $this->setAtypeField("RD", 2);
+                $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
+                $records .= $this->setNtypeField($brand_business_num, 10);
+                $records .= $this->setNtypeField($sub_business_regi_info->card_company_code, 3);
+                $records .= $this->setNtypeField($business_num, 10);
 
-            return [$full_records, $upload];
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->sector), 20);
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->mcht_name), 40);
+                $records .= $this->setNtypeField('00000', 6);   //우편번호
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->addr), 100);
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->nick_name), 40);
+                $records .= $this->setNtypeField($region_num, 3);  //지역번호 필드
+                $records .= $this->setNtypeField($number_1, 4);   //국번번호 필드
+                $records .= $this->setNtypeField($number_2, 4);   //개별번호 필드
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->email), 40);   //이메일 필드
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $sub_business_regi_info->website_url), 80);   //웹사이트 URL 필드
+                $records .= $this->setNtypeField($yesterday, 8);
+                $records .= $this->setAtypeField($sub_business_regi_info->id, 12);
+                $records .= $this->setAtypeField('', 116);
+                $records .= "\r\n";
+                $data_records .= $records;
+
+                $upload = $this->setRegisterCount($sub_business_regi_info, $upload);
+                $datas[] = $this->getRegisterRequestObject($sub_business_regi_info->id);
+            }
+            return [$data_records, $upload, $datas];
         };
         $getTrailer = function($upload) {
             return 

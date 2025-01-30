@@ -43,7 +43,7 @@ class ComponentBase extends MerchandiseRegistrationBase
         if($record['trans_id'] !== 0)
             $records[] = $record;
         else
-            error(['message' => 'trans_id is empty'], $service_name."\t main \t"."difference-settlement-response");
+            $this->logging($service_name, 'MAIN', 'difference-settlement-response', ['message' => 'trans_id is empty'], 1);
         return $records;
     }
 

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Log\DifferenceSettlement\Component;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class MerchandiseRegistrationBase
 {
@@ -89,7 +90,18 @@ class MerchandiseRegistrationBase
         if($data['id'] !== 0)
             $datas[] = $data;
         else
-            error(['message' => 'id is empty'], $service_name."\t main \t"."merchandise-registration-response");
+            $this->logging($service_name, 'MAIN', 'merchandise-registration-response', ['message' => 'id is empty'], 1);
         return $datas;
+    }
+    
+    protected function logging($service_name, $connection_type, $message, $data, $level=0)
+    {
+        $base_message = $service_name."\t $connection_type \t"."$message";
+        if($level === 0)
+            logging($data, "$base_message (O)");
+        else if($level === 1)
+            Log::warning("$base_message (X)", $data);
+        else if($level === 2)
+            error($data, "$base_message (X)");
     }
 }
