@@ -8,6 +8,7 @@ import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOvervie
 import UserOverview from '@/views/users/UserOverview.vue'
 
 import CreateForm from '@/layouts/utils/CreateForm.vue'
+import { isFixplus } from '@/plugins/fixplus'
 import { notiViewable } from '@/views/merchandises/noti-urls/useStore'
 import { defaultItemInfo } from '@/views/merchandises/useStore'
 import type { Tab } from '@/views/types'
@@ -16,8 +17,7 @@ import corp from '@corp'
 const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([])
 
-
-if(corp.pv_options.paid.sales_parent_structure) {
+if(isFixplus()) {
     tabs.push({ icon: 'tabler-user-check', title: '가맹점정보' })
 }
 else {
@@ -35,7 +35,7 @@ const id = ref<number>(0)
     <section>
         <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
             <template #view>
-                <template v-if="corp.pv_options.paid.sales_parent_structure">
+                <template v-if="isFixplus()">
                     <VWindowItem>
                         <FixplusOverview :item="item"/>
                     </VWindowItem>
