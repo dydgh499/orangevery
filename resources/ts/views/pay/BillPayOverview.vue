@@ -27,7 +27,6 @@ const getDefaultFormat = () => {
     }   
 }
 
-const route = useRoute()
 const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
@@ -60,7 +59,7 @@ const filterInstallment = computed(() => {
 })
 
 const billKeySelect = async () => {
-    const _bill_key = await billKeySelectDialog.value.show(route.params.window, bill_pay.value, auth_token)
+    const _bill_key = await billKeySelectDialog.value.show(props.pay_window.window_code, bill_pay.value, auth_token)
     if(_bill_key !== null) {
         bill_key.value = _bill_key
         bill_pay.value.buyer_name = bill_key.value.buyer_name
@@ -79,7 +78,7 @@ const pay = async () => {
             if (is_valid?.valid && await alert.value.show(bill_pay.value.amount.toLocaleString() + '원을 결제하시겠습니까?')) {
                 try {
                     const r = await axios.post(
-                        `/api/v1/pay/${route.params.window}/bill-keys/${bill_key.value.id}/pay`, 
+                        `/api/v1/pay/${props.pay_window.window_code}/bill-keys/${bill_key.value.id}/pay`, 
                         Object.assign(cloneDeep(bill_pay.value), {token: auth_token.value})
                     )
                     sale_slip.value = {
