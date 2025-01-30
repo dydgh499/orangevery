@@ -35,7 +35,7 @@ const id = ref<number>(0)
     <section>
         <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
             <template #view>
-                <template v-if="corp.id === 30">
+                <template v-if="corp.pv_options.paid.sales_parent_structure">
                     <VWindowItem>
                         <FixplusOverview :item="item"/>
                     </VWindowItem>

@@ -27,8 +27,8 @@ const {
 } = inputFormater()
 
 const {
-    hand_pay_info,
-    hand_pay_infos,
+    hand_pay,
+    hand_pays,
     full_processes,
     valid_total_amount,
     purchaseStart,
@@ -39,7 +39,7 @@ const {
     // 다중 결제 시작
 const pays = async () => {
     const common_valid = await vForm.value?.validate()
-    const total_amount = hand_pay_infos.value.reduce((sum: number, obj: { amount: any }) => sum + Number(obj.amount), 0)
+    const total_amount = hand_pays.value.reduce((sum: number, obj: { amount: any }) => sum + Number(obj.amount), 0)
 
     if(valid_total_amount.value !== total_amount) {
         snackbar.value.show('결제금액은 총 ' + valid_total_amount.value.toLocaleString() + '원 이어야합니다.', 'error')
@@ -63,15 +63,15 @@ const isShowMobileVerification = computed(() => {
 })
 
 watchEffect(async () => {
-    if (hand_pay_info.value.buyer_name && hand_pay_info.value.buyer_phone) {
+    if (hand_pay.value.buyer_name && hand_pay.value.buyer_phone) {
         // watchEffect가 잡히지 않는 이유?
     }
     let is_valid = await vForm.value?.validate()
-    hand_pay_info.value.status_icon = is_valid?.valid ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'
-    hand_pay_info.value.status_color = is_valid?.valid ? 'success' : 'error'    
+    hand_pay.value.status_icon = is_valid?.valid ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'
+    hand_pay.value.status_color = is_valid?.valid ? 'success' : 'error'    
 })
 watchEffect(() => {
-    hand_pay_info.value.buyer_phone = phone_num.value
+    hand_pay.value.buyer_phone = phone_num.value
 })
 onMounted(() => {
     init()
@@ -87,7 +87,7 @@ onMounted(() => {
                 <template #title>
                     <div>
                         <span>공통 결제정보</span>
-                        <VIcon size="24" :icon=hand_pay_info.status_icon :color=hand_pay_info.status_color
+                        <VIcon size="24" :icon=hand_pay.status_icon :color=hand_pay.status_color
                             style="float: inline-end;" />
                     </div>
                 </template>
@@ -101,12 +101,12 @@ onMounted(() => {
                                         <label>상품명</label>
                                     </VCol>
                                     <VCol cols="8" :md="10">
-                                        <VTextField v-model="hand_pay_info.item_name" name="item_name"
+                                        <VTextField v-model="hand_pay.item_name" name="item_name"
                                             prepend-icon="tabler:shopping-bag"
                                             maxlength="100" 
                                             counter
                                             variant="underlined"
-                                            :rules="[requiredValidatorV2(hand_pay_info.item_name, '상품명')]" 
+                                            :rules="[requiredValidatorV2(hand_pay.item_name, '상품명')]" 
                                             placeholder="상품명을 입력해주세요" />
                                     </VCol>
                                 </VRow>
@@ -120,9 +120,9 @@ onMounted(() => {
                                         <label>구매자명</label>
                                     </VCol>
                                     <VCol cols="8" :md="10">
-                                        <VTextField v-model="hand_pay_info.buyer_name" name="buyer_name"
+                                        <VTextField v-model="hand_pay.buyer_name" name="buyer_name"
                                             variant="underlined"
-                                            placeholder="구매자명을 입력해주세요" :rules="[requiredValidatorV2(hand_pay_info.buyer_name, '구매자명')]" 
+                                            placeholder="구매자명을 입력해주세요" :rules="[requiredValidatorV2(hand_pay.buyer_name, '구매자명')]" 
                                             prepend-icon="tabler-user" />
                                     </VCol>
                                 </VRow>
@@ -140,7 +140,7 @@ onMounted(() => {
                                             @input="formatPhoneNum"
                                             variant="underlined"
                                             prepend-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
-                                            :rules="[requiredValidatorV2(hand_pay_info.buyer_phone, '구매자 연락처')]" 
+                                            :rules="[requiredValidatorV2(hand_pay.buyer_phone, '구매자 연락처')]" 
                                         />
                                     </VCol>
                                 </VRow>
@@ -152,7 +152,7 @@ onMounted(() => {
                         <VRow>
                             <VCol cols="6">
                                 <span>총 입력금액</span>
-                                <b style="margin-left: 0.5em;">{{ hand_pay_infos.reduce((sum, obj) => sum + Number(obj.amount), 0).toLocaleString() }}</b>원
+                                <b style="margin-left: 0.5em;">{{ hand_pays.reduce((sum, obj) => sum + Number(obj.amount), 0).toLocaleString() }}</b>원
                                 <br>
                                 <span>총 결제금액</span>
                                 <b style="margin-left: 0.5em;">{{ valid_total_amount.toLocaleString() }}</b>원
@@ -166,7 +166,7 @@ onMounted(() => {
             </AppCardActions>
         </template>
         <template #input>
-            <MultipleHandPayForm v-for="(item, index) in hand_pay_infos" :key="index" :hand_pay_info="hand_pay_infos[index]"
+            <MultipleHandPayForm v-for="(item, index) in hand_pays" :key="index" :hand_pay="hand_pays[index]"
                 :pay_module="props.pay_module" :index="index" style="margin-bottom: 1em;" />
         </template>
     </CreateHalfVCol>
@@ -240,7 +240,7 @@ onMounted(() => {
         <VCardText>
             <MobileVerification
                 v-if="isShowMobileVerification"
-                @update:token="updateToken($event)" :phone_num="hand_pay_info.buyer_phone" 
+                @update:token="updateToken($event)" :phone_num="hand_pay.buyer_phone" 
                 :merchandise="props.merchandise"/>
             <VCol cols="12" style="padding: 0;" v-else>
                 <VBtn block @click="pays()">

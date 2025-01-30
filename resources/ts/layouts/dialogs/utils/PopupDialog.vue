@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { getUserLevel } from '@/plugins/axios'
-import corp from '@/plugins/corp'
+import { isFixplus } from '@/plugins/fixplus'
 import type { Popup } from '@/views/types'
 import { PopupEvent } from '@core/utils/popup'
 
@@ -8,7 +8,7 @@ const { setOpenStatus, init } = PopupEvent('popups/hide/')
 const popups = ref<Popup[]>([])
 
 const show = (_popups: Popup[]) => {
-    if(corp.id === 30 && getUserLevel() <= 25) {
+    if(isFixplus() && getUserLevel() <= 25) {
         return
     }
     popups.value = _popups

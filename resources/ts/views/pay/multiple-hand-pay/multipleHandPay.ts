@@ -5,16 +5,16 @@ import { cloneDeep } from 'lodash'
 export const multipleHandPaySequence = () => {
     const noti_temp = ref('')
     const full_processes = ref<any[]>([])
-    const hand_pay_info = ref(<MultipleHandPay>({}))
-    const hand_pay_infos = ref(<MultipleHandPay[]>([]))
+    const hand_pay = ref(<MultipleHandPay>({}))
+    const hand_pays = ref(<MultipleHandPay[]>([]))
     const valid_total_amount = ref(0)
     const snackbar = <any>(inject('snackbar'))
     const alert = <any>(inject('alert'))
     const route = useRoute()
 
     const purchaseStart = async (total_amount: number, merchandise: Merchandise) => {
-        for (let i = 0; i < hand_pay_infos.value.length; i++) {
-            if (hand_pay_infos.value[i].status_color != 'success') {
+        for (let i = 0; i < hand_pays.value.length; i++) {
+            if (hand_pays.value[i].status_color != 'success') {
                 snackbar.value.show((i+1) + '번째 결제정보를 확인해주세요.', 'error')
                 return
             }
@@ -43,7 +43,7 @@ export const multipleHandPaySequence = () => {
     // level 1 결제
     const trxProcess = () => {
         full_processes.value = []
-        for (let i = 0; i < hand_pay_infos.value.length; i++) {
+        for (let i = 0; i < hand_pays.value.length; i++) {
             full_processes.value.push(getProcessObject())
             full_processes.value[i].trx_process = pay(i)
         }
@@ -97,8 +97,8 @@ export const multipleHandPaySequence = () => {
     const pay = (index: number) => {
         return new Promise((resolve, reject) => {
             axios.post('/api/v1/transactions/hand-pay', {
-                ...hand_pay_info.value,
-                ...hand_pay_infos.value[index]
+                ...hand_pay.value,
+                ...hand_pays.value[index]
             }).then(r => {
                 resolve({
                     ...r.data,
@@ -117,9 +117,9 @@ export const multipleHandPaySequence = () => {
     const cancel = (index: number) => {
         return new Promise((resolve, reject) => {
             axios.post('/api/v1/transactions/pay-cancel', {
-                temp: hand_pay_info.value.temp,
-                pmod_id: hand_pay_infos.value[index].pmod_id,
-                amount: hand_pay_infos.value[index].amount,
+                temp: hand_pay.value.temp,
+                pmod_id: hand_pays.value[index].pmod_id,
+                amount: hand_pays.value[index].amount,
                 trx_id: full_processes.value[index].trx_result.trx_id,
                 only: true,
             }).then(r => {
@@ -167,7 +167,7 @@ export const multipleHandPaySequence = () => {
         else
             snackbar.value.show('temp 파라미터가 존재하지 않습니다.', 'error')
 
-        hand_pay_info.value = (<MultipleHandPay>({
+        hand_pay.value = (<MultipleHandPay>({
             yymm: '',
             card_num: '',
             installment: 0,
@@ -180,7 +180,7 @@ export const multipleHandPaySequence = () => {
 
     const addNewHandPay = (pay_module: PayModule, mobile: boolean) => {
         const urlParams = new URLSearchParams(window.location.search)
-        hand_pay_infos.value.push(<MultipleHandPay><unknown>({
+        hand_pays.value.push(<MultipleHandPay><unknown>({
             auth_num: '',
             card_pw: '',
             yymm: String(''),
@@ -199,8 +199,8 @@ export const multipleHandPaySequence = () => {
     })
     
     return {
-        hand_pay_info,
-        hand_pay_infos,
+        hand_pay,
+        hand_pays,
         full_processes,
         valid_total_amount,
         purchaseStart,

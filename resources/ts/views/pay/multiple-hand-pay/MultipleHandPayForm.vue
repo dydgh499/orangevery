@@ -8,7 +8,7 @@ import { useDisplay } from 'vuetify'
 import { VForm } from 'vuetify/components'
 
 interface Props {
-    hand_pay_info: MultipleHandPay,
+    hand_pay: MultipleHandPay,
     pay_module: PayModule,
     index: number,
 }
@@ -32,31 +32,31 @@ const filterInstallment = computed(() => {
 })
 
 watchEffect(async () => {
-    let valid = props.hand_pay_info.amount > 0 && 
-    props.hand_pay_info.card_num.length > 14 &&
-    props.hand_pay_info.yymm.length == 4
+    let valid = props.hand_pay.amount > 0 && 
+    props.hand_pay.card_num.length > 14 &&
+    props.hand_pay.yymm.length == 4
 
     if(props.pay_module.is_old_auth) {
-        valid = valid && props.hand_pay_info.card_pw?.length == 2
-        valid = valid && props.hand_pay_info.auth_num?.length as number > 2
+        valid = valid && props.hand_pay.card_pw?.length == 2
+        valid = valid && props.hand_pay.auth_num?.length as number > 2
     }
 
-    props.hand_pay_info.status_icon = valid ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'
-    props.hand_pay_info.status_color = valid ? 'success' : 'error'
+    props.hand_pay.status_icon = valid ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'
+    props.hand_pay.status_color = valid ? 'success' : 'error'
 })
 
 watchEffect(() => {
-    props.hand_pay_info.card_num = card_num.value
-    props.hand_pay_info.yymm = yymm.value
-    props.hand_pay_info.amount = amount.value
+    props.hand_pay.card_num = card_num.value
+    props.hand_pay.yymm = yymm.value
+    props.hand_pay.amount = amount.value
 })
 
 
 watchEffect(() => {
     const { mobile } = useDisplay()
-    props.hand_pay_info.user_agent = mobile.value ? "WM" : "WP"
-    props.hand_pay_info.pmod_id = props.pay_module.id
-    props.hand_pay_info.ord_num = props.pay_module.id + "H" + Date.now().toString().substr(0, 10)
+    props.hand_pay.user_agent = mobile.value ? "WM" : "WP"
+    props.hand_pay.pmod_id = props.pay_module.id
+    props.hand_pay.ord_num = props.pay_module.id + "H" + Date.now().toString().substr(0, 10)
 })
 
 </script>
@@ -65,8 +65,8 @@ watchEffect(() => {
         <template #title>
             <div>
                 <span>결제정보 {{ index+1 }}</span>
-                <VIcon size="24" :icon="props.hand_pay_info.status_icon"
-                    :color="props.hand_pay_info.status_color" style="float: inline-end;"/>
+                <VIcon size="24" :icon="props.hand_pay.status_icon"
+                    :color="props.hand_pay.status_color" style="float: inline-end;"/>
             </div>
         </template>
         <VDivider />
@@ -84,7 +84,7 @@ watchEffect(() => {
                                     @input="formatAmount"
                                     variant="underlined"
                                     placeholder="상품금액을 입력해주세요" prepend-icon="ic:outline-price-change"
-                                    :rules="[requiredValidatorV2(props.hand_pay_info.amount, '상품금액')]" 
+                                    :rules="[requiredValidatorV2(props.hand_pay.amount, '상품금액')]" 
                                 />
                             </VCol>
                         </VRow>
@@ -95,10 +95,10 @@ watchEffect(() => {
                                 <label>할부기간</label>
                             </VCol>
                             <VCol cols="8" :md="8">
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.hand_pay_info.installment" name="installment"
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.hand_pay.installment" name="installment"
                                     variant="underlined"
                                     :items="filterInstallment" prepend-icon="fluent-credit-card-clock-20-regular"
-                                    label="할부기간 선택" item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(props.hand_pay_info.installment, '할부기간')]" />
+                                    label="할부기간 선택" item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(props.hand_pay.installment, '할부기간')]" />
                             </VCol>
                         </VRow>
                     </VCol>
@@ -114,7 +114,7 @@ watchEffect(() => {
                             @input="formatCardNum"
                             prepend-icon="tabler:credit-card"
                             placeholder="카드번호를 입력해주세요" 
-                            :rules="[requiredValidatorV2(props.hand_pay_info.card_num, '카드번호')]"
+                            :rules="[requiredValidatorV2(props.hand_pay.card_num, '카드번호')]"
                             maxlength="22" autocomplete="cc-number" />
                     </VCol>
                 </VRow>
@@ -129,7 +129,7 @@ watchEffect(() => {
                             placeholder="MM/YY" 
                             variant="underlined"
                             prepend-icon="ri:pass-expired-line"
-                            :rules="[requiredValidatorV2(props.hand_pay_info.yymm, '유효기간'), lengthValidatorV2(hand_pay_info.yymm, 4)]"
+                            :rules="[requiredValidatorV2(props.hand_pay.yymm, '유효기간'), lengthValidatorV2(hand_pay.yymm, 4)]"
                             maxlength="5" style="min-inline-size: 11em;">
                             <VTooltip activator="parent" location="top">
                                 카드의 유효기간 4자리를 입력해주세요.<br>
@@ -144,7 +144,7 @@ watchEffect(() => {
                         <label>본인확인</label>
                     </VCol>
                     <VCol md="8" cols="8">
-                        <VTextField v-model="props.hand_pay_info.auth_num" type="number" maxlength="10" variant="underlined"
+                        <VTextField v-model="props.hand_pay.auth_num" type="number" maxlength="10" variant="underlined"
                             prepend-icon="teenyicons:id-outline"
                             placeholder="생년월일6자리(사업자번호)" persistent-placeholder counter>
                             <VTooltip activator="parent" location="top">
@@ -159,7 +159,7 @@ watchEffect(() => {
                     </VCol>
                     <VCol md="8" cols="8">
                         <div style="display: inline-flex; align-items: center;">
-                            <VTextField v-model="props.hand_pay_info.card_pw" 
+                            <VTextField v-model="props.hand_pay.card_pw" 
                                 type="password" 
                                 prepend-icon="tabler:paywall"
                                 variant="underlined"

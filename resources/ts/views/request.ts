@@ -1,4 +1,4 @@
-import { autoInsertPaymentModule } from '@/plugins/fixplus'
+import { autoInsertPaymentModule, isFixplus } from '@/plugins/fixplus'
 import router from '@/router'
 import { defaultItemInfo as complaintItemInit } from '@/views/complaints/useStore'
 import { defaultItemInfo as notiItemInit } from '@/views/merchandises/noti-urls/useStore'
@@ -66,7 +66,7 @@ export const useRequestStore = defineStore('requestStore', () => {
                 else if (back_url === '/merchandises') {
                     mchts.push({ ...params})
                     mchts.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
-                    if(corp.id === 30) {
+                    if(isFixplus()) {
                         autoInsertPaymentModule(params.id)
                     }
                 }
