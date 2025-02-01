@@ -114,7 +114,7 @@ class nicepay extends ContainerBase implements ContainerInterface
     {
         $upload_date = $date->format('ymd');
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);
-        $upload_path = $upload_date."_RS_".$brand_business_num.".00";
+        $upload_path = "EDI_MARGIN/".$upload_date."_RS_".$brand_business_num.".00";
 
         [$full_record, $datas] = $this->service->setRegistrationDataRecord($this->brand, $upload_date, $sub_business_regi_infos);
         if($this->upload($upload_path, $full_record, 'merchandise-registration-upload'))
@@ -127,7 +127,7 @@ class nicepay extends ContainerBase implements ContainerInterface
     {
         $download_date = $date->format('ymd');
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);
-        $download_path = $download_date."_RR_".$brand_business_num.".00";
+        $download_path = "EDI_MARGIN/RECV/".$download_date."_RR_".$brand_business_num.".00";
 
         $contents = $this->download($download_path, 'merchandise-registration-download');
         if($contents !== "")
