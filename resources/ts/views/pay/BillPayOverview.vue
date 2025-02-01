@@ -114,6 +114,7 @@ watchEffect(() => {
 watchEffect(() => {
     if(params_mode.value) {
         amount_format.value = params.value.amount.toString()
+        bill_pay.value.item_name = params.value.item_name
         bill_pay.value.amount = params.value.amount
     }
     else {
