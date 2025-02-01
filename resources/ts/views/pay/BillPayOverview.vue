@@ -292,7 +292,7 @@ watchEffect(() => {
                                             prepend-icon="carbon-identification"
                                             @update:model-value="bill_pay.resident_num_front = getOnlyNumber($event)"
                                             style="width: 13em;"
-                                            placeholder="890101"
+                                            placeholder="19890101"
                                         />
                                     </VCol>
                                 </VRow>

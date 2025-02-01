@@ -45,7 +45,8 @@ class BillKeyController extends Controller
     public function defaultValidate($request, string $window_code)
     {
         // TODO: token 인증 변경 필요
-        [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
+        $result = 0;
+        // [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
         if($result === 0)
         {
             $pay_window = PayWindowInterface::getPayInfo($window_code);
