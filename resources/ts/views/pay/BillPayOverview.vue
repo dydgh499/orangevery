@@ -54,10 +54,6 @@ const {
 } = inputFormater()
 bill_pay.value.delivery_type = false
 
-const filterInstallment = computed(() => {
-    return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
-})
-
 const billKeySelect = async () => {
     const _bill_key = await billKeySelectDialog.value.show(props.pay_window.window_code, bill_pay.value, auth_token)
     if(_bill_key !== null) {
@@ -103,6 +99,15 @@ const pay = async () => {
     else
         snackbar.value.show('결제모듈을 선택해주세요.', 'error')
 }
+
+const filterInstallment = computed(() => {
+    if(bill_pay.value.amount >= 50000)
+        return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
+    else {
+        bill_pay.value.installment = 0
+        return [{ id: 0, title: "일시불" }]        
+    }
+})
 
 watchEffect(() => {
     const { mobile } = useDisplay()
@@ -288,7 +293,7 @@ watchEffect(() => {
                                     <VCol cols="8" :md="8">
                                         <VTextField 
                                             v-model="bill_pay.resident_num_front" 
-                                            maxlength="6"
+                                            maxlength="8"
                                             variant="underlined"
                                             prepend-icon="carbon-identification"
                                             @update:model-value="bill_pay.resident_num_front = getOnlyNumber($event)"

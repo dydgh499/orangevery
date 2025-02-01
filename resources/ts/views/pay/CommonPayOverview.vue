@@ -42,8 +42,14 @@ const isShowMobileVerification = computed(() => {
     return props.pay_module.pay_window_secure_level >= 3 && is_verify_sms.value === false
 })
 
+
 const filterInstallment = computed(() => {
-    return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
+    if(props.common_info.amount >= 50000)
+        return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
+    else {
+        props.common_info.installment = 0
+        return [{ id: 0, title: "일시불" }]        
+    }
 })
 
 watchEffect(() => {

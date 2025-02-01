@@ -99,7 +99,6 @@ class ksnet extends ComponentBase implements ComponentInterface
             {
                 logging($logs, "$log_base (O)");
                 $contents = Storage::disk('public')->get($save_path);
-                Storage::disk('public')->delete($save_path);
                 return $this->getDataRecord($contents);
             }
             else
@@ -206,7 +205,7 @@ class ksnet extends ComponentBase implements ComponentInterface
         {
             $data = explode(',', $datas[$i]);
 
-            $is_cancel  = $data[3];
+            $is_cancel  = (int)$data[3];
             $trx_id     = (int)$data[12];
             $settle_result_code = $data[13];
             $mcht_section_code  = $data[14];

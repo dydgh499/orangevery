@@ -28,7 +28,12 @@ const {
 } = inputFormater()
 
 const filterInstallment = computed(() => {
-    return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
+    if(props.hand_pay.amount >= 50000)
+        return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
+    else {
+        props.hand_pay.installment = 0
+        return [{ id: 0, title: "일시불" }]        
+    }
 })
 
 watchEffect(async () => {
