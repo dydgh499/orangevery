@@ -15,7 +15,7 @@ use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
 use App\Http\Controllers\Manager\SalesforceController;
 use App\Http\Controllers\Manager\Salesforce\UnderAutoSettingController;
 
-use App\Http\Controllers\Log\SubBusinessRegistration\SubBusinessRegistrationController;
+use App\Http\Controllers\Log\SubBusinessRegistrationController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\NotiSendHistoryController;
 

@@ -15,7 +15,7 @@ class BulkSalesforceRequest extends FormRequest
         'phone_num',
         'sales_name',
         'nick_name',
-        'level'    ,
+        'level',
         'resident_num',
         'business_num',
         'sector',
@@ -23,10 +23,14 @@ class BulkSalesforceRequest extends FormRequest
         'acct_name',
         'acct_bank_name',
         'acct_bank_code',
+    ];
+    public $integer_keys = [
         'settle_tax_type',
         'settle_cycle',
-        'settle_day',
         'view_type',
+    ];
+    public $nullable_keys = [
+        'settle_day',
     ];
 
     public function authorize()
@@ -70,8 +74,12 @@ class BulkSalesforceRequest extends FormRequest
         $datas = [];
         $_datas = $this->all();
         for ($i=0; $i < count($_datas) ; $i++)
-        { 
-            $data = $this->getParmasBaseKeyV3($_datas[$i], $this->keys, '');
+        {
+            $data = array_merge(
+                $this->getParmasBaseKeyV3($_datas[$i], $this->keys, ''),
+                $this->getParmasBaseKeyV3($_datas[$i], $this->integer_keys, 0),
+                $this->getParmasBaseKeyV3($_datas[$i], $this->nullable_keys, null)
+            );
             $datas[] = $data;
         }
         return collect($datas);
