@@ -132,7 +132,7 @@ class ShoppingMallWindowInterface implements GeneratorInterface
                 'item_name' => $product['product_name'],
                 'buyer_name' => '',
                 'buyer_phone' => '',
-                'product_option_groups' => $product['product_option_groups'],
+                'product_option_groups' => isset($product['productOptionGroups']) ? $product['productOptionGroups'] : [],
             ];
         }
         else
