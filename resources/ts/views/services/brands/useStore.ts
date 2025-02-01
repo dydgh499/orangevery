@@ -17,8 +17,9 @@ export const dev_settle_types = <Options[]>([
 
 export const identity_auth_types = <Options[]>([
     {id:0, title:'보내자(SMS)'},
-    {id:1, title:'카카오 본인인증(더즌)'},
-    {id:2, title:'카카오 1원인증(더즌)'},
+    {id:1, title:'본인인증(카카오)'},
+    {id:2, title:'1원인증(카카오)'},
+    {id:3, title:'전자계약(싸인오케이)'},
 ])
 
 export const useSearchStore = defineStore('brandSearchStore', () => {

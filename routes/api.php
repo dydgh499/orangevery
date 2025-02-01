@@ -12,7 +12,7 @@ use App\Http\Controllers\Manager\Service\CMSTransactionController;
 
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\QuickView\PayWindowController;
-use App\Http\Controllers\Manager\PaymentModule\BillKeyController;
+use App\Http\Controllers\Manager\Merchandise\BillKeyController;
 use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ShopController;
 
 use App\Http\Controllers\BeforeSystem\BeforeSystemController;
