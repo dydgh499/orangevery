@@ -154,9 +154,9 @@
         public $ps_id = null;
         public $module_type = 2;
         public $is_old_auth = 0;
-        public $ci_validate = false;
-        public $account_validate = false;
-        public $contract_validate = false;        
+        public $ci_validate = 0;
+        public $account_validate = 0;
+        public $contract_validate = 0;
         
         public function __construct(array $source)
         {

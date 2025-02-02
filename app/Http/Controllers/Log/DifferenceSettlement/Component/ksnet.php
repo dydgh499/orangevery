@@ -72,17 +72,17 @@ class ksnet extends ComponentBase implements ComponentInterface
                 {
                     $logs['line-count'] = count(explode("\n", $full_record));
                     Storage::disk('public')->delete($save_path);
-                    logging($logs, "$log_base (O)");
+                    $this->logging('ksnet', 'MAIN', 'difference-settlement-upload', $logs, 0);
                     return true;
                 }
                 else
                 {
                     [$code, $message] = $this->getModuleResultMessage($logs['output']);
-                    error($logs, "$log_base $message (X)"); 
+                    $this->logging('ksnet', 'MAIN', 'difference-settlement-upload', $logs, 2);
                 }
             }
             else
-                error(['save_path'=>$save_path], "$log_base (X)");
+                $this->logging('ksnet', 'MAIN', 'difference-settlement-upload', ['save_path'=>$save_path], 2);
         }
         return false;
     }
@@ -97,7 +97,7 @@ class ksnet extends ComponentBase implements ComponentInterface
             $logs = $this->execKSNetShell($save_path, $rep_mid, 'download');
             if(strpos($logs['output'], 'FILE DOWNLOAD SUCCESS') !== false)
             {
-                logging($logs, "$log_base (O)");
+                $this->logging('ksnet', 'MAIN', 'difference-settlement-download', $logs, 0);
                 $contents = Storage::disk('public')->get($save_path);
                 return $this->getDataRecord($contents);
             }
@@ -105,9 +105,9 @@ class ksnet extends ComponentBase implements ComponentInterface
             {
                 [$code, $message] = $this->getModuleResultMessage($logs['output']);
                 if($code === '0104')
-                    Log::warning("$log_base $message (X)", $logs);
+                    $this->logging('ksnet', 'MAIN', 'difference-settlement-download', $logs, 1);
                 else
-                    error($logs, "$log_base $message (X)"); 
+                    $this->logging('ksnet', 'MAIN', 'difference-settlement-download', $logs, 2);
             }
         }
         return [];
@@ -201,11 +201,12 @@ class ksnet extends ComponentBase implements ComponentInterface
         $datas = array_values(array_filter($lines, function($line) {
             return substr($line, 0, 1) === "R";
         }));
+        $this->logging('ksnet', 'MAIN', 'difference-settlement-download', $datas, 0);
         for ($i=0; $i < count($datas); $i++) 
         {
             $data = explode(',', $datas[$i]);
 
-            $is_cancel  = (int)$data[3];
+            $is_cancel  = $data[3];
             $trx_id     = (int)$data[12];
             $settle_result_code = $data[13];
             $mcht_section_code  = $data[14];
