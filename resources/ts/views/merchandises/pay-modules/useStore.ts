@@ -87,6 +87,13 @@ export const cxl_types = <Options[]>([
 if(corp.pv_options.paid.use_cancel_all_allow)
     cxl_types.push({id:-1, title: '모두허용'})
 
+export const pay_limit_types = <Options[]>([
+    {id: 0, title:'설정안함'},
+    {id: 1, title:'주말 결제금지'},
+    {id: 2, title:'공휴일 결제금지'},
+    {id: 2, title:'주말+공휴일 결제금지'},
+])
+
 export const payModFilter = (all_pay_modules:PayModule[], filter:PayModule[], pmod_id:number|null) => {
     if (all_pay_modules.length > 0) {
         if (filter.length > 0) {
@@ -165,8 +172,6 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         }
         if(getUserLevel() > 10) {
             headers_4['settle_type'] = '정산일'
-            if(getUserLevel() >= 35)
-                headers_4['p_mid'] = 'PMID'
             headers_4['mid'] = 'MID'
             headers_4['tid'] = 'TID'    
         }
@@ -194,6 +199,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         const headers_6:Record<string, string> = {}
         if(corp.pv_options.paid.use_dup_pay_validation)
             headers_6['pay_dupe_limit'] = '동일카드 결제허용'
+        headers_6['pay_limit_type'] = '결제금지타입'
         if(corp.pv_options.paid.use_forb_pay_time)
             headers_6['pay_disable_tm'] = '결제금지 시간'
         headers_6['payment_term_min'] = '결제허용 간격'

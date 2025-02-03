@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('payment_modules', function (Blueprint $table) {
-            $table->dropColumn('is_able_bill_key');
+            $table->unsignedInteger('pay_limit_type')->default(0)->comment('결제제한타입(0=제한없음, 1=주말금지, 2=공휴일금지, 3=주말+공휴일 금지)');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('payment_modules', function (Blueprint $table) {
-            $table->boolean('is_able_bill_key')->default(false)->comment('빌키 사용여부');
+            $table->dropColumn('pay_limit_type');
         });
     }
 };

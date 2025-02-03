@@ -42,12 +42,14 @@ const submit = async () => {
     const is_valid = await vForm.value.validate()
     if (is_valid.valid) {
         if (await alert.value.show('정말 수정하시겠습니까?')) {
-            axios.post(`/api/v1/pay/${pay_window.value}/bill-keys/${bill_key.value.id}`, 
-                Object.assign(bill_key.value, {
+            axios({
+                url: `/api/v1/pay/${pay_window.value}/bill-keys/${bill_key.value.id}`, 
+                data: Object.assign(bill_key.value, {
                     token: auth_token.value,
                     request_at: request_at.value
-                })
-            ).then(r => {
+                }),
+                method: 'put',
+            }).then(r => {
                 snackbar.value.show('성공하였습니다.', 'success')
                 onAgree()
             })

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Manager\Transaction;
 use Illuminate\Support\Facades\DB;
 use App\Enums\DevSettleType;
+use App\Http\Controllers\Manager\Service\BrandInfo;
 
 class SettleAmountCalculator
 {
@@ -59,6 +60,41 @@ class SettleAmountCalculator
         return 0;
     }
 
+    static private function setTaxAmount($settle_tax_type, $profit)
+    {
+        switch($settle_tax_type)
+        {
+            case 1:
+                $profit *= 0.967;
+                break;
+            case 2:
+                $profit *= 0.9;
+                break;
+            case 3:
+                $profit *= 0.9;
+                $profit *= 0.967;
+                break;
+        }
+        return $profit;
+    }
+
+    static private function setOperatorSettleAmountV2($tran)
+    {
+        $tran['dev_settle_amount']   = 0;
+        $tran["brand_settle_amount"] = $tran["ps_id"] ? round($tran['amount'] * $tran["ps_fee"]) : 0;
+        return $tran;
+    }
+
+    static private function setSalesSettleAmountV2($tran, $saleses)
+    {
+        for($i=0; $i<6; $i++)
+        {
+            $key = 'sales'.$i;
+            $tran[$key."_settle_amount"] = $tran[$key."_id"] ? round($tran['amount'] * $tran[$key."_fee"]) : 0;
+        }
+        return $tran;
+    }
+
     static private function setSalesSettleAmount($tran, $saleses)
     {
         for($i=0; $i<6; $i++)
@@ -72,19 +108,7 @@ class SettleAmountCalculator
                 $idx    = array_search($sales_id, array_column($saleses, 'id'));
                 if($idx !== false)
                 {
-                    switch($saleses[$idx]['settle_tax_type'])
-                    {
-                        case 1:
-                            $profit *= 0.967;
-                            break;
-                        case 2:
-                            $profit *= 0.9;
-                            break;
-                        case 3:
-                            $profit *= 0.9;
-                            $profit *= 0.967;
-                            break;
-                    }
+                    $profit = self::setTaxAmount($saleses[$idx]['settle_tax_type'], $profit);
                 }
             }
             $tran[$key."_settle_amount"] = round($profit);
@@ -92,7 +116,7 @@ class SettleAmountCalculator
         return $tran;
     }
 
-    static public function setSettleAmount($trans, $dev_settle_type)
+    static public function setSettleAmount($trans)
     {
         $getSalesforces = function($trans) {
             $sales_ids = collect($trans)->flatMap(function ($tran) {
@@ -113,14 +137,22 @@ class SettleAmountCalculator
         };
 
         $saleses = $getSalesforces($trans);
+        $brand = count($trans) ? BrandInfo::getBrandById($trans[0]['brand_id']) : null;
+
         foreach($trans as &$tran)
         {
             //가맹점 수수료 세팅
             $tran["mcht_settle_amount"] = round(($tran['amount'] - ($tran['amount'] * ($tran['mcht_fee'] + $tran['hold_fee']))) - $tran['mcht_settle_fee']);
-            //영업점 수수료 세팅
-            $tran = self::setSalesSettleAmount($tran, $saleses);
-            //본사 수수료 세팅
-            $tran = self::setOperatorSettleAmount($tran, $dev_settle_type);
+            if($brand['pv_options']['paid']['fee_structure_type'] === 0)
+            {
+                $tran = self::setSalesSettleAmount($tran, $saleses);
+                $tran = self::setOperatorSettleAmount($tran, $brand['dev_settle_type']);   
+            }
+            else
+            {
+                $tran = self::setSalesSettleAmountV2($tran, $saleses);
+                $tran = self::setOperatorSettleAmountV2($tran);   
+            }
         }
         return $trans;
     }

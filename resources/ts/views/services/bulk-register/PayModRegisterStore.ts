@@ -155,6 +155,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
                 {title: '동일카드 결제허용 회수(X)', key: 'pay_dupe_limit'}
             )
         }
+        headers2.push({title: '결제금지타입(X)', key: 'pay_limit_type'})
         if(corp.pv_options.paid.use_pay_limit) {
             headers2.push(
                 {title: '결제 연 한도(X)', key: 'pay_year_limit'},

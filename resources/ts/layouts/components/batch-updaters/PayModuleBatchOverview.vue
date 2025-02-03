@@ -5,7 +5,7 @@ import { batch } from '@/layouts/components/batch-updaters/batch'
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
-import { abnormal_trans_limits, fin_trx_delays, installments, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore'
+import { abnormal_trans_limits, cxl_types, fin_trx_delays, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
@@ -63,6 +63,8 @@ const pay_module = reactive<any>({
     ps_id: null,
     pay_window_secure_level: 1,
     pay_window_extend_hour: 1,
+    cxl_type: 0,
+    pay_limit_type: 0,
 })
 
 const setPaymentGateway = (apply_type: number) => {
@@ -191,6 +193,18 @@ const setPayWindowSecureLevel = (apply_type: number) => {
 const setPayWindowExtendHour = (apply_type: number) => {
     post('set-pay-window-extend-hour', {
         'pay_window_extend_hour': pay_module.pay_window_extend_hour,
+    }, apply_type)
+}
+
+const setCxlType = (apply_type: number) => {
+    post('set-cxl-type', {
+        'cxl_type': pay_module.cxl_type,
+    }, apply_type)
+}
+
+const setPayLimitType = (apply_type: number) => {
+    post('set-pay-limit-type', {
+        'pay_limit_type': pay_module.pay_limit_type,
     }, apply_type)
 }
 
@@ -361,6 +375,51 @@ watchEffect(() => {
                 <VDivider style="margin: 1em 0;" />
                 <h4 class="pt-3">제한정보 일괄변경</h4>
                 <br>
+                <VRow>
+                    <VCol :md="6" :cols="12">
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol md="6" cols="12">
+                                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="pay_module.cxl_type" :items="cxl_types"
+                                    label="취소타입" item-title="title" item-value="id" />
+                            </VCol>
+                            <VCol md="6">
+                                <div class="button-cantainer">
+                                    <VBtn variant="tonal" size="small" @click="setCxlType(0)">
+                                        즉시적용
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
+                                    </VBtn>
+                                    <VBtn variant="tonal" size="small" color="secondary" @click="setCxlType(1)"
+                                        style='margin-left: 0.5em;'>
+                                        예약적용
+                                        <VIcon end size="18" icon="tabler-clock-up" />
+                                    </VBtn>                 
+                                </div>
+                            </VCol>
+                        </VRow>
+                    </VCol>
+                    <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_forb_pay_time">
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol md="6" cols="12">
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.pay_limit_type" :items="pay_limit_types"
+                                    label="결제금지타입" item-title="title"
+                                    item-value="id" />
+                            </VCol>
+                            <VCol md="6" cols="12">                                    
+                                <div class="button-cantainer">
+                                    <VBtn variant="tonal" size="small" @click="setPayLimitType(0)">
+                                        즉시적용
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
+                                    </VBtn>
+                                    <VBtn variant="tonal" size="small" color="secondary" @click="setPayLimitType(1)"
+                                        style='margin-left: 0.5em;'>
+                                        예약적용
+                                        <VIcon end size="18" icon="tabler-clock-up" />
+                                    </VBtn>                 
+                                </div>
+                            </VCol>
+                        </VRow>
+                    </VCol>
+                </VRow>
                 <template v-if="corp.pv_options.paid.use_pay_limit">
                     <VRow>
                         <VCol :md="6" :cols="12">

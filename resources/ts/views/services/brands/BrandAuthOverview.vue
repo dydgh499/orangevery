@@ -2,6 +2,7 @@
 
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import { fee_structure_types } from '@/views/services/brands/useStore';
 import type { AuthOption, FreeOption, PaidOption } from '@/views/types';
 import { getUserLevel } from '@axios';
 import corp from '@corp';
@@ -95,13 +96,26 @@ const props = defineProps<Props>()
                     </VCardTitle>
                     <VCol>
                         <VRow class="pt-5">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>
-                                    <VSwitch hide-details v-model="props.item.paid.sales_parent_structure" color="primary" label="계층형 구조"/>
-                                </template>
-                                <template #input>
-                                </template>
-                            </CreateHalfVCol>
+                            <VCol cols="6">
+                                <VRow no-gutters style="align-items: center;">
+                                    <VCol cols="12" :md="4">
+                                        <VSwitch hide-details v-model="props.item.paid.sales_parent_structure" color="primary" label="계층형 구조"/>
+                                    </VCol>
+                                    <VCol cols="12" :md="8">
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.paid.fee_structure_type"
+                                                :items="fee_structure_types" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                                label="수수료 입력방식" item-title="title" item-value="id" single-line />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol cols="6">
+                                <VRow no-gutters style="align-items: center;">
+                                    <VCol cols="12" :md="6">
+                                    </VCol>
+                                    <VCol cols="12" :md="6">
+                                    </VCol>
+                                </VRow>
+                            </VCol>
                         </VRow>
                     </VCol>
                     <VCardTitle class="pt-10">

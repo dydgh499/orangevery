@@ -325,27 +325,33 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     }
 
     const hintSalesSettleFee = (mcht: Merchandise, sales_idx: number): string => {
-        const levels = corp.pv_options.auth.levels
-        const dest_key = `sales${sales_idx}`;
-        if (levels[`${dest_key}_use`] && mcht[`${dest_key}_id`]) {
-            let under_fee = -1;
-            for (let i = sales_idx-1; i > -1; i--) 
-            {
-                const sales_key = `sales${i}`
-                if(levels[`${sales_key}_use`] && mcht[`${sales_key}_id`]) {
-                    under_fee = mcht[`${sales_key}_fee`]
-                    break
+        if(corp.pv_options.paid.fee_structure_type === 0) {
+            const levels = corp.pv_options.auth.levels
+            const dest_key = `sales${sales_idx}`;
+            if (levels[`${dest_key}_use`] && mcht[`${dest_key}_id`]) {
+                let under_fee = -1;
+                for (let i = sales_idx-1; i > -1; i--) 
+                {
+                    const sales_key = `sales${i}`
+                    if(levels[`${sales_key}_use`] && mcht[`${sales_key}_id`]) {
+                        under_fee = mcht[`${sales_key}_fee`]
+                        break
+                    }
                 }
+                if(under_fee === -1) 
+                    under_fee = mcht.trx_fee
+    
+                mcht[`${dest_key}_settlement_fee`] = (under_fee - mcht[`${dest_key}_fee`]).toFixed(4)
+                return `정산수수료: ${mcht[`${dest_key}_settlement_fee`]}%`
             }
-            if(under_fee === -1) 
-                under_fee = mcht.trx_fee
-
-            mcht[`${dest_key}_settlement_fee`] = (under_fee - mcht[`${dest_key}_fee`]).toFixed(4)
-            return `정산수수료: ${mcht[`${dest_key}_settlement_fee`]}%`
+            else {
+                mcht[`${dest_key}_settlement_fee`] = 0
+                return ''
+            }    
         }
         else {
-            mcht[`${dest_key}_settlement_fee`] = 0
-            return ''
+            mcht[`${dest_key}_settlement_fee`] = mcht[`${dest_key}_id`]
+            return `${ mcht[`${dest_key}_settlement_fee`] }`
         }
     }
 

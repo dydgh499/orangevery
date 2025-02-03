@@ -89,9 +89,8 @@ class BatchUpdateTransactionController extends BatchUpdateController
             ->whereIn('id', $request->selected_idxs)
             ->get();
 
-        $brand = Brand::where('id', $request->user()->brand_id)->first();
         $trans = json_decode(json_encode($db_trans), true);
-        $trans = SettleAmountCalculator::setSettleAmount($trans, $brand->dev_settle_type);
+        $trans = SettleAmountCalculator::setSettleAmount($trans);
         $i=0;
 
         foreach($db_trans as $tran)
@@ -171,11 +170,7 @@ class BatchUpdateTransactionController extends BatchUpdateController
             $tran->{$sales_fee_field} = $request->sales_fee / 100;
         }
         
-        $brand = Brand::where('id', $request->user()->brand_id)->first();
-        $trans = SettleAmountCalculator::setSettleAmount(
-            json_decode(json_encode($db_trans), true), 
-            $brand->dev_settle_type
-        );
+        $trans = SettleAmountCalculator::setSettleAmount(json_decode(json_encode($db_trans), true));
 
         foreach($db_trans as $key => $tran)
         {

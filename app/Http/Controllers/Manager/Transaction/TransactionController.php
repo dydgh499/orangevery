@@ -137,7 +137,7 @@ class TransactionController extends Controller
                 return $this->extendResponse(991, '개발사 수수료가 이상합니다.<br>관리자에게 문의하세요.');
             else
             {
-                [$data] = SettleAmountCalculator::setSettleAmount([$data], $request->dev_settle_type);
+                [$data] = SettleAmountCalculator::setSettleAmount([$data]);
                 $res = $this->transactions->create($data);
                 operLogging(HistoryType::CREATE, $this->target, [], $data, "#".$res->id);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
@@ -200,7 +200,7 @@ class TransactionController extends Controller
             $data['dev_fee'] = $tran->dev_fee;
             $data['dev_realtime_fee'] = $tran->dev_realtime_fee;
 
-            [$data] = SettleAmountCalculator::setSettleAmount([$data], $request->dev_settle_type);
+            [$data] = SettleAmountCalculator::setSettleAmount([$data]);
             $res = $this->transactions->where('id', $id)->update($data);
             operLogging(HistoryType::UPDATE, $this->target, $tran, $data, "#".$id);
             return $this->response($res ? 1 : 990, ['id'=>$id]);
@@ -252,7 +252,7 @@ class TransactionController extends Controller
         $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], $data['cxl_dt'], $data['mcht_settle_type'], $request->pg_settle_type);
         try 
         {
-            [$data] = SettleAmountCalculator::setSettleAmount([$data], $request->dev_settle_type);
+            [$data] = SettleAmountCalculator::setSettleAmount([$data]);
             $res = $this->transactions->create($data);
             operLogging(HistoryType::CREATE, $this->target, [], $data, "#".$res->id);
             return $this->response(1);

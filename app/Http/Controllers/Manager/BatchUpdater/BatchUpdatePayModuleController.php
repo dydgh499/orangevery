@@ -320,6 +320,21 @@ class BatchUpdatePayModuleController extends BatchUpdateController
         return $this->batchResponse($row, '결제모듈');
     }
     
+    public function setCxlType(Request $request)
+    {
+        $cols = ['cxl_type' => $request->cxl_type];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '결제모듈');
+    }
+
+    public function setPayLimitType(Request $request)
+    {
+        $cols = ['pay_limit_type' => $request->pay_limit_type];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '결제모듈');
+    }
+
+    
     /**
      * 결제모듈 대량등록
      *

@@ -63,13 +63,23 @@ const setErrorCode = () => {
             getErrorContent('425', '단건 결제한도를 초과하였습니다.', '단건 결제한도 하향 시간대에 이상금액 결제시도', '해당 가맹점 단건 결제한도 하향금 수정'),
         ])
     }
-    errors.value.push(getErrorContent('426', '계약기간이 만료되었습니다.', '', '결제모듈 정보 -> 계약 종료일 연장'))
-    errors.value.push(getErrorContent('427', '시스템 점검시간입니다.(06:00 ~ 06:05)', '점검시간대에 결제 시도', '06:05 이후 결제가능'))
+
+    errors.value.push(...[
+        getErrorContent('426', '계약기간이 만료되었습니다.', '', '결제모듈 정보 -> 계약 종료일 연장'),
+        getErrorContent('427', '시스템 점검시간입니다.(06:00 ~ 06:05)', '점검시간대에 결제 시도', '06:05 이후 결제가능'),
+        getErrorContent('428', '오늘은 결제할 수 없습니다.', '결제금지타입 검증사항', '결제금지타입 수정'),
+    ])
 
     if(corp.pv_options.paid.use_realtime_deposit) {
         errors.value.push(...[
             getErrorContent('450', '개인정보 또는 실시간 모듈 정보가 매칭되지 않았습니다.', '실시간 이체 시 개인정보 누락', '해당 가맹점에서 은행정보 기입'),
             getErrorContent('451', '이체 예약취소에 실패한 거래건들이 존재합니다.', '이미 이체 예약 취소한 거래건', ''),
+        ])
+    }
+    if(corp.pv_options.paid.use_bill_key)  {
+        errors.value.push(...[
+            getErrorContent('452', '빌키사용이 불가한 결제모듈입니다.', '', '결제모듈 타입을 빌키결제로 수정'),
+            getErrorContent('470', '빌키가 존재하지 않습니다.', '빌키 조회 실패', '요청 MID 및 bill key 정보 확인'),
         ])
     }
     errors.value.push(...[

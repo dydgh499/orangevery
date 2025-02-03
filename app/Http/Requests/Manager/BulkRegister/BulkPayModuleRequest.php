@@ -35,6 +35,7 @@ class BulkPayModuleRequest extends FormRequest
         'use_realtime_deposit',
         'under_sales_limit',
         'under_sales_type',
+        'pay_limit_type',
     ];
     public $string_keys = [
         'api_key',

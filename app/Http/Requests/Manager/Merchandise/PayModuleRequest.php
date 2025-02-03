@@ -61,6 +61,7 @@ class PayModuleRequest extends FormRequest
         'payment_term_min',
         'pay_window_secure_level',
         'pay_window_extend_hour',
+        'pay_limit_type',
     ];
 
     public function authorize()

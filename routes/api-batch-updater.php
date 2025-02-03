@@ -64,6 +64,8 @@ Route::prefix('merchandises/pay-modules/batch-updaters')->group(function() {
     Route::post('set-payment-term-min', [BatchUpdatePayModuleController::class, 'setPaymentTermMin']);
     Route::post('set-pay-window-secure-level', [BatchUpdatePayModuleController::class, 'setPayWindowSecureLevel']);
     Route::post('set-pay-window-extend-hour', [BatchUpdatePayModuleController::class, 'setPayWindowExtendHour']);
+    Route::post('set-cxl-type', [BatchUpdatePayModuleController::class, 'setCxlType']);
+    Route::post('set-pay-limit-type', [BatchUpdatePayModuleController::class, 'setPayLimitType']);
     Route::post('register', [BatchUpdatePayModuleController::class, 'register']);
     Route::delete('remove', [BatchUpdatePayModuleController::class, 'batchRemove']);   
 });

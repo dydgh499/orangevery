@@ -38,7 +38,6 @@ class BrandInfo
                     'deposit_amount',
                     'extra_deposit_amount',
                     'curr_deposit_amount',
-                    'dev_settle_type',
                     'last_dpst_at',
                     'is_transfer',
                     'p2p_app_dns',

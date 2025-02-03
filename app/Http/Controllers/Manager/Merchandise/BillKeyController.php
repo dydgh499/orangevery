@@ -54,12 +54,7 @@ class BillKeyController extends Controller
             {
                 $pay_module = PaymentModule::where('id', $pay_window['payment_module']['id'])->first();
                 if($pay_module)
-                {
-                    if($pay_module->pay_key)
-                        return [0, '', $pay_window, $pay_module];
-                    else
-                        return [1999, '결제모듈의 pay key가 존재하지 않습니다.<br>pay key를 생성한 후 빌키를 생성해주세요.', $pay_window, $pay_module];
-                }
+                    return [0, '', $pay_window, $pay_module];
                 else
                     return [1999, '결제모듈이 존재하지 않습니다.', null, null];
             }

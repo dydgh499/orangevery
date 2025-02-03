@@ -24,7 +24,7 @@ class EditAbleWorkTime
         else
         {
             $yesterday = Carbon::now()->subDay(1)->format('Y-m-d 00:00:00');
-            $tommrow = Carbon::now()->addDay(1)->format('Y-m-d 23:59:59');
+            $tommrow = Carbon::now()->addDay(31)->format('Y-m-d 23:59:59');
             $exception_times = ExceptionWorkTime::where('brand_id', $brand_id)
                 ->where('work_s_at', '>=', $yesterday)
                 ->where('work_e_at', '<=', $tommrow)
@@ -39,6 +39,8 @@ class EditAbleWorkTime
     {
         // 브라이트픽스 총판 예외 : kim5150, 2024-09-09부터 적용
         if(Ablilty::isSalesforce(request()) && request()->user()->id === 9393 && in_array(request()->ip(), ['58.225.69.144', '221.140.168.13']))
+            return true;
+        else if(Ablilty::isDevOffice(request()) && in_array(request()->user()->brand_id, [18, 35]))
             return true;
         else
             return false;
@@ -64,8 +66,6 @@ class EditAbleWorkTime
         if ($now->hour >= 21 || $now->hour < 6) 
         {
             if(env('APP_ENV') === 'local')
-                return true;
-            else if(Ablilty::isDevOffice(request()) && in_array(request()->user()->brand_id, [18, 35]))
                 return true;
             else if(request()->user()->brand_id === 30)
                 return true;

@@ -217,7 +217,7 @@ class Transaction
                 });
         print('set settle amount prepare items: '.count($items)."\r\n");
         $items = json_decode(json_encode($items), true);
-        $items = SettleAmountCalculator::setSettleAmount($items, $this->dev_settle_type);
+        $items = SettleAmountCalculator::setSettleAmount($items);
         $this->paywell = $items;
         print("complate transactions getPaywell - found:".count($this->paywell)."\r\n");
     }

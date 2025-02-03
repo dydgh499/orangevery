@@ -268,6 +268,7 @@ export interface PayModule {
     sign_key?: string,
     pay_window?: PayWindow | null,
     is_different_settlement: number,
+    pay_limit_type: number,
 }
 
 export interface PayGateway {
@@ -414,6 +415,7 @@ interface PaidOption {
     use_cancel_all_allow: boolean,
     use_bill_key: boolean,  // 빌키 사용 여부
     use_shop: boolean, // 쇼핑몰 사용여부
+    fee_structure_type: number,  // 수수료구조 타입
 }
 interface AuthOption {
     levels: {

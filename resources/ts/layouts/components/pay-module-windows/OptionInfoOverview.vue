@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import corp from '@/plugins/corp';
 import { issuers } from '@/views/complaints/useStore';
-import { abnormal_trans_limits, cxl_types, installments, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore';
+import { abnormal_trans_limits, cxl_types, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore';
 import type { PayModule } from '@/views/types';
 import { isAbleModiy } from '@axios';
 import { requiredValidatorV2 } from '@validators';
@@ -33,8 +33,8 @@ const props = defineProps<Props>()
         <VRow>
             <VCol md="6">
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.installment" :items="installments"
-                prepend-inneer-icon="fluent-credit-card-clock-20-regular" label="할부한도" item-title="title"
-                item-value="id" />
+                    prepend-inneer-icon="fluent-credit-card-clock-20-regular" label="할부한도" item-title="title"
+                    item-value="id" />
             </VCol>
         </VRow>
         
@@ -44,8 +44,13 @@ const props = defineProps<Props>()
             <br>            
             <VRow v-if="isAbleModiy(props.item.id)">
                 <VCol md="6" cols="12">
-                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.cxl_type" :items="cxl_types" prepend-inner-icon="tabler:world-cancel"
+                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.cxl_type" :items="cxl_types"
                             label="취소타입" item-title="title" item-value="id" />
+                </VCol>
+                <VCol md="6" cols="12">
+                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pay_limit_type" :items="pay_limit_types"
+                        label="결제금지타입" item-title="title"
+                        item-value="id" />
                 </VCol>
             </VRow>
             <VRow v-else>
@@ -85,7 +90,7 @@ const props = defineProps<Props>()
                     </VTooltip>
                 </VCol>
                 <VCol md="6" cols="12">
-                    <VTextField prepend-inner-icon="material-symbols:shutter-speed-minus" v-model="props.item.payment_term_min"
+                    <VTextField v-model="props.item.payment_term_min"
                         type="number" suffix="분" label="결제 허용 간격"
                         :rules="[requiredValidatorV2(props.item.payment_term_min, '결제 허용 간격')]" />
                     <VTooltip activator="parent" location="top" transition="scale-transition">
@@ -96,7 +101,7 @@ const props = defineProps<Props>()
             <VRow v-if="corp.pv_options.paid.use_issuer_filter">
                 <VCol md="6" cols="12" >
                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.filter_issuers"
-                        label="발급사 필터링" :items="issuers" prepend-inner-icon="ph-buildings" item-title="title"
+                        label="발급사 필터링" :items="issuers" item-title="title"
                         item-value="code" multiple chips closable-chips />
                         <VTooltip activator="parent" location="top" transition="scale-transition">
                             해당 발급사로 결제된 카드는 강제취소됩니다.
