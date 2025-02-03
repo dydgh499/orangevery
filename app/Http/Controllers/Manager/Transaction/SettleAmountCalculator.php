@@ -145,13 +145,13 @@ class SettleAmountCalculator
             $tran["mcht_settle_amount"] = round(($tran['amount'] - ($tran['amount'] * ($tran['mcht_fee'] + $tran['hold_fee']))) - $tran['mcht_settle_fee']);
             if($brand['pv_options']['paid']['fee_input_mode'])
             {
-                $tran = self::setSalesSettleAmount($tran, $saleses);
-                $tran = self::setOperatorSettleAmount($tran, $brand['dev_settle_type']);   
+                $tran = self::setSalesSettleAmountV2($tran, $saleses);
+                $tran = self::setOperatorSettleAmountV2($tran);   
             }
             else
             {
-                $tran = self::setSalesSettleAmountV2($tran, $saleses);
-                $tran = self::setOperatorSettleAmountV2($tran);   
+                $tran = self::setSalesSettleAmount($tran, $saleses);
+                $tran = self::setOperatorSettleAmount($tran, $brand['dev_settle_type']);   
             }
         }
         return $trans;
