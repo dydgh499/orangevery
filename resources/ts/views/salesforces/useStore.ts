@@ -325,9 +325,9 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     }
 
     const hintSalesSettleFee = (mcht: Merchandise, sales_idx: number): string => {
-        if(corp.pv_options.paid.fee_structure_type === 0) {
-            const levels = corp.pv_options.auth.levels
-            const dest_key = `sales${sales_idx}`;
+        const levels = corp.pv_options.auth.levels
+        const dest_key = `sales${sales_idx}`;
+        if(corp.pv_options.paid.fee_input_mode === false) {
             if (levels[`${dest_key}_use`] && mcht[`${dest_key}_id`]) {
                 let under_fee = -1;
                 for (let i = sales_idx-1; i > -1; i--) 
@@ -350,7 +350,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
             }    
         }
         else {
-            mcht[`${dest_key}_settlement_fee`] = mcht[`${dest_key}_id`]
+            mcht[`${dest_key}_settlement_fee`] = mcht[`${dest_key}_fee`]
             return `${ mcht[`${dest_key}_settlement_fee`] }`
         }
     }

@@ -2,7 +2,7 @@
 
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
-import { fee_structure_types } from '@/views/services/brands/useStore';
+import { fee_input_modes } from '@/views/services/brands/useStore';
 import type { AuthOption, FreeOption, PaidOption } from '@/views/types';
 import { getUserLevel } from '@axios';
 import corp from '@corp';
@@ -102,8 +102,8 @@ const props = defineProps<Props>()
                                         <VSwitch hide-details v-model="props.item.paid.sales_parent_structure" color="primary" label="계층형 구조"/>
                                     </VCol>
                                     <VCol cols="12" :md="8">
-                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.paid.fee_structure_type"
-                                                :items="fee_structure_types" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.paid.fee_input_mode"
+                                                :items="fee_input_modes" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
                                                 label="수수료 입력방식" item-title="title" item-value="id" single-line />
                                     </VCol>
                                 </VRow>

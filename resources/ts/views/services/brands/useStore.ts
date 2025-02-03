@@ -22,9 +22,9 @@ export const identity_auth_types = <Options[]>([
     {id:3, title:'전자계약(싸인오케이)'},
 ])
 
-export const fee_structure_types = <Options[]>([
-    {id:0, title:'공급가율 기준'},
-    {id:1, title:'정산율 가준'},
+export const fee_input_modes = <any[]>([
+    {id:false, title:'공급가율 기준'},
+    {id:true, title:'정산율 기준'},
 ]);
 
 export const useSearchStore = defineStore('brandSearchStore', () => {
@@ -170,7 +170,7 @@ export const defaultItemInfo = () => {
             use_cancel_all_allow: false,
             use_bill_key: false,
             use_shop: false,
-            fee_structure_type: 0,
+            fee_input_mode: false,
         })
     }
 

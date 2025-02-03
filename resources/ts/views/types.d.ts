@@ -415,7 +415,7 @@ interface PaidOption {
     use_cancel_all_allow: boolean,
     use_bill_key: boolean,  // 빌키 사용 여부
     use_shop: boolean, // 쇼핑몰 사용여부
-    fee_structure_type: number,  // 수수료구조 타입
+    fee_input_mode: boolean,  // 수수료구조 타입
 }
 interface AuthOption {
     levels: {

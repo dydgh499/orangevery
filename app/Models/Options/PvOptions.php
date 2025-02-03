@@ -105,7 +105,7 @@
         public $use_cancel_all_allow = false;   //전체취소 사용여부
         public $use_bill_key = false;   // 빌키사용 여부
         public $use_shop = false;       // 쇼핑몰 사용여부
-        public $fee_structure_type = 0;     // 수수료율 정산 방식
+        public $fee_input_mode = false;     // 수수료율 정산 방식
 
         public function __construct(array $source)
         {

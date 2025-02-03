@@ -143,7 +143,7 @@ class SettleAmountCalculator
         {
             //가맹점 수수료 세팅
             $tran["mcht_settle_amount"] = round(($tran['amount'] - ($tran['amount'] * ($tran['mcht_fee'] + $tran['hold_fee']))) - $tran['mcht_settle_fee']);
-            if($brand['pv_options']['paid']['fee_structure_type'] === 0)
+            if($brand['pv_options']['paid']['fee_input_mode'])
             {
                 $tran = self::setSalesSettleAmount($tran, $saleses);
                 $tran = self::setOperatorSettleAmount($tran, $brand['dev_settle_type']);   

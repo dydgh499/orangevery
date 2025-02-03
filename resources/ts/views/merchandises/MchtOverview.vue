@@ -241,10 +241,8 @@ watchEffect(() => {
                                                 :rules="[requiredValidatorV2(props.item['sales'+(6-i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]" />
 
                                             <div style="font-size: 0.8em; font-weight: bold; text-align: center;" v-if="props.item['sales'+(6-i)+'_id']">
-                                                <template v-if="corp.pv_options.paid.fee_structure_type">
-                                                    <span>{{ hintSalesSettleFee(props.item, 6-i) }}</span>
-                                                    <br>
-                                                </template>
+                                                <span>{{ hintSalesSettleFee(props.item, 6-i) }}</span>
+                                                <br>
                                                 <span>
                                                     ({{ hintSalesSettleTaxTypeText(props.item, 6-i, all_sales[(6-i)]) }})
                                                     = {{ hintSalesSettleTotalFee(props.item, 6-i, all_sales[(6-i)]) }}%
@@ -257,10 +255,8 @@ watchEffect(() => {
                                         <VCol md="3" cols="6" class="font-weight-bold">
                                             <span>{{ levels['sales'+(6-i)+'_name'] }}/수수료율</span>
                                             <div style="font-size: 0.8em; font-weight: bold;" v-if="props.item['sales'+(6-i)+'_id'] && $vuetify.display.smAndDown">
-                                                <template v-if="corp.pv_options.paid.fee_structure_type">
-                                                    <span>{{ hintSalesSettleFee(props.item, 6-i) }}</span>
-                                                    <br>
-                                                </template>
+                                                <span>{{ hintSalesSettleFee(props.item, 6-i) }}</span>
+                                                <br>
                                                 <span>
                                                     ({{ hintSalesSettleTaxTypeText(props.item, 6-i, all_sales[(6-i)]) }})
                                                     = {{ hintSalesSettleTotalFee(props.item, 6-i, all_sales[(6-i)]) }}%
@@ -372,7 +368,7 @@ watchEffect(() => {
                                     </VRow>
                                     <VRow v-else>
                                         <VCol class="font-weight-bold">커스텀 필터</VCol>
-                                        <VCol md="6"><span>{{ cus_filters.find(obj => obj.id === props.item.custom_id)?.title }}</span></VCol>
+                                        <VCol md="6"><span>{{ cus_filters.find(obj => obj.id === props.item.custom_id)?.name }}</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>
