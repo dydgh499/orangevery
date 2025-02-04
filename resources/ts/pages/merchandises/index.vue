@@ -1,22 +1,25 @@
 <script setup lang="ts">
 import ShoppingMallDialog from '@/layouts/dialogs/shopping-mall/ShoppingMallDialog.vue';
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { useSearchStore } from '@/views/merchandises/useStore'
-import { selectFunctionCollect } from '@/views/selected'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import { useSearchStore } from '@/views/merchandises/useStore';
+import { selectFunctionCollect } from '@/views/selected';
+import { useStore } from '@/views/services/pay-gateways/useStore';
+import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
 
-import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
-import InitPayVerficationDialog from '@/layouts/dialogs/users/InitPayVerficationDialog.vue'
-import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
+import BatchDialog from '@/layouts/dialogs/BatchDialog.vue';
+import InitPayVerficationDialog from '@/layouts/dialogs/users/InitPayVerficationDialog.vue';
+import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue';
 
-import { module_types } from '@/views/merchandises/pay-modules/useStore'
-import { getUserLevel, isAbleModiy } from '@axios'
-import { DateFilters, ItemTypes } from '@core/enums'
-import corp from '@corp'
+import { module_types } from '@/views/merchandises/pay-modules/useStore';
+import { useSalesFilterStore } from '@/views/salesforces/useStore';
+import { Merchandise } from '@/views/types';
+import { getUserLevel, isAbleModiy } from '@axios';
+import { DateFilters, ItemTypes } from '@core/enums';
+import corp from '@corp';
 
 const { store, head, exporter, metas } = useSearchStore()
+const { hintSalesApplyFee, hintSalesSettleFee, hintSalesSettleTaxTypeText, hintSalesSettleTotalFee } = useSalesFilterStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { pgs, settle_types, cus_filters } = useStore()
 const password  = ref()
@@ -28,6 +31,13 @@ provide('password', password)
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+
+const feeValidate = (mcht: Merchandise) => {
+    for(var i=0; i<6; i++)
+    {
+        hintSalesSettleFee(mcht, 6-i)        
+    }
+}
 
 onMounted(() => {
     watchEffect(async() => {

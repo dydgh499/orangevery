@@ -75,7 +75,7 @@ class Merchandise extends Authenticatable
     {
         return $this->hasMany(PaymentModule::class, 'mcht_id')
             ->where('is_delete', false)
-            ->select(['id', 'mcht_id', 'p_mid', 'mid', 'tid', 'module_type', 'pg_id', 'settle_type', 'serial_num']);
+            ->select(['id', 'mcht_id', 'p_mid', 'mid', 'tid', 'module_type', 'pg_id', 'ps_id', 'settle_type', 'serial_num']);
     }
     
     public function noSettles()

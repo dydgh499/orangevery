@@ -67,6 +67,8 @@ export const comm_settle_types = <Options[]>([
 ])
 export const fin_trx_delays = <Options[]>([
     {id: 0, title:'즉시입금'},
+    {id: 1, title:'1분'},
+    {id: 5, title:'5분'},
     {id: 15, title:'15분'},
     {id: 30, title:'30분'}, 
     {id: 45, title:'45분'},
