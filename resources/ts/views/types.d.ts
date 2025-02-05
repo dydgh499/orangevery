@@ -443,6 +443,7 @@ interface AuthOption {
 interface P2pAppOption {
     pg_id: number | null,
     ps_id: number | null,
+    fin_id: number | null,
     module_type: number,
     is_old_auth: number,
     ci_validate: number,

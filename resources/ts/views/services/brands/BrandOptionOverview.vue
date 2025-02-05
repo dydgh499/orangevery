@@ -15,7 +15,7 @@ interface Props {
     },
 }
 const props = defineProps<Props>()
-const { pgs, pss, psFilter, setFee } = useStore()
+const { pgs, pss, psFilter, setFee, finance_vans } = useStore()
 
 const mchtIdLevels = <Options[]>([
     {id: 0, title: '1단계(검증없음)'},
@@ -328,40 +328,47 @@ const filterPgs = computed(() => {
                                     item-value="id" />
                             </template>
                             <template #r_name>
-                                수기 구인증 여부
+                                {{ props.item.paid.use_collect_withdraw ? '출금모듈' : ''}}
                             </template>
                             <template #r_input>
-                                <VSwitch hide-details v-model="props.item.p2p.is_old_auth"
-                                    color="primary" :false-value=0 :true-value=1 />
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.p2p.fin_id"
+                                    :items="finance_vans"
+                                    prepend-inner-icon="streamline-emojis:ant" label="출금모듈 타입" item-title="title"
+                                    item-value="id" 
+                                    v-if="props.item.paid.use_collect_withdraw"/>
                             </template>
                         </CreateHalfVColV2>
                     <CreateHalfVColV2 :mdl="5" :mdr="7">
                         <template #l_name>
-                            <BaseQuestionTooltip location="top" text="1원인증" :content="`1원 인증입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
+                            수기 구인증 여부
                         </template>
                         <template #l_input>
-                            <VSwitch hide-details v-model="props.item.p2p.account_validate"
-                                color="primary" :false-value=0 :true-value=1 />
+                            <VSwitch hide-details v-model="props.item.p2p.is_old_auth"
+                                    color="primary" :false-value=0 :true-value=1 />
                         </template>
                         <template #r_name>
-                            <BaseQuestionTooltip location="top" text="전자계약 사용여부" :content="`전자계약 사용여부입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
+                            <BaseQuestionTooltip location="top" text="1원인증" :content="`1원 인증입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
                         </template>
                         <template #r_input>                            
-                            <VSwitch hide-details v-model="props.item.p2p.contract_validate"
-                                    color="primary" :false-value=0 :true-value=1 />
+                            <VSwitch hide-details v-model="props.item.p2p.account_validate"
+                                color="primary" :false-value=0 :true-value=1 />
+
                         </template>
                     </CreateHalfVColV2>
                     <CreateHalfVColV2 :mdl="5" :mdr="7">
                             <template #l_name>
-                                <BaseQuestionTooltip location="top" text="CI 본인인증" :content="`카카오 본인인증입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
+                                <BaseQuestionTooltip location="top" text="전자계약 사용여부" :content="`전자계약 사용여부입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
                             </template>
                             <template #l_input>
-                                <VSwitch hide-details v-model="props.item.p2p.ci_validate"
-                                    color="primary" :false-value=0 :true-value=1 />
+                                <VSwitch hide-details v-model="props.item.p2p.contract_validate"
+                                color="primary" :false-value=0 :true-value=1 />
                             </template>
                             <template #r_name>
+                                <BaseQuestionTooltip location="top" text="카카오 본인인증" :content="`카카오 본인인증입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
                             </template>
                             <template #r_input>
+                                <VSwitch hide-details v-model="props.item.p2p.ci_validate"
+                                    color="primary" :false-value=0 :true-value=1 />
                             </template>
                         </CreateHalfVColV2>
                     </div>

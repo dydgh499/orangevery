@@ -202,6 +202,7 @@ export const defaultItemInfo = () => {
         return <P2pAppOption>({
             pg_id: null,
             ps_id: null,
+            fin_id: null,
             module_type: 2,
             is_old_auth: 0,
             ci_validate: 0,

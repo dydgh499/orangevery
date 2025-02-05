@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import corp from '@/plugins/corp'
 import { fin_trx_delays } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
