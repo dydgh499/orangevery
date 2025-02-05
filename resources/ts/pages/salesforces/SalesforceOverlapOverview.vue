@@ -55,6 +55,14 @@ store.params.level = sales_levels[sales_levels.length - 1].id as number
             </template>
             <template #headers>
                 <tr>
+                    <template v-for="(sub_header, index) in head.getSubHeaderComputed" :key="index">
+                        <th :colspan="head.getSubHeaderComputed.length - 1 == index ? sub_header.width + 1 : sub_header.width"
+                            class='list-square sub-headers' v-show="sub_header.width">
+                            <span>{{ sub_header.ko }}</span>
+                        </th>
+                    </template>
+                </tr>    
+                <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                         <div class='check-label-container' v-if="key == 'id'">
                             <VCheckbox v-if="getUserLevel() >= 35" v-model="all_selected" class="check-label"/>
@@ -129,9 +137,17 @@ store.params.level = sales_levels[sales_levels.length - 1].id as number
                                             {{ item[_key] ? 'LOCK' : 'X' }}
                                         </VChip>
                                     </span>
+                                    <span v-else-if="_key == 'is_2fa_use'">
+                                        <VChip :color="store.booleanTypeColor(!item[_key])">
+                                            {{ item[_key] ? 'O' : 'X' }}
+                                        </VChip>
+                                    </span>
                                     <span v-else-if="_key == 'extra_col'">
                                         <UserExtraMenu :item="item" :type="1" :key="item['id']" />
                                     </span>
+                                    <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
+                                        {{ item[_key] }}
+                                    </span>     
                                     <span v-else>
                                         {{ item[_key] }}
                                     </span>

@@ -51,13 +51,17 @@ const getSalesHeaders = (head :any) => {
     }
 
     const getSettleInfoCol = () => {
-        return {
-            'under_auto_settings' : '수수료율',
+        const headers:any = {}
+        if(corp.pv_options.paid.sales_parent_structure)
+            headers['sales_fee'] = '수수료율'
+        else
+            headers['under_auto_settings'] = '수수료율'
+        return Object.assign(headers, {            
             'settle_cycle' : '정산 주기',
             'settle_day' : '정산 요일',
             'settle_tax_type' : '정산 세율',
             'last_settle_dt': '마지막 정산일',
-        }
+        })
     }
 
     const getPrivacyCols = () => {

@@ -89,11 +89,16 @@ const getChildDepth = computed(() => {
                         {{ props.salesforce[key] ? 'LOCK' : 'X' }}
                     </VChip>
                 </span>
+                <span v-else-if="key == 'is_2fa_use'">
+                    <VChip :color="store.booleanTypeColor(!props.salesforce[key])">
+                        {{ props.salesforce[key] ? 'O' : 'X' }}
+                    </VChip>
+                </span>
                 <span v-else-if="key == 'extra_col'">
                     <UserExtraMenu :item="props.salesforce" :type="1" :key="props.salesforce.id"/>
                 </span>
-                <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
-                    {{ item[_key] }}
+                <span v-else-if="key == 'updated_at'" :class="props.salesforce[key] !== props.salesforce['created_at'] ? 'text-primary' : ''">
+                    {{ props.salesforce[key] }}
                 </span>     
                 <span v-else>
                     {{ props.salesforce[key] }}
