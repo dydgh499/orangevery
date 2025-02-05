@@ -48,18 +48,6 @@ const getSalesLevel = () => {
     }
 }
 
-const TrxFeeReadonly = () => {
-    if(getUserLevel() >= 30)
-        return true
-    else
-    {
-        if(props.item.id !== 0) 
-            return getUserLevel() <= props.item.level ? false : true
-        else 
-            return isDistMchtFeeModifyAble(all_sales)
-    }
-}
-
 const getParentSales = computed(()  => {
     const idx = getLevelByIndex(props.item.level)
     if(idx < 5) {
@@ -136,8 +124,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                         <VRow no-gutters style="align-items: center;">
                                             <VCol>기본 수수료</VCol>
                                             <VCol md="8">
-                                                <VTextField v-model="props.item.sales_fee" type="number" suffix="%" :rules="[requiredValidatorV2(props.item.sales_fee, '기본 수수료')]"
-                                                :readonly="!TrxFeeReadonly()"/>
+                                                <VTextField v-model="props.item.sales_fee" type="number" suffix="%" :rules="[requiredValidatorV2(props.item.sales_fee, '기본 수수료')]"/>
                                             </VCol>
                                         </VRow>
                                     </VCol>
