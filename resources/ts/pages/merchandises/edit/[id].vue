@@ -25,9 +25,12 @@ if(isFixplus()) {
 else {
     tabs.push({ icon: 'tabler-user-check', title: '개인정보' })
     tabs.push({ icon: 'tabler-building-store', title: '가맹점정보' })
-    tabs.push({ icon: 'ic-outline-send-to-mobile', title: '결제모듈정보' })
-    if(notiViewable()) 
-        tabs.push({ icon: 'emojione:envelope', title: '노티정보' })
+    
+    if(corp.pv_options.paid.fee_input_mode === false) {
+        tabs.push({ icon: 'ic-outline-send-to-mobile', title: '결제모듈정보' })
+        if(notiViewable()) 
+            tabs.push({ icon: 'emojione:envelope', title: '노티정보' })
+    }
 }
 
 watchEffect(() => {
@@ -45,22 +48,24 @@ watchEffect(() => {
                 </template>
                 <template v-else>
                     <VWindowItem>
-                        <UserOverview :item="item" :key="id" :is_mcht="true" />
+                        <UserOverview :item="item" :key="id" :is_mcht="true"/>
                     </VWindowItem>
                     <VWindowItem>
-                        <MchtOverview :item="item" :key="id"/>
+                        <MchtOverview :item="item"/>
                     </VWindowItem>
-                    <VWindowItem>
-                        <Suspense>
-                            <PayModuleOverview :item="item" v-if="corp.pv_options.free.pay_module_detail_view"/>
-                            <PayModuleOldOverview :item="item" v-else/>               
-                        </Suspense>
-                    </VWindowItem>
-                    <VWindowItem v-if="notiViewable()">
-                        <Suspense>
-                            <NotiOverview :item="item" :key="id" />
-                        </Suspense>
-                    </VWindowItem>
+                    <template v-if="corp.pv_options.paid.fee_input_mode === false">
+                        <VWindowItem>
+                            <Suspense>
+                                <PayModuleOverview :item="item" v-if="corp.pv_options.free.pay_module_detail_view"/>
+                                <PayModuleOldOverview :item="item" v-else/>
+                            </Suspense>
+                        </VWindowItem>
+                        <VWindowItem v-if="notiViewable()">
+                            <Suspense>
+                                <NotiOverview :item="item" />
+                            </Suspense>
+                        </VWindowItem>
+                    </template>
                 </template>
             </template>
         </CreateForm>

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import corp from '@/plugins/corp';
 import { issuers } from '@/views/complaints/useStore';
-import { abnormal_trans_limits, cxl_types, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore';
+import { cxl_types, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore';
 import type { PayModule } from '@/views/types';
 import { isAbleModiy } from '@axios';
 import { requiredValidatorV2 } from '@validators';
@@ -25,9 +25,9 @@ const props = defineProps<Props>()
                     </VTooltip>
             </VCol>
             <VCol md="6">
-                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.abnormal_trans_limit" :items="abnormal_trans_limits"
-                    prepend-inner-icon="jam-triangle-danger" label="이상거래 한도" item-title="title" item-value="id"
-                />
+                <VTextField prepend-inner-icon="jam-triangle-dangern" v-model="props.item.abnormal_trans_limit"
+                            type="number" suffix="만원" label="이상거래 한도"
+                            :rules="[requiredValidatorV2(props.item.abnormal_trans_limit, '이상거래 한도')]" />
             </VCol>
         </VRow>
         <VRow>

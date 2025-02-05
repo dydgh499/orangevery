@@ -132,12 +132,20 @@ export const isAbleModiy = (id: number) => {
         else
             return false
     }
+    const salesParentStructre = () => {
+        if(getUserLevel() > 10 && getUserLevel() < 35) 
+            return id === 0 ? true : false
+        else
+            return false
+    }
     
     if(getUserLevel() >= 35)
         return true
     else if(getUserLevel() >= 13) {
         if(isFixplus())
             return isFixplusSalesAbleUpdate(id)
+        else if(corp.pv_options.paid.sales_parent_structure)
+            return salesParentStructre()
         else
             return isAbleModifyMcht()            
     }

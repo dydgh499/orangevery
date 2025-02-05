@@ -27,16 +27,9 @@ class TransactionRequest extends FormRequest
         'trx_dt',
         'trx_tm',
         'amount',
-        'ord_num',
-        'trx_id',
-        'card_num',
         'installment',
-        'issuer',
-        'acquirer',
-        'appr_num',
         'cxl_dt', 
         'cxl_tm', 
-        'ori_trx_id',   //
         'buyer_name',   //
         'buyer_phone',  //
         'item_name',    //
@@ -56,7 +49,8 @@ class TransactionRequest extends FormRequest
     {
         $sub = [
             'mcht_id' => 'required',
-            'mcht_fee' => 'required', 'hold_fee' => 'required',
+            'mcht_fee' => 'required', 
+            'hold_fee' => 'required',
             'module_type' => 'required',
             'pg_id' => 'required', 
             'pmod_id' => 'required', 
@@ -67,12 +61,7 @@ class TransactionRequest extends FormRequest
             'trx_dt' => 'required', 
             'trx_tm' => 'required',
             'amount' => 'required',
-            'ord_num' => 'required',
-            'trx_id' => 'required',
-            'card_num' => 'required',
             'installment' => 'required',
-            'issuer' => 'required',
-            'appr_num' => 'required',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -115,7 +104,6 @@ class TransactionRequest extends FormRequest
         $data['cxl_dt'] = $data['cxl_dt'] == '' ? null : $data['cxl_dt'];
         $data['cxl_tm'] = $data['cxl_tm'] == '' ? null : $data['cxl_tm'];
         $data['is_cancel'] = $data['cxl_dt'] == null ? false : true;
-        $data['ori_trx_id'] = $data['cxl_dt'] == null ? null : $data['trx_id'];
         $data['terminal_id'] = $data['terminal_id'] == '' ? null : $data['terminal_id'];
         $data['custom_id'] = $data['custom_id'] == '' ? null : $data['custom_id'];
         if($data['is_cancel'])

@@ -5,7 +5,7 @@ import { batch } from '@/layouts/components/batch-updaters/batch'
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
-import { abnormal_trans_limits, cxl_types, fin_trx_delays, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore'
+import { cxl_types, fin_trx_delays, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
@@ -286,9 +286,8 @@ watchEffect(() => {
                     <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
                             <VCol md="6" cols="12">
-                                <VSelect v-model="pay_module.abnormal_trans_limit" :items="abnormal_trans_limits"
-                                    prepend-inner-icon="jam-triangle-danger" item-title="title"
-                                    item-value="id" label="이상거래 한도"/>
+                                <VTextField v-model="pay_module.abnormal_trans_limit"
+                                            type="number" suffix="만원" label="이상거래 한도"/>
                             </VCol>
                             <VCol md="6">
                                 <div class="button-cantainer">

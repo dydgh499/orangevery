@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import CreateForm from '@/layouts/utils/CreateForm.vue'
-import corp from '@/plugins/corp'
+import { isFixplus } from '@/plugins/fixplus'
 import FixplusOverview from '@/views/salesforces/FixplusOverview.vue'
 import SalesforceOverview from '@/views/salesforces/SalesforceOverview.vue'
 import { defaultItemInfo } from '@/views/salesforces/useStore'
@@ -10,7 +10,7 @@ import UserOverview from '@/views/users/UserOverview.vue'
 
 const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([])
-if(corp.pv_options.paid.sales_parent_structure) {
+if(isFixplus()) {
     tabs.push({ icon: 'tabler-user-check', title: '영업점정보' })
 }
 else {
@@ -29,7 +29,7 @@ watchEffect(() => {
     <section>
         <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
             <template #view>
-                <template v-if="corp.pv_options.paid.sales_parent_structure">
+                <template v-if="isFixplus()">
                     <VWindowItem>
                         <FixplusOverview :item="item"/>
                     </VWindowItem>

@@ -2,7 +2,7 @@
 
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
 import CreateHalfVColV2 from '@/layouts/utils/CreateHalfVColV2.vue';
-import { abnormal_trans_limits, installments, module_types } from '@/views/merchandises/pay-modules/useStore';
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import type { AuthOption, FreeOption, Options, P2pAppOption, PaidOption } from '@/views/types';
 
@@ -278,8 +278,8 @@ const filterPgs = computed(() => {
                                 이상거래한도      
                             </template>
                             <template #r_input>
-                                <VSelect v-model="props.item.free.default.abnormal_trans_limit" :items="abnormal_trans_limits"
-                                    prepend-inner-icon="jam-triangle-danger" item-title="title" item-value="id"  single-line />
+                                <VTextField prepend-inner-icon="jam-triangle-danger" v-model="props.item.free.default.abnormal_trans_limit"
+                                            type="number" suffix="만원" label="이상거래 한도"/>
                             </template>
                         </CreateHalfVColV2>
                         <CreateHalfVColV2 :mdl="5" :mdr="7">

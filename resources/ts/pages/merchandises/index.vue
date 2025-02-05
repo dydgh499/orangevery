@@ -2,7 +2,7 @@
 import ShoppingMallDialog from '@/layouts/dialogs/shopping-mall/ShoppingMallDialog.vue';
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
-import { useSearchStore } from '@/views/merchandises/useStore';
+import { feeCalcMenual, useSearchStore } from '@/views/merchandises/useStore';
 import { selectFunctionCollect } from '@/views/selected';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
@@ -12,31 +12,77 @@ import InitPayVerficationDialog from '@/layouts/dialogs/users/InitPayVerfication
 import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue';
 
 import { module_types } from '@/views/merchandises/pay-modules/useStore';
-import { useSalesFilterStore } from '@/views/salesforces/useStore';
-import { Merchandise } from '@/views/types';
+import { SALES_LEVEL_SIZE, useSalesFilterStore } from '@/views/salesforces/useStore';
 import { getUserLevel, isAbleModiy } from '@axios';
 import { DateFilters, ItemTypes } from '@core/enums';
 import corp from '@corp';
 
 const { store, head, exporter, metas } = useSearchStore()
-const { hintSalesApplyFee, hintSalesSettleFee, hintSalesSettleTaxTypeText, hintSalesSettleTotalFee } = useSalesFilterStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { pgs, settle_types, cus_filters } = useStore()
+const { hintSalesSettleFee } = useSalesFilterStore()
+const { pgs, pss, settle_types, cus_filters } = useStore()
 const password  = ref()
 const batchDialog = ref()
 const shoppingMallDialog = ref()
 const initPayVerficationDialog = ref()
+
+const alert = <any>(inject('alert'))
 
 provide('password', password)
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-const feeValidate = (mcht: Merchandise) => {
-    for(var i=0; i<6; i++)
+const getBrandSettleFee = (mcht: any, sales_settle_info: any) => {
+    if(mcht.payment_modules.length)
     {
-        hintSalesSettleFee(mcht, 6-i)        
+        for(let i=0; i< mcht.payment_modules.length; i++)
+        {            
+            let ps_fee = Number(pss.find(ps => ps.id === mcht.payment_modules[0].ps_id)?.trx_fee)
+            return {
+                ps_fee: ps_fee,
+                settle_fee: Number((sales_settle_info.sales_root_fee - ps_fee).toFixed(5))
+            }
+        }
     }
+    return {
+        ps_fee: 0,
+        settle_fee: 0,
+    }
+}
+
+const getSalesSettleInfo = (mcht: any) => {
+    const sales_settle_fees = []
+    const sales_fees = []
+    for(let i = SALES_LEVEL_SIZE - 1; i>=0; i--)
+    {
+        if(mcht['sales'+i+'_id']) {
+            if(corp.pv_options.paid.fee_input_mode) {
+                sales_settle_fees.push(Number(mcht[`sales${i}_fee`]))
+            }
+            else {
+                hintSalesSettleFee(mcht, i)
+                sales_settle_fees.push(Number(mcht[`sales${i}_settlement_fee`]))
+            }
+            sales_fees.push(Number(mcht[`sales${i}_fee`]))
+        }
+    }
+    return {
+        sales_total_fee: Number(sales_settle_fees.reduce((ac, cr_val) => ac + cr_val, 0).toFixed(5)),
+        sales_root_fee: sales_fees.length ? sales_fees[0] : 0
+    }
+}
+
+const settleFeeValidate = (mcht: any) => {
+    if(getUserLevel() >= 35) {
+        const sales_settle_info = getSalesSettleInfo(mcht)
+        const brand_settle_info = getBrandSettleFee(mcht, sales_settle_info)
+
+        return sales_settle_info.sales_total_fee + brand_settle_info.settle_fee + brand_settle_info.ps_fee === mcht.trx_fee
+            ? true : false
+    }
+    else
+        return true
 }
 
 onMounted(() => {
@@ -91,6 +137,9 @@ onMounted(() => {
                     size="small" :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
                     쇼핑몰 관리
                 </VBtn>
+                <VBtn prepend-icon="ic:outline-help" @click="alert.show(feeCalcMenual(), 'v-dialog-lg')" size="small" v-if="getUserLevel() >= 35">
+                    수익률 계산식
+                </VBtn>
                 <div :style="$vuetify.display.smAndDown ? 'margin-top: 1em' : ''">
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.settle_hold" label="지급보류건 조회"
                         color="error" @update:modelValue="store.updateQueryString({ settle_hold: store.params.settle_hold })" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_settle_hold"/>
@@ -121,9 +170,16 @@ onMounted(() => {
                 </tr>
             </template>
             <template #body>
-                <tr v-for="(item, index) in store.getItems" :key="index">
-                    <VTooltip activator="parent" location="end" open-delay="250" transition="scroll-x-transition" v-if="$vuetify.display.smAndDown === false">
-                        {{ item['mcht_name'] }}
+                <tr v-for="(item, index) in store.getItems" :key="index" :class="settleFeeValidate(item) === false ? 'text-error' : ''">
+                    <VTooltip activator="parent" location="end" open-delay="250" transition="scroll-x-transition" v-if="$vuetify.display.smAndDown === false && settleFeeValidate(item) === false">
+                        <div>
+                            수수료율 재점검 필요({{item['mcht_name']}})
+                            <br>
+                            <br>
+                            구간 수수료율 = {{ item['payment_modules'].length ? Number(pss.find(ps => ps.id === item['payment_modules'][0].ps_id)?.trx_fee) : 0}} %<br>
+                            본사 수익률 = {{ getBrandSettleFee(item, getSalesSettleInfo(item)).settle_fee }} %<br>
+                            영업점 수익률 합계 = {{ getSalesSettleInfo(item).sales_total_fee }} %<br>
+                        </div>
                     </VTooltip>
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" class='list-square'>
@@ -148,6 +204,9 @@ onMounted(() => {
                                 <VChip v-if="item[_key]">
                                     {{ (item[_key] as number).toFixed(3) }} %
                                 </VChip>
+                                <VTooltip activator="parent" location="top" transition="scale-transition" v-if="corp.pv_options.paid.fee_input_mode === false && $vuetify.display.smAndDown === false && (_key as string).includes('sales')">
+                                    수익률: {{  item[`sales${(_key as string).replace(/\D/g, '')}_settlement_fee`] }} %
+                                </VTooltip>
                             </span>
                             <span v-else-if="_key == 'settle_types'">
                                 <select class="custom-select">
@@ -188,6 +247,23 @@ onMounted(() => {
                                 <select class="custom-select">
                                     <option v-for="(payment_module, key) in item['payment_modules']" :key="key">
                                         {{ pgs.find(pg => pg.id === payment_module['pg_id'])?.pg_name }}
+                                    </option>
+                                </select>
+                            </span>
+                            <span v-else-if="_key == 'contract_img'">
+                                <select class="custom-select">
+                                    <option v-for="(payment_module, key) in item['payment_modules']" :key="key">
+                                        {{ pss.find(ps => ps.id === payment_module['ps_id'])?.trx_fee }} %
+                                    </option>
+                                </select>
+                                <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                    본사 수익률: {{ getBrandSettleFee(item, getSalesSettleInfo(item)).settle_fee }}%
+                                </VTooltip>
+                            </span>
+                            <span v-else-if="_key == 'pss'">
+                                <select class="custom-select">
+                                    <option v-for="(payment_module, key) in item['payment_modules']" :key="key">
+                                        {{ pss.find(ps => ps.id === payment_module['ps_id'])?.name }}
                                     </option>
                                 </select>
                             </span>

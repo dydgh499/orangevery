@@ -1,5 +1,34 @@
-import type { SalesFilter, Salesforce } from '@/views/types'
+import { getLevelByIndex, getUserLevel, user_info } from '@/plugins/axios'
+import type { Merchandise, SalesFilter, Salesforce } from '@/views/types'
 import { SALES_LEVEL_SIZE } from './useStore'
+
+// 영업점 수수료 자동업데이트
+export const autoUpdateMerchandiseParentSalesInfo = (merchandise: Merchandise, all_sales: Salesforce[][]) => {    
+    const updateMchtFee = (idx: number, dest_sales: Salesforce, merchandise: Merchandise) => {
+        merchandise[`sales${idx}_id`] = dest_sales.id
+        merchandise[`sales${idx}_fee`] = dest_sales.sales_fee
+        return merchandise
+    }
+
+    const idx = getLevelByIndex(getUserLevel())
+    let dest_sales = user_info.value
+    merchandise = updateMchtFee(idx, dest_sales, merchandise)
+
+    for (let i = idx; i < SALES_LEVEL_SIZE; i++) 
+    {
+        let _dest_sales = all_sales[i+1].find(obj => obj.id === dest_sales.parent_id)
+        if(_dest_sales) {
+            merchandise = updateMchtFee(i+1, _dest_sales, merchandise)
+            dest_sales = _dest_sales
+        }
+    }
+}
+
+export const autoUpdateSalesforceInfo = (salesforce: Salesforce) => {
+    if(getUserLevel() <= 30) {
+        salesforce.sales_fee = user_info.value.sales_fee
+    }
+}
 
 export const overlap = (all_sales: Salesforce[][], sales: Ref<SalesFilter[]>[]) => {
     const recursionSalesChildFilter = (select_idx: number, params: any) => {

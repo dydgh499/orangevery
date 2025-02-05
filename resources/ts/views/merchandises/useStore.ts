@@ -137,6 +137,15 @@ const getMchtHeaders = (head :any) => {
             headers_9['extra_col'] = '더보기'
         return headers_9
     }
+
+    const getPGCol = () => {
+        const headers_10:Record<string, string> = {}
+        if(getUserLevel() >= 35) {
+            headers_10['pss'] = '구간명'
+            headers_10['contract_img'] = '수수료'
+        }
+        return headers_10
+    }
     
     const headers0:any = getIdCol()
     const headers1:any = getSettleHoldCols()
@@ -148,9 +157,11 @@ const getMchtHeaders = (head :any) => {
     const headers7:any = getNotiCols()
     const headers8:any = getSecureCols()
     const headers9:any = getEtcCols()
+    const headers10:any = getPGCol()
 
     const headers: Record<string, string> = {
         ...headers0,
+        ...headers10,
         ...headers1,
         ...headers2,
         ...headers3,
@@ -163,6 +174,7 @@ const getMchtHeaders = (head :any) => {
     }
     const sub_headers: any = []
     head.getSubHeaderCol('NO.', headers0, sub_headers)
+    head.getSubHeaderCol('원천사 정보', headers10, sub_headers)
     head.getSubHeaderCol('지급보류', headers1, sub_headers)
     head.getSubHeaderCol('상위 영업점', headers2, sub_headers)
     head.getSubHeaderCol('가맹점 정보', headers3, sub_headers)
@@ -175,10 +187,73 @@ const getMchtHeaders = (head :any) => {
     return [headers, sub_headers]
 }
 
+export const feeCalcMenual = () => {
+    let sales_fee_text  = ''
+    if(corp.pv_options.paid.fee_input_mode) {
+        sales_fee_text = `
+            <td class='list-square'>본인등급 수익률</td>
+            <td class='list-square'></td>`
+    }
+    else {
+        sales_fee_text = `
+            <td class='list-square'>본인등급 수수료율 - 하위등급 영업점 수수료율</td>
+            <td class='list-square'>하위등급 영업점이 미존재 시 가맹점 거래 수수료율로 계산</td>`
+    }
+    return `
+    <div class="v-table v-theme--light v-table--density-default text-no-wrap">
+        <div class="v-table__wrapper" style='block-size: auto !important;'>
+            <span>
+            각 등급별 정산금액은 입력한 가맹점 정보, 결제모듈 정보기반으로 <b>"수익률 * 거래금액"</b> 으로 계산됩니다.
+            </span>
+            <br>
+            <br>
+            <span>
+            수수료율 입력검증에 통과되지 않을 시, 가맹점 목록에서 빨간줄로 표시됩니다.
+            <br>
+            수수료율 입력 검증방식은 아래와 같습니다.
+            </span>
+            <br>
+            <br>
+            <h3>수수료율 입력 검증방식</h3>
+            <span>
+            가맹점 거래 수수료율 = 영업점 수익률 합계 + 본사 수익률 + PG사 구간 수수료율
+            </span>
+            <br>
+            <br>
+            <table>
+                <thead>
+                    <tr>
+                        <th class='list-square'>등급</th>
+                        <th class='list-square'>수익률 계산방식</th>
+                        <th class='list-square'>비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th style='text-align: start;'>본사</th>
+                        <td class='list-square'>최상위 영업점 수수료율 - PG사 구간 수수료율</td>
+                        <td class='list-square'>영업점이 미존재 시 가맹점 거래 수수료율로 계산</td>
+                    </tr>
+                    <tr>
+                        <th style='text-align: start;'>영업점</th>
+                    ` +sales_fee_text + `
+                    </tr>
+                    <tr>
+                        <th style='text-align: start;'>가맹점</th>
+                        <td class='list-square'>거래 수수료율 + 유보금 수수료율</td>
+                        <td class='list-square'></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    `
+}
+
 export const useSearchStore = defineStore('mchtSearchStore', () => {
     const store     = Searcher('merchandises')
     const head      = Header('merchandises', '가맹점 관리')
-    const { pgs, settle_types, cus_filters } = useStore()
+    const { pgs, pss, settle_types, cus_filters } = useStore()
 
     if(isFixplus()) {
         head.headers.value = head.initHeader(getFixplusMchtHeader(), {})
@@ -232,7 +307,9 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
             if(getUserLevel() >= 35) {
                 datas[i]['module_types'] = datas[i]['payment_modules'].map(module => module_types.find(type => type.id === module.module_type)?.title).join(',')  
                 datas[i]['serial_nums'] = datas[i]['payment_modules'].map(module => module.serial_num).join(',')
-                datas[i]['pgs'] = datas[i]['payment_modules'].map(module => pgs.find(pg => pg.id === module.module_type)?.title).join(',')  
+                datas[i]['pgs'] = datas[i]['payment_modules'].map(module => pgs.find(pg => pg.id === module.pg_id)?.pg_name).join(',')  
+                datas[i]['pss'] = datas[i]['payment_modules'].map(module => pss.find(ps => ps.id === module.ps_id)?.trx_fee).join(',')
+                datas[i]['contract_img'] = datas[i]['payment_modules'].map(module => pss.find(ps => ps.id === module.ps_id)?.trx_fee).join(',')
                 datas[i]['mids'] = datas[i]['payment_modules'].map(module => module.mid).join(',')
                 datas[i]['tids'] = datas[i]['payment_modules'].map(module => module.tid).join(',')                
             }

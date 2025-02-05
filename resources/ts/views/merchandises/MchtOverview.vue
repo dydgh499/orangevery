@@ -12,7 +12,6 @@ import ProductCard from '@/views/merchandises/products/ProductCard.vue'
 import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
 import SpecifiedTimeDisablePaymentCard from '@/views/merchandises/specified-time-disable-payments/SpecifiedTimeDisablePaymentCard.vue'
 
-import { autoUpdateMerchandiseAgencyInfo, isFixplus, isFixplusAgency } from '@/plugins/fixplus'
 import { tax_category_types } from '@/views/merchandises/useStore'
 import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
@@ -20,6 +19,7 @@ import { StatusColorSetter } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getIndexByLevel, getLevelByIndex, getUserLevel, isAbleModiy, user_info } from '@axios'
 import corp from '@corp'
+import { autoUpdateMerchandiseParentSalesInfo } from '../salesforces/overlap'
 
 interface Props {
     item: Merchandise,
@@ -94,22 +94,20 @@ const formatContactNum = computed(() => {
 })
 
 initAllSales()
-
 watchEffect(() => {
     // 수정가능, 추가상태, 영업점일 경우
-    if(isAbleModiy(props.item.id) && props.item.id === 0 && getUserLevel() < 35) {
-        const idx = getLevelByIndex(getUserLevel())
-        props.item[`sales${idx}_id`] = user_info.value.id
+    if(props.item.id === 0 && isAbleModiy(props.item.id)) {
+        if(getUserLevel() > 10 && getUserLevel() < 35) {
+            if(corp.pv_options.paid.sales_parent_structure)
+                autoUpdateMerchandiseParentSalesInfo(props.item, all_sales)
+            else {
+                const idx = getLevelByIndex(getUserLevel())
+                props.item[`sales${idx}_id`] = user_info.value.id
+            }
+        }        
     }
 })
-watchEffect(() => {
-    if(isFixplus() && props.item.id === 0) {
-        // 대리점의 경우
-        if(getUserLevel() === 17 || getUserLevel() === 20) {
-            autoUpdateMerchandiseAgencyInfo(props.item, all_sales)
-        }
-    }
-})
+
 watchEffect(() => {
     contact_num_format.value = props.item.contact_num ?? ''
 })
@@ -216,7 +214,7 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <template v-if="getUserLevel() > 10 && isFixplusAgency() === false">
+                        <template v-if="getUserLevel() > 10">
                             <VDivider/>
                             <VCol cols="12">
                                 <VCardTitle>영업점 수수료</VCardTitle>
@@ -577,7 +575,7 @@ watchEffect(() => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.use_settle_hold">
+                            <VCol cols="12" v-if="corp.pv_options.paid.use_settle_hold && getUserLevel() >= 35">
                                 <VDivider style="margin-bottom: 1em;"/>
                                 <VRow>
                                     <VCol :md="6" :cols="12">
@@ -614,7 +612,7 @@ watchEffect(() => {
                                 </VRow>
                                 <VDivider/>
                             </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile">
+                            <VCol cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile && getUserLevel() >= 35">
                                 <VRow>
                                     <VCol :md="6" :cols="12">
                                         <VCardTitle>결제창 SMS 인증</VCardTitle>       

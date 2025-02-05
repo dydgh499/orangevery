@@ -5,12 +5,10 @@ import { getAllPayModules, installments, module_types, payModFilter } from '@/vi
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { dev_settle_types } from '@/views/services/brands/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import type { Merchandise, Options, PayModule, PaySection, Transaction } from '@/views/types'
+import type { Merchandise, PayModule, PaySection, Transaction } from '@/views/types'
 import { getIndexByLevel, getUserLevel } from '@axios'
-import { useThemeConfig } from '@core/composable/useThemeConfig'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
-import { ko } from 'date-fns/locale'
 
 interface Props {
     item: Transaction,
@@ -22,12 +20,9 @@ const formatTime = <any>(inject('$formatTime'))
 const props = defineProps<Props>()
 const { pgs, pss, settle_types, terminals, cus_filters, psFilter, finance_vans } = useStore()
 const { sales, mchts, initAllSales, hintSalesApplyFee } = useSalesFilterStore()
-const { theme } = useThemeConfig()
 
 const levels = corp.pv_options.auth.levels
 const pay_modules = ref<PayModule[]>([])
-const trx_dttm = ref(<string>(''))
-const cxl_dttm = ref(<string>(''))
 
 const getDttmFormat = (date: Date) => {
     return formatDate(date) + " " + formatTime(date)
@@ -89,34 +84,12 @@ const filterPayMod = computed(() => {
     props.item.pmod_id = payModFilter(pay_modules.value, filter, props.item.pmod_id as number)
     return filter
 })
-const filterInsts = computed(() => {
-    if (props.item.pmod_id != null) {
-        const pmod = pay_modules.value.find((obj: PayModule) => obj.id == props.item.pmod_id)
-        return installments.filter((obj: Options) => { return pmod && obj.id <= pmod.installment });
-    }
-    else
-        return []
-})
 
 initAllSales()
 onMounted(async () => {
     props.item.dev_fee = (props.item.dev_fee * 100).toFixed(3)
     props.item.dev_realtime_fee = (props.item.dev_realtime_fee * 100).toFixed(3)
     pay_modules.value  = await getAllPayModules()
-
-    trx_dttm.value = props.item.trx_dt + " " + props.item.trx_tm
-    cxl_dttm.value = props.item.is_cancel ? props.item.cxl_dt + " " + props.item.cxl_tm : ''
-
-    watchEffect(() => {
-        const trx_date = new Date(trx_dttm.value)
-        props.item.trx_dt = formatDate(trx_date)
-        props.item.trx_tm = formatTime(trx_date)
-        if (cxl_dttm.value != '') {
-            const cxl_date = new Date(cxl_dttm.value)
-            props.item.cxl_dt = formatDate(cxl_date)
-            props.item.cxl_tm = formatTime(cxl_date)
-        }
-    })
 })
 
 </script>
@@ -389,23 +362,17 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>거래시간</template>
                                     <template #input>
-                                        <VueDatePicker v-model="trx_dttm" :action-row="{ showNow: true }"
-                                            :enable-seconds="true" :text-input="{ format: 'yyyy-MM-dd HH:mm:ss' }"
-                                            locale="ko" :format-locale="ko" :dark="theme === 'dark'" autocomplete="on" utc
-                                            :format="getDttmFormat" :teleport="true" />
+                                        {{ props.item.trx_dt + " " + props.item.trx_tm }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12">
-                            <VRow>
+                        <VCol cols="12" v-if="props.item.is_cancel">
+                            <VRow class="text-error">
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>취소시간</template>
                                     <template #input>
-                                        <VueDatePicker v-model="cxl_dttm" :action-row="{ showNow: true }"
-                                            :enable-seconds="true" :text-input="{ format: 'yyyy-MM-dd HH:mm:ss' }"
-                                            locale="ko" :format-locale="ko" :dark="theme === 'dark'" autocomplete="on" utc
-                                            :format="getDttmFormat" :teleport="true" />
+                                        {{ props.item.cxl_dt + " " + props.item.cxl_tm }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -415,14 +382,10 @@ onMounted(async () => {
                             <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>
-                                        <BaseQuestionTooltip :location="'top'" :text="'할부'"
-                                            :content="'결제모듈에서 선택한 할부설정기간 이내의 값만 할부를 선택할 수 있습니다.'">
-                                        </BaseQuestionTooltip>
+                                        할부개월
                                     </template>
                                     <template #input>
-                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.installment"
-                                            :items="filterInsts" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                                            label="할부 선택" item-title="title" item-value="id" single-line />
+                                        {{ installments.find(obj => obj.id === props.item.installment)?.title }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -431,14 +394,10 @@ onMounted(async () => {
                             <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>
-                                        <BaseQuestionTooltip :location="'top'" :text="'거래금액'"
-                                            :content="'취소금액 입력시 꼭 -(마이너스 기호)를 입력해주세요.'">
-                                        </BaseQuestionTooltip>
+                                        거래금액
                                     </template>
                                     <template #input>
-                                        <VTextField v-model="props.item.amount" type="number" suffix="￦"
-                                            placeholder="거래금액을 입력해주세요" prepend-inner-icon="ic:outline-price-change"
-                                            :rules="[requiredValidatorV2(props.item.amount, '거래금액')]" />
+                                        {{ props.item.amount }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -448,8 +407,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>주문번호</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.ord_num" type="text" placeholder="주문번호를 입력해주세요"
-                                            prepend-inner-icon="ic:outline-border-color" :rules="[requiredValidatorV2(props.item.ord_num, '주문번호')]" />
+                                        {{ props.item.ord_num }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -459,20 +417,17 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>거래번호</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.trx_id" type="text" placeholder="거래번호를 입력해주세요"
-                                            prepend-inner-icon="icon-park-twotone:transaction-order"
-                                            :rules="[requiredValidatorV2(props.item.trx_id, '거래번호')]" />
+                                        {{ props.item.trx_id }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12">
-                            <VRow>
+                        <VCol cols="12" v-if="props.item.is_cancel">
+                            <VRow class="text-error">
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>원거래번호</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.ori_trx_id" type="text" placeholder="원거래번호를 입력해주세요"
-                                            prepend-inner-icon="icon-park-outline:transaction-order" />
+                                        {{ props.item.ori_trx_id }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -482,9 +437,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>카드번호</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.card_num" type="text" placeholder="카드번호를 입력해주세요"
-                                            persistent-placeholder counter prepend-inner-icon="emojione:credit-card"
-                                            :rules="[requiredValidatorV2(props.item.card_num, '카드번호')]" maxlength="18" />
+                                        {{ props.item.card_num }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -494,8 +447,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>발급사</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.issuer" type="text" placeholder="발급사를 입력해주세요"
-                                            prepend-inner-icon="ph-buildings" :rules="[requiredValidatorV2(props.item.issuer, '발급사')]" maxlength="20" />
+                                        {{ props.item.issuer }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -505,8 +457,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>매입사</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.acquirer" type="text" placeholder="매입사를 입력해주세요"
-                                            prepend-inner-icon="ph-buildings" maxlength="20" />
+                                        {{ props.item.acquirer }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -516,10 +467,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>승인번호</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.appr_num" type="text" placeholder="승인번호를 입력해주세요"
-                                            prepend-inner-icon="icon-park-solid:transaction-order" persistent-placeholder
-                                            counter :rules="[requiredValidatorV2(props.item.appr_num, '승인번호')]"
-                                            maxlength="8" />
+                                        {{ props.item.appr_num }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -529,8 +477,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>구매자명</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.buyer_name" type="text" placeholder="구매자명을 입력해주세요"
-                                            prepend-inner-icon="tabler-user" maxlength="50" />
+                                        {{ props.item.buyer_name }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -540,9 +487,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>구매자 연락처</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.buyer_phone" type="text"
-                                            placeholder="구매자 연락처를 입력해주세요" prepend-inner-icon="tabler-device-mobile"
-                                            maxlength="20" />
+                                        {{ props.item.buyer_phone }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -552,9 +497,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>상품명</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.item_name" type="text" placeholder="상품명을 입력해주세요"
-                                            prepend-inner-icon="tabler:shopping-bag"
-                                            maxlength="100" />
+                                        {{ props.item.item_name }}
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>

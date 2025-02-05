@@ -2,11 +2,12 @@
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import { isDistMchtFeeModifyAble } from '@/plugins/fixplus'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
-import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import { settleCycles, settleDays, settleTaxTypes, useSalesFilterStore } from '@/views/salesforces/useStore'
 import type { Options, Salesforce } from '@/views/types'
 
-import { getUserLevel, isAbleModiy, salesLevels } from '@axios'
+import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
 import { ItemTypes } from '@core/enums'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
@@ -19,6 +20,7 @@ const props = defineProps<Props>()
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
+const { sales, all_sales } = useSalesFilterStore()
 
 const mchtBatchDialog = ref()
 const pmodBatchDialog = ref()
@@ -45,6 +47,27 @@ const getSalesLevel = () => {
         return sales
     }
 }
+
+const TrxFeeReadonly = () => {
+    if(getUserLevel() >= 30)
+        return true
+    else
+    {
+        if(props.item.id !== 0) 
+            return getUserLevel() <= props.item.level ? false : true
+        else 
+            return isDistMchtFeeModifyAble(all_sales)
+    }
+}
+
+const getParentSales = computed(()  => {
+    const idx = getLevelByIndex(props.item.level)
+    if(idx < 5) {
+        return sales[idx+1].value
+    }
+    else
+        return []
+})
 
 if(props.item.id === 0 && getSalesLevel().length > 0)
     props.item.level = getSalesLevel()[0].id as number
@@ -90,8 +113,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol cols="4">
-                                            <BaseQuestionTooltip :location="'top'" :text="'등급'" :content="'영업자 등급은 추가 후 수정할 수 없습니다.'">
-                                            </BaseQuestionTooltip>
+                                            <BaseQuestionTooltip :location="'top'" :text="'등급'" :content="'영업자 등급은 추가 후 수정할 수 없습니다.'"/>
                                         </VCol>
                                         <VCol md="8">                                             
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
@@ -107,6 +129,34 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                 </VCol>
                             </VRow>
                         </VCol>
+                        <template v-if="corp.pv_options.paid.sales_parent_structure">
+                            <VCol cols="12" v-if="isAbleModiy(props.item.id)">
+                                <VRow>
+                                    <VCol cols="12" md="6">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>기본 수수료</VCol>
+                                            <VCol md="8">
+                                                <VTextField v-model="props.item.sales_fee" type="number" suffix="%" :rules="[requiredValidatorV2(props.item.sales_fee, '기본 수수료')]"
+                                                :readonly="!TrxFeeReadonly()"/>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                    <VCol cols="12" md="6">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>상위 영업점</VCol>
+                                            <VCol md="8">
+                                                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.parent_id"
+                                                    :items="getParentSales"
+                                                    :label="'상위영업점 선택'"
+                                                    item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network" 
+                                                    :rules="props.item.level < 30 ? [requiredValidatorV2(props.item.parent_id, '상위 영업점')] : []"
+                                                    />
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </template>
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
@@ -190,8 +240,16 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                 </VCol>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;">
-                                        <VCol>하위 가맹점 수정권한</VCol>
-                                        <VCol md="6">                                            
+                                        <VCol md="4">
+                                            {{
+                                                corp.pv_options.paid.sales_parent_structure
+                                                ?
+                                                "생성권한"
+                                                :
+                                                "생성/수정권한"    
+                                            }}
+                                        </VCol>
+                                        <VCol md="8">
                                             <BooleanRadio :radio="props.item.is_able_modify_mcht"
                                                 @update:radio="props.item.is_able_modify_mcht = $event">
                                                 <template #true>가능</template>
@@ -210,7 +268,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
+        <VCol cols="12" md="6" v-if="getUserLevel() >= 35 && corp.pv_options.paid.sales_parent_structure === false">
             <VCard>
                 <VCardItem>
                     <VCol cols="12">
