@@ -18,11 +18,6 @@ export const simplePays = <StringOptions[]>([
     { id: "APPLE", title: "애플페이"},
 ])
 
-export const abnormal_trans_limits = <Options[]>([
-    { id: 0, title: "한도없음" }, { id: 200, title: "200만원" },
-    { id: 300, title: "300만원" }, { id: 500, title: "500만원" },
-])
-
 export const module_types = <Options[]>([
     { id: 0, title: "장비" }, { id: 1, title: "수기결제" },
     { id: 2, title: "인증결제" }, { id: 3, title: "간편결제" },
@@ -438,6 +433,7 @@ export const defaultItemInfo =  () => {
         p_mid: '',
         pay_window_extend_hour: 1,
         is_different_settlement: 1,
+        pay_limit_type: 0
     })
     //카드사 필터 및 다른 필터옵션들
     return {
