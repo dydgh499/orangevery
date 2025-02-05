@@ -57,5 +57,4 @@ class CollectWithdrawHistoryController extends Controller
         $query = $this->commonSelect($request);
         return $this->getIndexData($request, $query, 'collect_withdraws.id', $cols, 'collect_withdraws.created_at');
     }
-
 }

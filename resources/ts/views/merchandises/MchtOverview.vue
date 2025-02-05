@@ -3,7 +3,7 @@ import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import PasswordCheckDialog from '@/layouts/dialogs/users/PasswordCheckDialog.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import type { Merchandise, UnderAutoSetting } from '@/views/types'
-import { requiredValidatorV2 } from '@validators'
+import { amountValidator, requiredValidatorV2 } from '@validators'
 
 import UnderAutoSettingDialog from '@/layouts/dialogs/users/UnderAutoSettingDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
@@ -20,6 +20,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getIndexByLevel, getLevelByIndex, getUserLevel, isAbleModiy, user_info } from '@axios'
 import corp from '@corp'
 import { autoUpdateMerchandiseParentSalesInfo } from '../salesforces/overlap'
+import { useFeeCalculatorStore } from './feeCalculatorStore'
 
 interface Props {
     item: Merchandise,
@@ -28,6 +29,7 @@ interface Props {
 const props = defineProps<Props>()
 const { post } = useRequestStore()
 const { sales, all_sales, initAllSales, sales_apply_histories, hintSalesApplyFee, hintSalesSettleFee, hintSalesSettleTaxTypeText, hintSalesSettleTotalFee } = useSalesFilterStore()
+const { getBrandSettleFee, getSalesSettleInfo, settleFeeValidate } = useFeeCalculatorStore()
 const { cus_filters } = useStore()
 
 const alert = <any>(inject('alert'))
@@ -81,6 +83,13 @@ const clearSettleHoldClear = async () => {
     }
 }
 
+const isAbleEditSalesFee = (id: number) => {
+    if(corp.pv_options.paid.sales_parent_structure) 
+        return getUserLevel() >= 35 ? true : false
+    else
+        return isAbleModiy(id)
+}
+
 const formatContactNum = computed(() => {
     let raw_value = contact_num_format.value.replace(/\D/g, '');
     props.item.contact_num = raw_value
@@ -91,6 +100,21 @@ const formatContactNum = computed(() => {
         contact_num_format.value = raw_value.replace(/(\d{2})(\d{3,4})(\d{4})/, '$1-$2-$3')
     else if(!raw_value.startsWith("02") && (raw_value.length === 10 || raw_value.length === 11))
         contact_num_format.value = raw_value.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3')
+})
+
+const MerchandiseTrxFeeValidate = computed(() => {
+    if(corp.pv_options.paid.sales_parent_structure) {
+        const settle_info = getSalesSettleInfo(props.item)
+        return [requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율'), amountValidator(props.item.trx_fee, '가맹점 수수료율', settle_info.sales_total_fee)]
+    }
+    else {
+        if(getUserLevel() >= 35) {
+            const settle_info = getSalesSettleInfo(props.item)
+            return [requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율'), amountValidator(props.item.trx_fee, '가맹점 수수료율', settle_info.sales_total_fee)]
+        }
+        else
+            return [requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]
+    }
 })
 
 initAllSales()
@@ -221,7 +245,7 @@ watchEffect(() => {
                             </VCol>
                             <template v-for="i in 6" :key="i">
                                 <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">
-                                    <VRow v-if="isAbleModiy(props.item.id)">
+                                    <VRow v-if="isAbleEditSalesFee(props.item.id)">
                                         <VCol cols="12" md="3">* {{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
                                         <VCol cols="6" :md="props.item.id ? 3 : 4">
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6-i)+'_id']"
@@ -275,8 +299,10 @@ watchEffect(() => {
                                                 </VChip>    
                                             </span>
                                             <div style="font-size: 0.8em; font-weight: bold;" v-if="props.item['sales'+(6-i)+'_id'] && $vuetify.display.smAndDown === false">
-                                                <span>{{ hintSalesSettleFee(props.item, 6-i) }}</span>
-                                                <br>
+                                                <template v-if="corp.pv_options.paid.fee_input_mode === false">
+                                                    <span>{{ hintSalesSettleFee(props.item, 6-i) }}</span>
+                                                    <br>
+                                                </template>
                                                 <span>
                                                     ({{ hintSalesSettleTaxTypeText(props.item, 6-i, all_sales[(6-i)]) }})
                                                     = {{ hintSalesSettleTotalFee(props.item, 6-i, all_sales[(6-i)]) }}%
@@ -298,7 +324,7 @@ watchEffect(() => {
                                 </VCol>
                                     <VCol cols="6" :md="props.item.id ? 3 : 4">
                                         <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
-                                            :rules="[requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]" v-if="isAbleModiy(props.item.id)"/>
+                                            :rules="MerchandiseTrxFeeValidate" v-if="isAbleModiy(props.item.id)"/>
                                     </VCol>
                                     <VCol cols="6" :md="props.item.id ? 3 : 4">
                                         <VTextField v-model="props.item.hold_fee" type="number" suffix="%"

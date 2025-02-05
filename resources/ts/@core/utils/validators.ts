@@ -109,3 +109,7 @@ export const extensionValidator = (files: File[], values: string[]) => {
         return isValid ? true : `확장자는 ${values.join(',')}만 등록 가능합니다.`;    
     }
 }
+
+export const amountValidator = (value: number, name:string, amount: number) => {
+    return value > amount || checkDirectObject(name)+` 최소 ${amount}이상이어야합니다.` 
+}
