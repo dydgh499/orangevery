@@ -25,7 +25,7 @@ const props = defineProps<Props>()
                     </VTooltip>
             </VCol>
             <VCol md="6">
-                <VTextField prepend-inner-icon="jam-triangle-dangern" v-model="props.item.abnormal_trans_limit"
+                <VTextField prepend-inner-icon="jam-triangle-danger" v-model="props.item.abnormal_trans_limit"
                             type="number" suffix="만원" label="이상거래 한도"
                             :rules="[requiredValidatorV2(props.item.abnormal_trans_limit, '이상거래 한도')]" />
             </VCol>

@@ -23,8 +23,8 @@ class EditAbleWorkTime
             return json_decode($exception_times, true);
         else
         {
-            $yesterday = Carbon::now()->subDay(1)->format('Y-m-d 00:00:00');
-            $tommrow = Carbon::now()->addDay(31)->format('Y-m-d 23:59:59');
+            $yesterday = Carbon::now()->subDay(60)->format('Y-m-d 00:00:00');
+            $tommrow = Carbon::now()->addDay(60)->format('Y-m-d 23:59:59');
             $exception_times = ExceptionWorkTime::where('brand_id', $brand_id)
                 ->where('work_s_at', '>=', $yesterday)
                 ->where('work_e_at', '<=', $tommrow)

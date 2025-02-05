@@ -191,7 +191,7 @@ export const feeCalcMenual = () => {
     let sales_fee_text  = ''
     if(corp.pv_options.paid.fee_input_mode) {
         sales_fee_text = `
-            <td class='list-square'>본인등급 수익률</td>
+            <td class='list-square'>본인등급 수수료</td>
             <td class='list-square'></td>`
     }
     else {

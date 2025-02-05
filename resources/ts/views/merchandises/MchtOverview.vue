@@ -439,8 +439,7 @@ watchEffect(() => {
                                         <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                             <VCol md="6" cols="7">
                                                 <BaseQuestionTooltip :location="'top'" :text="'모아서 출금 수수료'"
-                                                    :content="'모아서 출금 사용시마다 적용되는 수수료 입니다.'">
-                                                </BaseQuestionTooltip>
+                                                    :content="'모아서 출금 사용시마다 적용되는 수수료 입니다.'"/>
                                             </VCol>
                                             <VCol md="6">
                                                 <div class="batch-container">     
