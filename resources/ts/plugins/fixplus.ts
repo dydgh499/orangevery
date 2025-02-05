@@ -133,7 +133,6 @@ export const isDistMchtFeeModifyAble = (all_sales: Salesforce[][]) => {
     }
     else // 운영자, 총판
         return true
-
 }
 
 // 영업점 수수료 자동업데이트

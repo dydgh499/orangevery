@@ -1,4 +1,3 @@
-import { isFixplus } from '@/plugins/fixplus'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
 
@@ -8,10 +7,10 @@ const getMchtChildMenu = () => {
         icon: { icon: 'tabler-user' },
         children: [{ title: '가맹점 목록', to: 'merchandises'}]
     }
-    
-    if(isFixplus() === false) 
+
+    if(corp.pv_options.paid.sales_parent_structure === false) 
         users.children.push({ title: '장비 관리', to: 'merchandises-terminals'})
-    if(isFixplus() === false || (isFixplus() && getUserLevel() >= 35))
+    if(corp.pv_options.paid.sales_parent_structure === false || getUserLevel() >= 35)
         users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
 
     if(getUserLevel() >= 35) {
