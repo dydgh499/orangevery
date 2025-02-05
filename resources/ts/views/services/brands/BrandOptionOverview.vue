@@ -333,7 +333,7 @@ const filterPgs = computed(() => {
                             <template #r_input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.p2p.fin_id"
                                     :items="finance_vans"
-                                    prepend-inner-icon="streamline-emojis:ant" label="출금모듈 타입" item-title="title"
+                                    prepend-inner-icon="streamline-emojis:ant" label="출금모듈 타입" item-title="nick_name"
                                     item-value="id" 
                                     v-if="props.item.paid.use_collect_withdraw"/>
                             </template>
