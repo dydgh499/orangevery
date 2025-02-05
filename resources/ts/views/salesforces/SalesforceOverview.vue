@@ -20,7 +20,7 @@ const props = defineProps<Props>()
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
-const { sales, all_sales } = useSalesFilterStore()
+const { sales } = useSalesFilterStore()
 
 const mchtBatchDialog = ref()
 const pmodBatchDialog = ref()
