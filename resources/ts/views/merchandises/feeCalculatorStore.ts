@@ -44,7 +44,7 @@ export const useFeeCalculatorStore = defineStore('useFeeCalculatorStore', () => 
         }
         return {
             sales_total_fee: Number(sales_settle_fees.reduce((ac, cr_val) => ac + cr_val, 0).toFixed(5)),
-            sales_root_fee: sales_fees.length ? sales_fees[0] : 0
+            sales_root_fee: sales_fees.length ? sales_fees[0] : Number(mcht.trx_fee.toFixed(5))
         }
     }
 
