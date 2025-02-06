@@ -244,7 +244,7 @@ class TransactionController extends Controller
         $data['cxl_dt']     = $request->input('cxl_dt', '');
         $data['cxl_tm']     = $request->input('cxl_tm', '');
         $data['ori_trx_id'] = $request->input('trx_id', '');
-        $data['amount']     = $data['amount'] * -1;       
+        $data['amount']     = $data['amount'] * -1;
         $data['is_cancel']  = 1;
         $data['cxl_seq']    = 1; 
         $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], $data['cxl_dt'], $data['mcht_settle_type'], $data['pg_settle_type']);

@@ -133,8 +133,12 @@ export const isAbleModiy = (id: number) => {
             return false
     }
     const salesParentStructre = () => {
-        if(getUserLevel() > 10 && getUserLevel() < 35) 
-            return id === 0 ? true : false
+        if(getUserLevel() > 10 && getUserLevel() < 35) {
+            if(id === 0) 
+                return isAbleModifyMcht()
+            else
+                return false
+        }
         else
             return false
     }
