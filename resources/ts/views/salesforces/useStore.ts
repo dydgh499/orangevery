@@ -331,7 +331,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     const hintSalesSettleFee = (mcht: Merchandise, sales_idx: number): string => {
         const dest_key = `sales${sales_idx}`;
         if(corp.pv_options.paid.fee_input_mode) 
-            return mcht[`${dest_key}_fee`].toFixed(4)
+            return Number(mcht[`${dest_key}_fee`]).toFixed(4)
         else {
             const levels = corp.pv_options.auth.levels
             if (levels[`${dest_key}_use`] && mcht[`${dest_key}_id`]) {
