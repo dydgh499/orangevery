@@ -111,5 +111,5 @@ export const extensionValidator = (files: File[], values: string[]) => {
 }
 
 export const amountValidator = (value: number, name:string, amount: number) => {
-    return value > amount || checkDirectObject(name)+` 최소 ${amount}이상이어야합니다.` 
+    return value >= amount || checkDirectObject(name)+` 최소 ${amount}이상이어야합니다.` 
 }

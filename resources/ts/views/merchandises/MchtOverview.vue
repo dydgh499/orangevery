@@ -29,7 +29,7 @@ interface Props {
 const props = defineProps<Props>()
 const { post } = useRequestStore()
 const { sales, all_sales, initAllSales, sales_apply_histories, hintSalesApplyFee, hintSalesSettleFee, hintSalesSettleTaxTypeText, hintSalesSettleTotalFee } = useSalesFilterStore()
-const { getBrandSettleFee, getSalesSettleInfo, settleFeeValidate } = useFeeCalculatorStore()
+const { getSalesSettleInfo } = useFeeCalculatorStore()
 const { cus_filters } = useStore()
 
 const alert = <any>(inject('alert'))
@@ -110,7 +110,7 @@ const MerchandiseTrxFeeValidate = computed(() => {
     else {
         if(getUserLevel() >= 35) {
             const settle_info = getSalesSettleInfo(props.item)
-            return [requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]
+            return [requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율'), amountValidator(props.item.trx_fee, '가맹점 수수료율', settle_info.sales_total_fee)]
         }
         else
             return [requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]
