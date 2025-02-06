@@ -120,6 +120,7 @@ export const defaultItemInfo = () => {
             use_tid_duplicate: false,
             use_mid_duplicate: false,
             use_fix_table_view: true,
+            use_fee_detail_view: false,
             fix_table_size: 749,
             excel_search_filter: false,
             resident_num_masking: false,

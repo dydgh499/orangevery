@@ -150,13 +150,18 @@ onMounted(() => {
                                     상세보기
                                 </VTooltip>
                             </span>
-                            <span v-else-if="(_key as string).includes('_fee')">
-                                <VChip v-if="item[_key]">
-                                    {{ (item[_key] as number).toFixed(3) }} %
+                            <span v-else-if="(_key as string).includes('_fee') && (_key as string).includes('_sales')">
+                                <VChip v-if="item[`sales${(_key as string).replace(/\D/g, '')}_id`] && (corp.pv_options.free.use_fee_detail_view || item[_key])">
+                                    {{ (item[_key] * 100).toFixed(3) }} %
                                 </VChip>
                                 <VTooltip activator="parent" location="top" transition="scale-transition" v-if="corp.pv_options.paid.fee_input_mode === false && $vuetify.display.smAndDown === false && (_key as string).includes('sales')">
                                     수익률: {{  item[`sales${(_key as string).replace(/\D/g, '')}_settlement_fee`] }} %
                                 </VTooltip>
+                            </span>
+                            <span v-else-if="(_key as string).includes('_fee')">
+                                <VChip v-if="corp.pv_options.free.use_fee_detail_view || item[_key]">
+                                    {{ (item[_key] as number).toFixed(3) }} %
+                                </VChip>
                             </span>
                             <span v-else-if="_key == 'settle_types'">
                                 <select class="custom-select">

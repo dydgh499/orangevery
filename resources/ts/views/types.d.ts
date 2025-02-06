@@ -352,6 +352,7 @@ interface FreeOption {
     use_tid_duplicate: boolean,
     use_mid_duplicate: boolean,
     use_fix_table_view: boolean,
+    use_fee_detail_view: boolean,
     fix_table_size: number,
     excel_search_filter: boolean,
     resident_num_masking: boolean,

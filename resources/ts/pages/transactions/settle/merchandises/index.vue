@@ -207,6 +207,11 @@ onMounted(() => {
                                 <span v-else-if="(_key as string).includes('_id') && (_key as string).includes('sales')">
                                     {{ findSalesName(_key as string, item[_key]) }}
                                 </span>
+                                <span v-else-if="(_key as string).includes('_fee') && (_key as string).includes('_sales')">
+                                    <VChip v-if="item[`sales${(_key as string).replace(/\D/g, '')}_id`] && (corp.pv_options.free.use_fee_detail_view || item[_key])">
+                                        {{ (item[_key] * 100).toFixed(3) }} %
+                                    </VChip>
+                                </span>
                                 <span v-else-if="_key.toString().includes('_fee') && _key != 'mcht_settle_fee'">
                                     <VChip v-if="item[_key]">
                                         {{ (item[_key] * 100).toFixed(3) }} %

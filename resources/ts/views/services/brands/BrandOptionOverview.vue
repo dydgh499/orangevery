@@ -107,6 +107,20 @@ const filterPgs = computed(() => {
                         </template>
                     </CreateHalfVColV2>
 
+                    <CreateHalfVColV2 :mdl="6" :mdr="6">
+                        <template #l_name>
+                            <BaseQuestionTooltip location="top" text="수수료 상세표기" :content="`0% 수수료도 전산에 표기됩니다.`"/>
+                        </template>
+                        <template #l_input>
+                            <VSwitch hide-details v-model="props.item.free.use_fee_detail_view"
+                                color="primary" />
+                        </template>
+                        <template #r_name>
+                        </template>
+                        <template #r_input>
+                        </template>
+                    </CreateHalfVColV2>
+
                     <VCardTitle class="pt-10">                        
                         보안 옵션<span><b class="text-error" style="font-size: 0.6em;"> (보안 옵션 완화로인한 금융사고는 책임지지 않습니다.)</b></span>
                     </VCardTitle>
