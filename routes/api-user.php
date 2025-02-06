@@ -11,6 +11,7 @@ use App\Http\Controllers\Manager\Merchandise\SpecifiedTimeDisablePaymentControll
 use App\Http\Controllers\Manager\Merchandise\HandHeldTerminalProductController;
 use App\Http\Controllers\Manager\Merchandise\BillKeyController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
+use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateBillKeyController;
 
 use App\Http\Controllers\Manager\SalesforceController;
 use App\Http\Controllers\Manager\Salesforce\UnderAutoSettingController;
