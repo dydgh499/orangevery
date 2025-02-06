@@ -235,28 +235,19 @@ class TransactionController extends Controller
      * 취소매출 생성
      *
      */
-    public function cancel(TransactionRequest $request)
+    public function cancel(Request $request)
     {
-        $data = $request->data();
-        // TransactionRequest 에서 100을 먼저 나눠서 가져오기 떄문에 다시가져옴
-        $data['ps_fee']  = $request->input('ps_fee', 0);
-        $data['hold_fee'] = $request->input('hold_fee', 0);
-        $data['mcht_fee'] = $request->input('mcht_fee', 0);
-        $data['sales0_fee'] = $request->input('sales0_fee', 0);
-        $data['sales1_fee'] = $request->input('sales1_fee', 0);
-        $data['sales2_fee'] = $request->input('sales2_fee', 0);
-        $data['sales3_fee'] = $request->input('sales3_fee', 0);
-        $data['sales4_fee'] = $request->input('sales4_fee', 0);
-        $data['sales5_fee'] = $request->input('sales5_fee', 0);
-
-        $data['card_num']   = $request->input('card_num', '');
-        $data['issuer']     = $request->input('issuer', '');
-        $data['trx_id'] = $request->input('trx_id', '');
+        $data = json_decode(json_encode(
+            DB::table('transactions')->where('id', $request->id)->first()
+        ), true);
+        unset($data['id']);
+        $data['cxl_dt']     = $request->input('cxl_dt', '');
+        $data['cxl_tm']     = $request->input('cxl_tm', '');
         $data['ori_trx_id'] = $request->input('trx_id', '');
-        $data['cxl_dt'] = $request->input('cxl_dt', '');
-        $data['cxl_tm'] = $request->input('cxl_tm', '');
-
-        $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], $data['cxl_dt'], $data['mcht_settle_type'], $request->pg_settle_type);
+        $data['amount']     = $data['amount'] * -1;       
+        $data['is_cancel']  = 1;
+        $data['cxl_seq']    = 1; 
+        $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], $data['cxl_dt'], $data['mcht_settle_type'], $data['pg_settle_type']);
         try 
         {
             [$data] = SettleAmountCalculator::setSettleAmount([$data]);

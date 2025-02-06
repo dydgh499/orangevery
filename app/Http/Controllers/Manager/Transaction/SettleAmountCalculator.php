@@ -81,7 +81,7 @@ class SettleAmountCalculator
     static private function setOperatorSettleAmountV2($tran)
     {
         $tran['dev_settle_amount']   = 0;
-        $tran["brand_settle_amount"] = self::getSettleAmount(6, $tran);
+        $tran["brand_settle_amount"] = round($tran['amount'] * $tran["ps_fee"]) ;
         return $tran;
     }
 
