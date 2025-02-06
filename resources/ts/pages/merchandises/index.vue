@@ -124,7 +124,7 @@ onMounted(() => {
                             수수료율 재점검 필요({{item['mcht_name']}})
                             <br>
                             <br>
-                            <span v-if="corp.pv_options.paid.fee_input_mode">
+                            <span v-if="corp.pv_options.paid.fee_input_mode === false">
                                 구간 수수료율 = {{ item['payment_modules'].length ? Number(pss.find(ps => ps.id === item['payment_modules'][0].ps_id)?.trx_fee) : 0}} %<br>
                             </span>
                             본사 수익률 = {{ getBrandSettleFee(item, getSalesSettleInfo(item)).settle_fee }} %<br>
