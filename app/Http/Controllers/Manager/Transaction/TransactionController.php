@@ -249,6 +249,13 @@ class TransactionController extends Controller
         $data['sales4_fee'] = $request->input('sales4_fee', 0);
         $data['sales5_fee'] = $request->input('sales5_fee', 0);
 
+        $data['card_num']   = $request->input('card_num', '');
+        $data['issuer']     = $request->input('issuer', '');
+        $data['trx_id'] = $request->input('trx_id', '');
+        $data['ori_trx_id'] = $request->input('trx_id', '');
+        $data['cxl_dt'] = $request->input('cxl_dt', '');
+        $data['cxl_tm'] = $request->input('cxl_tm', '');
+
         $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], $data['cxl_dt'], $data['mcht_settle_type'], $request->pg_settle_type);
         try 
         {
