@@ -85,11 +85,12 @@ class BatchUpdateBillKeyController extends BatchUpdateController
         }
         if(count($success))
             $this->bill_keys->whereIn('id', $success)->delete();
-
-        $message = count($success).'개가 삭제되었습니다.\n';
         if(count($fails))
-            $message .= "일괄작업에 실패한 삭제건들이 존재합니다.\n\n".json_encode($fails, JSON_UNESCAPED_UNICODE);
-
-        return $this->extendResponse(count($fails) ? 1: 990, $message);
+        {
+            $message = "일괄작업에 실패한 삭제건들이 존재합니다.\n\n".json_encode($fails, JSON_UNESCAPED_UNICODE);
+            return $this->extendResponse(990, $message);
+        }
+        else
+            return $this->extendResponse(1, count($success)."개가 삭제되었습니다.");
     }
 }
