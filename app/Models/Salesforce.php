@@ -69,7 +69,8 @@ class Salesforce extends Authenticatable
                 'level', 'sales_name', 'nick_name', 'resident_num', 
                 'business_num', 'sector', 'addr', 'phone_num', 
                 'acct_num', 'acct_name', 'acct_bank_name', 'acct_bank_code',
-                'is_able_under_modify', 'mcht_batch_fee', 'created_at', 'is_lock', 'locked_at'
+                'is_able_under_modify', 'mcht_batch_fee', 'created_at', 'is_lock', 'locked_at',
+                'settle_cycle', 'settle_day', 'settle_tax_type', 'last_settle_dt',
             ]);
     }
 

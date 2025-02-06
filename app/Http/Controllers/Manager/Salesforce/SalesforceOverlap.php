@@ -19,7 +19,8 @@ class SalesforceOverlap
                 $is_dest_level = $i+1 === $offset;
                 $sales_ids = Salesforce::whereIn('parent_id', $parent_ids)
                     ->where('is_delete', false)
-                    ->pluck('id')->all();
+                    ->pluck('id')
+                    ->all();
                 if($is_dest_level)
                     return $sales_ids;
                 else

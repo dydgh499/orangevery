@@ -17,7 +17,7 @@ class CancelDepositRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return $this->user()->tokenCan(10) ? true : false;
+        return $this->user()->tokenCan(35) ? true : false;
     }
 
     /**
@@ -48,7 +48,6 @@ class CancelDepositRequest extends FormRequest
     }
     public function data()
     {
-        $data = $this->getParmasBaseKey();
-        return $data;
+        return $this->getParmasBaseKey();
     }
 }
