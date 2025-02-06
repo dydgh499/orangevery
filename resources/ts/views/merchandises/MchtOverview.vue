@@ -110,7 +110,7 @@ const MerchandiseTrxFeeValidate = computed(() => {
     else {
         if(getUserLevel() >= 35) {
             const settle_info = getSalesSettleInfo(props.item)
-            return [requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율'), amountValidator(props.item.trx_fee, '가맹점 수수료율', settle_info.sales_total_fee)]
+            return [requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]
         }
         else
             return [requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]
