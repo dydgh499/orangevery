@@ -143,6 +143,30 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                     </VCol>
                                 </VRow>
                             </VCol>
+                            <VCol cols="12" v-else>
+                                <VRow>
+                                    <VCol cols="12" md="6">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>기본 수수료</VCol>
+                                            <VCol md="8">
+                                                <VChip :color="'default'">
+                                                    {{ props.item.sales_fee }} %
+                                                </VChip>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                    <VCol cols="12" md="6">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>상위 영업점</VCol>
+                                            <VCol md="8">                                                
+                                                <span>
+                                                    {{ getParentSales.find(obj => obj.id === props.item.parent_id)?.sales_name }}
+                                                </span>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
                         </template>
                         <VCol cols="12">
                             <VRow>

@@ -52,9 +52,12 @@ export const useFeeCalculatorStore = defineStore('useFeeCalculatorStore', () => 
         if(getUserLevel() >= 35) {
             const sales_settle_info = getSalesSettleInfo(mcht)
             const brand_settle_info = getBrandSettleFee(mcht, sales_settle_info)
-
-            return Number((sales_settle_info.sales_total_fee + brand_settle_info.settle_fee + brand_settle_info.ps_fee).toFixed(5)) === Number(mcht.trx_fee.toFixed(5))
+            if(corp.pv_options.paid.fee_input_mode)
+                return Number((sales_settle_info.sales_total_fee + brand_settle_info.settle_fee).toFixed(5)) === Number(mcht.trx_fee.toFixed(5))
                 ? true : false
+            else
+                return Number((sales_settle_info.sales_total_fee + brand_settle_info.settle_fee + brand_settle_info.ps_fee).toFixed(5)) === Number(mcht.trx_fee.toFixed(5))
+                    ? true : false
         }
         else
             return true

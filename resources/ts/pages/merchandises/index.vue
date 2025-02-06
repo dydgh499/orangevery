@@ -80,7 +80,7 @@ onMounted(() => {
                     일괄작업
                 </VBtn>
                 <VBtn
-                    color="info" v-if="corp.pv_options.paid.use_shop"
+                    color="info" v-if="corp.pv_options.paid.use_shop && getUserLevel() >= 35"
                     prepend-icon="material-symbols:work-history-outline" @click="shoppingMallDialog.show(-1)"
                     size="small" :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
                     쇼핑몰 관리
@@ -124,7 +124,9 @@ onMounted(() => {
                             수수료율 재점검 필요({{item['mcht_name']}})
                             <br>
                             <br>
-                            구간 수수료율 = {{ item['payment_modules'].length ? Number(pss.find(ps => ps.id === item['payment_modules'][0].ps_id)?.trx_fee) : 0}} %<br>
+                            <span v-if="corp.pv_options.paid.fee_input_mode">
+                                구간 수수료율 = {{ item['payment_modules'].length ? Number(pss.find(ps => ps.id === item['payment_modules'][0].ps_id)?.trx_fee) : 0}} %<br>
+                            </span>
                             본사 수익률 = {{ getBrandSettleFee(item, getSalesSettleInfo(item)).settle_fee }} %<br>
                             영업점 수익률 합계 = {{ getSalesSettleInfo(item).sales_total_fee }} %<br>
                         </div>
