@@ -243,6 +243,7 @@ class TransactionController extends Controller
         unset($data['id']);
         $data['cxl_dt']     = $request->input('cxl_dt', '');
         $data['cxl_tm']     = $request->input('cxl_tm', '');
+        $date['trx_at']     = $data['cxl_dt']." ".$data['cxl_tm'];
         $data['ori_trx_id'] = $request->input('trx_id', '');
         $data['amount']     = $data['amount'] * -1;
         $data['is_cancel']  = 1;
