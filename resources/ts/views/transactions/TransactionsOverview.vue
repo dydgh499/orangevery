@@ -507,4 +507,5 @@ onMounted(async () => {
                 </VCardItem>
             </VCard>
         </VCol>
-    </VRow></template>
+    </VRow>
+</template>
