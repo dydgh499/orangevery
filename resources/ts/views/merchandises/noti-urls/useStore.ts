@@ -8,6 +8,11 @@ export const noti_statuses = <Options[]>([
     { id: 0, title: "미사용" }, { id: 1, title: "사용" },
 ])
 
+export const send_types = <Options[]>([
+    { id: 0, title: "전체" }, { id: 1, title: "승인건만 발송" }, 
+    { id: 2, title: "취소건만 발송" },
+])
+
 export const notiViewable = () => {
     if(corp.pv_options.paid.use_noti) {
         if(getUserLevel() >= 35)
@@ -32,6 +37,7 @@ export const useSearchStore = defineStore('NotiSearchStore', () => {
         'note' : '별칭',
         'mcht_name' : '가맹점 상호',
         'send_url' : '전송 URL',
+        'send_type' : '발송타입',
         'noti_status' : '사용여부',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',

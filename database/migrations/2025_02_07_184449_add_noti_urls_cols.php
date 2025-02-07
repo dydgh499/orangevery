@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('noti_urls', function (Blueprint $table) {
-            $table->integer('pmod_id')->nullable()->default(-1)->comment('사용 결제모듈 ID')->index();
+            $table->unsignedInteger('send_type')->default(0)->comment('발송타입(0=전체, 1=승인건만 발송, 2=취소건만 발송)');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('noti_urls', function (Blueprint $table) {
-            $table->dropColumn('pmod_id');
+            $table->dropColumn('send_type');
         });
     }
 };

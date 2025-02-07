@@ -6,6 +6,7 @@ import { batch } from '@/layouts/components/batch-updaters/batch'
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
+import { noti_statuses, send_types } from '@/views/merchandises/noti-urls/useStore'
 import corp from '@corp'
 
 interface Props {
@@ -29,8 +30,8 @@ const noti = reactive<any>({
     note: '',
     send_url: '',
     noti_status: 0,
+    send_type: 0,
 })
-const noti_statuses = [{id:0, title:'미사용'}, {id:1, title:'사용'}]
 
 const setSendUrl = (apply_type: number) => {
     post('set-send-url', {
@@ -47,6 +48,12 @@ const setNotiStatus = (apply_type: number) => {
 const setNote = (apply_type: number) => {
     post('set-note', {
         'note': noti.note,
+    }, apply_type)
+}
+
+const setSendType = (apply_type: number) => {
+    post('set-send-type', {
+        'send_type': noti.send_type,
     }, apply_type)
 }
 
@@ -101,14 +108,37 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                     <VRow>
+                        <VCol :md="12" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="8" cols="12">
+                                    <VTextField v-model="noti.note" label="별칭" />
+                                </VCol>
+                                <VCol md="4" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setNote(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setNote(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+
+                    <VRow>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
-                                <VCol md="6" cols="12">
+                                <VCol md="4" cols="12">
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="noti.noti_status"
                                             :items="noti_statuses" 
                                             item-title="title" item-value="id" label="노티 사용여부" />
                                 </VCol>
-                                <VCol md="6" cols="12">
+                                <VCol md="8" cols="12">
                                     <div class="button-cantainer">
                                         <VBtn variant="tonal" size="small" @click="setNotiStatus(0)">
                                             즉시적용
@@ -125,16 +155,18 @@ watchEffect(() => {
                         </VCol>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
-                                <VCol md="6" cols="12">
-                                    <VTextField v-model="noti.note" label="별칭" />
+                                <VCol md="4" cols="12">
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="noti.send_type"
+                                            :items="send_types" 
+                                            item-title="title" item-value="id" label="발송타입" />
                                 </VCol>
-                                <VCol md="6" cols="12">
+                                <VCol md="8" cols="12">
                                     <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setNote(0)">
+                                        <VBtn variant="tonal" size="small" @click="setSendType(0)">
                                             즉시적용
                                             <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
-                                        <VBtn variant="tonal" size="small" color="secondary" @click="setNote(1)"
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setSendType(1)"
                                             style='margin-left: 0.5em;'>
                                             예약적용
                                             <VIcon end size="18" icon="tabler-clock-up" />

@@ -103,6 +103,13 @@ class BatchUpdateNotiUrlController extends BatchUpdateController
         return $this->batchResponse($row, '노티주소');
     }
 
+    public function setSendType(Request $request)	
+    {
+        $cols = ['send_type' => $request->send_type];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '노티주소');
+    }
+
     /**
      * 일괄삭제
      */
@@ -112,7 +119,6 @@ class BatchUpdateNotiUrlController extends BatchUpdateController
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 노티주소가 존재하지 않습니다.');
     }
     
-
     /**
      * 대량등록
      *

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { notiViewable } from '@/views/merchandises/noti-urls/useStore';
+import { notiViewable, send_types } from '@/views/merchandises/noti-urls/useStore';
 import { payModFilter } from '@/views/merchandises/pay-modules/useStore';
 import { useRequestStore } from '@/views/request';
 import { useSalesFilterStore } from '@/views/salesforces/useStore';
@@ -40,7 +40,7 @@ const filterPayMod = computed(() => {
                                             single-line :rules="[requiredValidatorV2(props.item.mcht_id, '가맹점')]" :eager="true" />
                                 </VCol>
                             </VRow>
-                            <VRow v-else>
+                            <VRow v-else :style='`align-items: center;`'>
                                 <VCol md="6" cols="6">
                                     <span class="font-weight-bold">소유 가맹점</span>
                                 </VCol>
@@ -48,20 +48,16 @@ const filterPayMod = computed(() => {
                                     {{ mchts.find(obj => obj.id === props.item.mcht_id)?.mcht_name }}
                                 </VCol>
                             </VRow>
-                            <VCardSubtitle></VCardSubtitle>
-                            <br>
-
                             <VRow v-if="notiViewable()">
                                 <VCol md="6" cols="12">
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pmod_id"
-                                    :items="[{ id: -1, note: '전체' }].concat(filterPayMod)" prepend-inner-icon="ic-outline-send-to-mobile"
-                                    label="발송 결제모듈" item-title="note" item-value="id"/>
+                                        :items="[{ id: -1, note: '전체' }].concat(filterPayMod)" prepend-inner-icon="ic-outline-send-to-mobile"
+                                        label="발송 결제모듈" item-title="note" item-value="id"/>
                                 </VCol>
                                 <VCol md="6">
-                                    <VSwitch hide-details :false-value=0 :true-value=1 
-                                            v-model="props.item.noti_status"
-                                            label="활성여부" color="primary"
-                                        />
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.send_type"
+                                        :items="send_types" prepend-inner-icon="tabler:send"
+                                        label="발송타입" item-title="title" item-value="id"/>                                    
                                 </VCol>
                             </VRow>
                             <VRow v-else>
@@ -69,7 +65,7 @@ const filterPayMod = computed(() => {
                                     <span>{{ filterPayMod.find(obj => obj.id === props.item.pmod_id)?.note }}</span>
                                 </VCol>
                                 <VCol cols="6">
-                                    <span>{{ props.item.noti_status ? '활성' : '미활성' }}</span>
+                                    <span></span>
                                 </VCol>
                             </VRow>
 
@@ -102,6 +98,17 @@ const filterPayMod = computed(() => {
                                 </VCol>
                                 <VCol cols="6">
                                     <span>{{ props.item.note }}</span>
+                                </VCol>
+                            </VRow>
+                            <VRow>
+                                <VCol cols="6" v-if="notiViewable()">
+                                    <VSwitch hide-details :false-value=0 :true-value=1 
+                                            v-model="props.item.noti_status"
+                                            label="활성여부" color="primary"
+                                        />
+                                </VCol>
+                                <VCol cols="6" v-else>
+                                    <span>{{ props.item.noti_status ? '활성' : '미활성' }}</span>
                                 </VCol>
                             </VRow>
                         

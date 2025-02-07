@@ -306,7 +306,6 @@ class TransactionController extends Controller
             return $this->response(1, $res['body']);
         else
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);
-
     }
 
     /*

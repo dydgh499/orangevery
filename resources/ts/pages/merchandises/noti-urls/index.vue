@@ -3,7 +3,7 @@ import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 
-import { noti_statuses, useSearchStore } from '@/views/merchandises/noti-urls/useStore'
+import { noti_statuses, send_types, useSearchStore } from '@/views/merchandises/noti-urls/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { getUserLevel } from '@axios'
 import { DateFilters, ItemTypes } from '@core/enums'
@@ -11,6 +11,15 @@ import { DateFilters, ItemTypes } from '@core/enums'
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const batchDialog = ref()
+
+const getSendTypeColor = (send_type: number) => {
+    if(send_type === 0)
+        return 'primary'
+    else if(send_type === 1)
+        return 'success'
+    else
+        return 'error'
+}
 
 provide('store', store)
 provide('head', head)
@@ -23,8 +32,7 @@ provide('exporter', exporter)
             :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="true"
-                    :sales="true">
-                </BaseIndexFilterCard>
+                    :sales="true"/>
             </template>
             <template #index_extra_field>
                 <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35"
@@ -75,9 +83,14 @@ provide('exporter', exporter)
                                         {{ noti_statuses.find(module_type => module_type['id'] === item[_key])?.title }}
                                     </VChip>
                                 </span>
+                                <span v-else-if="_key == 'send_type'">
+                                    <VChip :color="getSendTypeColor(item[_key])">
+                                        {{ send_types.find(module_type => module_type['id'] === item[_key])?.title }}
+                                    </VChip>
+                                </span>
                                 <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
                                     {{ item[_key] }}
-                                </span>     
+                                </span>
                                 <span v-else>
                                     {{ item[_key] }}
                                 </span>

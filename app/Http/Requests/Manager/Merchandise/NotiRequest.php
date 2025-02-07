@@ -15,6 +15,9 @@ class NotiRequest extends FormRequest
         'noti_status',
         'note',
     ];
+    public $integer_keys = [
+        'send_type'
+    ];
 
     public function authorize()
     {
@@ -34,22 +37,20 @@ class NotiRequest extends FormRequest
             'send_url' => 'required',
             'noti_status' => 'required',
         ];
-        return $this->getRules($this->keys, $sub);
+        return $this->getRules(array_merge($this->keys, $this->integer_keys), $sub);
     }
 
     public function attributes()
     {
-        return $this->getAttributes($this->keys);
+        return $this->getAttributes(array_merge($this->keys, $this->integer_keys));
     }
 
     public function bodyParameters()
     {
-        $params = $this->getDocsParameters($this->keys);
-        return $params;
+        return $this->getDocsParameters(array_merge($this->keys, $this->integer_keys));
     }
     public function data()
     {
-        $data = $this->getParmasBaseKey();
-        return $data;
+        return array_merge($this->getParmasBaseKeyV2($this->keys, ''), $this->getParmasBaseKeyV2($this->integer_keys, 0));
     }
 }

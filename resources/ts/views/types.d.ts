@@ -926,6 +926,7 @@ export interface NotiUrl {
     mcht_name?: string,
     send_url: string,
     noti_status: number,
+    send_type: number,
     note: string,
 }
 

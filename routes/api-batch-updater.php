@@ -74,6 +74,7 @@ Route::prefix('merchandises/noti-urls/batch-updaters')->group(function() {
     Route::post('set-send-url', [BatchUpdateNotiUrlController::class, 'setSendUrl']);
     Route::post('set-noti-status', [BatchUpdateNotiUrlController::class, 'setNotiStatus']);
     Route::post('set-note', [BatchUpdateNotiUrlController::class, 'setNote']);
+    Route::post('set-send-type', [BatchUpdateNotiUrlController::class, 'setSendType']);
     Route::delete('remove', [BatchUpdateNotiUrlController::class, 'batchRemove']);       
 	Route::post('register', [BatchUpdateNotiUrlController::class, 'register']);
 });
