@@ -69,7 +69,8 @@ export const defaultItemInfo =  () => {
         send_url: '',
         note: '비고(별칭)',
         noti_status: 1,
-        pmod_id: -1
+        pmod_id: -1,
+        send_type: 0
     })
     //카드사 필터 및 다른 필터옵션들
     return {
