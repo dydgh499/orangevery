@@ -79,6 +79,18 @@ class NotiRetrySender
         return Comm::post($url, $params, $headers);
     }
 
+    static public function isAbleSend($send_type, $tran)
+    {
+        if($send_type === 0)
+            return true;
+        else if($send_type === 1 && (int)$tran['is_cancel'] === 0)
+            return true;
+        else if($send_type === 2 && (int)$tran['is_cancel'] === 1)
+            return true;
+        else
+            return false;
+    }
+
     static public function notiSenderWrap($id)
     {
         $fail_res    = [];
@@ -90,7 +102,7 @@ class NotiRetrySender
                 return $query->whereColumn('noti_urls.pmod_id', 'transactions.pmod_id')
                     ->orWhere('noti_urls.pmod_id', -1);
             })
-            ->get(['transactions.*', 'noti_urls.send_url']);
+            ->get(['transactions.*', 'noti_urls.send_url', 'noti_urls.send_type']);
 
         if(count($trans) === 0)
             $fail_res[] = '#'.$id.":노티주소가 등록되어있지 않습니다.<br>";
@@ -98,14 +110,19 @@ class NotiRetrySender
         {
             foreach($trans as $tran)
             {
-                $tran->retry_count = 0;
-                $res = self::notiSender($tran->send_url, $tran, '');
-                self::save($res, $tran);
-
-                if($res['code'] === 200 || $res['code'] === 201)
-                    $success_res[] = '#'.$id;
+                if(self::isAbleSend($tran->send_type, $tran))
+                {
+                    $tran->retry_count = 0;
+                    $res = self::notiSender($tran->send_url, $tran, '');
+                    self::save($res, $tran);
+    
+                    if($res['code'] === 200 || $res['code'] === 201)
+                        $success_res[] = '#'.$id;
+                    else
+                        $fail_res[] = '#'.$id.":".$res['body']."<br>";    
+                }
                 else
-                    $fail_res[] = '#'.$id.":".$res['body']."<br>";
+                    $fail_res[] = '#'.$id.":노티 발송타입으로 인해 발송하지 않았습니다.<br>";
             }    
         }
         return [$success_res, $fail_res];
