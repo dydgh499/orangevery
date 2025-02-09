@@ -22,7 +22,7 @@
             'passgo', 'buddypay', 'withpay', 'fixpay', 'galaxiamoneytree',
             'bkwinners', 'welcome1', 'toss', 'payup', 'wayup', 'nicepay', 
             'bonacamp', 'onoffkorea', 'ksnet', 'buddypayWZE', 'seedpayment',
-            'weroute',
+            'weroute', 'ezpgWZE',
         ];
         return $pgs[$pg_type-1];
     }

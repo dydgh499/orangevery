@@ -12,6 +12,10 @@ export const tax_category_types = <Options[]>([
     {id:0, title:'과세'}, {id:1, title:'면세'}, 
 ])
 
+export const merchant_statuses  = <Options[]>([
+    {id:0, title:'정상'}, {id:1, title:'중지'}, {id:2, title: '해지'} 
+])
+
 const getMchtHeaders = (head :any) => {
     const getIdCol = () => {
         return {
