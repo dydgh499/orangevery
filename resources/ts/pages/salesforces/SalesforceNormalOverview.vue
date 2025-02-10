@@ -83,7 +83,7 @@ onMounted(() => {
                             <span>{{ sub_header.ko }}</span>
                         </th>
                     </template>
-                </tr>                
+                </tr>
                 <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                         <div class='check-label-container' v-if="key == 'id'">

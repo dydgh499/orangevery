@@ -102,7 +102,6 @@ class BfController extends Controller
      * @responseField use_realtime_deposit integer 실시간 이체 사용여부(미사용=0, 사용=1)
      * @responseField fin_trx_delay integer 실시간 이체 딜레이(모아서 출금=-1, 즉시입금=0, 15분=15, 30분=30, 45분=45, 60분=60), 모아서 출금 외 모두 즉시입금
      */
-
     public function payModules(Request $request)
     {
         $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)
@@ -171,7 +170,6 @@ class BfController extends Controller
     {
         $inst = new QuickViewController(new Transaction);
         return $inst->withdrawAbleAmount($request);
-        
     }
 
     /**
