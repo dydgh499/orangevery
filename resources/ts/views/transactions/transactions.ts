@@ -223,7 +223,9 @@ export const realtimeHistoryInterface = (formatTime: any) => {
                 'tid': item.tid,
                 'pmod_id': item.pmod_id,
             }
-            return await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit', params, true)
+            const res = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit', params, false)
+            snackbar.value.show(res.data.message, res.status === 201 ? 'success' : 'error')
+            
         }
         else
             return null
