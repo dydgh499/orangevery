@@ -120,11 +120,7 @@ defineExpose({
                                         <label>구매자명</label>
                                     </VCol>
                                     <VCol cols="8" :md="8">
-                                        <VTextField 
-                                            v-model="bill_key.buyer_name"
-                                            variant="underlined"
-                                            placeholder="구매자명을 입력해주세요" :rules="[requiredValidatorV2(bill_key.buyer_name, '구매자명')]" 
-                                            prepend-icon="tabler-user" />
+                                        <b>{{ bill_key.buyer_name }}</b>
                                     </VCol>
                                 </VRow>
                             </VCol>
@@ -134,17 +130,11 @@ defineExpose({
                                         <label>연락처</label>
                                     </VCol>
                                     <VCol cols="8" :md="8">
-                                        <VTextField 
-                                            v-model="phone_num_format" 
-                                            @input="formatPhoneNum"
-                                            variant="underlined"
-                                            prepend-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
-                                            :rules="[requiredValidatorV2(bill_key.buyer_phone, '구매자 연락처')]" 
-                                            />
+                                        <b>{{ phone_num_format }}</b>
                                     </VCol>
                                 </VRow>
                             </VCol>
-                        </VRow>                        
+                        </VRow>
                     </VCol>
                 </VForm>
             </VCardText>

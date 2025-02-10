@@ -33,7 +33,6 @@ watchEffect(() => {
         <VDivider />
         <VCardTitle style="margin-top: 0.5em;">
             <b>구매자정보</b>
-            <slot name="bill_key"></slot> 
         </VCardTitle>
     </VRow>
     <VRow>

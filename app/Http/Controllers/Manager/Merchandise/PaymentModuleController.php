@@ -69,7 +69,7 @@ class PaymentModuleController extends Controller
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
 
-        if($is_all == false) 
+        if($is_all === false) 
             $query = $query->where('merchandises.is_delete', false)->where('payment_modules.is_delete', false);
         if($request->has('mcht_id'))
             $query = $query->where('payment_modules.mcht_id', $request->mcht_id);
@@ -92,7 +92,7 @@ class PaymentModuleController extends Controller
      * 가맹점 이상 가능
      *
      * @queryParam search string 검색어(mid, tid)
-     * @queryParam module_type integer 모듈타입(0,1,2,3,4)
+     * @queryParam module_type integer 모듈타입(0,1,2,3,4,5)
      */
     public function index(IndexRequest $request)
     {

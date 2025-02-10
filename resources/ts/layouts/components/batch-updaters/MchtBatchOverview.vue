@@ -346,7 +346,7 @@ watchEffect(() => {
                                 prepend-inner-icon="ph-buildings" label="은행 선택"
                                 :hint="`${merchandise.bank.title}, 은행 코드: ${merchandise.bank.code ? merchandise.bank.code : '000'} `"
                                 item-title="title" item-value="code" persistent-hint return-object
-                            />                            
+                            />
                         </VCol>
                         <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important; margin-left: auto;">
                             <div style="float: inline-end;">

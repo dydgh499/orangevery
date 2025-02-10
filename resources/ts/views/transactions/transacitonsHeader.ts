@@ -85,7 +85,7 @@ export const transactionHeader = (table_name: string) => {
     const getPGCols = () => {
         const headers_3:Record<string, string> = {}
         if(getUserLevel() >= 35) {
-            headers_3['pg_id'] = 'PG사'
+            headers_3['pg_id'] = '원천사'
             headers_3['ps_id'] = '구간'
             headers_3['ps_fee'] = '구간 수수료'
         }

@@ -321,7 +321,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
             if(getUserLevel() >= 35) {
                 datas[i]['module_types'] = datas[i]['payment_modules'].map(module => module_types.find(type => type.id === module.module_type)?.title).join(',')  
                 datas[i]['serial_nums'] = datas[i]['payment_modules'].map(module => module.serial_num).join(',')
-                datas[i]['pgs'] = datas[i]['payment_modules'].map(module => pgs.find(pg => pg.id === module.pg_id)?.pg_name).join(',')  
+                datas[i]['pgs'] = datas[i]['payment_modules'].map(module => pgs.find(pg => pg.id === module.pg_id)?.pg_name).join(',')
                 datas[i]['pss'] = datas[i]['payment_modules'].map(module => pss.find(ps => ps.id === module.ps_id)?.trx_fee).join(',')
                 datas[i]['contract_img'] = datas[i]['payment_modules'].map(module => pss.find(ps => ps.id === module.ps_id)?.trx_fee).join(',')
                 datas[i]['mids'] = datas[i]['payment_modules'].map(module => module.mid).join(',')

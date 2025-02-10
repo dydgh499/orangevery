@@ -31,8 +31,12 @@ class LoginValidate
             $result['result'] = AuthLoginCode::INHIBITION_ACCOUNT->value;
         else
         {
-            if(count($result['user']->shoppingMall) === 0)
-                $result['user']->shoppingMall = ShoppingMallWindowInterface::renew($result['user']->id);
+        	if(count($result['user']->shoppingMall) === 0)
+            {
+                $shop_info =[ShoppingMallWindowInterface::renew($result['user']->id)];
+                $result['user']->shoppingMall = $shop_info;
+                $result['user']->shopping_mall = $shop_info;
+            }
         }
         return $result;
     }
@@ -54,7 +58,7 @@ class LoginValidate
 
     static protected function locationValidate($result, $ip)
     {
-        if($result['user']->level >= 35 && AuthOperatorIP::valiate($result['user']->brand_id, $ip === false))
+        if($result['user']->level >= 35 && AuthOperatorIP::valiate($result['user']->brand_id, $ip) === false)
             AbnormalConnection::tryNoRegisterIP($result['user']);
     }
 

@@ -23,7 +23,6 @@ class MerchandiseRequest extends FormRequest
         'acct_name',
         'phone_num',
         'contact_num',
-        'merchant_status',
         'note',
         'website_url',
         'email',
@@ -58,6 +57,7 @@ class MerchandiseRequest extends FormRequest
         'is_show_fee',
         'is_hide_account',
         'use_regular_card',
+        'merchant_status',
     ];
     public $nullable_keys = [
         'custom_id',
@@ -93,10 +93,10 @@ class MerchandiseRequest extends FormRequest
             'mcht_name' => 'required',
             'acct_bank_name' => 'required',
             'acct_num'  => 'nullable|max:30',
-            'merchant_status' => 'required|boolean',
             'use_saleslip_prov' => 'required|boolean',
             'use_saleslip_sell' => 'required|boolean',
             'is_hide_account'   => 'required|boolean',
+            'merchant_status'   => 'required|integer',
             'collect_withdraw_fee' => 'nullable|integer',
             'tax_category_type' => 'nullable|integer',
             'withdraw_fee' => 'nullable|integer',

@@ -124,6 +124,9 @@ class PayWindowController extends Controller
             return $this->extendResponse(1999, '존재하지 않은 결제창 입니다.');        
     }
 
+    /** 
+     * 매출전표
+    */
     public function salesSlip(Request $request, string $ord_num)
     {
         $data = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
@@ -181,7 +184,8 @@ class PayWindowController extends Controller
                     $result['transactions']['cxl_dttm'] = $data->cxl_dt." ".$data->cxl_tm;
                 return $this->response(0, $result);
             }
-
+            else
+                return $this->extendResponse(1999, '존재하지 않는 원천사 입니다.');
         }
         else
             return $this->extendResponse(1999, '존재하지 거래건 입니다.');
