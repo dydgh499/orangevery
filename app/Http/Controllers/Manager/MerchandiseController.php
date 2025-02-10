@@ -116,6 +116,9 @@ class MerchandiseController extends Controller
             $query = $query->where('merchandises.is_lock', 1);
         if($request->input('settle_hold', 0))
             $query = $query->whereNotNull('merchandises.settle_hold_s_dt');
+        if($request->merchant_status !== null)
+            $query = $query->where('merchandises.merchant_status', $request->merchant_status);
+
         if($is_all == false)
             $query = $query->where('merchandises.is_delete', false);
         return $query;

@@ -12,4 +12,5 @@ enum AuthLoginCode: int {
     case REQUIRE_PHONE_AUTH         = 956;
     case REQUIRE_OTP_AUTH           = 957;
     case EXPIRED_TOKEN              = 958;
+    case INHIBITION_ACCOUNT         = 959;
 }

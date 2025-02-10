@@ -42,6 +42,7 @@ const passwordChangeNoticeDialog = ref()
 provide('popup', popup)
 provide('payShow', payShow)
 provide('holidayDlg', holidayDlg)
+provide('pwaSnackbar', pwaSnackbar)
 provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()

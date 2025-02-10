@@ -6,58 +6,16 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
 
 use App\Http\Controllers\Ablilty\Ablilty;
-use App\Http\Controllers\Ablilty\AbnormalConnection;
-use App\Http\Controllers\Auth\AuthPhoneNum;
-use App\Http\Controllers\Auth\AuthGoogleOTP;
 use App\Http\Controllers\Auth\AuthAccountLock;
-use App\Http\Controllers\Auth\AuthOperatorIP;
 use App\Http\Controllers\Auth\AuthPasswordChange;
-use App\Http\Controllers\Manager\Service\BrandInfo;
-use App\Http\Controllers\Ablilty\ShoppingMallWindowInterface;
+use App\Http\Controllers\Auth\LoginValidate;
 
 use Illuminate\Support\Facades\Hash;
 use App\Enums\HistoryType;
 
-class Login
+class Login extends LoginValidate
 {
     use ExtendResponseTrait, EncryptDataTrait;
-
-    static private function secondAuthValidate($result, $request)
-    {
-        $brand = BrandInfo::getBrandById($result['user']->brand_id);
-        if($result['user']->level >= 35)
-        {
-            // 3FA
-            if(AuthOperatorIP::valiate($result['user']->brand_id, $request->ip()))
-            {   // 2FA
-                if($result['user']->google_2fa_secret_key)
-                    return AuthGoogleOTP::validate($request->token);
-                else if($brand['pv_options']['paid']['use_head_office_withdraw'])
-                    return AuthPhoneNum::validate($request->token);   // 휴대폰 인증
-                else
-                    return AuthLoginCode::SUCCESS->value;
-            }
-            else
-            {
-                AbnormalConnection::tryNoRegisterIP($result['user']);
-                return AuthLoginCode::NOT_FOUND->value;
-            }
-        }
-        else
-        {
-            if($brand['pv_options']['free']['secure']['login_only_operate'])
-                return AuthLoginCode::NOT_FOUND->value;
-            if($result['user']->password_change_at === null && $request->is('*/v1/bf/sign-in') === false)
-                return AuthLoginCode::REQUIRE_PASSWORD_CHANGE->value;
-            else
-            {
-                if($result['user']->google_2fa_secret_key)
-                    return AuthGoogleOTP::validate($request->token);
-                else
-                    return AuthLoginCode::SUCCESS->value;
-            }
-        }
-    }
 
     static private function setResponseBody($orm, $result)
     {
@@ -107,6 +65,8 @@ class Login
             $result['msg'] = '패스워드를 3회이상 잘못 입력하여 잠금된 계정입니다. 운영사에게 문의해주세요.';
         else if($result === AuthLoginCode::EXPIRED_TOKEN->value)
             $result['msg'] = '만료된 인증입니다. 다시 인증을 시도해주세요.';
+        else if($result === AuthLoginCode::INHIBITION_ACCOUNT->value)
+            $result['msg'] = '사용이 중지된 가맹점입니다. 운영사에게 문의해주세요.';
         return $result;
     }
     
@@ -126,23 +86,15 @@ class Login
 
         if($result['user'])
         {
-            if(isset($result['user']->mcht_name))
-            {                
-                $result['user']->level = 10;
-                if(count($result['user']->shoppingMall) === 0)
-                    $result['user']->shoppingMall = ShoppingMallWindowInterface::renew($result['user']->id);
-            }
-            if($result['user']->is_lock)
+            if(self::isMerchant($result))
+                $result = self::setMerchant($result);
+            if(self::isLockAccount($result))
                 $result['result'] = AuthLoginCode::LOCK_ACCOUNT->value;
-            else if(AuthPasswordChange::HashCheck($result['user'], $request->user_pw))
+            else if(self::isCorrectPassword($result, $request->user_pw))
                 $result['result'] = self::secondAuthValidate($result, $request);
             else
             {
-                if($result['user']->level >= 35 && AuthOperatorIP::valiate($result['user']->brand_id, $request->ip() === false))
-                {
-                    AbnormalConnection::tryNoRegisterIP($result['user']);
-                }
-
+                self::locationValidate($result, $request->ip());
                 $result['result'] = AuthLoginCode::WRONG_PASSWORD->value;
             }
         }

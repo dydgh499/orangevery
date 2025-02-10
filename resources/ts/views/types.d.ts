@@ -116,7 +116,7 @@ export interface MerchandisePropertie {
     trx_fee: float,
     hold_fee: float,
     // option
-    enabled: number,
+    merchant_status: number,
     tax_category_type: number,
     custom_id: number | null,
     use_saleslip_prov: number,
@@ -384,7 +384,6 @@ interface FreeOption {
 }
 interface PaidOption {
     use_acct_verification: boolean, // 예금주 검증
-    subsidiary_use_control: boolean, // 하위 영업점 전산 사용 ON/OFF
     use_hand_pay_sms: boolean, // 수기결제 SMS
     use_realtime_deposit: boolean,  // 실시간 결제모듈
     use_issuer_filter: boolean, // 카드사 필터링
@@ -399,7 +398,6 @@ interface PaidOption {
     use_regular_card: boolean,
     use_collect_withdraw: boolean, // 가맹점 모아서 출금
     use_collect_withdraw_scheduler: boolean, // 모아서 출금 스케줄링
-    use_withdraw_fee: boolean,  // 출금 수수료
     use_head_office_withdraw: boolean,
     use_noti: boolean,
     use_finance_van_deposit: boolean, //금융 VAN 송금

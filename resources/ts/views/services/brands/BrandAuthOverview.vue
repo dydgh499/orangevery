@@ -98,10 +98,10 @@ const props = defineProps<Props>()
                         <VRow class="pt-5">
                             <VCol cols="6">
                                 <VRow no-gutters style="align-items: center;">
-                                    <VCol cols="12" :md="4">
+                                    <VCol cols="12" :md="6">
                                         <VSwitch hide-details v-model="props.item.paid.sales_parent_structure" color="primary" label="계층형 구조"/>
                                     </VCol>
-                                    <VCol cols="12" :md="8">
+                                    <VCol cols="12" :md="6">
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.paid.fee_input_mode"
                                                 :items="fee_input_modes" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
                                                 label="수수료 입력방식" item-title="title" item-value="id" single-line />
@@ -248,7 +248,6 @@ const props = defineProps<Props>()
                                     <VSwitch hide-details v-model="props.item.paid.use_acct_verification" color="primary" label="예금주 검증"/>
                                 </template>
                                 <template #input>
-                                    <VSwitch hide-details v-model="props.item.paid.subsidiary_use_control" color="primary" label="가맹점 전산 ON/OFF"/>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -280,7 +279,6 @@ const props = defineProps<Props>()
                                     <VSwitch hide-details v-model="props.item.paid.use_regular_card" color="primary" label="단골고객 전용결제"/>
                                 </template>
                                 <template #input>
-                                    <VSwitch hide-details v-model="props.item.paid.use_withdraw_fee" color="primary" label="출금 수수료"/>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

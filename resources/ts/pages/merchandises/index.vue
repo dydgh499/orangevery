@@ -2,7 +2,7 @@
 import ShoppingMallDialog from '@/layouts/dialogs/shopping-mall/ShoppingMallDialog.vue';
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
-import { feeCalcMenual, useSearchStore } from '@/views/merchandises/useStore';
+import { feeCalcMenual, merchant_statuses, MerchantStatusColor, useSearchStore } from '@/views/merchandises/useStore';
 import { selectFunctionCollect } from '@/views/selected';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
@@ -65,11 +65,16 @@ onMounted(() => {
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true"
                     :sales="true">
                     <template #pg_extra_field>
-                        <VCol cols="6" sm="3">
+                        <VCol cols="6" sm="3" v-if="getUserLevel() > 10">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"
                                 :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 필터" item-title="title"
                                 item-value="id"
                                 @update:modelValue="[store.updateQueryString({ module_type: store.params.module_type })]" />
+                        </VCol>
+                        <VCol cols="6" sm="3" v-if="getUserLevel() > 10">
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.merchant_status"
+                                :items="[{ id: null, title: '전체' }].concat(merchant_statuses)" label="가맹점 상태" item-title="title"
+                                item-value="id" @update:modelValue="[store.updateQueryString({ merchant_status: store.params.merchant_status })]"/>
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>
@@ -248,9 +253,9 @@ onMounted(() => {
                                     </option>
                                 </select>
                             </span>
-                            <span v-else-if="_key == 'enabled'">
-                                <VChip :color="store.booleanTypeColor(!item[_key])">
-                                    {{ item[_key] ? 'ON' : 'OFF' }}
+                            <span v-else-if="_key == 'merchant_status'">
+                                <VChip :color="MerchantStatusColor(item[_key])">
+                                    {{ merchant_statuses.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'is_lock'">

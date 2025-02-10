@@ -41,7 +41,6 @@ class Brand
             $pv_options->free->sales_slip['merchandise']['addr'] = $brand->SEL_ADDR;
 
             $pv_options->paid->use_dup_pay_validation = (boolean)$brand->USE_DUPE_TRX;
-            $pv_options->paid->subsidiary_use_control = (boolean)$brand->USE_MD_ENABLED;
             $pv_options->paid->use_acct_verification = (boolean)$brand->USE_ACCT_VALID;
             $pv_options->paid->use_realtime_deposit = (boolean)$brand->USE_RT_DPST;
             $pv_options->paid->use_issuer_filter = (boolean)$brand->USE_MD_CRD_FL;

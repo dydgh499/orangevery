@@ -66,7 +66,7 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
     }
     
     const getPaymentMenu = computed(() => {
-        if (getUserLevel() == 10)
+        if (getUserLevel() === 10)
             return getPayLink(payment_modules.value)
         else
             return {}

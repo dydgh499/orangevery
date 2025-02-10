@@ -124,9 +124,9 @@ class BatchUpdateMchtController extends BatchUpdateController
             return $this->response(951);
     }
 
-    public function setEnabled(Request $request)
+    public function setMerchantStatus(Request $request)
     {
-        $cols = ['enabled' => $request->enabled];
+        $cols = ['merchant_status' => $request->merchant_status];
         $row = $this->getApplyRow($request, $cols);
         return $this->batchResponse($row, '가맹점');
     }

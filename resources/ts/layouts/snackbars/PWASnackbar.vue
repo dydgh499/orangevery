@@ -6,6 +6,7 @@ const shortcut = corp.dns + '-shortcut'
 const visible = ref(false)
 const service_worker = ref(false)
 const before_install_prompt = ref(false)
+const snackbar = <any>(inject('snackbar'))
 
 const isMobile = {
     Android: function () { return navigator.userAgent.match(/Android/i); },
@@ -36,6 +37,16 @@ const close = () => {
     visible.value = false
 }
 
+const show = () => {
+    if(before_install_prompt.value)
+        visible.value = true
+    else
+        snackbar.value.show('크롬브라우저 또는 엣지를 사용해주세요.', 'error')
+}
+
+defineExpose({
+    show
+});
 onMounted(() => {
     const loadManifest = () => {
         if(corp.logo_img) {

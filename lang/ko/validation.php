@@ -187,7 +187,7 @@ return [
         'use_collect_withdraw' => '모아서 출금 사용여부',
         'is_show_fee' => '가맹점 수수료율 노출여부',
         'sector' => '업종',
-        'enabled' => '전산 활성화 여부',
+        'merchant_status' => '가맹점 상태',
         'custom_id' => '커스텀 필터',
         'tax_category_type' => '사업자 유형',
         'contact_num' => '가맹점 연락처',

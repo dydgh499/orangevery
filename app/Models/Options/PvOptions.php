@@ -74,7 +74,6 @@
     class PaidOption 
     {
         public $use_dup_pay_validation = true; // 중복결제 검증 사용 여부
-        public $subsidiary_use_control = false; // 하위 영업점 전산 사용 ON/OFF
         public $use_acct_verification = false;  // 예금주 검증
         public $use_realtime_deposit = false;   // 실시간 결제모듈
         public $use_issuer_filter = false;      // 카드사 필터링
@@ -89,7 +88,6 @@
         public $use_regular_card = false;       // 단골고객 카드등록
         public $use_collect_withdraw = false;   // 모아서 출금
         public $use_collect_withdraw_scheduler = false; // 모아서 출금 스케줄링
-        public $use_withdraw_fee = true;       // 출금 수수료
         public $use_head_office_withdraw = false; // 가상계좌 출금
         public $use_noti = false;               // 노티 사용여부
         public $use_finance_van_deposit = false; // 금융 VAN 송금 사용여부

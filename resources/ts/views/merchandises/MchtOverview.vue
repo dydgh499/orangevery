@@ -12,7 +12,7 @@ import ProductCard from '@/views/merchandises/products/ProductCard.vue'
 import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
 import SpecifiedTimeDisablePaymentCard from '@/views/merchandises/specified-time-disable-payments/SpecifiedTimeDisablePaymentCard.vue'
 
-import { tax_category_types } from '@/views/merchandises/useStore'
+import { merchant_statuses, MerchantStatusColor, tax_category_types } from '@/views/merchandises/useStore'
 import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { StatusColorSetter } from '@/views/searcher'
@@ -401,10 +401,51 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card || corp.pv_options.paid.use_withdraw_fee">
+                        <VCol cols="12">
                             <VRow>
-                                <!-- 👉 단골고객 사용여부 -->
-                                <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_regular_card ">
+                                <VCol md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol>
+                                            <BaseQuestionTooltip :location="'top'" :text="'가맹점 상태'" :content="'- 정상 : 거래 유지 중<br>- 해지 : 승인X, 취소X, 가맹점 관리자 접속O<br>- 중지 : 승인X, 취소X, 가맹점 관리자 접속X'"/>
+                                        </VCol>
+                                        <VCol md="6">
+                                            <div class="batch-container">
+                                                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.merchant_status"
+                                                    :items="merchant_statuses"
+                                                    prepend-inner-icon="pajamas:status-health" label="가맹점 상태" item-title="title"
+                                                    item-value="id" single-line/>
+                                            </div>
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">가맹점 상태</VCol>
+                                        <VCol md="6">
+                                            <VChip :color="MerchantStatusColor(props.item.merchant_status)">
+                                                {{ merchant_statuses.find(obj => obj.id === props.item.merchant_status)?.title }}
+                                            </VChip>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol :md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol>지급이체 수수료</VCol>
+                                        <VCol md="6">
+                                            <div class="batch-container">
+                                            <VTextField v-model="props.item.withdraw_fee" type="number" suffix="₩"
+                                                :rules="[requiredValidatorV2(props.item.withdraw_fee, '지급이체 수수료')]" />
+                                            </div>
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">지급이체 수수료</VCol>
+                                        <VCol md="6"><span>{{ props.item.withdraw_fee }}₩</span></VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card">
+                            <VRow>
+                                <VCol :md="6" :cols="12">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>단골고객 사용여부</VCol>
                                         <VCol md="6">
@@ -420,21 +461,6 @@ watchEffect(() => {
                                     <VRow v-else>
                                         <VCol class="font-weight-bold">단골고객 사용여부</VCol>
                                         <VCol md="6"><span>{{ props.item.use_regular_card ? "사용" : "미사용" }}</span></VCol>
-                                    </VRow>
-                                </VCol>
-                                <VCol :md="6" v-if="corp.pv_options.paid.use_withdraw_fee">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>* 출금 수수료</VCol>
-                                        <VCol md="6">
-                                            <div class="batch-container">
-                                            <VTextField v-model="props.item.withdraw_fee" type="number" suffix="₩"
-                                                :rules="[requiredValidatorV2(props.item.withdraw_fee, '출금 수수료')]" />
-                                            </div>
-                                        </VCol>
-                                    </VRow>
-                                    <VRow v-else>
-                                        <VCol class="font-weight-bold">출금 수수료</VCol>
-                                        <VCol md="6"><span>{{ props.item.withdraw_fee }}₩</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>
@@ -516,38 +542,6 @@ watchEffect(() => {
                                     </VCol>
                                 </VRow>
                                 <VDivider style="margin: 1em 0;"/>
-                            </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.subsidiary_use_control || corp.pv_options.paid.use_hide_account">
-                                <VRow>
-                                    <VCol md="6" v-if="corp.pv_options.paid.subsidiary_use_control">
-                                        <VRow no-gutters style="align-items: center;">
-                                            <VCol>전산 사용상태</VCol>
-                                            <VCol md="6">
-                                                <div class="batch-container">
-                                                    <BooleanRadio :radio="props.item.enabled"
-                                                        @update:radio="props.item.enabled = $event">
-                                                        <template #true>ON</template>
-                                                        <template #false>OFF</template>
-                                                    </BooleanRadio>
-                                                </div>
-                                            </VCol>
-                                        </VRow>
-                                    </VCol>
-                                    <VCol md="6" v-if="corp.pv_options.paid.use_hide_account">
-                                        <VRow no-gutters style="align-items: center;">
-                                            <VCol>정산계좌 숨김</VCol>
-                                            <VCol md="6">
-                                                <div class="batch-container">     
-                                                    <BooleanRadio :radio="props.item.is_hide_account"
-                                                        @update:radio="props.item.is_hide_account = $event">
-                                                        <template #true>숨김</template>
-                                                        <template #false>노출</template>
-                                                    </BooleanRadio>
-                                                </div>
-                                            </VCol>
-                                        </VRow>
-                                    </VCol>
-                                </VRow>
                             </VCol>
                             <VCol cols="12">
                                 <VRow>

@@ -3,6 +3,17 @@ import { getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
 
+const getHeader = () => {
+    return [
+        { heading: '' },
+        {
+            title: '홈',
+            icon: { icon: 'tabler-smart-home' },
+            to: 'quick-view',
+        },
+    ]
+}
+
 const getMchtChildMenu = () => {
     const users = (<any>([
         { heading: 'User information' },
@@ -77,16 +88,15 @@ const getSettlementMenu = () => {
     }
 }
 
-const getAbilitiesMenu = computed(() => {
-    const { getPaymentMenu } = useQuickViewStore()
-    const services = [
+const getServiceMenu = () => {
+    const services = <any>([
         { heading: 'Service' },
         {
             title: '공지사항',
             icon: { icon: 'fe-notice-active' },
             to: 'posts',
         },
-    ]    
+    ])
     if(getUserLevel() === 10) {
         services.push({
             title: '민원관리',
@@ -94,20 +104,32 @@ const getAbilitiesMenu = computed(() => {
             to: 'complaints',
         })
     }
-    return [
-        { heading: '' },
-        {
-            title: '홈',
-            icon: { icon: 'tabler-smart-home' },
-            to: 'quick-view',
-        },
+    services.push({
+        title: '설치하기',
+        icon: { icon: 'tabler:download' },
+        class: 'install()'
+    })
+    return services
+}
+
+const getAbilitiesMenu = computed(() => {
+    const menu = [
+        ...getHeader(),
         ...getMchtChildMenu(),
         { heading: 'Transaction' },
-        getPaymentMenu,
+    ]
+    if(getUserLevel() === 10) {
+        const { getPaymentMenu } = useQuickViewStore()
+        if(getPaymentMenu.children.length > 0) {
+            menu.push(getPaymentMenu)
+        }
+    }
+    menu.push(        
         getTransactionMenu(),
         getSettlementMenu(),
-        ...services,
-    ]
+        ...getServiceMenu()
+    )
+    return menu
 })
 export default getAbilitiesMenu
 

@@ -13,8 +13,19 @@ export const tax_category_types = <Options[]>([
 ])
 
 export const merchant_statuses  = <Options[]>([
-    {id:0, title:'정상'}, {id:1, title:'중지'}, {id:2, title: '해지'} 
+    {id:0, title:'정상'}, {id:1, title:'해지'}, {id:2, title: '중지'} 
 ])
+
+export const MerchantStatusColor = (merchant_status: number) => {
+    if(merchant_status === 0)
+        return 'success'
+    else if(merchant_status === 1)
+        return 'error'
+    else if(merchant_status === 2)
+        return 'warning'
+    else
+        return 'default'
+}
 
 const getMchtHeaders = (head :any) => {
     const getIdCol = () => {
@@ -120,8 +131,7 @@ const getMchtHeaders = (head :any) => {
 
     const getSecureCols = () => {
         const headers_8:Record<string, string> = {}
-        if (corp.pv_options.paid.subsidiary_use_control)
-            headers_8['enabled'] = '전산사용여부'
+        headers_8['merchant_status'] = '가맹점 상태'
         if(getUserLevel() >= 35 || (getUserLevel() >= 13 && user_info.value.is_able_unlock_mcht)) {
             headers_8['is_lock'] = '계정잠김여부'
             headers_8['locked_at'] = '계정잠금시간'
@@ -381,7 +391,7 @@ export const defaultItemInfo = () => {
         // options
         tax_category_type: 0,
         custom_id: null,
-        enabled: 1,
+        merchant_status: 0,
         use_saleslip_prov: 1,
         use_saleslip_sell: 0,
         is_show_fee: Number(corp.pv_options.free.default.is_show_fee),

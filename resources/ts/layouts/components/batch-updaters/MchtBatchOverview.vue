@@ -6,6 +6,7 @@ import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import { merchant_statuses } from '@/views/merchandises/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Options } from '@/views/types'
@@ -56,7 +57,7 @@ const merchandise = reactive<any>({
     acct_name: "",
     bank: { code: null, title: '선택안함' },
     business_num: "",
-    enabled: 1,
+    merchant_status: 0,
     is_show_fee: 0,
     phone_auth_limit_count: 0,
     phone_auth_limit_s_tm:'00:00',
@@ -91,9 +92,9 @@ const setMchtFee = async (apply_type: number) => {
     }, apply_type)
 }
 
-const setEnabled = (apply_type: number) => {
-    post('set-enabled', {
-        'enabled': Number(merchandise.enabled),
+const setMerchantStatus = (apply_type: number) => {
+    post('set-merchant-status', {
+        'merchant_status': Number(merchandise.merchant_status),
     }, apply_type)
 }
 
@@ -468,20 +469,20 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.subsidiary_use_control">
+                        <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="merchandise.enabled" 
-                                        :items="[{id:0, title:'OFF'}, {id:1, title:'ON'}]" item-title="title" item-value="id" 
-                                        label="전산 사용상태"/>
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="merchandise.merchant_status" 
+                                        :items="merchant_statuses" item-title="title" item-value="id" 
+                                        label="가맹점 상태"/>
                                 </VCol>
                                 <VCol md="6" cols="12">
                                     <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setEnabled(0)">
+                                        <VBtn variant="tonal" size="small" @click="setMerchantStatus(0)">
                                             즉시적용
                                             <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
-                                        <VBtn variant="tonal" size="small" color="secondary" @click="setEnabled(1)"
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setMerchantStatus(1)"
                                             style='margin-left: 0.5em;'>
                                             예약적용
                                             <VIcon end size="18" icon="tabler-clock-up" />

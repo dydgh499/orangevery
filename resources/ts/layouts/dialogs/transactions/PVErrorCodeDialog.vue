@@ -32,8 +32,7 @@ const setErrorCode = () => {
     ])
     if(corp.pv_options.paid.use_dup_pay_validation)
         errors.value.push(getErrorContent('411', '동일카드는 하루에 최대 n번만 결제가 가능합니다.', '동일카드 ', '해당 결제모듈에서 동일카드 결제허용 회수 수정'))
-    if(corp.pv_options.paid.subsidiary_use_control)
-        errors.value.push(getErrorContent('412', '사용불가 가맹점 입니다.', '사용불가 가맹점', '해당 가맹점에서 전산 사용상태 수정'))
+    errors.value.push(getErrorContent('412', '사용불가 가맹점 입니다.', '사용불가 가맹점', '해당 가맹점에서 가맹점 상태 수정'))
 
     errors.value.push(...[
         getErrorContent('413', '결제 정보가 잘못되었습니다. 상위 PG사에 문의하세요.', '', '결제정보 재확인'),

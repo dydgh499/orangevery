@@ -10,16 +10,18 @@ defineProps<{
 }>()
 
 const payShow  = <any>(inject('payShow'))
-
 const { width: windowWidth } = useWindowSize()
 const { isVerticalNavMini, dynamicI18nProps } = useLayouts()
 const hideTitleAndBadge = isVerticalNavMini(windowWidth)
+const pwaSnackbar = <any>(inject('pwaSnackbar'))
 
 const TapFunctionNavi = (item: NavLink) => {
     if(item.class == 'payWindow()')
         payShow.value.show(item.params)
     else if(item.class === `shop()`)
         window.open(window.location.origin + `/shop/${item.params.window_code}`, '_blank', "toolbar=no,scrollbars=no,resizable=no,status=no,menubar=no,width=1000, height=1200")
+    else if(item.class === `install()`)
+        pwaSnackbar.value.show()
 }
 </script>
 
