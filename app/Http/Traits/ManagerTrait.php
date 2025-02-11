@@ -109,7 +109,7 @@ trait ManagerTrait
 
                 if(env('FILESYSTEM_DISK') === 's3')
                     $data[$cols[$i]] = $this->ToS3($folders[$i], $img, $name);
-                if(env('FILESYSTEM_DISK') === 'n-cloud')
+                else if(env('FILESYSTEM_DISK') === 'n-cloud')
                     $data[$cols[$i]] = $this->ToNCloud($folders[$i], $img, $name);
                 else if(env('FILESYSTEM_DISK') === 'cloudinary')
                     $data[$cols[$i]] = $this->ToCloudinary($folders[$i], $img, $name);
