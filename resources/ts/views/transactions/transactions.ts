@@ -213,7 +213,7 @@ export const realtimeHistoryInterface = (formatTime: any) => {
                 selected_idxs: trx_ids
             }, true)
         }
-    }    
+    }
 
     const realtimeRetry = async (item: Transaction) => {
         if (await alert.value.show('정말 해당 거래건을 재이체(정산) 하시겠습니까?')) {

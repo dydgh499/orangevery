@@ -288,7 +288,6 @@ return [
         'filter_issuers' => '카드사 필터',
         'pay_window_secure_level' => '결제창 보안등급',
         'pay_window_extend_hour' => '결제창 연장시간',
-        'show_pay_view' => '결제창 노출여부',
         //finance van
         'receive_phone' => '수신자 전화번호',
         'sender_phone' => '발신자 전화번호',

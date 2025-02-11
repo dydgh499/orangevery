@@ -25,9 +25,9 @@ Route::prefix('salesforces/batch-updaters')->group(function() {
     
 Route::prefix('merchandises/batch-updaters')->group(function() {
     Route::post('set-noti-url', [BatchUpdateMchtController::class, 'setNotiUrl']);
-    Route::post('set-merchant-status', [BatchUpdateMchtController::class, 'setEnabled']);
+    Route::post('set-merchant-status', [BatchUpdateMchtController::class, 'setMerchantStatus']);
     Route::post('set-custom-filter', [BatchUpdateMchtController::class, 'setCustomFilter']);
-    Route::post('set-business-num', [BatchUpdateMchtController::class, 'setMerchantStatus']);
+    Route::post('set-business-num', [BatchUpdateMchtController::class, 'setBusinessNum']);
     Route::post('set-resident-num', [BatchUpdateMchtController::class, 'setResidentNum']);
     Route::post('set-account-info', [BatchUpdateMchtController::class, 'setAccountInfo']);
     Route::post('set-show-fee', [BatchUpdateMchtController::class, 'setShowFee']);
