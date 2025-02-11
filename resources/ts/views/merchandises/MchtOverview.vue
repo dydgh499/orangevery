@@ -541,11 +541,10 @@ watchEffect(() => {
                                         </VRow>
                                     </VCol>
                                 </VRow>
-                                <VDivider style="margin: 1em 0;"/>
                             </VCol>
                             <VCol cols="12">
+                                <VDivider style="margin-bottom: 1em;"/>
                                 <VRow>
-                                    <!-- 👉 노티 발송 여부 -->
                                     <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_noti">
                                         <VRow no-gutters style="align-items: center;">
                                             <VCol>노티 발송 여부</VCol>

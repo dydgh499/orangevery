@@ -175,13 +175,18 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
                 {title: '실시간 사용여부(X)', key: 'use_realtime_deposit'},
                 {title: '이체 모듈 타입(X)', key: 'fin_id'},
                 {title: '이체 딜레이(X)', key: 'fin_trx_delay'},
+                {title: '출금금지타입(X)', key: 'withdraw_limit_type'},
             )
         }
         return [...headers1, ...headers2]
     }
     
     const isPrimaryHeader = (key: string) => {
-        const keys = ['pg_id', 'ps_id', 'is_old_auth', 'comm_settle_type', 'cxl_type', 'module_type', 'terminal_id', 'comm_calc_level', 'under_sales_type']
+        const keys = [
+            'pg_id', 'ps_id', 'settle_type', 'is_old_auth', 
+            'comm_settle_type', 'cxl_type', 'module_type', 'terminal_id', 
+            'comm_calc_level', 'under_sales_type', 'withdraw_limit_type'
+        ]
         if(corp.pv_options.paid.use_realtime_deposit)
         {
             keys.push('fin_id')

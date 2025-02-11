@@ -126,9 +126,8 @@ export const getViewType = () => {
 
 export const isAbleModiy = (id: number) => {
     const isAbleModifyMcht = () => {
-        if(getUserLevel() > 10 && getUserLevel() < 35) {
+        if(getUserLevel() > 10 && getUserLevel() < 35)
             return user_info.value.is_able_modify_mcht ? true : false
-        }
         else
             return false
     }

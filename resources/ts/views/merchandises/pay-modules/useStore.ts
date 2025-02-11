@@ -91,6 +91,13 @@ export const pay_limit_types = <Options[]>([
     {id: 3, title:'주말+공휴일 결제금지'},
 ])
 
+export const withdraw_limit_types = <Options[]>([
+    {id: 0, title:'설정안함'},
+    {id: 1, title:'주말 출금금지'},
+    {id: 2, title:'공휴일 출금금지'},
+    {id: 3, title:'주말+공휴일 출금금지'},
+])
+
 export const payModFilter = (all_pay_modules:PayModule[], filter:PayModule[], pmod_id:number|null) => {
     if (all_pay_modules.length > 0) {
         if (filter.length > 0) {

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import Preview from '@/layouts/utils/Preview.vue'
-import { isAbleModiy } from '@axios'
+import { isAbleModiy } from '@axios';
+import { checkDirectObjectV2 } from '@validators';
 
 interface Props {
     preview: string,
@@ -19,19 +19,8 @@ const getFileExtension = (file_name: string) => {
 const props = defineProps<Props>()
 const files = ref(<File[]>([]))
 const ext = ref<string>('')
-const preview_style = `
-    border: 1px solid rgb(130, 130, 130);
-    border-radius: 0.5em;
-    margin-block: 0;
-    margin-inline: 0.5em;
-`;
 
 const emits = defineEmits(['update:file', 'update:path']);
-
-const remove = () => {
-    ext.value = 'svg' 
-    emits('update:path', '/utils/icons/img-preview.svg')
-}
 
 const upload = () => {
     if(files.value.length) {
@@ -40,6 +29,11 @@ const upload = () => {
         emits('update:path', URL.createObjectURL(files.value[0]))
     }
 }
+
+const open = (link: string) => {
+    window.open(link)
+}
+
 watchEffect(() => {
     if(files.value.length === 0)
         ext.value = getFileExtension(props.preview)
@@ -50,27 +44,39 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VRow no-gutters style="align-items: flex-start;">
-        <VCol cols="12" md="6">
-            <template v-if="isAbleModiy(0)">
-                <VFileInput accept=".jpg,.bmp,.png,.jpeg,.webp,.pdf" v-model="files" :label="label"  @change="upload()" >
-                    <template #selection="{ fileNames }">
-                    <template v-for="fileName in fileNames" :key="fileName">
-                        <VChip label size="small" variant="outlined" color="primary" class="me-2">
-                            {{ fileName }}
-                        </VChip>
+    <VRow>
+        <VCol cols="12" md="12">
+            <VAlert border="start" border-color="primary">
+                <div>
+                    <template v-if="isAbleModiy(0)">
+                        <VFileInput 
+                            style="padding-top: 0.5em;"
+                            variant="underlined" accept=".jpg,.bmp,.png,.jpeg,.webp,.pdf" 
+                            v-model="files" :label="label" @change="upload()" >
+                            <template #selection="{ fileNames }">
+                            <template v-for="fileName in fileNames" :key="fileName">
+                                <VChip label size="small" variant="outlined" color="primary" class="me-2">
+                                    {{ fileName }}
+                                </VChip>
+                            </template>
+                        </template>
+                        </VFileInput>
+                        <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                            jpg,bmp,png,jpeg,webp,pdf만 업로드 가능합니다.
+                        </VTooltip>
                     </template>
-                </template>
-                </VFileInput>
-                <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
-                    jpg,bmp,png,jpeg,webp,pdf만 업로드 가능합니다.
-                </VTooltip>
-            </template>
-            <span v-else>{{ label.replace(' 업로드', '') }}</span>
-        </VCol>
-        <VCol cols="12" md="6">
-            <DialogCloseBtn class="close-btn" @click="remove()" v-if="props.preview !== '/utils/icons/img-preview.svg' && files.length === 0 && isAbleModiy(0)"/>
-            <Preview :preview="props.preview" :style="``" :preview-style="preview_style" class="preview" :ext="ext"/>
+                    <div v-if="props.preview !== '/utils/icons/img-preview.svg'">
+                        <VChip color="primary" style="margin-top: 1em; float: inline-end;" @click="open(props.preview)">
+                            {{ label.replace('업로드', '') }} 확인하기
+                        </VChip>
+                    </div>
+                    <div v-else>
+                        <VChip color="default" style="margin-top: 1em; float: inline-end;">
+                            {{ checkDirectObjectV2(label.replace(' 업로드', '')) }} 등록되지 않았습니다.
+                        </VChip>
+                    </div>
+                </div>
+            </VAlert>
         </VCol>
     </VRow>
 </template>

@@ -59,6 +59,7 @@ Route::prefix('merchandises/pay-modules/batch-updaters')->group(function() {
     Route::post('set-pay-limit', [BatchUpdatePayModuleController::class, 'setPayLimit']);
     Route::post('set-pay-disable-time', [BatchUpdatePayModuleController::class, 'setForbiddenPayTime']);
     Route::post('set-use-realtime-deposit', [BatchUpdatePayModuleController::class, 'setUseRealtimeDeposit']);
+    Route::post('set-withdraw-limit-type', [BatchUpdatePayModuleController::class, 'setWithdrawLimitType']);
     Route::post('set-fin-id', [BatchUpdatePayModuleController::class, 'setFinId']);
     Route::post('set-fin-trx-delay', [BatchUpdatePayModuleController::class, 'setFinTrxDelay']);
     Route::post('set-payment-term-min', [BatchUpdatePayModuleController::class, 'setPaymentTermMin']);

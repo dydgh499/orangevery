@@ -5,7 +5,7 @@ import { batch } from '@/layouts/components/batch-updaters/batch'
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
-import { cxl_types, fin_trx_delays, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore'
+import { cxl_types, fin_trx_delays, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels, withdraw_limit_types } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
@@ -65,6 +65,7 @@ const pay_module = reactive<any>({
     pay_window_extend_hour: 1,
     cxl_type: 0,
     pay_limit_type: 0,
+    withdraw_limit_type: 0,
 })
 
 const setPaymentGateway = (apply_type: number) => {
@@ -113,6 +114,11 @@ const setForbiddenPayTime = (apply_type: number) => {
 const setUseRealtimeDeposit = (apply_type: number) => {
     post('set-use-realtime-deposit', {
         'use_realtime_deposit': pay_module.use_realtime_deposit,
+    }, apply_type)
+}
+const setWithdrawLimitType = (apply_type: number) => {
+    post('set-withdraw-limit-type', {
+        'withdraw_limit_type': pay_module.withdraw_limit_type,
     }, apply_type)
 }
 
@@ -209,9 +215,13 @@ const setPayLimitType = (apply_type: number) => {
 }
 
 const filterPgs = computed(() => {
-    const filter = pss.filter(item => { return item.pg_id == pay_module.pg_id })
-    pay_module.ps_id = psFilter(filter, pay_module.ps_id)
-    return filter
+    if(pay_module.pg_id) {
+        const filter = pss.filter(item => { return item.pg_id == pay_module.pg_id })
+        pay_module.ps_id = psFilter(filter, pay_module.ps_id)
+        return filter
+    }
+    else
+        return []
 })
 
 watchEffect(() => {
@@ -795,6 +805,28 @@ watchEffect(() => {
                         <VCol :md="6" :cols="12" >
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.withdraw_limit_type"
+                                            :items="withdraw_limit_types" prepend-inner-icon="streamline-emojis:pig" label="출금제한타입"
+                                            item-title="title" item-value="id"/>
+                                </VCol>
+                                <VCol md="6" col="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setWithdrawLimitType(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setWithdrawLimitType(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md="6" :cols="12" >
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12">
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.use_realtime_deposit"
                                             :items="is_realtime_deposit_use" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
                                             item-title="title" item-value="id" label="실시간 사용여부" />
@@ -814,6 +846,8 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
+                    </VRow>
+                    <VRow>
                         <VCol :md="6" :cols="12" >
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
@@ -836,8 +870,6 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                    </VRow>
-                    <VRow>
                         <VCol :md="6" :cols="12" >
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">

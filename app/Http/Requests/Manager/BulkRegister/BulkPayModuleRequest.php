@@ -36,6 +36,7 @@ class BulkPayModuleRequest extends FormRequest
         'under_sales_limit',
         'under_sales_type',
         'pay_limit_type',
+        'withdraw_limit_type',
     ];
     public $string_keys = [
         'api_key',

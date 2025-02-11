@@ -81,7 +81,6 @@ class SalesforceOverlap
     static private function getParents($request)
     {
         $parents = [];
-
         $parent_id = $request->user()->parent_id;
         if($parent_id)
         {
@@ -96,12 +95,15 @@ class SalesforceOverlap
                         'mcht_batch_fee', 'business_num', 'is_lock', 'locked_at'
                     ]);
                 if($parent)
+                {
                     $parents[] = $parent;
-
-                if($parent->parent_id === null)
-                    return $parents;
+                    if($parent->parent_id === null)
+                        return $parents;
+                    else
+                        $parent_id = $parent->parent_id;
+                }
                 else
-                    $parent_id = $parent->parent_id;
+                    return $parents;
             }
             return $parents;
         }

@@ -3,7 +3,7 @@ import ProfileDialog from '@/layouts/dialogs/users/ProfileDialog.vue'
 import FileInput from '@/layouts/utils/FileInput.vue'
 import type { UserPropertie } from '@/views/types'
 import { avatars, banks, getOnlyNumber, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore'
-import { axios, getUserLevel, isAbleModiy } from '@axios'
+import { axios, getUserLevel, isAbleModiy, user_info } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -78,6 +78,23 @@ const formatBusinessNum = computed(() => {
     else
         business_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 5) + '-' + raw_value.slice(5, 10);
 })
+
+const isViewAbleContractFile = () => {
+    if(getUserLevel() >= 35)
+        return true
+    else {
+        if(props.item.id) {
+            if(props.is_mcht && getUserLevel() === 10 && props.item.id === user_info.value.id)
+                return true
+            else if(props.is_mcht === false && getUserLevel() > 10 && props.item.id === user_info.value.id)
+                return true
+            else
+                return false
+        }
+        else
+            return isAbleModiy(0)
+    }
+}
 
 watchEffect(() => {
     props.item.resident_num = props.item.resident_num_front + props.item.resident_num_back
@@ -329,7 +346,7 @@ watchEffect(() => {
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol cols="12" md="6" v-if="getUserLevel() >= 35 || (corp.id !== 35 && corp.id !== 18)">
+        <VCol cols="12" md="6" v-if="isViewAbleContractFile()">
             <VCard>
                 <VCardItem>
                     <VCardTitle>계약파일</VCardTitle>
@@ -375,7 +392,7 @@ watchEffect(() => {
                         </span>
 
                     </div>
-                    <VCardItem v-if="props.id">
+                    <VCardItem v-if="props.item.id">
                         <VCardTitle>SYSLINK 연동정보</VCardTitle>
                         <span :class="props.item?.syslink?.code === 'SUCCESS' ? 'text-success' : 'text-error'">{{ props.item?.syslink?.message }}</span>
                     </VCardItem>

@@ -88,7 +88,6 @@ watchEffect(async () => {
                 <template #name>
                     <VCol style="padding: 0 2em;">
                         <h3 class="pt-3">영업점 정보</h3>
-                        <br>
                         <VRow>
                             <VCol md="4" cols="12">
                                 <VRow>
@@ -97,7 +96,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank"
                                             :items="banks"
                                             label="은행 검색"
-                                            :hint="`은행 코드: ${bank.code} `"
+                                            :hint="`은행 코드: ${bank?.code || ''} `"
                                             item-title="title" item-value="code" persistent-hint return-object
                                         />
                                     </VCol>
@@ -111,7 +110,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="level"
                                             :items="all_sales"
                                             label="등급 검색"
-                                            :hint="`등급 코드: ${level.id} `"
+                                            :hint="`등급 코드: ${level ? level.id : ''} `"
                                             item-title="title" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>
@@ -132,7 +131,6 @@ watchEffect(async () => {
                         </VRow>
                         <VDivider style="margin: 1em 0;" />
                         <h3 class="pt-3">정산정보</h3>
-                        <br>
                         <VRow>
                             <VCol md="4" cols="12">
                                 <VRow>
@@ -141,7 +139,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="tax_type"
                                             :items="tax_types"
                                             label="정산세율 검색"
-                                            :hint="`정산세율 코드: ${tax_type.id} `"
+                                            :hint="`정산세율 코드: ${tax_type ? tax_type.id : ''} `"
                                             item-title="title" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>
@@ -155,7 +153,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="all_cycle"
                                             :items="all_cycles"
                                             label="등급 검색"
-                                            :hint="`정산주기 코드: ${all_cycle.id} `"
+                                            :hint="`정산주기 코드: ${all_cycle ? all_cycle.id : ''} `"
                                             item-title="title" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>
@@ -168,7 +166,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="all_day"
                                             :items="all_days"
                                             label="정산일 검색"
-                                            :hint="all_day.id === null ? `정산일 코드:` : `정산일 코드: ${all_day.id} `"
+                                            :hint="`정산일 코드: ${all_day ? all_day.id : ''} `"
                                             item-title="title" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>

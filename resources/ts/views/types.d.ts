@@ -269,6 +269,7 @@ export interface PayModule {
     pay_window?: PayWindow | null,
     is_different_settlement: number,
     pay_limit_type: number,
+    withdraw_limit_type: number,
 }
 
 export interface PayGateway {

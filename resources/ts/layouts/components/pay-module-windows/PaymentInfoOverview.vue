@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import corp from '@/plugins/corp'
-import { fin_trx_delays } from '@/views/merchandises/pay-modules/useStore'
+import { fin_trx_delays, withdraw_limit_types } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayModule } from '@/views/types'
 import { axios, getUserLevel, isAbleModiy } from '@axios'
@@ -263,35 +263,22 @@ watchEffect(() => {
 
         <template v-if="corp.pv_options.paid.use_realtime_deposit">
             <VDivider style="margin: 1em 0;" />
-            <VCardSubtitle>즉시출금 정보</VCardSubtitle>
-            <br>
-            <VRow v-if="isAbleModiy(props.item.id)">
-                <VCol md="6">
-                    <VSwitch hide-details :false-value=0 :true-value=1 
+            <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
+                <span>출금정보</span>
+                <div style="display: inline-block;">
+                    <VSwitch v-if="isAbleModiy(props.item.id)" 
+                        hide-details :false-value=0 :true-value=1 
                         v-model="props.item.use_realtime_deposit"
-                        label="즉시출금 사용" color="warning"
-                        />
-                </VCol>
-                <VCol md="6" cols="6">                    
-                    <VTextField v-model="props.item.settle_fee" type="number" suffix="₩" label="이체 수수료"
-                            :rules="[requiredValidatorV2(props.item.settle_fee, '이체 수수료')]" />
-                </VCol>
-            </VRow>
-            <VRow v-else>
-                <VCol md="5" cols="6">
-                    <span class="font-weight-bold">즉시출금 사용여부</span>
-                </VCol>
-                <VCol md="7" cols="6">
-                    {{ props.item.use_realtime_deposit ? "O" : "X" }}
-                </VCol>
-                <VCol md="5" cols="6">
-                    <span class="font-weight-bold">이체 수수료</span>
-                </VCol>
-                <VCol md="7" cols="6">
-                    {{ props.item.settle_fee }} ₩
-                </VCol>
-            </VRow>
-
+                        label="출금사용여부" color="warning"
+                    />
+                    <template v-else>
+                        <VChip :color="props.item.use_realtime_deposit ? 'success' : 'error'">
+                            {{ props.item.use_realtime_deposit ? "출금사용" : "출금미사용" }}
+                        </VChip>
+                    </template>
+                </div>
+            </VCardSubtitle>
+            <br>
             <VRow v-if="isAbleModiy(props.item.id)">
                 <VCol md="6" cols="12">
                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_id" :items="finance_vans"
@@ -307,8 +294,32 @@ watchEffect(() => {
                     </VTooltip>
                 </VCol>
             </VRow>
+            <VRow v-if="isAbleModiy(props.item.id)">
+                <VCol md="6">
+                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.withdraw_limit_type"
+                        :items="withdraw_limit_types" prepend-inner-icon="streamline-emojis:pig" label="출금제한타입"
+                        item-title="title" item-value="id"/>
+                </VCol>
+                <VCol md="6" cols="6">                    
+                    <VTextField v-model="props.item.settle_fee" type="number" suffix="₩" label="이체 수수료"
+                            :rules="[requiredValidatorV2(props.item.settle_fee, '이체 수수료')]" />
+                </VCol>
+            </VRow>
+            <VRow v-else>
+                <VCol md="5" cols="6">
+                    <span class="font-weight-bold">출금제한타입</span>
+                </VCol>
+                <VCol md="7" cols="6">
+                    {{ withdraw_limit_types.find(obj => obj.id === props.item.withdraw_limit_type )?.title }}
+                </VCol>
+                <VCol md="5" cols="6">
+                    <span class="font-weight-bold">이체 수수료</span>
+                </VCol>
+                <VCol md="7" cols="6">
+                    {{ props.item.settle_fee }} ₩
+                </VCol>
+            </VRow>
         </template>
-
     </VCardItem>
 </template>
 <style scoped>

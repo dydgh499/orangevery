@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import corp from '@/plugins/corp'
 import { Registration } from '@/views/registration'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useRegisterStore, validateItems } from '@/views/services/bulk-register/RegularCardRegisterStore'

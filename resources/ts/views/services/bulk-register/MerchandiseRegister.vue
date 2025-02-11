@@ -98,7 +98,6 @@ watchEffect(async () => {
                 <template #name>
                     <VCol style="padding: 0 2em;">
                         <h3 class="pt-3">가맹점 정보</h3>
-                        <br>
                         <VRow>
                             <VCol md="4" cols="12">
                                 <VRow>
@@ -107,7 +106,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank"
                                             :items="banks"
                                             label="은행 검색"
-                                            :hint="`은행 코드: ${bank.code} `"
+                                            :hint="`은행 코드: ${bank ? bank.code : ''} `"
                                             item-title="title" item-value="code" persistent-hint return-object
                                         />
                                     </VCol>
@@ -120,7 +119,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="tax_category_type"
                                             :items="tax_category_types"
                                             label="사업자 유형 검색"
-                                            :hint="`사업자 유형 코드: ${tax_category_type.id} `"
+                                            :hint="`사업자 유형 코드: ${tax_category_type ? tax_category_type.id : ''} `"
                                             item-title="title" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>
@@ -133,7 +132,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="cus_filter"
                                             :items="cus_filters"
                                             label="커스텀 필터 검색"
-                                            :hint="`커스텀 필터 코드: ${cus_filter.id} `"
+                                            :hint="`커스텀 필터 코드: ${cus_filter ? cus_filter.id : ''} `"
                                             item-title="name" item-value="id" persistent-hint return-object
                                         />
                                         <VTooltip activator="parent" location="top" transition="scale-transition" v-if="cus_filters.length == 0">
@@ -145,7 +144,6 @@ watchEffect(async () => {
                         </VRow>
                         <VDivider style="margin: 1em 0;" />
                         <h3 class="pt-3">옵션 정보</h3>
-                        <br>
                         <VRow>
                             <VCol md="4" cols="12" v-if="corp.pv_options.paid.use_collect_withdraw">
                                 <VRow>

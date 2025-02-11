@@ -101,7 +101,7 @@ defineExpose({
         <!-- Dialog close btn -->
         <DialogCloseBtn @click="visible = false" />
         <!-- Dialog Content -->
-        <VCard title="PV 전산내 에러코드">
+        <VCard title="결제/취소 에러코드">
             <VCardText>
                 <VTable class="text-no-wrap" style="width: 100%;">
                     <thead>

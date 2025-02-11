@@ -25,7 +25,7 @@ provide('exporter', exporter)
             <template #index_extra_field>
                 <VBtn prepend-icon="line-md:emoji-frown-twotone" @click="pvErrorCodeDialog.show()" v-if="getUserLevel() >= 35" color="error" size="small"
                     :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
-                    에러코드 정의
+                    결제/취소 에러코드 정의
                 </VBtn>
             </template>
             <template #headers>

@@ -334,6 +334,14 @@ class BatchUpdatePayModuleController extends BatchUpdateController
         return $this->batchResponse($row, '결제모듈');
     }
 
+    public function setWithdrawLimitType(Request $request)
+    {
+        $cols = ['withdraw_limit_type' => $request->withdraw_limit_type];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '결제모듈');
+    }
+
+
     
     /**
      * 결제모듈 대량등록

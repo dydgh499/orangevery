@@ -2,7 +2,7 @@
 import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_types, pay_window_secure_levels, under_sales_types, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
+import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_types, pay_window_secure_levels, under_sales_types, useSearchStore, withdraw_limit_types } from '@/views/merchandises/pay-modules/useStore'
 import { Registration } from '@/views/registration'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { keyCreater, useRegisterStore, validateItems } from '@/views/services/bulk-register/PayModRegisterStore'
@@ -41,6 +41,7 @@ const is_clear = ref<boolean>(false)
 const midCreateDlg = ref()
 const finance_van = ref({id: null, title: ''})
 const fin_trx_delay = ref(fin_trx_delays[0])
+const withdraw_limit_type = ref({id: null, title: ''})
 
 const comm_settle_type = ref(comm_settle_types[0])
 const under_sales_type = ref(under_sales_types[0])
@@ -53,9 +54,13 @@ const pg = ref({id: null, pg_name: ''})
 const ps = ref({id: null, name: ''})
 
 const filterPgs = computed(() => {
-    const filter = pss.filter(item => { return item.pg_id === pg.value.id })
-    ps.value.id = psFilter(filter, ps.value.id)
-    return filter
+    if(pg.value) {
+        const filter = pss.filter(item => { return item.pg_id === pg.value.id })
+        ps.value.id = psFilter(filter, ps.value.id)
+        return filter
+    }
+    else
+        return []
 })
 
 const use_types: Options[] = [
@@ -172,7 +177,6 @@ watchEffect(async () => {
                 <template #name>
                     <VCol>
                         <h3 class="pt-3">정산 정보</h3>
-                        <br>
                         <VRow>
                             <VCol md="4" cols="12">
                                 <VRow>
@@ -181,7 +185,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="settle_type"
                                             :items="settle_types"
                                             label="가맹점 정산타입 검색"
-                                            :hint="`가맹점 정산타입 코드: ${settle_type.id} `"
+                                            :hint="`가맹점 정산타입 코드: ${settle_type ? settle_type.id : ''} `"
                                             item-title="name" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>
@@ -194,7 +198,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="pg"
                                             :items="pgs"
                                             label="PG사 검색"
-                                            :hint="`PG사 코드: ${pg.id} `"
+                                            :hint="`PG사 코드: ${pg ? pg.id : ''} `"
                                             item-title="pg_name" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>
@@ -207,7 +211,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="ps"
                                             :items="filterPgs"
                                             label="구간 검색"
-                                            :hint="`구간 코드: ${ps.id} `"
+                                            :hint="`구간 코드: ${ps ? ps.id : ''} `"
                                             item-title="name" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>
@@ -216,7 +220,6 @@ watchEffect(async () => {
                         </VRow>
                         <VDivider style="margin: 1em 0;" />
                         <h3 class="pt-3">결제 정보</h3>
-                        <br>
                         <VRow>
                             <VCol md="4" cols="12">
                                 <VRow>
@@ -225,7 +228,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="module_type"
                                             :items="module_types"
                                             label="결제모듈 타입 검색"
-                                            :hint="`결제모듈 타입 코드: ${module_type.id} `"
+                                            :hint="`결제모듈 타입 코드: ${module_type ? module_type.id : ''} `"
                                             item-title="title" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>
@@ -246,7 +249,6 @@ watchEffect(async () => {
                         </VRow>
                         <VDivider style="margin: 1em 0;" />
                         <h3 class="pt-3">제한 정보</h3>
-                        <br>
                         <VRow>
                             <VCol md="4" cols="12">
                                 <VRow>
@@ -255,7 +257,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="cxl_type"
                                             :items="cxl_types"
                                             label="취소 타입 검색"
-                                            :hint="`취소 타입 코드: ${cxl_type.id} `"
+                                            :hint="`취소 타입 코드: ${cxl_type ? cxl_type.id : ''} `"
                                             item-title="title" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>
@@ -268,7 +270,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="pay_window_secure_level"
                                             :items="pay_window_secure_levels"
                                             label="결제창 보안등급 검색"
-                                            :hint="`결제창 보안등급 코드: ${pay_window_secure_level.id} `"
+                                            :hint="`결제창 보안등급 코드: ${pay_window_secure_level ? pay_window_secure_level.id : ''} `"
                                             item-title="title" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>
@@ -280,7 +282,6 @@ watchEffect(async () => {
                             <BaseQuestionTooltip :location="'top'" :text="'장비 정보'"
                         :content="'<b>통신비, 통신비 정산타입, 개통일, 정산일, 정산주체</b>가 설정되어있어야 적용됩니다.<br>ex)<br>통신비: 30,000<br>통신비 정산타입: 개통월 M+2부터 적용<br>개통일: 2023-09-25<br>정산일: 1일<br>정산주체: 가맹점<br><br>통신비 차감적용일: 2023-11-01, 2023-12-01, 2024-01-01 ...'"/>
                         </h3>
-                        <br>
                         <VRow>
                             <VCol md="4" cols="12">
                                 <VRow>
@@ -289,7 +290,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="comm_settle_type"
                                             :items="comm_settle_types"
                                             label="통신비 정산타입 검색"
-                                            :hint="`통신비 정산타입 코드: ${comm_settle_type.id} `"
+                                            :hint="`통신비 정산타입 코드: ${comm_settle_type ? comm_settle_type.id : ''} `"
                                             item-title="title" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>
@@ -302,7 +303,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="under_sales_type"
                                             :items="under_sales_types"
                                             label="매출미달 적용타입 검색"
-                                            :hint="`매출미달 적용타입 코드: ${under_sales_type.id} `"
+                                            :hint="`매출미달 적용타입 코드: ${under_sales_type ? under_sales_type.id : ''} `"
                                             item-title="title" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>
@@ -315,7 +316,7 @@ watchEffect(async () => {
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="all_level"
                                             :items="all_levels"
                                             label="정산주체 검색"
-                                            :hint="`정산주체 코드: ${all_level.id} `"
+                                            :hint="`정산주체 코드: ${all_level ? all_level.id : ''} `"
                                             item-title="title" item-value="id" persistent-hint return-object
                                         />
                                     </VCol>
@@ -325,7 +326,6 @@ watchEffect(async () => {
                         <template v-if="corp.pv_options.paid.use_realtime_deposit">
                             <VDivider style="margin: 1em 0;" />
                             <h3 class="pt-3">즉시출금 정보</h3>
-                            <br>
                             <VRow>
                                 <VCol md="4" cols="12">
                                     <VRow>
@@ -347,7 +347,7 @@ watchEffect(async () => {
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="finance_van"
                                                 :items="finance_vans"
                                                 label="이체모듈 검색"
-                                                :hint="`이체모듈 코드: ${finance_van.id} `"
+                                                :hint="`이체모듈 코드: ${finance_van ? finance_van.id : ''} `"
                                                 item-title="title" item-value="id" persistent-hint return-object
                                             />
                                             <VTooltip activator="parent" location="top" transition="scale-transition" v-if="finance_vans.length == 0">
@@ -365,7 +365,22 @@ watchEffect(async () => {
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="fin_trx_delay"
                                                 :items="fin_trx_delays"
                                                 label="이체 딜레이 검색"
-                                                :hint="`이체 딜레이 코드: ${fin_trx_delay.id} `"
+                                                :hint="`이체 딜레이 코드: ${fin_trx_delay ? fin_trx_delay.id : ''} `"
+                                                item-title="title" item-value="id" persistent-hint return-object
+                                            />
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                            <VRow>
+                                <VCol md="4" cols="12">
+                                    <VRow>
+                                        <VCol class="font-weight-bold" md="6">출금금지타입</VCol>
+                                        <VCol md="6">
+                                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="withdraw_limit_type"
+                                                :items="withdraw_limit_types"
+                                                label="출금금지타입 검색"
+                                                :hint="`출금금지타입 코드: ${withdraw_limit_type ? withdraw_limit_type.id : ''} `"
                                                 item-title="title" item-value="id" persistent-hint return-object
                                             />
                                         </VCol>
