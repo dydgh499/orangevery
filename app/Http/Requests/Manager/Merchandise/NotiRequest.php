@@ -9,13 +9,13 @@ class NotiRequest extends FormRequest
 {
     use FormRequestTrait;
     public $keys = [
-        'mcht_id',
-        'pmod_id',
         'send_url',
-        'noti_status',
         'note',
     ];
     public $integer_keys = [
+        'mcht_id',
+        'pmod_id',
+        'noti_status',
         'send_type'
     ];
 

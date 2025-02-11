@@ -19,14 +19,16 @@ const getErrorContent = (code: string, message: string, reason: string, resolve:
 }
 
 const setErrorCode = () => {
-    errors.value = [getErrorContent('406', '가맹점을 찾을 수 없습니다.', '삭제된 가맹점의 경우', '')]
+    errors.value = [
+	    getErrorContent('406', '가맹점을 찾을 수 없습니다.', '삭제된 가맹점의 경우', ''), 
+    ]
     if(corp.pv_options.paid.use_specified_limit) {
         errors.value.push(...[
             getErrorContent('424', '지금은 결제할 수 없습니다.', '지정시간 출금제한시간대에 출금시도', '해당 가맹점 지정시간 출금제한시간 수정'),
-            getErrorContent('427', '시스템 점검시간입니다.(06:00 ~ 06:05)', '점검시간대에 출금시도', '06:05 이후 출금가능'),
         ])
     }
     errors.value.push(...[
+	    getErrorContent('427', '시스템 점검시간입니다.(06:00 ~ 06:05)', '점검시간대에 출금시도', '06:05 이후 출금가능')
         getErrorContent('480', '지급보류(사유)', '지급보류된 가맹점', '해당 가맹점 지급보류 해제'),
         getErrorContent('481', '이미 입금처리가 된 건입니다.', '이미처리된 단일거래건에 대해서 중복 출금시도', ''),
 

@@ -213,7 +213,7 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                     </VRow>
-                    
+
                     <VRow>
                         <VCol cols="12">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">

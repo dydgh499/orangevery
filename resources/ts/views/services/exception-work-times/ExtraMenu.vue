@@ -32,13 +32,13 @@ const remove = async () => {
         <VIcon size="22" icon="tabler-dots-vertical" />
         <VMenu activator="parent" width="230">
             <VList>
-                <VListItem value="saleslip" @click="exceptionWorkTimeDialog.show(props.item)">
+                <VListItem value="modify" @click="exceptionWorkTimeDialog.show(props.item)">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler-pencil" />
                     </template>
                     <VListItemTitle>수정</VListItemTitle>
                 </VListItem>
-                <VListItem value="saleslip" @click="remove()">
+                <VListItem value="remove" @click="remove()">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler-trash" />
                     </template>

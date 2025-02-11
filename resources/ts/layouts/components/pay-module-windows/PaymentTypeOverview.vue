@@ -128,7 +128,7 @@ const filterPgs = computed(() => {
                             placeholder="PMID 입력" persistent-placeholder maxlength="50" label="PMID"/>
                 </VCol>
             </VRow>
-            <VRow v-show="props.item.module_type == 1" v-if="isAbleModiy(props.item.id)">
+            <VRow v-show="props.item.module_type == 1">
                 <VCol md="5" cols="5">수기결제 타입</VCol>
                 <VCol md="7">
                     <BooleanRadio :radio="props.item.is_old_auth" @update:radio="props.item.is_old_auth = $event">
