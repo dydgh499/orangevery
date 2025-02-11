@@ -379,7 +379,11 @@ watchEffect(() => {
                                     </VRow>
                                     <VRow v-else>
                                         <VCol class="font-weight-bold">사업자 유형</VCol>
-                                        <VCol md="6"><span>{{ tax_category_types.find(obj => obj.id === props.item.tax_category_type)?.title }}</span></VCol>
+                                        <VCol md="6">
+                                            <VChip :color="MerchantStatusColor(props.item.tax_category_type)">
+                                                {{ tax_category_types.find(obj => obj.id === props.item.tax_category_type)?.title }}
+                                            </VChip>
+                                        </VCol>
                                     </VRow>
                                 </VCol>
                                 <VCol>
