@@ -120,7 +120,7 @@ const getAbilitiesMenu = computed(() => {
     ]
     if(getUserLevel() === 10) {
         const { getPaymentMenu } = useQuickViewStore()
-        if(getPaymentMenu.children.length > 0) {
+        if(getPaymentMenu?.children && getPaymentMenu?.children?.length > 0) {
             menu.push(getPaymentMenu)
         }
     }
