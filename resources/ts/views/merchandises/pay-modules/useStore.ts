@@ -226,6 +226,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
             headers_8['use_realtime_deposit'] = '실시간 사용여부'
             headers_8['fin_id'] = '이체 모듈 타입'
             headers_8['fin_trx_delay'] = '이체 딜레이'
+            headers_8['withdraw_limit_type'] = '이체 금지타입'
         }
         return headers_8
     }
@@ -440,7 +441,8 @@ export const defaultItemInfo =  () => {
         p_mid: '',
         pay_window_extend_hour: 1,
         is_different_settlement: 1,
-        pay_limit_type: 0
+        pay_limit_type: 0,
+        withdraw_limit_type: 0,
     })
     //카드사 필터 및 다른 필터옵션들
     return {

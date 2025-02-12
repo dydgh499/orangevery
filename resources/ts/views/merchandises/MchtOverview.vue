@@ -83,13 +83,6 @@ const clearSettleHoldClear = async () => {
     }
 }
 
-const isAbleEditSalesFee = (id: number) => {
-    if(corp.pv_options.paid.sales_parent_structure) 
-        return getUserLevel() >= 35 ? true : false
-    else
-        return isAbleModiy(id)
-}
-
 const formatContactNum = computed(() => {
     let raw_value = contact_num_format.value.replace(/\D/g, '');
     props.item.contact_num = raw_value
@@ -245,7 +238,7 @@ watchEffect(() => {
                             </VCol>
                             <template v-for="i in 6" :key="i">
                                 <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">
-                                    <VRow v-if="isAbleEditSalesFee(props.item.id)">
+                                    <VRow v-if="isAbleModiy(props.item.id)">
                                         <VCol cols="12" md="3">* {{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
                                         <VCol cols="6" :md="props.item.id ? 3 : 4">
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6-i)+'_id']"

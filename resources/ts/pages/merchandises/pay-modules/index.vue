@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cxl_types, fin_trx_delays, installments, module_types, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
+import { cxl_types, fin_trx_delays, installments, module_types, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels, useSearchStore, withdraw_limit_types } from '@/views/merchandises/pay-modules/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -177,6 +177,9 @@ onMounted(() => {
                                 </span>
                                 <span v-else-if="_key == 'pay_limit_type'">
                                     {{ pay_limit_types.find(pay_limit_type => pay_limit_type['id'] === item[_key])?.title }}
+                                </span>
+                                <span v-else-if="_key == 'pay_limit_type'">
+                                    {{ withdraw_limit_types.find(withdraw_limit_type => withdraw_limit_type['id'] === item[_key])?.title }}
                                 </span>
                                 <span
                                     v-else-if="(_key.includes('_limit') || _key === 'pay_dupe_least') && _key != 'pay_dupe_limit'">
