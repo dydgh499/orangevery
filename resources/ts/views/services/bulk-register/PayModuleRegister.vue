@@ -348,7 +348,7 @@ watchEffect(async () => {
                                                 :items="finance_vans"
                                                 label="이체모듈 검색"
                                                 :hint="`이체모듈 코드: ${finance_van ? finance_van.id : ''} `"
-                                                item-title="title" item-value="id" persistent-hint return-object
+                                                item-title="nick_name" item-value="id" persistent-hint return-object
                                             />
                                             <VTooltip activator="parent" location="top" transition="scale-transition" v-if="finance_vans.length == 0">
                                                 <b>
