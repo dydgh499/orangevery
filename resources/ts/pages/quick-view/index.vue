@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import corp from '@/plugins/corp'
 import router from '@/router'
 import CardLayout from '@/views/quick-view/CardLayout.vue'
+import CollectWithdrawOverview from '@/views/quick-view/CollectWithdrawOverview.vue'
 import Recent30DaysContentOverview from '@/views/quick-view/Recent30DaysContentOverview.vue'
 import Recent30DaysRankOverview from '@/views/quick-view/Recent30DaysRankOverview.vue'
 import SettleContentOverview from '@/views/quick-view/SettleContentOverview.vue'
@@ -16,9 +18,17 @@ const transactions = ref(<MchtRecentTransactions>({
 }))
 const is_skeleton = ref(true)
 const { getFirstModule } = useQuickViewStore()
+const errorHandler = <any>(inject('$errorHandler'))
 
 const my_level = getUserLevel()
 const payShow  = <any>(inject('payShow'))
+
+const isAbleCollectWithdraw = () => {
+    if(corp.pv_options.paid.use_collect_withdraw && [12,14,31].includes(corp.id) === false)
+        return getUserLevel() === 10 && user_info.value.use_collect_withdraw
+    else
+        return false
+}
 
 onMounted(() => {
     if(my_level) {
@@ -71,6 +81,13 @@ onMounted(() => {
                     </VCol>
                 </template>
             </CardLayout>
+            <template v-if="isAbleCollectWithdraw()">
+                <CardLayout :padding="true">
+                    <template #content>
+                        <CollectWithdrawOverview :is_skeleton="is_skeleton"/>
+                    </template>
+                </CardLayout>
+            </template>
             <template v-if="is_skeleton">
                 <CardLayout v-for="(transaction, key) in 3" :key="key" :padding="true">
                     <template #content>

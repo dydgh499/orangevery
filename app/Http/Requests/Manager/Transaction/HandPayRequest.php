@@ -1,6 +1,5 @@
 <?php
-
-namespace App\Http\Requests\Pay;
+namespace App\Http\Requests\Manager\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
@@ -8,7 +7,6 @@ use App\Http\Traits\FormRequestTrait;
 class HandPayRequest extends FormRequest
 {
     use FormRequestTrait;
-
     public $keys = [
         'pmod_id',
         'yymm',
@@ -25,7 +23,7 @@ class HandPayRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return $this->user()->tokenCan(10) ? true : false;
+        return true;
     }
 
     public function rules(): array
@@ -79,9 +77,9 @@ class HandPayRequest extends FormRequest
         $params['card_pw']['example']     = '34';
         return $params;
     }
+
     public function data()
     {
-        $data = $this->getParmasBaseKey();
-        return $data;
+        return $this->getParmasBaseKey();
     }
 }

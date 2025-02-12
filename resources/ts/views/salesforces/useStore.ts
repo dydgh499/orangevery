@@ -194,17 +194,18 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
             data['settle_day'] = all_days.find(obj => obj['id'] === salesforce['settle_day'])?.title as string
             data['settle_tax_type'] = tax_types.find(obj => obj['id'] === salesforce['settle_tax_type'])?.title as string
             data['resident_num'] = salesforce['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : salesforce['resident_num_back'])
-            data['view_type'] = data['view_type'] ? '상세보기' : '간편보기' 
-            if(isFixplus() === false)
-                data['under_auto_settings'] = JSON.stringify(getAutoSetting(data['under_auto_settings']))
+            data['view_type'] = data['view_type'] ? '상세보기' : '간편보기'
             return head.sortAndFilterByHeader(data, keys)
         }
+
         const getChildDatas = (datas:any[], childs: Salesforce[]) => {
-            for (let i = 0; i < childs.length; i++) {
-                datas.push(getSalesData(childs[i]))
-                if(childs[i].childs?.length) {
-                    datas = getChildDatas(datas, childs[i]?.childs as Salesforce[])
-                }
+            if(childs) {
+                for (let i = 0; i < childs.length; i++) {
+                    datas.push(getSalesData(childs[i]))
+                    if(childs[i] && childs[i].childs?.length) {
+                        datas = getChildDatas(datas, childs[i]?.childs as Salesforce[])
+                    }
+                }    
             }
             return datas
         }
@@ -216,7 +217,9 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         for (let i = 0; i < r.data.content.length; i++) {
             datas.push(getSalesData(r.data.content[i]))
             if(corp.pv_options.paid.sales_parent_structure) {
-                datas = getChildDatas(datas, r.data.content[i]?.childs as Salesforce[])
+                if(r.data.content[i]?.childs) {
+                    datas = getChildDatas(datas, r.data.content[i]?.childs as Salesforce[])
+                }
             }
         }
         head.exportToExcel(datas)

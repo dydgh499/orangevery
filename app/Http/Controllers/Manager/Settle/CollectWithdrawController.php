@@ -21,7 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @group Collect Withdraw deposit API
+ * @group Collect Withdraw API
  *
  * 모아서 출금 API 입니다.
  */
@@ -169,7 +169,7 @@ class CollectWithdrawController extends Controller
     }
 
     /**
-     * 모아서 출금 요청
+     * 출금요청
      *
      * 가맹점만 가능
      */
@@ -202,5 +202,51 @@ class CollectWithdrawController extends Controller
         }
         else
             return $this->extendResponse(1000, "활성화된 실시간 모듈을 찾을 수 없습니다.");
+    }
+    
+    public function _withdrawAbleAmount($request, $mcht_id)
+    {
+        request()->merge([
+            's_dt' => '2000-01-01',  
+            'e_dt' => Carbon::now()->format('Y-m-d'),
+        ]);
+        $merchandise = Merchandise::where('id', $mcht_id)
+            ->with(['transactions.cancelDeposits', 'collectWithdraws'])
+            ->first(['id', 'collect_withdraw_fee']);
+        $pay_modules = PaymentModule::whereIn('id', $merchandise->transactions->pluck('pmod_id')->all())
+            ->get(['id', 'fin_trx_delay', 'use_realtime_deposit']);
+
+        $total_withdraw_amount  = $merchandise->collectWithdraws->sum('total_withdraw_amount'); // 출금액        
+        $cancel_deposit = $merchandise->transactions->reduce(function($carry, $transaction) {
+            return $carry + $transaction->cancelDeposits->sum('deposit_amount');
+        }, 0);  // 취소 후 입금
+        $profit = $merchandise->transactions->reduce(function($carry, $transaction) use($pay_modules) {
+            $pay_module = $pay_modules->firstWhere('id', $transaction->pmod_id);
+            if($pay_module)
+            {   // 즉시출금의 경우, 정산금에 포함하지 않는다.
+                if($pay_module->use_realtime_deposit && $pay_module->fin_trx_delay > -1)
+                    return $carry;
+                else
+                    return $carry + $transaction->mcht_settle_amount;
+            }
+            else
+                return $carry;
+        }, 0);  // 정산금
+
+        return [
+            'profit' => ($profit + $cancel_deposit - $total_withdraw_amount),
+            'withdraw_fee' =>  (int)$merchandise->collect_withdraw_fee,
+        ];
+    }
+
+    /**
+     * 출금가능 잔액
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function withdrawAbleAmount(Request $request)
+    {
+        $data = $this->_withdrawAbleAmount($request, $request->user()->id);
+        return $this->response(0, $data);        
     }
 }

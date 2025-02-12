@@ -17,9 +17,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @group Collect Withdraw deposit API
+ * @group Collect Withdraw History API
  *
- * 모아서 출금 API 입니다.
+ * 모아서 출금 이력 API 입니다.
  */
 class CollectWithdrawHistoryController extends Controller
 {

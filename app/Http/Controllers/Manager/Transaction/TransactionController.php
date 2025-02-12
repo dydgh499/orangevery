@@ -10,6 +10,9 @@ use App\Http\Traits\ExtendResponseTrait;
 
 use App\Http\Requests\Manager\TransactionRequest;
 use App\Http\Requests\Manager\IndexRequest;
+use App\Http\Requests\Manager\Transaction\HandPayRequest;
+use App\Http\Requests\Manager\Transaction\PayCancelRequest;
+
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Controllers\Manager\Transaction\NotiRetrySender;
@@ -270,7 +273,7 @@ class TransactionController extends Controller
      * 수기결제
      *
      */
-    public function handPay(Request $request)
+    public function handPay(HandPayRequest $request)
     {
         $getYYMM = function($mmyy) {
             if(mb_strlen($mmyy, 'utf-8') == 4)
@@ -298,7 +301,7 @@ class TransactionController extends Controller
      * 결제취소
      *
      */
-    public function payCancel(Request $request)
+    public function payCancel(PayCancelRequest $request)
     {
         $data = $request->all();
         $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/cancel', $data);

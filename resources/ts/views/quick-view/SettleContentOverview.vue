@@ -81,7 +81,7 @@ watchEffect(() => {
                 <span class="small-font" style="font-weight: 500;"> 건</span>
             </div>
         </div>
-        <span style=" margin-top: auto; font-weight: 600;" class="small-font">{{ props.date }}</span>
+        <span style="margin-top: auto; font-weight: 600;" class="small-font">{{ props.date }}</span>
     </VCol>
 </template>
 <style>

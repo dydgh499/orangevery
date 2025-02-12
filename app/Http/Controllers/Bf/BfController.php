@@ -18,7 +18,7 @@ use App\Models\Log\RealtimeSendHistory;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\LoginRequest;
 use App\Http\Requests\Manager\Settle\CollectWithdrawRequest;
-use App\Http\Requests\Pay\HandPayRequest;
+use App\Http\Requests\Manager\Transaction\HandPayRequest;
 
 use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Manager\Transaction\TransactionFilter;
@@ -168,7 +168,7 @@ class BfController extends Controller
      */
     public function withdrawsBalance(Request $request)
     {
-        $inst = new QuickViewController(new Transaction);
+        $inst = new CollectWithdrawController(new CollectWithdraw);
         return $inst->withdrawAbleAmount($request);
     }
 
@@ -181,13 +181,10 @@ class BfController extends Controller
      */
     public function withdrawsStore(CollectWithdrawRequest $request)
     {
-        $inst = new QuickViewController(new Transaction);
+        $inst = new CollectWithdrawController(new CollectWithdraw);
         $json = $inst->_withdrawAbleAmount($request, $request->user()->id);
         if($json['profit'] >= $request->withdraw_amount)
-        {
-            $inst = new CollectWithdrawController(new CollectWithdraw);
-            return $inst->collectDeposit($request);    
-        }
+            return $inst->collectDeposit($request);
         else
             return $this->response(1002);
     }
