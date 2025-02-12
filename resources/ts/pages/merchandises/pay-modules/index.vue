@@ -178,7 +178,7 @@ onMounted(() => {
                                 <span v-else-if="_key == 'pay_limit_type'">
                                     {{ pay_limit_types.find(pay_limit_type => pay_limit_type['id'] === item[_key])?.title }}
                                 </span>
-                                <span v-else-if="_key == 'pay_limit_type'">
+                                <span v-else-if="_key == 'withdraw_limit_type'">
                                     {{ withdraw_limit_types.find(withdraw_limit_type => withdraw_limit_type['id'] === item[_key])?.title }}
                                 </span>
                                 <span
