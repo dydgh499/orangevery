@@ -46,8 +46,6 @@ Route::prefix('transactions')->group(function() {
             Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
             Route::get('difference/chart', [DifferenceSettlementHistoryController::class, 'chart']);
             Route::post('difference/retry', [DifferenceSettlementHistoryController::class, 'retry']);
-
-            Route::apiResource('collect-withdraws', CollectWithdrawHistoryController::class);    
             Route::middleware(['is.edit.able'])->group(function() {
                 Route::post('merchandises/batch', [MchtSettleHistoryController::class, 'batch']);
                 Route::post('merchandises/batch-link-account', [MchtSettleHistoryController::class, 'batchLinkAccount']);
@@ -110,6 +108,7 @@ Route::prefix('transactions')->group(function() {
         Route::get('salesforces/chart', [SalesSettleHistoryController::class, 'chart']);
         Route::apiResource('merchandises', MchtSettleHistoryController::class);
         Route::apiResource('salesforces', SalesSettleHistoryController::class);
+        Route::apiResource('collect-withdraws', CollectWithdrawHistoryController::class);
     });
     Route::get('realtime-histories', [RealtimeSendHistoryController::class, 'index']);
 });

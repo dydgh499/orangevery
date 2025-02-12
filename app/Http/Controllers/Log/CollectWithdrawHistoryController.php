@@ -38,6 +38,7 @@ class CollectWithdrawHistoryController extends Controller
             ->where('collect_withdraws.brand_id', $request->user()->brand_id)
             ->where('merchandises.mcht_name', 'like', "%$search%");
         $query = globalSalesFilter($query, $request, 'merchandises');
+        $query = globalAuthFilter($query, $request, 'merchandises');
         return $query;
     }
 

@@ -81,11 +81,23 @@ const getTransactionMenu = () => {
 }
 
 const getSettlementMenu = () => {
-    return {
+    const settlements = {
         title: '정산 이력',
         icon: { icon: 'tabler:calendar-time' },
-        to: 'transactions-settle-histories-merchandises',
+        children: [
+            {
+                title: '정산 이력',
+                to: 'transactions-settle-histories-merchandises',
+            }
+        ],
     }
+    if(getUserLevel() === 10 && corp.pv_options.paid.use_collect_withdraw) {
+        settlements.children.push({
+            title: '모아서 출금 이력',
+            to: 'transactions-settle-histories-collect-withdraws',
+        })
+    }
+    return settlements
 }
 
 const getServiceMenu = () => {
