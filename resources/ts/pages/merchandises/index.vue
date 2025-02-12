@@ -85,7 +85,7 @@ onMounted(() => {
                     일괄작업
                 </VBtn>
                 <VBtn
-                    color="info" v-if="corp.pv_options.paid.use_shop && getUserLevel() >= 35"
+                    color="info" v-if="corp.pv_options.paid.use_shop && (getUserLevel() >= 35 || getUserLevel() === 10)"
                     prepend-icon="material-symbols:work-history-outline" @click="shoppingMallDialog.show(-1)"
                     size="small" :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
                     쇼핑몰 관리

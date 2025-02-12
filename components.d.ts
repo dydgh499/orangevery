@@ -78,6 +78,7 @@ declare module '@vue/runtime-core' {
     ProductOptionDialog: typeof import('./resources/ts/layouts/dialogs/shopping-mall/ProductOptionDialog.vue')['default']
     ProfileDialog: typeof import('./resources/ts/layouts/dialogs/users/ProfileDialog.vue')['default']
     PVErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/transactions/PVErrorCodeDialog.vue')['default']
+    PVWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/transactions/PVWithdrawErrorCodeDialog.vue')['default']
     RealtimeHistoriesDialog: typeof import('./resources/ts/layouts/dialogs/transactions/RealtimeHistoriesDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
