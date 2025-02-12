@@ -39,7 +39,7 @@ const items = ref<PayModule[]>([])
 const is_clear = ref<boolean>(false)
 
 const midCreateDlg = ref()
-const finance_van = ref({id: null, title: ''})
+const finance_van = ref({id: null, nick_name: ''})
 const fin_trx_delay = ref(fin_trx_delays[0])
 const withdraw_limit_type = ref({id: null, title: ''})
 
