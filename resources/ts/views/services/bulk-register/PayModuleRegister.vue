@@ -341,8 +341,8 @@ watchEffect(async () => {
                                     </VRow>
                                 </VCol>
                                 <VCol md="4" cols="12">
-                                    <VRow>
-                                        <VCol class="font-weight-bold" md="6">이체모듈 검색</VCol>
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">이체모듈 검색</VCol>
                                         <VCol md="6">
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="finance_van"
                                                 :items="finance_vans"

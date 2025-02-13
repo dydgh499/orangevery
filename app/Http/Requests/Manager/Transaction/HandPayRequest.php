@@ -35,7 +35,7 @@ class HandPayRequest extends FormRequest
             'buyer_name' => 'required|string',
             'buyer_phone' => 'required|string',
             'installment' => 'required',
-            'amount' => 'required|string',
+            'amount' => 'required',
             'ord_num'   => 'required|string',
             'item_name' => 'required|string',
             'auth_num'  => 'nullable|string',
