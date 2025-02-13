@@ -21,9 +21,9 @@ class PayCancelRequest extends FormRequest
     public function rules()
     {
         $sub = [
-            'amount'    => 'required|integer',
-            'trx_id'    => 'required|integer',
-            'pmod_id'   => 'required|integer',
+            'amount'    => 'required',
+            'trx_id'    => 'required',
+            'pmod_id'   => 'required',
         ];
         return $this->getRules($this->keys, $sub);
     }
