@@ -79,7 +79,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                 <VBtn style='margin: 0.25em;' variant="tonal" size="small" color="error" @click="pmodBatchDialog.show()">
                                     하위 결제모듈 일괄작업
                                 </VBtn>
-                                <VBtn v-if="corp.pv_options.paid.use_p2p_app && getUserLevel() === 13"
+                                <VBtn v-if="corp.pv_options.paid.use_p2p_app && props.item.level === 13"
                                     style='margin: 0.25em;' variant="tonal" size="small" color="warning" @click="salesRecommenderCodeEialog.show(props.item)">
                                     추천인코드 관리
                                 </VBtn>
