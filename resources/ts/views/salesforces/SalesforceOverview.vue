@@ -71,14 +71,16 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                     <VCardTitle>
                         <div style="display: flex;align-items: center;justify-content: space-between;">
                             <span style="margin-right: 1em;">영업점정보</span>
-                            <div v-if="getUserLevel() >= 35 && props.item.id"
+                            <div v-if="props.item.id"
                                 :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
-                                <VBtn style='margin: 0.25em;' variant="tonal" size="small" @click="mchtBatchDialog.show()">
-                                    하위 가맹점 일괄작업
-                                </VBtn>
-                                <VBtn style='margin: 0.25em;' variant="tonal" size="small" color="error" @click="pmodBatchDialog.show()">
-                                    하위 결제모듈 일괄작업
-                                </VBtn>
+                                <template v-if="getUserLevel() >= 35">
+                                    <VBtn style='margin: 0.25em;' variant="tonal" size="small" @click="mchtBatchDialog.show()">
+                                        하위 가맹점 일괄작업
+                                    </VBtn>
+                                    <VBtn style='margin: 0.25em;' variant="tonal" size="small" color="error" @click="pmodBatchDialog.show()">
+                                        하위 결제모듈 일괄작업
+                                    </VBtn>
+                                </template>
                                 <VBtn v-if="corp.pv_options.paid.use_p2p_app && props.item.level === 13"
                                     style='margin: 0.25em;' variant="tonal" size="small" color="warning" @click="salesRecommenderCodeEialog.show(props.item)">
                                     추천인코드 관리
