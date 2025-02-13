@@ -32,7 +32,7 @@ class UnderAutoSettingController extends Controller
     /**
      * 목록출력
      *
-     * 가맹점 이상 가능
+     * 영업점 이상 가능
      */
     public function index(IndexRequest $request)
     {
@@ -56,7 +56,7 @@ class UnderAutoSettingController extends Controller
     /**
      * 단일조회
      *
-     * 가맹점 이상 가능
+     * 영업점 이상 가능
      *
      * @urlParam id integer required 유저 PK
      */
@@ -69,7 +69,7 @@ class UnderAutoSettingController extends Controller
     /**
      * 업데이트
      *
-     * 가맹점 이상 가능
+     * 영업점 이상 가능
      *
      * @urlParam id integer required 유저 PK
      */

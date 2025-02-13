@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { useRequestStore } from '@/views/request'
-import UnderAutoSettingTr from '@/views/salesforces/under-auto-settings/UnderAutoSettingTr.vue'
-import type { Salesforce, UnderAutoSetting } from '@/views/types'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
+import { useRequestStore } from '@/views/request';
+import UnderAutoSettingTr from '@/views/salesforces/under-auto-settings/UnderAutoSettingTr.vue';
+import type { Salesforce, UnderAutoSetting } from '@/views/types';
 
 interface Props {
     item: Salesforce,
@@ -52,7 +52,7 @@ watchEffect(() => {
     <VRow v-show="Boolean(props.item.id != 0)">
         <VCol class="d-flex gap-4">
             <VBtn type="button" style="margin-left: auto;" @click="addNewUnderAutoSetting()">
-                세팅정보 신규추가
+                추가하기
                 <VIcon end icon="tabler-plus" />
             </VBtn>
         </VCol>

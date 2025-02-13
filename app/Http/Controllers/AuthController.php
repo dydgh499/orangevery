@@ -118,11 +118,16 @@ class AuthController extends Controller
      */
     public function signIn(LoginRequest $request)
     {
+        $brand = BrandInfo::getBrandById($request->brand_id);
+        $sales_with = [];
+        if($brand['pv_options']['paid']['use_p2p_app'])
+            $sales_with[] = 'salesRecommenderCodes';
+
         $result = Login::isSafeAccount(Operator::where('is_active', true), $request);    // check operator
         if($result !== null)
             return $result;
         
-        $result = Login::isSafeAccount(new Salesforce(), $request);    // check sales
+        $result = Login::isSafeAccount(Salesforce::with($sales_with), $request);    // check sales
         if($result !== null)
             return $result;
 

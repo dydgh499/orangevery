@@ -296,7 +296,7 @@ const filterPgs = computed(() => {
                                             type="number" suffix="만원" label="이상거래 한도"/>
                             </template>
                         </CreateHalfVColV2>
-                        <CreateHalfVColV2 :mdl="5" :mdr="7">
+                        <CreateHalfVColV2 :mdl="6" :mdr="6">
                             <template #l_name>
                                 가맹점 수수료율 노출
                             </template>
@@ -309,67 +309,69 @@ const filterPgs = computed(() => {
                             <template #r_input>
                             </template>
                         </CreateHalfVColV2>
-                        <VCardTitle class="pt-10">
-                            <BaseQuestionTooltip location="top" text="P2P APP" :content="`P2P APP 회원가입시 기본적으로 추가될 값 입니다.<br><b>PG사 관리의 대표 결제 정보<b>가 입력 되어있어야합니다.`"/> 
-                        </VCardTitle>
-                        <CreateHalfVColV2 :mdl="5" :mdr="7">
-                            <template #l_name>
-                                원천사
-                            </template>
-                            <template #l_input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.p2p.pg_id" :items="pgs"
-                                        prepend-inner-icon="ph-buildings" label="원천사 선택" item-title="pg_name" item-value="id"
-                                />    
-                            </template>
-                            <template #r_name>
-                                구간
-                            </template>
-                            <template #r_input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.p2p.ps_id" :items="filterPgs"
-                                    prepend-inner-icon="mdi-vector-intersection" label="구간 선택" item-title="name" item-value="id"
-                                    :hint="`${setFee(pss, props.item.p2p.ps_id)}`" persistent-hint/>
+                        <template v-if="props.item.paid.use_p2p_app">
+                            <VCardTitle class="pt-10">
+                                <BaseQuestionTooltip location="top" text="P2P APP" :content="`P2P APP 회원가입시 기본적으로 추가될 값 입니다.<br><b>PG사 관리의 대표 결제 정보<b>가 입력 되어있어야합니다.`"/> 
+                            </VCardTitle>
+                            <CreateHalfVColV2 :mdl="5" :mdr="7">
+                                <template #l_name>
+                                    원천사
+                                </template>
+                                <template #l_input>
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.p2p.pg_id" :items="pgs"
+                                            prepend-inner-icon="ph-buildings" label="원천사 선택" item-title="pg_name" item-value="id"
+                                    />    
+                                </template>
+                                <template #r_name>
+                                    구간
+                                </template>
+                                <template #r_input>
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.p2p.ps_id" :items="filterPgs"
+                                        prepend-inner-icon="mdi-vector-intersection" label="구간 선택" item-title="name" item-value="id"
+                                        :hint="`${setFee(pss, props.item.p2p.ps_id)}`" persistent-hint/>
 
-                            </template>
-                        </CreateHalfVColV2>
-                        <CreateHalfVColV2 :mdl="5" :mdr="7">
-                            <template #l_name>
-                                모듈타입
-                            </template>
-                            <template #l_input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.p2p.module_type"
-                                    :items="module_types"
-                                    prepend-inner-icon="ic-outline-send-to-mobile" label="결제모듈 타입" item-title="title"
-                                    item-value="id" />
-                            </template>
-                            <template #r_name>
-                                {{ props.item.paid.use_collect_withdraw ? '출금모듈' : ''}}
-                            </template>
-                            <template #r_input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.p2p.fin_id"
-                                    :items="finance_vans"
-                                    prepend-inner-icon="streamline-emojis:ant" label="출금모듈 타입" item-title="nick_name"
-                                    item-value="id" 
-                                    v-if="props.item.paid.use_collect_withdraw"/>
-                            </template>
-                        </CreateHalfVColV2>
-                    <CreateHalfVColV2 :mdl="5" :mdr="7">
-                        <template #l_name>
-                            수기 구인증 여부
-                        </template>
-                        <template #l_input>
-                            <VSwitch hide-details v-model="props.item.p2p.is_old_auth"
-                                    color="primary" :false-value=0 :true-value=1 />
-                        </template>
-                        <template #r_name>
-                            <BaseQuestionTooltip location="top" text="1원인증" :content="`1원 인증입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
-                        </template>
-                        <template #r_input>                            
-                            <VSwitch hide-details v-model="props.item.p2p.account_validate"
-                                color="primary" :false-value=0 :true-value=1 />
+                                </template>
+                            </CreateHalfVColV2>
+                            <CreateHalfVColV2 :mdl="5" :mdr="7">
+                                <template #l_name>
+                                    모듈타입
+                                </template>
+                                <template #l_input>
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.p2p.module_type"
+                                        :items="module_types"
+                                        prepend-inner-icon="ic-outline-send-to-mobile" label="결제모듈 타입" item-title="title"
+                                        item-value="id" />
+                                </template>
+                                <template #r_name>
+                                    {{ props.item.paid.use_collect_withdraw ? '출금모듈' : ''}}
+                                </template>
+                                <template #r_input>
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.p2p.fin_id"
+                                        :items="finance_vans"
+                                        prepend-inner-icon="streamline-emojis:ant" label="출금모듈 타입" item-title="nick_name"
+                                        item-value="id" 
+                                        v-if="props.item.paid.use_collect_withdraw"/>
+                                </template>
+                            </CreateHalfVColV2>
+                            <CreateHalfVColV2 :mdl="5" :mdr="7">
+                                <template #l_name>
+                                    수기 구인증 여부
+                                </template>
+                                <template #l_input>
+                                    <VSwitch hide-details v-model="props.item.p2p.is_old_auth"
+                                            color="primary" :false-value=0 :true-value=1 />
+                                </template>
+                                <template #r_name>
+                                    <BaseQuestionTooltip location="top" text="1원인증" :content="`1원 인증입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
+                                </template>
+                                <template #r_input>                            
+                                    <VSwitch hide-details v-model="props.item.p2p.account_validate"
+                                        color="primary" :false-value=0 :true-value=1 />
 
+                                </template>
+                            </CreateHalfVColV2>
                         </template>
-                    </CreateHalfVColV2>
-                    <CreateHalfVColV2 :mdl="5" :mdr="7">
+                    <CreateHalfVColV2 :mdl="6" :mdr="6">
                             <template #l_name>
                                 <BaseQuestionTooltip location="top" text="전자계약 사용여부" :content="`전자계약 사용여부입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
                             </template>

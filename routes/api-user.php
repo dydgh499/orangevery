@@ -15,6 +15,7 @@ use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateBillKeyController;
 
 use App\Http\Controllers\Manager\SalesforceController;
 use App\Http\Controllers\Manager\Salesforce\UnderAutoSettingController;
+use App\Http\Controllers\Manager\Salesforce\SalesRecommenderCodeController;
 
 use App\Http\Controllers\Log\SubBusinessRegistrationController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
@@ -52,6 +53,7 @@ Route::prefix('salesforces')->group(function() {
                 Route::post('{id}/unlock-account', [SalesforceController::class, 'unlockAccount']);
             });
         Route::apiResource('under-auto-settings', UnderAutoSettingController::class);    
+        Route::apiResource('sales-recommender-codes', SalesRecommenderCodeController::class);
     });
 });
 Route::apiResource('salesforces', SalesforceController::class);

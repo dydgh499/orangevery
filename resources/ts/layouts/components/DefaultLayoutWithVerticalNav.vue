@@ -12,6 +12,7 @@ import NavTokenableExpireTime from '@/layouts/components/NavTokenableExpireTime.
 import UserProfile from '@/layouts/components/UserProfile.vue'
 import { VerticalNavLayout } from '@layouts'
 
+import SalesRecommenderCodeEialog from '@/layouts/dialogs/salesforces/SalesRecommenderCodeEialog.vue'
 import HolidayDlg from '@/layouts/dialogs/services/HolidayDlg.vue'
 import PayWindowShowDialog from '@/layouts/dialogs/transactions/PayWindowShowDialog.vue'
 import PasswordChangeNoticeDialog from '@/layouts/dialogs/users/PasswordChangeNoticeDialog.vue'
@@ -38,12 +39,14 @@ const pwaSnackbar = ref()
 const holidayDlg = ref()
 const phoneNum2FAVertifyDialog = ref()
 const passwordChangeNoticeDialog = ref()
+const salesRecommenderCodeEialog = ref()
 
 provide('popup', popup)
 provide('payShow', payShow)
 provide('holidayDlg', holidayDlg)
 provide('pwaSnackbar', pwaSnackbar)
 provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
+provide('salesRecommenderCodeEialog', salesRecommenderCodeEialog)
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
@@ -136,6 +139,8 @@ onMounted(async () => {
         </RouterView>
 
         <Snackbar ref="snackbar" />
+        <SalesRecommenderCodeEialog ref="salesRecommenderCodeEialog"
+            :key="user_info.id"/>
         <PWASnackbar ref="pwaSnackbar"/>
         <AlertDialog ref="alert" />
         <LoadingDialog ref="loading" />

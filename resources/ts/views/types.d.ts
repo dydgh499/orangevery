@@ -188,6 +188,7 @@ export interface Salesforce extends SalesforcePropertie, UserPropertie {
     is_able_unlock_mcht: number,
     is_able_under_modify: number,
     under_auto_settings?: UnderAutoSetting[],
+    sales_recommender_codes?: SalesRecommenderCode[],
     childs?: Salesforce[],
 }
 
@@ -197,6 +198,13 @@ export interface UnderAutoSetting {
     sales_id: number,
     sales_fee: number,
     note: string,
+}
+
+export interface SalesRecommenderCode {
+    id: number,
+    sales_id: number,
+    mcht_fee: number,
+    recommend_code: string,
 }
 
 export interface Operator extends BasePropertie {
@@ -416,6 +424,7 @@ interface PaidOption {
     use_bill_key: boolean,  // 빌키 사용 여부
     use_shop: boolean, // 쇼핑몰 사용여부
     fee_input_mode: boolean,  // 수수료구조 타입
+    use_p2p_app: boolean,
 }
 interface AuthOption {
     levels: {

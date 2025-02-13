@@ -1,3 +1,4 @@
+import corp from '@/plugins/corp';
 import { getUserLevel } from '@axios';
 
 const getAbilitiesMenu = computed(() => {
@@ -51,7 +52,7 @@ const getAbilitiesMenu = computed(() => {
             to: 'services-book-applies',
         })
     }
-    return [
+    const menu = [
         { heading: 'Service' },
         ...operations,
         {
@@ -60,6 +61,14 @@ const getAbilitiesMenu = computed(() => {
             to: 'posts',
         },
     ]
+    if(corp.pv_options.paid.use_p2p_app && getUserLevel() > 10 && getUserLevel() < 35) {
+        menu.push({
+            title: '추천인코드관리',
+            icon: { icon: 'tabler:heart-code' },
+            class: 'recommandCode()'
+        })
+    }
+    return menu
 })
 
 

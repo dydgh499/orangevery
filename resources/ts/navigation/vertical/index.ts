@@ -7,7 +7,7 @@ import service from './service'
 import transaction from './transaction'
 import user from './user'
 
-import quick from './quick/quick'
+import quick from './quick'
 
 const combinedNavItems = computed(() => {
     if(getViewType() == 'quick-view')

@@ -77,7 +77,7 @@ watchEffect(() => {
     <VRow v-show="Boolean(props.item.id != 0)">
         <VCol class="d-flex gap-4">
             <VBtn type="button" style="margin-left: auto;" @click="addNewSpecifiedTimeDisablePayment()">
-                세팅정보 신규추가
+                추가하기
                 <VIcon end icon="tabler-plus" />
             </VBtn>
         </VCol>

@@ -24,8 +24,7 @@ const props = defineProps<Props>()
                 <VCardItem>
                     <VCardTitle>
                         <BaseQuestionTooltip location="top" text="브랜드 옵션(유료)"
-                            :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
-                        </BaseQuestionTooltip>
+                            :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`"/>
                     </VCardTitle>
                     <VCol>
                         <VRow class="pt-5">
@@ -73,6 +72,16 @@ const props = defineProps<Props>()
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>
+                                    <VSwitch hide-details v-model="props.item.paid.use_p2p_app" color="primary" label="P2P APP 사용여부"/>
+                                </template>
+                                <template #input>
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        
                     </VCol>
                     <VCardTitle class="pt-10">
                         <BaseQuestionTooltip location="top" text="정산 옵션(유료)"

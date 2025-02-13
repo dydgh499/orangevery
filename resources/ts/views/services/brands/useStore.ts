@@ -170,6 +170,7 @@ export const defaultItemInfo = () => {
             use_bill_key: false,
             use_shop: false,
             fee_input_mode: false,
+            use_p2p_app: false,
         })
     }
 

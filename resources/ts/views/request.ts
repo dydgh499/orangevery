@@ -82,6 +82,10 @@ export const useRequestStore = defineStore('requestStore', () => {
                         })
                     })
                 }
+                else if (back_url == '/salesforces/sales-recommender-codes') {
+                    params.id = res.data.id
+                    params.recommend_code = res.data.recommend_code
+                }
                 else if (back_url === '/merchandises/shopping-mall/categories') {
                     categories.push({ ...params})
                     categories.sort((a:Category, b:Category) => a.category_name.localeCompare(b.category_name))

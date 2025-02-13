@@ -99,12 +99,13 @@
         public $use_hide_account = false;       // 계좌숨김
         public $sales_parent_structure = false;
         public $use_specified_limit = false;    // 지정시간 제한
-        public $use_syslink = false;    //syslink 선정산 사용여부
+        public $use_syslink = false;            // syslink 선정산 사용여부
         public $use_product = false;
-        public $use_cancel_all_allow = false;   //전체취소 사용여부
-        public $use_bill_key = false;   // 빌키사용 여부
-        public $use_shop = false;       // 쇼핑몰 사용여부
-        public $fee_input_mode = false;     // 수수료율 정산 방식
+        public $use_cancel_all_allow = false;   // 전체취소 사용여부
+        public $use_bill_key = false;           // 빌키사용 여부
+        public $use_shop = false;               // 쇼핑몰 사용여부
+        public $fee_input_mode = false;         // 수수료율 정산 방식
+        public $use_p2p_app = false;            // p2p APP 사용여부
 
         public function __construct(array $source)
         {

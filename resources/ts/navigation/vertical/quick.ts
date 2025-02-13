@@ -116,6 +116,15 @@ const getServiceMenu = () => {
             to: 'complaints',
         })
     }
+    else {
+        if(corp.pv_options.paid.use_p2p_app && getUserLevel() > 10 && getUserLevel() < 35) {
+            services.push({
+                title: '추천인코드관리',
+                icon: { icon: 'tabler:heart-code' },
+                class: 'recommandCode()'
+            })
+        }
+    }
     services.push({
         title: '설치하기',
         icon: { icon: 'tabler:download' },

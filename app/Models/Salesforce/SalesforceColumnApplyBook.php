@@ -4,7 +4,6 @@ namespace App\Models\Salesforce;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 use App\Http\Traits\Models\AttributeTrait;
 
 class SalesforceColumnApplyBook extends Model

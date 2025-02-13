@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
+import SalesRecommenderCodeEialog from '@/layouts/dialogs/salesforces/SalesRecommenderCodeEialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
-import { isDistMchtFeeModifyAble } from '@/plugins/fixplus'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
+
 import { settleCycles, settleDays, settleTaxTypes, useSalesFilterStore } from '@/views/salesforces/useStore'
 import type { Options, Salesforce } from '@/views/types'
 
@@ -24,7 +25,7 @@ const { sales } = useSalesFilterStore()
 
 const mchtBatchDialog = ref()
 const pmodBatchDialog = ref()
-
+const salesRecommenderCodeEialog = ref()
 
 const getSalesLevel = () => {
     if(props.item.id)
@@ -77,6 +78,10 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                 </VBtn>
                                 <VBtn style='margin: 0.25em;' variant="tonal" size="small" color="error" @click="pmodBatchDialog.show()">
                                     하위 결제모듈 일괄작업
+                                </VBtn>
+                                <VBtn v-if="corp.pv_options.paid.use_p2p_app" 
+                                    style='margin: 0.25em;' variant="tonal" size="small" color="warning" @click="salesRecommenderCodeEialog.show(props.item)">
+                                    추천인코드 관리
                                 </VBtn>
                             </div>
                         </div>
@@ -284,7 +289,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                 <VCardItem>
                     <VCol cols="12">
                         <VRow>
-                            <UnderAutoSettingCard :item="props.item" />
+                            <UnderAutoSettingCard :item="props.item" :key="props.item.id" />
                         </VRow>
                     </VCol>
                 </VCardItem>
@@ -294,6 +299,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
             :item_type="ItemTypes.Merchandise" @update:select_idxs=""/>
         <BatchDialog ref="pmodBatchDialog" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"
             :item_type="ItemTypes.PaymentModule" @update:select_idxs=""/>
+        <SalesRecommenderCodeEialog ref="salesRecommenderCodeEialog" :key="props.item.id"/>
     </VRow>
 </template>
 <style scoped>

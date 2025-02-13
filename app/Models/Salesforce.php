@@ -14,6 +14,7 @@ use App\Models\Merchandise;
 use App\Models\Merchandise\PaymentModule;
 use App\Models\Transaction;
 use App\Models\Salesforce\UnderAutoSetting;
+use App\Models\Salesforce\SalesRecommenderCode;
 use App\Models\Log\SettleDeductSalesforce;
 use App\Models\Log\SettleHistorySalesforce;
 
@@ -63,20 +64,17 @@ class Salesforce extends Authenticatable
         if(request()->is_lock)
             $query = $query->where('is_lock', 1);
 
-        return $query->with('childs')
-            ->select([
-                'id', 'parent_id', 'user_name', 'sales_fee', 
-                'level', 'sales_name', 'nick_name', 'resident_num', 
-                'business_num', 'sector', 'addr', 'phone_num', 
-                'acct_num', 'acct_name', 'acct_bank_name', 'acct_bank_code',
-                'is_able_under_modify', 'mcht_batch_fee', 'created_at', 'is_lock', 'locked_at',
-                'settle_cycle', 'settle_day', 'settle_tax_type', 'last_settle_dt',
-            ]);
+        return $query->with('childs')->select();
     }
 
     public function underAutoSettings()
     {
         return $this->hasMany(UnderAutoSetting::class, 'sales_id');
+    }
+    
+    public function salesRecommenderCodes()
+    {
+        return $this->hasMany(SalesRecommenderCode::class, 'sales_id');
     }
 
     public function merchandises()

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { useRequestStore } from '@/views/request'
-import type { UnderAutoSetting } from '@/views/types'
-import { VForm } from 'vuetify/components'
+import { useRequestStore } from '@/views/request';
+import type { UnderAutoSetting } from '@/views/types';
+import { VForm } from 'vuetify/components';
 
 interface Props {
     item: UnderAutoSetting,

@@ -182,8 +182,13 @@ class SalesforceController extends Controller
      */
     public function show(Request $request, int $id)
     {
+        $with = ['underAutoSettings'];
+        $b_info = BrandInfo::getBrandById($request->user()->brand_id);
+        if($b_info['pv_options']['paid']['use_p2p_app'])
+            $with[] = 'salesRecommenderCodes';
+
         $data = $this->salesforces->where('id', $id)
-            ->with(['underAutoSettings'])
+            ->with($with)
             ->first();
         if($data)
         {
