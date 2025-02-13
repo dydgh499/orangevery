@@ -61,7 +61,7 @@ const getAbilitiesMenu = computed(() => {
             to: 'posts',
         },
     ]
-    if(corp.pv_options.paid.use_p2p_app && getUserLevel() > 10 && getUserLevel() < 35) {
+    if(corp.pv_options.paid.use_p2p_app && getUserLevel() === 13) {
         menu.push({
             title: '추천인코드관리',
             icon: { icon: 'tabler:heart-code' },
