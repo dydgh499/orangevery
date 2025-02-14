@@ -66,6 +66,8 @@ const pay_module = reactive<any>({
     cxl_type: 0,
     pay_limit_type: 0,
     withdraw_limit_type: 0,
+    withdraw_business_limit: 0,
+    withdraw_holiday_limit: 0,
 })
 
 const setPaymentGateway = (apply_type: number) => {
@@ -119,6 +121,18 @@ const setUseRealtimeDeposit = (apply_type: number) => {
 const setWithdrawLimitType = (apply_type: number) => {
     post('set-withdraw-limit-type', {
         'withdraw_limit_type': pay_module.withdraw_limit_type,
+    }, apply_type)
+}
+
+const setWithdrawBusinessLimit = (apply_type: number) => {
+    post('set-withdraw-business-limit', {
+        'withdraw_business_limit': pay_module.withdraw_business_limit,
+    }, apply_type)
+}
+
+const setWithdrawHolidayLimit = (apply_type: number) => {
+    post('set-withdraw-holiday-limit', {
+        'withdraw_holiday_limit': pay_module.withdraw_holiday_limit,
     }, apply_type)
 }
 
@@ -435,7 +449,7 @@ watchEffect(() => {
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_single_limit"
-                                            type="number" suffix="만원" label="단건 결제 한도"/>
+                                            type="number" suffix="만원" label="단건 결제한도"/>
                                 </VCol>
                                 <VCol md="6">
                                     <div class="button-cantainer">
@@ -456,7 +470,7 @@ watchEffect(() => {
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_day_limit"
-                                            type="number" suffix="만원" label="일 결제 한도"/>
+                                            type="number" suffix="만원" label="일 결제한도"/>
                                     </VCol>
                                 <VCol md="6">
                                     <div class="button-cantainer">
@@ -479,7 +493,7 @@ watchEffect(() => {
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
                                     <VTextField prepend-inner-icon="tabler-currency-won"
-                                            v-model="pay_module.pay_month_limit" type="number" suffix="만원" label="월 결제 한도"/>
+                                            v-model="pay_module.pay_month_limit" type="number" suffix="만원" label="월 결제한도"/>
                                 </VCol>
                                 <VCol md="6">
                                     <div class="button-cantainer">
@@ -500,7 +514,7 @@ watchEffect(() => {
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_year_limit"
-                                    type="number" suffix="만원" label="연 결제 한도"/>
+                                    type="number" suffix="만원" label="연 결제한도"/>
                                     </VCol>
                                 <VCol md="6">
                                     <div class="button-cantainer">
@@ -889,6 +903,52 @@ watchEffect(() => {
                                             <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
                                         <VBtn variant="tonal" size="small" color="secondary" @click="setFinTrxDelay(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+
+                    
+                    <VRow>
+                        <VCol :md="6" :cols="12" >
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12">
+                                    <VTextField prepend-inner-icon="tabler-currency-won"
+                                        v-model="pay_module.withdraw_business_limit" type="number" suffix="만원" label="일 출금한도(영업일)"/>
+                                </VCol>
+                                <VCol md="6">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setWithdrawBusinessLimit(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setWithdrawBusinessLimit(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md="6" :cols="12" >
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12">
+                                    <VTextField prepend-inner-icon="tabler-currency-won"
+                                            v-model="pay_module.withdraw_holiday_limit" type="number" suffix="만원" label="일 출금한도(휴무일 )"/>
+                                </VCol>
+                                <VCol md="6" col="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setWithdrawHolidayLimit(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setWithdrawHolidayLimit(1)"
                                             style='margin-left: 0.5em;'>
                                             예약적용
                                             <VIcon end size="18" icon="tabler-clock-up" />

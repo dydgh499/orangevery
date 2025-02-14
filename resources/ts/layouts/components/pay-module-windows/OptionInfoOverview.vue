@@ -110,30 +110,30 @@ const props = defineProps<Props>()
             </VRow>
             <template v-if="corp.pv_options.paid.use_pay_limit">
                 <VDivider style="margin: 1em 0;" />
-                <VCardSubtitle>결제 한도</VCardSubtitle>
+                <VCardSubtitle>결제한도</VCardSubtitle>
                 <br>
                 <VRow>
                     <VCol md="6" cols="12">
                         <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_single_limit"
-                            type="number" suffix="만원" label="단건 결제 한도"
-                            :rules="[requiredValidatorV2(props.item.pay_single_limit, '단건 결제 한도')]" />
+                            type="number" suffix="만원" label="단건 결제한도"
+                            :rules="[requiredValidatorV2(props.item.pay_single_limit, '단건 결제한도')]" />
                     </VCol>
                     <VCol md="6">
                         <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_day_limit"
-                            type="number" suffix="만원" label="일 결제 한도"
-                            :rules="[requiredValidatorV2(props.item.pay_day_limit, '일 결제 한도')]" />
+                            type="number" suffix="만원" label="일 결제한도"
+                            :rules="[requiredValidatorV2(props.item.pay_day_limit, '일 결제한도')]" />
                     </VCol>
                 </VRow>
                 <VRow>
                     <VCol md="6" cols="12">
                         <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_month_limit"
-                            type="number" suffix="만원" label="월 결제 한도"
-                            :rules="[requiredValidatorV2(props.item.pay_month_limit, '월 결제 한도')]" />
+                            type="number" suffix="만원" label="월 결제한도"
+                            :rules="[requiredValidatorV2(props.item.pay_month_limit, '월 결제한도')]" />
                     </VCol>
                     <VCol md="6">
                         <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_year_limit"
-                            type="number" suffix="만원" label="연 결제 한도"
-                            :rules="[requiredValidatorV2(props.item.pay_year_limit, '연 결제 한도')]" />
+                            type="number" suffix="만원" label="연 결제한도"
+                            :rules="[requiredValidatorV2(props.item.pay_year_limit, '연 결제한도')]" />
                     </VCol>
                 </VRow>
             </template>

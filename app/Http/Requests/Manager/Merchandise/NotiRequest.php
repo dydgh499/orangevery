@@ -51,6 +51,9 @@ class NotiRequest extends FormRequest
     }
     public function data()
     {
-        return array_merge($this->getParmasBaseKeyV2($this->keys, ''), $this->getParmasBaseKeyV2($this->integer_keys, 0));
+        $data = array_merge($this->getParmasBaseKeyV2($this->keys, ''), $this->getParmasBaseKeyV2($this->integer_keys, 0));
+        if($data['pmod_id'] === 0)
+            $data['pmod_id'] = -1;
+        return $data;
     }
 }

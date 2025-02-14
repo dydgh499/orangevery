@@ -48,6 +48,8 @@ class BulkNotiUrlRequest extends FormRequest
                 $this->getParmasBaseKeyV3($_datas[$i], $this->integer_keys, 0), 
                 $this->getParmasBaseKeyV3($_datas[$i], $this->keys, '')
             );
+            if($data['pmod_id'] === 0)
+                $data['pmod_id'] = -1;
             $datas[] = $data;
         }
         return collect($datas);

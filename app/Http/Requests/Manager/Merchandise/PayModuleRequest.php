@@ -63,6 +63,8 @@ class PayModuleRequest extends FormRequest
         'pay_window_extend_hour',
         'pay_limit_type',
         'withdraw_limit_type',
+        'withdraw_business_limit',
+        'withdraw_holiday_limit',
     ];
 
     public function authorize()

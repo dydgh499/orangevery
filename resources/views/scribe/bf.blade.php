@@ -688,21 +688,21 @@ response.json()</code></pre></div>
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>연결제 한도(만 단위)</p>
+<p>연결제한도(만 단위)</p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>pay_month_limit</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>월결제 한도(만 단위)</p>
+<p>월결제한도(만 단위)</p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>pay_single_limit</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>일결제 한도(만 단위)</p>
+<p>일결제한도(만 단위)</p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>pay_year_amount</code></b>&nbsp;&nbsp;

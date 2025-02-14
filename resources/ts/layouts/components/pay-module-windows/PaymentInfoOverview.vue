@@ -121,6 +121,10 @@ watchEffect(() => {
                         prepend-inner-icon="ic-outline-send-to-mobile" item-title="name" item-value="id" label="정산일"
                         :rules="[requiredValidatorV2(props.item.settle_type, '정산일')]" />
             </VCol>
+            <VCol md="6" cols="12">                    
+                <VTextField v-model="props.item.settle_fee" type="number" suffix="₩" label="단건 수수료"
+                        :rules="[requiredValidatorV2(props.item.settle_fee, '단건 수수료')]" />
+            </VCol>
         </VRow>
         <VRow v-else>
             <VCol md="5" cols="6">
@@ -128,6 +132,12 @@ watchEffect(() => {
             </VCol>
             <VCol md="7" cols="6">
                 {{ settle_types.find(obj => obj.id === props.item.settle_type)?.name }}
+            </VCol>
+            <VCol md="5" cols="6">
+                <span class="font-weight-bold">이체 수수료</span>
+            </VCol>
+            <VCol md="7" cols="6">
+                {{ props.item.settle_fee }} ₩
             </VCol>
         </VRow>
         <VRow v-if="isAbleModiy(props.item.id)">
@@ -294,15 +304,16 @@ watchEffect(() => {
                     </VTooltip>
                 </VCol>
             </VRow>
+            <VDivider style="margin: 1em 0;" />
+            <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
+                <span>출금제한</span>
+            </VCardSubtitle>
+            <br>
             <VRow v-if="isAbleModiy(props.item.id)">
                 <VCol md="6">
                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.withdraw_limit_type"
                         :items="withdraw_limit_types" prepend-inner-icon="streamline-emojis:pig" label="출금제한타입"
                         item-title="title" item-value="id"/>
-                </VCol>
-                <VCol md="6" cols="6">                    
-                    <VTextField v-model="props.item.settle_fee" type="number" suffix="₩" label="이체 수수료"
-                            :rules="[requiredValidatorV2(props.item.settle_fee, '이체 수수료')]" />
                 </VCol>
             </VRow>
             <VRow v-else>
@@ -312,11 +323,30 @@ watchEffect(() => {
                 <VCol md="7" cols="6">
                     {{ withdraw_limit_types.find(obj => obj.id === props.item.withdraw_limit_type )?.title }}
                 </VCol>
+            </VRow>
+
+            <VRow v-if="isAbleModiy(props.item.id)">
+                <VCol md="6">
+                    <VTextField prepend-inner-icon="tabler-currency-won"
+                            v-model="props.item.withdraw_business_limit" type="number" suffix="만원" label="일 출금한도(영업일)"/>
+                </VCol>
+                <VCol md="6">
+                    <VTextField prepend-inner-icon="tabler-currency-won"
+                            v-model="props.item.withdraw_holiday_limit" type="number" suffix="만원" label="일 출금한도(휴무일 )"/>
+                </VCol>
+            </VRow>
+            <VRow v-else>
                 <VCol md="5" cols="6">
-                    <span class="font-weight-bold">이체 수수료</span>
+                    <span class="font-weight-bold">일 출금한도(영업일)</span>
                 </VCol>
                 <VCol md="7" cols="6">
-                    {{ props.item.settle_fee }} ₩
+                    {{ props.item.withdraw_business_limit }} 만원
+                </VCol>
+                <VCol md="5" cols="6">
+                    <span class="font-weight-bold">일 출금한도(휴무일 )</span>
+                </VCol>
+                <VCol md="7" cols="6">
+                    {{ props.item.withdraw_holiday_limit }} 만원
                 </VCol>
             </VRow>
         </template>

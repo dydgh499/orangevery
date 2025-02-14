@@ -109,6 +109,8 @@ const addNewPayModule = async () => {
         is_different_settlement: 1,
         pay_limit_type: 0,
         withdraw_limit_type: 0,
+        withdraw_business_limit: 0,
+        withdraw_holiday_limit: 0,
     })
     const res = await payModuleDlg.value.show(pay_module)
     if(res)

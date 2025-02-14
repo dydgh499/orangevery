@@ -278,6 +278,8 @@ export interface PayModule {
     is_different_settlement: number,
     pay_limit_type: number,
     withdraw_limit_type: number,
+    withdraw_business_limit: number,
+    withdraw_holiday_limit: number,
 }
 
 export interface PayGateway {

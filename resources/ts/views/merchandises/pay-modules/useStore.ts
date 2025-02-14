@@ -289,7 +289,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     head.getSubHeaderCol('단말기 정보', headers4, sub_headers)
     head.getSubHeaderCol('FDS 설정정보', headers5, sub_headers)
     head.getSubHeaderCol('제한 정보', headers6, sub_headers)
-    head.getSubHeaderCol('결제 한도', headers7, sub_headers)
+    head.getSubHeaderCol('결제한도', headers7, sub_headers)
     head.getSubHeaderCol('실시간 정보', headers8, sub_headers)
     head.getSubHeaderCol('결제창 정보', headers9, sub_headers)
     head.getSubHeaderCol('계약 정보', headers10, sub_headers)
@@ -443,6 +443,8 @@ export const defaultItemInfo =  () => {
         is_different_settlement: 1,
         pay_limit_type: 0,
         withdraw_limit_type: 0,
+        withdraw_business_limit: 0,
+        withdraw_holiday_limit: 0,
     })
     //카드사 필터 및 다른 필터옵션들
     return {

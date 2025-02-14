@@ -91,9 +91,9 @@ class BfController extends Controller
      * @responseField settle_fee integer 입금 수수료
      * @responseField is_old_auth integer 비인증, 구인증 여부(비인증=0, 구인증=1)
      * @responseField installment string 할부한도(0~12)
-     * @responseField pay_year_limit integer 연결제 한도(만 단위)
-     * @responseField pay_month_limit integer 월결제 한도(만 단위)
-     * @responseField pay_single_limit integer 일결제 한도(만 단위)
+     * @responseField pay_year_limit integer 연결제한도(만 단위)
+     * @responseField pay_month_limit integer 월결제한도(만 단위)
+     * @responseField pay_single_limit integer 일결제한도(만 단위)
      * @responseField pay_year_amount integer 연결제 금액
      * @responseField pay_month_amount integer 월결제 금액
      * @responseField pay_day_amount integer 일결제 금액

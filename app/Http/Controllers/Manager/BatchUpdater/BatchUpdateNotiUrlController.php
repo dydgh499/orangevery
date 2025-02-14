@@ -118,7 +118,7 @@ class BatchUpdateNotiUrlController extends BatchUpdateController
         $row = $this->notiUrlBatch($request)->update(['is_delete' => true]);
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 노티주소가 존재하지 않습니다.');
     }
-    
+
     /**
      * 대량등록
      *

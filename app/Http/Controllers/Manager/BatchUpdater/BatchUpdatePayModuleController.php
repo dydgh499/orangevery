@@ -341,7 +341,19 @@ class BatchUpdatePayModuleController extends BatchUpdateController
         return $this->batchResponse($row, '결제모듈');
     }
 
+    public function setWithdrawBusinessLimit(Request $request)
+    {
+        $cols = ['withdraw_business_limit' => $request->withdraw_business_limit];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '결제모듈');
+    }
 
+    public function setWithdrawHolidayLimit(Request $request)
+    {
+        $cols = ['withdraw_holiday_limit' => $request->withdraw_holiday_limit];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '결제모듈');
+    }
     
     /**
      * 결제모듈 대량등록
