@@ -187,6 +187,8 @@ export interface Salesforce extends SalesforcePropertie, UserPropertie {
     is_able_modify_mcht: number,
     is_able_unlock_mcht: number,
     is_able_under_modify: number,
+    withdraw_business_limit: number,
+    withdraw_holiday_limit: number,
     under_auto_settings?: UnderAutoSetting[],
     sales_recommender_codes?: SalesRecommenderCode[],
     childs?: Salesforce[],

@@ -48,6 +48,8 @@ class SalesforceRequest extends FormRequest
         'is_able_modify_mcht',
         'is_able_under_modify',
         'is_able_unlock_mcht',
+        'withdraw_business_limit',
+        'withdraw_holiday_limit',
     ];
     public $nullable_keys = [
         'parent_id'

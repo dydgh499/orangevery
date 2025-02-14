@@ -297,6 +297,59 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                 </VCardItem>
             </VCard>
         </VCol>
+        <VCol v-else>
+            <VCard>
+                <VCardItem>
+                    <VCardTitle>
+                        <div style="display: flex;align-items: center;justify-content: space-between;">
+                            <span style="margin-right: 1em;">옵션정보</span>
+                        </div>
+                    </VCardTitle>
+                    <br>
+                    <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
+                        <span>하위 실시간 가맹점 출금한도</span>
+                    </VCardSubtitle>
+                    <VRow>
+                        <VCol cols="12">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol md="5" cols="6">
+                                            <span>일 출금한도(영업일)</span>
+                                        </VCol>
+                                        <VCol md="7">
+                                            <VTextField prepend-inner-icon="tabler-currency-won"
+                                                    v-model="props.item.withdraw_business_limit" type="number" suffix="만원"/>
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol md="5" cols="6">
+                                            <span class="font-weight-bold">일 출금한도(영업일)</span>
+                                        </VCol>
+                                        <VCol md="7" cols="6">
+                                            {{ props.item.withdraw_business_limit }} 만원
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol cols="5">일 출금한도(휴무일)</VCol>
+                                        <VCol md="7"> 
+                                            <VTextField prepend-inner-icon="tabler-currency-won"
+                                                v-model="props.item.withdraw_holiday_limit" type="number" suffix="만원"/>
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol md="5" cols="6" class="font-weight-bold">일 출금한도(휴무일)</VCol>
+                                        <VCol md="7" cols="6"><span>{{ props.item.withdraw_holiday_limit }} 만원</span></VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                </VCardItem>
+            </VCard>
+        </VCol>
         <BatchDialog ref="mchtBatchDialog" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"
             :item_type="ItemTypes.Merchandise" @update:select_idxs=""/>
         <BatchDialog ref="pmodBatchDialog" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"
