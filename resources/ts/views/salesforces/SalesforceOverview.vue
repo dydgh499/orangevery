@@ -298,7 +298,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
             </VCard>
         </VCol>
         <VCol v-else>
-            <VCard>
+            <VCard v-if="props.item.level === 30">
                 <VCardItem>
                     <VCardTitle>
                         <div style="display: flex;align-items: center;justify-content: space-between;">
