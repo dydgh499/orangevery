@@ -311,6 +311,15 @@ class BatchUpdateMchtController extends BatchUpdateController
         $row = $this->getApplyRow($request, $cols);
         return $this->batchResponse($row, '가맹점');
     }
+
+    public function setWithdrawFee(Request $request)
+    {
+        $cols = [
+            'withdraw_fee' => $request->withdraw_fee,
+        ];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
+    }
     
     /**
      * 대량등록

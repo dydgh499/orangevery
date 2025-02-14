@@ -38,6 +38,7 @@ Route::prefix('merchandises/batch-updaters')->group(function() {
     Route::post('set-specified-time-disable-limit', [BatchUpdateMchtController::class, 'setSpecifiedTimeDisableLimit']);
     Route::post('set-specified-time-disable-time', [BatchUpdateMchtController::class, 'setSpecifiedTimeDisableTime']);
     Route::post('set-use-noti', [BatchUpdateMchtController::class, 'setUseNoti']);
+    Route::post('set-withdraw-fee', [BatchUpdateMchtController::class, 'setWithdrawFee']);
     Route::post('register', [BatchUpdateMchtController::class, 'register']);
     Route::post('regular-credit-cards/register', [RegularCreditCardController::class, 'register']);
 });

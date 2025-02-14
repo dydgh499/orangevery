@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('payment_modules', function (Blueprint $table) {
             $table->unsignedInteger('withdraw_business_limit')->default(0)->comment('일 출금한도(영업일)');
-            $table->unsignedInteger('withdraw_holiday_limit')->default(0)->comment('일 출금한도(휴무일 )');
+            $table->unsignedInteger('withdraw_holiday_limit')->default(0)->comment('일 출금한도(휴무일)');
         });
     }
 

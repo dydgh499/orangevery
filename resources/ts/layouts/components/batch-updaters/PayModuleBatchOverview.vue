@@ -813,7 +813,7 @@ watchEffect(() => {
 
                 <template v-if="corp.pv_options.paid.use_realtime_deposit">
                     <VDivider style="margin: 1em 0;" />
-                    <h4 class="pt-3">실시간 정보 일괄변경</h4>
+                    <h4 class="pt-3">출금정보 일괄변경</h4>
                     <br>
                     <VRow>
                         <VCol :md="6" :cols="12" >

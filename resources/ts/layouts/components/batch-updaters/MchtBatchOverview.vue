@@ -67,6 +67,7 @@ const merchandise = reactive<any>({
     single_payment_limit_s_tm:'00:00',
     single_payment_limit_e_tm:'00:00',
     use_noti: 0,
+    withdraw_fee: 0,
 })
 
 const noti = reactive<any>({
@@ -167,6 +168,12 @@ const setSpecifiedTimeDisableTime = (apply_type: number) => {
 const setUseNoti = (apply_type: number) => {
     post('set-use-noti', {
         'use_noti': merchandise.use_noti,
+    }, apply_type)
+}
+
+const setWithdrawFee = (apply_type: number) => {
+    post('set-withdraw-fee', {
+        'withdraw_fee': merchandise.withdraw_fee,
     }, apply_type)
 }
 
@@ -400,6 +407,28 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12">
+                                    <VTextField v-model="merchandise.business_num" type="number" 
+                                        @update:model-value="merchandise.business_num = getOnlyNumber($event)"
+                                        label="사업자 번호"/>
+                                </VCol>
+                                <VCol md="6" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setBusinessNum(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setBusinessNum(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>                 
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>                        
                     </VRow>
                     <VRow>
                         <VCol :md="6" :cols="12">
@@ -426,26 +455,25 @@ watchEffect(() => {
                         </VCol>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
-                                <VCol md="6" cols="12">
-                                    <VTextField v-model="merchandise.business_num" type="number" 
-                                        @update:model-value="merchandise.business_num = getOnlyNumber($event)"
-                                        label="사업자 번호"/>
+                                <VCol md="6" cols="12" style="display: flex;">
+                                    <VTextField v-model="merchandise.withdraw_fee" type="number" suffix="₩" :label="`지급이체 수수료`"/>
                                 </VCol>
                                 <VCol md="6" cols="12">
                                     <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setBusinessNum(0)">
+                                        <VBtn variant="tonal" size="small" @click="setWithdrawFee(0)">
                                             즉시적용
                                             <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
-                                        <VBtn variant="tonal" size="small" color="secondary" @click="setBusinessNum(1)"
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setWithdrawFee(1)"
                                             style='margin-left: 0.5em;'>
                                             예약적용
                                             <VIcon end size="18" icon="tabler-clock-up" />
-                                        </VBtn>                 
+                                        </VBtn>                                
                                     </div>
                                 </VCol>
                             </VRow>
                         </VCol>
+
                     </VRow>
                     <VRow>
                         <VCol :md="6" :cols="12">
