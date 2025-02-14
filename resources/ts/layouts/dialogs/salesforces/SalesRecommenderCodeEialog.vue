@@ -5,13 +5,14 @@ import type { Salesforce, SalesRecommenderCode } from '@/views/types';
 
 const { setNullRemove } = useRequestStore()
 const visible = ref(false)
-const salesforce = ref(<Salesforce><unknown>({ id: 0, sales_recommender_codes: [] }))
+const salesforce = ref(<Salesforce><unknown>({ id: 0, sales_recommender_codes: [], level: 13}))
 
 const addNewSalesRecommenderCode = () => {
     salesforce.value.sales_recommender_codes?.push(<SalesRecommenderCode>({
         id: 0,
         sales_id: salesforce.value.id,
         mcht_fee: 0,
+        sales_fee: 0,
         recommend_code: '',
     }))
 }
@@ -36,7 +37,7 @@ defineExpose({
             <VCardText>
                 <SalesRecommenderCodeItem 
                 v-for="(sales_recommender_code, index) in salesforce.sales_recommender_codes"
-                        :key="sales_recommender_code.id" :item="sales_recommender_code" />
+                        :key="sales_recommender_code.id" :item="sales_recommender_code" :level="salesforce.level"/>
                 <VRow v-show="Boolean(salesforce.id != 0)">
                     <VCol class="d-flex gap-4">
                         <VBtn type="button" 

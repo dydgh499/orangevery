@@ -1,11 +1,15 @@
 <script lang="ts" setup>
+import { getLevelByIndex } from '@/plugins/axios';
+import corp from '@/plugins/corp';
 import { payWindowStore } from '@/views/quick-view/payWindowStore';
 import { useRequestStore } from '@/views/request';
 import type { SalesRecommenderCode } from '@/views/types';
 import { requiredValidatorV2 } from '@validators';
 import { VForm } from 'vuetify/components';
+
 interface Props {
     item: SalesRecommenderCode,
+    level: number,
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
@@ -58,16 +62,32 @@ const removeItem = () => {
                     </VCol>
                     <VCol class="d-flex justify-space-between small-font">
                         <div>
-                            <div>
-                                <b>가맹점 수수료율</b> 
+                            <div style="margin-bottom: 1em;">
+                                <b>수수료율 입력</b> 
                             </div>
                             <div>
                                 <VTextField 
                                     v-model="props.item.mcht_fee" 
                                     variant="underlined"
-                                    placeholder="수수료율 입력" suffix="%" 
-                                    style="min-width: 8em;"
-                                    :rules="[requiredValidatorV2(props.item.mcht_fee, '수수료율')]"
+                                    label="가맹점"
+                                    suffix="%" 
+                                    style="width: 4em;"
+                                    :rules="[requiredValidatorV2(props.item.mcht_fee, '수수료')]"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <div style="margin-bottom: 1em;">
+                                <b>　</b>
+                            </div>
+                            <div>
+                                <VTextField 
+                                    v-model="props.item.sales_fee" 
+                                    variant="underlined"
+                                    :label="corp.pv_options.auth.levels['sales'+(getLevelByIndex(props.level))+'_name']"
+                                    suffix="%" 
+                                    style="width: 4em;"
+                                    :rules="[requiredValidatorV2(props.item.sales_fee, '수수료')]"
                                 />
                             </div>
                         </div>

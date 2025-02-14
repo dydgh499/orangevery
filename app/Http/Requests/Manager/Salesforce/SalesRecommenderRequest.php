@@ -14,6 +14,7 @@ class SalesRecommenderRequest extends FormRequest
     public $integer_keys = [
         'sales_id',
         'mcht_fee',
+        'sales_fee',
     ];
 
     public function authorize()
@@ -31,6 +32,7 @@ class SalesRecommenderRequest extends FormRequest
         $sub = [
             'sales_id' => 'required|integer',
             'mcht_fee' => 'required|numeric',
+            'sales_fee' => 'required|numeric',
         ];
         return $this->getRules(array_merge($this->keys, $this->integer_keys), $sub);
     }

@@ -21,4 +21,12 @@ class SalesRecommenderCode extends Model
             set: fn ($value) => $value/100,
         );
     }
+
+    protected function SalesFee() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => number_format($value * 100, 3),
+            set: fn ($value) => $value/100,
+        );
+    }
 }

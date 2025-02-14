@@ -204,6 +204,7 @@ export interface SalesRecommenderCode {
     id: number,
     sales_id: number,
     mcht_fee: number,
+    sales_fee: number,
     recommend_code: string,
 }
 
