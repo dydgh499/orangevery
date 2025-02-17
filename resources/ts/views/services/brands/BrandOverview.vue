@@ -215,6 +215,7 @@ const props = defineProps<Props>()
                                 </VCol>
                                 <VCol md="8">
                                     <VTextarea v-model="props.item.note" counter label="메모사항"
+                                        variant="filled"
                                         prepend-inner-icon="twemoji-spiral-notepad" maxlength="250" auto-grow/>
                                 </VCol>
                             </VRow>
@@ -263,9 +264,7 @@ const props = defineProps<Props>()
                     </VRow>
                 </VCardItem>
             </VCard>
-            <template v-if="props.item.pv_options.paid.use_before_brand_info">
-                <br>
-                <VCard>
+            <VCard>
                 <VCardItem>
                     <VCol cols="12">
                         <VRow>
@@ -274,7 +273,6 @@ const props = defineProps<Props>()
                     </VCol>
                 </VCardItem>
             </VCard>
-            </template>
             <template v-if="props.item.use_different_settlement">
                 <br>
                 <VCard>

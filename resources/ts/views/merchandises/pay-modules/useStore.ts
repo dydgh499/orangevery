@@ -204,20 +204,17 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         if(corp.pv_options.paid.use_dup_pay_validation)
             headers_6['pay_dupe_limit'] = '동일카드 결제허용'
         headers_6['pay_limit_type'] = '결제금지타입'
-        if(corp.pv_options.paid.use_forb_pay_time)
-            headers_6['pay_disable_tm'] = '결제금지 시간'
+        headers_6['pay_disable_tm'] = '결제금지 시간'
         headers_6['payment_term_min'] = '결제허용 간격'
         return headers_6
     }
     
     const getLimitCols = () => {
         const headers_7:Record<string, string> = {}
-        if(corp.pv_options.paid.use_pay_limit) {
-            headers_7['pay_year_limit'] = '연'
-            headers_7['pay_month_limit'] = '월'
-            headers_7['pay_day_limit'] = '일'
-            headers_7['pay_single_limit'] = '단건'
-        }
+        headers_7['pay_year_limit'] = '연'
+        headers_7['pay_month_limit'] = '월'
+        headers_7['pay_day_limit'] = '일'
+        headers_7['pay_single_limit'] = '단건'
         return headers_7
     }
     const getRealtimeCols = () => {

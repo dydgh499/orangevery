@@ -184,7 +184,7 @@ class SalesforceController extends Controller
     {
         $with = ['underAutoSettings'];
         $b_info = BrandInfo::getBrandById($request->user()->brand_id);
-        if($b_info['pv_options']['paid']['use_p2p_app'])
+        if($b_info['pv_options']['paid']['brand_mode'] === 1)
             $with[] = 'salesRecommenderCodes';
 
         $data = $this->salesforces->where('id', $id)

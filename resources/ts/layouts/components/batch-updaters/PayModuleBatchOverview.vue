@@ -420,7 +420,7 @@ watchEffect(() => {
                             </VCol>
                         </VRow>
                     </VCol>
-                    <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_forb_pay_time">
+                    <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
                             <VCol md="6" cols="12">
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.pay_limit_type" :items="pay_limit_types"
@@ -443,7 +443,7 @@ watchEffect(() => {
                         </VRow>
                     </VCol>
                 </VRow>
-                <template v-if="corp.pv_options.paid.use_pay_limit">
+                <template>
                     <VRow>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
@@ -555,7 +555,7 @@ watchEffect(() => {
                             </VCol>
                         </VRow>
                     </VCol>
-                    <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_forb_pay_time">
+                    <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
                             <VCol md="6" cols="12">
                                 <div class="batch-container">

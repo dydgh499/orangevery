@@ -221,7 +221,6 @@ return [
 
         'use_pay_verification_mobile' => '결제전 휴대폰 인증 사용여부',
         'use_multiple_hand_pay' => '다중결제 사용여부',
-        'is_hide_account' => '정산계좌 숨김여부',
         //payment_modules
         'pg_id' => 'PG사',
         'ps_id' => '구간',

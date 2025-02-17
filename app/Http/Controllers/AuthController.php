@@ -120,7 +120,7 @@ class AuthController extends Controller
     {
         $brand = BrandInfo::getBrandById($request->brand_id);
         $sales_with = [];
-        if($brand['pv_options']['paid']['use_p2p_app'])
+        if($brand['pv_options']['paid']['brand_mode'] === 1)
             $sales_with[] = 'salesRecommenderCodes';
 
         $result = Login::isSafeAccount(Operator::where('is_active', true), $request);    // check operator

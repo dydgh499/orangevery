@@ -156,20 +156,16 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
             )
         }
         headers2.push({title: '결제금지타입(X)', key: 'pay_limit_type'})
-        if(corp.pv_options.paid.use_pay_limit) {
-            headers2.push(
-                {title: '결제 연 한도(X)', key: 'pay_year_limit'},
-                {title: '결제 월 한도(X)', key: 'pay_month_limit'},
-                {title: '결제 일 한도(X)', key: 'pay_day_limit'},
-                {title: '결제 단건 한도(X)', key: 'pay_single_limit'},
-            )
-        }
-        if(corp.pv_options.paid.use_forb_pay_time) {
-            headers2.push(
-                {title: '결제금지 시작시간(X)', key: 'pay_disable_s_tm'},
-                {title: '결제금지 종료시간(X)', key: 'pay_disable_e_tm'},
-            )
-        }
+        headers2.push(
+            {title: '결제 연 한도(X)', key: 'pay_year_limit'},
+            {title: '결제 월 한도(X)', key: 'pay_month_limit'},
+            {title: '결제 일 한도(X)', key: 'pay_day_limit'},
+            {title: '결제 단건 한도(X)', key: 'pay_single_limit'},
+        )
+        headers2.push(
+            {title: '결제금지 시작시간(X)', key: 'pay_disable_s_tm'},
+            {title: '결제금지 종료시간(X)', key: 'pay_disable_e_tm'},
+        )
         if(corp.pv_options.paid.use_realtime_deposit) {
             headers2.push(
                 {title: '실시간 사용여부(X)', key: 'use_realtime_deposit'},

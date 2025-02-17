@@ -23,10 +23,10 @@ const getMchtChildMenu = () => {
             children: [{ title: '가맹점 목록', to: 'merchandises'}]
         }
     ]))
-    if(corp.pv_options.paid.sales_parent_structure === false) {
-        users[1].children.push({ title: '장비 관리', to: 'merchandises-terminals' })
+    users[1].children.push({ title: '장비 관리', to: 'merchandises-terminals' })
+    if(corp.pv_options.paid.sales_parent_structure === false) 
         users[1].children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules' })
-    }
+
     if(corp.pv_options.paid.use_bill_key && getUserLevel() === 10)
         users[1].children.push({ title: '빌키 관리', to: 'merchandises-bill-keys'})
     if(corp.pv_options.paid.use_noti && (getUserLevel() === 10 && user_info.value.use_noti)) {
@@ -117,7 +117,7 @@ const getServiceMenu = () => {
         })
     }
     else {
-        if(corp.pv_options.paid.use_p2p_app && getUserLevel() === 13) {
+        if(corp.pv_options.paid.brand_mode === 1 && getUserLevel() === 13) {
             services.push({
                 title: '추천인코드관리',
                 icon: { icon: 'tabler:heart-code' },

@@ -451,6 +451,7 @@ watchEffect(() => {
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VTextarea v-model="props.item.note" counter label="메모사항"
+                                        variant="filled"
                                         prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
                                 </VCol>
                                 <VCol cols="12" md="6" style="margin-bottom: auto;">

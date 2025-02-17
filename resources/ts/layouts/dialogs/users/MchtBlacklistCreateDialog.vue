@@ -144,6 +144,7 @@ defineExpose({
                         </VCol>
                     </VRow>
                     <VTextarea v-model="mcht_blacklist.block_reason" counter placeholder='차단사유를 적어주세요.'
+                        variant="filled"
                         prepend-inner-icon="twemoji-spiral-notepad" class="pt-3" auto-grow/>
                 </VForm>
             </VCardText>

@@ -34,19 +34,19 @@ class Brand
             $pv_options = new PvOptions('[]');
 
             $theme_css->main_color = $brand->TM_CLR;
+            /*  TODO
             $pv_options->free->sales_slip['merchandise']['company_name'] = $brand->SEL_NICK_NM;
             $pv_options->free->sales_slip['merchandise']['rep_name'] = $brand->SEL_REP_NM;
             $pv_options->free->sales_slip['merchandise']['phone_num'] = $brand->SEL_PHONE;
             $pv_options->free->sales_slip['merchandise']['business_num'] = $brand->SEL_BUSINESS_NUM;
             $pv_options->free->sales_slip['merchandise']['addr'] = $brand->SEL_ADDR;
+            */
 
             $pv_options->paid->use_dup_pay_validation = (boolean)$brand->USE_DUPE_TRX;
             $pv_options->paid->use_acct_verification = (boolean)$brand->USE_ACCT_VALID;
             $pv_options->paid->use_realtime_deposit = (boolean)$brand->USE_RT_DPST;
             $pv_options->paid->use_issuer_filter = (boolean)$brand->USE_MD_CRD_FL;
-            $pv_options->paid->use_forb_pay_time = (boolean)$brand->USE_PAY_DISABLE_TM;
             $pv_options->paid->use_hand_pay_sms = (boolean)$brand->USE_HAND_PAY_SMS;
-            $pv_options->paid->use_pay_limit = (boolean)$brand->USE_PAY_LIMIT;
             
             $pv_options->auth->levels['dev_use'] = (boolean)$brand->USE_DEV;
             $pv_options->auth->levels['sales5_use'] = false;

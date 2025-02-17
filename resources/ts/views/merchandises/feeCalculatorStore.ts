@@ -1,8 +1,39 @@
-import { getUserLevel } from "@/plugins/axios";
+import { getIndexByLevel, getUserLevel, isAbleModiy } from "@/plugins/axios";
 import corp from "@/plugins/corp";
 import { SALES_LEVEL_SIZE, useSalesFilterStore } from "../salesforces/useStore";
 import { useStore } from "../services/pay-gateways/useStore";
 
+export const merchandiseCreateAuth = () => {
+    // 영업점 수수료 수정권한
+    const isSalesModifyValidate = (mcht_id: number, idx: number) => {
+        if(isAbleModiy(mcht_id)) {
+            if(getUserLevel() > 10 && getUserLevel() < 35) {
+                if(mcht_id === 0 && getIndexByLevel(idx) === getUserLevel())
+                    return false
+                else
+                    return true
+            }
+            else
+                return true
+        }
+        else
+            return false
+    }
+    // TID 추가모드가 가능한지?
+    const isSalesAddTIDMode = (mcht_id: number) => {
+        if(corp.pv_options.paid.brand_mode === 2) {
+            if(getUserLevel() > 10 && getUserLevel() < 35) {
+                if(mcht_id === 0)
+                    return true
+            }
+        }
+        return false
+    }
+    return {
+        isSalesModifyValidate,
+        isSalesAddTIDMode,
+    }
+}
 
 export const useFeeCalculatorStore = defineStore('useFeeCalculatorStore', () => {
     const { hintSalesSettleFee } = useSalesFilterStore()

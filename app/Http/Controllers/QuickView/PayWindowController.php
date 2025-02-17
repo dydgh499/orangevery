@@ -135,7 +135,6 @@ class PayWindowController extends Controller
             ->where('transactions.is_cancel', $request->is_cancel)
             ->first([
                 'merchandises.use_saleslip_prov',
-                'merchandises.use_saleslip_sell',
                 'merchandises.tax_category_type',
                 'merchandises.contact_num',
                 'merchandises.mcht_name',
@@ -158,7 +157,6 @@ class PayWindowController extends Controller
                         'contact_num' => $data->contact_num,
                         'business_num' => $data->business_num,
                         'use_saleslip_prov' => $data->use_saleslip_prov,
-                        'use_saleslip_sell' => $data->use_saleslip_sell,
                         'tax_category_type' => $data->tax_category_type,
                     ],
                     'transactions' => [

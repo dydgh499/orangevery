@@ -1,7 +1,15 @@
 <?php
     namespace App\Models\Options;
 
-    class FreeOption
+    class initOption
+    {
+        protected function initIntKey($parent, $key, $default)
+        {
+            return isset($parent[$key]) ? (int)$parent[$key] : $default;
+        }
+    }
+
+    class FreeOption extends initOption
     {
         public $use_search_date_detail = true;
         public $use_tid_duplicate = true;
@@ -12,16 +20,6 @@
         public $resident_num_masking = true;
         public $pay_module_detail_view = false;
         public $use_fee_detail_view = false;
-        
-        public $sales_slip = [
-            'merchandise' => [
-                'company_name' => '',
-                'rep_name' => '',
-                'phone_num' => '',
-                'business_num' => '',
-                'addr' => '',
-            ]
-        ];
         public $bonaeja = [
             'user_id'   => '',
             'api_key'   => '',
@@ -45,11 +43,6 @@
             'login_only_operate' => 0,
         ];
 
-        private function initIntKey($parent, $key, $default)
-        {
-            return isset($parent[$key]) ? (int)$parent[$key] : $default;
-        }
-
         public function __construct(array $source)
         {
             foreach ($source as $property => $value) 
@@ -71,16 +64,14 @@
         }
     }
 
-    class PaidOption 
+    class PaidOption extends initOption
     {
         public $use_dup_pay_validation = true; // 중복결제 검증 사용 여부
         public $use_acct_verification = false;  // 예금주 검증
         public $use_realtime_deposit = false;   // 실시간 결제모듈
         public $use_issuer_filter = false;      // 카드사 필터링
-        public $use_forb_pay_time = false;      // 결제금지시간 지정 사용 여부
         public $use_hand_pay_sms = false;       // 수기결제 SMS
         public $use_pay_verification_mobile = false; // 결제전 휴대폰 인증
-        public $use_pay_limit = false;          // 결제한도 지정 사용 여부
         public $use_online_pay = false;         // 온라인 결제 사용 여부
         public $use_tid_create = false;         // tid 생성버튼 사용여부
         public $use_mid_create = false;         // mid 생성버튼 사용여부
@@ -91,12 +82,9 @@
         public $use_head_office_withdraw = false; // 가상계좌 출금
         public $use_noti = false;               // 노티 사용여부
         public $use_finance_van_deposit = false; // 금융 VAN 송금 사용여부
-        public $use_before_brand_info = false;  // 이전 서비스 정보 사용
         public $use_multiple_hand_pay = false;  // 다중 수기결제
         public $use_mcht_blacklist = false;     // 가맹점 블랙리스트
         public $use_part_cancel = false;        // 부분취소
-        public $use_settle_hold = false;        // 지급보류
-        public $use_hide_account = false;       // 계좌숨김
         public $sales_parent_structure = false;
         public $use_specified_limit = false;    // 지정시간 제한
         public $use_syslink = false;            // syslink 선정산 사용여부
@@ -105,7 +93,7 @@
         public $use_bill_key = false;           // 빌키사용 여부
         public $use_shop = false;               // 쇼핑몰 사용여부
         public $fee_input_mode = false;         // 수수료율 정산 방식
-        public $use_p2p_app = false;            // p2p APP 사용여부
+        public $brand_mode = 0;                 // brand mode 0=대표가맹점, 1=P2P, 2=대표가명점(영업점)
 
         public function __construct(array $source)
         {
@@ -114,10 +102,11 @@
                 if (property_exists($this, $property)) 
                     $this->$property = $value;
             }
+            $this->brand_mode = (int)$this->brand_mode;
         }
     }
 
-    class AuthOption
+    class AuthOption extends initOption
     {
         public $levels = [
             'dev_use'       =>  false,

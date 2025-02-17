@@ -70,6 +70,7 @@ const { mchts } = useSalesFilterStore()
                     <VRow>
                         <VCol>
                             <VTextarea v-model="props.item.note" counter label="메모사항"
+                                variant="filled"
                                 prepend-inner-icon="twemoji-spiral-notepad" maxlength="250" auto-grow  :readonly="getUserLevel() >= 35 ? false : true"/>                                
                         </VCol>                        
                         <VDivider />

@@ -114,7 +114,7 @@ export const defaultItemInfo = () => {
             default: {
                 installment: 0,
                 abnormal_trans_limit: 0,
-                is_show_fee: 0,
+                is_show_fee: 1,
 
             },
             use_tid_duplicate: false,
@@ -143,8 +143,6 @@ export const defaultItemInfo = () => {
             use_realtime_deposit: false,
             use_issuer_filter: false,
             use_dup_pay_validation: false,
-            use_forb_pay_time: false,
-            use_pay_limit: false,
             use_online_pay: false,
             use_tid_create: false,
             use_mid_create: false,
@@ -156,12 +154,9 @@ export const defaultItemInfo = () => {
             use_collect_withdraw_scheduler: false,
             use_finance_van_deposit: false,
             use_pmid: false,
-            use_before_brand_info: false,
             use_multiple_hand_pay: false,
             use_mcht_blacklist: false,
             use_part_cancel: false,
-            use_settle_hold: false,
-            use_hide_account: false,
             sales_parent_structure: false,
             use_specified_limit: false,
             use_syslink: false,
@@ -170,7 +165,7 @@ export const defaultItemInfo = () => {
             use_bill_key: false,
             use_shop: false,
             fee_input_mode: false,
-            use_p2p_app: false,
+            brand_mode: 0,
         })
     }
 

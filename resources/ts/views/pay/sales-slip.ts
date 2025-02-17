@@ -100,10 +100,10 @@ export const salesSlip = () => {
     
     판매자 정보
     ---------------------------------
-    상호\t\t\t\t${trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.company_name : trans?.mcht_name}
-    사업자번호\t${trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.business_num : trans?.business_num}
-    대표자명\t\t${trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.rep_name : trans?.nick_name}
-    주소\t\t\t\t${trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.addr : trans?.addr}
+    상호\t\t\t\t${merchandise_info.value?.company_name}
+    사업자번호\t${merchandise_info.value?.business_num}
+    대표자명\t\t${merchandise_info.value?.rep_name}
+    주소\t\t\t\t${merchandise_info.value?.addr}
     
     공급자(결제대행사)정보
     ---------------------------------
@@ -149,24 +149,13 @@ export const salesSlip = () => {
     }
 
     const setMerchandiseInfo = (trans: SalesSlip) => {
-        if(trans?.use_saleslip_sell) {
-            merchandise_info.value = <BeforeBrandInfo>({
-                company_name: corp.pv_options.free.sales_slip.merchandise.company_name,
-                business_num: corp.pv_options.free.sales_slip.merchandise.business_num,
-                phone_num: corp.pv_options.free.sales_slip.merchandise.phone_num,
-                rep_name: corp.pv_options.free.sales_slip.merchandise.rep_name,
-                addr: corp.pv_options.free.sales_slip.merchandise.addr,
-            })
-        }
-        else {
-            merchandise_info.value = <BeforeBrandInfo>({
-                company_name: trans?.mcht_name,
-                business_num: trans?.business_num,
-                phone_num: trans?.contact_num,
-                rep_name: trans?.nick_name,
-                addr: trans?.addr,
-            })
-        }
+        merchandise_info.value = <BeforeBrandInfo>({
+            company_name: trans?.mcht_name,
+            business_num: trans?.business_num,
+            phone_num: trans?.contact_num,
+            rep_name: trans?.nick_name,
+            addr: trans?.addr,
+        })
     }
 
     const setProviderInfo = (trans: SalesSlip) => {

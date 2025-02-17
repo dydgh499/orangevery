@@ -90,7 +90,7 @@ class ShopController extends Controller
             'merchandises.addr', 
             'merchandises.resident_num', 'merchandises.business_num', 
             'merchandises.tax_category_type', 'merchandises.is_show_fee',
-            'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell', 
+            'merchandises.use_saleslip_prov',
 
             
             'transactions.is_cancel',

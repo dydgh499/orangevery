@@ -12,6 +12,7 @@ import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
 import { ItemTypes } from '@core/enums'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
+import { useStore } from '../services/pay-gateways/useStore'
 
 interface Props {
     item: Salesforce,
@@ -22,6 +23,7 @@ const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
 const { sales } = useSalesFilterStore()
+const { pgs, pss, psFilter, setFee } = useStore()
 
 const mchtBatchDialog = ref()
 const pmodBatchDialog = ref()
@@ -58,6 +60,12 @@ const getParentSales = computed(()  => {
         return []
 })
 
+const filterPgs = computed(() => {
+    const filter = pss.filter(item => { return item.pg_id == props.item.mcht_pg_id })
+    props.item.mcht_ps_id = psFilter(filter, props.item.mcht_ps_id)
+    return filter
+})
+
 if(props.item.id === 0 && getSalesLevel().length > 0)
     props.item.level = getSalesLevel()[0].id as number
 
@@ -81,7 +89,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                         하위 결제모듈 일괄작업
                                     </VBtn>
                                 </template>
-                                <VBtn v-if="corp.pv_options.paid.use_p2p_app && props.item.level === 13"
+                                <VBtn v-if="corp.pv_options.paid.brand_mode === 1 && props.item.level === 13"
                                     style='margin: 0.25em;' variant="tonal" size="small" color="warning" @click="salesRecommenderCodeEialog.show(props.item)">
                                     추천인코드 관리
                                 </VBtn>
@@ -280,6 +288,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                         </VCol>
                         <VCol v-if="isAbleModiy(props.item.id)">
                             <VTextarea v-model="props.item.note" counter label="메모사항"
+                                variant="filled"
                                 prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
                         </VCol>                        
                     </VRow>
@@ -297,7 +306,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol v-else>
+        <VCol v-if="getUserLevel() >= 35 && corp.pv_options.paid.brand_mode === 2">
             <VCard v-if="props.item.level === 30">
                 <VCardItem>
                     <VCardTitle>
@@ -307,9 +316,8 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                     </VCardTitle>
                     <br>
                     <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
-                        <span>하위 실시간 가맹점 출금한도</span>
+                        <span>하위 가맹점 출금한도</span>
                     </VCardSubtitle>
-                    <br>
                     <VRow>
                         <VCol cols="12">
                             <VRow>
@@ -343,6 +351,39 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                     <VRow v-else>
                                         <VCol md="5" cols="6" class="font-weight-bold">일 출금한도(휴무일)</VCol>
                                         <VCol md="7" cols="6"><span>{{ props.item.withdraw_holiday_limit }} 만원</span></VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <br>
+                    <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
+                        <span>하위 가맹점 추가정보</span>
+                    </VCardSubtitle>
+                    <VRow>
+                        <VCol cols="12">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol md="5" cols="6">
+                                            <span>원천사</span>
+                                        </VCol>
+                                        <VCol md="7">
+                                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_pg_id" :items="pgs"
+                                                prepend-inner-icon="ph-buildings" label="원천사 선택" item-title="pg_name" item-value="id"
+                                                :rules="[requiredValidatorV2(props.item.mcht_pg_id, 'PG사')]" />
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol cols="5">구간</VCol>
+                                        <VCol md="7"> 
+                                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_ps_id" :items="filterPgs"
+                                                prepend-inner-icon="mdi-vector-intersection" label="구간 선택" item-title="name" item-value="id"
+                                                :hint="`${setFee(pss, props.item.mcht_ps_id)}`" persistent-hint
+                                                :rules="[requiredValidatorV2(props.item.mcht_ps_id, '구간')]" />
+                                        </VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>

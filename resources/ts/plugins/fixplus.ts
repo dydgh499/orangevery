@@ -24,7 +24,6 @@ export const autoUpdateMerchandiseInfo = (merchandise: Merchandise) => {
     merchandise.use_regular_card  = 1
     merchandise.use_collect_withdraw = 1
     merchandise.use_saleslip_prov = 1
-    merchandise.use_saleslip_sell = 0  
     merchandise.user_name = merchandise.business_num
     merchandise.user_pw = merchandise.phone_num
 } 

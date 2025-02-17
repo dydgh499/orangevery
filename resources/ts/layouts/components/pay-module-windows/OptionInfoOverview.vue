@@ -62,7 +62,7 @@ const props = defineProps<Props>()
                 </VCol>
             </VRow>
 
-            <VRow v-if="corp.pv_options.paid.use_forb_pay_time">
+            <VRow>
                 <VCol md="6" cols="12">
                     <AppDateTimePicker 
                         v-model="props.item.pay_disable_s_tm" label="결제금지 시작시간"
@@ -108,7 +108,7 @@ const props = defineProps<Props>()
                         </VTooltip>
                 </VCol>
             </VRow>
-            <template v-if="corp.pv_options.paid.use_pay_limit">
+            <template>
                 <VDivider style="margin: 1em 0;" />
                 <VCardSubtitle>결제한도</VCardSubtitle>
                 <br>

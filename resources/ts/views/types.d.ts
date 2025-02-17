@@ -120,7 +120,6 @@ export interface MerchandisePropertie {
     tax_category_type: number,
     custom_id: number | null,
     use_saleslip_prov: number,
-    use_saleslip_sell: number,
     use_noti: number,
     is_show_fee: number,
     use_regular_card: number,
@@ -129,7 +128,6 @@ export interface MerchandisePropertie {
     withdraw_fee: number,
     settle_hold_s_dt: string,
     settle_hold_reason: string,
-    is_hide_account: number,
     note: string,
 
     website_url: string,
@@ -173,6 +171,9 @@ export interface Merchandise extends MerchandisePropertie, UserPropertie {
     specified_time_disable_limit?: number,
     specified_time_disable_limit_payments?: SpecifiedTimeDisablePayment[],
     products?: Product[],
+    //
+    tid?: string,
+    tid_auto_issue?: number,
 }
 
 export interface SalesFilter {
@@ -189,6 +190,8 @@ export interface Salesforce extends SalesforcePropertie, UserPropertie {
     is_able_under_modify: number,
     withdraw_business_limit: number,
     withdraw_holiday_limit: number,
+    mcht_pg_id: number,
+    mcht_ps_id: number,
     under_auto_settings?: UnderAutoSetting[],
     sales_recommender_codes?: SalesRecommenderCode[],
     childs?: Salesforce[],
@@ -402,8 +405,6 @@ interface PaidOption {
     use_realtime_deposit: boolean,  // 실시간 결제모듈
     use_issuer_filter: boolean, // 카드사 필터링
     use_dup_pay_validation: boolean,    // 중복결제 검증 사용 여부
-    use_forb_pay_time: boolean,   // 결제금지시간 지정 사용 여부
-    use_pay_limit: boolean,   // 결제한도 지정 사용 여부
     use_online_pay: boolean,    // 통합 API KEY
     use_tid_create: boolean,    // TID 생성버튼
     use_mid_create: boolean,    // MID 생성버튼
@@ -415,12 +416,9 @@ interface PaidOption {
     use_head_office_withdraw: boolean,
     use_noti: boolean,
     use_finance_van_deposit: boolean, //금융 VAN 송금
-    use_before_brand_info: boolean, // 이전 서비스 정보 사용
     use_multiple_hand_pay: boolean, // 다중 수기결제
     use_mcht_blacklist: boolean, // 가맹점 블랙리스트
     use_part_cancel: boolean, // 부분취소 사용여부
-    use_settle_hold: boolean, // 지급보류
-    use_hide_account: boolean, // 계좌 숨김
     sales_parent_structure: boolean, // 영업점 종속구조
     use_specified_limit: boolean,   // 지정시간 제한
     use_syslink: boolean,
@@ -429,7 +427,7 @@ interface PaidOption {
     use_bill_key: boolean,  // 빌키 사용 여부
     use_shop: boolean, // 쇼핑몰 사용여부
     fee_input_mode: boolean,  // 수수료구조 타입
-    use_p2p_app: boolean,
+    brand_mode: number,
 }
 interface AuthOption {
     levels: {
@@ -650,8 +648,7 @@ export interface SalesSlip extends Transaction {
     result_cd?: string,
     result_msg?: string,
     contact_num?: string,
-    use_saleslip_prov: number, 
-    use_saleslip_sell: number, 
+    use_saleslip_prov: number,
     tax_category_type: number,
 }
 

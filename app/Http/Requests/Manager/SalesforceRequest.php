@@ -52,7 +52,9 @@ class SalesforceRequest extends FormRequest
         'withdraw_holiday_limit',
     ];
     public $nullable_keys = [
-        'parent_id'
+        'parent_id',
+        'mcht_pg_id',
+        'mcht_ps_id',
     ];
 
     public function authorize()

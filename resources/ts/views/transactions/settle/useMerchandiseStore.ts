@@ -2,17 +2,15 @@ import { Header } from '@/views/headers'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { Searcher } from '@/views/searcher'
 import type { DeductionHeader } from '@/views/types'
-import { getUserLevel, user_info } from '@axios'
+import { getUserLevel } from '@axios'
 import corp from '@corp'
 
 export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
     const setMerchandiseHeader = () => {
         const headers0:any = {}
         headers0['id'] = 'NO.'
-        if(corp.pv_options.paid.use_settle_hold) {
-            headers0['settle_hold_s_dt'] = '지급보류 시작일'
-            headers0['settle_hold_reason'] = '지급보류 사유'
-        }
+        headers0['settle_hold_s_dt'] = '지급보류 시작일'
+        headers0['settle_hold_reason'] = '지급보류 사유'
         headers0['user_name'] = '가맹점 ID'
         headers0['mcht_name'] = '상호'
         if (levels.sales5_use && getUserLevel() >= 30) {
@@ -93,7 +91,7 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
     const { findSalesName } = useSalesFilterStore()
     const levels = corp.pv_options.auth.levels
 
-    const is_show_acct = ((getUserLevel() == 10 && !user_info.value.is_hide_account) || getUserLevel() >= 13) ? true : false
+    const is_show_acct = (getUserLevel() == 10 || getUserLevel() >= 35) ? true : false
     const settleObject = {
         'count' :  '건수',
         'amount' :  '금액',

@@ -20,7 +20,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getIndexByLevel, getLevelByIndex, getUserLevel, isAbleModiy, user_info } from '@axios'
 import corp from '@corp'
 import { autoUpdateMerchandiseParentSalesInfo } from '../salesforces/overlap'
-import { useFeeCalculatorStore } from './feeCalculatorStore'
+import { merchandiseCreateAuth, useFeeCalculatorStore } from './feeCalculatorStore'
 
 interface Props {
     item: Merchandise,
@@ -41,6 +41,8 @@ const underAutoSetting = ref()
 const passwordCheckDialog = ref()
 
 provide('feeBookDialog', feeBookDialog)
+
+const { isSalesModifyValidate, isSalesAddTIDMode } = merchandiseCreateAuth()
 
 const setSalesUnderAutoSetting = async (my_level: number) => {
     const setSalesAutoInfo = (my_level: number, under_auto_setting: UnderAutoSetting) => {
@@ -110,23 +112,25 @@ const MerchandiseTrxFeeValidate = computed(() => {
     }
 })
 
-initAllSales()
-watchEffect(() => {
-    // 수정가능, 추가상태, 영업점일 경우
-    if(props.item.id === 0 && isAbleModiy(props.item.id)) {
-        if(getUserLevel() > 10 && getUserLevel() < 35) {
-            if(corp.pv_options.paid.sales_parent_structure)
-                autoUpdateMerchandiseParentSalesInfo(props.item, all_sales)
-            else {
-                const idx = getLevelByIndex(getUserLevel())
-                props.item[`sales${idx}_id`] = user_info.value.id
-            }
-        }        
-    }
-})
+onMounted(() => {
+    initAllSales()
+    watchEffect(() => {
+        // 수정가능, 추가상태, 영업점일 경우
+        if(props.item.id === 0 && isAbleModiy(props.item.id)) {
+            if(getUserLevel() > 10 && getUserLevel() < 35) {
+                if(corp.pv_options.paid.sales_parent_structure)
+                    autoUpdateMerchandiseParentSalesInfo(props.item, all_sales)
+                else {
+                    const idx = getLevelByIndex(getUserLevel())
+                    props.item[`sales${idx}_id`] = user_info.value.id
+                }
+            }        
+        }
+    })
 
-watchEffect(() => {
-    contact_num_format.value = props.item.contact_num ?? ''
+    watchEffect(() => {
+        contact_num_format.value = props.item.contact_num ?? ''
+    })
 })
 </script>
 <template>
@@ -238,7 +242,7 @@ watchEffect(() => {
                             </VCol>
                             <template v-for="i in 6" :key="i">
                                 <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">
-                                    <VRow v-if="isAbleModiy(props.item.id)">
+                                    <VRow v-if="isSalesModifyValidate(props.item.id, 6 - i)">
                                         <VCol cols="12" md="3">* {{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
                                         <VCol cols="6" :md="props.item.id ? 3 : 4">
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6-i)+'_id']"
@@ -345,6 +349,7 @@ watchEffect(() => {
                         </VCol>
                         <VCol v-if="isAbleModiy(props.item.id)">
                             <VTextarea v-model="props.item.note" counter label="메모사항"
+                                variant="filled"
                                 prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
                         </VCol>
                     </VRow>
@@ -440,7 +445,8 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card">
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card || corp.pv_options.paid.use_multiple_hand_pay">
+                            <VDivider style="margin-bottom: 1em;"/>
                             <VRow>
                                 <VCol :md="6" :cols="12">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
@@ -458,6 +464,20 @@ watchEffect(() => {
                                     <VRow v-else>
                                         <VCol class="font-weight-bold">단골고객 사용여부</VCol>
                                         <VCol md="6"><span>{{ props.item.use_regular_card ? "사용" : "미사용" }}</span></VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol v-if="corp.pv_options.paid.use_multiple_hand_pay" md="6">
+                                    <VRow no-gutters :md="6" style="align-items: center;">
+                                        <VCol>다중 수기결제 사용 여부</VCol>
+                                        <VCol md="6">
+                                            <div class="batch-container">
+                                                <BooleanRadio :radio="props.item.use_multiple_hand_pay"
+                                                    @update:radio="props.item.use_multiple_hand_pay = $event">
+                                                    <template #true>활성</template>
+                                                    <template #false>비활성</template>
+                                                </BooleanRadio>
+                                            </div>
+                                        </VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>
@@ -505,40 +525,32 @@ watchEffect(() => {
                                 </VRow>
                             </VCol>
                         </template>
-                        <template v-if="isAbleModiy(props.item.id)">
+                        <template v-if="isSalesAddTIDMode(props.item.id)">
                             <VCol cols="12">
                                 <VDivider style="margin-bottom: 1em;"/>
                                 <VRow>
                                     <VCol :md="6" :cols="12">
                                         <VRow no-gutters style="align-items: center;">
-                                            <VCol>매출전표 공급자 정보</VCol>
-                                            <VCol md="6">
-                                                <div class="batch-container">
-                                                    <BooleanRadio :radio="props.item.use_saleslip_prov"
-                                                        @update:radio="props.item.use_saleslip_prov = $event">
-                                                        <template #true>PG사</template>
-                                                        <template #false>운영사</template>
-                                                    </BooleanRadio>
-                                                </div>
+                                            <VCol>
+                                                <VSwitch v-if="isAbleModiy(props.item.id)" 
+                                                    hide-details :false-value=0 :true-value=1 
+                                                    v-model="props.item.tid_auto_issue"
+                                                    label="TID 추가" color="info"
+                                                />
                                             </VCol>
-                                        </VRow>
-                                    </VCol>
-                                    <VCol>
-                                        <VRow no-gutters style="align-items: center;">
-                                            <VCol>매출전표 판매자 정보</VCol>
                                             <VCol md="6">
-                                                <div class="batch-container">     
-                                                    <BooleanRadio :radio="props.item.use_saleslip_sell"
-                                                        @update:radio="props.item.use_saleslip_sell = $event">
-                                                        <template #false>가맹점</template>
-                                                        <template #true>운영사</template>
-                                                    </BooleanRadio>
-                                                </div>
+                                                <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
+                                                    placeholder="TID 입력" persistent-placeholder
+                                                    maxlength="50" :rules="props.item.tid_auto_issue ? [] : [requiredValidatorV2(props.item.tid, 'TID')]"
+                                                    :disabled="!props.item.tid_auto_issue"
+                                                />
                                             </VCol>
                                         </VRow>
                                     </VCol>
                                 </VRow>
                             </VCol>
+                        </template>
+                        <template v-if="getUserLevel() >= 35">
                             <VCol cols="12">
                                 <VDivider style="margin-bottom: 1em;"/>
                                 <VRow>
@@ -556,60 +568,41 @@ watchEffect(() => {
                                             </VCol>
                                         </VRow>
                                     </VCol>
-                                    <VCol :md="6">
-                                        <VRow no-gutters style="align-items: center;">
-                                            <VCol>가맹점 수수료율 노출</VCol>
-                                            <VCol md="6">
-                                                <div class="batch-container">
-                                            <BooleanRadio :radio="props.item.is_show_fee"
-                                                @update:radio="props.item.is_show_fee = $event">
-                                                <template #true>노출</template>
-                                                <template #false>숨김</template>
-                                            </BooleanRadio>
-                                                </div>
-                                            </VCol>
-                                        </VRow>
-                                    </VCol>
-                                </VRow>
-                            </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.use_multiple_hand_pay">
-                                <VRow>
-                                    <VCol v-if="corp.pv_options.paid.use_multiple_hand_pay" md="6">
-                                        <VRow no-gutters :md="6" style="align-items: center;">
-                                            <VCol>다중 수기결제 사용 여부</VCol>
-                                            <VCol md="6">
-                                                <div class="batch-container">
-                                            <BooleanRadio :radio="props.item.use_multiple_hand_pay"
-                                                @update:radio="props.item.use_multiple_hand_pay = $event">
-                                                <template #true>활성</template>
-                                                <template #false>비활성</template>
-                                            </BooleanRadio>
-                                                </div>
-                                            </VCol>
-                                        </VRow>
-                                    </VCol>
-                                </VRow>
-                            </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.use_settle_hold && getUserLevel() >= 35">
-                                <VDivider style="margin-bottom: 1em;"/>
-                                <VRow>
                                     <VCol :md="6" :cols="12">
                                         <VRow no-gutters style="align-items: center;">
-                                            <VCol cols="5">지급보류 시작일</VCol>
+                                            <VCol>매출전표 공급자 정보</VCol>
                                             <VCol md="6">
-                                                <div class="batch-container">                                                    
-                                                    <VTextField type="date" v-model="props.item.settle_hold_s_dt"
-                                                        prepend-inner-icon="ic-baseline-calendar-today" label="시작일 입력" single-line />
+                                                <div class="batch-container">
+                                                    <BooleanRadio :radio="props.item.use_saleslip_prov"
+                                                        @update:radio="props.item.use_saleslip_prov = $event">
+                                                        <template #true>PG사</template>
+                                                        <template #false>운영사</template>
+                                                    </BooleanRadio>
                                                 </div>
                                             </VCol>
                                         </VRow>
                                     </VCol>
-                                    <VCol md="6">
-                                        <VRow no-gutters style="align-items: center;">
-                                            <VCol md="12">
-                                                <div class="batch-container">     
-                                                    <VTextarea v-model="props.item.settle_hold_reason" counter label="지급보류 사유"
-                                                        prepend-inner-icon="twemoji-spiral-notepad" maxlength="200" auto-grow />
+                                </VRow>
+                            </VCol>
+                            <VCol cols="12" v-if="getUserLevel() >= 35">
+                                <VDivider style="margin-bottom: 1em;"/>
+                                <VRow>
+                                    <VCol :md="12" :cols="12">
+                                        <VRow style="align-items: center;" class="match-height">
+                                            <VCol md="6" cols=12>
+                                                <VTextarea v-model="props.item.settle_hold_reason" counter label="지급보류 사유"
+                                                    variant="filled"
+                                                    prepend-inner-icon="twemoji-spiral-notepad" maxlength="200" auto-grow />
+                                            </VCol>
+                                            <VCol md="6" cols="12" style="display: flex;flex-direction: column;text-align: end;">
+                                                <div>
+                                                    <AppDateTimePicker
+                                                        v-model="props.item.settle_hold_s_dt" 
+                                                        prepend-inner-icon="ic-baseline-calendar-today"
+                                                        placeholder="지급보류 시작일 입력"
+                                                        label="지급보류 시작일"
+                                                        style="max-width: 14em; margin-bottom: 3em; margin-left: auto;"
+                                                    />
                                                 </div>
                                                 <div style="float: inline-end;">
                                                     <VBtn color="error" @click="setSettleHoldClear()" style='margin-bottom: 1em;'>
@@ -621,7 +614,7 @@ watchEffect(() => {
                                                         <VIcon end icon="icon-park-solid:clear-format" />
                                                     </VBtn>
                                                 </div>
-                                            </VCol>                                            
+                                            </VCol>
                                         </VRow>
                                     </VCol>
                                 </VRow>
@@ -666,9 +659,9 @@ watchEffect(() => {
                     </VRow>
                 </VCardItem>
             </VCard>
-            <template v-if="props.item.use_regular_card">
+            <template v-if="props.item.use_regular_card && isAbleModiy(props.item.id)">
                 <br>
-                <VCard v-if="isAbleModiy(props.item.id)">
+                <VCard>
                     <VCardItem>
                         <VCol cols="12">
                             <VRow>
@@ -678,9 +671,9 @@ watchEffect(() => {
                     </VCardItem>
                 </VCard>
             </template>
-            <template v-if="corp.pv_options.paid.use_product">
+            <template v-if="corp.pv_options.paid.use_product && isAbleModiy(props.item.id)">
                 <br>
-                <VCard v-if="isAbleModiy(props.item.id)">
+                <VCard>
                     <VCardItem>
                         <VCol cols="12">
                             <VRow>

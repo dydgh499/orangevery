@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 
 use App\Models\Operator;
 use App\Models\Merchandise;
-use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Models\Merchandise\PaymentModule;
 use App\Models\Merchandise\NotiUrl;
 
@@ -180,6 +180,30 @@ class MerchandiseController extends Controller
         return $this->response(0, $data);
     }
 
+    public function createPayModuleByTID($request, $mcht_id)
+    {
+        if(Ablilty::isSalesforce($request) && $request->tid_auto_issue)
+        {
+            if($request->user()->mcht_pg_id && $request->user()->mcht_ps_id)
+            {
+                $res = PaymentModule::create([
+                    'brand_id'  => $request->user()->brand_id,
+                    'mcht_id'   => $mcht_id,
+                    'pg_id'     => $request->user()->mcht_pg_id,
+                    'ps_id'     => $request->user()->mcht_ps_id,
+                    'settle_type' => 0,
+                    'module_type' => 0,
+                    'tid'       => $request->tid,
+                    'note'      => '장비',
+                    'contract_s_dt' => date("Y-m-d"),
+                ]);
+                return $res ? true : false;
+            }
+        }
+        else
+            return true;
+    }
+
     /**
      * 추가
      *
@@ -237,8 +261,14 @@ class MerchandiseController extends Controller
                     }
 
                     $res = $this->merchandises->create($user);
-                    operLogging(HistoryType::CREATE, $this->target, [], $user, $user['mcht_name']);
-                    return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
+                    if($res)
+                    {
+                        $p_res = $this->createPayModuleByTID($request, $res->id);
+                        operLogging(HistoryType::CREATE, $this->target, [], $user, $user['mcht_name']);
+                        return $this->response(1, ['id'=>$res->id]);    
+                    }
+                    else
+                        return $this->response(990, []);
                 }
             }
         }

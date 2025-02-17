@@ -14,7 +14,7 @@ export const autoUpdateMerchandiseParentSalesInfo = (merchandise: Merchandise, a
     let dest_sales = user_info.value
     merchandise = updateMchtFee(idx, dest_sales, merchandise)
 
-    for (let i = idx; i < SALES_LEVEL_SIZE; i++) 
+    for (let i = idx; i < SALES_LEVEL_SIZE-1; i++) 
     {
         let _dest_sales = all_sales[i+1].find(obj => obj.id === dest_sales.parent_id)
         if(_dest_sales) {

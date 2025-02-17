@@ -82,6 +82,7 @@ declare module '@vue/runtime-core' {
     RealtimeHistoriesDialog: typeof import('./resources/ts/layouts/dialogs/transactions/RealtimeHistoriesDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SalesRecommenderCodeEialog: typeof import('./resources/ts/layouts/dialogs/salesforces/SalesRecommenderCodeEialog.vue')['default']
     SalesSlipDialog: typeof import('./resources/ts/layouts/dialogs/transactions/SalesSlipDialog.vue')['default']
     SearchFilterDialog: typeof import('./resources/ts/layouts/dialogs/utils/SearchFilterDialog.vue')['default']
     SecureReportDialog: typeof import('./resources/ts/layouts/dialogs/utils/SecureReportDialog.vue')['default']

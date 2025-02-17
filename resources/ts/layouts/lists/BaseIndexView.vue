@@ -103,3 +103,8 @@ onMounted(() => {
         <SearchFilterDialog ref="filter" />
     </section>
 </template>
+<style scoped>
+  textarea {
+    font-size: 0.8em !important;
+  }
+</style>

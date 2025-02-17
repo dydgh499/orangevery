@@ -1,6 +1,6 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
-import { getUserLevel, user_info } from '@axios'
+import { getUserLevel } from '@axios'
 import corp from '@corp'
 
 export const deposit_statuses = [
@@ -65,7 +65,7 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
     }
 
     const getPrivacyCols = () => {
-        if(((getUserLevel() == 10 && !user_info.value.is_hide_account) || getUserLevel() >= 13)) {
+        if(getUserLevel() == 10 || getUserLevel() >= 35) {
             return {
                 'acct_bank_name': '은행',
                 'acct_bank_code': '은행코드',

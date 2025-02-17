@@ -184,99 +184,49 @@ const filterPgs = computed(() => {
             <VCard>
                 <VCardItem>
                     <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="매출전표 가맹점표기 정보"
-                            :content="`가맹점 옵션중 매출전표 가맹점표기 정보(PG/본사)를 본사로 설정할 시<br>매출전표에서 하단 정보들이 보여집니다.`">
-                        </BaseQuestionTooltip>
+                        <BaseQuestionTooltip :location="'top'" text="문자 발송정보" content="전산내 문자발송 서비스에 사용됩니다." />
                     </VCardTitle>
                     <CreateHalfVColV2 :mdl="5" :mdr="7" class="pt-5">
-                        <template #l_name>회사명</template>
+                        <template #l_name>회원 ID</template>
                         <template #l_input>
-                            <VTextField  prepend-inner-icon="ph-buildings"
-                                v-model="props.item.free.sales_slip.merchandise.company_name" placeholder="회사명 입력"
+                                <VTextField prepend-inner-icon="tabler-user" v-model="props.item.free.bonaeja.user_id"
+                                    placeholder="대표자명을 입력해주세요." type="text" />
+                        </template>
+                        <template #r_name>API KEY</template>
+                        <template #r_input>
+                            <VTextField prepend-inner-icon="ic-baseline-vpn-key"
+                                v-model="props.item.free.bonaeja.api_key" placeholder="API KEY를 입력해주세요."
                                 type="text" />
                         </template>
-                        <template #r_name>대표자명</template>
-                        <template #r_input>
-                                <VTextField prepend-inner-icon="tabler-user"
-                                    v-model="props.item.free.sales_slip.merchandise.rep_name" placeholder="대표자명 입력"
-                                    type="text" />
-                        </template>
                     </CreateHalfVColV2>
                     <CreateHalfVColV2 :mdl="5" :mdr="7">
-                        <template #l_name>연락처</template>
+                        <template #l_name>발신자번호</template>
                         <template #l_input>
                                 <VTextField prepend-inner-icon="tabler-device-mobile"
-                                    v-model="props.item.free.sales_slip.merchandise.phone_num" placeholder="연락처 입력"
-                                    type="text" />
-                        </template>
-                        <template #r_name>사업자등록번호</template>
-                        <template #r_input>
-                                <VTextField prepend-inner-icon="ic-outline-business-center" 
-                                    v-model="props.item.free.sales_slip.merchandise.business_num"
-                                    placeholder="사업자등록번호 입력" type="text" />
-                        </template>
-                    </CreateHalfVColV2>
-                    <CreateHalfVColV2 :mdl="5" :mdr="7">
-                        <template #l_name>주소</template>
-                        <template #l_input>
-                                <VTextField prepend-inner-icon="tabler-map-pin"
-                                    v-model="props.item.free.sales_slip.merchandise.addr" placeholder="주소 입력"
+                                    v-model="props.item.free.bonaeja.sender_phone" placeholder="연락처를 입력해주세요."
                                     type="text" />
                         </template>
                         <template #r_name></template>
                         <template #r_input>
                         </template>
                     </CreateHalfVColV2>
-
-                    <div>
-                        <VCardTitle class="pt-10">
-                            <BaseQuestionTooltip :location="'top'" text="문자 발송정보" content="전산내 문자발송 서비스에 사용됩니다." />
-                        </VCardTitle>
-
-                        <CreateHalfVColV2 :mdl="5" :mdr="7" class="pt-5">
-                            <template #l_name>회원 ID</template>
-                            <template #l_input>
-                                    <VTextField prepend-inner-icon="tabler-user" v-model="props.item.free.bonaeja.user_id"
-                                        placeholder="대표자명을 입력해주세요." type="text" />
-                            </template>
-                            <template #r_name>API KEY</template>
-                            <template #r_input>
-                                <VTextField prepend-inner-icon="ic-baseline-vpn-key"
-                                    v-model="props.item.free.bonaeja.api_key" placeholder="API KEY를 입력해주세요."
-                                    type="text" />
-                            </template>
+                    <CreateHalfVColV2 :mdl="5" :mdr="7">
+                        <template #l_name>
+                            <BaseQuestionTooltip :location="'top'" text="포인트 하한금"
+                                content="보내자 보유포인트가 하한금 미만으로 떨어지면 수신자 번호에 알림문자가 발송됩니다." />
+                        </template>
+                        <template #l_input>
+                            <VTextField type="number" v-model="props.item.free.bonaeja.min_balance_limit"
+                                prepend-inner-icon="tabler-currency-won" placeholder="유보금미달 알림금"
+                                persistent-placeholder suffix="만원" />
+                        </template>
+                        <template #r_name>포인트 하한금 알림번호</template>
+                        <template #r_input>
+                            <VTextField type="number" v-model="props.item.free.bonaeja.receive_phone"
+                                    prepend-inner-icon="tabler-device-mobile" placeholder="01012345678"
+                                    persistent-placeholder />
+                        </template>
                         </CreateHalfVColV2>
-                        <CreateHalfVColV2 :mdl="5" :mdr="7">
-                            <template #l_name>발신자번호</template>
-                            <template #l_input>
-                                    <VTextField prepend-inner-icon="tabler-device-mobile"
-                                        v-model="props.item.free.bonaeja.sender_phone" placeholder="연락처를 입력해주세요."
-                                        type="text" />
-                            </template>
-                            <template #r_name></template>
-                            <template #r_input>
-                            </template>
-                        </CreateHalfVColV2>
-                        
-                        <CreateHalfVColV2 :mdl="5" :mdr="7">
-                            <template #l_name>
-                                <BaseQuestionTooltip :location="'top'" text="포인트 하한금"
-                                    content="보내자 보유포인트가 하한금 미만으로 떨어지면 수신자 번호에 알림문자가 발송됩니다." />
-                            </template>
-                            <template #l_input>
-                                <VTextField type="number" v-model="props.item.free.bonaeja.min_balance_limit"
-                                    prepend-inner-icon="tabler-currency-won" placeholder="유보금미달 알림금"
-                                    persistent-placeholder suffix="만원" />
-                            </template>
-                            <template #r_name>포인트 하한금 알림번호</template>
-                            <template #r_input>
-                                <VTextField type="number" v-model="props.item.free.bonaeja.receive_phone"
-                                        prepend-inner-icon="tabler-device-mobile" placeholder="01012345678"
-                                        persistent-placeholder />
-                            </template>
-                        </CreateHalfVColV2>
-                    </div>
-                    <div>
                         <VCardTitle class="pt-10">
                             <BaseQuestionTooltip location="top" text="기본 설정 값" :content="`각 정보 추가시 기본으로 세팅되어있는 값들을 변경합니다.`"/> 
                         </VCardTitle>
@@ -309,7 +259,7 @@ const filterPgs = computed(() => {
                             <template #r_input>
                             </template>
                         </CreateHalfVColV2>
-                        <template v-if="props.item.paid.use_p2p_app">
+                        <template v-if="props.item.paid.brand_mode === 1">
                             <VCardTitle class="pt-10">
                                 <BaseQuestionTooltip location="top" text="P2P APP" :content="`P2P APP 회원가입시 기본적으로 추가될 값 입니다.<br><b>PG사 관리의 대표 결제 정보<b>가 입력 되어있어야합니다.`"/> 
                             </VCardTitle>
@@ -387,7 +337,6 @@ const filterPgs = computed(() => {
                                     color="primary" :false-value=0 :true-value=1 />
                             </template>
                         </CreateHalfVColV2>
-                    </div>
                 </VCardItem>
             </VCard>
         </VCol>

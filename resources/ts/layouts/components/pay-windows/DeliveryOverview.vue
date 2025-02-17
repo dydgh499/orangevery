@@ -62,6 +62,7 @@ const setAddress = async () => {
         </VCol>
         <VCol md="12" cols="12">
             <VTextarea v-model="props.user_pay_info.note" counter label="메모사항"
+                variant="filled"
                 prepend-inner-icon="twemoji-spiral-notepad" maxlength="255" auto-grow />
         </VCol>
     </VRow>

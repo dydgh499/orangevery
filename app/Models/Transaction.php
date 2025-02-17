@@ -164,7 +164,7 @@ class Transaction extends Model
         return $this->belongsTo(Merchandise::class, 'mcht_id')->select([
             'id', 'mcht_name', 'user_name', 'nick_name',
             'addr', 'resident_num', 'business_num', 
-            'use_saleslip_prov', 'use_saleslip_sell',
+            'use_saleslip_prov',
             'is_show_fee',
         ]);
     }

@@ -15,7 +15,11 @@ interface Props {
     },
 }
 const props = defineProps<Props>()
-
+const brand_modes = [
+    {id:0, title: '대표가맹점(운영사)'},
+    {id:1, title: '개인간거래'},
+    {id:2, title: '대표가맹점(영업점)'},
+]
 </script>
 <template>
     <VRow class="match-height" v-if="getUserLevel() === 50">
@@ -40,21 +44,6 @@ const props = defineProps<Props>()
                         <VRow>
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
-                                    <VSwitch hide-details v-model="props.item.auth.visibles.abnormal_trans_sales"
-                                        color="primary" label="이상거래, 결제실패, 즉시출금 관리 영업점 노출여부"/>
-                                </template>
-                                <template #input>
-                                    <div style="display: flex;">
-                                        <VSwitch hide-details v-model="props.item.paid.use_before_brand_info" color="primary" label="기간별 사업자정보 사용"/>
-                                        <BaseQuestionTooltip location="top" text=""
-                                        :content="`기간별로 사업자정보가 매출전표에 표기됩니다.(공급자 정보: 본사정보로 체크되어야합니다.)`"/>
-                                    </div>
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
-                        <VRow>
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>
                                     <VSwitch hide-details v-model="props.item.paid.use_cancel_all_allow" color="primary" label="취소옵션 모두허용 추가"/>
                                 </template>
                                 <template #input>
@@ -73,15 +62,27 @@ const props = defineProps<Props>()
                             </CreateHalfVCol>
                         </VRow>
                         <VRow>
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>
-                                    <VSwitch hide-details v-model="props.item.paid.use_p2p_app" color="primary" label="P2P APP 사용여부"/>
-                                </template>
-                                <template #input>
-                                </template>
-                            </CreateHalfVCol>
+                            <VCol cols="12">
+                                <VRow no-gutters style="align-items: center;">
+                                    <VCol cols="12" :md="6">                                        
+                                        <VSwitch hide-details v-model="props.item.auth.visibles.abnormal_trans_sales"
+                                            color="primary" label="이상거래, 결제실패, 즉시출금 관리 영업점 노출여부"/>
+                                    </VCol>
+                                    <VCol cols="12" :md="6">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol cols="12" :md="4" style="text-align: start;">
+                                                운영방식
+                                            </VCol>
+                                            <VCol cols="12" :md="5">
+                                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.paid.brand_mode"
+                                                    :items="brand_modes" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                                    label="운영방식" item-title="title" item-value="id" single-line />
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
                         </VRow>
-                        
                     </VCol>
                     <VCardTitle class="pt-10">
                         <BaseQuestionTooltip location="top" text="정산 옵션(유료)"
@@ -94,7 +95,6 @@ const props = defineProps<Props>()
                                     <VSwitch hide-details v-model="props.item.paid.use_finance_van_deposit" color="primary" label="지급대행"/>
                                 </template>
                                 <template #input>
-                                    <VSwitch hide-details v-model="props.item.paid.use_settle_hold" color="primary" label="지급보류"/>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -105,23 +105,22 @@ const props = defineProps<Props>()
                     </VCardTitle>
                     <VCol>
                         <VRow class="pt-5">
-                            <VCol cols="6">
+                            <VCol cols="12">
                                 <VRow no-gutters style="align-items: center;">
                                     <VCol cols="12" :md="6">
                                         <VSwitch hide-details v-model="props.item.paid.sales_parent_structure" color="primary" label="계층형 구조"/>
                                     </VCol>
                                     <VCol cols="12" :md="6">
-                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.paid.fee_input_mode"
-                                                :items="fee_input_modes" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                                                label="수수료 입력방식" item-title="title" item-value="id" single-line />
-                                    </VCol>
-                                </VRow>
-                            </VCol>
-                            <VCol cols="6">
-                                <VRow no-gutters style="align-items: center;">
-                                    <VCol cols="12" :md="6">
-                                    </VCol>
-                                    <VCol cols="12" :md="6">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol cols="12" :md="4">
+                                                수수료 입력방식
+                                            </VCol>
+                                            <VCol cols="12" :md="5">
+                                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.paid.fee_input_mode"
+                                                    :items="fee_input_modes" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                                    label="수수료 입력방식" item-title="title" item-value="id" single-line />
+                                            </VCol>
+                                        </VRow>
                                     </VCol>
                                 </VRow>
                             </VCol>
@@ -257,6 +256,7 @@ const props = defineProps<Props>()
                                     <VSwitch hide-details v-model="props.item.paid.use_acct_verification" color="primary" label="예금주 검증"/>
                                 </template>
                                 <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_shop" color="primary" label="쇼핑몰 사용"/>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -279,25 +279,6 @@ const props = defineProps<Props>()
                                 <template #input>
                                     <VSwitch hide-details v-model="props.item.paid.use_collect_withdraw_scheduler"
                                         color="primary" label="모아서 출금 스케줄링"/>
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
-                        <VRow>
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>
-                                    <VSwitch hide-details v-model="props.item.paid.use_regular_card" color="primary" label="단골고객 전용결제"/>
-                                </template>
-                                <template #input>
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
-                        <VRow>
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>
-                                    <VSwitch hide-details v-model="props.item.paid.use_hide_account" color="primary" label="가맹점 계좌숨김"/>
-                                </template>
-                                <template #input>
-                                    <VSwitch hide-details v-model="props.item.paid.use_shop" color="primary" label="쇼핑몰 사용"/>                                    
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -329,6 +310,15 @@ const props = defineProps<Props>()
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>
+                                    <VSwitch hide-details v-model="props.item.paid.use_regular_card" color="primary" label="단골고객 전용결제"/>
+                                </template>
+                                <template #input>
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
 
                     </VCol>
                     <VCardTitle class="pt-10">
@@ -350,16 +340,6 @@ const props = defineProps<Props>()
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
                                     <VSwitch hide-details v-model="props.item.paid.use_dup_pay_validation" color="primary" label="중복결제 검증"/>
-                                </template>
-                                <template #input>
-                                    <VSwitch hide-details v-model="props.item.paid.use_forb_pay_time" color="primary" label="결제금지시간"/>
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
-                        <VRow>
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>
-                                    <VSwitch hide-details v-model="props.item.paid.use_pay_limit" color="primary" label="결제한도"/>
                                 </template>
                                 <template #input>
                                     <VSwitch hide-details v-model="props.item.paid.use_online_pay" color="primary" label="PAY KEY 사용"/>

@@ -58,7 +58,7 @@ const setErrorCode = () => {
     
     if(corp.pv_options.paid.use_specified_limit) {
         errors.value.push(...[
-            getErrorContent('424', '지금은 결제할 수 없습니다.', '지정시간 결제제한시간대에 결제시도', '해당 가맹점 지정시간 결제제한시간 수정'),
+            getErrorContent('424', '지금은 결제할 수 없습니다.', '지정결제제한시간대에 결제시도', '해당 가맹점 지정결제제한시간 수정'),
             getErrorContent('425', '단건 결제한도를 초과하였습니다.', '단건 결제한도 하향 시간대에 이상금액 결제시도', '해당 가맹점 단건 결제한도 하향금 수정'),
         ])
     }

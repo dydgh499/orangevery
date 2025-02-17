@@ -36,10 +36,8 @@ const getMchtHeaders = (head :any) => {
 
     const getSettleHoldCols = () => {
         const headers_1:Record<string, string> = {}
-        if (corp.pv_options.paid.use_settle_hold) {
-            headers_1['settle_hold_s_dt'] = '지급보류 시작일'
-            headers_1['settle_hold_reason'] = '지급보류 사유'
-        }
+        headers_1['settle_hold_s_dt'] = '지급보류 시작일'
+        headers_1['settle_hold_reason'] = '지급보류 사유'
         return headers_1
     }
 
@@ -88,12 +86,12 @@ const getMchtHeaders = (head :any) => {
     const getPaymentModuleCols = () => {
         const headers_4:Record<string, string> = {}
         headers_4['settle_types'] = '정산일'
+        headers_4['serial_nums'] = '시리얼번호'
+        headers_4['mids'] = 'MID'
+        headers_4['tids'] = 'TID'
+        headers_4['module_types'] = '모듈타입'
         if(getUserLevel() >= 35) {
-            headers_4['serial_nums'] = '시리얼번호'
-            headers_4['mids'] = 'MID'
-            headers_4['tids'] = 'TID'
-            headers_4['module_types'] = '모듈타입'
-            headers_4['pgs'] = 'PG사'
+                headers_4['pgs'] = 'PG사'
         }
         return headers_4
     }
@@ -111,7 +109,7 @@ const getMchtHeaders = (head :any) => {
 
     const getBankCols = () => {
         const headers_6:Record<string, string> = {}
-        if(((getUserLevel() == 10 && !user_info.value.is_hide_account) || getUserLevel() >= 13)) {
+        if((getUserLevel() === 10 || getUserLevel() >= 35)) {
             headers_6['acct_bank_name'] = '은행'
             headers_6['acct_bank_code'] = '은행코드'
             headers_6['acct_name'] = '예금주'
@@ -393,7 +391,6 @@ export const defaultItemInfo = () => {
         custom_id: null,
         merchant_status: 0,
         use_saleslip_prov: 1,
-        use_saleslip_sell: 0,
         is_show_fee: Number(corp.pv_options.free.default.is_show_fee),
         note: '',
         dev_fee: 0,
@@ -408,7 +405,6 @@ export const defaultItemInfo = () => {
         use_noti: 0,
         settle_hold_s_dt: '',
         settle_hold_reason: '',
-        is_hide_account: 0,
         website_url: '',
         email: '',
         contact_num: '',

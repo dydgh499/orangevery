@@ -85,7 +85,6 @@ class Merchandise
                 'trx_fee' => $mcht->MD_FEE,
                 'custom_id' => $mcht->CST_FL ? $this->paywell_to_payvery_cls[$mcht->CST_FL] : null,
                 'use_saleslip_prov' => (boolean)$mcht->USE_SALESLIP_HEAD_INFO,
-                'use_saleslip_sell' => (boolean)$mcht->USE_SALESLIP_SELLER_INFO,
                 'is_show_fee' => (boolean)$mcht->IS_SHOW_FEE,
                 'note'      => $mcht->NOTE,
                 'USER_PK' => $mcht->USER_PK,

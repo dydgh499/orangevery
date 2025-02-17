@@ -138,7 +138,6 @@ class PayWindowInterface implements GeneratorInterface
                     'payment_modules.pay_window_secure_level',
 
                     'merchandises.use_saleslip_prov',
-                    'merchandises.use_saleslip_sell',
                     'merchandises.tax_category_type',
                     'merchandises.mcht_name',
                     'merchandises.contact_num',
@@ -163,7 +162,6 @@ class PayWindowInterface implements GeneratorInterface
                             'contact_num' => $pay_module->contact_num,
                             'business_num' => $pay_module->business_num,
                             'use_saleslip_prov' => $pay_module->use_saleslip_prov,
-                            'use_saleslip_sell' => $pay_module->use_saleslip_sell,
                             'tax_category_type' => $pay_module->tax_category_type,
                         ],
                         'payment_module' => [

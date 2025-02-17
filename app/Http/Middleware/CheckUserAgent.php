@@ -32,6 +32,7 @@ class CheckUserAgent
             'Microsoft Office',
             'NateOn',
             'ms-office',
+            'Microsoft Windows Network Diagnostics',
         ];
         $user_agent = $request->header('User-Agent');
         // User-Agent가 정상적인 브라우저 목록에 포함되는지 검사

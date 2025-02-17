@@ -43,11 +43,9 @@ class MerchandiseRequest extends FormRequest
     ];
     public $integer_keys = [
         'use_saleslip_prov',
-        'use_saleslip_sell',
         'specified_time_disable_limit',
         'phone_auth_limit_count',
         'use_saleslip_prov',
-        'use_saleslip_sell',
         'use_noti',
         'use_multiple_hand_pay',
         'use_collect_withdraw',
@@ -55,7 +53,6 @@ class MerchandiseRequest extends FormRequest
         'collect_withdraw_fee',
         'withdraw_fee',
         'is_show_fee',
-        'is_hide_account',
         'use_regular_card',
         'merchant_status',
     ];
@@ -94,8 +91,6 @@ class MerchandiseRequest extends FormRequest
             'acct_bank_name' => 'required',
             'acct_num'  => 'nullable|max:30',
             'use_saleslip_prov' => 'required|boolean',
-            'use_saleslip_sell' => 'required|boolean',
-            'is_hide_account'   => 'required|boolean',
             'merchant_status'   => 'required|integer',
             'collect_withdraw_fee' => 'nullable|integer',
             'tax_category_type' => 'nullable|integer',
@@ -138,7 +133,6 @@ class MerchandiseRequest extends FormRequest
             $this->getParmasBaseKeyV2($this->nullable_keys, null), $this->getParamsBaseFile($this->image_keys)
         );
 
-        
         $data['brand_id'] = $this->user()->brand_id;
         if($data['acct_bank_code'] == '')
             $data['acct_bank_code'] = "000";

@@ -154,18 +154,12 @@ class OperatorHistoryContoller extends Controller
             
             if($pv_options->paid->use_issuer_filter === false)
                 unset($conv_history_detail['filter_issuers']);
-            if($pv_options->paid->use_forb_pay_time === false)
-            {
-                unset($conv_history_detail['pay_disable_s_tm']);   
-                unset($conv_history_detail['pay_disable_e_tm']);            
-            }
-            if($pv_options->paid->use_pay_limit === false)
-            {
-                unset($conv_history_detail['pay_year_limit']);   
-                unset($conv_history_detail['pay_month_limit']);   
-                unset($conv_history_detail['pay_day_limit']);
-                unset($conv_history_detail['pay_single_limit']);            
-            }
+            unset($conv_history_detail['pay_disable_s_tm']);
+            unset($conv_history_detail['pay_disable_e_tm']);
+            unset($conv_history_detail['pay_year_limit']);   
+            unset($conv_history_detail['pay_month_limit']);   
+            unset($conv_history_detail['pay_day_limit']);
+            unset($conv_history_detail['pay_single_limit']);
             if($pv_options->paid->use_regular_card === false)
                 unset($conv_history_detail['use_regular_card']);
             if($pv_options->paid->use_collect_withdraw === false)
@@ -177,20 +171,12 @@ class OperatorHistoryContoller extends Controller
                 unset($conv_history_detail['use_noti']);
             if(isset($conv_history_detail['brand_id']))
                 unset($conv_history_detail['brand_id']);
-            
-            if($pv_options->paid->use_hide_account === false)
-                unset($conv_history_detail['is_hide_account']);
-    
+
             if($pv_options->paid->use_multiple_hand_pay === false)
                 unset($conv_history_detail['use_multiple_hand_pay']);    
             if($pv_options->paid->use_pay_verification_mobile === false)
                 unset($conv_history_detail['use_pay_verification_mobile']);
-    
-            if($pv_options->paid->use_settle_hold === false)
-            {
-                unset($conv_history_detail['settle_hold_s_dt']);
-                unset($conv_history_detail['settle_hold_reason']);
-            }
+
             if($pv_options->paid->use_noti === false)
                 unset($conv_history_detail['use_noti']);
             

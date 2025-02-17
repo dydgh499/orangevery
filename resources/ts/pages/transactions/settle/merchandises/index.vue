@@ -30,9 +30,7 @@ provide('exporter', exporter)
 store.params.level = 10 // taransaction model에서 필수
 store.params.use_collect_withdraw = Number(corp.pv_options.paid.use_collect_withdraw)
 store.params.use_realtime_deposit = 0
-
-if(corp.pv_options.paid.use_settle_hold)
-    store.params.use_settle_hold = 1
+store.params.use_settle_hold = 1
 
 
 const { settle_types } = useStore()
