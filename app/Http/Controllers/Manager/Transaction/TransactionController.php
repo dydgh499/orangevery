@@ -252,6 +252,11 @@ class TransactionController extends Controller
         $data['is_cancel']  = 1;
         $data['cxl_seq']    = 1; 
         $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], $data['cxl_dt'], $data['mcht_settle_type'], $data['pg_settle_type']);
+        $settle_ids = ['mcht_settle_id', 'sales0_settle_id', 'sales1_settle_id', 'sales2_settle_id', 'sales3_settle_id', 'sales4_settle_id', 'sales5_settle_id', 'dev_settle_id'];
+        foreach($settle_ids as $settle_id)
+        {
+            $data[$settle_id] = null;
+        }
         try 
         {
             [$data] = SettleAmountCalculator::setSettleAmount([$data]);

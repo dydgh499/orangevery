@@ -309,6 +309,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                     <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
                         <span>하위 실시간 가맹점 출금한도</span>
                     </VCardSubtitle>
+                    <br>
                     <VRow>
                         <VCol cols="12">
                             <VRow>
