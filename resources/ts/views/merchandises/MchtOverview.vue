@@ -541,7 +541,7 @@ onMounted(() => {
                                             <VCol md="6">
                                                 <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
                                                     placeholder="TID 입력" persistent-placeholder
-                                                    maxlength="50" :rules="props.item.tid_auto_issue ? [] : [requiredValidatorV2(props.item.tid, 'TID')]"
+                                                    maxlength="50" :rules="props.item.tid_auto_issue ? [requiredValidatorV2(props.item.tid, 'TID')] : []"
                                                     :disabled="!props.item.tid_auto_issue"
                                                 />
                                             </VCol>

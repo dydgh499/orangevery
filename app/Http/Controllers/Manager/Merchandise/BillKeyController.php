@@ -97,7 +97,7 @@ class BillKeyController extends Controller
         $query = $this->bill_keys
             ->join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
             ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-            ->where('payment_modules.id', $request->user()->brand_id);
+            ->where('payment_modules.brand_id', $request->user()->brand_id);
 
         if($search)
         {
@@ -133,11 +133,7 @@ class BillKeyController extends Controller
                 ->where('bill_keys.pmod_id', $pay_module->id)
                 ->where('bill_keys.buyer_phone', $this->aes256_encode($request->buyer_phone))
                 ->where('bill_keys.buyer_name', $this->aes256_encode($request->buyer_name))
-                ->get([
-                'bill_keys.id', 'bill_keys.issuer', 
-                'bill_keys.card_num', 
-                'bill_keys.buyer_name', 'bill_keys.buyer_phone', 
-            ]);
+                ->get();
             return $this->response(0, $bill_keys);
         }
         else if($result === 951)
