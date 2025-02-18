@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('salesforces', function (Blueprint $table) {
-            $table->unsignedInteger('mcht_pg_id')->default(null)->comment('원천사 고유번호');
-            $table->unsignedInteger('mcht_ps_id')->default(null)->comment('구간 고유번호');
+            $table->unsignedInteger('mcht_pg_id')->nullable()->default(null)->comment('원천사 고유번호');
+            $table->unsignedInteger('mcht_ps_id')->nullable()->default(null)->comment('구간 고유번호');
         });
     }
 
