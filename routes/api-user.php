@@ -34,7 +34,6 @@ Route::prefix('salesforces')->group(function() {
     Route::get('chart', [SalesforceController::class, 'chart']);
     Route::get('fee-apply-histories', [SalesforceController::class, 'feeApplyHistories']);  // 간편보기
     Route::get('classification', [SalesforceController::class, 'classification']);
-
         //FIXPLUS
         Route::middleware(['is.edit.able'])->group(function() {
             Route::prefix('fee-change-histories')->group(function() {
@@ -53,8 +52,8 @@ Route::prefix('salesforces')->group(function() {
                 Route::post('{id}/unlock-account', [SalesforceController::class, 'unlockAccount']);
             });
         Route::apiResource('under-auto-settings', UnderAutoSettingController::class);    
-        Route::apiResource('sales-recommender-codes', SalesRecommenderCodeController::class);
     });
+    Route::apiResource('sales-recommender-codes', SalesRecommenderCodeController::class);
 });
 Route::apiResource('salesforces', SalesforceController::class);
     
