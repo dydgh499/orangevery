@@ -96,7 +96,8 @@ class BillKeyController extends Controller
         $search = $request->input('search', '');
         $query = $this->bill_keys
             ->join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
-            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id');
+            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            ->where('payment_modules.id', $request->user()->brand_id);
 
         if($search)
         {
