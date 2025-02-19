@@ -61,7 +61,6 @@ class FeeTableController extends Controller
             return $this->flatSalesforce($sales, $child['parent']);
         else
             return $sales;
-        
     }
 
     public function index(Request $request)
@@ -69,6 +68,7 @@ class FeeTableController extends Controller
         $query  = $this->salesforces
             ->where('brand_id', $request->user()->brand_id)
             ->where('level', $request->level)
+            ->where('is_delete', 0)
             ->with(['parent']);
         $data = $this->getIndexData($request, $query, 'id', ['id', 'level', 'sales_name', 'parent_id', 'sales_fee']);
         $data = json_decode(json_encode($data), true);
