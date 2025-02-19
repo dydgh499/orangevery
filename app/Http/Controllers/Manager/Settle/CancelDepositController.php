@@ -55,6 +55,8 @@ class CancelDepositController extends Controller
                 ->join('merchandises', 'merchandises.id', '=', 'transactions.mcht_id')
                 ->where('transactions.brand_id', $request->user()->brand_id)
                 ->where('merchandises.mcht_name', 'like', "%$search%");
+        $query = globalSalesFilter($query, $request, 'merchandises');
+        $query = globalAuthFilter($query, $request, 'merchandises');
         return $this->getIndexData($request, $query, 'transactions.id', $cols, 'transactions.trx_at');
     }
 

@@ -14,6 +14,7 @@ use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateBillKeyController;
 
 use App\Http\Controllers\Manager\SalesforceController;
+use App\Http\Controllers\Manager\Salesforce\FeeTableController;
 use App\Http\Controllers\Manager\Salesforce\UnderAutoSettingController;
 use App\Http\Controllers\Manager\Salesforce\SalesRecommenderCodeController;
 
@@ -34,23 +35,25 @@ Route::prefix('salesforces')->group(function() {
     Route::get('chart', [SalesforceController::class, 'chart']);
     Route::get('fee-apply-histories', [SalesforceController::class, 'feeApplyHistories']);  // 간편보기
     Route::get('classification', [SalesforceController::class, 'classification']);
-        //FIXPLUS
-        Route::middleware(['is.edit.able'])->group(function() {
-            Route::prefix('fee-change-histories')->group(function() {
-                Route::delete('batch-remove', [FeeChangeHistoryController::class, 'deleteSalesforceBatch']);
-                Route::delete('{id}', [FeeChangeHistoryController::class, 'deleteSalesforce']);
-                Route::post('{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
-            });
-            Route::post('{id}/mcht-batch-fee', [SalesforceController::class, 'mchtBatchFee']);
-            Route::post('{id}/2fa-qrcode', [SalesforceController::class, 'create2FAQRLink']);  
-            Route::post('{id}/2fa-qrcode/init', [SalesforceController::class, 'init2FA']);  
-            Route::post('{id}/2fa-qrcode/create-vertify', [SalesforceController::class, 'vertify2FAQRLink']);
+    Route::get('fee-table', [FeeTableController::class, 'index']);
+    Route::post('fee-table', [FeeTableController::class, 'update']);
+    //FIXPLUS
+    Route::middleware(['is.edit.able'])->group(function() {
+        Route::prefix('fee-change-histories')->group(function() {
+            Route::delete('batch-remove', [FeeChangeHistoryController::class, 'deleteSalesforceBatch']);
+            Route::delete('{id}', [FeeChangeHistoryController::class, 'deleteSalesforce']);
+            Route::post('{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
         });
-        Route::middleware(['is.operate'])->group(function() {
-            Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
-            Route::middleware(['is.edit.able'])->group(function() {
-                Route::post('{id}/unlock-account', [SalesforceController::class, 'unlockAccount']);
-            });
+        Route::post('{id}/mcht-batch-fee', [SalesforceController::class, 'mchtBatchFee']);
+        Route::post('{id}/2fa-qrcode', [SalesforceController::class, 'create2FAQRLink']);  
+        Route::post('{id}/2fa-qrcode/init', [SalesforceController::class, 'init2FA']);  
+        Route::post('{id}/2fa-qrcode/create-vertify', [SalesforceController::class, 'vertify2FAQRLink']);
+    });
+    Route::middleware(['is.operate'])->group(function() {
+        Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
+        Route::middleware(['is.edit.able'])->group(function() {
+            Route::post('{id}/unlock-account', [SalesforceController::class, 'unlockAccount']);
+        });
         Route::apiResource('under-auto-settings', UnderAutoSettingController::class);    
     });
     Route::apiResource('sales-recommender-codes', SalesRecommenderCodeController::class);

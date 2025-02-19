@@ -66,6 +66,15 @@ class Salesforce extends Authenticatable
 
         return $query->with('childs')->select();
     }
+    
+    // 부모 영업점
+    public function parent()
+    {
+        return $this->belongsTo(Salesforce::class, 'parent_id', 'id')
+            ->where('is_delete', false)
+            ->with('parent')
+            ->select(['id', 'level', 'sales_name', 'parent_id', 'sales_fee']);
+    }
 
     public function underAutoSettings()
     {

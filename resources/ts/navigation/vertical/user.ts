@@ -1,4 +1,5 @@
-import { getUserLevel } from '@axios'
+import { isFixplus } from '@/plugins/fixplus'
+import { getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
 const getMchtChildMenu = () => {
@@ -8,10 +9,15 @@ const getMchtChildMenu = () => {
         children: [{ title: '가맹점 목록', to: 'merchandises'}]
     }
 
-    if(corp.pv_options.paid.sales_parent_structure === false) 
-        users.children.push({ title: '장비 관리', to: 'merchandises-terminals'})
-    if(corp.pv_options.paid.sales_parent_structure === false || getUserLevel() >= 35)
+    if(isFixplus()) {
+        if(getUserLevel() >= 35)
+            users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
+    }
+    else {
+        if(getUserLevel() >= 35)
+            users.children.push({ title: '장비 관리', to: 'merchandises-terminals'})
         users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
+    }
 
     if(getUserLevel() >= 35) {
 	    if(corp.pv_options.paid.use_bill_key)
@@ -35,9 +41,22 @@ const getSalesChildMenu = () => {
         sales.children  = [{ title: '영업점 목록', to: 'salesforces'}]
         if(getUserLevel() >= 35) {
             sales.children.push({title: '수수료율 변경이력', to: 'salesforces-fee-change-histories'})
+            if(corp.pv_options.paid.sales_parent_structure)
+                sales.children.push({title: '수수료율 테이블', to: 'salesforces-fee-table'})
         }
     }
     return sales
+}
+
+const getShopMenu = () => {
+    if(corp.pv_options.paid.use_shop && getUserLevel() === 10) {
+        return {
+            title: '미니 쇼핑몰',
+            icon: { icon: 'tabler:shopping-cart' },
+            class: 'shop()',
+            params: user_info.value.shopping_mall[0]
+        }
+    }
 }
 
 const getAbilitiesMenu = computed(() => {

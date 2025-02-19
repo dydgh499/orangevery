@@ -88,6 +88,28 @@
         return $query;
     }
 
+    function globalIndexByLevel($index)
+    {
+        switch($index)
+        {
+            case 0:
+                return 13;
+            case 1:
+                return 15;
+            case 2:
+                return 17;
+            case 3:
+                return 20;
+            case 4:
+                return 25;
+            case 5:
+                return 30;
+            default:
+                throw new Exception('알 수 없는 등급');
+                return "UNKNOWUN";
+        }
+    }
+
     function globalLevelByIndex($level)
     {
         switch($level)

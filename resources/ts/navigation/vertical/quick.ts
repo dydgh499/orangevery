@@ -1,3 +1,4 @@
+import { isFixplus } from '@/plugins/fixplus'
 import { useQuickViewStore } from '@/views/quick-view/useStore'
 import { getUserLevel, user_info } from '@axios'
 import corp from '@corp'
@@ -23,9 +24,16 @@ const getMchtChildMenu = () => {
             children: [{ title: '가맹점 목록', to: 'merchandises'}]
         }
     ]))
-    users[1].children.push({ title: '장비 관리', to: 'merchandises-terminals' })
-    if(corp.pv_options.paid.sales_parent_structure === false) 
-        users[1].children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules' })
+
+    if(isFixplus()) {
+        if(getUserLevel() >= 35)
+            users[1].children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
+    }
+    else {
+        if(getUserLevel() >= 35)
+            users[1].children.push({ title: '장비 관리', to: 'merchandises-terminals'})
+        users[1].children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
+    }
 
     if(corp.pv_options.paid.use_bill_key && getUserLevel() === 10)
         users[1].children.push({ title: '빌키 관리', to: 'merchandises-bill-keys'})
