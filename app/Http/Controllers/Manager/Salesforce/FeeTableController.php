@@ -54,7 +54,7 @@ class FeeTableController extends Controller
         $sales_key = "sales".$idx;
 
         $sales[$sales_key."_id"] = $child['id'];
-        $sales[$sales_key."_fee"] = $child['sales_fee'];
+        $sales[$sales_key."_fee"] = number_format($child['sales_fee'], 3);
         $sales[$sales_key."_name"] = $child['sales_name'];
 
         if($child['parent'])

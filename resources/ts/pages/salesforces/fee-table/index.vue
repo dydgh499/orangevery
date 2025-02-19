@@ -48,14 +48,6 @@ onMounted(() => {
         store.params.level > 20 ? setVisiable(3, false) : setVisiable(3, true)
         store.params.level > 25 ? setVisiable(4, false) : setVisiable(4, true)
     })
-    watchEffect(async() => {
-        const keys = Object.keys(head.headers).filter(obj => obj.includes('_fee'))        
-        for (let i = 0; i < store.getItems.length; i++) {
-            keys.forEach(key => {
-                store.getItems[i][key] = store.getItems[i][key].toFixed(4)
-            })           
-        }
-    })
 })
 </script>
 <template>
