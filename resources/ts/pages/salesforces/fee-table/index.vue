@@ -2,7 +2,7 @@
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import { useRequestStore } from '@/views/request';
 import { useSearchStore } from '@/views/salesforces/fee-table/useStore';
-import { getUserLevel, salesLevels } from '@axios';
+import { salesLevels } from '@axios';
 import { DateFilters } from '@core/enums';
 
 const { store, head, exporter } = useSearchStore()
@@ -49,7 +49,11 @@ onMounted(() => {
         store.params.level > 25 ? setVisiable(4, false) : setVisiable(4, true)
     })
     watchEffect(async() => {
-        if(store.getChartProcess() === false && getUserLevel() > 10) {
+        const keys = Object.keys(head.headers).filter(obj => obj.includes('_fee'))        
+        for (let i = 0; i < store.getItems.length; i++) {
+            keys.forEach(key => {
+                store.getItems[i][key] = store.getItems[i][key].toFixed(4)
+            })           
         }
     })
 })
@@ -96,7 +100,7 @@ onMounted(() => {
                                     v-model="item[_key]" 
                                     variant="underlined"
                                     type="number" suffix="%"
-                                    style="width: 4em; margin: auto;"
+                                    style="width: 5em; margin: auto;"
                                     />
                             </span>
                             <span v-else-if="_key === 'extra_cols'">
