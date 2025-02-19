@@ -112,6 +112,10 @@ const MerchandiseTrxFeeValidate = computed(() => {
     }
 })
 
+watchEffect(() => {
+    contact_num_format.value = props.item.contact_num ?? ''
+})
+
 onMounted(() => {
     initAllSales()
     watchEffect(() => {
@@ -126,10 +130,6 @@ onMounted(() => {
                 }
             }        
         }
-    })
-
-    watchEffect(() => {
-        contact_num_format.value = props.item.contact_num ?? ''
     })
 })
 </script>
