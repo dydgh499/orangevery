@@ -68,6 +68,11 @@ const getAbilitiesMenu = computed(() => {
             class: 'recommandCode()'
         })
     }
+    menu.push({
+        title: '설치하기',
+        icon: { icon: 'tabler:download' },
+        class: 'install()'
+    })
     return menu
 })
 

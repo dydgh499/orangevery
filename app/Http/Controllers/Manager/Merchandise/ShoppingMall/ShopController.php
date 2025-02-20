@@ -92,7 +92,6 @@ class ShopController extends Controller
             'merchandises.tax_category_type', 'merchandises.is_show_fee',
             'merchandises.use_saleslip_prov',
 
-            
             'transactions.is_cancel',
             'transactions.pg_id',
             'transactions.ps_id',
