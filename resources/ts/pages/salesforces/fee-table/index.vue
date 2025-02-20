@@ -40,9 +40,17 @@ const setVisiable = (idx: number, value: boolean) => {
     head.headers["sales"+idx+"_name"].visible = value
 }
 
+const onInputChange = computed((value) => {
+    console.log(value)
+    return value
+})
+
 onMounted(() => {
     watchEffect(() => {
-        store.params.level > 13 ? setVisiable(0, false) : setVisiable(1, true)
+        if(store.params.level === 13)
+            setVisiable(0, true)
+        else
+            setVisiable(0, false)
         store.params.level > 15 ? setVisiable(1, false) : setVisiable(1, true)
         store.params.level > 17 ? setVisiable(2, false) : setVisiable(2, true)
         store.params.level > 20 ? setVisiable(3, false) : setVisiable(3, true)
@@ -89,7 +97,7 @@ onMounted(() => {
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="(_key as string).includes('_fee')">
                                 <VTextField 
-                                    v-model="item[_key]" 
+                                    :value="item[_key]"
                                     variant="underlined"
                                     type="number" suffix="%"
                                     style="width: 5em; margin: auto;"
