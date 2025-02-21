@@ -13,6 +13,8 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
             return 'fluent:payment-32-filled'
         else if(module_type === 3)
             return 'streamline:money-wallet-money-payment-finance-wallet'
+        else if(module_type === 4)
+            return 'streamline:money-wallet-money-payment-finance-wallet'
         else
             return ''
     }
@@ -25,7 +27,8 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
             module_type = '인증'
         else if(payment_module.module_type === 3)
             module_type = '간편'
-
+        else if(payment_module.module_type === 4)
+            module_type = '빌키'
         return module_type
     }
 
