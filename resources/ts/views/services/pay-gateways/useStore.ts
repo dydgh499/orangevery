@@ -129,7 +129,7 @@ export const useStore = defineStore('payGatewayStore', () => {
     const getFianaceVansBalance = async () => {
         if(getUserLevel() >= 35) {
             for (let i = 0; i < finance_vans.value.length; i++)  {
-                if(finance_vans.value[i].nick_name !== '1원인증전용')
+                if(!finance_vans.value[i].use_kakao_auth && !finance_vans.value[i].use_account_auth)
                     getFinanceVan(finance_vans.value[i])
             }    
         }

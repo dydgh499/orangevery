@@ -10,19 +10,24 @@ class FinanceRequest extends FormRequest
     use FormRequestTrait;
     public $keys = [
         'finance_company_num',
-        'is_agency_van',
-        'dev_fee',
         'api_key',
         'sub_key',
         'enc_key',
         'iv',
-        'min_balance_limit',
         'corp_code',
         'corp_name',
         'bank_code',
         'nick_name',
         'withdraw_acct_num',
         'deposit_type',
+    ];
+
+    public $integer_keys = [
+        'dev_fee',
+        'is_agency_van',
+        'min_balance_limit',
+        'use_kakao_auth',
+        'use_account_auth',
     ];
 
     public function authorize()
@@ -39,23 +44,22 @@ class FinanceRequest extends FormRequest
             'corp_name'=>'required',
             'nick_name'=>'required',
         ];
-        return $this->getRules($this->keys, $sub);
+        return $this->getRules(array_merge($this->keys, $this->integer_keys), $sub);
     }
 
     public function attributes()
     {
-        return $this->getAttributes($this->keys);
+        return $this->getAttributes(array_merge($this->keys, $this->integer_keys));
     }
 
     public function bodyParameters()
     {
-        $params = $this->getDocsParameters($this->keys);
-        return $params;
+        return $this->getDocsParameters(array_merge($this->keys, $this->integer_keys));
     }
 
     public function data()
     {
-        $data = $this->getParmasBaseKey();
+        $data = array_merge($this->getParmasBaseKey(), $this->getParmasBaseKeyV2($this->integer_keys, 0));
         $data['dev_fee'] = $data['dev_fee']/100;
         $data['brand_id'] = $this->user()->brand_id;        
         return $data;

@@ -173,6 +173,23 @@ onMounted(async () => {
                                 </template>
                             </CreateHalfVColV2>
                             
+                            <CreateHalfVColV2 :mdl="5" :mdr="7">
+                                <template #l_name>
+                                    카카오 인증
+                                </template>
+                                <template #l_input>
+                                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="props.item.use_kakao_auth"
+                                            color="primary" />
+                                </template>
+                                <template #r_name>
+                                    1원 인증
+                                </template>
+                                <template #r_input>
+                                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="props.item.use_account_auth"
+                                             color="primary" />
+                                </template>
+                            </CreateHalfVColV2>
+
                             <VRow>
                                 <VCol class="d-flex gap-4 pt-10">
                                     <VBtn type="button" style="margin-left: auto;"

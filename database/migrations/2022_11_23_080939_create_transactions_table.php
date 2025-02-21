@@ -64,8 +64,8 @@ class CreateTransactionsTable extends Migration
             $table->integer('terminal_id')->nullable()->default(0)->comment('장비 타입 ID');
             //            
             $table->integer('mcht_settle_amount')->default(0)->comment('가맹점 정산금');
-            $table->float('mcht_fee', 6, 5)->comment('가맹점 수수료');
-            $table->float('hold_fee', 6, 5)->comment('보유금액 수수료');      
+            $table->float('mcht_fee', 7, 5)->comment('가맹점 수수료');
+            $table->float('hold_fee', 7, 5)->comment('보유금액 수수료');      
             $table->tinyInteger('mcht_settle_type')->comment('가맹점 정산타입(D+1, D+2 ..)');
             $table->smallInteger('mcht_settle_fee')->default(0)->comment('가맹점 입금 수수료');
             $table->unsignedInteger('mcht_settle_id')->nullable()->comment('가맹점 정산 ID')->constrained('settle_histories_merchandises')->onDelete('SET NULL');

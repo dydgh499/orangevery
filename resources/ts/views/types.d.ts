@@ -336,6 +336,8 @@ export interface FinanceVan {
 
     min_balance_limit: number,
     deposit_type: number,
+    use_kakao_auth: number,
+    use_account_auth: number,
     balance_status?: number,
     balance?: number,
 }

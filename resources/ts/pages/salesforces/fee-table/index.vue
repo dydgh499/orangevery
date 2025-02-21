@@ -9,13 +9,14 @@ const { store, head, exporter } = useSearchStore()
 const { post } = useRequestStore()
 
 const alert = <any>(inject('alert'))
-    const snackbar = <any>(inject('snackbar'))
+const snackbar = <any>(inject('snackbar'))
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
 const sales_levels = salesLevels()
+const inputs = ref(<any>({}))
 store.params.level = sales_levels[0].id as number
 
 const setSalesFee = async (item: any) => {
@@ -35,15 +36,14 @@ const setSalesFee = async (item: any) => {
     }
 }
 
+const updateSalesFee = (item: any, key: string, fee_key: string) => {
+    item[fee_key] = inputs.value[key]
+}
+
 const setVisiable = (idx: number, value: boolean) => {
     head.headers["sales"+idx+"_fee"].visible = value
     head.headers["sales"+idx+"_name"].visible = value
 }
-
-const onInputChange = computed((value) => {
-    console.log(value)
-    return value
-})
 
 onMounted(() => {
     watchEffect(() => {
@@ -55,6 +55,14 @@ onMounted(() => {
         store.params.level > 17 ? setVisiable(2, false) : setVisiable(2, true)
         store.params.level > 20 ? setVisiable(3, false) : setVisiable(3, true)
         store.params.level > 25 ? setVisiable(4, false) : setVisiable(4, true)
+    })
+    watchEffect(async() => {
+        store.getItems.forEach(obj => {
+            const fees = Object.keys(obj).filter(item => item.includes('_fee'));
+            fees.forEach(fee => {
+                inputs.value[`${obj['id']}-${fee}`] = obj[fee]
+            });
+        })
     })
 })
 </script>
@@ -97,7 +105,8 @@ onMounted(() => {
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="(_key as string).includes('_fee')">
                                 <VTextField 
-                                    :value="item[_key]"
+                                    v-model="inputs[`${item['id']}-${_key}`]"
+                                    @input="updateSalesFee(item, `${item['id']}-${_key}`, _key)"
                                     variant="underlined"
                                     type="number" suffix="%"
                                     style="width: 5em; margin: auto;"

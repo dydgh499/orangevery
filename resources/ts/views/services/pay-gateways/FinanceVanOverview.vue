@@ -23,6 +23,8 @@ const addNewFinanceVan = () => {
         corp_name: '',
         nick_name: '별칭입력',
         withdraw_acct_num: '',
+        use_kakao_auth: 0,
+        use_account_auth: 0,
     }))
 }
 watchEffect(() => {

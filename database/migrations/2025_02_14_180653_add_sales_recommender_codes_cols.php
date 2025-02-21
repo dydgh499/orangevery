@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sales_recommender_codes', function (Blueprint $table) {
-            $table->float('sales_fee', 6, 5)->default(0)->comment('영업점 수수료');
+            $table->float('sales_fee', 7, 5)->default(0)->comment('영업점 수수료');
         });
     }
 
