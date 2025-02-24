@@ -37,7 +37,7 @@ const getLogStyle = (item: RealtimeHistory) => {
                         출금 에러코드 정의
                     </VBtn>
                 <table>
-                    <tr v-for="(finance_van, key) in finance_vans.filter(t => t.is_agency_van === 0)" :key="key" :style="finance_van.balance_status === 0 ? '' : 'color:red'">
+                    <tr v-for="(finance_van, key) in finance_vans.filter(t => t.is_agency_van === 0 && t.use_kakao_auth === 0 && t.use_account_auth === 0)" :key="key" :style="finance_van.balance_status === 0 ? '' : 'color:red'">
                         <th style="text-align: start;">{{ finance_van.nick_name }} 잔액: </th>
                         <td style="text-align: end;">{{ finance_van.balance ? finance_van.balance.toLocaleString() : 0 }} &#8361;</td>
                     </tr>
