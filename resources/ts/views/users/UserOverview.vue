@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import ProfileDialog from '@/layouts/dialogs/users/ProfileDialog.vue'
-import FileInput from '@/layouts/utils/FileInput.vue'
-import type { UserPropertie } from '@/views/types'
-import { avatars, banks, getOnlyNumber, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore'
-import { axios, getUserLevel, isAbleModiy, user_info } from '@axios'
-import corp from '@corp'
+import ProfileDialog from '@/layouts/dialogs/users/ProfileDialog.vue';
+import FileInput from '@/layouts/utils/FileInput.vue';
+import { isFixplus, isFixplusSalesAbleUpdate } from '@/plugins/fixplus';
+import type { UserPropertie } from '@/views/types';
+import { avatars, banks, getOnlyNumber, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore';
+import { axios, getUserLevel, isAbleModiy, user_info } from '@axios';
+import corp from '@corp';
 
 interface Props {
     item: UserPropertie,
@@ -95,6 +96,18 @@ const isViewAbleContractFile = () => {
             return isAbleModiy(0)
     }
 }
+const isAbleModifyPrimary = (id: number) => {
+    if(getUserLevel() >= 35)
+        return true
+    else if(getUserLevel() >= 13) {
+        if(isFixplus())
+            return isFixplusSalesAbleUpdate(id)
+        else    // TODO: back 보완 필요
+            return id ? false : true
+    }
+    else
+        return false
+}
 
 watchEffect(() => {
     props.item.resident_num = props.item.resident_num_front + props.item.resident_num_back
@@ -114,7 +127,7 @@ watchEffect(() => {
                     <VCardTitle>기본정보</VCardTitle>
                     <VRow class="pt-3">
                         <VCol cols="12" md="6">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
                                 <VCol cols="5" md="4">
                                     <label>* 아이디
                                         <VAvatar class="cursor-pointer" color="primary preview" variant="tonal"
@@ -158,15 +171,13 @@ watchEffect(() => {
                     </VRow>
                     <VRow>
                         <VCol cols="12" md="6">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
                                 <VCol cols="5" md="4">
                                     <label>대표자명</label>
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField id="nickNameHorizontalIcons" v-model="props.item.nick_name"
-                                    prepend-inner-icon="tabler-user" placeholder="대표자명 입력" persistent-placeholder
-                                    v-if="isAbleModiy(props.item.id)"/>
-                                    <span v-else>{{ props.item.nick_name }}</span>
+                                    prepend-inner-icon="tabler-user" placeholder="대표자명 입력" persistent-placeholder/>
                                 </VCol>
                             </VRow>
                             <VRow v-else>
@@ -175,7 +186,7 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                         <VCol cols="12" md="6">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
                                 <VCol cols="5" md="4">
                                     <label>대표자 연락처</label>
                                 </VCol>
@@ -197,7 +208,7 @@ watchEffect(() => {
                     
                     <VRow>
                         <VCol cols="12" md="12">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
                                 <VCol md="2" cols="5">
                                     <label>주소</label>
                                 </VCol>
@@ -216,7 +227,7 @@ watchEffect(() => {
 
                     <VRow>
                         <VCol cols="12">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
                                 <VCol md="2" cols="5">
                                     <label>사업자등록번호</label>
                                 </VCol>
@@ -243,7 +254,7 @@ watchEffect(() => {
                     </VRow>
                     <VRow>
                         <VCol cols="12">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
                                 <VCol md=2 cols="12">
                                     <label>주민등록번호</label>
                                 </VCol>
@@ -278,7 +289,7 @@ watchEffect(() => {
                     <VCardTitle>은행정보</VCardTitle>
                     <VRow class="pt-3">
                         <VCol cols="12" :md="getUserLevel() === 10 ? 6: 12">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
                                 <VCol md="2" cols="4">
                                     <label>계좌번호</label>
                                 </VCol>
@@ -301,7 +312,7 @@ watchEffect(() => {
                     </VRow>
                     <VRow>
                         <VCol cols="12" md="6">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
                                 <VCol md="4" cols="5">
                                     <label>
                                         예금주
@@ -321,7 +332,7 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                         <VCol cols="12" md="6">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
                                 <VCol md="2" cols="5">
                                     <label>은행</label>
                                 </VCol>

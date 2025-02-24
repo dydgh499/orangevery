@@ -44,7 +44,7 @@ provide('partSettle', partSettle)
 <template>
     <div>
         <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호 검색" :metas="metas" :add="false" add_name=""
-            :date_filter_type="DateFilters.SETTLE_RANGE">
+            :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">

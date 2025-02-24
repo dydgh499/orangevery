@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { useRequestStore } from '@/views/request'
-import type { Options, SpecifiedTimeDisablePayment } from '@/views/types'
-import { requiredValidatorV2 } from '@validators'
-import { VForm } from 'vuetify/components'
+import { useRequestStore } from '@/views/request';
+import type { Options, SpecifiedTimeDisablePayment } from '@/views/types';
+import { isAbleModiy } from '@axios';
+import { VForm } from 'vuetify/components';
 
 interface Props {
     item: SpecifiedTimeDisablePayment,
@@ -21,9 +21,17 @@ const disable_types = <Options[]>[
         <td class='list-square'>
             <VCol cols="12">
                 <VRow no-gutters>
-                    <VSelect v-model="props.item.disable_type" :items="disable_types" prepend-inner-icon="tabler:world-cancel"
+                    <VSelect 
+                        v-if="isAbleModiy(props.item.id)"
+                        v-model="props.item.disable_type" 
+                        variant='underlined'
+                        :items="disable_types"
                         label="제한타입 설정" item-title="title" item-value="id" single-line 
-                        style="min-width: 10em;"/>
+                        style="min-width: 10em;"
+                    />
+                    <span v-else>
+                        {{ disable_types.find(obj => obj.id === props.item.disable_type)?.title}}
+                    </span>
                 </VRow>
             </VCol>
         </td>
@@ -31,9 +39,16 @@ const disable_types = <Options[]>[
             <VForm ref="vForm">
                 <VCol cols="12">
                     <VRow no-gutters>
-                        <VTextField v-model="props.item.disable_s_tm" type="time" 
-                        :rules="[requiredValidatorV2(props.item.disable_s_tm, '시작시간')]"
-                        style="min-width: 10em;" />
+                        <AppDateTimePicker 
+                            v-if="isAbleModiy(props.item.id)"
+                            v-model="props.item.disable_s_tm" placeholder="시작시간"
+                            variant='underlined'
+                            :config="{ mode: 'range', enableTime: true, noCalendar: true, dateFormat: 'H:i'  }"   
+                            style="min-width: 8em;"
+                        />
+                        <span v-else>
+                            {{ props.item.disable_s_tm }}
+                        </span>
                     </VRow>
                 </VCol>
             </VForm>
@@ -41,13 +56,20 @@ const disable_types = <Options[]>[
         <td class='list-square'>
             <VCol cols="12">
                 <VRow no-gutters>
-                    <VTextField v-model="props.item.disable_e_tm" type="time"
-                        :rules="[requiredValidatorV2(props.item.disable_e_tm, '종료시간')]" 
-                        style="min-width: 10em;" />
+                    <AppDateTimePicker 
+                        v-if="isAbleModiy(props.item.id)"
+                        v-model="props.item.disable_e_tm" placeholder="종료시간"
+                        variant='underlined'
+                        :config="{ mode: 'range', enableTime: true, noCalendar: true, dateFormat: 'H:i'  }"   
+                        style="min-width: 8em;"
+                    />
+                    <span v-else>
+                        {{ props.item.disable_e_tm }}
+                    </span>
                 </VRow>
             </VCol>
         </td>
-        <td cclass='list-square'>
+        <td cclass='list-square' v-if="isAbleModiy(props.item.id)">
             <VCol class="d-flex gap-4">
                 <VBtn type="button" color="default" variant="text"
                     @click="update('/merchandises/specified-time-disable-payments', props.item, vForm, false)">

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Manager\Merchandise;
 
 use App\Models\Merchandise\SpecifiedTimeDisablePayment;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
@@ -46,9 +47,14 @@ class SpecifiedTimeDisablePaymentController extends Controller
      */
     public function store(SpecifiedTimeDisablePaymentRequest $request)
     {
-        $data = $request->data();
-        $res = $this->specified_time_disable_payments->create($data);
-        return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);
+        if(EditAbleWorkTime::validate() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+        else
+        {
+            $data = $request->data();
+            $res = $this->specified_time_disable_payments->create($data);
+            return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);    
+        }
     }
 
     /**
@@ -73,9 +79,14 @@ class SpecifiedTimeDisablePaymentController extends Controller
      */
     public function update(SpecifiedTimeDisablePaymentRequest $request, int $id)
     {
-        $data = $request->data();
-        $res = $this->specified_time_disable_payments->where('id', $id)->update($data);
-        return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
+        if(EditAbleWorkTime::validate() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+        else
+        {
+            $data = $request->data();
+            $res = $this->specified_time_disable_payments->where('id', $id)->update($data);
+            return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);    
+        }
     }
 
     /**
@@ -85,7 +96,12 @@ class SpecifiedTimeDisablePaymentController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        $res = $this->specified_time_disable_payments->where('id', $id)->delete();
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
+        if(EditAbleWorkTime::validate() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+        else
+        {
+            $res = $this->specified_time_disable_payments->where('id', $id)->delete();
+            return $this->response($res ? 1 : 990, ['id'=>$id]);    
+        }
     }
 }

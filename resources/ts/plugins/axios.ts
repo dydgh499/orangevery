@@ -122,8 +122,6 @@ export const getViewType = () => {
         return ''
 }
 // -----------------------
-
-
 export const isAbleModiy = (id: number) => {
     const salesAuthLevelValidate = () => {
         if(id === 0 && user_info.value.auth_level >= 1)

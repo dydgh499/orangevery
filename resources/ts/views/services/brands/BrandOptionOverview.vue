@@ -317,26 +317,25 @@ const filterPgs = computed(() => {
                                 <template #r_input>                            
                                     <VSwitch hide-details v-model="props.item.p2p.account_validate"
                                         color="primary" :false-value=0 :true-value=1 />
-
+                                </template>
+                            </CreateHalfVColV2>
+                            <CreateHalfVColV2 :mdl="6" :mdr="6">
+                                <template #l_name>
+                                    <BaseQuestionTooltip location="top" text="전자계약 사용여부" :content="`전자계약 사용여부입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
+                                </template>
+                                <template #l_input>
+                                    <VSwitch hide-details v-model="props.item.p2p.contract_validate"
+                                    color="primary" :false-value=0 :true-value=1 />
+                                </template>
+                                <template #r_name>
+                                    <BaseQuestionTooltip location="top" text="카카오 본인인증" :content="`카카오 본인인증입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
+                                </template>
+                                <template #r_input>
+                                    <VSwitch hide-details v-model="props.item.p2p.ci_validate"
+                                        color="primary" :false-value=0 :true-value=1 />
                                 </template>
                             </CreateHalfVColV2>
                         </template>
-                    <CreateHalfVColV2 :mdl="6" :mdr="6">
-                            <template #l_name>
-                                <BaseQuestionTooltip location="top" text="전자계약 사용여부" :content="`전자계약 사용여부입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
-                            </template>
-                            <template #l_input>
-                                <VSwitch hide-details v-model="props.item.p2p.contract_validate"
-                                color="primary" :false-value=0 :true-value=1 />
-                            </template>
-                            <template #r_name>
-                                <BaseQuestionTooltip location="top" text="카카오 본인인증" :content="`카카오 본인인증입니다. 사용을위해 개발사에 문의 부탁드립니다.`"/>
-                            </template>
-                            <template #r_input>
-                                <VSwitch hide-details v-model="props.item.p2p.ci_validate"
-                                    color="primary" :false-value=0 :true-value=1 />
-                            </template>
-                        </CreateHalfVColV2>
                 </VCardItem>
             </VCard>
         </VCol>

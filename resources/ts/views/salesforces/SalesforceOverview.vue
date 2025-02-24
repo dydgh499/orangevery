@@ -232,11 +232,11 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                         <VCol md="8"><span>{{ tax_types.find(obj => obj.id === props.item.settle_tax_type).title }}</span></VCol>
                                     </VRow>
                                 </VCol>
-                                <VCol cols="12" md="6" v-if="isAbleModiy(props.item.id)">
+                                <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol md="4">
                                             <BaseQuestionTooltip :location="'top'" :text="'작업권한'" 
-                                                :content="'하위 가맹점과 하위 등급의 영업점들의 작업권한을 부여합니다.'"/>
+                                                :content="'하위 가맹점과 하위 등급의 영업점들의 작업권한을 부여합니다.<br>(개인정보는 수정할 수 없습니다.)'"/>
                                         </VCol>
                                         <VCol md="8">                                            
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.auth_level" 

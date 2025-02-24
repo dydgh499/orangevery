@@ -4,7 +4,7 @@ namespace App\Http\Requests\Manager\Merchandise;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
-
+use App\Http\Controllers\Ablilty\Ablilty;
 
 class SpecifiedTimeDisablePaymentRequest extends FormRequest
 {
@@ -21,7 +21,12 @@ class SpecifiedTimeDisablePaymentRequest extends FormRequest
     ];
     public function authorize()
     {
-        return $this->user()->tokenCan(35) ? true : false;
+        if(Ablilty::isOperator($this))
+            return true;
+        else if(Ablilty::isSalesforce($this))
+            return Ablilty::salesAuthValidate($this, $this->id);
+        else
+            return false;
     }
 
     /**

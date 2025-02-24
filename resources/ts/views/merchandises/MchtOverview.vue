@@ -529,137 +529,132 @@ onMounted(() => {
                                 </VRow>
                             </VCol>
                         </template>
-                        <template v-if="isSalesAddTIDMode(props.item.id)">
-                            <VCol cols="12">
-                                <VDivider style="margin-bottom: 1em;"/>
-                                <VRow>
-                                    <VCol :md="6" :cols="12">
-                                        <VRow no-gutters style="align-items: center;">
-                                            <VCol>
-                                                <VSwitch v-if="isAbleModiy(props.item.id)" 
-                                                    hide-details :false-value=0 :true-value=1 
-                                                    v-model="props.item.tid_auto_issue"
-                                                    label="TID 추가" color="info"
+                        <VCol cols="12" v-if="isSalesAddTIDMode(props.item.id)">
+                            <VDivider style="margin-bottom: 1em;"/>
+                            <VRow>
+                                <VCol :md="6" :cols="12">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>
+                                            <VSwitch v-if="isAbleModiy(props.item.id)" 
+                                                hide-details :false-value=0 :true-value=1 
+                                                v-model="props.item.tid_auto_issue"
+                                                label="TID 추가" color="info"
+                                            />
+                                        </VCol>
+                                        <VCol md="6">
+                                            <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
+                                                placeholder="TID 입력" persistent-placeholder
+                                                maxlength="50" :rules="props.item.tid_auto_issue ? [requiredValidatorV2(props.item.tid, 'TID')] : []"
+                                                :disabled="!props.item.tid_auto_issue"
+                                            />
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12" v-if="getUserLevel() >= 35">
+                            <VDivider style="margin-bottom: 1em;"/>
+                            <VRow>
+                                <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_noti">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>노티 발송 여부</VCol>
+                                        <VCol md="6">
+                                            <div class="batch-container">
+                                                <BooleanRadio :radio="props.item.use_noti"
+                                                    @update:radio="props.item.use_noti = $event">
+                                                    <template #true>활성</template>
+                                                    <template #false>비활성</template>
+                                                </BooleanRadio>
+                                            </div>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol :md="6" :cols="12">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>매출전표 공급자 정보</VCol>
+                                        <VCol md="6">
+                                            <div class="batch-container">
+                                                <BooleanRadio :radio="props.item.use_saleslip_prov"
+                                                    @update:radio="props.item.use_saleslip_prov = $event">
+                                                    <template #true>PG사</template>
+                                                    <template #false>운영사</template>
+                                                </BooleanRadio>
+                                            </div>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12" v-if="getUserLevel() >= 35">
+                            <VDivider style="margin-bottom: 1em;"/>
+                            <VRow>
+                                <VCol :md="12" :cols="12">
+                                    <VRow style="align-items: center;" class="match-height">
+                                        <VCol md="6" cols=12>
+                                            <VTextarea v-model="props.item.settle_hold_reason" counter label="지급보류 사유"
+                                                variant="filled"
+                                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="200" auto-grow />
+                                        </VCol>
+                                        <VCol md="6" cols="12" style="display: flex;flex-direction: column;text-align: end;">
+                                            <div>
+                                                <AppDateTimePicker
+                                                    v-model="props.item.settle_hold_s_dt" 
+                                                    variant='underlined'
+                                                    placeholder="지급보류 시작일"
+                                                    style="max-width: 14em; margin-bottom: 3em; margin-left: auto;"
                                                 />
-                                            </VCol>
-                                            <VCol md="6">
-                                                <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
-                                                    placeholder="TID 입력" persistent-placeholder
-                                                    maxlength="50" :rules="props.item.tid_auto_issue ? [requiredValidatorV2(props.item.tid, 'TID')] : []"
-                                                    :disabled="!props.item.tid_auto_issue"
-                                                />
-                                            </VCol>
-                                        </VRow>
-                                    </VCol>
-                                </VRow>
-                            </VCol>
-                        </template>
-                        <template v-if="getUserLevel() >= 35">
-                            <VCol cols="12">
-                                <VDivider style="margin-bottom: 1em;"/>
-                                <VRow>
-                                    <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_noti">
-                                        <VRow no-gutters style="align-items: center;">
-                                            <VCol>노티 발송 여부</VCol>
-                                            <VCol md="6">
-                                                <div class="batch-container">
-                                                    <BooleanRadio :radio="props.item.use_noti"
-                                                        @update:radio="props.item.use_noti = $event">
-                                                        <template #true>활성</template>
-                                                        <template #false>비활성</template>
-                                                    </BooleanRadio>
-                                                </div>
-                                            </VCol>
-                                        </VRow>
-                                    </VCol>
-                                    <VCol :md="6" :cols="12">
-                                        <VRow no-gutters style="align-items: center;">
-                                            <VCol>매출전표 공급자 정보</VCol>
-                                            <VCol md="6">
-                                                <div class="batch-container">
-                                                    <BooleanRadio :radio="props.item.use_saleslip_prov"
-                                                        @update:radio="props.item.use_saleslip_prov = $event">
-                                                        <template #true>PG사</template>
-                                                        <template #false>운영사</template>
-                                                    </BooleanRadio>
-                                                </div>
-                                            </VCol>
-                                        </VRow>
-                                    </VCol>
-                                </VRow>
-                            </VCol>
-                            <VCol cols="12" v-if="getUserLevel() >= 35">
-                                <VDivider style="margin-bottom: 1em;"/>
-                                <VRow>
-                                    <VCol :md="12" :cols="12">
-                                        <VRow style="align-items: center;" class="match-height">
-                                            <VCol md="6" cols=12>
-                                                <VTextarea v-model="props.item.settle_hold_reason" counter label="지급보류 사유"
-                                                    variant="filled"
-                                                    prepend-inner-icon="twemoji-spiral-notepad" maxlength="200" auto-grow />
-                                            </VCol>
-                                            <VCol md="6" cols="12" style="display: flex;flex-direction: column;text-align: end;">
-                                                <div>
-                                                    <AppDateTimePicker
-                                                        v-model="props.item.settle_hold_s_dt" 
-                                                        prepend-inner-icon="ic-baseline-calendar-today"
-                                                        placeholder="지급보류 시작일 입력"
-                                                        label="지급보류 시작일"
-                                                        style="max-width: 14em; margin-bottom: 3em; margin-left: auto;"
-                                                    />
-                                                </div>
-                                                <div style="float: inline-end;">
-                                                    <VBtn color="error" @click="setSettleHoldClear()" style='margin-bottom: 1em;'>
-                                                        지급보류
-                                                        <VIcon end icon="icon-park-solid:clear-format" />
-                                                    </VBtn>
-                                                    <VBtn color="error" variant="tonal" @click="clearSettleHoldClear()" style=" margin-bottom: 1em;margin-left: 1em;">
-                                                        지급보류해제
-                                                        <VIcon end icon="icon-park-solid:clear-format" />
-                                                    </VBtn>
-                                                </div>
-                                            </VCol>
-                                        </VRow>
-                                    </VCol>
-                                </VRow>
-                                <VDivider/>
-                            </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile && getUserLevel() >= 35">
-                                <VRow>
-                                    <VCol :md="6" :cols="12">
-                                        <VCardTitle>결제창 SMS 인증</VCardTitle>       
-                                    </VCol>                             
-                                </VRow>
-                                <VRow style="margin-bottom: 1em;">
-                                    <VCol md="5" cols="12">
-                                        <VRow no-gutters style="align-items: center;">
-                                            <VCol md="7" cols="7">최대 인증허용 회수</VCol>
-                                            <VCol md="5" cols="5">
-                                                <VTextField v-model="props.item.phone_auth_limit_count" type="number" suffix="회 허용"
-                                                    :rules="[requiredValidatorV2(props.item.phone_auth_limit_count, '최대 인증허용 회수')]" 
-                                                    style="max-width: 120px; margin-right: 1em;"/>
-                                                    <VTooltip activator="parent" location="top" transition="scale-transition">
-                                                        <span>0 입력시 검증하지 않습니다.</span>
-                                                    </VTooltip>
-                                            </VCol>                                   
-                                        </VRow>
-                                    </VCol>
-                                    <VCol :md="7" :cols="12">
-                                        <div class="flex-container">
-                                            <VTextField v-model="props.item.phone_auth_limit_s_tm" type="time" label="적용시작시간"
-                                                style="max-width: 150px;"/>
-                                            <span style="margin: 0 0.5em;">~</span>
-                                            <VTextField v-model="props.item.phone_auth_limit_e_tm" type="time" label="적용종료시간"
-                                                style="max-width: 150px;"/>
-                                        </div>
-                                    </VCol>
-                                </VRow>
-                                <VDivider />
-                            </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.use_specified_limit">
-                                <SpecifiedTimeDisablePaymentCard :item="props.item"/>
-                            </VCol>
-                        </template>
+                                            </div>
+                                            <div style="float: inline-end;">
+                                                <VBtn color="error" @click="setSettleHoldClear()" style='margin-bottom: 1em;'>
+                                                    지급보류
+                                                    <VIcon end icon="icon-park-solid:clear-format" />
+                                                </VBtn>
+                                                <VBtn color="error" variant="tonal" @click="clearSettleHoldClear()" style=" margin-bottom: 1em;margin-left: 1em;">
+                                                    지급보류해제
+                                                    <VIcon end icon="icon-park-solid:clear-format" />
+                                                </VBtn>
+                                            </div>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                            <VDivider/>
+                        </VCol>
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile && getUserLevel() >= 35">
+                            <VRow>
+                                <VCol :md="6" :cols="12">
+                                    <VCardTitle>결제창 SMS 인증</VCardTitle>       
+                                </VCol>                             
+                            </VRow>
+                            <VRow style="margin-bottom: 1em;">
+                                <VCol md="5" cols="12">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol md="7" cols="7">최대 인증허용 회수</VCol>
+                                        <VCol md="5" cols="5">
+                                            <VTextField v-model="props.item.phone_auth_limit_count" type="number" suffix="회 허용"
+                                                :rules="[requiredValidatorV2(props.item.phone_auth_limit_count, '최대 인증허용 회수')]" 
+                                                style="max-width: 120px; margin-right: 1em;"/>
+                                                <VTooltip activator="parent" location="top" transition="scale-transition">
+                                                    <span>0 입력시 검증하지 않습니다.</span>
+                                                </VTooltip>
+                                        </VCol>                                   
+                                    </VRow>
+                                </VCol>
+                                <VCol :md="7" :cols="12">
+                                    <div class="flex-container">
+                                        <VTextField v-model="props.item.phone_auth_limit_s_tm" type="time" label="적용시작시간"
+                                            style="max-width: 150px;"/>
+                                        <span style="margin: 0 0.5em;">~</span>
+                                        <VTextField v-model="props.item.phone_auth_limit_e_tm" type="time" label="적용종료시간"
+                                            style="max-width: 150px;"/>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                            <VDivider />
+                        </VCol>
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_specified_limit">
+                            <SpecifiedTimeDisablePaymentCard :item="props.item"/>
+                        </VCol>
                     </VRow>
                 </VCardItem>
             </VCard>

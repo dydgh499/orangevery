@@ -72,7 +72,6 @@ Route::prefix('merchandises')->group(function() {
 
     Route::get('pay-modules/chart', [PaymentModuleController::class, 'chart']);
     Route::get('pay-modules/all', [PaymentModuleController::class, 'all']);
-
     Route::get('noti-send-histories', [NotiSendHistoryController::class, 'index']);
     Route::prefix('noti-send-histories')->group(function() {
         Route::get('{id}', [NotiSendHistoryController::class, 'show']);
@@ -100,7 +99,6 @@ Route::prefix('merchandises')->group(function() {
 
             Route::apiResource('products', ProductController::class);
             Route::apiResource('handheld-terminal-products', HandHeldTerminalProductController::class);
-            Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
             Route::delete('fee-change-histories/batch-remove', [FeeChangeHistoryController::class, 'deleteMerchandiseBatch']);
             Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
         });
@@ -125,5 +123,6 @@ Route::prefix('merchandises')->group(function() {
     Route::apiResource('pay-modules', PaymentModuleController::class);
     Route::apiResource('regular-credit-cards', RegularCreditCardController::class);     
     Route::apiResource('noti-urls', NotiUrlController::class);
+    Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
 });
 Route::apiResource('merchandises', MerchandiseController::class);

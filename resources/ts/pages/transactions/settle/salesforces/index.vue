@@ -88,15 +88,13 @@ onMounted(() => {
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                     <template v-if="key == 'deduction.input'">
                         <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
-                            :content="'차감이 아닌 추가금 설정을 하시러면 금액 앞에 -(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.'">
-                        </BaseQuestionTooltip>
+                            :content="'차감이 아닌 추가금 설정을 하시러면 금액 앞에 -(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.'"/>
                     </template>
                     <template v-else-if="key == 'id'">
                         <div class='check-label-container'>
                             <VCheckbox v-model="all_selected" class="check-label" v-if="getUserLevel() >= 35" style="min-width: 1em;"/>
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
-                                :content="'하단 영업점 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'">
-                            </BaseQuestionTooltip>
+                                :content="'하단 영업점 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'"/>
                         </div>
                     </template>
                     <template v-else>
