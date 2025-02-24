@@ -23,9 +23,7 @@ class ProductOptionRequest extends FormRequest
     public function authorize()
     {
         if(Ablilty::isOperator($this))
-            return true;
-        else if(Ablilty::isSalesforce($this))
-            return $this->user()->is_able_modify_mcht;        
+            return true; 
         else if(Ablilty::isMerchandise($this))
             return true;
         else

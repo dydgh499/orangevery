@@ -114,7 +114,7 @@ export const getViewType = () => {
     const level = getUserLevel()
     if(level === 10)
         return 'quick-view'
-    else if(level <= 30 && user_info.value.view_type == 0)
+    else if(level <= 30 && user_info.value.view_type === 0)
         return 'quick-view'
     else if(level > 10)
         return 'dashboards-home'
@@ -125,19 +125,11 @@ export const getViewType = () => {
 
 
 export const isAbleModiy = (id: number) => {
-    const isAbleModifyMcht = () => {
-        if(getUserLevel() > 10 && getUserLevel() < 35)
-            return user_info.value.is_able_modify_mcht ? true : false
-        else
-            return false
-    }
-    const salesParentStructre = () => {
-        if(getUserLevel() > 10 && getUserLevel() < 35) {
-            if(id === 0) 
-                return isAbleModifyMcht()
-            else
-                return false
-        }
+    const salesAuthLevelValidate = () => {
+        if(id === 0 && user_info.value.auth_level >= 1)
+            return true
+        else if(id !== 0 && user_info.value.auth_level == 2)
+            return true
         else
             return false
     }
@@ -147,10 +139,8 @@ export const isAbleModiy = (id: number) => {
     else if(getUserLevel() >= 13) {
         if(isFixplus())
             return isFixplusSalesAbleUpdate(id)
-        else if(corp.pv_options.paid.sales_parent_structure)
-            return salesParentStructre()
         else
-            return isAbleModifyMcht()            
+            return salesAuthLevelValidate()
     }
     else
         return false

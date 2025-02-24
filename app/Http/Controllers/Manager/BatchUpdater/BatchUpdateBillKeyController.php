@@ -78,10 +78,7 @@ class BatchUpdateBillKeyController extends BatchUpdateController
             $res = Comm::destroy(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key', $data, [
                 'Authorization' => $bill_key->pay_key
             ]);
-            if($res['body']['result_cd'] !== '0000')
-                $fails[] = "(#".$bill_key->bill_id.") ".$res['body']['result_msg']."\n";
-            else
-                $success[] = $bill_key->bill_id;
+            $success[] = $bill_key->bill_id;
         }
         if(count($success))
             $this->bill_keys->whereIn('id', $success)->delete();

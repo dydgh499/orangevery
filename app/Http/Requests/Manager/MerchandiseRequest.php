@@ -72,7 +72,7 @@ class MerchandiseRequest extends FormRequest
             if($this->user()->brand_id === 30)
                 return true;
             else
-                return $this->user()->is_able_modify_mcht;        
+                return Ablilty::salesAuthValidate($this, $this->id);
         }
         else
             return false;

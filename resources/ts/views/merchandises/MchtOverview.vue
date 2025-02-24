@@ -448,7 +448,7 @@ onMounted(() => {
                         <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card || corp.pv_options.paid.use_multiple_hand_pay">
                             <VDivider style="margin-bottom: 1em;"/>
                             <VRow>
-                                <VCol :md="6" :cols="12">
+                                <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_regular_card">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>단골고객 사용여부</VCol>
                                         <VCol md="6">
@@ -467,17 +467,21 @@ onMounted(() => {
                                     </VRow>
                                 </VCol>
                                 <VCol v-if="corp.pv_options.paid.use_multiple_hand_pay" md="6">
-                                    <VRow no-gutters :md="6" style="align-items: center;">
-                                        <VCol>다중 수기결제 사용 여부</VCol>
+                                    <VRow no-gutters :md="6" style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol>다중 수기결제 사용여부</VCol>
                                         <VCol md="6">
                                             <div class="batch-container">
                                                 <BooleanRadio :radio="props.item.use_multiple_hand_pay"
                                                     @update:radio="props.item.use_multiple_hand_pay = $event">
-                                                    <template #true>활성</template>
-                                                    <template #false>비활성</template>
+                                                    <template #true>사용</template>
+                                                    <template #false>미사용</template>
                                                 </BooleanRadio>
                                             </div>
                                         </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">다중 수기결제 사용여부</VCol>
+                                        <VCol md="6"><span>{{ props.item.use_multiple_hand_pay ? "사용" : "미사용" }}</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>

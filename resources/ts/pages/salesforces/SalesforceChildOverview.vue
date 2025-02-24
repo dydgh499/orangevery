@@ -5,7 +5,7 @@ import SalesforceChildOverview from '@/pages/salesforces/SalesforceChildOverview
 import { selectFunctionCollect } from '@/views/selected';
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
 
-import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
+import { authLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
 import { Salesforce } from '@/views/types';
 import { getLevelByIndex, getUserLevel, salesLevels } from '@axios';
 import corp from '@corp';
@@ -29,7 +29,7 @@ const getChildDepth = computed(() => {
 </script>
 
 <template>
-    <tr :style="(depth+1)%2 === 0 ? 'background: rgba(var(--v-theme-primary), 10%);' : ''">
+    <tr :style="`background: rgba(var(--v-theme-primary), ${depth * 5}%);`">
         <template v-for="(header, key, idx) in head.headers" :key="idx">
             <td v-show="header.visible" :class="key == 'title' ? 'list-square title' : 'list-square'">
                 <span v-if="key == 'id'">
@@ -82,6 +82,12 @@ const getChildDepth = computed(() => {
                     <VChip
                         :color="store.booleanTypeColor(!props.salesforce[key])">
                         {{ props.salesforce[key] ? '상세보기' : '간편보기' }}
+                    </VChip>
+                </span>
+                <span v-else-if="key == 'auth_level'">
+                    <VChip
+                        :color="store.getSelectIdColor(authLevels().find(obj => obj.id === props.salesforce[key])?.id)">
+                        {{ authLevels().find(obj => obj.id === props.salesforce[key])?.title }}
                     </VChip>
                 </span>
                 <span v-else-if="key == 'is_lock'">

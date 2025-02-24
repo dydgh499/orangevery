@@ -128,11 +128,8 @@ class BillKeyController extends Controller
         if($result === 0)
         {
             $bill_keys = $this->bill_keys
-                ->join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
-                ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-                ->where('bill_keys.pmod_id', $pay_module->id)
-                ->where('bill_keys.buyer_phone', $this->aes256_encode($request->buyer_phone))
-                ->where('bill_keys.buyer_name', $this->aes256_encode($request->buyer_name))
+                ->where('pmod_id', $pay_window['payment_module']['id'])
+                ->where('buyer_phone', $this->aes256_encode($request->buyer_phone))
                 ->get();
             return $this->response(0, $bill_keys);
         }

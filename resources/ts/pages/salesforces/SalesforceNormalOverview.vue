@@ -7,7 +7,7 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
 
-import { getAutoSetting, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
+import { authLevels, getAutoSetting, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
 import type { Options } from '@/views/types';
 import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios';
 import { DateFilters, ItemTypes } from '@core/enums';
@@ -166,10 +166,10 @@ onMounted(() => {
                                         {{ tax_types.find(sales => sales.id === item[_key])?.title }}
                                     </VChip>
                                 </span>
-                                <span v-else-if="_key == 'is_able_modify_mcht'">
+                                <span v-else-if="_key == 'auth_level'">
                                     <VChip
-                                        :color="store.booleanTypeColor(!item[_key])">
-                                        {{ item[_key] ? '가능' : '불가능' }}
+                                        :color="store.getSelectIdColor(authLevels().find(obj => obj.id === item[_key])?.id)">
+                                        {{ authLevels().find(obj => obj.id === item[_key])?.title }}
                                     </VChip>
                                 </span>
                                 <span v-else-if="_key == 'is_lock'">

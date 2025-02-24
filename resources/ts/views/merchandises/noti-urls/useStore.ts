@@ -2,7 +2,7 @@ import corp from '@/plugins/corp'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { NotiUrl, Options } from '@/views/types'
-import { axios, getUserLevel, user_info } from '@axios'
+import { axios, getUserLevel, isAbleModiy, user_info } from '@axios'
 
 export const noti_statuses = <Options[]>([
     { id: 0, title: "미사용" }, { id: 1, title: "사용" },
@@ -13,12 +13,12 @@ export const send_types = <Options[]>([
     { id: 2, title: "취소건만 발송" },
 ])
 
-export const notiViewable = () => {
+export const notiViewable = (id: number) => {
     if(corp.pv_options.paid.use_noti) {
         if(getUserLevel() >= 35)
             return true
-        else if(getUserLevel() >= 10 && user_info.value.is_able_modify_mcht)
-            return true
+        else if(getUserLevel() > 10)
+            return isAbleModiy(id)
         else if(getUserLevel() === 10 && user_info.value.use_noti)
             return true
         else

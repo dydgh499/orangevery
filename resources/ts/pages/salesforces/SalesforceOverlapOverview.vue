@@ -8,7 +8,7 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import SalesforceChildOverview from '@/pages/salesforces/SalesforceChildOverview.vue';
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
 
-import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
+import { authLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
 import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios';
 import { DateFilters, ItemTypes } from '@core/enums';
 import corp from '@corp';
@@ -135,6 +135,12 @@ store.params.level = sales_levels[sales_levels.length - 1].id as number
                                     <span v-else-if="_key == 'is_lock'">
                                     <VChip :color="store.booleanTypeColor(item[_key])">
                                             {{ item[_key] ? 'LOCK' : 'X' }}
+                                        </VChip>
+                                    </span>
+                                    <span v-else-if="_key == 'auth_level'">
+                                        <VChip
+                                            :color="store.getSelectIdColor(authLevels().find(obj => obj.id === item[_key])?.id)">
+                                            {{ authLevels().find(obj => obj.id === item[_key])?.title }}
                                         </VChip>
                                     </span>
                                     <span v-else-if="_key == 'is_2fa_use'">

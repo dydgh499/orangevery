@@ -161,7 +161,7 @@ return [
         'sales_fee' => '영업점 수수료',
         'parent_id' => '상위 영업점',
         'is_able_unlock_mcht' => '하위 가맹점 언락여부',
-        'is_able_modify_mcht' => '영업점 수정가능 여부',
+        'auth_level' => '권한등급',
         'is_able_under_modify' => '하위 영업점 수정가능 여부',
         'view_type'  => '화면타입',
         'settle_tax_type' => '정산 세율',

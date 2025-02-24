@@ -185,7 +185,7 @@ export interface Salesforce extends SalesforcePropertie, UserPropertie {
     parent_id?: number,
     sales_fee?: number,
     mcht_batch_fee?: number,
-    is_able_modify_mcht: number,
+    auth_level: number,
     is_able_unlock_mcht: number,
     is_able_under_modify: number,
     withdraw_business_limit: number,

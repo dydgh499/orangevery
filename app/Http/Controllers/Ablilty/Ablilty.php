@@ -18,6 +18,16 @@ class Ablilty
         return $request->user()->tokenCan(13) == false ? true : false;
     }
 
+    static function salesAuthValidate($request, $id)
+    {
+        if($id === 0 && $request->user()->auth_level >= 1)
+            return true;
+        else if($id !== 0 && $request->user()->auth_level == 2)
+            return true;
+        else
+            return false;
+    }
+
     static function isMySalesforce($request, int $id)
     {
         return self::isSalesforce($request) && $request->user()->id === $id;

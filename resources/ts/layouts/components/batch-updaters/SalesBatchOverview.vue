@@ -5,7 +5,7 @@ import { batch } from '@/layouts/components/batch-updaters/batch'
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
-import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import { settleCycles, settleDays, settleTaxTypes, authLevels } from '@/views/salesforces/useStore'
 import { Salesforce } from '@/views/types'
 import { banks } from '@/views/users/useStore'
 import { getUserLevel } from '@axios'
@@ -41,7 +41,7 @@ const salesforces = reactive<Salesforce>({
     settle_tax_type: 0,
     settle_cycle: 0,
     settle_day: 0,
-    is_able_modify_mcht: 0,
+    auth_level: 0,
     view_type: 0,
     note: '',
     acct_num: "",
@@ -70,7 +70,7 @@ const setSettleDay = (apply_type: number) => {
 
 const setIsAbleModifyMcht = (apply_type: number) => {
     post('set-is-able-modify-mcht', {
-        'is_able_modify_mcht': salesforces.is_able_modify_mcht,
+        'auth_level': salesforces.auth_level,
     }, apply_type)
 }
 
@@ -206,8 +206,8 @@ watchEffect(() => {
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="salesforces.is_able_modify_mcht" 
-                                            :items="is_ables" item-title="title" item-value="id" label="하위 가맹점 수정권한"/>
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="salesforces.auth_level" 
+                                            :items="authLevels()" item-title="title" item-value="id" label="영업점 권한"/>
                                 </VCol>
                                 <VCol md="6">
                                     <div class="button-cantainer">

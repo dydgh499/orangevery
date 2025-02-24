@@ -5,7 +5,7 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
 
-import { settleCycles, settleDays, settleTaxTypes, useSalesFilterStore } from '@/views/salesforces/useStore'
+import { settleCycles, settleDays, settleTaxTypes, authLevels, useSalesFilterStore } from '@/views/salesforces/useStore'
 import type { Options, Salesforce } from '@/views/types'
 
 import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
@@ -232,16 +232,15 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                         <VCol md="8"><span>{{ tax_types.find(obj => obj.id === props.item.settle_tax_type).title }}</span></VCol>
                                     </VRow>
                                 </VCol>
-                                
-                                <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
+                                <VCol cols="12" md="6" v-if="isAbleModiy(props.item.id)">
                                     <VRow no-gutters style="align-items: center;">
-                                        <VCol cols="4">화면 타입</VCol>
-                                        <VCol md="8">
-                                    <BooleanRadio :radio="props.item.view_type"
-                                        @update:radio="props.item.view_type = $event">
-                                        <template #true>상세보기</template>
-                                        <template #false>간편보기</template>
-                                    </BooleanRadio>
+                                        <VCol md="4">
+                                            <BaseQuestionTooltip :location="'top'" :text="'작업권한'" 
+                                                :content="'하위 가맹점과 하위 등급의 영업점들의 작업권한을 부여합니다.'"/>
+                                        </VCol>
+                                        <VCol md="8">                                            
+                                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.auth_level" 
+                                                    :items="authLevels()" item-title="title" item-value="id" label="영업점 권한"/>
                                         </VCol>
                                     </VRow>
                                 </VCol>
@@ -264,23 +263,15 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                         </VCol>
                                     </VRow>
                                 </VCol>
-                                <VCol cols="12" md="6">
+                                <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
                                     <VRow no-gutters style="align-items: center;">
-                                        <VCol md="4">
-                                            {{
-                                                corp.pv_options.paid.sales_parent_structure
-                                                ?
-                                                "생성권한"
-                                                :
-                                                "생성/수정권한"    
-                                            }}
-                                        </VCol>
+                                        <VCol cols="4">화면 타입</VCol>
                                         <VCol md="8">
-                                            <BooleanRadio :radio="props.item.is_able_modify_mcht"
-                                                @update:radio="props.item.is_able_modify_mcht = $event">
-                                                <template #true>가능</template>
-                                                <template #false>불가능</template>
-                                            </BooleanRadio>
+                                    <BooleanRadio :radio="props.item.view_type"
+                                        @update:radio="props.item.view_type = $event">
+                                        <template #true>상세보기</template>
+                                        <template #false>간편보기</template>
+                                    </BooleanRadio>
                                         </VCol>
                                     </VRow>
                                 </VCol>

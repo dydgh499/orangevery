@@ -34,6 +34,14 @@ export const settleTaxTypes = () => {
     ])
 }
 
+export const authLevels = () => {
+    return <Options[]>([
+        {id:0, title:'권한없음'}, 
+        {id:1, title:'추가가능'},
+        {id:2, title:'추가/수정/삭제 가능'},
+    ])
+}
+
 export const getAutoSetting = (auto_settings: UnderAutoSetting[]) => {
     return auto_settings.map(item => `${item.note} ${item.sales_fee}%`)
 }
@@ -86,6 +94,7 @@ const getSalesHeaders = (head :any) => {
     const getSecureCols = () => {
         const headers_4:Record<string, string> = {}
         if(getUserLevel() >= 35) {
+            headers_4['auth_level'] = '작업권한'
             headers_4['is_lock'] = '계정잠김여부'
             headers_4['locked_at'] = '계정잠금시간'
         }
@@ -507,12 +516,16 @@ export const defaultItemInfo = () => {
         settle_day: 0,
         sales_name: '',
         view_type: 0,
-        is_able_modify_mcht: 0,
+        auth_level: 0,
         is_able_under_modify: 0,
         is_able_unlock_mcht: 0,
         note: '',
         resident_num_front: '',
-        resident_num_back: ''
+        resident_num_back: '',
+        withdraw_business_limit: 0,
+        withdraw_holiday_limit: 0,
+        mcht_pg_id: 0,
+        mcht_ps_id: 0
     })
     return {
         path, item

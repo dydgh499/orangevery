@@ -108,7 +108,7 @@ class BatchUpdateSalesController extends BatchUpdateController
     
     public function setIsAbleModifyMcht(Request $request)	
     {
-        $cols = ['is_able_modify_mcht' => $request->is_able_modify_mcht];
+        $cols = ['auth_level' => $request->auth_level];
         $row = $this->getApplyRow($request, $cols);
         return $this->batchResponse($row, '영업점');
     }

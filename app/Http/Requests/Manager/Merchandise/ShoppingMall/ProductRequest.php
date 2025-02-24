@@ -26,8 +26,6 @@ class ProductRequest extends FormRequest
     {
         if(Ablilty::isOperator($this))
             return true;
-        else if(Ablilty::isSalesforce($this))
-            return $this->user()->is_able_modify_mcht;        
         else if(Ablilty::isMerchandise($this))
             return true;
         else

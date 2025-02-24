@@ -33,7 +33,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VCard style="margin-top: 1em;" v-if="notiViewable()">
+    <VCard style="margin-top: 1em;" v-if="notiViewable(0)">
         <VCol class="d-flex gap-4">
             <VBtn type="button" style="margin-left: auto;" @click="addNewNotiUrl">
                 노티 신규추가

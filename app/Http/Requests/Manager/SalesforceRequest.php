@@ -45,7 +45,7 @@ class SalesforceRequest extends FormRequest
     ];
     public $integer_keys = [
         'sales_fee',
-        'is_able_modify_mcht',
+        'auth_level',
         'is_able_under_modify',
         'is_able_unlock_mcht',
         'withdraw_business_limit',
@@ -66,7 +66,7 @@ class SalesforceRequest extends FormRequest
             if($this->user()->brand_id === 30)
                 return true;
             else
-                return $this->user()->is_able_modify_mcht;        
+                return Ablilty::salesAuthValidate($this, $this->id);     
         }
         else
             return false;
@@ -83,7 +83,7 @@ class SalesforceRequest extends FormRequest
             'user_name' => 'required',
             'sales_name' => 'required',
             'view_type' => 'required',
-            'is_able_modify_mcht' => 'required',
+            'auth_level' => 'required',
             'level'     => 'required',
             'settle_tax_type' => 'required',
             'settle_cycle' => 'required',

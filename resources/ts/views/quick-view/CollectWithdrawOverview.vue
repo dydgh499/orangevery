@@ -52,13 +52,13 @@ watchEffect(() => {
     <VCol class="d-flex justify-space-between small-font">
         <div>
             <div class="small-font">
-                <span class="text-info">출금</span>가능 금액                    
+                <span class="text-primary">출금</span>가능 금액                    
             </div>
             <div style="font-weight: bold;">
                 <SkeletonBox v-if="props.is_skeleton" :width="'8em'"/>
-                <span v-else :class="able_balance ? 'text-success' : 'text-error'">
+                <b v-else>
                     {{ able_balance.toLocaleString() }}
-                </span>
+                </b>
                 원
             </div>
         </div>
@@ -66,7 +66,7 @@ watchEffect(() => {
     <VCol style="padding-top: 0;" class="d-flex justify-space-between small-font">
         <div>
             <div class="small-font">
-                <span class="text-info">출금</span>금액 입력
+                <span class="text-primary">출금</span>금액 입력
             </div>
             <div>
                 <SkeletonBox v-if="props.is_skeleton" :width="'10em'" :height="'2em'"/>
@@ -80,7 +80,7 @@ watchEffect(() => {
                     style="min-width: 10em;"/>
             </div>
         </div>
-        <VBtn size="small" color="info" type="button" @click="requestWithdraw()" style="margin-top: auto;">
+        <VBtn size="small" color="primary" type="button" @click="requestWithdraw()" style="margin-top: auto;">
             출금하기
         </VBtn>
     </VCol>

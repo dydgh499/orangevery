@@ -28,7 +28,7 @@ else {
     
     if(corp.pv_options.paid.fee_input_mode === false) {
         tabs.push({ icon: 'ic-outline-send-to-mobile', title: '결제모듈정보' })
-        if(notiViewable()) 
+        if(notiViewable(id.value)) 
             tabs.push({ icon: 'emojione:envelope', title: '노티정보' })
     }
 }
@@ -60,7 +60,7 @@ watchEffect(() => {
                                 <PayModuleOldOverview :item="item" v-else/>
                             </Suspense>
                         </VWindowItem>
-                        <VWindowItem v-if="notiViewable()">
+                        <VWindowItem v-if="notiViewable(id)">
                             <Suspense>
                                 <NotiOverview :item="item" />
                             </Suspense>

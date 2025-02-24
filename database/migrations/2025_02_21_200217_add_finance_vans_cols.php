@@ -15,7 +15,6 @@ return new class extends Migration
             $table->boolean('use_kakao_auth')->default(0)->comment('카카오 인증');
             $table->boolean('use_account_auth')->default(0)->comment('1원 인증');
         });
-        
     }
 
     /**

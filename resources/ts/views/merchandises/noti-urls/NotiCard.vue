@@ -48,7 +48,7 @@ const filterPayMod = computed(() => {
                                     {{ mchts.find(obj => obj.id === props.item.mcht_id)?.mcht_name }}
                                 </VCol>
                             </VRow>
-                            <VRow v-if="notiViewable()">
+                            <VRow v-if="notiViewable(props.item.id)">
                                 <VCol md="6" cols="12">
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pmod_id"
                                         :items="[{ id: -1, note: '전체' }].concat(filterPayMod)" prepend-inner-icon="ic-outline-send-to-mobile"
@@ -69,7 +69,7 @@ const filterPayMod = computed(() => {
                                 </VCol>
                             </VRow>
 
-                            <VRow v-if="notiViewable()">
+                            <VRow v-if="notiViewable(props.item.id)">
                                 <VCol cols="12">
                                     <VTextField v-model="props.item.send_url"
                                     label="발송 URL"
@@ -86,7 +86,7 @@ const filterPayMod = computed(() => {
                                 </VCol>
                             </VRow>
 
-                            <VRow v-if="notiViewable()">
+                            <VRow v-if="notiViewable(props.item.id)">
                                 <VCol cols="12">
                                     <VTextField v-model="props.item.note" counter label="별칭"
                                         prepend-inner-icon="twemoji-spiral-notepad" maxlength="190" auto-grow/>
@@ -101,7 +101,7 @@ const filterPayMod = computed(() => {
                                 </VCol>
                             </VRow>
                             <VRow>
-                                <VCol cols="6" v-if="notiViewable()">
+                                <VCol cols="6" v-if="notiViewable(props.item.id)">
                                     <VSwitch hide-details :false-value=0 :true-value=1 
                                             v-model="props.item.noti_status"
                                             label="활성여부" color="primary"
@@ -111,8 +111,8 @@ const filterPayMod = computed(() => {
                                     <span>{{ props.item.noti_status ? '활성' : '미활성' }}</span>
                                 </VCol>
                             </VRow>
-                        
-                        <VRow v-if="notiViewable()">
+
+                        <VRow v-if="notiViewable(props.item.id)">
                             <VCol class="d-flex gap-4">
                                 <VBtn type="button" style="margin-left: auto;"
                                     @click="update('/merchandises/noti-urls', props.item, vForm, props.able_mcht_chanage)">
