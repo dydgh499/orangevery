@@ -13,7 +13,7 @@ const tabs = <Tab[]>([
     { icon: 'carbon-classification', title: '구분 정보' },
 ])
 if((corp.pv_options.paid.use_realtime_deposit || corp.pv_options.paid.use_finance_van_deposit) && getUserLevel() >= 35)
-    tabs.push({icon: 'streamline:money-atm-card-2-deposit-money-payment-finance-atm-withdraw', title: '실시간 이체 모듈'})
+    tabs.push({icon: 'streamline:money-atm-card-2-deposit-money-payment-finance-atm-withdraw', title: '금융 VAN'})
 const path = 'services/pay-gateways'
 </script>
 <template>
