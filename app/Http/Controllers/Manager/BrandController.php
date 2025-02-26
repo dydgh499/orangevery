@@ -178,9 +178,9 @@ class BrandController extends Controller
 
     public function setSealFile($request)
     {
-        if($request->hasFile('p2p.seal_file'))
+        if($request->hasFile('pv_options.p2p.seal_file'))
         {
-            $img    = $request->file('p2p.seal_file');
+            $img    = $request->file('pv_options.p2p.seal_file');
             $ext    = $img->extension();                
             $name = time().md5(pathinfo($img, PATHINFO_FILENAME)).".$ext";
 
