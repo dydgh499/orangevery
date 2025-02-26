@@ -31,6 +31,7 @@ class BrandInfo
                     'id_img',
                     'contract_img',
                     'bsin_lic_img',
+                    'seal_img',
                     'pvcy_rep_name',
                     'note',
                     'dev_fee',
