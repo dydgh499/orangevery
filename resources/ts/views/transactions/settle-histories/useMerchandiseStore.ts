@@ -40,7 +40,7 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
         return {
             'total_amount': '매출액',
             'trx_amount' : '거래 수수료',
-            'settle_fee' : '입금 수수료',
+            'settle_fee' : '건별 수수료',
         }
     }
 

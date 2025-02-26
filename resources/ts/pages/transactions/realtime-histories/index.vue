@@ -18,9 +18,9 @@ provide('exporter', exporter)
 
 const getLogStyle = (item: RealtimeHistory) => {
     if(item.result_code === '0000' && item.request_type === 6170)
-        return 'color:blue';
-    else if(item.result_code !== '0000' && item.request_type === 6170)
-        return 'color:red';
+        return 'text-primary';
+    else if(item.result_code !== '0000')
+        return 'text-error';
     else
         return '';
 }
@@ -32,7 +32,7 @@ const getLogStyle = (item: RealtimeHistory) => {
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true" :sales="true"/>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="line-md:emoji-frown-twotone" @click="pvErrorCodeDialog.show()" v-if="getUserLevel() >= 35" color="error" size="small"
+                    <VBtn prepend-icon="line-md:emoji-frown-twotone" @click="pvErrorCodeDialog.show()" v-if="getUserLevel() >= 35" color="error" size="small"
                         :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
                         출금 에러코드 정의
                     </VBtn>

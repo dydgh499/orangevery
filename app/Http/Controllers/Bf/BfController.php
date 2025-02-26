@@ -88,7 +88,7 @@ class BfController extends Controller
      * @responseFile 200 storage/bf/payModules.json
      * @responseField id integer 결제모듈 고유번호
      * @responseField module_type integer 모듈 타입(0=장비, 1=수기, 2=인증, 3=간편)
-     * @responseField settle_fee integer 입금 수수료
+     * @responseField settle_fee integer 건별 수수료
      * @responseField is_old_auth integer 비인증, 구인증 여부(비인증=0, 구인증=1)
      * @responseField installment string 할부한도(0~12)
      * @responseField pay_year_limit integer 연결제한도(만 단위)
@@ -245,8 +245,8 @@ class BfController extends Controller
      * @responseField content.*.profit integer 가맹점 정산금액
      * @responseField content.*.trx_amount integer 가맹점 거래 수수료
      * @responseField content.*.fin_trx_delay integer 이체 딜레이(분)
-     * @responseField content.*.mcht_settle_fee integer 가맹점 입금 수수료
-     * @responseField content.*.total_trx_amount integer 가맹점 총 거래 수수료(입금 수수료 + 거래 수수료)
+     * @responseField content.*.mcht_settle_fee integer 가맹점 건별 수수료
+     * @responseField content.*.total_trx_amount integer 가맹점 총 거래 수수료(건별 수수료 + 거래 수수료)
      * @responseField content.*.hold_amount integer 가맹점 유보금 수수료
      */
     

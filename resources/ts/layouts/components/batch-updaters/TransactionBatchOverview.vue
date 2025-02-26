@@ -255,7 +255,7 @@ watchEffect(() => {
                                             </VBtn>
                                             <template v-if="corp.pv_options.paid.use_collect_withdraw_scheduler">
                                                 <VBtn prepend-icon="tabler:column-remove" @click="removeDepositFee(0)" size="small" color="primary">
-                                                    입금 수수료 삭제
+                                                    건별 수수료 삭제
                                                 </VBtn>
                                             </template>
                                         </div>

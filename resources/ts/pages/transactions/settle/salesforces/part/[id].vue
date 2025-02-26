@@ -78,7 +78,7 @@ provide('partSettle', partSettle)
                         </span>
                         <span v-else-if="key == 'mcht_settle_fee' && store.params.level == 10">
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
-                                :content="'입금 수수료는 가맹점만 적용됩니다.'"/>
+                                :content="'건별 수수료는 가맹점만 적용됩니다.'"/>
                         </span>
                         <span v-else-if="key == 'trx_amount'">
                             <span>{{ store.params.level === 10 ? header.ko : '지급액' }}</span>

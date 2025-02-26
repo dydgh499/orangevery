@@ -106,8 +106,8 @@ class EzpgController extends Controller
      * @responseField content.*.amount integer 거래금액
      * @responseField content.*.profit integer 가맹점 정산금액
      * @responseField content.*.trx_amount integer 가맹점 거래 수수료
-     * @responseField content.*.mcht_settle_fee integer 가맹점 입금 수수료
-     * @responseField content.*.total_trx_amount integer 가맹점 총 거래 수수료(입금 수수료 + 거래 수수료)
+     * @responseField content.*.mcht_settle_fee integer 가맹점 건별 수수료
+     * @responseField content.*.total_trx_amount integer 가맹점 총 거래 수수료(건별 수수료 + 거래 수수료)
      * @responseField content.*.hold_amount integer 가맹점 유보금 수수료
      * @responseField content.*.trx_dt string 승인일자
      * @responseField content.*.trx_tm string 승인시간

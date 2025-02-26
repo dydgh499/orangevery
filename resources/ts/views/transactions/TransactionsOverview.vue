@@ -302,7 +302,7 @@ onMounted(async () => {
                         <VCol cols="12">
                             <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
-                                    <template #name>입금 수수료</template>
+                                    <template #name>건별 수수료</template>
                                     <template #input>
                                         <VTextField v-model="props.item.mcht_settle_fee" type="number" suffix="￦"
                                             :rules="[requiredValidatorV2(props.item.mcht_settle_fee, '이체 수수료')]" />

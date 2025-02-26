@@ -113,7 +113,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
             {title: 'PG사명(O)', key: 'pg_id'},
             {title: '구간(O)', key: 'ps_id'},
             {title: '가맹점 정산타입(O)', key: 'settle_type'},
-            {title: '입금 수수료(X)', key: 'settle_fee'},
+            {title: '건별 수수료(X)', key: 'settle_fee'},
             {title: '계약 시작일(X)', key: 'contract_s_dt'},
             {title: '계약 종료일(X)', key: 'contract_e_dt'},
         ]

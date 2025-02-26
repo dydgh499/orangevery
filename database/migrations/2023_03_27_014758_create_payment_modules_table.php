@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('pg_id')->nullable()->comment('PG사 id');
             $table->integer('ps_id')->nullable()->comment('PG사 구간 id');
             $table->integer('settle_type')->default(0)->comment('정산일(D+1, D+2 ..)');
-            $table->mediumInteger('settle_fee')->default(0)->comment('입금 수수료');
+            $table->mediumInteger('settle_fee')->default(0)->comment('건별 수수료');
             $table->tinyInteger('module_type')->default(0)->comment('모듈 타입(0=장비, 1=수기, 2=인증, 3=간편, 4=실시간 이체, 5=비인증 장비)');
             $table->string('api_key', 100)->default('')->comment('API KEY');
             $table->string('sub_key', 100)->default('')->comment('SUB KEY');
@@ -31,7 +31,7 @@ return new class extends Migration
             //-------------------------- comm
             $table->integer('terminal_id')->nullable()->comment('장비 종류');
             $table->tinyInteger('comm_settle_day')->default(0)->comment('통신비 정산일');
-            $table->smallInteger('comm_settle_fee')->default(0)->comment('통신비 입금 수수료');
+            $table->smallInteger('comm_settle_fee')->default(0)->comment('통신비 건별 수수료');
             $table->tinyInteger('comm_settle_type')->nullable()->default(0)->comment('통신비 정산 타입(개통월 부터=0, 개통월 익월=1, 개통월 익익월=2)');
             $table->tinyInteger('comm_calc_level')->default(0)->comment('정산주체(sales id), -1=본인, 125=개발사, 128=본사');            
             $table->tinyInteger('under_sales_type')->default(0)->comment('매출미달 적용타입');

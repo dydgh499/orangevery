@@ -967,14 +967,14 @@ response.json()</code></pre></div>
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>가맹점 입금 수수료</p>
+<p>가맹점 건별 수수료</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
                         <b style="line-height: 2;"><code>total_trx_amount</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>가맹점 총 거래 수수료(입금 수수료 + 거래 수수료)</p>
+<p>가맹점 총 거래 수수료(건별 수수료 + 거래 수수료)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
                         <b style="line-height: 2;"><code>hold_amount</code></b>&nbsp;&nbsp;

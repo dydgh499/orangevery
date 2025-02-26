@@ -124,7 +124,7 @@ export const transactionHeader = (table_name: string) => {
             headers_4['hold_fee'] = '유보금 수수료'
             headers_4['trx_amount'] = '거래 수수료'
             headers_4['hold_amount'] = '유보금'
-            headers_4['mcht_settle_fee'] = '입금 수수료'
+            headers_4['mcht_settle_fee'] = '건별 수수료'
             headers_4['total_trx_amount'] = '총 거래 수수료'
         }
         return headers_4

@@ -150,7 +150,7 @@ const register = async() => {
                                 <b style="margin-left: 1em;">- 정산타입 </b>                                
                                 <VChip>{{ settle_types.find(item => item.id === 0)?.name }}</VChip>                                
                                 <br>
-                                <b style="margin-left: 1em;">- 입금 수수료 </b>                                
+                                <b style="margin-left: 1em;">- 건별 수수료 </b>                                
                                 <VChip>0원</VChip>                                
                                 <br>
                                 <b style="margin-left: 1em;">- 구간타입(장비 이외만 적용) </b>

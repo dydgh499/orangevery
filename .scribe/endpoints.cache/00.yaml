@@ -485,7 +485,7 @@ endpoints:
         custom: []
       'content.*.mcht_settle_fee':
         name: 'content.*.mcht_settle_fee'
-        description: '가맹점 입금 수수료'
+        description: '가맹점 건별 수수료'
         required: false
         example: null
         type: integer
@@ -493,7 +493,7 @@ endpoints:
         custom: []
       'content.*.total_trx_amount':
         name: 'content.*.total_trx_amount'
-        description: '가맹점 총 거래 수수료(입금 수수료 + 거래 수수료)'
+        description: '가맹점 총 거래 수수료(건별 수수료 + 거래 수수료)'
         required: false
         example: null
         type: integer

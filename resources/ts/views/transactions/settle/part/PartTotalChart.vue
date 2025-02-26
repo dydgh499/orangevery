@@ -52,7 +52,7 @@ const partSettle = <any>(inject('partSettle'))
                     <td><span>{{ settle.trx_amount.toLocaleString() }}</span> &#8361;</td>
                 </tr>
                 <tr v-if="store.params.level === 10">
-                    <th>입금 수수료</th>
+                    <th>건별 수수료</th>
                     <td><span>{{ settle.settle_fee.toLocaleString() }}</span> &#8361;</td>
                 </tr>
                 <tr v-else>

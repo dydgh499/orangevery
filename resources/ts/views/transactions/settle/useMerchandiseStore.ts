@@ -97,7 +97,7 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         'amount' :  '금액',
         'trx_amount' :  '거래 수수료',
         'hold_amount': '유보금',
-        'settle_fee' :  '입금 수수료',
+        'settle_fee' :  '건별 수수료',
         'total_trx_amount': '총 거래 수수료',
         'profit': '정산액',    
     }
