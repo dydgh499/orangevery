@@ -31,10 +31,10 @@ const getMchtChildMenu = () => {
     }
     else {
         if(getUserLevel() === 10)
-            users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
+            users[1].children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
         else if(getUserLevel() >= 35) {
-            users.children.push({ title: '장비 관리', to: 'merchandises-terminals'})
-            users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
+            users[1].children.push({ title: '장비 관리', to: 'merchandises-terminals'})
+            users[1].children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
         }
     }
 
