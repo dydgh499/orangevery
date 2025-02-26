@@ -37,7 +37,7 @@ const _getTransactionMenu = () => {
         }
     }
 
-    if(corp.pv_options.paid.use_shop && (getUserLevel() >= 35 || getUserLevel() === 10)) {
+    if((getUserLevel() >= 35 || getUserLevel() === 10) && corp.pv_options.paid.use_shop) {
         transactions.children.push({
             title: '주문 관리',
             to: 'transactions-orders',

@@ -463,6 +463,8 @@ interface P2pAppOption {
     ci_validate: number,
     account_validate: number,
     contract_validate: number,
+    seal_img: string,
+    seal_file: File | undefined,
 }
 
 interface ThemeCSS {

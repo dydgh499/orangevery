@@ -161,4 +161,20 @@ class SalesforceOverlap
         }
         return $data;
     }
+
+    static public function getAllChildIds($parent_ids, $childs)
+    {
+        $ids = collect($parent_ids); // 기존 parent_ids를 컬렉션으로 처리하여 중복을 방지합니다.
+        
+        // 자식들만 반복문으로 순회하면서 ID를 수집
+        foreach ($childs as $child) {
+            $ids->push($child->id); // 현재 자식 ID 추가
+            if ($child->childs) {
+                // 자식이 더 있다면 재귀적으로 호출하여 자식 ID를 추가
+                $ids = $ids->merge(self::getAllChildIds([], $child->childs));
+            }
+        }
+
+        return $ids->unique()->values(); // 고유한 ID만 반환
+    }
 }

@@ -10,12 +10,18 @@ const getMchtChildMenu = () => {
         children: [{ title: '가맹점 목록', to: 'merchandises'}]
     }
 
-    if(isFixplus() && getUserLevel() >= 35) {
-        users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
+    if(isFixplus()) {
+        if(getUserLevel() >= 35)
+            users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
     }
     else {
-        users.children.push({ title: '장비 관리', to: 'merchandises-terminals'})
-        users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
+        // 영업점은 .. 고민해봐야함
+        if(getUserLevel() === 10)
+            users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
+        else if(getUserLevel() >= 35) {
+            users.children.push({ title: '장비 관리', to: 'merchandises-terminals'})
+            users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
+        }
     }
 
     if((getUserLevel() >= 35 || getUserLevel() == 10) && corp.pv_options.paid.use_bill_key)
@@ -57,10 +63,9 @@ const getShopMenu = () => {
 }
 
 export const getUserMenu = () => {
-    const menu = <any[]>[
-        getMchtChildMenu(),
-    ]
-    if(getUserLevel() >= 13)
+    const menu = <any[]>[{ heading: 'User information' }]
+    menu.push(getMchtChildMenu())
+    if(getUserLevel() >= 13) 
         menu.push(getSalesChildMenu())
     if(corp.pv_options.paid.use_shop && getUserLevel() === 10) 
         menu.push(getShopMenu())

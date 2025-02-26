@@ -15,11 +15,14 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleHistoryTrait;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+use App\Http\Controllers\Manager\Service\BrandInfo;
 
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Log\CreateSettleHistoryRequest;
 use App\Http\Requests\Manager\Log\BatchSettleHistoryRequest;
+
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
+use App\Http\Controllers\Manager\Salesforce\SalesforceOverlap;
 
 /**
  * @group Sales-Settle-History API
@@ -53,9 +56,19 @@ class SalesSettleHistoryController extends Controller
         if($request->has('deposit_status'))
             $query = $query->where('settle_histories_salesforces.deposit_status', $request->deposit_status);
 
-        $sales_ids = UnderSalesforce::getSalesIds($request);
-        if(count($sales_ids))
-            $query = $query->whereIn('salesforces.id', $sales_ids);
+        if(Ablilty::isSalesforce($request))
+        {
+            $brand = BrandInfo::getBrandById($request->user()->brand_id);
+            if($brand['pv_options']['paid']['sales_parent_structure'])
+            {
+                $sales = Salesforce::where('id', $request->user()->id)->with(['childs'])->first();
+                $sales_ids = SalesforceOverlap::getAllChildIds([$sales->id], $sales->childs);
+            }
+            else
+                $sales_ids = UnderSalesforce::getSalesIds($request);
+            if(count($sales_ids))
+                $query = $query->whereIn('salesforces.id', $sales_ids);
+        }
         if($request->level)
             $query = $query->where('salesforces.level', $request->level);
         return $query;

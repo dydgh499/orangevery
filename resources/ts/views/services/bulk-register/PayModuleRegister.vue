@@ -52,6 +52,7 @@ const pay_window_secure_level = ref(pay_window_secure_levels[0])
 const settle_type = ref(settle_types[0])
 const pg = ref({id: null, pg_name: ''})
 const ps = ref({id: null, name: ''})
+const terminal = ref({id: null, name: ''})
 
 const filterPgs = computed(() => {
     if(pg.value) {
@@ -283,6 +284,19 @@ watchEffect(async () => {
                         :content="'<b>통신비, 통신비 정산타입, 개통일, 정산일, 정산주체</b>가 설정되어있어야 적용됩니다.<br>ex)<br>통신비: 30,000<br>통신비 정산타입: 개통월 M+2부터 적용<br>개통일: 2023-09-25<br>정산일: 1일<br>정산주체: 가맹점<br><br>통신비 차감적용일: 2023-11-01, 2023-12-01, 2024-01-01 ...'"/>
                         </h3>
                         <VRow>
+                            <VCol md="4" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">장비 종류</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="terminal"
+                                            :items="terminals"
+                                            label="장비 종류"
+                                            :hint="`장비 종류: ${terminal ? terminal.id : ''} `"
+                                            item-title="name" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
                             <VCol md="4" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">통신비 정산타입</VCol>

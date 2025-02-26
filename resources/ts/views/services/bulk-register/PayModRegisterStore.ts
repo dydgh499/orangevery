@@ -133,11 +133,11 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
             {title: '시리얼 번호(X)',  key: 'serial_num'},
             {title: '통신비(X)',  key: 'comm_settle_fee'},
             {title: '통신비 정산타입(X)',  key: 'comm_settle_type'},
+            {title: '통신비 정산일(X)',  key: 'comm_settle_day'},
+            {title: '통신비 정산주체(X)',  key: 'comm_calc_level'},
             {title: '매출미달 차감금(X)',  key: 'under_sales_amt'},
             {title: '매출미달 하한금(X)',  key: 'under_sales_limit'},
             {title: '매출미달 적용기간(X)',  key: 'under_sales_type'},
-            {title: '정산일(X)',  key: 'comm_settle_day'},
-            {title: '정산주체(X)',  key: 'comm_calc_level'},
             {title: '개통일(X)',  key: 'begin_dt'},
             {title: '출고일(X)',  key: 'ship_out_dt'},
             {title: '출고상태(X)',  key: 'ship_out_stat'},
@@ -185,6 +185,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         ]
         if(corp.pv_options.paid.use_realtime_deposit)
         {
+            keys.push('use_realtime_deposit')
             keys.push('fin_id')
             keys.push('fin_trx_delay')
         }

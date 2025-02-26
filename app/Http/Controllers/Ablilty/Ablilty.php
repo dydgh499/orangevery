@@ -1,7 +1,9 @@
 <?php
 namespace App\Http\Controllers\Ablilty;
 
+use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
+use App\Http\Controllers\Manager\Salesforce\SalesforceOverlap;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Models\Merchandise;
 use Carbon\Carbon;
@@ -46,10 +48,20 @@ class Ablilty
             return true;
         else
         {
-            return self::isSalesforce($request);
-
-            $sales_ids = UnderSalesforce::getSalesIds($request);
-            return in_array($id, $sales_ids);    
+            $brand = BrandInfo::getBrandById($request->user()->brand_id);
+            if($brand['pv_options']['paid']['sales_parent_structure'])
+            {
+                if(self::isSalesforce($request))
+                {
+                    $sales = Salesforce::where('id', $request->user()->id)->with(['childs'])->first();
+                    $sales_ids = SalesforceOverlap::getAllChildIds([$sales->id], $sales->childs);    
+                    return in_array($id, $sales_ids);
+                }
+                else
+                    return false;
+            }
+            else
+                return self::isSalesforce($request);
         }
     }
 
@@ -60,7 +72,7 @@ class Ablilty
         else
         {
             $sales_filter = [
-                'id' => 'sales'.globalLevelByIndex($request->user()->level).'_id',
+                'id'    => 'sales'.globalLevelByIndex($request->user()->level).'_id',
                 'value' => $request->user()->id,
             ];
             $mcht_ids = Merchandise::where($sales_filter['id'], $sales_filter['value'])->pluck('id')->all();

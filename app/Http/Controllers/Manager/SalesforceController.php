@@ -107,7 +107,7 @@ class SalesforceController extends Controller
             $b_info = BrandInfo::getBrandById($request->user()->brand_id);
             if($b_info['pv_options']['paid']['sales_parent_structure'])
             {
-                [$total_count, $content] =SalesforceOverlap::OverlapSearch($request);
+                [$total_count, $content] = SalesforceOverlap::OverlapSearch($request);
                 $data = [
                     'page'      => $request->page, 
                     'page_size' => $request->page_size,

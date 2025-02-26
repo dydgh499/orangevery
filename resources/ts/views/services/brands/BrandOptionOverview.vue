@@ -2,6 +2,7 @@
 
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
 import CreateHalfVColV2 from '@/layouts/utils/CreateHalfVColV2.vue';
+import FileInput from '@/layouts/utils/FileInput.vue';
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import type { AuthOption, FreeOption, Options, P2pAppOption, PaidOption } from '@/views/types';
@@ -303,7 +304,7 @@ const filterPgs = computed(() => {
                                         v-if="props.item.paid.use_collect_withdraw"/>
                                 </template>
                             </CreateHalfVColV2>
-                            <CreateHalfVColV2 :mdl="5" :mdr="7">
+                            <CreateHalfVColV2 :mdl="6" :mdr="6">
                                 <template #l_name>
                                     수기 구인증 여부
                                 </template>
@@ -335,6 +336,14 @@ const filterPgs = computed(() => {
                                         color="primary" :false-value=0 :true-value=1 />
                                 </template>
                             </CreateHalfVColV2>
+                            <VRow>
+                                <VCol md=6 cols=6>
+                                    <FileInput :label="`계약서 인감 업로드`"
+                                        :preview="props.item.p2p.seal_img ? props.item.p2p.seal_img : '/utils/icons/img-preview.svg'"
+                                        @update:file="props.item.p2p.seal_file = $event" 
+                                        @update:path="props.item.p2p.seal_img = $event" />
+                                </VCol>
+                            </VRow>
                         </template>
                 </VCardItem>
             </VCard>

@@ -30,7 +30,7 @@ const _getSettlementMenu = () => {
         }
     }
 
-    if(getUserLevel() >= 10 && getUserLevel() >= 35) {
+    if(getUserLevel() === 10 && getUserLevel() >= 35) {
         settlement.children.push({
             title: '취소 수기 입금',
             to: 'transactions-settle-cancel-deposits',
@@ -50,25 +50,24 @@ const _getSettlementHistoryMenu = () => {
         to: 'transactions-settle-histories-merchandises',
     })
 
-    if (getUserLevel() > 10) {
+    if (getUserLevel() >= 13) {
         settle_histories.children.push({
             title: '영업점 정산 이력',
             to: 'transactions-settle-histories-salesforces',
         })
     }
-    if((getUserLevel() === 10 || getUserLevel() >= 35)) {
-        if (getUserLevel() >= 35 && corp.use_different_settlement) {
-            settle_histories.children.push({
-                title: '차액 정산 이력',
-                to: 'transactions-settle-histories-difference',
-            })
-        }
-        if(corp.pv_options.paid.use_collect_withdraw) {
-            settle_histories.children.push({
-                title: '모아서 출금 이력',
-                to: 'transactions-settle-histories-collect-withdraws',
-            })            
-        }
+    if (getUserLevel() >= 35 && corp.use_different_settlement) {
+        settle_histories.children.push({
+            title: '차액 정산 이력',
+            to: 'transactions-settle-histories-difference',
+        })
+    }
+        
+    if((getUserLevel() === 10 || getUserLevel() >= 35) && corp.pv_options.paid.use_collect_withdraw) {
+        settle_histories.children.push({
+            title: '모아서 출금 이력',
+            to: 'transactions-settle-histories-collect-withdraws',
+        })
     }
     return settle_histories
 }

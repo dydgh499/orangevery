@@ -140,6 +140,7 @@ class BrandController extends Controller
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($request->user()->level > 35)
         {
+            $request = $this->setSealFile($request);
             $data = $request->data();
             $data = $this->saveImages($request, $data, $this->imgs);
             
@@ -173,5 +174,25 @@ class BrandController extends Controller
         $brand = $this->brands->where('id', $id)->first();
         $res = $this->delete($this->brands->where('id', $id), ['logo_img', 'favicon_img']);
         return $this->response($res ? 1 : 990, ['id'=>$id]);
+    }
+
+    public function setSealFile($request)
+    {
+        if($request->hasFile('p2p.seal_file'))
+        {
+            $img    = $request->file('p2p.seal_file');
+            $ext    = $img->extension();                
+            $name = time().md5(pathinfo($img, PATHINFO_FILENAME)).".$ext";
+
+            if(env('FILESYSTEM_DISK') === 's3')
+                $request->pv_options['p2p']['seal_file'] = $this->ToS3('seals', $img, $name);
+            else if(env('FILESYSTEM_DISK') === 'n-cloud')
+                $request->pv_options['p2p']['seal_file'] = $this->ToNCloud('seals', $img, $name);
+            else if(env('FILESYSTEM_DISK') === 'cloudinary')
+                $request->pv_options['p2p']['seal_file'] = $this->ToCloudinary('seals', $img, $name);
+            else
+                $request->pv_options['p2p']['seal_file'] = $this->ToLocal('seals', $img, $name);
+        }
+        return $request;
     }
 }

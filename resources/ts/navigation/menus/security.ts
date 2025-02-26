@@ -41,9 +41,10 @@ const _getSecurityMenu = () => {
 }
 
 export const getSecurityMenu = () => {
-    const menu = <any[]>[
-        _getSecurityMenu(),
-    ]
+    const menu = <any[]>[]
+    if (getUserLevel() >= 35) {
+        menu.push(_getSecurityMenu())
+    }
     return menu
 }
 

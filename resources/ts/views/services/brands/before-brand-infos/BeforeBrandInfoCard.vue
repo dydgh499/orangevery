@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import BeforeBrandInfoCardTr from '@/views/services/brands/before-brand-infos/BeforeBrandInfoCardTr.vue'
-import type { Brand, BeforeBrandInfo } from '@/views/types'
-import { useRequestStore } from '@/views/request'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
+import { useRequestStore } from '@/views/request';
+import BeforeBrandInfoCardTr from '@/views/services/brands/before-brand-infos/BeforeBrandInfoCardTr.vue';
+import type { BeforeBrandInfo, Brand } from '@/views/types';
 
 interface Props {
     item: Brand,
@@ -23,8 +23,7 @@ watchEffect(() => {
 </script>
 <template>
     <VCardTitle style="margin: 1em 0;">
-        <BaseQuestionTooltip :location="'top'" :text="'이전 운영사 정보'" :content="'매출 기간별로 매출전표에 이전 운영사 정보가 적용됩니다.<br>(공급자 정보가 본사정보로 체크되어있는 가맹점에 한해 적용됩니다.)'">
-        </BaseQuestionTooltip>
+        <BaseQuestionTooltip :location="'top'" :text="'이전 운영사 정보'" :content="'매출 기간별로 매출전표에 이전 운영사 정보가 적용됩니다.<br>(공급자 정보가 본사정보로 체크되어있는 가맹점에 한해 적용됩니다.)'"/>
     </VCardTitle>
     <VTable class="text-no-wrap" style=" margin-bottom: 1em;text-align: center;">
         <thead>
@@ -45,7 +44,7 @@ watchEffect(() => {
         </tbody>
         <tfoot v-show="Boolean(props.item.id == 0)">
             <tr>
-                <td colspan="4" class="text-center">
+                <td colspan="8" class="text-center">
                     운영사를 추가하신 후 사용 가능합니다.
                 </td>
             </tr>

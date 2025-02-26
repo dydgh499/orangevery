@@ -140,15 +140,16 @@
 
     class P2pAppOption
     {
-        public $pg_id = null;
-        public $ps_id = null;
-        public $fin_id = null;
+        public $pg_id   = null;
+        public $ps_id   = null;
+        public $fin_id  = null;
         public $module_type = 2;
         public $is_old_auth = 0;
         public $ci_validate = 0;
         public $account_validate = 0;
         public $contract_validate = 0;
-        
+        public $seal_img    = '';
+
         public function __construct(array $source)
         {
             foreach ($source as $property => $value) 
