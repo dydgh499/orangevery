@@ -67,6 +67,13 @@ trait AttributeTrait
         );
     }
 
+    protected function SealImg() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => $this->isS3Img($value) ? $this->toS3PrivateLink($value) : $value
+        );
+    }
+
     protected function PassbookImg() : Attribute
     {
         return new Attribute(
