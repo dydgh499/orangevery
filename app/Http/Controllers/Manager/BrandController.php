@@ -140,9 +140,9 @@ class BrandController extends Controller
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($request->user()->level > 35)
         {
-            $request = $this->setSealFile($request);
             $data = $request->data();
             $data = $this->saveImages($request, $data, $this->imgs);
+            $data['pv_options'] = $this->getPvOption($request);
             
             $query  = $this->brands->where('id', $id);
             $brand = $query->first();
@@ -176,8 +176,9 @@ class BrandController extends Controller
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
-    public function setSealFile($request)
+    public function getPvOption($request)
     {
+        $pv_options = json_decode(json_encode($request->pv_options), true);
         if($request->hasFile('pv_options.p2p.seal_file'))
         {
             $img    = $request->file('pv_options.p2p.seal_file');
@@ -185,14 +186,16 @@ class BrandController extends Controller
             $name = time().md5(pathinfo($img, PATHINFO_FILENAME)).".$ext";
 
             if(env('FILESYSTEM_DISK') === 's3')
-                $request->pv_options['p2p']['seal_img'] = $this->ToS3('seals', $img, $name);
+                $pv_options['p2p']['seal_img'] = $this->ToS3('seals', $img, $name);
             else if(env('FILESYSTEM_DISK') === 'n-cloud')
-                $request->pv_options['p2p']['seal_img'] = $this->ToNCloud('seals', $img, $name);
+                $pv_options['p2p']['seal_img'] = $this->ToNCloud('seals', $img, $name);
             else if(env('FILESYSTEM_DISK') === 'cloudinary')
-                $request->pv_options['p2p']['seal_img'] = $this->ToCloudinary('seals', $img, $name);
+                $pv_options['p2p']['seal_img'] = $this->ToCloudinary('seals', $img, $name);
             else
-                $request->pv_options['p2p']['seal_img'] = $this->ToLocal('seals', $img, $name);
+                $pv_options['p2p']['seal_img'] = $this->ToLocal('seals', $img, $name);
         }
-        return $request;
+        else
+            $pv_options['p2p']['seal_img'] = $request->input('pv_options.p2p.seal_img', '');
+        return json_encode($pv_options);
     }
 }
