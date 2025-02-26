@@ -185,13 +185,13 @@ class BrandController extends Controller
             $name = time().md5(pathinfo($img, PATHINFO_FILENAME)).".$ext";
 
             if(env('FILESYSTEM_DISK') === 's3')
-                $request->pv_options['p2p']['seal_file'] = $this->ToS3('seals', $img, $name);
+                $request->pv_options['p2p']['seal_img'] = $this->ToS3('seals', $img, $name);
             else if(env('FILESYSTEM_DISK') === 'n-cloud')
-                $request->pv_options['p2p']['seal_file'] = $this->ToNCloud('seals', $img, $name);
+                $request->pv_options['p2p']['seal_img'] = $this->ToNCloud('seals', $img, $name);
             else if(env('FILESYSTEM_DISK') === 'cloudinary')
-                $request->pv_options['p2p']['seal_file'] = $this->ToCloudinary('seals', $img, $name);
+                $request->pv_options['p2p']['seal_img'] = $this->ToCloudinary('seals', $img, $name);
             else
-                $request->pv_options['p2p']['seal_file'] = $this->ToLocal('seals', $img, $name);
+                $request->pv_options['p2p']['seal_img'] = $this->ToLocal('seals', $img, $name);
         }
         return $request;
     }
