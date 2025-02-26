@@ -148,7 +148,6 @@
         public $ci_validate = 0;
         public $account_validate = 0;
         public $contract_validate = 0;
-        public $seal_img    = '';
 
         public function __construct(array $source)
         {

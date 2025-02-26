@@ -463,8 +463,6 @@ interface P2pAppOption {
     ci_validate: number,
     account_validate: number,
     contract_validate: number,
-    seal_img: string,
-    seal_file: File | undefined,
 }
 
 interface ThemeCSS {
@@ -481,11 +479,14 @@ export interface Brand extends Contract {
     favicon_img: string | null,
     og_img: string | null,
     login_img: string | null,
+    seal_img: string,
 
     logo_file: File | undefined,
     favicon_file: File | undefined,
     og_file: File | undefined,
-    login_file: File | undefined,
+    login_file: File | undefined,    
+    seal_file: File | undefined,
+    
     // 운영 정보
     og_description: string,
     note: string,

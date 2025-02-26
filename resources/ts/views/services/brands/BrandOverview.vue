@@ -261,6 +261,15 @@ const props = defineProps<Props>()
                                     @update:path="props.item.bsin_lic_img = $event" />
                             </VRow>
                         </VCol>
+                        <VCol cols="12" md="6" v-if="props.item.pv_options.paid.brand_mode === 1">
+                            <VRow no-gutters>
+                                <FileInput :label="`인감 업로드`"
+                                    :preview="props.item.seal_img ? props.item.seal_img : '/utils/icons/img-preview.svg'"
+                                    @update:file="props.item.seal_file = $event" 
+                                    @update:path="props.item.seal_img = $event" />
+                            </VRow>
+                        </VCol>
+
                     </VRow>
                 </VCardItem>
             </VCard>

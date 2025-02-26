@@ -201,7 +201,6 @@ export const defaultItemInfo = () => {
             ci_validate: 0,
             account_validate: 0,
             contract_validate: 0,
-            seal_img: '',
         })
     }
 

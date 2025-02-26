@@ -28,9 +28,6 @@ class BrandRequest extends FormRequest
         'dev_settle_type',
         'note',
         'use_different_settlement',
-        'logo_img',         
-        'favicon_img',
-        'og_img',
     ];
     public $file_keys = [   
         'logo_file',         
@@ -40,6 +37,7 @@ class BrandRequest extends FormRequest
         'bsin_lic_file',
         'id_file',
         'og_file',
+        'seal_file',
     ];
     public $image_keys = [
         'logo_img',         
@@ -49,6 +47,7 @@ class BrandRequest extends FormRequest
         'bsin_lic_img',
         'id_img',
         'og_img',
+        'seal_img',
     ];
     public function authorize()
     {

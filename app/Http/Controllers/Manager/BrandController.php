@@ -34,22 +34,22 @@ class BrandController extends Controller
         $this->brands = $brands;
         $this->imgs = [
             'params'    => [
-                'logo_file', 'favicon_file', 'passbook_file',
+                'logo_file', 'favicon_file', 'passbook_file', 'seal_file',
                 'contract_file', 'id_file', 'og_file', 'bsin_lic_file',
                 'login_file',
             ],
             'cols'  => [
-                'logo_img', 'favicon_img', 'passbook_img',
+                'logo_img', 'favicon_img', 'passbook_img', 'seal_img',
                 'contract_img', 'id_img', 'og_img', 'bsin_lic_img',
                 'login_img',
             ],
             'folders'   => [
-                'logos', 'favicons', 'passbooks',
+                'logos', 'favicons', 'passbooks', 'seals',
                 'contracts', 'ids', 'ogs', 'e-ids',
                 'logins',
             ],
             'sizes'     => [
-                96, 32, 500,
+                96, 32, 500, 100,
                 500, 500, 1200, 500,
                 2000,
             ],
@@ -141,9 +141,7 @@ class BrandController extends Controller
         if($request->user()->level > 35)
         {
             $data = $request->data();
-            $data = $this->saveImages($request, $data, $this->imgs);
-            $data['pv_options'] = $this->getPvOption($request);
-            
+            $data = $this->saveImages($request, $data, $this->imgs);            
             $query  = $this->brands->where('id', $id);
             $brand = $query->first();
             $res = $query->update($data);
@@ -174,28 +172,5 @@ class BrandController extends Controller
         $brand = $this->brands->where('id', $id)->first();
         $res = $this->delete($this->brands->where('id', $id), ['logo_img', 'favicon_img']);
         return $this->response($res ? 1 : 990, ['id'=>$id]);
-    }
-
-    public function getPvOption($request)
-    {
-        $pv_options = json_decode(json_encode($request->pv_options), true);
-        if($request->hasFile('pv_options.p2p.seal_file'))
-        {
-            $img    = $request->file('pv_options.p2p.seal_file');
-            $ext    = $img->extension();                
-            $name = time().md5(pathinfo($img, PATHINFO_FILENAME)).".$ext";
-
-            if(env('FILESYSTEM_DISK') === 's3')
-                $pv_options['p2p']['seal_img'] = $this->ToS3('seals', $img, $name);
-            else if(env('FILESYSTEM_DISK') === 'n-cloud')
-                $pv_options['p2p']['seal_img'] = $this->ToNCloud('seals', $img, $name);
-            else if(env('FILESYSTEM_DISK') === 'cloudinary')
-                $pv_options['p2p']['seal_img'] = $this->ToCloudinary('seals', $img, $name);
-            else
-                $pv_options['p2p']['seal_img'] = $this->ToLocal('seals', $img, $name);
-        }
-        else
-            $pv_options['p2p']['seal_img'] = $request->input('pv_options.p2p.seal_img', '');
-        return json_encode($pv_options);
     }
 }
