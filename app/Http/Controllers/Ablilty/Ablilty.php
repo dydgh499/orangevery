@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Ablilty;
 
+use App\Models\Salesforce;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Controllers\Manager\Salesforce\SalesforceOverlap;
