@@ -80,6 +80,7 @@ export const cxl_types = <Options[]>([
     {id: 0, title:'취소금지'},
     {id: 1, title:'결제이후 +5분허용'},
     {id: 2, title:'당일허용'},
+    {id: 3, title:'정산전까지 허용'},
 ])
 if(corp.pv_options.paid.use_cancel_all_allow)
     cxl_types.push({id:-1, title: '모두허용'})
