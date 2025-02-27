@@ -56,7 +56,7 @@ class Ablilty
                 {
                     $sales = Salesforce::where('id', $request->user()->id)->with(['childs'])->first();
                     $sales_ids = SalesforceOverlap::getAllChildIds([$sales->id], $sales->childs);    
-                    return in_array($id, $sales_ids);
+                    return in_array($id, json_decode(json_encode($sales_ids), true));
                 }
                 else
                     return false;
