@@ -317,13 +317,6 @@ defineExpose({
     </VDialog>
 </template>
 <style scoped>
-* {
-  -webkit-font-variant: normal !important;
-  font-variant: normal !important;
-  font-variant-ligatures: none !important;
-  word-break: normal !important;
-}
-
 section::-webkit-scrollbar { block-size: 0; inline-size: 0; }
 
 .result-wrapper {
@@ -347,10 +340,6 @@ section::-webkit-scrollbar { block-size: 0; inline-size: 0; }
   border-collapse: separate;
   border-spacing: 8px 5px;
   inline-size: 100%;
-}
-
-.sales-slip-title {
-  inline-size: 30%;
 }
 
 .cancel-img {

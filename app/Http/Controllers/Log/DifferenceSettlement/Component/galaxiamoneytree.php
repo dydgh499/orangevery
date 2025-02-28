@@ -194,7 +194,7 @@ class galaxiamoneytree extends ComponentBase implements ComponentInterface
                 }
             }
 
-            return [$full_records, $upload];
+            return [$data_records, $datas, $upload];
         };
         $getTrailer = function($upload) {
             return 

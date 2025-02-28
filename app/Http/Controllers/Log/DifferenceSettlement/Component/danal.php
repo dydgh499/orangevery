@@ -170,7 +170,7 @@ class danal extends ComponentBase implements ComponentInterface
                     $seq++;
                 }
             }
-            return [$full_records, $upload];
+            return [$data_records, $datas, $upload];
         };
         $getTrailer = function($upload) {
             return 

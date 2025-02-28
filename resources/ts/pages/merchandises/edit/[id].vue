@@ -26,7 +26,7 @@ else {
     tabs.push({ icon: 'tabler-user-check', title: '개인정보' })
     tabs.push({ icon: 'tabler-building-store', title: '가맹점정보' })
     
-    if(corp.pv_options.paid.fee_input_mode === false) {
+    if(corp.pv_options.paid.brand_mode === 0) {
         tabs.push({ icon: 'ic-outline-send-to-mobile', title: '결제모듈정보' })
         if(notiViewable(id.value)) 
             tabs.push({ icon: 'emojione:envelope', title: '노티정보' })
