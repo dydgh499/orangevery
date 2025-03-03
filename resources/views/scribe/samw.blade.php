@@ -425,7 +425,9 @@
             </tbody>
         </table>          
         <h2 id="noti-response-format">통지 응답 규격</h2>
-        <p><b>통지를 성공적으로 받았을 시, body에 작성하셔야할 내용입니다.</b></p>
+        <p>
+          <b>통지를 성공적으로 받았을 시, body에 작성하셔야할 내용입니다.</b>
+        </p>
         <aside>
             1. 하단 테이블의 포멧에 맞게 응답하셔야 통지서버에서 성공/실패유무를 판단하여 재전송하지 않습니다.<br><br>
             2. 응답 포멧이 다를시, 가맹점 별 설정해둔 재전송 회수만큼 1분 간격으로 재전송 합니다.<br><br>
@@ -434,10 +436,10 @@
         <table>
             <thead>
                 <tr>
-                    <th style="width: 10%;">상황별 응답</th>
-                    <th style="width: 10%;">http code</th>
-                    <th style="width: 10%;">body</th>
-                    <th style="width: 10%;">비고</th>
+                    <th>상황별 응답</th>
+                    <th>http code</th>
+                    <th>body</th>
+                    <th>비고</th>
                 </tr>
                 <tr>
                     <td>성공시 응답</td>
@@ -453,9 +455,8 @@
                 </tr>
             </thead>
         </table>
-        
         <h1 id="samw-api">SAMW API</h1>
-          <p><b>본 API를 이용하기 위해서 전산내 IP 등록이 필요합니다.<b></p>
+          <p><b>본 API를 이용하기 위해서 전산내 IP 등록이 필요합니다.</b></p>
           <h2 id="samw-api-POSTapi-v1-samw-sign-in">로그인</h2>
           <p></p><span id="example-requests-POSTapi-v1-samw-sign-in">
             <blockquote>예시 요청:</blockquote>
