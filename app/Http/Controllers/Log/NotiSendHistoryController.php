@@ -38,6 +38,22 @@ class NotiSendHistoryController extends Controller
             'transactions.tid',
             'transactions.is_cancel',
             'transactions.module_type',
+            
+            'transactions.trx_dttm',
+            'transactions.cxl_dttm',
+            'transactions.appr_num',
+            'transactions.amount',
+            'transactions.installment',
+            'transactions.acquirer',
+            'transactions.card_num',
+            
+            'transactions.issuer',
+            'transactions.buyer_name',
+            'transactions.buyer_phone',
+            'transactions.item_name',
+            'transactions.trx_id',
+            'transactions.ori_trx_id',
+
             'merchandises.mcht_name',
             'payment_modules.note as pmod_note',
         ];

@@ -102,6 +102,11 @@ class NotiRetrySender
                 return $query->whereColumn('noti_urls.pmod_id', 'transactions.pmod_id')
                     ->orWhere('noti_urls.pmod_id', -1);
             })
+            ->where(function ($query) {
+                return $query->where('noti_urls.send_type', 0)
+                    ->orWhere('noti_urls.send_type', 1)
+                    ->orWhere('noti_urls.send_type', 2);
+            })
             ->get(['transactions.*', 'noti_urls.send_url', 'noti_urls.send_type']);
 
         if(count($trans) === 0)

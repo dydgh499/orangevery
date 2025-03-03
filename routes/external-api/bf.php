@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Bf\BfController;
+use App\Http\Controllers\External\Bf\BfController;
 use App\Http\Controllers\Manager\Merchandise\RegularCreditCardController;
 
 Route::post('sign-in', [BfController::class, 'login']);

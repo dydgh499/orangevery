@@ -75,5 +75,6 @@ class Kernel extends HttpKernel
         'is.operate' => \App\Http\Middleware\CheckOperator::class,
         'is.edit.able' => \App\Http\Middleware\CheckEditAbleTime::class,
         'last.login.ip' => \App\Http\Middleware\CheckLastLoginIP::class,
+        'is.external.enable.ip' => \App\Http\Middleware\CheckExternalApiEnableIP::class,
     ];
 }

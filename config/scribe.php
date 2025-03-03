@@ -9,18 +9,18 @@ return [
     /*
      * The HTML <title> for the generated documentation. If this is empty, Scribe will infer it from config('app.name').
      */
-    'title' => 'Ezpg API',
+    'title' => 'SAMW API',
 
     /*
      * A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
      */
-    'description' => '본 문서는 EZPG와 Smart Data간 인터페이스에 대하여 기술합니다.',
+    'description' => '본 문서는 루트업의 SAMW API 인터페이스에 대하여 기술합니다.',
 
     /*
      * The base URL displayed in the docs. If this is empty, Scribe will use the value of config('app.url') at generation time.
      * If you're using `laravel` type, you can set this to a dynamic string, like '{{ config("app.tenant_url") }}' to get a dynamic base URL.
      */
-    'base_url' => 'https://w.ez-pg.kr',
+    'base_url' => 'https://www.routeup.kr',
 
     /*
      * Tell Scribe what routes to generate documentation for.
@@ -37,7 +37,7 @@ return [
                 /*
                  * Match only routes whose paths match this pattern (use * as a wildcard to match any characters). Example: 'users/*'.
                  */
-                'prefixes' => ['api/v1/ezpg/*'],
+                'prefixes' => ['api/v1/samw/*'],
 
                 /*
                  * Match only routes whose domains match this pattern (use * as a wildcard to match any characters). Example: 'api.*'.
@@ -194,7 +194,7 @@ return [
          * The base URL for the API tester to use (for example, you can set this to your staging URL).
          * Leave as null to use the current app URL when generating (config("app.url")).
          */
-        'base_url' => 'https://w.ez-pg.kr',
+        'base_url' => 'https://www.routeup.kr',
 
         /**
          * Fetch a CSRF token before each request, and add it as an X-XSRF-TOKEN header. Needed if you're using Laravel Sanctum.

@@ -9,9 +9,7 @@ export const noti_statuses = <Options[]>([
 ])
 
 export const send_types = <Options[]>([
-    { id: 0, title: "전체" }, 
-    { id: 1, title: "승인건 발송" },
-    { id: 2, title: "취소건 발송" },
+    { id: 0, title: "자동이체" }, { id: 1, title: "모아서출금" },
 ])
 
 export const notiViewable = (id: number) => {
@@ -30,19 +28,24 @@ export const notiViewable = (id: number) => {
 }
 
 export const useSearchStore = defineStore('NotiSearchStore', () => {    
-    const store = Searcher('merchandises/noti-urls')
-    const head  = Header('merchandises/noti-urls', '거래통지 URL 관리')
+    const store = Searcher('merchandises/withdraw-noti-urls')
+    const head  = Header('merchandises/withdraw-noti-urls', '출금통지 URL 관리')
 
     const headers: Record<string, string> = {
         'id' : 'NO.',
-        'note' : '별칭',
         'mcht_name' : '가맹점 상호',
         'send_url' : '전송 URL',
         'send_type' : '발송타입',
         'noti_status' : '사용여부',
+        'fin_id': '이체 모듈 타입',
+        'fin_trx_delay': '이체 딜레이',
+        'withdraw_limit_type': '이체 금지타입',
+        'withdraw_business_limit': '일 출금한도(영업일)',
+        'withdraw_holiday_limit': '일 출금한도(휴무일)',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
     }
+
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
@@ -63,7 +66,7 @@ export const useSearchStore = defineStore('NotiSearchStore', () => {
 });
 
 export const defaultItemInfo =  () => {   
-    const path  = 'merchandises/noti-urls'
+    const path  = 'merchandises/withdraw-noti-urls'
     const item  = reactive<NotiUrl>({
         id: 0,
         mcht_id: null,
@@ -88,7 +91,7 @@ export const getAllNotiUrls = async(mcht_id:number|null=null) => {
     if(mcht_id)
         params['mcht_id'] = mcht_id    
     const sub_query = Object.keys(params).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`).join('&')
-    const url = '/api/v1/manager/merchandises/noti-urls?'+sub_query
+    const url = '/api/v1/manager/merchandises/withdraw-noti-urls?'+sub_query
     const r = await axios.get(url)
     return r.data.content
 }

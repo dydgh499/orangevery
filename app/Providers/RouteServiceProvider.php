@@ -27,14 +27,14 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $apis = ['bf', 'ezpg'];
+        $apis = ['bf', 'samw'];
         $this->configureRateLimiting();
         $this->routes(function () use($apis) {
             foreach($apis as $api) {
                 Route::middleware(['api', 'log.route'])
                     ->prefix("api/v1/$api")
                     ->namespace($this->namespace)
-                    ->group(base_path("routes/$api.php"));
+                    ->group(base_path("routes/external-api/$api.php"));
             }
 
             Route::middleware(['api', 'log.route', 'auth:sanctum', 'is.browser'])

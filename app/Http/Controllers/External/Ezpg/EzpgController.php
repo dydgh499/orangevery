@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ezpg;
+namespace App\Http\Controllers\External\Ezpg;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Manager\Transaction\TransactionFilter;

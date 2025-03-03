@@ -33,8 +33,7 @@ class LoginRequest extends FormRequest
     public function bodyParameters()
     {
         $params = $this->getDocsParameters($this->keys);
-        
-        $params['brand_id']['description'] = '법인코드를 의미하며 TYINT: 12, MNWORKS: 14가 요구됩니다.';
+        $params['brand_id']['description'] = '법인코드';
         $params['brand_id']['example']     = 12;
         $params['user_name']['example']    = 'test0001';
         $params['user_pw']['example']      = 'test0001';

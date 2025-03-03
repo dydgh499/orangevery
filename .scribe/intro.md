@@ -1,9 +1,9 @@
 # 소개
 
-본 문서는 EZPG와 Smart Data간 인터페이스에 대하여 기술합니다.
+본 문서는 루트업의 SAMW API 인터페이스에 대하여 기술합니다.
 
 <aside>
-    <strong>기본 URL</strong>: <code>https://w.ez-pg.kr</code>
+    <strong>기본 URL</strong>: <code>https://www.routeup.kr</code>
 </aside>
 
 <h2 id="response-format">응답코드 정의</h1>

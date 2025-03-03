@@ -1,58 +1,62 @@
-import corp from '@/plugins/corp'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { NotiUrl, Options } from '@/views/types'
-import { axios, getUserLevel, isAbleModiy, user_info } from '@axios'
+import { axios } from '@axios'
 
 export const noti_statuses = <Options[]>([
     { id: 0, title: "미사용" }, { id: 1, title: "사용" },
 ])
 
-export const send_types = <Options[]>([
-    { id: 0, title: "전체" }, 
-    { id: 1, title: "승인건 발송" },
-    { id: 2, title: "취소건 발송" },
-])
-
-export const notiViewable = (id: number) => {
-    if(corp.pv_options.paid.use_noti) {
-        if(getUserLevel() >= 35)
-            return true
-        else if(getUserLevel() > 10)
-            return isAbleModiy(id)
-        else if(getUserLevel() === 10 && user_info.value.use_noti)
-            return true
-        else
-            return false
-    }
-    else
-        return false
-}
-
 export const useSearchStore = defineStore('NotiSearchStore', () => {    
-    const store = Searcher('merchandises/noti-urls')
-    const head  = Header('merchandises/noti-urls', '거래통지 URL 관리')
+    const store = Searcher('merchandises/withdraw-send-histories')
+    const head  = Header('merchandises/withdraw-send-histories', '출금통지 이력')
+    const getSendResponseHeader = () => {
+        return {
+            'id': 'NO.',
+            'http_code': '응답코드',
+            'message': '응답내용',
+            'retry_count': '재시도 회수',    
+        }
+    }
+
+    const getMerchandiseHeader = () => {
+        return {
+            'mcht_name': '가맹점 상호',
+        }
+    }
+
+    const getWithdrawHeader = () => {
+        return {
+            'send_type': '발송 타입',
+            'amount' : '출금금액',
+        }
+    }
+
+    const getEtcCols = () => {
+        return {
+            'extra_col': '더보기'
+        }
+    }
 
     const headers: Record<string, string> = {
-        'id' : 'NO.',
-        'note' : '별칭',
-        'mcht_name' : '가맹점 상호',
-        'send_url' : '전송 URL',
-        'send_type' : '발송타입',
-        'noti_status' : '사용여부',
-        'created_at' : '생성시간',
-        'updated_at' : '업데이트시간',
+        ...getSendResponseHeader(),
+        ...getMerchandiseHeader(),
+        ...getWithdrawHeader(),
+        ...getEtcCols(),
     }
-    head.sub_headers.value = []
+    const sub_headers: any = []
+    head.getSubHeaderCol('노티결과', getSendResponseHeader(), sub_headers)
+    head.getSubHeaderCol('가맹점 정보', getMerchandiseHeader(), sub_headers)
+    head.getSubHeaderCol('출금 정보', getWithdrawHeader(), sub_headers)
+    head.getSubHeaderCol('기타 정보', getEtcCols(), sub_headers)
+
+    head.sub_headers.value = sub_headers
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 
     const exporter = async () => {
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         let datas = r.data.content;
-        for (let i = 0; i < datas.length; i++) {
-            datas[i]['noti_status'] = noti_statuses.find(status => status['id'] === datas[i]['noti_status'])?.title as string
-        }
         head.exportToExcel(datas)
     }
     return {

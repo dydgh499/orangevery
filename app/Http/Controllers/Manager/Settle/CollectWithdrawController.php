@@ -12,6 +12,8 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
 use App\Http\Requests\Manager\Settle\CollectWithdrawRequest;
+use App\Http\Requests\Manager\Settle\CollectWithdrawRequestV2;
+
 use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Utils\Comm;
@@ -175,7 +177,6 @@ class CollectWithdrawController extends Controller
      */
     public function collectDeposit(CollectWithdrawRequest $request)
     {
-        $merchandise = Merchandise::where('id', $request->user()->id)->first(['collect_withdraw_fee']);
         $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)
             ->where('is_delete', false)
             ->get(['fin_id', 'use_realtime_deposit']);
@@ -187,17 +188,47 @@ class CollectWithdrawController extends Controller
         if($fin_id)
         {
             $params = [
-                'brand_id' => $request->user()->brand_id,
-                'mcht_id' => $request->user()->id,
-                'withdraw_amount' => $request->withdraw_amount,
-                'withdraw_fee'    => $merchandise->collect_withdraw_fee,
+                'brand_id'          => $request->user()->brand_id,
+                'mcht_id'           => $request->user()->id,
+                'withdraw_amount'   => $request->withdraw_amount,
+                'withdraw_fee'      => $request->user()->collect_withdraw_fee,
                 'fin_id' => $fin_id,
-                'acct_num' => $request->user()->acct_num,
-                'acct_name' => $request->user()->acct_name,
-                'acct_bank_name' => $request->user()->acct_bank_name,
-                'acct_bank_code' => $request->user()->acct_bank_code,
             ];
             $res = Comm::post($this->base_noti_url.'/collect-deposit', $params);
+            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
+        }
+        else
+            return $this->extendResponse(1000, "활성화된 실시간 모듈을 찾을 수 없습니다.");
+    }
+
+    /**
+     * 출금요청
+     *
+     * 가맹점만 가능
+     */
+    public function collectDepositV2(CollectWithdrawRequestV2 $request)
+    {
+        $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)
+            ->where('is_delete', false)
+            ->get(['fin_id', 'use_realtime_deposit']);
+
+        $fin_module = $pay_modules->first(function ($pay_module) {
+            return $pay_module->fin_id > 0 && $pay_module->use_realtime_deposit;
+        });
+        $fin_id = $fin_module ? $fin_module->fin_id : 0;
+        if($fin_id)
+        {
+            $params = [
+                'brand_id'  => $request->user()->brand_id,
+                'mcht_id'   => $request->user()->id,
+                'withdraw_amount' => $request->withdraw_amount,
+                'withdraw_fee'    => $request->user()->collect_withdraw_fee,
+                'fin_id'    => $fin_id,
+                'acct_num'  => $request->acct_num,
+                'acct_name' => $request->acct_name,
+                'acct_bank_code' => $request->acct_bank_code,
+            ];
+            $res = Comm::post($this->base_noti_url.'/virtual-deposit', $params);
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
         }
         else

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Bf;
+namespace App\Http\Controllers\External\Bf;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuickView\QuickViewController;
