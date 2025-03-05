@@ -117,7 +117,7 @@ class Salesforce extends Authenticatable
     protected function SalesFee() : Attribute
     {
         return new Attribute(
-            get: fn ($value) => $this->getFeeFormatting() ? round($value * 100, 3) : $value,
+            get: fn ($value) => round($value * 100, 3),
         );
     }
 }
