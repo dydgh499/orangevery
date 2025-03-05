@@ -111,19 +111,22 @@ watchEffect(() => {
                             <br>
                             <VCol>
                                 <VRow>
-                                    <div class="preview-box" :style="'height:3em; width:15em; background: rgb(var(--v-theme-background)); display:inline-flex; align-items: center; border-bottom-color: black; border-radius: 8px 8px 0 0;'">
+                                    <div class="preview-box" :style="'height:3em; width:16em; background: rgb(var(--v-theme-background)); display:inline-flex; align-items: center; border-bottom-color: black; border-radius: 8px 8px 0 0;'">
                                         <div :style="`background-repeat: round; background-image: url(${favicon_preview}); block-size: 32px; width:32px;  margin:0.5em; display: inline-block;`">
                                         </div>
                                         <b>{{ props.item.name }}</b>
                                         <b style="position: relative;top: -0.5em;margin-right: 0.5em;margin-left: auto;">X</b>
                                     </div>
-                                    <div class="preview-box" :style="'height:3em; width:2em; display:inline-flex; align-items: center; border-bottom-color: black; border-radius: 8px 8px 0 0;'">
+                                    <div class="preview-box" :style="'height:3em; width:3em; display:inline-flex; align-items: center; border-bottom-color: black; border-radius: 8px 8px 0 0;'">
                                         <b> ...</b>
                                     </div>
-                                    <div class="preview-box" :style="'height:4em; width:17em; display:inline-flex; align-items: center; border-radius:0px;'">
+                                    <div class="preview-box" :style="'height:3em; width:3em; display:inline-flex; align-items: center; border-bottom-color: black; border-radius: 8px 8px 0 0;'">
+                                        <b> ...</b>
+                                    </div>
+                                    <div class="preview-box" :style="'height:4em; width:22em; display:inline-flex; align-items: center; border-radius:0px;'">
                                         <VIcon :icon="'material-symbols:refresh'" style="margin: 0 0.5em;"/>
                                         <div class="preview-box" :style="'background: rgb(var(--v-theme-background));height:2.5em; display:flex; align-items: center; border-radius:1.5em 0 0px 1.5em;'">
-                                            <b style=" width: 13.7em;padding-left: 1em;">https://{{ props.item.dns }}</b>
+                                            <b style=" width: 18.7em;padding-left: 1em;">https://{{ props.item.dns }}</b>
                                         </div>
                                     </div>
                                 </VRow>

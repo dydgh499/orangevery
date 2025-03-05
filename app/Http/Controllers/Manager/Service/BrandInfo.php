@@ -46,7 +46,8 @@ class BrandInfo
                 $brand['favicon_img'] = $sales->favicon_img;
                 $brand['og_img']      = $sales->og_img;
                 $brand['login_img']   = $sales->login_img;
-                $brand['og_description']  = $sales->og_description;
+                $brand['og_description']    = $sales->og_description;
+                $brand['theme_css']         = $sales->theme_css;
                 return $brand;    
             }
         }

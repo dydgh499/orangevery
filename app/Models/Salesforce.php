@@ -108,9 +108,16 @@ class Salesforce extends Authenticatable
             get: fn ($value) => new ThemeCSS($value),
         );
     }
-    
+
     public function getIs2faUseAttribute()
     {
         return $this->google_2fa_secret_key ? true : false;
+    }
+
+    protected function SalesFee() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => $this->getFeeFormatting() ? round($value * 100, 3) : $value,
+        );
     }
 }
