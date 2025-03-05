@@ -525,7 +525,19 @@ export const defaultItemInfo = () => {
         withdraw_business_limit: 0,
         withdraw_holiday_limit: 0,
         mcht_pg_id: 0,
-        mcht_ps_id: 0
+        mcht_ps_id: 0,
+        name: '',
+        dns: '',
+        theme_css: {main_color: "#ABCDEF"},
+        og_description: '',
+        logo_img: '',
+        favicon_img: '',
+        og_img: '',
+        login_img: '',
+        logo_file: undefined,
+        favicon_file: undefined,
+        og_file: undefined,
+        login_file: undefined
     })
     return {
         path, item

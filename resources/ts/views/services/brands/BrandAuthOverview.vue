@@ -66,19 +66,25 @@ const brand_modes = [
                                 <VRow no-gutters style="align-items: center;">
                                     <VCol cols="12" :md="6">                                        
                                         <VSwitch hide-details v-model="props.item.auth.visibles.abnormal_trans_sales"
-                                            color="primary" label="이상거래, 결제실패, 즉시출금 관리 영업점 노출여부"/>
+                                            color="primary" label="이상거래, 결제실패, 즉시출금 영업점 노출여부"/>
                                     </VCol>
-                                    <VCol cols="12" :md="6">
-                                        <VRow no-gutters style="align-items: center;">
-                                            <VCol cols="12" :md="4" style="text-align: start;">
-                                                운영방식
-                                            </VCol>
-                                            <VCol cols="12" :md="5">
-                                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.paid.brand_mode"
-                                                    :items="brand_modes" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                                                    label="운영방식" item-title="title" item-value="id" single-line />
-                                            </VCol>
-                                        </VRow>
+                                    <VCol cols="12" :md="6">                                        
+                                        <VSwitch hide-details v-model="props.item.paid.use_sales_dns"
+                                            color="primary" label="영업점 DNS 허용"/>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                        <VRow>
+                            <VCol cols="6">
+                                <VRow no-gutters style="align-items: center;">
+                                    <VCol cols="12" :md="4" style="text-align: start;">
+                                        운영방식
+                                    </VCol>
+                                    <VCol cols="12" :md="5">
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.paid.brand_mode"
+                                            :items="brand_modes" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                            label="운영방식" item-title="title" item-value="id" single-line />
                                     </VCol>
                                 </VRow>
                             </VCol>

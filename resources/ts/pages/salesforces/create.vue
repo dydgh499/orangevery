@@ -10,6 +10,7 @@ import UserOverview from '@/views/users/UserOverview.vue'
 
 const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([])
+
 if(isFixplus()) {
     tabs.push({ icon: 'tabler-user-check', title: '영업점정보' })
 }

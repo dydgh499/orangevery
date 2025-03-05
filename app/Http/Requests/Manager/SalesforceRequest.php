@@ -27,6 +27,10 @@ class SalesforceRequest extends FormRequest
         'settle_cycle',
         'settle_day',
         'note',
+        //
+        'name',
+        'dns',
+        'og_description',
     ];
 
     public $file_keys = [
@@ -35,6 +39,7 @@ class SalesforceRequest extends FormRequest
         'bsin_lic_file',
         'id_file',
         'profile_file',
+        'logo_file', 'favicon_file', 'og_file', 'login_file',
     ];
     public $image_keys = [
         'passbook_img',
@@ -42,6 +47,7 @@ class SalesforceRequest extends FormRequest
         'bsin_lic_img',
         'id_img',
         'profile_img',
+        'logo_img', 'favicon_img', 'og_img', 'login_img',
     ];
     public $integer_keys = [
         'sales_fee',
@@ -96,6 +102,11 @@ class SalesforceRequest extends FormRequest
             'bsin_lic_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
             'id_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
             'profile_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
+
+            'logo_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
+            'favicon_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf,ico',
+            'og_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
+            'login_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -122,6 +133,7 @@ class SalesforceRequest extends FormRequest
             $this->getParmasBaseKeyV2($this->integer_keys, 0), $this->getParmasBaseKeyV2($this->nullable_keys, null),
             $this->getParamsBaseFile($this->image_keys)
         );
+        $data['theme_css']  = json_encode($this->theme_css);
 
         for ($i=0; $i < count($this->keys) ; $i++)
         {

@@ -72,7 +72,6 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
 </script>
 <template>
     <VRow>
-        <!-- 👉 개인정보 -->
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>

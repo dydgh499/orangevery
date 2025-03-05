@@ -12,11 +12,10 @@ use Laravel\Sanctum\HasApiTokens;
 
 use App\Models\Merchandise;
 use App\Models\Transaction;
-use App\Models\Merchandise\PaymentModule;
 use App\Models\Salesforce\UnderAutoSetting;
 use App\Models\Salesforce\SalesRecommenderCode;
 use App\Models\Log\SettleDeductSalesforce;
-use App\Models\Log\SettleHistorySalesforce;
+use App\Models\Options\ThemeCSS;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Http\Traits\Models\AttributeTrait;
@@ -100,6 +99,13 @@ class Salesforce extends Authenticatable
     {
         return new Attribute(
             get: fn ($value) => round($value * 100, 3),
+        );
+    }
+    
+    protected function ThemeCss() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => new ThemeCSS($value),
         );
     }
     

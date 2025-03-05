@@ -104,7 +104,7 @@ class HolidayController extends Controller
     }
 
     /*
-     * 공휴일 자동등록 (매년 12월 30일 내년꺼 등록)
+     * 공휴일 자동업데이트
      */
     public function updateHoliday()
     {

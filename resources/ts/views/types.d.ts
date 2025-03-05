@@ -181,7 +181,7 @@ export interface SalesFilter {
     sales_name: string,
 }    
 
-export interface Salesforce extends SalesforcePropertie, UserPropertie {
+export interface Salesforce extends SalesforcePropertie, UserPropertie, IdentityDesign {
     parent_id?: number,
     sales_fee?: number,
     mcht_batch_fee?: number,
@@ -429,7 +429,8 @@ interface PaidOption {
     use_bill_key: boolean,  // 빌키 사용 여부
     use_shop: boolean, // 쇼핑몰 사용여부
     fee_input_mode: boolean,  // 수수료구조 타입
-    brand_mode: number,
+    brand_mode: number, // 브랜드 모드
+    use_sales_dns: boolean, // 영업점 DNS 사용여부
 }
 interface AuthOption {
     levels: {
@@ -466,29 +467,34 @@ interface P2pAppOption {
 }
 
 interface ThemeCSS {
-    main_color: string,
+    main_color?: string,
 }
 
-export interface Brand extends Contract {
-    id: number,
-    dns: string,
+export interface IdentityDesign {
     name:string,
+    dns: string,
     theme_css: ThemeCSS,
-    // 운영 이미지
-    logo_img: string | null,
-    favicon_img: string | null,
-    og_img: string | null,
-    login_img: string | null,
-    seal_img: string,
+    og_description: string,
+
+    logo_img: string,
+    favicon_img: string,
+    og_img: string,
+    login_img: string,
 
     logo_file: File | undefined,
     favicon_file: File | undefined,
     og_file: File | undefined,
     login_file: File | undefined,    
+}
+
+export interface Brand extends Contract, IdentityDesign {
+    id: number,
+    // 운영 이미지
+    seal_img: string,
+
     seal_file: File | undefined,
     
     // 운영 정보
-    og_description: string,
     note: string,
     company_name: string,
     ceo_name: string,

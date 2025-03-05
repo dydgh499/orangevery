@@ -45,15 +45,19 @@ class SalesforceController extends Controller
         $this->imgs = [
             'params'    => [
                 'contract_file', 'id_file', 'passbook_file', 'bsin_lic_file', 'profile_file',
+                'logo_file', 'favicon_file', 'og_file', 'login_file',
             ],
             'cols'  => [
                 'contract_img', 'id_img', 'passbook_img', 'bsin_lic_img', 'profile_img',
+                'logo_img', 'favicon_img', 'og_img', 'login_img',
             ],
             'folders'   => [
                 'contracts', 'ids', 'passbooks', 'e-ids', 'profiles',
+                'logos', 'favicons', 'ogs', 'logins',
             ],
             'sizes'     => [
                 500, 500, 500, 500, 120,
+                96, 32, 2000, 2000
             ],
         ];
     }

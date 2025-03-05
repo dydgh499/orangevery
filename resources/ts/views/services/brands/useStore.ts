@@ -164,6 +164,7 @@ export const defaultItemInfo = () => {
             use_shop: false,
             fee_input_mode: false,
             brand_mode: 0,
+            use_sales_dns: false,
         })
     }
 

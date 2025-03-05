@@ -36,17 +36,6 @@ const props = defineProps<Props>()
                         </VCol>
                     </VRow>
                     <VRow class="pt-3">
-                        <VCol :md="6" :cols="12">
-                            <VRow no-gutters>
-                                <VCol>
-                                    <label>운영사명</label>
-                                </VCol>
-                                <VCol md="8">
-                                    <VTextField v-model="props.item.name" prepend-inner-icon="twemoji-desktop-computer"
-                                        placeholder="운영사명을 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.name, '운영사명')]" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
                         <VCol :md=6>
                             <VRow no-gutters>
                                 <VCol>
@@ -58,8 +47,6 @@ const props = defineProps<Props>()
                                 </VCol>
                             </VRow>
                         </VCol>
-                    </VRow>
-                    <VRow class="pt-3">
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters>
                                 <VCol>
@@ -72,6 +59,8 @@ const props = defineProps<Props>()
                                 </VCol>
                             </VRow>
                         </VCol>
+                    </VRow>
+                    <VRow class="pt-3">
                         <VCol :md=6>
                             <VRow no-gutters>
                                 <VCol>
@@ -82,6 +71,18 @@ const props = defineProps<Props>()
                                         prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
                                         persistent-placeholder
                                         :rules="[requiredValidatorV2(props.item.business_num, '사업자등록번호')]" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md=6>
+                            <VRow no-gutters>
+                                <VCol>
+                                    <label>팩스번호</label>
+                                </VCol>
+                                <VCol md="8">
+                                    <VTextField v-model="props.item.fax_num"
+                                        prepend-inner-icon="streamline-emojis:fax-machine" placeholder="팩스번호 입력" persistent-placeholder
+                                        maxlength="15" :rules="[requiredValidatorV2(props.item.fax_num, '팩스번호')]" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -96,18 +97,6 @@ const props = defineProps<Props>()
                                     <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="number"
                                         prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력" persistent-placeholder
                                         :rules="[requiredValidatorV2(props.item.phone_num, '휴대폰번호')]" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol :md=6>
-                            <VRow no-gutters>
-                                <VCol>
-                                    <label>팩스번호</label>
-                                </VCol>
-                                <VCol md="8">
-                                    <VTextField v-model="props.item.fax_num"
-                                        prepend-inner-icon="streamline-emojis:fax-machine" placeholder="팩스번호 입력" persistent-placeholder
-                                        maxlength="15" :rules="[requiredValidatorV2(props.item.fax_num, '팩스번호')]" />
                                 </VCol>
                             </VRow>
                         </VCol>

@@ -94,10 +94,10 @@ watchEffect(() => {
         <span v-else>{{ props.label+' 이미지' }}</span>
     </VCol>
     <VCol cols="12" :md="props.rmd" :style="containerStyle">
-        <Preview :preview="preview" :style="`inline-size:20em !important;`" :preview-style="previewStyle" class="preview" :ext="ext" />
-        <VFileInput accept="image/*" show-size v-model="files" :label="props.label+' 이미지'"
-            prepend-icon=""
-            prepend-inner-icon="tabler-camera-up" @change="upload()" style="padding: 0.5em;">
+        <VFileInput accept="image/*" show-size v-model="files" 
+            :label="props.label+' 이미지'"
+            variant="underlined"
+            @change="upload()" style="padding: 0.5em;">
             <template #selection="{ fileNames }">
                 <template v-for="fileName in fileNames" :key="fileName">
                     <VChip label size="small" variant="outlined" color="primary" class="me-2">
@@ -106,6 +106,7 @@ watchEffect(() => {
                 </template>
             </template>
         </VFileInput>
+        <Preview :preview="preview" :style="`inline-size:20em !important;`" :preview-style="previewStyle" class="preview" :ext="ext" />
     </VCol>
 </template>
 <style lang="scss" scoped>
