@@ -47,7 +47,7 @@ class BrandInfo
                 $brand['og_img']      = $sales->og_img;
                 $brand['login_img']   = $sales->login_img;
                 $brand['og_description']    = $sales->og_description;
-                $brand['theme_css']         = $sales->theme_css;
+                $brand['theme_css']         = json_decode(json_encode($sales->theme_css), true);
                 return $brand;    
             }
         }
