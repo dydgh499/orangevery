@@ -1,5 +1,5 @@
 import corp from '@/plugins/corp';
-import { getUserLevel } from '@axios';
+import { getUserLevel, user_info } from '@axios';
 
 const _getOtherMenu = () => {
     const menu = []
@@ -13,6 +13,15 @@ const _getOtherMenu = () => {
         icon: { icon: 'ic-round-sentiment-dissatisfied' },
         to: 'complaints',
     })
+    if(corp.pv_options.paid.use_shop && getUserLevel() === 10) {
+        menu.push({
+            title: '미니 쇼핑몰',
+            icon: { icon: 'tabler:shopping-cart' },
+            class: 'shop()',
+            params: user_info.value.shopping_mall[0]
+        })
+
+    }
     if(corp.pv_options.paid.brand_mode === 1 && getUserLevel() === 13) {
         menu.push({
             title: '추천인코드관리',
