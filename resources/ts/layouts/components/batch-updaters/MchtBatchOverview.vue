@@ -456,7 +456,7 @@ watchEffect(() => {
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12" style="display: flex;">
-                                    <VTextField v-model="merchandise.withdraw_fee" type="number" suffix="₩" :label="`지급이체 수수료`"/>
+                                    <VTextField v-model="merchandise.withdraw_fee" type="number" suffix="원" :label="`지급이체 수수료`"/>
                                 </VCol>
                                 <VCol md="6" cols="12">
                                     <div class="button-cantainer">

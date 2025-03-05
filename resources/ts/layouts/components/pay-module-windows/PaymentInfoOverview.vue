@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import corp from '@/plugins/corp'
-import { fin_trx_delays, withdraw_limit_types } from '@/views/merchandises/pay-modules/useStore'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import type { PayModule } from '@/views/types'
-import { axios, getUserLevel, isAbleModiy } from '@axios'
-import { requiredValidatorV2 } from '@validators'
+import corp from '@/plugins/corp';
+import { fin_trx_delays, withdraw_limit_types } from '@/views/merchandises/pay-modules/useStore';
+import { StatusColorSetter } from '@/views/searcher';
+import { useStore } from '@/views/services/pay-gateways/useStore';
+import type { PayModule } from '@/views/types';
+import { axios, getUserLevel, isAbleModiyV2 } from '@axios';
+import { requiredValidatorV2 } from '@validators';
 
 interface Props {
     item: PayModule,
@@ -79,7 +80,7 @@ const signKeyCreate = async() => {
 }
 
 const useCollectWithdrawTrxFinDelayValidate = () => {
-    if (isAbleModiy(props.item.id) && props.item.use_realtime_deposit && props.item.id) {
+    if (isAbleModiyV2(props.item.id, 'merchandises/pay-modules') && props.item.use_realtime_deposit && props.item.id) {
         axios.get('/api/v1/bf/occuerred-sale', {params: {
             mcht_id: props.item.mcht_id,
             pmod_id: props.item.id
@@ -98,8 +99,8 @@ watchEffect(() => {
 <template>
     <VCardItem>
         <VCardSubtitle style="display: flex; justify-content: space-between;">
-            <template v-if="isAbleModiy(props.item.id)">
-                계약 및 결제정보
+            <VChip variant="outlined">계약 및 결제 정보</VChip>
+            <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
                 <div style="display: inline-block;">
                     <VBtn type="button" variant="tonal" v-if="corp.pv_options.paid.use_mid_create && props.item.id == 0 && getUserLevel() >= 35" 
                         @click="midCreate()" style="margin-left: 0.5em;" size="small" color="info">
@@ -111,18 +112,16 @@ watchEffect(() => {
                     </VBtn>
                 </div>
             </template>
-            <span v-else>계약 및 결제정보</span>
         </VCardSubtitle>
         <br>
-
-        <VRow v-if="isAbleModiy(props.item.id)">
+        <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
             <VCol md="6" cols="12">
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type" :items="settle_types"
                         prepend-inner-icon="ic-outline-send-to-mobile" item-title="name" item-value="id" label="정산일"
                         :rules="[requiredValidatorV2(props.item.settle_type, '정산일')]" />
             </VCol>
             <VCol md="6" cols="12">                    
-                <VTextField v-model="props.item.settle_fee" type="number" suffix="₩" label="단건 수수료"
+                <VTextField v-model="props.item.settle_fee" type="number" suffix="원" label="단건 수수료"
                         :rules="[requiredValidatorV2(props.item.settle_fee, '단건 수수료')]" />
             </VCol>
         </VRow>
@@ -137,10 +136,10 @@ watchEffect(() => {
                 <span class="font-weight-bold">이체 수수료</span>
             </VCol>
             <VCol md="7" cols="6">
-                {{ props.item.settle_fee }} ₩
+                {{ props.item.settle_fee }}원
             </VCol>
         </VRow>
-        <VRow v-if="isAbleModiy(props.item.id)">
+        <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
             <VCol md="6" cols="12">
                 <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
                     placeholder="MID 입력" persistent-placeholder label="MID"
@@ -166,7 +165,7 @@ watchEffect(() => {
                 {{ props.item.tid }}
             </VCol>
         </VRow>
-        <VRow v-if="isAbleModiy(props.item.id)">
+        <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
             <VCol md="6" cols="12">
                 <AppDateTimePicker 
                     v-model="props.item.contract_s_dt" 
@@ -202,7 +201,7 @@ watchEffect(() => {
         </VRow>
 
         <template v-if="corp.pv_options.paid.use_online_pay && props.item.id != 0 && props.item.module_type != 0">
-            <VRow v-if="isAbleModiy(props.item.id)">
+            <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
                 <VCol md="4" cols="4">
                     <VBtn type="button" variant="tonal" @click="payKeyCreate()" size="small" color="info">
                         {{ "결제 KEY 발급" }}                            
@@ -237,7 +236,7 @@ watchEffect(() => {
         </template>
 
         <template v-if="corp.pv_options.paid.use_noti && props.item.id != 0">
-            <VRow v-if="isAbleModiy(props.item.id)">
+            <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
                 <VCol md="4" cols="4">
                     <VBtn type="button" variant="tonal" @click="signKeyCreate()" size="small" color="info">
                         {{ "서명 KEY 발급" }}
@@ -272,44 +271,46 @@ watchEffect(() => {
         </template>
 
         <template v-if="corp.pv_options.paid.use_realtime_deposit">
+            <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+                <VDivider style="margin: 1em 0;" />
+                    <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
+                        <span>출금정보</span>
+                        <div style="display: inline-block;">
+                            <VSwitch 
+                                hide-details :false-value=0 :true-value=1 
+                                v-model="props.item.use_realtime_deposit"
+                                label="출금사용여부" color="warning"
+                            />
+                        </div>
+                    </VCardSubtitle>
+                    <br>
+                    <VRow>
+                        <VCol md="6" cols="12">
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_id" :items="finance_vans"
+                                prepend-inner-icon="streamline-emojis:ant" label="이체모듈 타입" item-title="nick_name"
+                                item-value="id" />
+                        </VCol>
+                        <VCol md="6">
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_trx_delay"
+                                :items="fin_trx_delays" prepend-inner-icon="streamline-emojis:bug" label="이체딜레이 선택"
+                                item-title="title" item-value="id" :readonly="is_readonly_fin_trx_delay"/>
+                            <VTooltip activator="parent" location="top">
+                                사고 방지를 위해 결제모듈이 최초거래가 발생한 순간부터 이체 딜레이를 수정할 수 없습니다.
+                            </VTooltip>
+                        </VCol>
+                    </VRow>
+            </template>
             <VDivider style="margin: 1em 0;" />
             <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
-                <span>출금정보</span>
-                <div style="display: inline-block;">
-                    <VSwitch v-if="isAbleModiy(props.item.id)" 
-                        hide-details :false-value=0 :true-value=1 
-                        v-model="props.item.use_realtime_deposit"
-                        label="출금사용여부" color="warning"
-                    />
-                    <template v-else>
-                        <VChip :color="props.item.use_realtime_deposit ? 'success' : 'error'">
-                            {{ props.item.use_realtime_deposit ? "출금사용" : "출금미사용" }}
-                        </VChip>
-                    </template>
-                </div>
+                <VChip variant="outlined">출금제한</VChip>
+                <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules') === false">
+                    <VChip :color="props.item.use_realtime_deposit ? 'success' : 'error'">
+                        {{ props.item.use_realtime_deposit ? "출금사용" : "출금미사용" }}
+                    </VChip>
+                </template>
             </VCardSubtitle>
             <br>
-            <VRow v-if="isAbleModiy(props.item.id)">
-                <VCol md="6" cols="12">
-                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_id" :items="finance_vans"
-                        prepend-inner-icon="streamline-emojis:ant" label="이체모듈 타입" item-title="nick_name"
-                        item-value="id" />
-                </VCol>
-                <VCol md="6">
-                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_trx_delay"
-                        :items="fin_trx_delays" prepend-inner-icon="streamline-emojis:bug" label="이체딜레이 선택"
-                        item-title="title" item-value="id" :readonly="is_readonly_fin_trx_delay"/>
-                    <VTooltip activator="parent" location="top">
-                        사고 방지를 위해 결제모듈이 최초거래가 발생한 순간부터 이체 딜레이를 수정할 수 없습니다.
-                    </VTooltip>
-                </VCol>
-            </VRow>
-            <VDivider style="margin: 1em 0;" />
-            <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
-                <span>출금제한</span>
-            </VCardSubtitle>
-            <br>
-            <VRow v-if="isAbleModiy(props.item.id)">
+            <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
                 <VCol md="6">
                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.withdraw_limit_type"
                         :items="withdraw_limit_types" prepend-inner-icon="streamline-emojis:pig" label="출금제한타입"
@@ -321,18 +322,20 @@ watchEffect(() => {
                     <span class="font-weight-bold">출금제한타입</span>
                 </VCol>
                 <VCol md="7" cols="6">
-                    {{ withdraw_limit_types.find(obj => obj.id === props.item.withdraw_limit_type )?.title }}
+                    <VChip :color="StatusColorSetter().getSelectIdColor(props.item.withdraw_limit_type || 0)">
+                        {{ withdraw_limit_types.find(obj => obj.id === props.item.withdraw_limit_type)?.title }}
+                    </VChip>
                 </VCol>
             </VRow>
 
-            <VRow v-if="isAbleModiy(props.item.id)">
+            <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
                 <VCol md="6">
                     <VTextField prepend-inner-icon="tabler-currency-won"
                             v-model="props.item.withdraw_business_limit" type="number" suffix="만원" label="일 출금한도(영업일)"/>
                 </VCol>
                 <VCol md="6">
                     <VTextField prepend-inner-icon="tabler-currency-won"
-                            v-model="props.item.withdraw_holiday_limit" type="number" suffix="만원" label="일 출금한도(휴무일 )"/>
+                            v-model="props.item.withdraw_holiday_limit" type="number" suffix="만원" label="일 출금한도(휴무일)"/>
                 </VCol>
             </VRow>
             <VRow v-else>
@@ -343,7 +346,7 @@ watchEffect(() => {
                     {{ props.item.withdraw_business_limit }} 만원
                 </VCol>
                 <VCol md="5" cols="6">
-                    <span class="font-weight-bold">일 출금한도(휴무일 )</span>
+                    <span class="font-weight-bold">일 출금한도(휴무일)</span>
                 </VCol>
                 <VCol md="7" cols="6">
                     {{ props.item.withdraw_holiday_limit }} 만원

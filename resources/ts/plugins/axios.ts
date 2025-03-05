@@ -122,23 +122,40 @@ export const getViewType = () => {
         return ''
 }
 // -----------------------
-export const isAbleModiy = (id: number) => {
-    const salesAuthLevelValidate = () => {
-        if(id === 0 && user_info.value.auth_level >= 1)
-            return true
-        else if(id !== 0 && user_info.value.auth_level == 2)
-            return true
-        else
-            return false
-    }
-    
+export const salesAuthLevelValidate = (id: number) => {
+    if(id === 0 && user_info.value.auth_level >= 1)
+        return true
+    else if(id !== 0 && user_info.value.auth_level == 2)
+        return true
+    else
+        return false
+}
+
+export const isAbleModiy = (id: number) => {    
     if(getUserLevel() >= 35)
         return true
     else if(getUserLevel() >= 13) {
         if(isFixplus())
             return isFixplusSalesAbleUpdate(id)
         else
-            return salesAuthLevelValidate()
+            return salesAuthLevelValidate(id)
+    }
+    else
+        return false
+}
+
+export const isAbleModiyV2 = (id: number, path: string) => {    
+    if(getUserLevel() >= 35)
+        return true
+    else if(getUserLevel() >= 13) {
+        if(isFixplus())
+            return isFixplusSalesAbleUpdate(id)
+        else {
+            if(path === 'merchandises' || path === 'salesforces' || path === 'merchandises/noti-urls')
+                return salesAuthLevelValidate(id)
+            else
+                return false
+        }
     }
     else
         return false

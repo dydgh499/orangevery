@@ -190,7 +190,7 @@ defineExpose({
                                     <label>상품금액</label>
                                 </VCol>
                                 <VCol cols="8" :md="9">
-                                    <VTextField v-model="amount_format" suffix="₩" @input="formatAmount"
+                                    <VTextField v-model="amount_format" suffix="원" @input="formatAmount"
                                         variant="underlined" placeholder="상품금액을 입력해주세요"
                                         prepend-icon="ic:outline-price-change"
                                         :rules="[requiredValidatorV2(product.product_amount, '상품금액')]" />

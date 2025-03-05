@@ -138,7 +138,7 @@ defineExpose({
                                     <VCol cols="12" :md="8">
                                         <VTextField 
                                             v-model="amount_format" 
-                                            suffix="₩" 
+                                            suffix="원" 
                                             name="amount"
                                             @input="formatAmount"
                                             variant="underlined"

@@ -8,7 +8,7 @@ import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
 
 import { useRequestStore } from '@/views/request'
 import type { PayModule } from '@/views/types'
-import { isAbleModiy } from '@axios'
+import { isAbleModiyV2 } from '@axios'
 import corp from '@corp'
 import { VForm } from 'vuetify/components'
 
@@ -19,8 +19,8 @@ interface Props {
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 const midCreateDlg = ref(null)
-
 const { update, remove } = useRequestStore()
+
 const md = ref<number>(3)
 
 provide('midCreateDlg', midCreateDlg)
@@ -43,44 +43,41 @@ onDeactivated(() => {
             <VForm ref="vForm">
                 <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
                     <VCol cols="12" :md="md">
-                        <VCardTitle>결제타입</VCardTitle>
                         <PaymentTypeOverview :item="props.item" :able_mcht_chanage="props.able_mcht_chanage" />
                     </VCol>
                     <VDivider :vertical="$vuetify.display.mdAndUp" />
                     <VCol cols="12" :md="md">
-                        <VCardTitle>결제정보</VCardTitle>
                         <PaymentInfoOverview :item="props.item" />
                     </VCol>
                     <template v-if="corp.id !== 30">
                         <VDivider :vertical="$vuetify.display.mdAndUp" />
                         <VCol cols="12" :md="md">
-                            <VCardTitle>장비정보</VCardTitle>
                             <TerminalInfoOverview :item="props.item" />
                         </VCol>
                     </template>
-                    <template v-if="isAbleModiy(item.id)">
-                        <VDivider :vertical="$vuetify.display.mdAndUp" />
-                        <VCol cols="12" :md="md">
-                            <VCardTitle>옵션</VCardTitle>
-                            <OptionInfoOverview :item="props.item" />
-                            <VCol style="text-align: end;">
-                                <VBtn type="button"
-                                    @click="update('/merchandises/pay-modules', props.item, vForm, props.able_mcht_chanage)">
-                                    {{ props.item.id == 0 ? "추가" : "수정" }}
-                                    <VIcon end icon="tabler-pencil" />
-                                </VBtn>
-                                <VBtn type="button" color="error" v-if="props.item.id" style="margin-left: 1em;"
-                                    @click="remove('/merchandises/pay-modules', props.item, props.able_mcht_chanage)">
-                                    삭제
-                                    <VIcon end icon="tabler-trash" />
-                                </VBtn>
-                                <VBtn type="button" color="warning" v-else @click="props.item.id = -1" style="margin-left: 1em;">
-                                    입력란 제거
-                                    <VIcon end icon="tabler-trash" />
-                                </VBtn>
-                            </VCol>
-                        </VCol>
-                    </template>
+                    <VDivider :vertical="$vuetify.display.mdAndUp" />
+                    <VCol cols="12" :md="md">
+                        <OptionInfoOverview :item="props.item">
+                            <template #edit v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+                                <VCol style="text-align: end;">
+                                    <VBtn type="button"
+                                        @click="update('/merchandises/pay-modules', props.item, vForm, props.able_mcht_chanage)">
+                                        {{ props.item.id == 0 ? "추가" : "수정" }}
+                                        <VIcon end icon="tabler-pencil" />
+                                    </VBtn>
+                                    <VBtn type="button" color="error" v-if="props.item.id" style="margin-left: 1em;"
+                                        @click="remove('/merchandises/pay-modules', props.item, props.able_mcht_chanage)">
+                                        삭제
+                                        <VIcon end icon="tabler-trash" />
+                                    </VBtn>
+                                    <VBtn type="button" color="warning" v-else @click="props.item.id = -1" style="margin-left: 1em;">
+                                        입력란 제거
+                                        <VIcon end icon="tabler-trash" />
+                                    </VBtn>
+                                </VCol>
+                            </template>
+                        </OptionInfoOverview>
+                    </VCol>
                 </div>
             </VForm>
         </AppCardActions>

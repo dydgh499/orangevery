@@ -142,7 +142,7 @@ defineExpose({
                                     </VCol>
                                     <VCol cols="8" :md="8">
                                         <VTextField 
-                                            v-model="amount_format" suffix="₩" 
+                                            v-model="amount_format" suffix="원" 
                                             @input="formatAmount"
                                             variant="underlined"
                                             placeholder="상품금액을 입력해주세요" prepend-icon="ic:outline-price-change"

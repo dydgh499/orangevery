@@ -8,13 +8,11 @@ const _getOtherMenu = () => {
         icon: { icon: 'fe-notice-active' },
         to: 'posts',
     })
-    if(getUserLevel() === 10) {
-        menu.push({
-            title: '민원관리',
-            icon: { icon: 'ic-round-sentiment-dissatisfied' },
-            to: 'complaints',
-        })
-    }
+    menu.push({
+        title: '민원관리',
+        icon: { icon: 'ic-round-sentiment-dissatisfied' },
+        to: 'complaints',
+    })
     if(corp.pv_options.paid.brand_mode === 1 && getUserLevel() === 13) {
         menu.push({
             title: '추천인코드관리',
@@ -32,7 +30,8 @@ const _getOtherMenu = () => {
 
 export const getOtherMenu = () => {
     const menu = <any[]>[
-        _getOtherMenu(),
+        { heading: 'Service' },
+        ..._getOtherMenu(),
     ]
     return menu
 }

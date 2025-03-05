@@ -3,7 +3,7 @@ import { useDynamicTabStore } from '@/@core/utils/dynamicTab';
 import router from '@/router';
 import { useRequestStore } from '@/views/request';
 import type { Tab } from '@/views/types';
-import { getUserLevel, isAbleModiy, user_info } from '@axios';
+import { getUserLevel, isAbleModiyV2, user_info } from '@axios';
 
 import { VForm } from 'vuetify/components';
 
@@ -54,7 +54,7 @@ const authHideConditions = () => {
                 return false
         }
         else 
-            return isAbleModiy(props.id as number)
+            return isAbleModiyV2(props.id as number, props.path)
     }
     else
     {

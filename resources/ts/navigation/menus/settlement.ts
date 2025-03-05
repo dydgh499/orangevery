@@ -4,35 +4,26 @@ import corp from '@corp'
 const _getSettlementMenu = () => {
     const settlement = <any>{
         title: '정산 관리',
-        icon: { icon: 'tabler:calendar-time' },
+        icon: { icon: 'tabler:calculator' },
         children: [],
     }
     
     if(getUserLevel() >= 13) {
         settlement.children.push(
             {
-                title: '가맹점 정산 관리',
+                title: '지급이체(가맹점)',
                 to: 'transactions-settle-merchandises',
             },
             {
-                title: '영업점 정산 관리',
+                title: '지급이체(영업점)',
                 to: 'transactions-settle-salesforces',
             },
         )
     }
 
-    if(getUserLevel() >= 35) {
-        if(corp.pv_options.paid.use_collect_withdraw) {
-            settlement.children.push({
-                title: '모아서 출금 관리',
-                to: 'transactions-settle-collect-withdraws',
-            })
-        }
-    }
-
     if(getUserLevel() === 10 && getUserLevel() >= 35) {
         settlement.children.push({
-            title: '취소 수기 입금',
+            title: '취소건 수기입금',
             to: 'transactions-settle-cancel-deposits',
         })    
     }
@@ -46,28 +37,35 @@ const _getSettlementHistoryMenu = () => {
         children: [],
     }
     settle_histories.children.push({
-        title: getUserLevel() === 10 ? '정산 이력' : '가맹점 정산 이력',
+        title: getUserLevel() === 10 ? '지급이체' : '지급이체(가맹점)',
         to: 'transactions-settle-histories-merchandises',
     })
 
     if (getUserLevel() >= 13) {
         settle_histories.children.push({
-            title: '영업점 정산 이력',
+            title: '지급이체(영업점)',
             to: 'transactions-settle-histories-salesforces',
         })
     }
     if (getUserLevel() >= 35 && corp.use_different_settlement) {
         settle_histories.children.push({
-            title: '차액 정산 이력',
+            title: '차액정산',
             to: 'transactions-settle-histories-difference',
         })
     }
         
     if((getUserLevel() === 10 || getUserLevel() >= 35) && corp.pv_options.paid.use_collect_withdraw) {
         settle_histories.children.push({
-            title: '모아서 출금 이력',
+            title: '모아서출금',
             to: 'transactions-settle-histories-collect-withdraws',
         })
+        if(getUserLevel() >= 35) {
+            settle_histories.children.push({
+                title: '모아서출금 통계조회',
+                to: 'transactions-settle-collect-withdraws',
+            })
+            
+        }
     }
     return settle_histories
 }

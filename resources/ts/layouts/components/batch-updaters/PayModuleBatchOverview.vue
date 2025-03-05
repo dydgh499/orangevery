@@ -615,7 +615,7 @@ watchEffect(() => {
                     <VCol :md=6>
                         <VRow no-gutters style="align-items: center;">
                             <VCol md="6" cols="12">
-                                <VTextField v-model="pay_module.settle_fee" label="이체 수수료" type="number" suffix="₩" />
+                                <VTextField v-model="pay_module.settle_fee" label="이체 수수료" type="number" suffix="원" />
                             </VCol>
                             <VCol md="6">
                                 <div class="button-cantainer">
@@ -938,7 +938,7 @@ watchEffect(() => {
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
                                     <VTextField prepend-inner-icon="tabler-currency-won"
-                                            v-model="pay_module.withdraw_holiday_limit" type="number" suffix="만원" label="일 출금한도(휴무일 )"/>
+                                            v-model="pay_module.withdraw_holiday_limit" type="number" suffix="만원" label="일 출금한도(휴무일)"/>
                                 </VCol>
                                 <VCol md="6" col="12">
                                     <div class="button-cantainer">

@@ -5,7 +5,7 @@ import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayModule } from '@/views/types'
-import { isAbleModiy } from '@axios'
+import { isAbleModiyV2 } from '@axios'
 import { requiredValidatorV2 } from '@validators'
 
 interface Props {
@@ -45,7 +45,11 @@ const filterPgs = computed(() => {
 </script>
 <template>
     <VCardItem>
-        <VRow v-if="props.able_mcht_chanage && isAbleModiy(props.item.id)">
+        <VCardSubtitle>
+            <VChip variant="outlined">소유 가맹점 정보</VChip>                
+        </VCardSubtitle>
+        <br>
+        <VRow v-if="props.able_mcht_chanage && isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
             <VCol md="6" cols="6">소유 가맹점</VCol>
             <VCol md="6">
                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id" :items="mchts"
@@ -63,7 +67,7 @@ const filterPgs = computed(() => {
         </VRow>
         <VCardSubtitle></VCardSubtitle>
         <br>
-        <VRow v-if="isAbleModiy(props.item.id)">
+        <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
             <VCol md="6" cols="12">
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.module_type"
                         @update:modelValue="onModuleTypeChange" :items="module_types"
@@ -90,11 +94,11 @@ const filterPgs = computed(() => {
             </VCol>
         </VRow>
 
-        <template v-if="isAbleModiy(props.item.id)">
+        <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
             <VDivider style="margin: 1em 0;" />
             <VCardSubtitle>
                 <div style="display: flex; flex-direction: row;align-items: center;">
-                    <span>원천사 정보</span>
+                    <VChip variant="outlined">원천사 정보</VChip>
                     <VBtn size="small" variant="tonal" @click="setPGKeyInfo()" style="margin-left: 0.5em;">가져오기</VBtn>
                 </div>
             </VCardSubtitle>

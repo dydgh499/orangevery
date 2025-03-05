@@ -15,6 +15,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
+use App\Http\Controllers\Manager\Salesforce;
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Requests\Manager\MerchandiseRequest;
 use App\Http\Requests\Manager\IndexRequest;
@@ -457,21 +458,15 @@ class MerchandiseController extends Controller
      */
     public function clearSettleHold(Request $request, $id)
     {
-        $data = Operator::where('id', $request->user()->id)->first();
-        if($data)
+        if(AuthPasswordChange::HashCheck($request->user(), $request->user_pw))
         {
-            if(AuthPasswordChange::HashCheck($data, $request->user_pw))
-            {
-                $this->merchandises->where('id', $id)->update([
-                    'settle_hold_s_dt' => null,
-                    'settle_hold_reason' => '',
-                ]);
-                return $this->response(0);
-            }
-            else
-                return $this->extendResponse(2000, '패스워드가 다릅니다.');
+            $this->merchandises->where('id', $id)->update([
+                'settle_hold_s_dt' => null,
+                'settle_hold_reason' => '',
+            ]);
+            return $this->response(0);
         }
         else
-            return $this->response(990);
+            return $this->extendResponse(2000, '패스워드가 다릅니다.');
     }
 }

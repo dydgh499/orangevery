@@ -22,11 +22,6 @@ const visible = ref(false)
 const trans = ref<SalesSlip>()
 
 const card = ref()
-const thickness = ref(3)
-
-const updateThickness = () => {
-    thickness.value = window.innerWidth <= 500 ? 2 : 3;
-};
 
 const show = (item: SalesSlip, _reload_mode:boolean=false) => {
     reload_mode.value = _reload_mode
@@ -41,14 +36,14 @@ const close = () => {
         location.reload()
 }
 
-onMounted(() => {
-    window.addEventListener('resize', updateThickness);
-    updateThickness(); // 초기 상태 설정
-});
+const getSalesSlipBackground = computed(() => {
+    if(window.innerWidth < 450)
+        return `background-image: url(${background}); width:${window.innerWidth - 60}px; !important`
+    else
+        return `background-image: url(${background});`
+})
 
-onUnmounted(() => {
-    window.removeEventListener('resize', updateThickness);
-});
+
 defineExpose({
     show
 });
@@ -57,12 +52,12 @@ defineExpose({
     <VDialog v-model="visible" style="box-shadow: 0 !important;" max-width="450">
         <section class="result-wrapper" ref="card">
             <div class="sales-slip-rect">
-                <VCard class="sales-slip-background" rounded :style="`background-image: url(${background});`">
+                <VCard class="sales-slip-background" rounded :style="getSalesSlipBackground">
                     <VCardText>
                         <br>
                         <h3 style="text-align: center;">매출전표 영수증</h3>
-                        <h3 :style="`padding: 12px ${$vuetify.display.smAndDown ? '12px' : '0px'};`">결제정보</h3>
-                        <VDivider :thickness="thickness" class="mb-2" />
+                        <h4 :style="`padding: 12px ${$vuetify.display.smAndDown ? '12px' : '0px'};`">결제정보</h4>
+                        <VDivider :thickness="2" class="mb-2" />
                         <table class='sales-slip-table text-no-wrap'>
                             <tbody>
                                 <tr>
@@ -195,8 +190,8 @@ defineExpose({
                                 </tr>
                             </tbody>
                         </table>
-                        <h3 :style="`padding: 12px ${$vuetify.display.smAndDown ? '12px' : '0px'};`">판매자(가맹점) 정보</h3>
-                        <VDivider :thickness="thickness" class="mb-2" />
+                        <h4 :style="`padding: 12px ${$vuetify.display.smAndDown ? '12px' : '0px'};`">판매자(가맹점) 정보</h4>
+                        <VDivider :thickness="2" class="mb-2" />
                         <table class='sales-slip-table'>
                             <tbody>
                                 <tr>
@@ -241,8 +236,8 @@ defineExpose({
                                 </tr>
                             </tbody>
                         </table>
-                        <h3 :style="`padding: 12px ${$vuetify.display.smAndDown ? '12px' : '0px'};`">공급자(결제대행사) 정보</h3>
-                        <VDivider :thickness="thickness" class="mb-2" />
+                        <h4 :style="`padding: 12px ${$vuetify.display.smAndDown ? '12px' : '0px'};`">공급자(결제대행사) 정보</h4>
+                        <VDivider :thickness="2" class="mb-2" />
                         <table class='sales-slip-table'>
                             <tbody>
                                 <tr>
@@ -317,14 +312,12 @@ defineExpose({
     </VDialog>
 </template>
 <style scoped>
+/* stylelint-disable-next-line declaration-block-single-line-max-declarations */
 section::-webkit-scrollbar { block-size: 0; inline-size: 0; }
 
 .result-wrapper {
-  padding: 0.3em;
   background: rgb(255, 255, 255, 0%) !important;
   color: rgba(51, 48, 60, 68%) !important;
-  inline-size: 450px;
-  margin-inline: auto;
   overflow-y: auto;
 }
 
@@ -357,31 +350,11 @@ section::-webkit-scrollbar { block-size: 0; inline-size: 0; }
   inset-block-start: -1em;
 }
 
-@media (max-width: 500px) {
-  :deep(.v-card-text) {
-    padding: 12px;
-  }
+.sales-slip-title {
+  inline-size: 100px;
+}
 
-  .result-wrapper {
-    inline-size: 100%;
-    padding-block-start: 1.5em;
-  }
-
-  .action-container {
-    justify-content: space-between;
-    font-size: 0.9em !important;
-  }
-
-  .sales-slip-title {
-    padding-inline: 8px;
-  }
-
-  .cancel-img {
-    inset-block-start: 45%;
-  }
-
-  * {
-    font-size: 14px;
-  }
+.sales-slip-content {
+  inline-size: auto;
 }
 </style>

@@ -86,7 +86,7 @@ export const useSearchStore = defineStore('bonaejaSearchStore', () => {
     onMounted(async () => {
         const r = await store.getChartData()
         if(r.status == 200) {
-            metas.value[0]['stats'] = r.data.data.TOTAL_DEPOSIT.toLocaleString() + ' ₩'
+            metas.value[0]['stats'] = r.data.data.TOTAL_DEPOSIT.toLocaleString() + ' 원'
             metas.value[1]['stats'] = r.data.data.SMS_CNT.toLocaleString() + '건'
             metas.value[2]['stats'] = r.data.data.LMS_CNT.toLocaleString() + '건'
             metas.value[3]['stats'] = r.data.data.MMS_CNT.toLocaleString() + '건'

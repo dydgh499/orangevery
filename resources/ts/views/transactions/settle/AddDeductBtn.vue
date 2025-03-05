@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { axios } from '@axios'
+import { axios } from '@axios';
 
 interface Props {
     id: number,
@@ -44,7 +44,7 @@ const addDeduction = async () => {
     <VRow no-gutters>
         <VCol>
             <div class="d-inline-flex align-center gap-2 justify-content-evenly">
-                <VTextField v-model="deduction" type="text" suffix="₩" />
+                <VTextField v-model="deduction" type="text" suffix="원" />
                 <VBtn size="small" variant="tonal" @click="addDeduction()">
                     차감
                 </VBtn>

@@ -1,14 +1,14 @@
 <script lang="ts" setup>
+import OptionInfoOverview from '@/layouts/components/pay-module-windows/OptionInfoOverview.vue'
+import PaymentInfoOverview from '@/layouts/components/pay-module-windows/PaymentInfoOverview.vue'
+import PaymentTypeOverview from '@/layouts/components/pay-module-windows/PaymentTypeOverview.vue'
+import TerminalInfoOverview from '@/layouts/components/pay-module-windows/TerminalInfoOverview.vue'
+import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
 import type { PayModule } from '@/views/types'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
-import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
-import PaymentTypeOverview from '@/layouts/components/pay-module-windows/PaymentTypeOverview.vue'
-import PaymentInfoOverview from '@/layouts/components/pay-module-windows/PaymentInfoOverview.vue'
-import TerminalInfoOverview from '@/layouts/components/pay-module-windows/TerminalInfoOverview.vue'
-import OptionInfoOverview from '@/layouts/components/pay-module-windows/OptionInfoOverview.vue'
 
 import { useRequestStore } from '@/views/request'
-import { isAbleModiy } from '@axios'
+import { isAbleModiyV2 } from '@axios'
 import { VForm } from 'vuetify/components'
 
 interface Props {
@@ -74,7 +74,7 @@ defineExpose({
                     <VTab>결제타입</VTab>
                     <VTab>결제정보</VTab>
                     <VTab>장비정보</VTab>
-                    <VTab v-if="isAbleModiy(pay_module.id)">옵션정보</VTab>
+                    <VTab v-if="isAbleModiyV2(pay_module.id, 'merchandises/pay-modules')">옵션정보</VTab>
                 </VTabs>
                 <PerfectScrollbar :options="{ wheelPropagation: false }">
                     <VWindow v-model="tab">
@@ -87,14 +87,14 @@ defineExpose({
                         <VWindowItem>
                             <TerminalInfoOverview :item="pay_module" />
                         </VWindowItem>
-                        <VWindowItem v-if="isAbleModiy(pay_module.id)">
+                        <VWindowItem v-if="isAbleModiyV2(pay_module.id, 'merchandises/pay-modules')">
                             <OptionInfoOverview :item="pay_module" />
                         </VWindowItem>
                     </VWindow>
                 </PerfectScrollbar>
             </VForm>
             <VDivider />
-            <VRow v-if="isAbleModiy(pay_module.id)" style="padding: 1em;">
+            <VRow v-if="isAbleModiyV2(pay_module.id, 'merchandises/pay-modules')" style="padding: 1em;">
                 <VCol cols="12" class="d-flex gap-4">
                     <VBtn type="button" style="margin-left: auto;" @click="payModuleUpdate()">
                         {{ pay_module.id == 0 ? "추가" : "수정" }}

@@ -1,4 +1,4 @@
-import { getIndexByLevel, getUserLevel, isAbleModiy } from "@/plugins/axios";
+import { getIndexByLevel, getUserLevel, isAbleModiyV2 } from "@/plugins/axios";
 import corp from "@/plugins/corp";
 import { SALES_LEVEL_SIZE, useSalesFilterStore } from "../salesforces/useStore";
 import { useStore } from "../services/pay-gateways/useStore";
@@ -6,7 +6,7 @@ import { useStore } from "../services/pay-gateways/useStore";
 export const merchandiseCreateAuth = () => {
     // 영업점 수수료 수정권한
     const isSalesModifyValidate = (mcht_id: number, idx: number) => {
-        if(isAbleModiy(mcht_id)) {
+        if(isAbleModiyV2(mcht_id, 'merchandises')) {
             if(getUserLevel() > 10 && getUserLevel() < 35) {
                 if(mcht_id === 0 && getIndexByLevel(idx) === getUserLevel())
                     return false

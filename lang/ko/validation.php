@@ -290,7 +290,7 @@ return [
         'pay_limit_type' => '결제제한타입',
         'withdraw_limit_type' => '출금제한타입',
         'withdraw_business_limit' => '일 출금한도(영업일)',
-        'withdraw_holiday_limit' => '일 출금한도(휴무일 )',
+        'withdraw_holiday_limit' => '일 출금한도(휴무일)',
         //finance van
         'receive_phone' => '수신자 전화번호',
         'sender_phone' => '발신자 전화번호',

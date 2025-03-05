@@ -8,24 +8,22 @@ const _getOperaterMenu = () => {
     }
     if (getUserLevel() >= 40) {
         operations.children.push({
-            title: '서비스 관리',
+            title: '운영사 관리',
             to: 'services-brands',
         })
-        operations.children.push({
-            title: 'PG사 관리',
-            to: 'services-pay-gateways',
-        })
-    }
-    operations.children.push({
-        title: '공휴일 관리',
-        to: 'services-holidays',
-    })
-    if (getUserLevel() >= 40) {
         operations.children.push({
             title: '운영자 관리',
             to: 'services-operators',
         })
     }
+    operations.children.push({
+        title: 'PG사 관리',
+        to: 'services-pay-gateways',
+    })
+    operations.children.push({
+        title: '공휴일 관리',
+        to: 'services-holidays',
+    })
     operations.children.push({
         title: '대량 등록',
         to: 'services-bulk-register',
@@ -41,18 +39,16 @@ const _getOperaterMenu = () => {
         to: 'popups',
     })
     operations.children.push({
-        title: '민원 관리',
-        to: 'complaints',
-    })
-    operations.children.push({
         title: '예약변경 관리',
         to: 'services-book-applies',
     })
+    return operations
 }
 
 export const getServiceMenu = () => {
     const menu = <any[]>[]
     if (getUserLevel() >= 35) {
+        menu.push({ heading: 'Operate' })
         menu.push(_getOperaterMenu())
     }
     return menu

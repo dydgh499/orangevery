@@ -5,7 +5,7 @@ import { comm_settle_types, installments, module_types, ship_out_stats, under_sa
 import { useSearchStore } from '@/views/merchandises/terminals/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { allLevels, getUserLevel, isAbleModiy } from '@axios'
+import { allLevels, getUserLevel, isAbleModiyV2 } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
@@ -19,7 +19,7 @@ provide('exporter', exporter)
 
 </script>
 <template>
-    <BaseIndexView placeholder="MID, TID, 시리얼 번호, 가맹점 상호 검색" :metas="[]" :add="isAbleModiy(0)" add_name="장비"
+    <BaseIndexView placeholder="MID, TID, 시리얼 번호, 가맹점 상호 검색" :metas="[]" :add="isAbleModiyV2(0, 'merchandises/pay-modules')" add_name="장비"
         :date_filter_type="DateFilters.NOT_USE">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true" :sales="true"

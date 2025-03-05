@@ -405,7 +405,7 @@ onMounted(() => {
                         </VCol>
                         <VCol cols="12">
                             <VRow>
-                                <VCol md="6">
+                                <VCol md="6" :cols="12">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>
                                             <BaseQuestionTooltip :location="'top'" :text="'가맹점 상태'" :content="'- 정상 : 거래 유지 중<br>- 해지 : 승인X, 취소X, 가맹점 관리자 접속O<br>- 중지 : 승인X, 취소X, 가맹점 관리자 접속X'"/>
@@ -428,19 +428,19 @@ onMounted(() => {
                                         </VCol>
                                     </VRow>
                                 </VCol>
-                                <VCol :md="6">
+                                <VCol :md="6" :cols="12">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>지급이체 수수료</VCol>
                                         <VCol md="6">
                                             <div class="batch-container">
-                                            <VTextField v-model="props.item.withdraw_fee" type="number" suffix="₩"
+                                            <VTextField v-model="props.item.withdraw_fee" type="number" suffix="원"
                                                 :rules="[requiredValidatorV2(props.item.withdraw_fee, '지급이체 수수료')]" />
                                             </div>
                                         </VCol>
                                     </VRow>
                                     <VRow v-else>
                                         <VCol class="font-weight-bold">지급이체 수수료</VCol>
-                                        <VCol md="6"><span>{{ props.item.withdraw_fee }}₩</span></VCol>
+                                        <VCol md="6"><span>{{ props.item.withdraw_fee }}원</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>
@@ -516,14 +516,14 @@ onMounted(() => {
                                             </VCol>
                                             <VCol md="6">
                                                 <div class="batch-container">     
-                                                    <VTextField v-model="props.item.collect_withdraw_fee" type="number" suffix="₩"
+                                                    <VTextField v-model="props.item.collect_withdraw_fee" type="number" suffix="원"
                                                         :rules="[requiredValidatorV2(props.item.collect_withdraw_fee, '모아서 출금')]" />
                                                 </div>
                                             </VCol>
                                         </VRow>
                                         <VRow v-else>
                                             <VCol class="font-weight-bold">모아서 출금 수수료</VCol>
-                                            <VCol md="6"><span>{{ props.item.collect_withdraw_fee }} ₩</span></VCol>
+                                            <VCol md="6"><span>{{ props.item.collect_withdraw_fee }} 원</span></VCol>
                                         </VRow>
                                     </VCol>
                                 </VRow>
@@ -585,40 +585,41 @@ onMounted(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" v-if="getUserLevel() >= 35">
-                            <VDivider style="margin-bottom: 1em;"/>
-                            <VRow>
-                                <VCol :md="12" :cols="12">
-                                    <VRow style="align-items: center;" class="match-height">
-                                        <VCol md="6" cols=12>
-                                            <VTextarea v-model="props.item.settle_hold_reason" counter label="지급보류 사유"
-                                                variant="filled"
-                                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="200" auto-grow />
-                                        </VCol>
-                                        <VCol md="6" cols="12" style="display: flex;flex-direction: column;text-align: end;">
-                                            <div>
-                                                <AppDateTimePicker
-                                                    v-model="props.item.settle_hold_s_dt" 
-                                                    variant='underlined'
-                                                    placeholder="지급보류 시작일"
-                                                    style="max-width: 14em; margin-bottom: 3em; margin-left: auto;"
-                                                />
-                                            </div>
-                                            <div style="float: inline-end;">
-                                                <VBtn color="error" @click="setSettleHoldClear()" style='margin-bottom: 1em;'>
-                                                    지급보류
-                                                    <VIcon end icon="icon-park-solid:clear-format" />
-                                                </VBtn>
-                                                <VBtn color="error" variant="tonal" @click="clearSettleHoldClear()" style=" margin-bottom: 1em;margin-left: 1em;">
-                                                    지급보류해제
-                                                    <VIcon end icon="icon-park-solid:clear-format" />
-                                                </VBtn>
-                                            </div>
-                                        </VCol>
-                                    </VRow>
-                                </VCol>
-                            </VRow>
-                            <VDivider/>
+                        <VCol cols="12">
+                            <template v-if="getUserLevel() > 10">
+                                <VDivider style="margin-bottom: 1em;"/>
+                                <VRow>
+                                    <VCol :md="12" :cols="12">
+                                        <VRow style="align-items: center;" class="match-height">
+                                            <VCol md="6" cols=12>
+                                                <VTextarea v-model="props.item.settle_hold_reason" counter label="지급보류 사유"
+                                                    variant="filled"
+                                                    prepend-inner-icon="twemoji-spiral-notepad" maxlength="200" auto-grow />
+                                            </VCol>
+                                            <VCol md="6" cols="12" style="display: flex;flex-direction: column;text-align: end;">
+                                                <div>
+                                                    <AppDateTimePicker
+                                                        v-model="props.item.settle_hold_s_dt" 
+                                                        variant='underlined'
+                                                        placeholder="지급보류 시작일"
+                                                        style="max-width: 8em; margin-bottom: 3em; margin-left: auto;"
+                                                    />
+                                                </div>
+                                                <div style="float: inline-end;">
+                                                    <VBtn color="error" size="small" @click="setSettleHoldClear()">
+                                                        지급보류
+                                                        <VIcon end icon="icon-park-solid:clear-format" />
+                                                    </VBtn>
+                                                    <VBtn color="error" variant="tonal" size="small" @click="clearSettleHoldClear()" style="margin-left: 1em;">
+                                                        지급보류해제
+                                                        <VIcon end icon="icon-park-solid:clear-format" />
+                                                    </VBtn>
+                                                </div>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                            </template>
                         </VCol>
                         <VCol cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile && getUserLevel() >= 35">
                             <VRow>
