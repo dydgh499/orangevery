@@ -203,7 +203,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     const getOptionCols = () => {
         const headers_6:Record<string, string> = {}
         if(corp.pv_options.paid.use_dup_pay_validation)
-            headers_6['pay_dupe_limit'] = '동일카드 결제허용'
+            headers_6['pay_dupe_limit'] = '동일카드 결제'
         headers_6['pay_limit_type'] = '결제금지타입'
         headers_6['pay_disable_tm'] = '결제금지 시간'
         headers_6['payment_term_min'] = '결제허용 간격'
