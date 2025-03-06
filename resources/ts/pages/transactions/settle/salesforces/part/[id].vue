@@ -12,6 +12,7 @@ import { getProfitColName } from '@/views/transactions/transacitonsHeader'
 import TransactionsIndexTd from '@/views/transactions/TransactionsIndexTd.vue'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
+import corp from '@corp'
 
 
 const { head, table, metas } = useSearchStore()
@@ -20,6 +21,9 @@ const { selected, dialog } = selectFunctionCollect(store)
 const { settle, partSettle, exporter } = partSettleStore(store, selected, dialog, table, head, 'salesforces')
 const { settle_types } = useStore()
 const all_selected = ref()
+
+store.params.s_dt = corp.pv_options.free.use_search_date_detail ? store.params.s_dt + " 00:00:00" : store.params.s_dt
+store.params.e_dt = corp.pv_options.free.use_search_date_detail ? store.params.e_dt + " 23:59:59" : store.params.e_dt
 
 const dataToChart = async() => {
     if (store.getChartProcess() === false && store.params.s_dt && store.params.e_dt) {
@@ -45,7 +49,7 @@ provide('partSettle', partSettle)
 <template>
     <div>
         <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호 검색" :metas="metas" :add="false" add_name=""
-            :date_filter_type="DateFilters.DATE_RANGE">
+            :date_filter_type="corp.pv_options.free.use_search_date_detail ? DateFilters.DATE_RANGE : DateFilters.SETTLE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">
