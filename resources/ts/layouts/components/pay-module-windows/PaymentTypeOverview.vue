@@ -49,7 +49,7 @@ const filterPgs = computed(() => {
             <VChip variant="outlined">소유 가맹점 정보</VChip>                
         </VCardSubtitle>
         <br>
-        <VRow v-if="props.able_mcht_chanage && isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+        <VRow v-if="props.able_mcht_chanage && isAbleModiyV2(props.item, 'merchandises/pay-modules')">
             <VCol md="6" cols="6">소유 가맹점</VCol>
             <VCol md="6">
                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id" :items="mchts"
@@ -67,7 +67,7 @@ const filterPgs = computed(() => {
         </VRow>
         <VCardSubtitle></VCardSubtitle>
         <br>
-        <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+        <VRow v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
             <VCol md="6" cols="12">
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.module_type"
                         @update:modelValue="onModuleTypeChange" :items="module_types"
@@ -94,7 +94,7 @@ const filterPgs = computed(() => {
             </VCol>
         </VRow>
 
-        <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+        <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
             <VDivider style="margin: 1em 0;" />
             <VCardSubtitle>
                 <div style="display: flex; flex-direction: row;align-items: center;">

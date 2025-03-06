@@ -19,7 +19,7 @@ const props = defineProps<Props>()
         </VCardSubtitle>
         <br>
         <VRow style="padding-top: 0.5em;">
-            <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+            <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                 <VCol md="6" cols="12">
                     <VTextField type="number" v-model="props.item.pay_dupe_least"
                         prepend-inner-icon="tabler-currency-won" label="중복거래 하한금"
@@ -50,7 +50,7 @@ const props = defineProps<Props>()
             </template>
         </VRow>
         <VRow>
-            <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+            <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                 <VCol md="6">
                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.installment" :items="installments"
                         prepend-inneer-icon="fluent-credit-card-clock-20-regular" label="할부한도" item-title="title"
@@ -74,7 +74,7 @@ const props = defineProps<Props>()
             </VCardSubtitle>
             <br>            
             <VRow>
-                <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+                <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                     <VCol md="6" cols="12">
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.cxl_type" :items="cxl_types"
                                 label="취소타입" item-title="title" item-value="id" />
@@ -105,7 +105,7 @@ const props = defineProps<Props>()
                 </template>
             </VRow>
             <VRow>
-                <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+                <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                     <VCol md="6" cols="12">
                         <AppDateTimePicker 
                             v-model="props.item.pay_disable_s_tm" label="결제금지 시작시간"
@@ -136,7 +136,7 @@ const props = defineProps<Props>()
                 </template>
             </VRow>
             <VRow>
-                <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+                <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                     <VCol md="6" cols="12"  v-if="corp.pv_options.paid.use_dup_pay_validation">
                         <VTextField v-model="props.item.pay_dupe_limit" type="number" suffix="회 허용" label="동일카드 결제"
                             :rules="[requiredValidatorV2(props.item.pay_dupe_limit, '동일카드 결제')]" />
@@ -173,7 +173,7 @@ const props = defineProps<Props>()
                 </template>
             </VRow>
             <VRow v-if="corp.pv_options.paid.use_issuer_filter">
-                <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+                <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                     <VCol md="6" cols="12" >
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.filter_issuers"
                             label="발급사 필터링" :items="issuers" item-title="title"
@@ -200,7 +200,7 @@ const props = defineProps<Props>()
             </VCardSubtitle>
             <br>
             <VRow>                
-                <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+                <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                     <VCol md="6" cols="12">
                         <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_single_limit"
                             type="number" suffix="만원" label="단건 결제한도"
@@ -228,7 +228,7 @@ const props = defineProps<Props>()
                 </template>
             </VRow>
             <VRow>
-                <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+                <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                     <VCol md="6" cols="12">
                         <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_month_limit"
                             type="number" suffix="만원" label="월 결제한도"
@@ -261,7 +261,7 @@ const props = defineProps<Props>()
             </VCardSubtitle>
             <br>
             <VRow>
-                <template v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+                <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                     <VCol md="6" cols="12">
                         <VSelect v-model="props.item.pay_window_secure_level" :items="pay_window_secure_levels" prepend-inner-icon="tabler:shield-lock"
                                 item-title="title" item-value="id" label="결제창 보안등급"/>

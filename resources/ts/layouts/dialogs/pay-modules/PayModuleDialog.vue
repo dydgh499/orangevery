@@ -74,7 +74,7 @@ defineExpose({
                     <VTab>결제타입</VTab>
                     <VTab>결제정보</VTab>
                     <VTab>장비정보</VTab>
-                    <VTab v-if="isAbleModiyV2(pay_module.id, 'merchandises/pay-modules')">옵션정보</VTab>
+                    <VTab v-if="isAbleModiyV2(pay_module, 'merchandises/pay-modules')">옵션정보</VTab>
                 </VTabs>
                 <PerfectScrollbar :options="{ wheelPropagation: false }">
                     <VWindow v-model="tab">
@@ -87,14 +87,14 @@ defineExpose({
                         <VWindowItem>
                             <TerminalInfoOverview :item="pay_module" />
                         </VWindowItem>
-                        <VWindowItem v-if="isAbleModiyV2(pay_module.id, 'merchandises/pay-modules')">
+                        <VWindowItem v-if="isAbleModiyV2(pay_module, 'merchandises/pay-modules')">
                             <OptionInfoOverview :item="pay_module" />
                         </VWindowItem>
                     </VWindow>
                 </PerfectScrollbar>
             </VForm>
             <VDivider />
-            <VRow v-if="isAbleModiyV2(pay_module.id, 'merchandises/pay-modules')" style="padding: 1em;">
+            <VRow v-if="isAbleModiyV2(pay_module, 'merchandises/pay-modules')" style="padding: 1em;">
                 <VCol cols="12" class="d-flex gap-4">
                     <VBtn type="button" style="margin-left: auto;" @click="payModuleUpdate()">
                         {{ pay_module.id == 0 ? "추가" : "수정" }}

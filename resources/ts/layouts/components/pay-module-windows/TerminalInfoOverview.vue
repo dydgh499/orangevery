@@ -19,7 +19,7 @@ const { terminals } = useStore()
             <VChip variant="outlined">단말기 정보</VChip>
         </VCardSubtitle>
         <br>
-        <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+        <VRow v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
             <VCol md="6" cols="12">
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.terminal_id" :items="terminals"
                     prepend-inner-icon="ic-outline-send-to-mobile" item-title="name" item-value="id"
@@ -45,7 +45,7 @@ const { terminals } = useStore()
                 {{ props.item.serial_num }}
             </VCol>
         </VRow>
-        <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+        <VRow v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
             <VCol md="6" cols="12">
                 <AppDateTimePicker v-model="props.item.ship_out_dt" prepend-inner-icon="ic-baseline-calendar-today" label="출고일"/>
             </VCol>
@@ -76,13 +76,13 @@ const { terminals } = useStore()
         <VDivider style="margin: 1em 0;" />
         <VCardSubtitle>
             <VChip variant="outlined">추가정산 정보</VChip>
-            <BaseQuestionTooltip :location="'top'" :text="''" v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')"
+            <BaseQuestionTooltip :location="'top'" :text="''" v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')"
                     :content="`통신비와 매출미달 차감금의 추가정산액에 대한 설정입니다.<br>
                     추가정산일이 영업일이 아닌경우 추가정산액은 다음정산일에 반영됩니다.
             `"/>
         </VCardSubtitle>
         <br>
-        <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+        <VRow v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
             <VCol md="6" cols="12">
                 <VTextField v-model="props.item.comm_settle_day" suffix="일" label="추가정산일"/>
             </VCol>
@@ -110,7 +110,7 @@ const { terminals } = useStore()
         <VDivider style="margin: 1em 0;" />
         <VCardSubtitle>
             <VChip variant="outlined">통신비 정보</VChip>
-            <BaseQuestionTooltip :location="'top'" :text="''" v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')"
+            <BaseQuestionTooltip :location="'top'" :text="''" v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')"
                         :content="`추가정산정보가 설정되어있어야 적용됩니다.<br>
                         ex)<br>
                         통신비: 30,000<br>
@@ -119,7 +119,7 @@ const { terminals } = useStore()
                         통신비 차감적용일: 2023-11-01, 2023-12-01, 2024-01-01 ...`"/>
         </VCardSubtitle>
         <br>
-        <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+        <VRow v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
             <VCol md="6" cols="12">
                 <VTextField type="number" v-model="props.item.comm_settle_fee" label="통신비"
                         prepend-inner-icon="tabler-currency-won" placeholder="통신비 입력" persistent-placeholder />
@@ -146,7 +146,7 @@ const { terminals } = useStore()
                 </VChip>
             </VCol>
         </VRow>
-        <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+        <VRow v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
             <VCol md="6" cols="12">
                 <AppDateTimePicker v-model="props.item.begin_dt" prepend-inner-icon="ic-baseline-calendar-today" label="개통일"/>
             </VCol>
@@ -162,7 +162,7 @@ const { terminals } = useStore()
         <VDivider style="margin: 1em 0;" />
         <VCardSubtitle>
             <VChip variant="outlined">매출미달 차감금</VChip>
-            <BaseQuestionTooltip :location="'top'" :text="''" v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')"
+            <BaseQuestionTooltip :location="'top'" :text="''" v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')"
                         :content="`추가정산정보가 설정되어있어야 적용됩니다.<br>
                         ex)<br>
                         매출미달 차감액: 30,000<br>
@@ -172,7 +172,7 @@ const { terminals } = useStore()
                         추가정산액 정산시기에 30,000원이 차감된 후 정산`"/>
         </VCardSubtitle>
         <br>
-        <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+        <VRow v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
             <VCol md="6" cols="12">
                 <VTextField type="number" v-model="props.item.under_sales_amt"
                     prepend-inner-icon="tabler-currency-won" label="매출미달 차감액" />
@@ -197,7 +197,7 @@ const { terminals } = useStore()
                 {{ props.item.under_sales_limit ? (props.item.under_sales_limit * 10000).toLocaleString() : '0' }}원
             </VCol>
         </VRow>
-        <VRow v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+        <VRow v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
             <VCol md="6">
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.under_sales_type"
                         :items="under_sales_types" prepend-inner-icon="bi:calendar-range" label="매출미달 적용기간"

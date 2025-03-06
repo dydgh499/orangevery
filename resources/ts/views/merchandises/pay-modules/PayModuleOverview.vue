@@ -6,7 +6,7 @@ import type { Merchandise, PayModule } from '@/views/types'
 
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
-import { isAbleModiy } from '@axios'
+import { isAbleModiyV2 } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -152,7 +152,7 @@ onDeactivated(() => {
                         </VTooltip>
                         </AppTextField>
                     </div>
-                        <VBtn v-if="isAbleModiy(0)" prepend-icon="tabler-plus" @click="addNewPayModule">
+                        <VBtn v-if="isAbleModiyV2({id:0}, 'merchandises/pay-modules')" prepend-icon="tabler-plus" @click="addNewPayModule">
                             결제모듈 신규추가
                         </VBtn>
                 </div>

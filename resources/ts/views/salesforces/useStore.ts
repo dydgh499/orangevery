@@ -11,6 +11,13 @@ const levels = corp.pv_options.auth.levels
 
 export const SALES_LEVEL_SIZE = 6
 
+export const isAbleThemeDesign = (item: Salesforce) => {
+    if(corp.pv_options.paid.use_sales_dns && item.level === 30)
+        return true
+    else
+        return false
+}
+
 export const settleDays = () => {
     return <Options[]>([
         {id:null, title: '적용안함'}, {id:0, title:'일요일'},
@@ -47,7 +54,6 @@ export const getAutoSetting = (auto_settings: UnderAutoSetting[]) => {
 }
 
 const getSalesHeaders = (head :any) => {
-    
     const getSalesforceCol = () => {
         return {
             'id' : 'NO.',

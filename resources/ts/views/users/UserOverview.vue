@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import ProfileDialog from '@/layouts/dialogs/users/ProfileDialog.vue';
 import FileInput from '@/layouts/utils/FileInput.vue';
-import { isFixplus, isFixplusSalesAbleUpdate } from '@/plugins/fixplus';
 import type { UserPropertie } from '@/views/types';
 import { avatars, banks, getOnlyNumber, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore';
-import { axios, getUserLevel, isAbleModiy, user_info } from '@axios';
+import { axios, getUserLevel, isAbleModifyPrimary, isAbleModiy, user_info } from '@axios';
 import corp from '@corp';
 
 interface Props {
@@ -95,18 +94,6 @@ const isViewAbleContractFile = () => {
         else
             return isAbleModiy(0)
     }
-}
-const isAbleModifyPrimary = (id: number) => {
-    if(getUserLevel() >= 35)
-        return true
-    else if(getUserLevel() >= 13) {
-        if(isFixplus())
-            return isFixplusSalesAbleUpdate(id)
-        else    // TODO: back 보완 필요
-            return id ? false : true
-    }
-    else
-        return false
 }
 
 watchEffect(() => {

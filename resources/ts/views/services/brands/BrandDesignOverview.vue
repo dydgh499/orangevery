@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import LoginImageDialog from '@/layouts/dialogs/services/LoginImageDialog.vue';
 import type { IdentityDesign } from '@/views/types';
+import { isAbleModiyV2 } from '@axios';
 import { requiredValidatorV2 } from '@validators';
 
 interface Props {
@@ -56,7 +57,11 @@ watchEffect(() => {
                             <br>
                             <VCol>
                                 <VRow no-gutters>
-                                    <VColorPicker v-model="props.item.theme_css.main_color" show-swatches swatches-max-height="220px" mode="rgb"/>
+                                    <VColorPicker 
+                                        :disabled="isAbleModiyV2(props.item, 'salesforces') === false"
+                                        v-model="props.item.theme_css.main_color" 
+                                        :show-swatches="isAbleModiyV2(props.item, 'salesforces')"
+                                        swatches-max-height="220px" mode="rgb"/>
                                 </VRow>
                             </VCol>
                         </VCol>
@@ -69,6 +74,7 @@ watchEffect(() => {
                             <VCol>
                                 <VRow>
                                     <VTextField
+                                        :readonly="isAbleModiyV2(props.item, 'salesforces') === false"
                                         v-model="props.item.name" 
                                         variant="underlined"
                                         prepend-inner-icon="twemoji-desktop-computer"
@@ -86,6 +92,7 @@ watchEffect(() => {
                             <VCol>
                                 <VRow>
                                     <VTextField
+                                            :readonly="isAbleModiyV2(props.item, 'salesforces') === false"
                                             v-model="props.item.dns" 
                                             variant="underlined"
                                             prepend-inner-icon="carbon:dns-services"
@@ -97,7 +104,9 @@ watchEffect(() => {
                             <VCardTitle>
                                 <div style="display: flex;align-items: center;justify-content: space-between;">
                                     <span style="margin-right: 1em;">파비콘 이미지</span>
-                                    <div :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
+                                    <div 
+                                        v-if="isAbleModiyV2(props.item, 'salesforces')"
+                                        :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
                                         <VChip variant="elevated" color="warning" @click="triggerFileInput('favicon-upload')">
                                             파비콘 이미지 업로드
                                         </VChip>
@@ -136,7 +145,9 @@ watchEffect(() => {
                                 <div style="display: flex;align-items: center;justify-content: space-between;">
                                     <span style="margin-right: 1em;">전산 로고</span>
                                     <div :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
-                                        <VChip variant="elevated" color="warning" @click="triggerFileInput('logo-upload')">
+                                        <VChip 
+                                            v-if="isAbleModiyV2(props.item, 'salesforces')"
+                                            variant="elevated" color="warning" @click="triggerFileInput('logo-upload')">
                                             로고 이미지 업로드
                                         </VChip>
                                         <VFileInput 
@@ -164,7 +175,9 @@ watchEffect(() => {
                             <VCardTitle>
                                 <div style="display: flex;align-items: center;justify-content: space-between;">
                                     <span style="margin-right: 1em;">카카오톡 미리보기</span>
-                                    <div :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
+                                    <div 
+                                        v-if="isAbleModiyV2(props.item, 'salesforces')"
+                                        :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
                                         <VChip variant="elevated" color="primary" @click="triggerFileInput('kakao-upload')">
                                             미리보기 이미지 업로드
                                         </VChip>
@@ -183,6 +196,8 @@ watchEffect(() => {
                                         <div class="preview-text-box">
                                             <p class="title">{{ props.item.name }}</p>
                                             <VTextarea 
+                                                :readonly="isAbleModiyV2(props.item, 'salesforces') === false"
+                                                
                                                 v-model="props.item.og_description" 
                                                 auto-grow rows="3"
                                                 label="미리보기 문구"
@@ -196,7 +211,9 @@ watchEffect(() => {
                             <VCardTitle>
                                 <div style="display: flex;align-items: center;justify-content: space-between;">
                                     <span style="margin-right: 1em;">로그인페이지 배경</span>
-                                    <div :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
+                                    <div 
+                                        v-if="isAbleModiyV2(props.item, 'salesforces')"
+                                        :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
                                         <VChip variant="elevated" color="primary" @click="loginImageDialog.show()">
                                             로그인페이지 배경선택
                                         </VChip>

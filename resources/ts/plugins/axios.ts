@@ -144,18 +144,37 @@ export const isAbleModiy = (id: number) => {
         return false
 }
 
-export const isAbleModiyV2 = (id: number, path: string) => {    
+export const isAbleModiyV2 = (item: any, path: string) => {    
+    if(getUserLevel() >= 35)
+        return true
+    else if(getUserLevel() >= 13) {
+        if(isFixplus())
+            return isFixplusSalesAbleUpdate(item.id)
+        else {
+            if(path === 'merchandises' || path === 'merchandises/noti-urls')
+                return salesAuthLevelValidate(item.id)
+            else if(path === 'salesforces') {
+                if(item.level < user_info.value.level)
+                    return salesAuthLevelValidate(item.id)
+                else
+                    return false
+            }
+            else
+                return false
+        }
+    }
+    else
+        return false
+}
+
+export const isAbleModifyPrimary = (id: number) => {
     if(getUserLevel() >= 35)
         return true
     else if(getUserLevel() >= 13) {
         if(isFixplus())
             return isFixplusSalesAbleUpdate(id)
-        else {
-            if(path === 'merchandises' || path === 'salesforces' || path === 'merchandises/noti-urls')
-                return salesAuthLevelValidate(id)
-            else
-                return false
-        }
+        else    // TODO: back 보완 필요
+            return id ? false : true
     }
     else
         return false

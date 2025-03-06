@@ -6,7 +6,7 @@ import { useStore } from "../services/pay-gateways/useStore";
 export const merchandiseCreateAuth = () => {
     // 영업점 수수료 수정권한
     const isSalesModifyValidate = (mcht_id: number, idx: number) => {
-        if(isAbleModiyV2(mcht_id, 'merchandises')) {
+        if(isAbleModiyV2({id: mcht_id}, 'merchandises')) {
             if(getUserLevel() > 10 && getUserLevel() < 35) {
                 if(mcht_id === 0 && getIndexByLevel(idx) === getUserLevel())
                     return false

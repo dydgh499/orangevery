@@ -54,7 +54,7 @@ const authHideConditions = () => {
                 return false
         }
         else 
-            return isAbleModiyV2(props.id as number, props.path)
+            return isAbleModiyV2(props.item as number, props.path)
     }
     else
     {

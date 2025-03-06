@@ -42,7 +42,7 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="MID, TID, 가맹점 상호, 별칭 검색" :metas="metas" :add="isAbleModiyV2(0, 'merchandises/pay-modules')" add_name="결제모듈"
+        <BaseIndexView placeholder="MID, TID, 가맹점 상호, 별칭 검색" :metas="metas" :add="isAbleModiyV2({id:0}, 'merchandises/pay-modules')" add_name="결제모듈"
             :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true"

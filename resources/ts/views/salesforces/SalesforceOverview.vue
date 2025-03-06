@@ -8,7 +8,7 @@ import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderA
 import { settleCycles, settleDays, settleTaxTypes, authLevels, useSalesFilterStore } from '@/views/salesforces/useStore'
 import type { Options, Salesforce } from '@/views/types'
 
-import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
+import { getLevelByIndex, getUserLevel, isAbleModiyV2, salesLevels } from '@axios'
 import { ItemTypes } from '@core/enums'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
@@ -35,21 +35,27 @@ const getSalesLevel = () => {
     else {
         const levels = corp.pv_options.auth.levels
         const sales = <Options[]>([])
-        if(levels.sales0_use && getUserLevel() >= 13)
+        if(levels.sales0_use && getUserLevel() > 13)
             sales.push({id: 13, title: levels.sales0_name})
-        if(levels.sales1_use && getUserLevel() >= 15)
+        if(levels.sales1_use && getUserLevel() > 15)
             sales.push({id: 15, title: levels.sales1_name})
-        if(levels.sales2_use && getUserLevel() >= 17)
+        if(levels.sales2_use && getUserLevel() > 17)
             sales.push({id: 17, title: levels.sales2_name})
-        if(levels.sales3_use && getUserLevel() >= 20)
+        if(levels.sales3_use && getUserLevel() > 20)
             sales.push({id: 20, title: levels.sales3_name})
-        if(levels.sales4_use && getUserLevel() >= 25)
+        if(levels.sales4_use && getUserLevel() > 25)
             sales.push({id: 25, title: levels.sales4_name})
-        if(levels.sales5_use && getUserLevel() >= 30)
+        if(levels.sales5_use && getUserLevel() > 30)
             sales.push({id: 30, title: levels.sales5_name})
         return sales
     }
 }
+
+const initParentId = computed(() => {
+    // level 안쓰면 추적안됨
+    if(props.item.id === 0 && props.item.level)
+        props.item.parent_id = null
+})
 
 const getParentSales = computed(()  => {
     const idx = getLevelByIndex(props.item.level)
@@ -99,7 +105,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiyV2(props.item, 'salesforces')">
                                         <VCol cols="4">* 영업점 상호</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.sales_name" prepend-inner-icon="tabler-building-store"
@@ -113,12 +119,13 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                 </VCol>
 
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiyV2(props.item, 'salesforces')">
                                         <VCol cols="4">
                                             <BaseQuestionTooltip :location="'top'" :text="'등급'" :content="'영업자 등급은 추가 후 수정할 수 없습니다.'"/>
                                         </VCol>
                                         <VCol md="8">                                             
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
+                                                @change="initParentId" 
                                                 :items="getSalesLevel()" prepend-inner-icon="ph:share-network" label="영업자 등급 선택"
                                                 item-title="title" item-value="id" persistent-hint single-line :rules="[requiredValidatorV2(props.item.level, '영업자 등급')]"
                                                 :readonly="props.item.id != 0" />
@@ -132,7 +139,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                             </VRow>
                         </VCol>
                         <template v-if="corp.pv_options.paid.sales_parent_structure">
-                            <VCol cols="12" v-if="isAbleModiy(props.item.id)">
+                            <VCol cols="12" v-if="isAbleModiyV2(props.item, 'salesforces')">
                                 <VRow>
                                     <VCol cols="12" md="6">
                                         <VRow no-gutters style="align-items: center;">
@@ -185,7 +192,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiyV2(props.item, 'salesforces')">
                                         <VCol cols="4">정산 주기</VCol>
                                         <VCol md="8">
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_cycle"
@@ -200,7 +207,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                     </VRow>
                                 </VCol>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiyV2(props.item, 'salesforces')">
                                         <VCol cols="4">정산 요일</VCol>
                                         <VCol md="8"> 
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_day" :items="all_days"
@@ -218,7 +225,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiyV2(props.item, 'salesforces')">
                                         <VCol cols="4">정산 세율</VCol>
                                         <VCol md="8">
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_tax_type" :items="tax_types"
@@ -276,7 +283,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol v-if="isAbleModiy(props.item.id)">
+                        <VCol v-if="isAbleModiyV2(props.item, 'salesforces')">
                             <VTextarea v-model="props.item.note" counter label="메모사항"
                                 variant="filled"
                                 prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
@@ -312,7 +319,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiyV2(props.item, 'salesforces')">
                                         <VCol md="5" cols="6">
                                             <span>일 출금한도(영업일)</span>
                                         </VCol>
@@ -331,7 +338,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                     </VRow>
                                 </VCol>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiyV2(props.item, 'salesforces')">
                                         <VCol cols="5">일 출금한도(휴무일)</VCol>
                                         <VCol md="7"> 
                                             <VTextField prepend-inner-icon="tabler-currency-won"

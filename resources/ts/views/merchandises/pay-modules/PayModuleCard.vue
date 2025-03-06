@@ -58,7 +58,7 @@ onDeactivated(() => {
                     <VDivider :vertical="$vuetify.display.mdAndUp" />
                     <VCol cols="12" :md="md">
                         <OptionInfoOverview :item="props.item">
-                            <template #edit v-if="isAbleModiyV2(props.item.id, 'merchandises/pay-modules')">
+                            <template #edit v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                                 <VCol style="text-align: end;">
                                     <VBtn type="button"
                                         @click="update('/merchandises/pay-modules', props.item, vForm, props.able_mcht_chanage)">

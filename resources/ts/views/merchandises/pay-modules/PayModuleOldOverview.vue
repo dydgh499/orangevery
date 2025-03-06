@@ -84,7 +84,7 @@ watchEffect(() => {
 </script>
 <template>
     <section>
-        <VCard style="margin-top: 1em;" v-if="isAbleModiyV2(0, 'merchandises/pay-modules')">
+        <VCard style="margin-top: 1em;" v-if="isAbleModiyV2({id:0}, 'merchandises/pay-modules')">
             <VCol class="d-flex gap-4">
                 <VBtn type="button" style="margin-left: auto;" @click="addNewPayModule">
                     결제모듈 신규추가
@@ -92,7 +92,7 @@ watchEffect(() => {
                 </VBtn>
             </VCol>
         </VCard>
-        <VCard style="margin-top: 1em;" v-if="isAbleModiyV2(0, 'merchandises/pay-modules') === false && pay_modules.length === 0">
+        <VCard style="margin-top: 1em;" v-if="isAbleModiyV2({id:0}, 'merchandises/pay-modules') === false && pay_modules.length === 0">
             <VCol class="d-flex gap-4">
                 등록된 결제모듈이 없습니다.
             </VCol>
