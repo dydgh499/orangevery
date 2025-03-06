@@ -21,7 +21,7 @@ const _getSettlementMenu = () => {
         )
     }
 
-    if(getUserLevel() === 10 && getUserLevel() >= 35) {
+    if(getUserLevel() === 10 || getUserLevel() >= 35) {
         settlement.children.push({
             title: '취소건 수기입금',
             to: 'transactions-settle-cancel-deposits',
