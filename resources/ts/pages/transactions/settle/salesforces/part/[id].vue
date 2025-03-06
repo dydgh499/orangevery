@@ -22,9 +22,6 @@ const { settle, partSettle, exporter } = partSettleStore(store, selected, dialog
 const { settle_types } = useStore()
 const all_selected = ref()
 
-store.params.s_dt = corp.pv_options.free.use_search_date_detail ? store.params.s_dt + " 00:00:00" : store.params.s_dt
-store.params.e_dt = corp.pv_options.free.use_search_date_detail ? store.params.e_dt + " 23:59:59" : store.params.e_dt
-
 const dataToChart = async() => {
     if (store.getChartProcess() === false && store.params.s_dt && store.params.e_dt) {
         const r = await store.getChartData()

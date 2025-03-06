@@ -37,7 +37,7 @@ const onAgree = async (fin_number: string) => {
             resolveCallback(r.data.token)
         })
         .catch(async e => {
-            snackbar.value.show('핀번호가 정확하지 않습니다.', 'error') 
+            visible.value = false
             resolveCallback('')
         })
 };

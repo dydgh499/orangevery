@@ -58,7 +58,7 @@ const phone2FAValidate = async (e: any) => {
         }
         else {
             errors.value = {
-                message: '인증번호가 올바르지 않습니다.'
+                message: '핀번호가 정확하지 않습니다.'
             }
         }
     }
@@ -73,7 +73,7 @@ const opt2FAValidate = async (e: any) => {
     }
     else {
         errors.value = {
-            message: '인증번호가 올바르지 않습니다.'
+            message: '핀번호가 정확하지 않습니다.'
         }
     }
 }
@@ -106,16 +106,16 @@ const login = async (is_first: boolean) => {
         }
         else {
             if(is_first) {
-                pay_token.value = ''
-                errors.value = e.response.data
-            }
-            else {
                 if(e.response.data.code === 956 && is_first) {
                     phone2FAValidate(e)
                 }
                 else if(e.response.data.code === 957 && is_first) {
                     opt2FAValidate(e)
                 }
+            }
+            else {
+                pay_token.value = ''
+                errors.value = e.response.data
             }
         }
     }
