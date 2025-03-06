@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Enums\HistoryType;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * @group Salesforce API
@@ -248,7 +249,11 @@ class SalesforceController extends Controller
                 {
                     $res = $query->update($data);
                     operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['sales_name']);
-                    return $this->response($res ? 1 : 990, ['id'=>$id]);    
+
+                    if($request->dns)
+                        Redis::set("brand-info-sales-".$request->dns, null, 'EX', 1);
+
+                    return $this->response($res ? 1 : 990, ['id'=>$id]);
                 }
             }
             else

@@ -610,7 +610,8 @@ onMounted(() => {
                                                         지급보류
                                                         <VIcon end icon="icon-park-solid:clear-format" />
                                                     </VBtn>
-                                                    <VBtn color="error" variant="tonal" size="small" @click="clearSettleHoldClear()" style="margin-left: 1em;">
+                                                    <VBtn v-if="getUserLevel() >= 35" 
+                                                        color="error" variant="tonal" size="small" @click="clearSettleHoldClear()" style="margin-left: 1em;">
                                                         지급보류해제
                                                         <VIcon end icon="icon-park-solid:clear-format" />
                                                     </VBtn>

@@ -140,9 +140,7 @@ export function settlementFunctionCollect(store: any) {
     
     const movePartSettle = (item: Settle, is_mcht: boolean) => {
         const page = is_mcht ? 'merchandises' : 'salesforces'
-        const s_dt = corp.pv_options.free.use_search_date_detail ? store.params.s_dt + " 00:00:00" : store.params.s_dt
-        const e_dt = corp.pv_options.free.use_search_date_detail ? store.params.e_dt + " 23:59:59" : store.params.e_dt
-        let url = '/transactions/settle/'+page+'/part/' + item.id + '?s_dt=' + s_dt + "&e_dt=" + e_dt        
+        let url = '/transactions/settle/'+page+'/part/' + item.id + '?s_dt=' + store.params.s_dt + "&e_dt=" + store.params.e_dt        
         url += (is_mcht ? "&use_collect_withdraw=" + item.use_collect_withdraw : "")
         url += "&level=" + (is_mcht ? 10 : store.params.level)
         router.push(url)

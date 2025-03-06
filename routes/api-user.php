@@ -90,11 +90,11 @@ Route::prefix('merchandises')->group(function() {
     Route::middleware(['is.edit.able'])->group(function() {
         Route::post('fee-change-histories/{user}/set-fee', [FeeChangeHistoryController::class, 'apply']);
         Route::post('batch-updaters/{user}/set-fee', [BatchUpdateMchtController::class, 'feeApply']);
+        Route::post('{id}/set-settle-hold', [MerchandiseController::class, 'setSettleHold']);
     });
 
     Route::middleware(['is.operate'])->group(function() {
         Route::middleware(['is.edit.able'])->group(function() { 
-            Route::post('{id}/set-settle-hold', [MerchandiseController::class, 'setSettleHold']);
             Route::post('{id}/clear-settle-hold', [MerchandiseController::class, 'clearSettleHold']);
 
             Route::apiResource('products', ProductController::class);

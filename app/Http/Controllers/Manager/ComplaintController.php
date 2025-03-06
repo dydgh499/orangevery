@@ -52,10 +52,9 @@ class ComplaintController extends Controller
                     ->orWhere('merchandises.mcht_name', 'like', "%$search%");
             });
 
-            
         if($request->history_type !== null)
             $query->where('complaints.type', $request->history_type);
-        $query = globalAuthFilter($query, $request, 'complaints');
+        $query = globalAuthFilter($query, $request, 'merchandises');
 
         $data = $this->getIndexData($request, $query, 'complaints.id', ['complaints.*', 'merchandises.mcht_name', 'payment_gateways.pg_name'], 'complaints.created_at');
         return $this->response(0, $data);

@@ -31,7 +31,8 @@ store.params.level = 10 // taransaction model에서 필수
 store.params.use_collect_withdraw = Number(corp.pv_options.paid.use_collect_withdraw)
 store.params.use_realtime_deposit = 0
 store.params.use_settle_hold = 1
-
+store.params.s_dt = corp.pv_options.free.use_search_date_detail ? store.params.s_dt + " 00:00:00" : store.params.s_dt
+store.params.e_dt = corp.pv_options.free.use_search_date_detail ? store.params.e_dt + " 23:59:59" : store.params.e_dt
 
 const { settle_types } = useStore()
 const totals = ref(<any[]>([]))
@@ -64,7 +65,7 @@ onMounted(() => {
 <template>
     <div>
         <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="정산"
-            :date_filter_type="DateFilters.SETTLE_RANGE">
+            :date_filter_type="corp.pv_options.free.use_search_date_detail ? DateFilters.DATE_RANGE : DateFilters.SETTLE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">

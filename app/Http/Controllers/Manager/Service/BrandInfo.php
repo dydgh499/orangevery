@@ -34,24 +34,37 @@ class BrandInfo
 
     static function getSalesByDns($dns)
     {
-        $sales = Salesforce::where('dns', $dns)->first();
-        if($sales)
+        $key_name = "brand-info-sales-$dns";
+        $sales = Redis::get($key_name);
+        if($sales === null || env('APP_ENV', 'local') === 'local')
         {
-            $brand = self::getBrandById($sales->brand_id);
-            if($brand)
+            $sales = Salesforce::where('dns', $dns)->first();
+            if($sales)
             {
-                $brand['name']    = $sales->name;
-                $brand['dns']     = $sales->dns;
-                $brand['logo_img']    = $sales->logo_img;
-                $brand['favicon_img'] = $sales->favicon_img;
-                $brand['og_img']      = $sales->og_img;
-                $brand['login_img']   = $sales->login_img;
-                $brand['og_description']    = $sales->og_description;
-                $brand['theme_css']         = json_decode(json_encode($sales->theme_css), true);
-                return $brand;    
+                $brand = self::getBrandById($sales->brand_id);
+                if($brand)
+                {
+                    $brand['name']    = $sales->name;
+                    $brand['dns']     = $sales->dns;
+                    $brand['logo_img']    = $sales->logo_img;
+                    $brand['favicon_img'] = $sales->favicon_img;
+                    $brand['og_img']      = $sales->og_img;
+                    $brand['login_img']   = $sales->login_img;
+                    $brand['og_description']    = $sales->og_description;
+                    $brand['theme_css']         = json_decode(json_encode($sales->theme_css), true);
+                    Redis::set($key_name, json_encode($brand), 'EX', 600);
+                    return $brand;    
+                }
             }
+            return [];    
         }
-        return [];
+        else
+        {
+            $default = json_decode($sales, true);
+            $str_pv_options = json_encode($default['pv_options']);
+            $default['pv_options'] = json_decode(json_encode(new PvOptions($str_pv_options)), true);
+            return $default;
+        }
     }
 
     static function getBrandByDNS($dns)

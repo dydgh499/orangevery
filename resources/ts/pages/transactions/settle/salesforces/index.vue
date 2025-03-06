@@ -30,6 +30,8 @@ provide('exporter', exporter)
 
 store.params.level = all_sales[0].id
 store.params.is_base_trx = 1
+store.params.s_dt = corp.pv_options.free.use_search_date_detail ? store.params.s_dt + " 00:00:00" : store.params.s_dt
+store.params.e_dt = corp.pv_options.free.use_search_date_detail ? store.params.e_dt + " 23:59:59" : store.params.e_dt
 
 onMounted(() => {
     watchEffect(async () => {
@@ -43,7 +45,8 @@ onMounted(() => {
 })
 </script>
 <template>
-    <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.SETTLE_RANGE">
+    <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산"
+        :date_filter_type="corp.pv_options.free.use_search_date_detail ? DateFilters.DATE_RANGE : DateFilters.SETTLE_RANGE">
         <template #index_extra_field>
             <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, false)" v-if="getUserLevel() >= 35" size="small">
                 일괄 정산하기
