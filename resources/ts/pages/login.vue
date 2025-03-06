@@ -105,6 +105,9 @@ const login = async (is_first: boolean) => {
             router.replace('reset-password?token='+encodeURIComponent(e.response.data.data.token)+"&level="+encodeURIComponent(e.response.data.data.level))
         }
         else {
+            pay_token.value = ''
+            errors.value = e.response.data
+
             if(is_first) {
                 if(e.response.data.code === 956 && is_first) {
                     phone2FAValidate(e)
@@ -112,10 +115,6 @@ const login = async (is_first: boolean) => {
                 else if(e.response.data.code === 957 && is_first) {
                     opt2FAValidate(e)
                 }
-            }
-            else {
-                pay_token.value = ''
-                errors.value = e.response.data
             }
         }
     }
