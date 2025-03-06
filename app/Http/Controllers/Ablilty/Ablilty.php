@@ -129,4 +129,22 @@ class Ablilty
                 return true;
         }
     }
+
+    static public function emptyPrivacyInfo($request, $data)
+    {
+        if(self::isOperator($request) === false)
+        {
+            unset($data['user_name']);
+            unset($data['nick_name']);
+            unset($data['phone_num']);
+            unset($data['addr']);
+            unset($data['business_num']);
+            unset($data['resident_num']);
+            unset($data['acct_num']);
+            unset($data['acct_name']);
+            unset($data['acct_bank_code']);
+            unset($data['acct_bank_name']);    
+        }
+        return $data;
+    }
 }

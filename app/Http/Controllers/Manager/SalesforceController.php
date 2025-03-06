@@ -225,40 +225,38 @@ class SalesforceController extends Controller
      * @urlParam id integer required 유저 PK
      */
     public function update(SalesforceRequest $request, int $id)
-    {
-        $data = $request->data();
-        $data = $this->saveImages($request, $data, $this->imgs);
-        // 상호 검사
-        if(EditAbleWorkTime::validate() === false)
-            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-        if($this->isExistMutual($this->salesforces->where('id', '!=', $id), $request->user()->brand_id, 'sales_name', $data['sales_name']))
-            return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
-        else
+    {                
+        if(Ablilty::isOperator($request) || Ablilty::isUnderSalesforce($request, $id))
         {
             $query = $this->salesforces->where('id', $id);
             $user = $query->first();
+            $data = $request->data();
 
-            if(Ablilty::isOperator($request) || Ablilty::isUnderSalesforce($request, $id))
-            {
-                if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
-                    return $this->response(951);
-                // 아이디 중복 검사
-                if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $data['user_name']))
-                    return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
-                else
-                {
-                    $res = $query->update($data);
-                    operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['sales_name']);
-
-                    if($request->dns)
-                        Redis::set("brand-info-sales-".$request->dns, null, 'EX', 1);
-
-                    return $this->response($res ? 1 : 990, ['id'=>$id]);
-                }
-            }
-            else
+            if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
                 return $this->response(951);
+            if(EditAbleWorkTime::validate() === false)
+                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+            if($this->isExistMutual($this->salesforces->where('id', '!=', $id), $request->user()->brand_id, 'sales_name', $data['sales_name']))
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
+            // 아이디 중복 검사
+            if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $data['user_name']))
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+            else
+            {
+                $data = $this->saveImages($request, $data, $this->imgs);
+                $data = Ablilty::emptyPrivacyInfo($request, $data);        
+                $res = $query->update($data);
+                operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['sales_name']);
+
+                if($request->dns)
+                    Redis::set("brand-info-sales-".$request->dns, null, 'EX', 1);
+
+                return $this->response($res ? 1 : 990, ['id'=>$id]);
+            }
         }
+        else
+            return $this->response(951);
+
     }
 
     /**

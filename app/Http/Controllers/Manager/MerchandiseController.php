@@ -342,6 +342,7 @@ class MerchandiseController extends Controller
             else
             {
                 $data = $this->saveImages($request, $data, $this->imgs);
+                $data = Ablilty::emptyPrivacyInfo($request, $data);
                 // -- update syslink
                 $b_info = BrandInfo::getBrandById($request->user()->brand_id);
                 if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request) && (int)$request->use_syslink)
