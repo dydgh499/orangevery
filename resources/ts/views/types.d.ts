@@ -463,7 +463,11 @@ interface P2pAppOption {
     is_old_auth: number,
     ci_validate: number,
     account_validate: number,
-    contract_validate: number,
+
+    pay_single_limit: number,
+    pay_day_limit: number,
+    pay_month_limit: number,
+    pay_year_limit: number,
 }
 
 interface ThemeCSS {

@@ -148,8 +148,12 @@
         public $is_old_auth = 0;
         public $ci_validate = 0;
         public $account_validate = 0;
-        public $contract_validate = 0;
 
+        public $pay_single_limit = 0;
+        public $pay_day_limit   = 0;
+        public $pay_month_limit = 0;
+        public $pay_year_limit  = 0;
+        
         public function __construct(array $source)
         {
             foreach ($source as $property => $value) 

@@ -201,7 +201,10 @@ export const defaultItemInfo = () => {
             is_old_auth: 0,
             ci_validate: 0,
             account_validate: 0,
-            contract_validate: 0,
+            pay_single_limit: 200,
+            pay_day_limit: 500,
+            pay_month_limit: 5000,
+            pay_year_limit: 2000,
         })
     }
 
