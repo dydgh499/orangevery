@@ -48,50 +48,77 @@ const getAbilities = (): UserAbility[] => {
     return auth;
 }
 
-const login = () => {
-    axios.post('/api/v1/auth/sign-in', { brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value, token: token.value })
-        .then(r => {
-            const { access_token, user } = r.data
-            user['level'] = user['level'] == null ? 10 : user['level']
-            const abilities = getAbilities()
-            ability.update(abilities)
-            pay_token.value = access_token
-            user_info.value = user            
-            token_expire_time.value = r.headers['token-expire-time']
+const phone2FAValidate = async (e: any) => {
+    let phone_num = e.response.data.data.phone_num
+    if(phone_num) {
+        phone_num = phone_num.replaceAll(' ', '').replaceAll('-', '')
+        token.value = await passwordAuthDialog.value.show(phone_num)
+        if(token.value !== '') {
+            const result = await login(false)
+        }
+        else {
+            errors.value = {
+                message: '인증번호가 올바르지 않습니다.'
+            }
+        }
+    }
+    else
+        snackbar.value.show('등록된 로그인정보가 없습니다.<br>관리자에게 문의해주세요.', 'warning')
+}
 
-            localStorage.setItem('token-expire-time', token_expire_time.value)
-            localStorage.setItem('abilities', JSON.stringify(abilities))
-            // Redirect to `to` query if exist or redirect to index route
-            if(isBrightFix() && getUserLevel() > 10)
-                router.replace('transactions/summary')
-            else
-                router.replace(route.query.to ? String(route.query.to) : '/')
-        })
-        .catch(async e => {
-            if(e.response.data.code === 955) {
-                router.replace('reset-password?token='+encodeURIComponent(e.response.data.data.token)+"&level="+encodeURIComponent(e.response.data.data.level))
-            }
-            else if(e.response.data.code === 956) {
-                let phone_num = e.response.data.data.phone_num
-                if(phone_num) {
-                    phone_num = phone_num.replaceAll(' ', '').replaceAll('-', '')
-                    token.value = await passwordAuthDialog.value.show(phone_num)
-                    if(token.value !== '')
-                        login()
-                }
-                else
-                    snackbar.value.show('등록된 로그인정보가 없습니다.<br>관리자에게 문의해주세요.', 'warning')
-            }
-            else if(e.response.data.code === 957) {
-                token.value = await google2FAVertifyDialog.value.show(user_name.value, user_pw.value)
-                if(token.value !== '')
-                    login()
-            }
-            else
+const opt2FAValidate = async (e: any) => {
+    token.value = await google2FAVertifyDialog.value.show(user_name.value, user_pw.value)
+    if(token.value !== '') {
+        const result = await login(false)
+    }
+    else {
+        errors.value = {
+            message: '인증번호가 올바르지 않습니다.'
+        }
+    }
+}
+
+const login = async (is_first: boolean) => {
+    try {
+        const r = await axios.post('/api/v1/auth/sign-in', { brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value, token: token.value })
+        const { access_token, user } = r.data
+        pay_token.value = access_token
+
+        const abilities = getAbilities()
+        ability.update(abilities)
+
+        user['level'] = user['level'] == null ? 10 : user['level']
+        user_info.value = user            
+        token_expire_time.value = r.headers['token-expire-time']
+
+        localStorage.setItem('token-expire-time', token_expire_time.value)
+        localStorage.setItem('abilities', JSON.stringify(abilities))
+
+        if(isBrightFix() && getUserLevel() > 10)
+            router.replace('transactions/summary')
+        else
+            router.replace(route.query.to ? String(route.query.to) : '/')
+    }
+    catch(e: any) {
+        console.log(e)
+        if(e.response.data.code === 955) {
+            router.replace('reset-password?token='+encodeURIComponent(e.response.data.data.token)+"&level="+encodeURIComponent(e.response.data.data.level))
+        }
+        else {
+            if(is_first) {
                 pay_token.value = ''
-            console.log(e)
-            errors.value = e.response.data
-        })
+                errors.value = e.response.data
+            }
+            else {
+                if(e.response.data.code === 956 && is_first) {
+                    phone2FAValidate(e)
+                }
+                else if(e.response.data.code === 957 && is_first) {
+                    opt2FAValidate(e)
+                }
+            }
+        }
+    }
 }
 
 const forgotPassword = () => {
@@ -102,7 +129,7 @@ const onSubmit = () => {
     refVForm.value?.validate()
         .then(({ valid: isValid }) => {
             if (isValid)
-                login()
+                login(true)
         })
 }
 </script>

@@ -12,6 +12,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
+use Illuminate\Support\Facades\DB;
 /**
  * @group Noti-Send-History API
  *
@@ -39,8 +40,11 @@ class NotiSendHistoryController extends Controller
             'transactions.is_cancel',
             'transactions.module_type',
             
-            'transactions.trx_dttm',
-            'transactions.cxl_dttm',
+            'transactions.trx_dt', 'transactions.trx_tm', 
+            'transactions.cxl_dt', 'transactions.cxl_tm',
+            DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"), 
+            DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
+
             'transactions.appr_num',
             'transactions.amount',
             'transactions.installment',

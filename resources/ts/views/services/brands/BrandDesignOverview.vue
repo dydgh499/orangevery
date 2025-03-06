@@ -212,7 +212,6 @@ watchEffect(() => {
                                 <div style="display: flex;align-items: center;justify-content: space-between;">
                                     <span style="margin-right: 1em;">로그인페이지 배경</span>
                                     <div 
-                                        v-if="isAbleModiyV2(props.item, 'salesforces')"
                                         :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
                                         <VChip variant="elevated" color="primary" @click="loginImageDialog.show()">
                                             로그인페이지 배경선택
