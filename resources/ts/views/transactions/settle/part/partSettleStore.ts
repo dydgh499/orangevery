@@ -52,11 +52,11 @@ export const partSettleStore = (store: any, selected: any, dialog: any, table: a
         params.cancel_deposit_idxs    = []
         if(store.params.s_dt.length > 10) {
             let s_dts = store.params.s_dt.split(' ')
-            store.params.s_dt = s_dts[0]
+            params.s_dt = s_dts[0]
         }
         if(store.params.e_dt.length > 10) {
             let e_dts = store.params.e_dt.split(' ')
-            store.params.e_dt = e_dts[0]
+            params.e_dt = e_dts[0]
         }
         return params
     }

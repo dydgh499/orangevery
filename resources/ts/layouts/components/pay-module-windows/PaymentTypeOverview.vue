@@ -5,7 +5,7 @@ import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayModule } from '@/views/types'
-import { isAbleModiyV2 } from '@axios'
+import { getUserLevel, isAbleModiyV2 } from '@axios'
 import { requiredValidatorV2 } from '@validators'
 
 interface Props {
@@ -49,7 +49,7 @@ const filterPgs = computed(() => {
             <VChip variant="outlined">소유 가맹점 정보</VChip>                
         </VCardSubtitle>
         <br>
-        <VRow v-if="props.able_mcht_chanage && isAbleModiyV2(props.item, 'merchandises/pay-modules')">
+        <VRow v-if="props.able_mcht_chanage && getUserLevel() >= 35">
             <VCol md="6" cols="6">소유 가맹점</VCol>
             <VCol md="6">
                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id" :items="mchts"

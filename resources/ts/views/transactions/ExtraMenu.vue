@@ -103,16 +103,17 @@ const blacklist = () => {
 }
 const isCancelSafeDate = () => {
     if(getUserLevel() === 10) {
-        if(props.item.cxl_type === 1)
-        {
+        if(props.item.cxl_type === -1)
+            return true
+        else if(props.item.cxl_type === 1) {
             const able_at = (new Date(props.item.trx_dttm as string)).getTime() + (5 * 60000)
             const offset_at = able_at - new Date() 
             return offset_at > 0 ? true : false
         }
         else if(props.item.cxl_type === 2 && props.item.trx_dt == formatDate(new Date()))
             return true
-        else if(props.item.cxl_type === -1)
-            return true
+        else if(props.item.cxl_type === 3)
+            return props.item.mcht_settle_id ? false : true
     }
     else if(getUserLevel() >= 35)
         return true

@@ -313,7 +313,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                     </VCardTitle>
                     <br>
                     <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
-                        <span>하위 가맹점 출금한도</span>
+                        <VChip variant="outlined">하위 가맹점 출금한도</VChip>
                     </VCardSubtitle>
                     <VRow>
                         <VCol cols="12">
@@ -355,7 +355,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                     </VRow>
                     <br>
                     <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
-                        <span>하위 가맹점 추가정보</span>
+                        <VChip variant="outlined">하위 가맹점 추가정보</VChip>    
                     </VCardSubtitle>
                     <VRow>
                         <VCol cols="12">
