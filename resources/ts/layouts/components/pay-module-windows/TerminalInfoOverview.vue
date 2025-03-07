@@ -70,9 +70,7 @@ const { terminals } = useStore()
                     {{ ship_out_stats.find(obj => obj.id === props.item.ship_out_stat)?.title }}
                 </VChip>
             </VCol>
-        </VRow>
-
-        
+        </VRow>        
         <VDivider style="margin: 1em 0;" />
         <VCardSubtitle>
             <VChip variant="outlined">추가정산 정보</VChip>

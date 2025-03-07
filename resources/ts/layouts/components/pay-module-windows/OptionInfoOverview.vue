@@ -18,7 +18,7 @@ const props = defineProps<Props>()
             <VChip variant="outlined">FDS 설정</VChip>
         </VCardSubtitle>
         <br>
-        <VRow style="padding-top: 0.5em;">
+        <VRow>
             <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                 <VCol md="6" cols="12">
                     <VTextField type="number" v-model="props.item.pay_dupe_least"

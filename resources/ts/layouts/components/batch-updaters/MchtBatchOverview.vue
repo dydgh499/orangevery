@@ -55,7 +55,9 @@ const merchandise = reactive<any>({
 
     acct_num: "",
     acct_name: "",
-    bank: { code: null, title: '선택안함' },
+    acct_bank_name: "",
+    acct_bank_code: "000",
+    
     business_num: "",
     merchant_status: 0,
     is_show_fee: 0,
@@ -77,6 +79,11 @@ const noti = reactive<any>({
 })
 const resident_num_front = ref('')
 const resident_num_back = ref('')
+
+const setAcctBankName = () => {
+    const bank = banks.find(obj => obj.code == merchandise.acct_bank_code)
+    merchandise.acct_bank_name = bank ? bank.title : '선택안함'
+}
 
 const setSalesFee = async (sales_idx: number, apply_type: number) => {
     post(`salesforces/set-fee`, {
@@ -120,8 +127,8 @@ const setAccountInfo = (apply_type: number) => {
     post('set-account-info', {
         'acct_num': merchandise.acct_num,
         'acct_name': merchandise.acct_name,
-        'acct_bank_code': merchandise.bank.code,
-        'acct_bank_name': merchandise.bank.title,
+        'acct_bank_code': merchandise.acct_bank_code,
+        'acct_bank_name': merchandise.acct_bank_name,
     }, apply_type)
 }
 
@@ -348,12 +355,10 @@ watchEffect(() => {
                                 label="예금주 입력"  />
                         </VCol>
                         <VCol md="3" cols="6" style="padding: 0.25em;margin-bottom: auto !important;">
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.bank"
-                                :items="[{ code: null, title: '선택안함' }].concat(banks)"
-                                prepend-inner-icon="ph-buildings" label="은행 선택"
-                                :hint="`${merchandise.bank.title}, 은행 코드: ${merchandise.bank.code ? merchandise.bank.code : '000'} `"
-                                item-title="title" item-value="code" persistent-hint return-object
-                            />
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.acct_bank_code"
+                                    :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
+                                    label="은행 선택" item-title="title" item-value="code" single-line
+                                    @update:modelValue="setAcctBankName()" />
                         </VCol>
                         <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important; margin-left: auto;">
                             <div style="float: inline-end;">

@@ -67,6 +67,7 @@ class NotiSendHistoryController extends Controller
             ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
             ->where('noti_send_histories.brand_id', $request->user()->brand_id)
             ->where('noti_send_histories.is_delete', false);
+
         $query = globalPGFilter($query, $request, 'transactions');
         $query = globalSalesFilter($query, $request, 'transactions');
         $query = globalAuthFilter($query, $request, 'transactions');

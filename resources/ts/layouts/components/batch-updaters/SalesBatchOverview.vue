@@ -33,11 +33,10 @@ const store = <any>(inject('store'))
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
-const is_ables = [{id:0, title:'불가능'}, {id:1, title:'가능'}]
 const view_types = [{id:0, title:'간편보기'}, {id:1, title:'상세보기'}]
 
 
-const salesforces = reactive<Salesforce>({
+const salesforces = reactive<any>({
     settle_tax_type: 0,
     settle_cycle: 0,
     settle_day: 0,
@@ -46,8 +45,14 @@ const salesforces = reactive<Salesforce>({
     note: '',
     acct_num: "",
     acct_name: "",
-    bank: { code: null, title: '선택안함' },
+    acct_bank_name: "",
+    acct_bank_code: "000",
 })
+
+const setAcctBankName = () => {
+    const bank = banks.find(obj => obj.code == salesforces.acct_bank_code)
+    salesforces.acct_bank_name = bank ? bank.title : '선택안함'
+}
 
 const setSettleTaxType = (apply_type: number) => {
     post('set-settle-tax-type', {
@@ -84,8 +89,8 @@ const setAccountInfo = (apply_type: number) => {
     post('set-account-info', {
         'acct_num': salesforces.acct_num,
         'acct_name': salesforces.acct_name,
-        'acct_bank_code': salesforces.bank.code,
-        'acct_bank_name': salesforces.bank.title,
+        'acct_bank_code': salesforces.acct_bank_code,
+        'acct_bank_name': salesforces.acct_bank_name,
     }, apply_type)
 }
 
@@ -282,12 +287,10 @@ watchEffect(() => {
                                 placeholder="예금주 입력" persistent-placeholder />
                         </VCol>
                         <VCol md="3" cols="12"  style="padding: 0.25em;margin-bottom: auto !important;">
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforces.bank"
-                                :items="[{ code: null, title: '선택안함' }].concat(banks)"
-                                prepend-inner-icon="ph-buildings" label="은행 선택"
-                                :hint="`${salesforces.bank.title}, 은행 코드: ${salesforces.bank.code ? salesforces.bank.code : '000'} `"
-                                item-title="title" item-value="code" persistent-hint return-object
-                                />
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforces.acct_bank_code"
+                                    :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
+                                    label="은행 선택" item-title="title" item-value="code" single-line
+                                    @update:modelValue="setAcctBankName()" />
                         </VCol>
                         <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important;margin-left: auto;">
                             <div style="float: inline-end;">

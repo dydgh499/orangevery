@@ -325,9 +325,9 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="6">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.acct_bank_code"
-                                    :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
-                                    label="은행 선택" item-title="title" item-value="code" single-line
-                                    @update:modelValue="setAcctBankName()" />
+                                        :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
+                                        label="은행 선택" item-title="title" item-value="code" single-line
+                                        @update:modelValue="setAcctBankName()" />
                                 </VCol>
                                 <VCol md="4" cols="12" :style="$vuetify.display.smAndDown ? 'text-align: end;' : ''">
                                     <h5 style="margin-top: 0.5em; margin-left: 0.5em;">
