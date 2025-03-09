@@ -132,7 +132,7 @@ defineExpose({
                                     v-model="amount_format" suffix="원" 
                                     @input="formatAmount"
                                     variant="underlined"
-                                    placeholder="출금금액을 입력해주세요" prepend-icon="ic:outline-price-change"
+                                    placeholder="출금금액을 입력해주세요"
                                     :rules="[requiredValidatorV2(amount, '출금금액')]" 
                                 />
                             </template>
