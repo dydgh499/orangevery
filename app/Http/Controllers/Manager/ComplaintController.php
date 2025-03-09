@@ -35,6 +35,7 @@ class ComplaintController extends Controller
      */
     public function index(IndexRequest $request)
     {
+        logging(['test'=>123]);
         $search = $request->input('search', '');
         $query  = $this->complaints
             ->join('merchandises', 'complaints.mcht_id', '=', 'merchandises.id')
@@ -54,6 +55,7 @@ class ComplaintController extends Controller
         if($request->history_type !== null)
             $query->where('complaints.type', $request->history_type);
 
+        logging(['test'=>656]);
         $data = $this->getIndexData($request, $query, 'complaints.id', ['complaints.*', 'merchandises.mcht_name'], 'complaints.created_at');
         return $this->response(0, $data);
     }

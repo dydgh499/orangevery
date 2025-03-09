@@ -29,6 +29,7 @@
 
     function globalAuthFilter($query, $request, $parent_table='')
     {
+        logging(['test'=>0]);
         $table = $parent_table !== "" ? $parent_table."." : "";
         if(Ablilty::isMerchandise($request))
         {   // 가맹점
