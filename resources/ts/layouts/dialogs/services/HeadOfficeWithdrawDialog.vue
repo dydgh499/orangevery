@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { inputFormater } from '@/@core/utils/formatters'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -22,7 +23,11 @@ const token = ref('')
 const fin_id = ref(null)
 const note = ref('')
 const head_office_acct_id = ref(null)
-const amount = ref(0)
+const {
+    amount_format,
+    amount,
+    formatAmount,
+} = inputFormater()
 
 const show = () => {
     token.value = ''
@@ -121,8 +126,13 @@ defineExpose({
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>출금금액 입력</template>
                             <template #input>
-                                <VTextField v-model="amount" type="number" suffix="￦" placeholder="출금금액 입력"
-                                    prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidatorV2(amount, '출금금액')]" />
+                                <VTextField 
+                                    v-model="amount_format" suffix="원" 
+                                    @input="formatAmount"
+                                    variant="underlined"
+                                    placeholder="출금금액을 입력해주세요" prepend-icon="ic:outline-price-change"
+                                    :rules="[requiredValidatorV2(amount, '출금금액')]" 
+                                />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
