@@ -6,6 +6,7 @@ import { useSalesFilterStore } from '@/views/salesforces/useStore';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import type { Complaint } from '@/views/types';
 import { getUserLevel } from '@axios';
+import { requiredValidatorV2 } from '@validators';
 
 interface Props {
     item: Complaint,
@@ -94,7 +95,9 @@ const { mchts } = useSalesFilterStore()
                                 :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id" :items="mchts"
                                 prepend-inner-icon="tabler-building-store" label="가맹점 선택" item-title="mcht_name"
                                 item-value="id" single-line />
-                            <span v-else>{{ mchts.find(obj => obj.id === props.item.mcht_id)?.mcht_name }}</span>
+                            <span v-else>
+                                {{ mchts.find(obj => obj.id === props.item.mcht_id)?.mcht_name }}
+                            </span>
                         </template>
                         <template #r_name>
                             <span v-if="getUserLevel() >= 35">거래번호</span>
@@ -116,7 +119,8 @@ const { mchts } = useSalesFilterStore()
                         <template #l_input>
                             <VSelect v-if="getUserLevel() >= 35"
                                 :menu-props="{ maxHeight: 400 }" v-model="props.item.type" :items="complaint_types"
-                                prepend-inner-icon="ic-round-sentiment-dissatisfied" label="민원 타입 선택" item-title="title"
+                                prepend-inner-icon="ic-round-sentiment-dissatisfied" label="민원타입 선택" item-title="title"
+                                :rules="[requiredValidatorV2(props.item.type, '민원타입')]"
                                 item-value="id" single-line />
                             <span v-else>{{ complaint_types.find(obj => obj.id === props.item.type)?.title }}</span>
                         </template>

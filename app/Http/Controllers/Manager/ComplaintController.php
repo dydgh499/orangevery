@@ -38,7 +38,6 @@ class ComplaintController extends Controller
         $search = $request->input('search', '');
         $query  = $this->complaints
             ->join('merchandises', 'complaints.mcht_id', '=', 'merchandises.id')
-            ->join('payment_gateways', 'complaints.pg_id', '=', 'payment_gateways.id')
             ->where('merchandises.brand_id', $request->user()->brand_id)
             ->where('complaints.is_delete', false)
             ->where('merchandises.is_delete', false)
@@ -55,7 +54,7 @@ class ComplaintController extends Controller
         if($request->history_type !== null)
             $query->where('complaints.type', $request->history_type);
 
-        $data = $this->getIndexData($request, $query, 'complaints.id', ['complaints.*', 'merchandises.mcht_name', 'payment_gateways.pg_name'], 'complaints.created_at');
+        $data = $this->getIndexData($request, $query, 'complaints.id', ['complaints.*', 'merchandises.mcht_name'], 'complaints.created_at');
         return $this->response(0, $data);
     }
 

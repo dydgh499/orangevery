@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { complaint_types, useSearchStore } from '@/views/complaints/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
+const { pgs } = useStore()
+
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
@@ -48,6 +51,9 @@ provide('exporter', exporter)
                                 <VChip :color="store.booleanTypeColor(!item[_key])">
                                     {{ item[_key] ? '입금' : '미입금' }}
                                 </VChip>
+                            </span>
+                            <span v-else-if="_key == 'pg_id'">
+                                {{ pgs.find(pg => pg['id'] === item[_key])?.pg_name }}
                             </span>
                             <div v-else-if="_key === 'note'" class="content">
                                 {{ item[_key] }}

@@ -24,9 +24,6 @@ const { sales, mchts, initAllSales, hintSalesApplyFee } = useSalesFilterStore()
 const levels = corp.pv_options.auth.levels
 const pay_modules = ref<PayModule[]>([])
 
-const getDttmFormat = (date: Date) => {
-    return formatDate(date) + " " + formatTime(date)
-}
 const changePaymodEvent = () => {
     if (props.item.pmod_id != null) {
         const pmod = pay_modules.value.find((obj: PayModule) => obj.id == props.item.pmod_id)
@@ -53,12 +50,12 @@ const changeMchtEvent = () => {
     if (props.item.mcht_id != null) {
         const mcht = mchts.find((obj: Merchandise) => obj.id == props.item.mcht_id)
         if (mcht) {
-            props.item.sales5_fee = mcht.sales5_fee
-            props.item.sales4_fee = mcht.sales4_fee
-            props.item.sales3_fee = mcht.sales3_fee
-            props.item.sales2_fee = mcht.sales2_fee
-            props.item.sales1_fee = mcht.sales1_fee
-            props.item.sales0_fee = mcht.sales0_fee
+            props.item.sales5_fee = (mcht.sales5_fee * 100).toFixed(3)
+            props.item.sales4_fee = (mcht.sales4_fee * 100).toFixed(3)
+            props.item.sales3_fee = (mcht.sales3_fee * 100).toFixed(3)
+            props.item.sales2_fee = (mcht.sales2_fee * 100).toFixed(3)
+            props.item.sales1_fee = (mcht.sales1_fee * 100).toFixed(3)
+            props.item.sales0_fee = (mcht.sales0_fee * 100).toFixed(3)
             props.item.sales5_id = mcht.sales5_id
             props.item.sales4_id = mcht.sales4_id
             props.item.sales3_id = mcht.sales3_id
