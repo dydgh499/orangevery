@@ -29,7 +29,7 @@
 
     function globalAuthFilter($query, $request, $parent_table='')
     {
-        $table = $parent_table != "" ? $parent_table."." : "";
+        $table = $parent_table !== "" ? $parent_table."." : "";
         if(Ablilty::isMerchandise($request))
         {   // 가맹점
             $col = $parent_table == 'merchandises' ? "id" : 'mcht_id';

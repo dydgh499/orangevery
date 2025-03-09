@@ -64,7 +64,7 @@ class PostController extends Controller
 
         if($request->type !== null)
             $query = $query->where('type', $request->type);
-        if(Ablilty::isOperator($request) == false)
+        if(Ablilty::isOperator($request) === false)
         {
             $query = $query->where(function($q) use($request) {
                 $q->where('type', '!=', 2)
