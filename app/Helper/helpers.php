@@ -39,6 +39,7 @@
         {   // 영업자
             $idx = globalLevelByIndex($request->user()->level);            
             $query = $query->where($table."sales".$idx."_id",  $request->user()->id);
+            logging(['test'=>$table."sales".$idx."_id"]);
         }
         else if(Ablilty::isOperator($request))
         {   // all
