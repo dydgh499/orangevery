@@ -92,7 +92,7 @@ defineExpose({
 </script>
 <template>
     <section>
-        <VDialog v-model="visible" persistent class="v-dialog-lg">
+        <VDialog v-model="visible" persistent max-width="600">
             <!-- Dialog Content -->
             <DialogCloseBtn @click="visible = false" />
             <VCard>
@@ -108,6 +108,7 @@ defineExpose({
                             </template>
                             <template #input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="fin_id" :items="finance_vans"
+                                    variant="underlined"
                                     label="출금 이체모듈 선택" item-title="nick_name" item-value="id" 
                                     persistent-hint single-line  :hint="withdrawAcctHint()"/>
                             </template>
@@ -119,6 +120,7 @@ defineExpose({
                             </template>
                             <template #input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="head_office_acct_id"
+                                    variant="underlined"
                                     :items="head_office_accounts" label="입금 계좌 선택" item-title="acct_num" item-value="id"
                                     persistent-hint single-line  :hint="depositAcctHint()" />
                             </template>
@@ -139,6 +141,7 @@ defineExpose({
                             <template #name>출금사유</template>
                             <template #input>
                                 <VTextField v-model="note" label="출금사유"
+                                    variant="underlined"
                                     prepend-inner-icon="twemoji-spiral-notepad" maxlength="50" auto-grow :rules="[requiredValidatorV2(note, '출금사유')]"/>
                             </template>
                         </CreateHalfVCol>
