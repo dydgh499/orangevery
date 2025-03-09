@@ -62,7 +62,6 @@ const pay = async () => {
                     :merchandise="props.merchandise" :key="props.pay_module.id" :pay_code="'H'">
                     <template #extra_info>
                         <CardOverview 
-                            v-if="$vuetify.display.smAndDown === false"
                             :hand_pay="hand_pay" :is_old_auth="props.pay_module.is_old_auth"/>
                     </template>
                 </CommonPayOverview>

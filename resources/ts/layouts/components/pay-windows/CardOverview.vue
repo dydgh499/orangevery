@@ -105,7 +105,7 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                 </VCol>
-                <VCol cols="12" md="6">
+                <VCol cols="12" md="6" v-if="$vuetify.display.smAndDown === false">
                     <CreditCard
                         :card_num="hand_pay.card_num"
                         :auth_num="hand_pay.auth_num"
