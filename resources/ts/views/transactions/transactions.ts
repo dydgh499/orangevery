@@ -219,8 +219,6 @@ export const realtimeHistoryInterface = (formatTime: any) => {
         if (await alert.value.show('정말 해당 거래건을 재이체(정산) 하시겠습니까?')) {
             const params = {
                 'trx_id': item.id,
-                'mid': item.mid,
-                'tid': item.tid,
                 'pmod_id': item.pmod_id,
             }
             const res = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit', params, false)

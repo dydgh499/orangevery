@@ -266,7 +266,7 @@ class MchtSettleHistoryController extends Controller
     {
         if($request->user()->tokenCan(35))
         {
-            $validated = $request->validate(['trx_id'=>'required', 'mid'=>'required', 'tid'=>'nullable']);
+            $validated = $request->validate(['trx_id'=>'required', 'pmod_id'=>'required']);
             $data = $request->all();
             $url = $this->base_noti_url.'/single-deposit';
             $res = Comm::post($url, $data);
