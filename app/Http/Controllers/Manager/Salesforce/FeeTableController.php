@@ -77,6 +77,8 @@ class FeeTableController extends Controller
             $sales = $this->flatSalesforce([], $content);
             $content = array_merge($content, $sales);
             unset($content['parent']);
+            unset($content['sales_fee']);
+            unset($content['sales_name']);
         }
         return $this->response(0, $data);
     }
