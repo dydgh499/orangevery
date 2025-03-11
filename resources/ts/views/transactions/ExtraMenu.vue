@@ -30,7 +30,7 @@ const mchtBlackListDlg = <any>(inject('mchtBlackListDlg'))
 const notiSendHistoriesDialog = <any>(inject('notiSendHistoriesDialog'))
 const realtimeHistoryDialog = <any>(inject('realtimeHistoryDialog'))
 
-const { notiSendByTrans } = notiSendHistoryInterface()
+const { notiSend } = notiSendHistoryInterface()
 const { 
     realtimeResult, realtimeRetryAble, realtimeRetry, 
     isRealtimeTransaction, singleDepositCancelJobReservation 
@@ -161,7 +161,7 @@ const isUseCancelDeposit = () => {
                     </template>
                     <VListItemTitle>이체예약취소</VListItemTitle>
                 </VListItem>
-                <VListItem value="noti" class="noti" @click="notiSendByTrans(props.item.id)"
+                <VListItem value="noti" class="noti" @click="notiSend(props.item.id)"
                     v-if="corp.pv_options.paid.use_noti && getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="emojione:envelope" />

@@ -33,7 +33,6 @@ class BatchUpdateTransactionController extends BatchUpdateController
     public function __construct(Transaction $transactions)
     {
         $this->transactions = $transactions;
-        $this->base_noti_url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes';
     }
 
     private function getApplyRow($request, $cols)
@@ -69,7 +68,7 @@ class BatchUpdateTransactionController extends BatchUpdateController
         if($request->user()->tokenCan(35))
         {
             $validated = $request->validate(['selected_idxs.*'=>'required|integer']);
-            $url = $this->base_noti_url.'/single-deposit-cancel-job-reservation';
+            $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/single-deposit-cancel-job-reservation';
             $res = Comm::post($url, [
                 'trx_ids' => $request->selected_idxs,
             ]);

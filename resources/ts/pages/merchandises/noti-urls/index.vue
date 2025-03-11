@@ -88,6 +88,19 @@ provide('exporter', exporter)
                                         {{ send_types.find(module_type => module_type['id'] === item[_key])?.title }}
                                     </VChip>
                                 </span>
+                                <span v-else-if="_key == 'send_type'">
+                                    <VChip :color="getSendTypeColor(item[_key])">
+                                        {{ send_types.find(module_type => module_type['id'] === item[_key])?.title }}
+                                    </VChip>
+                                </span>
+                                <span v-else-if="_key == 'pmod_id'">
+                                    <VChip :color="getSendTypeColor(item[_key])" v-if="item[_key] === -1">
+                                        전체발송
+                                    </VChip>
+                                    <span v-else>
+                                        {{ item['pmod_note'] }}
+                                    </span>
+                                </span>
                                 <span v-else-if="_key == 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
                                     {{ item[_key] }}
                                 </span>

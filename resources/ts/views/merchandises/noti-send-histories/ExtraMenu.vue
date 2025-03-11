@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useRequestStore } from '@/views/request'
-import { notiSendHistoryInterface } from '@/views/transactions/transactions'
-import type { NotiSendHistory } from '@/views/types'
-import { getUserLevel } from '@axios'
+import { useRequestStore } from '@/views/request';
+import { notiSendHistoryInterface } from '@/views/transactions/transactions';
+import type { NotiSendHistory } from '@/views/types';
+import { getUserLevel } from '@axios';
 
 interface Props {
     item: NotiSendHistory,
@@ -25,7 +25,7 @@ const detail = async () => {
         <VIcon size="22" icon="tabler-dots-vertical" />
         <VMenu activator="parent" width="230">
             <VList>
-                <VListItem value="retry" @click="notiSend(props.item.id)">
+                <VListItem value="retry" @click="notiSend([props.item.trans_id])">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="gridicons:reply" />
                     </template>

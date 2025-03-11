@@ -317,57 +317,6 @@ class TransactionController extends Controller
     }
 
     /*
-     * 노티 자체 대량 재전송
-     */
-    public function batchSelfRetry(Request $request)
-    {
-        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/noti/payvery';
-        $trans = $this->transactions->whereIn('id', $request->selected)->get();
-        foreach($trans as $tran)
-        {
-            $res = NotiRetrySender::notiSender($url, $tran, '');
-        }
-        return $this->response(1);
-    }
-
-    /*
-     * 노티 대량 재전송
-     */
-    public function batchRetry(Request $request)
-    {
-        $fail_res    = [];
-        $success_res = [];
-        for ($i=0; $i <count($request->selected); $i++) 
-        {
-            [$_success_res, $_fail_res] = NotiRetrySender::notiSenderWrap($request->selected[$i]);
-            $success_res = array_merge($success_res, $_success_res);
-            $fail_res = array_merge($fail_res, $_fail_res);
-        }
-        if(count($fail_res))
-        {
-            $message = "일괄작업에 실패한 노티건들이 존재합니다.<br><br>".implode(' ', $fail_res);
-            return $this->extendResponse(2000, $message);
-        }
-        else
-            return $this->response(1, $success_res);
-    }
-
-    /*
-    * 노티 전송 -> 가맹점
-    */
-    public function noti(Request $request, int $id)
-    {
-        [$success_res, $fail_res]  = NotiRetrySender::notiSenderWrap($id);        
-        if(count($fail_res))
-        {
-            $message = "일괄작업에 실패한 노티건들이 존재합니다.<br><br>".implode(' ', $fail_res);
-            return $this->extendResponse(2000, $message);
-        }
-        else
-            return $this->response(1, $success_res);
-    }
-
-    /*
      * 가맹점별 매출집계
      */
     public function mchtGroups(Request $request)

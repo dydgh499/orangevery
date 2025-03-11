@@ -49,38 +49,27 @@ export const notiSendHistoryInterface = () => {
             return '알수없는 상태'
     }
 
-    const notiBatchSendByTrans = async (end_point: string, select_idxs: number[], emits:any) => {
+    const notiSelfSend = async (select_idxs: number[]) => {
         if(select_idxs.length) {
             if (await alert.value.show('정말 일괄 재발송하시겠습니까?')) {
-                const r = await post(`/api/v1/manager/transactions/notis/${end_point}`, { selected: select_idxs })
+                const r = await post(`/api/v1/manager/merchandises/noti-send-histories/self-retry`, {
+                    trx_ids: select_idxs 
+                })
                 if (r.status == 201)
                     snackbar.value.show('성공하였습니다.', 'success')
                 else
                     snackbar.value.show(r.data.message, 'error')            
-                emits('update:select_idxs', [])
             }    
         }
         else
             snackbar.value.show('매출을 1개이상 선택해주세요.', 'error')
     }
 
-    const notiSendByTrans = async (trans_id: number) => {
-        if (await alert.value.show('정말 노티 재발송을 하시겠습니까?')) {
-            try {
-                const r = await post('/api/v1/manager/transactions/notis/'+trans_id, {}, true)
-            }
-            catch (e: any) {
-                snackbar.value.show(e.response.data.message, 'error')
-                const r = errorHandler(e)
-            }
-        }
-    }
-
-    const notiBatchSend = async (select_idxs: number[]) => {
-        if(select_idxs.length) {
-            if (await alert.value.show('정말 일괄 재발송하시겠습니까?')) {
-                const r = await post(`/api/v1/manager/merchandises/noti-send-histories/batch-retry`, {
-                    selected: select_idxs 
+    const notiSend = async (trx_ids: number[]) => {
+        if(trx_ids.length) {
+            if (await alert.value.show('정말 재발송을 하시겠습니까?')) {
+                const r = await post(`/api/v1/manager/merchandises/noti-send-histories/retry`, {
+                    trx_ids: trx_ids 
                 })
                 if (r.status == 201)
                     snackbar.value.show('성공하였습니다.', 'success')
@@ -92,16 +81,6 @@ export const notiSendHistoryInterface = () => {
             snackbar.value.show('노티이력을 1개이상 선택해주세요.', 'error')
     }
 
-    const notiSend = async (noti_id: number) => {
-        if(await alert.value.show('정말 재발송하시겠습니까?')) {
-            const r = await post('/api/v1/manager/merchandises/noti-send-histories/'+noti_id+'/retry', {})
-            if(r.status == 201)
-                snackbar.value.show('성공하였습니다.', 'success')
-            else
-                snackbar.value.show(r.data.message, 'error')
-        }
-    }
-    
     const notiRemove = async (item: NotiSendHistory) => {
         remove('/merchandises/noti-send-histories', item, false)
     }
@@ -110,9 +89,7 @@ export const notiSendHistoryInterface = () => {
         notiSendResult,
         notiSendMessage,
         notiSendDetailClass,
-        notiBatchSendByTrans,
-        notiBatchSend,
-        notiSendByTrans,
+        notiSelfSend,
         notiSend,
         notiRemove,
     }

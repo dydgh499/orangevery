@@ -24,9 +24,7 @@ use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ShopController;
 
 Route::prefix('transactions')->group(function() {          
     Route::middleware(['is.operate'])->group(function() {
-        Route::middleware(['is.edit.able'])->group(function() {
-            Route::post('notis/batch-retry', [TransactionController::class, 'batchRetry']);
-            Route::post('notis/batch-self-retry', [TransactionController::class, 'batchSelfRetry']);    
+        Route::middleware(['is.edit.able'])->group(function() {   
             Route::post('settle/merchandises/representative-settle', [RepMerchandiseController::class, 'settlement']);
 
             Route::prefix('batch-updaters')->group(function() {
@@ -68,7 +66,6 @@ Route::prefix('transactions')->group(function() {
         Route::post('settle/merchandises/deposit-validate', [MchtSettleController::class, 'depositValidate']);
     });
 
-    Route::post('notis/{id}', [TransactionController::class, 'noti']);
     Route::post('cancel', [TransactionController::class, 'cancel']);
     Route::get('chart', [TransactionController::class, 'chart']);
     Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);

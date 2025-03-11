@@ -37,7 +37,6 @@ class SalesSettleHistoryController extends Controller
     public function __construct(SettleHistorySalesforce $settle_sales_hist)
     {
         $this->settle_sales_hist = $settle_sales_hist;
-        $this->base_noti_url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes';
     }
 
     private function commonQuery($request)

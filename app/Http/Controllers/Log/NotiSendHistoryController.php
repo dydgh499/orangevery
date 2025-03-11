@@ -11,6 +11,7 @@ use App\Http\Controllers\Manager\Transaction\TransactionFilter;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
+use App\Http\Controllers\Utils\Comm;
 
 use Illuminate\Support\Facades\DB;
 /**
@@ -73,7 +74,7 @@ class NotiSendHistoryController extends Controller
         $query = globalAuthFilter($query, $request, 'transactions');
         
         $query = $query->where(function($query) use ($search) {
-            return $query->where('transactions.appr_num', 'like', "%$search%")
+            return $query->where('merchandises.mcht_name', 'like', "%$search%")
                 ->orWhere('transactions.mid', 'like', "%$search%")
                 ->orWhere('transactions.tid', 'like', "%$search%");
         });
@@ -97,35 +98,27 @@ class NotiSendHistoryController extends Controller
     /*
      * 노티 재전송
      */
-    public function retry(Request $request, int $id)
+    public function retry(Request $request)
     {
-        $noti  = $this->noti_send_histories
-            ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
-            ->where('noti_send_histories.id', $id)
-            ->orderby('retry_count', 'desc')
-            ->first($this->cols);
-
-        $res = NotiRetrySender::notiSender($noti->send_url, $noti, $noti->temp);
-        $res = NotiRetrySender::save($res, $noti);
-        return $this->response($res ? 1 : 990);
+        $validated = $request->validate(['trx_ids'=>'required']);
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/noti-retry';
+        $res = Comm::post($url, [
+            'trx_ids' => $request->trx_ids,
+        ]);
+        return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
     }
 
     /*
-     * 노티 대량 재전송
+     * 노티 자체 재전송
      */
-    public function batchRetry(Request $request) 
+    public function selfRetry(Request $request) 
     {
-        $notis = $this->noti_send_histories
-            ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
-            ->whereIn('noti_send_histories.id', $request->selected)
-            ->get($this->cols);
-
-        foreach($notis as $noti)
-        {
-            $res = NotiRetrySender::notiSender($noti->send_url, $noti, $noti->temp);
-            $res = NotiRetrySender::save($res, $noti);
-        }
-        return $this->response(1);
+        $validated = $request->validate(['trx_ids'=>'required']);
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/noti-self-retry';
+        $res = Comm::post($url, [
+            'trx_ids' => $request->trx_ids,
+        ]);
+        return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
     }
     
     /*

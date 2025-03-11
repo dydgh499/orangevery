@@ -57,7 +57,7 @@ trait SettleHistoryTrait
         {   // 정산금 이체(실시간)
              if($data['current_status'] == 0)
              {
-                $url = $this->base_noti_url."/$target-settle-deposit/".$data['id'];
+                $url = env('NOTI_URL', 'http://localhost:81')."/api/v2/realtimes/$target-settle-deposit/".$data['id'];
                 $params = ['brand_id'=> $request->brand_id, 'fin_id'=> $request->fin_id];
 
                 $res = Comm::post($url, $params);

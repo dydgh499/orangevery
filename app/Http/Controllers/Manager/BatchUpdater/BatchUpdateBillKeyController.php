@@ -26,7 +26,6 @@ class BatchUpdateBillKeyController extends BatchUpdateController
     public function __construct(BillKey $bill_keys)
     {
         $this->bill_keys = $bill_keys;
-        $this->base_noti_url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes';
     }
 
     private function getApplyRow($request, $cols)

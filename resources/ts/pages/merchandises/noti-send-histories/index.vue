@@ -12,7 +12,7 @@ import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { notiBatchSend } = notiSendHistoryInterface()
+const { notiSend } = notiSendHistoryInterface()
 const notiDetail = ref()
 
 provide('store', store)
@@ -31,7 +31,7 @@ const httpCodeColor = (http_code: number) => {
 }
 
 const batchRetry = async () => {
-    notiBatchSend(selected.value)
+    notiSend(selected.value)
 }
 
 const getResponseBody = (body: string) => {

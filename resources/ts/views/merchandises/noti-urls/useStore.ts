@@ -35,8 +35,9 @@ export const useSearchStore = defineStore('NotiSearchStore', () => {
 
     const headers: Record<string, string> = {
         'id' : 'NO.',
-        'note' : '별칭',
         'mcht_name' : '가맹점 상호',
+        'note' : '노티 별칭',
+        'pmod_id' : '결제모듈 별칭',
         'send_url' : '전송 URL',
         'send_type' : '발송타입',
         'noti_status' : '사용여부',

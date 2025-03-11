@@ -121,6 +121,7 @@ const removeItem = () => {
   inline-size: 1.6em;
   inset-inline-end: 1em;
   margin-block-start: -0.5em;
+  text-align: center;
   transform: scale(1);
   transition: 0.5s ease all;
 
