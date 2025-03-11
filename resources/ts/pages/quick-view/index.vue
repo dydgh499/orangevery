@@ -9,7 +9,7 @@ import SettleContentOverview from '@/views/quick-view/SettleContentOverview.vue'
 import SettleContentSkeleton from '@/views/quick-view/SettleContentSkeleton.vue'
 import { useQuickViewStore } from '@/views/quick-view/useStore'
 import type { MchtRecentTransactions } from '@/views/types'
-import { axios, getUserLevel, user_info } from '@axios'
+import { axios, getUserLevel, getUserMutual, user_info } from '@axios'
 
 const transactions = ref(<MchtRecentTransactions>({
     monthly : {},
@@ -55,7 +55,7 @@ onMounted(() => {
                 <template #content>
                     <VCol>
                         <div style="text-align: center;">
-                            <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>
+                            <span class="text-primary font-weight-bold">{{ getUserMutual() }}</span>
                             <span style="font-size: 0.9em;">님 안녕하세요 !</span>
                         </div>
                     </VCol>

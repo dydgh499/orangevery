@@ -25,8 +25,7 @@ import PWASnackbar from '@/layouts/snackbars/PWASnackbar.vue'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 
 import corp from '@/plugins/corp'
-import { isFixplus } from '@/plugins/fixplus'
-import { axios, getUserLevel, user_info } from '@axios'
+import { axios, getUserLevel, getUserMutual, user_info } from '@axios'
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
@@ -115,14 +114,7 @@ onMounted(async () => {
                 </VBtn>
 
                 <div v-if="isLessThanOverlayNavBreakpoint(windowWidth) === false">
-                    <template v-if="isFixplus()">
-                        <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>
-                        <span v-if="getUserLevel() === 10" class="text-primary font-weight-bold">({{ user_info.mcht_name }})</span>
-                        <span v-else-if="getUserLevel() < 35" class="text-primary font-weight-bold">({{ user_info.sales_name }})</span>님 안녕하세요!
-                    </template>
-                    <template v-else>
-                        <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>님 안녕하세요!
-                    </template>
+                        <span class="text-primary font-weight-bold">{{ getUserMutual() }}</span>님 안녕하세요 !
                 </div>
                 <VSpacer />
                 <NavTokenableExpireTime />

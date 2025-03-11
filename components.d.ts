@@ -56,6 +56,7 @@ declare module '@vue/runtime-core' {
     IPDetailDialog: typeof import('./resources/ts/layouts/dialogs/services/IPDetailDialog.vue')['default']
     LastLoginDialog: typeof import('./resources/ts/layouts/dialogs/services/LastLoginDialog.vue')['default']
     LoadingDialog: typeof import('./resources/ts/layouts/dialogs/utils/LoadingDialog.vue')['default']
+    LoginImageDialog: typeof import('./resources/ts/layouts/dialogs/services/LoginImageDialog.vue')['default']
     MchtBlacklistCreateDialog: typeof import('./resources/ts/layouts/dialogs/users/MchtBlacklistCreateDialog.vue')['default']
     MidCreateDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/MidCreateDialog.vue')['default']
     MobileVerification: typeof import('./resources/ts/@core/components/MobileVerification.vue')['default']

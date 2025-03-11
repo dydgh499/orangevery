@@ -5,6 +5,15 @@ import axiosIns from 'axios';
 
 const levels = corp.pv_options.auth.levels
 
+export const getUserMutual = () => {
+    if(getUserLevel() === 10)
+        return user_info.value.mcht_name
+    else if(getUserLevel() < 35)
+        return user_info.value.sales_name
+    else
+        return user_info.value.user_name
+}
+
 export const getUserType = () => {
     if (getUserLevel() == 10) 
         return {id:0, link:'/merchandises/edit/' + user_info.value.id}

@@ -91,6 +91,7 @@ return [
         'array' => ':attribute 값이 :max 개가 아닙니다.',
     ],
     'string' => ':attribute 값이 글자가 아닙니다.',
+    'uploaded' => ':attribute 업로드에 실패했습니다. 파일크기를 줄여주세요.',
     'timezone' => ':attribute 값이 올바른 시간대가 아닙니다.',
     'unique' => ':attribute 값이 이미 존재합니다.',
     'url' => ':attribute 값이 유효한 URL이 아닙니다.',
