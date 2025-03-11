@@ -100,7 +100,7 @@ class NotiSendHistoryController extends Controller
      */
     public function retry(Request $request)
     {
-        $validated = $request->validate(['trx_ids'=>'required']);
+        $validated = $request->validate(['trx_ids.*'=>'required|integer']);
         $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/noti-retry';
         $res = Comm::post($url, [
             'trx_ids' => $request->trx_ids,
@@ -113,7 +113,7 @@ class NotiSendHistoryController extends Controller
      */
     public function selfRetry(Request $request) 
     {
-        $validated = $request->validate(['trx_ids'=>'required']);
+        $validated = $request->validate(['trx_ids.*'=>'required|integer']);
         $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/noti-self-retry';
         $res = Comm::post($url, [
             'trx_ids' => $request->trx_ids,

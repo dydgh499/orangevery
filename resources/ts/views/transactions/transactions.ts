@@ -52,13 +52,10 @@ export const notiSendHistoryInterface = () => {
     const notiSelfSend = async (select_idxs: number[]) => {
         if(select_idxs.length) {
             if (await alert.value.show('정말 일괄 재발송하시겠습니까?')) {
-                const r = await post(`/api/v1/manager/merchandises/noti-send-histories/self-retry`, {
+                const res = await post(`/api/v1/manager/merchandises/noti-send-histories/self-retry`, {
                     trx_ids: select_idxs 
                 })
-                if (r.status == 201)
-                    snackbar.value.show('성공하였습니다.', 'success')
-                else
-                    snackbar.value.show(r.data.message, 'error')            
+                snackbar.value.show(res.data.message, res.status === 201 ? 'success' : 'error')
             }    
         }
         else
@@ -68,13 +65,10 @@ export const notiSendHistoryInterface = () => {
     const notiSend = async (trx_ids: number[]) => {
         if(trx_ids.length) {
             if (await alert.value.show('정말 재발송을 하시겠습니까?')) {
-                const r = await post(`/api/v1/manager/merchandises/noti-send-histories/retry`, {
+                const res = await post(`/api/v1/manager/merchandises/noti-send-histories/retry`, {
                     trx_ids: trx_ids 
                 })
-                if (r.status == 201)
-                    snackbar.value.show('성공하였습니다.', 'success')
-                else
-                    snackbar.value.show(r.data.message, 'error')            
+                snackbar.value.show(res.data.message, res.status === 201 ? 'success' : 'error')
             }
         }
         else
@@ -186,9 +180,10 @@ export const realtimeHistoryInterface = (formatTime: any) => {
 
     const singleDepositCancelJobReservation = async (trx_ids: number[]) => {
         if (await alert.value.show('정말 해당 거래건을 이체예약취소처리 하시겠습니까?')) {
-            const r = await post('/api/v1/manager/transactions/batch-updaters/single-deposit-cancel-job-reservation', {
+            const res = await post('/api/v1/manager/transactions/batch-updaters/single-deposit-cancel-job-reservation', {
                 selected_idxs: trx_ids
             }, true)
+            snackbar.value.show(res.data.message, res.status === 201 ? 'success' : 'error')
         }
     }
 
