@@ -52,6 +52,7 @@ class TransactionController extends Controller
             'merchandises.mcht_name', 'merchandises.user_name', 'merchandises.nick_name', 'merchandises.contact_num',
             'merchandises.addr', 'merchandises.resident_num', 'merchandises.business_num', 'merchandises.tax_category_type',
             'merchandises.use_saleslip_prov', 'merchandises.use_collect_withdraw', 'merchandises.is_show_fee',
+            'merchandises.use_noti',
             'transactions.*',
             'payment_modules.note', 'payment_modules.use_realtime_deposit', 'payment_modules.cxl_type', 'payment_modules.fin_trx_delay',
             DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),

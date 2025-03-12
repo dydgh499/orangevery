@@ -18,21 +18,25 @@ export const notiSendHistoryInterface = () => {
     }
         
     const notiSendResult = (item: Transaction) => {
-        if(item.noti_send_histories?.length === 0) {
-            const trans_at = (new Date(item.created_at as string)).getTime() + 30000
-            const offset_at = new Date(trans_at) - new Date() 
-            if(offset_at < 0)
-                return StatusColors.Default
-            else
-                return StatusColors.Processing
+        if(item.use_noti) {
+            if(item.noti_send_histories?.length === 0) {
+                const trans_at = (new Date(item.created_at as string)).getTime() + 30000
+                const offset_at = new Date(trans_at) - new Date() 
+                if(offset_at < 0)
+                    return StatusColors.Timeout
+                else
+                    return StatusColors.Processing
+            }
+            else {
+                const is_success = item.noti_send_histories?.find(obj => obj.http_code === 200 || obj.http_code === 201)
+                if(is_success)  //성공
+                    return StatusColors.Success
+                else
+                    return StatusColors.Error
+            }
         }
-        else {
-            const is_success = item.noti_send_histories?.find(obj => obj.http_code === 200 || obj.http_code === 201)
-            if(is_success)  //성공
-                return StatusColors.Success
-            else
-                return StatusColors.Error
-        }
+        else
+            return StatusColors.Default
     }
 
     const notiSendMessage = (item: Transaction):string => {
@@ -41,6 +45,8 @@ export const notiSendHistoryInterface = () => {
             return 'N/A'
         else if(code === StatusColors.Processing)
             return '처리중'
+        else if(code === StatusColors.Timeout)
+            return '노티예정시간 초과'
         else if(code === StatusColors.Success)
             return '성공'
         else if(code === StatusColors.Error)
