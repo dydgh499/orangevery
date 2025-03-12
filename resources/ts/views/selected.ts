@@ -1,12 +1,13 @@
 
-export function selectFunctionCollect(store:any) {
+export function selectFunctionCollect(store:any, depth_mode=false) {
     const selected = ref<number[]>([])
     const all_selected = ref()
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
 
     watchEffect(() => {
-        selected.value = all_selected.value ? store.getItems.map(item => item['id']) : []
+        if(depth_mode === false)
+            selected.value = all_selected.value ? store.getItems.map(item => item['id']) : []
     })
 
     const dialog = async (messge: string) => {

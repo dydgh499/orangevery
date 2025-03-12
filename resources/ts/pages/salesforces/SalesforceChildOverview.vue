@@ -2,7 +2,6 @@
 <script setup lang="ts">
 
 import SalesforceChildOverview from '@/pages/salesforces/SalesforceChildOverview.vue';
-import { selectFunctionCollect } from '@/views/selected';
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
 
 import { authLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
@@ -17,7 +16,8 @@ interface Props {
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
 const head = <any>(inject('head')) 
-const { selected, all_selected } = selectFunctionCollect(store)
+const selected = <any>(inject('selected')) 
+const all_selected = <any>(inject('all_selected')) 
 
 const all_cycles = settleCycles()
 const all_days = settleDays()

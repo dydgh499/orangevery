@@ -14,7 +14,7 @@ import { DateFilters, ItemTypes } from '@core/enums';
 import corp from '@corp';
 
 const { store, head, exporter, metas } = useSearchStore()
-const { selected, all_selected } = selectFunctionCollect(store)
+const { selected, all_selected } = selectFunctionCollect(store, true)
 
 const all_cycles = settleCycles()
 const all_days = settleDays()
@@ -25,8 +25,36 @@ const batchDialog = ref()
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+provide('selected', selected)
+provide('all_selected', all_selected)
 
 store.params.level = sales_levels[sales_levels.length - 1].id as number
+
+
+const getAllSalesId = (ids: number[], childs: any[]): number[] => {
+    if(childs) {
+        childs.forEach(child => {
+            ids.push(child.id);  // 자식의 ID를 추가
+            // 자식들의 ID를 재귀적으로 추가
+            getAllSalesId(ids, child.childs); 
+        });
+    }
+    return ids;  // 배열을 반환하여 결과를 반영
+}
+
+watchEffect(() => {
+    if(all_selected.value) {
+        let ids: number[] = [];
+        store.getItems.forEach(sales => {
+            ids.push(sales.id);  // sales.id를 추가
+            ids = getAllSalesId(ids, sales.childs);  // 재귀 결과 반영
+        });
+        console.log(ids);
+        selected.value = ids;
+    } else {
+        selected.value = [];
+    }
+});
 </script>
 <template>
   

@@ -21,8 +21,8 @@ export const identity_auth_types = <Options[]>([
 ])
 
 export const fee_input_modes = <any[]>([
-    {id:false, title:'공급가율 기준'},
-    {id:true, title:'정산율 기준'},
+    {id:false, title:'원가 베이스'},
+    {id:true, title:'정산율 베이스'},
 ]);
 
 export const useSearchStore = defineStore('brandSearchStore', () => {
