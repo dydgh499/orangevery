@@ -100,16 +100,18 @@ class TransactionController extends Controller
             {
                 if($content['use_noti'])
                 {
-                    // 해당되는 노티들 수집
-                    $_noti_urls = array_filter($noti_urls, function($noti_url) use($content) {
+                    // TODO: 이 함수 점검해야함
+                    $_noti_urls = array_filter($noti_urls, function($noti_url) use($content) 
+                    {
                         if($noti_url === $content['mcht_id'])
                         {
-                            $match_send_type = ($content['is_cancel'] === 1 && $noti_url['send_type'] === 2) || ($content['is_cancel'] === 0 && $noti_url['send_type'] === 1);
+                            $match_send_type = ($content['is_cancel'] && $noti_url['send_type'] === 2) || ($content['is_cancel'] === 0 && $noti_url['send_type'] === 1);
                             if($noti_url['pmod_id'] !== -1 || $match_send_type)
                                 return true;
                         }
                         return false;
                     });
+                    logging(['noti'=> $_noti_urls, 'mcht_id'=>$content['mcht_id']]);
                     if(count($_noti_urls))
                         $content['noti_status'] = count($content['notiSendHistories']) ? 1 : 0;
                     else
