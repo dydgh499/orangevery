@@ -197,7 +197,7 @@ class SalesforceController extends Controller
             ->first();
         if($data)
         {
-            if(Ablilty::isOperator($request) || Ablilty::isUnderSalesforce($request, $id))
+            if(Ablilty::isOperator($request) || Ablilty::isMySalesforce($request, $id) || Ablilty::isUnderSalesforce($request, $id))
             {
                 if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                     return $this->response(951);
@@ -334,7 +334,7 @@ class SalesforceController extends Controller
      */
     public function passwordChange(Request $request, int $id)
     {
-        if(Ablilty::isOperator($request) || Ablilty::isUnderSalesforce($request, $id))
+        if(Ablilty::isOperator($request) || Ablilty::isMySalesforce($request, $id) || Ablilty::isUnderSalesforce($request, $id))
         {
             $is_me = Ablilty::isMySalesforce($request, $id) ? true : false;
             return $this->_passwordChange($this->salesforces->where('id', $id), $request, $is_me);
