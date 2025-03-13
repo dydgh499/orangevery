@@ -100,7 +100,6 @@ class TransactionController extends Controller
             {
                 if($content['use_noti'])
                 {
-                    // TODO: 이 함수 점검해야함
                     $_noti_urls = array_filter($noti_urls, function($noti_url) use($content) 
                     {
                         if($noti_url['mcht_id'] === $content['mcht_id'])
