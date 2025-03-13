@@ -111,19 +111,12 @@ class TransactionController extends Controller
                         return false;
                     });
                     if(count($_noti_urls))
-                    {   //노티가 있을 경우
-                        if(count($content['notiSendHistories']))
-                            $content->noti_status = 1;
-                        else
-                            $content->noti_status = 0;
-                    }
+                        $content['noti_status'] = count($content['notiSendHistories']) ? 1 : 0;
                     else
-                    {   //노티가 없을 경우
-                        $content->noti_status = -1;
-                    }
+                        $content['noti_status'] = -1;
                 }
                 else
-                    $content->noti_status = -1;
+                    $content['noti_status'] = -1;
             }
         }
         return $data;
