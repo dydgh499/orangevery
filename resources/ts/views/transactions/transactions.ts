@@ -23,14 +23,14 @@ export const notiSendHistoryInterface = () => {
                 const trans_at = (new Date(item.created_at as string)).getTime() + 30000
                 const offset_at = new Date(trans_at) - new Date() 
                 if(offset_at < 0)
-                    return StatusColors.Timeout
-                else
                 {
                     if(item?.noti_status === -1)
                         return StatusColors.Default
                     else
-                        return StatusColors.Processing
+                        return StatusColors.Timeout
                 }
+                else
+                    return StatusColors.Processing
             }
             else {
                 const is_success = item.noti_send_histories?.find(obj => obj.http_code === 200 || obj.http_code === 201)

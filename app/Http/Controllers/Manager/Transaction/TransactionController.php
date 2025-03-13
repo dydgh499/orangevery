@@ -94,7 +94,7 @@ class TransactionController extends Controller
         if($b_info['pv_options']['paid']['use_noti'])
         {
             $mcht_ids = array_unique($data['content']->pluck('mcht_id')->all());
-            $noti_urls = NotiUrl::whereIn('mcht_id', $mcht_ids)->get();
+            $noti_urls = NotiUrl::whereIn('mcht_id', $mcht_ids)->get()->toArray();
 
             foreach($data['content'] as $content)
             {

@@ -62,7 +62,6 @@ const getPreviousAmount = () => {
 }
 
 watchEffect(() => {
-    console.log(1)
     if(Object.keys(monthly_transactions).length) {
         getPreviousMonths()
         getPreviousAmount()
