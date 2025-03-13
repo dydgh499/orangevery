@@ -111,7 +111,6 @@ class TransactionController extends Controller
                         }
                         return false;
                     });
-                    logging(['noti'=> $_noti_urls, 'mcht_id'=>$content['mcht_id'], 'noti' => count($content['notiSendHistories'])]);
                     if(count($_noti_urls))
                         $content['noti_status'] = count($content['notiSendHistories']) ? 1 : 0;
                     else
