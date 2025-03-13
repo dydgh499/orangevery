@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Manager\Transaction;
 
+use App\Models\Salesforce;
 use App\Models\Transaction;
 use App\Models\Log\RealtimeSendHistory;
-use App\Models\Salesforce;
+use App\Models\Merchandise\NotiUrl;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
@@ -86,6 +87,48 @@ class TransactionController extends Controller
         return $this->response(0, $chart);
     }
 
+
+    public function getNotiStatus($b_info, $data)
+    {
+        // -1 = 해당사항 없음,   0 = 발송대기 상태 ,   1 = 발송성공
+        if($b_info['pv_options']['paid']['use_noti'])
+        {
+            $mcht_ids = array_unique($data['content']->pluck('mcht_id')->all());
+            $noti_urls = NotiUrl::whereIn('mcht_id', $mcht_ids)->get();
+
+            foreach($data['content'] as $content)
+            {
+                if($content['use_noti'])
+                {
+                    // 해당되는 노티들 수집
+                    $_noti_urls = array_filter($noti_urls, function($noti_url) use($content) {
+                        if($noti_url === $content['mcht_id'])
+                        {
+                            $match_send_type = ($content['is_cancel'] === 1 && $noti_url['send_type'] === 2) || ($content['is_cancel'] === 0 && $noti_url['send_type'] === 1);
+                            if($noti_url['pmod_id'] !== -1 || $match_send_type)
+                                return true;
+                        }
+                        return false;
+                    });
+                    if(count($_noti_urls))
+                    {   //노티가 있을 경우
+                        if(count($content['notiSendHistories']))
+                            $content->noti_status = 1;
+                        else
+                            $content->noti_status = 0;
+                    }
+                    else
+                    {   //노티가 없을 경우
+                        $content->noti_status = -1;
+                    }
+                }
+                else
+                    $content->noti_status = -1;
+            }
+        }
+        return $data;
+    }
+
     /**
      * 목록출력
      *
@@ -98,11 +141,11 @@ class TransactionController extends Controller
 
         $with  = ['cancelDeposits'];
         $query = TransactionFilter::common($request);
+
         if($request->use_realtime_deposit && (int)$request->level === 10)
             $with[] = 'realtimes';
         if($b_info['pv_options']['paid']['use_noti'])
-            $with[] = 'notiSendHistories';
-            
+            $with[] = 'notiSendHistories';            
         if(count($with))
             $query = $query->with($with);
         $data = TransactionFilter::pagenation($request, $query, $this->cols, 'transactions.trx_at', false);
@@ -116,6 +159,8 @@ class TransactionController extends Controller
             $content->append(['resident_num_front', 'resident_num_back']);
             $content->setHidden(['resident_num']);
         }
+        $data = $this->getNotiStatus($b_info, $data);        
+
 
         return $this->response(0, $data);
     }

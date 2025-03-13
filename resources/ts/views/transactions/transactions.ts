@@ -25,7 +25,12 @@ export const notiSendHistoryInterface = () => {
                 if(offset_at < 0)
                     return StatusColors.Timeout
                 else
-                    return StatusColors.Processing
+                {
+                    if(item?.noti_status === -1)
+                        return StatusColors.Default
+                    else
+                        return StatusColors.Processing
+                }
             }
             else {
                 const is_success = item.noti_send_histories?.find(obj => obj.http_code === 200 || obj.http_code === 201)
