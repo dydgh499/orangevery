@@ -93,24 +93,34 @@ class TransactionController extends Controller
         // -1 = 해당사항 없음,   0 = 발송대기 상태 ,   1 = 발송성공
         if($b_info['pv_options']['paid']['use_noti'])
         {
+            $existCorrectNotiUrl = function($noti_urls, $content) {
+                foreach($noti_urls as $noti_url)
+                {
+                    if($noti_url['mcht_id'] === $content['mcht_id'])
+                    {   //취소인데 취소타입
+                        $cxl_send_type  = ($content['is_cancel']        && $noti_url['send_type'] === 2);
+                        //승인인데 승인타입
+                        $appr_send_type = ($content['is_cancel'] === 0  && $noti_url['send_type'] === 1);
+                        //전체 발송
+                        $all_send_type  = $noti_url['pmod_id'] === -1;
+                        if($all_send_type || $cxl_send_type || $appr_send_type)
+                            return true;
+                    }
+                }
+                return false;
+            };
+
             $mcht_ids = array_unique($data['content']->pluck('mcht_id')->all());
-            $noti_urls = NotiUrl::whereIn('mcht_id', $mcht_ids)->get()->toArray();
+            $noti_urls = NotiUrl::whereIn('mcht_id', $mcht_ids)
+                ->where('is_delete', false)
+                ->where('noti_status', true)
+                ->get()->toArray();
 
             foreach($data['content'] as $content)
             {
                 if($content['use_noti'])
                 {
-                    $_noti_urls = array_filter($noti_urls, function($noti_url) use($content) 
-                    {
-                        if($noti_url['mcht_id'] === $content['mcht_id'])
-                        {
-                            $match_send_type = ($content['is_cancel'] && $noti_url['send_type'] === 2) || ($content['is_cancel'] === 0 && $noti_url['send_type'] === 1);
-                            if($noti_url['pmod_id'] !== -1 || $match_send_type)
-                                return true;
-                        }
-                        return false;
-                    });
-                    if(count($_noti_urls))
+                    if($existCorrectNotiUrl($noti_urls, $content))
                         $content['noti_status'] = count($content['notiSendHistories']) ? 1 : 0;
                     else
                         $content['noti_status'] = -1;

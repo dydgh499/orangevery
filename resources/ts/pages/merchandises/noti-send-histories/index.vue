@@ -30,10 +30,6 @@ const httpCodeColor = (http_code: number) => {
         return "error"
 }
 
-const batchRetry = async () => {
-    notiSend(selected.value)
-}
-
 const getResponseBody = (body: string) => {
     try {
         return JSON.stringify(JSON.parse(body))
@@ -53,7 +49,7 @@ const getResponseBody = (body: string) => {
                     :sales="true"/>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="gridicons:reply" @click="batchRetry()" size="small" v-if="getUserLevel() >= 35">
+                <VBtn prepend-icon="gridicons:reply" @click="notiSend(selected)" size="small">
                     노티 재발송
                 </VBtn>
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.result_status" 
