@@ -8,7 +8,7 @@ import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderA
 import { settleCycles, settleDays, settleTaxTypes, authLevels, useSalesFilterStore } from '@/views/salesforces/useStore'
 import type { Options, Salesforce } from '@/views/types'
 
-import { getLevelByIndex, getUserLevel, isAbleModiyV2, salesLevels } from '@axios'
+import { getLevelByIndex, getUserLevel, isAbleModiyV2, salesLevels, user_info } from '@axios'
 import { ItemTypes } from '@core/enums'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
@@ -70,6 +70,27 @@ const filterPgs = computed(() => {
     const filter = pss.filter(item => { return item.pg_id == props.item.mcht_pg_id })
     props.item.mcht_ps_id = psFilter(filter, props.item.mcht_ps_id)
     return filter
+})
+
+const getAuthLevels = computed(() => {
+    if(getUserLevel() >= 35)
+        return authLevels()
+    else if(getUserLevel() >= 13) {
+        if(isAbleModiyV2(props.item, 'salesforces')) {
+            const auth_levels = []
+            if(user_info.value.auth_level >= 0) 
+                auth_levels.push({id:0, title:'권한없음'})
+            if(user_info.value.auth_level >= 1) 
+                auth_levels.push({id:1, title:'추가가능'})
+            if(user_info.value.auth_level >= 2) 
+                auth_levels.push({id:2, title:'추가/수정/삭제 가능음'})
+            return auth_levels
+        }
+        else
+            return authLevels()
+    }
+    else
+        return []
 })
 
 if(props.item.id === 0 && getSalesLevel().length > 0)
@@ -238,7 +259,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                         <VCol md="8"><span>{{ tax_types.find(obj => obj.id === props.item.settle_tax_type).title }}</span></VCol>
                                     </VRow>
                                 </VCol>
-                                <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
+                                <VCol cols="12" md="6" v-if="isAbleModiyV2(props.item, 'salesforces')">
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol md="4">
                                             <BaseQuestionTooltip :location="'top'" :text="'작업권한'" 
@@ -246,15 +267,15 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                         </VCol>
                                         <VCol md="8">                                            
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.auth_level" 
-                                                    :items="authLevels()" item-title="title" item-value="id" label="영업점 권한"/>
+                                                    :items="getAuthLevels" item-title="title" item-value="id" label="영업점 권한"/>
                                         </VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" v-if="getUserLevel() >= 35">
+                        <VCol cols="12">
                             <VRow>
-                                <VCol cols="12" md="6">
+                                <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol>
                                             <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점 언락권한'" 
@@ -269,15 +290,23 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                         </VCol>
                                     </VRow>
                                 </VCol>
-                                <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
-                                    <VRow no-gutters style="align-items: center;">
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiyV2(props.item, 'salesforces')">
                                         <VCol cols="4">화면 타입</VCol>
                                         <VCol md="8">
-                                    <BooleanRadio :radio="props.item.view_type"
-                                        @update:radio="props.item.view_type = $event">
-                                        <template #true>상세보기</template>
-                                        <template #false>간편보기</template>
-                                    </BooleanRadio>
+                                            <BooleanRadio :radio="props.item.view_type"
+                                                @update:radio="props.item.view_type = $event">
+                                                <template #true>상세보기</template>
+                                                <template #false>간편보기</template>
+                                            </BooleanRadio>
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol cols="4" class="font-weight-bold">화면 타입</VCol>
+                                        <VCol md="8">
+                                            <VChip :color="props.item.view_type ? 'success' : 'default'">
+                                                {{ props.item.view_type ? '상세보기' : '간편보기' }}
+                                            </VChip>
                                         </VCol>
                                     </VRow>
                                 </VCol>

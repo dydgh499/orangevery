@@ -114,8 +114,8 @@ class TransactionFilter
                     ->orWhere('merchandises.mcht_name', 'like', "%$search%")
                     ->orWhere('merchandises.resident_num', 'like', "%$search%")
                     ->orWhere('merchandises.business_num', 'like', "%$search%")
-                    ->orWhere('transactions.trx_id', $search)
-                    ->orWhere('payment_modules.note', $search);
+                    ->orWhere('payment_modules.note', '%like%', $search)
+                    ->orWhere('transactions.trx_id', $search);
             });
         }
         if($request->issuer && $request->issuer !== '전체')

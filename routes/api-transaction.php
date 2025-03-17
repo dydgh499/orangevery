@@ -39,8 +39,6 @@ Route::prefix('transactions')->group(function() {
                 Route::post('single-deposit-cancel-job-reservation', [BatchUpdateTransactionController::class, 'singleDepositCancelJobReservation']);
             });
         });
-
-        Route::get('settle-histories/collect-withdraws', [CollectWithdrawHistoryController::class, 'index']); 
         Route::prefix('settle-histories')->group(function() {
             Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
             Route::get('difference/chart', [DifferenceSettlementHistoryController::class, 'chart']);
@@ -68,6 +66,7 @@ Route::prefix('transactions')->group(function() {
         Route::post('settle/merchandises/deposit-validate', [MchtSettleController::class, 'depositValidate']);
     });
 
+    Route::get('settle-histories/collect-withdraws', [CollectWithdrawHistoryController::class, 'index']); 
     Route::post('cancel', [TransactionController::class, 'cancel']);
     Route::get('chart', [TransactionController::class, 'chart']);
     Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);

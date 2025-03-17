@@ -163,7 +163,7 @@ export const isAbleModiyV2 = (item: any, path: string) => {
             if(path === 'merchandises' || path === 'merchandises/noti-urls')
                 return salesAuthLevelValidate(item.id)
             else if(path === 'salesforces') {
-                if(item.level < user_info.value.level)
+                if(item.level < getUserLevel())
                     return salesAuthLevelValidate(item.id)
                 else
                     return false
