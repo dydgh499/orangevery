@@ -39,13 +39,6 @@ trait AttributeTrait
         return env('FILESYSTEM_DISK') === 's3' && strpos($value, 'amazonaws.com') !== false;
     }
 
-    protected function ProfileImg() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => $this->isS3Img($value) ? $this->toS3PrivateLink($value) : $value
-        );
-    }
-
     protected function ContractImg() : Attribute
     {
         return new Attribute(
