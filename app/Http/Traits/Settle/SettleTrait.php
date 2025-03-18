@@ -53,8 +53,11 @@ trait SettleTrait
 
     private function getExistTransUserIds($col, $target)
     {   //#date groupby하면 속도에서 느려짐
-        return Transaction::noSettlement($target)
-            ->distinct()
+        $query = Transaction::noSettlement($target);
+        if((int)request()->input('use_realtime_deposit', 0) === 0)
+            $query = $query->where('mcht_settle_type', '!=', -1);
+
+        return $query->distinct()
             ->orderBy($col, 'desc')
             ->pluck($col)
             ->all();

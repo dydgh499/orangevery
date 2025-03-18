@@ -50,10 +50,9 @@ class PaymentModule extends Model
     {
         $settle_s_day   = (int)date('d', strtotime(request()->s_dt));
         $settle_e_day   = (int)date('d', strtotime(request()->e_dt));
-        $settle_month   = date('Ym', strtotime(request()->e_dt)); //202310
-
-        // 단말기 정산일이 정산일에 포함되는 것들 모두 조회
+        $settle_month   = date('Ym', strtotime(request()->e_dt));
         /*
+            단말기 정산일이 정산일에 포함되는 것들 모두 조회
 
             추가정산일: 조회일 보다 낮아야함
             추가정산액 부가대상: 각 레벨            
