@@ -46,18 +46,17 @@ export const keyCreater = (snackbar: any, items: any) => {
 export const validateItems = (item: PayModule, i: number, mchts: Merchandise[]) => {
     const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
     const date_regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
-
-    item.mcht_name = item.mcht_name ? item.mcht_name?.trim() : ''
-    const pg = pgs.find(a => a.id === item.pg_id)
-    const ps = pss.find(a => a.id === item.ps_id)
-    const settle_type = settle_types.find(a => a.id === item.settle_type)
-    const module_type = module_types.find(a => a.id === item.module_type)
-    const installment = installments.find(a => a.id === item.installment)
+    item.mcht_name = item.mcht_name ? item.mcht_name.toString()?.trim() : ''
+    const pg = pgs.find(a => a.id === parseInt(item.pg_id))
+    const ps = pss.find(a => a.id === parseInt(item.ps_id))
+    const settle_type = settle_types.find(a => a.id === parseInt(item.settle_type))
+    const module_type = module_types.find(a => a.id === parseInt(item.module_type))
+    const installment = installments.find(a => a.id === parseInt(item.installment))
     const mcht = mchts.find(a => a.mcht_name == item.mcht_name)
 
-    let finance_van = corp.pv_options.paid.use_realtime_deposit ? finance_vans.find(a => a.id === item.fin_id) : true
-    let fin_trx_delay = corp.pv_options.paid.use_realtime_deposit ? fin_trx_delays.find(a => a.id === item.fin_trx_delay) : true
-    let cxl_type = corp.pv_options.paid.use_realtime_deposit ? cxl_types.find(a => a.id === item.cxl_type) : true
+    let finance_van = corp.pv_options.paid.use_realtime_deposit ? finance_vans.find(a => a.id === parseInt(item.fin_id)) : true
+    let fin_trx_delay = corp.pv_options.paid.use_realtime_deposit ? fin_trx_delays.find(a => a.id === parseInt(item.fin_trx_delay)) : true
+    let cxl_type = corp.pv_options.paid.use_realtime_deposit ? cxl_types.find(a => a.id === parseInt(item.cxl_type)) : true
 
     if (item.fin_id == null)
         finance_van = true

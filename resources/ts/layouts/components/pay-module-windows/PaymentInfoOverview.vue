@@ -274,7 +274,7 @@ watchEffect(() => {
             <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                 <VDivider style="margin: 1em 0;" />
                     <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
-                        <span>출금정보</span>
+                        <VChip variant="outlined">출금정보</VChip>
                         <div style="display: inline-block;">
                             <VSwitch 
                                 hide-details :false-value=0 :true-value=1 

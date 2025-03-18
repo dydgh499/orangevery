@@ -30,7 +30,7 @@ const ownerCheck = async () => {
         try {
             const params = {
                 acct_cd: props.item.acct_bank_code,
-                acct_num: props.item.acct_num.trim().replace('-', ''),
+                acct_num: props.item.acct_num.toString().trim().replace('-', ''),
                 acct_nm: props.item.acct_name
             }
             const r = await axios.post('/api/v1/auth/owner-check', params)

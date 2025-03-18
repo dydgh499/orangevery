@@ -78,6 +78,12 @@ const { terminals } = useStore()
                     :content="`통신비와 매출미달 차감금의 추가정산액에 대한 설정입니다.<br>
                     추가정산일이 영업일이 아닌경우 추가정산액은 다음정산일에 반영됩니다.
             `"/>
+            <span v-if="props.item.last_settle_month" style='float: inline-end;'>
+                <span style="margin-right: 0.5em;">마지막 정산월</span>                
+                <VChip variant="outlined" color="success">
+                    {{ props.item.last_settle_month }}
+                </VChip>
+            </span>
         </VCardSubtitle>
         <br>
         <VRow v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">

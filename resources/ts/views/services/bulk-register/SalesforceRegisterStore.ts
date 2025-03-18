@@ -1,4 +1,4 @@
-import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
+import { settleCycles, settleTaxTypes } from '@/views/salesforces/useStore';
 import { Salesforce } from '@/views/types';
 import { banks } from '@/views/users/useStore';
 import { salesLevels } from '@axios';
@@ -8,16 +8,13 @@ import { lengthValidatorV2 } from '@validators';
 export const validateItems = (item: Salesforce, i: number, user_names: any) => {
     const all_sales = salesLevels()
     const all_cycles = settleCycles()
-    const all_days = settleDays()
     const tax_types = settleTaxTypes()
 
-    item.settle_day = item.settle_day == -1 ? null : item.settle_day;
-    const level = all_sales.find(sales => sales.id === item.level)
-    const settle_cycle = all_cycles.find(sales => sales.id === item.settle_cycle)
-    const settle_day = all_days.find(sales => sales.id === item.settle_day)
-    const settle_tax_type = tax_types.find(sales => sales.id === item.settle_tax_type)
+    const level = all_sales.find(sales => sales.id === parseInt(item.level))
+    const settle_cycle = all_cycles.find(sales => sales.id === parseInt(item.settle_cycle))
+    const settle_tax_type = tax_types.find(sales => sales.id === parseInt(item.settle_tax_type))
     const acct_bank_name = banks.find(sales => sales.title === item.acct_bank_name)
-    item.resident_num = item.resident_num ? item.resident_num?.trim() : ''
+    item.resident_num = item.resident_num ? item.resident_num.toString()?.trim() : ''
 
     if(user_names.has(item.user_name)) 
         return [false, (i + 2) + '번째줄의 아이디가 중복됩니다.('+item.user_name+")"]
@@ -35,8 +32,6 @@ export const validateItems = (item: Salesforce, i: number, user_names: any) => {
         return [false, (i + 2) + '번째줄의 영업점의 등급이 이상합니다.']
     else if (settle_cycle == null) 
         return [false, (i + 2) + '번째줄의 영업점의 정산주기가 이상합니다.']
-    else if (settle_day == null) 
-        return [false, (i + 2) + '번째줄의 영업점의 정산일이 이상합니다.']
     else if (settle_tax_type == null) 
         return [false, (i + 2) + '번째줄의 영업점의 정산세율이 이상합니다.']
     else if (isEmpty(item.acct_num)) 

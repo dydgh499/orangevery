@@ -28,6 +28,8 @@ const initPayVerficationDialog = ref()
 
 const alert = <any>(inject('alert'))
 
+
+
 provide('password', password)
 provide('store', store)
 provide('head', head)

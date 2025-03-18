@@ -53,23 +53,48 @@ class PaymentModule extends Model
         $settle_month   = date('Ym', strtotime(request()->e_dt)); //202310
 
         // 단말기 정산일이 정산일에 포함되는 것들 모두 조회
+        /*
+
+            추가정산일: 조회일 보다 낮아야함
+            추가정산액 부가대상: 각 레벨            
+            추가정산 적용월: comm_settle_type
+            payment_modules.begin_dt
+            개통일: 조회일 보다 낮아야함
+            마지막정산일: 조회월 보다 낮아야함
+            통신비: 0원 이상이어야함
+        */
         return $query->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
             ->where('merchandises.brand_id', request()->user()->brand_id)
-            ->where('payment_modules.begin_dt', '<=', request()->s_dt)
-            #->where('payment_modules.comm_settle_day', '>=', $settle_s_day)
-            ->where('payment_modules.comm_settle_day', '<=', $settle_e_day)
+            ->where(function ($query) {
+                return $query->orWhere(function($query) {
+                    $settle_month = Carbon::parse(request()->e_dt)->subMonthNoOverflow(0)->format('Ym');
+                    return $query->where('payment_modules.comm_settle_type', 0)
+                        ->whereRaw("DATE_FORMAT(payment_modules.begin_dt, '%Y%m') <= ?", [$settle_month]);
+                })
+                ->orWhere(function($query) {
+                    $settle_month = Carbon::parse(request()->e_dt)->subMonthNoOverflow(1)->format('Ym');
+                    return $query->where('payment_modules.comm_settle_type', 1)
+                        ->whereRaw("DATE_FORMAT(payment_modules.begin_dt, '%Y%m') <= ?", [$settle_month]);
+                })
+                ->orWhere(function($query) {
+                    $settle_month = Carbon::parse(request()->e_dt)->subMonthNoOverflow(2)->format('Ym');
+                    return $query->where('payment_modules.comm_settle_type', 2)
+                        ->whereRaw("DATE_FORMAT(payment_modules.begin_dt, '%Y%m') <= ?", [$settle_month]);
+                });
+            })
             ->where('payment_modules.last_settle_month', '<', $settle_month)
             ->where('payment_modules.comm_settle_fee', '>', 0)
             ->where('payment_modules.comm_calc_level', $level)
-            ->where('payment_modules.is_delete', false);
+            ->where('payment_modules.is_delete', false)
+            ->where('merchandises.is_delete', false);
     }
 
     public function scopeByTargetIds($query, $target_id)
     {
         return $query->distinct()
-        ->groupby("merchandises.$target_id")
-        ->pluck("merchandises.$target_id")
-        ->all();
+            ->groupby("merchandises.$target_id")
+            ->pluck("merchandises.$target_id")
+            ->all();
     }
 
     public function scopeNotUseLastMonth($query, $brand_id)

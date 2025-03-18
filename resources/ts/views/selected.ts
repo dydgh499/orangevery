@@ -1,4 +1,3 @@
-
 export function selectFunctionCollect(store:any, depth_mode=false) {
     const selected = ref<number[]>([])
     const all_selected = ref()

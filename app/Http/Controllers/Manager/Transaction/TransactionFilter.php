@@ -114,7 +114,7 @@ class TransactionFilter
                     ->orWhere('merchandises.mcht_name', 'like', "%$search%")
                     ->orWhere('merchandises.resident_num', 'like', "%$search%")
                     ->orWhere('merchandises.business_num', 'like', "%$search%")
-                    ->orWhere('payment_modules.note', '%like%', $search)
+                    ->orWhere('payment_modules.note', 'like', "%$search%")
                     ->orWhere('transactions.trx_id', $search);
             });
         }

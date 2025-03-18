@@ -119,6 +119,7 @@ trait SettleHistoryTrait
     
     protected function GetSettlePayModuleIds($data, $target_settle_id, $settle_id)
     {
+        // 거래건이 존재하지 않을 경우 문제 발생
         return Transaction::where('brand_id', $data['brand_id'])
             ->where($target_settle_id, $settle_id)
             ->distinct()

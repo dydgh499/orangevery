@@ -78,7 +78,6 @@ class MerchandiseController extends Controller
         // ----- 가맹점 목록 조회 ---------
         $mcht_ids = $this->getExistTransUserIds($target_id, $target_settle_id);
         $terminal_settle_ids = $this->getTerminalSettleIds($request, 10, 'id');
-
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
             ->where('use_collect_withdraw', false)
             ->where('merchandises.mcht_name', 'like', "%".$search."%")

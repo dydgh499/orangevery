@@ -186,7 +186,7 @@ class MchtSettleHistoryController extends Controller
         else
         {
             $code = $this->deleteMchtforceCommon($request, $id, 'mcht_settle_id');
-            return $this->response($code ? 1 : 1000, ['id'=>$id]);
+            return $this->response($code ? 1 : 1000, ['id' => $id]);
         }
     }
 
@@ -202,6 +202,7 @@ class MchtSettleHistoryController extends Controller
                 // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
                 $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
                 $this->SetNullCancelDeposit($hist);
+                $this->SetNullTransSettle($request, $target_settle_id);
                 $query->delete();
                 return true;
             }

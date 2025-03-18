@@ -2,7 +2,7 @@ import { isEmpty } from '@/@core/utils';
 import { Merchandise, RegularCreditCard } from '@/views/types';
 
 export const validateItems = (item: RegularCreditCard, i: number, mchts:Merchandise[]) => {
-    item.mcht_name = item.mcht_name ? item.mcht_name?.trim() : ''
+    item.mcht_name = item.mcht_name ? item.mcht_name.toString()?.trim() : ''
     const mcht = mchts.find(item => item.mcht_name == item.mcht_name)
     if (mcht == null) 
         return [false, (i + 2) + '번째줄의 카드정보의 가맹점 상호가 이상합니다.']

@@ -119,7 +119,7 @@ const tidCreater = async () => {
     const unique_pgids = [
         ...new Set(
             items.value
-                .filter(item => (item?.tid === undefined || item?.tid?.trim() === ''))
+                .filter(item => (item?.tid === undefined || item?.tid.toString()?.trim() === ''))
                 .map(item => item.pg_id)
         )
     ];

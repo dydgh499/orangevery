@@ -32,13 +32,13 @@ const isNotExistCustomFilter = (custom_id: number | null) => {
 }
 export const validateItems = (item: Merchandise, i: number, user_names: any, mcht_names: any) => {
     const levels = corp.pv_options.auth.levels
-    item.sales0_name = item.sales0_name ? item.sales0_name?.trim() : null
-    item.sales1_name = item.sales1_name ? item.sales1_name?.trim() : null
-    item.sales2_name = item.sales2_name ? item.sales2_name?.trim() : null
-    item.sales3_name = item.sales3_name ? item.sales3_name?.trim() : null
-    item.sales4_name = item.sales4_name ? item.sales4_name?.trim() : null
-    item.sales5_name = item.sales5_name ? item.sales5_name?.trim() : null
-    item.resident_num = item.resident_num ? item.resident_num.trim() : ''
+    item.sales0_name = item.sales0_name ? item.sales0_name.toString()?.trim() : null
+    item.sales1_name = item.sales1_name ? item.sales1_name.toString()?.trim() : null
+    item.sales2_name = item.sales2_name ? item.sales2_name.toString()?.trim() : null
+    item.sales3_name = item.sales3_name ? item.sales3_name.toString()?.trim() : null
+    item.sales4_name = item.sales4_name ? item.sales4_name.toString()?.trim() : null
+    item.sales5_name = item.sales5_name ? item.sales5_name.toString()?.trim() : null
+    item.resident_num = item.resident_num ? item.resident_num.toString()?.trim() : ''
 
     if(user_names.has(item.user_name)) 
         return [false, (i + 2) + '번째줄의 아이디가 중복됩니다.('+item.user_name+")"]

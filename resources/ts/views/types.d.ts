@@ -286,6 +286,7 @@ export interface PayModule {
     withdraw_limit_type: number,
     withdraw_business_limit: number,
     withdraw_holiday_limit: number,
+    last_settle_month: number,
 }
 
 export interface PayGateway {

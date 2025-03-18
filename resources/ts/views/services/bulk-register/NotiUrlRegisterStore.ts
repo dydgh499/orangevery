@@ -3,11 +3,11 @@ import { Merchandise, NotiUrl, PayModule } from '@/views/types';
 
 const filterPayModuleNote = (pmod_note: string, mcht_id: number, pay_modules: PayModule[]) => {
     const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id === mcht_id })
-    return filter.find(obj => obj.note === pmod_note ? pmod_note.trim() : '')?.id
+    return filter.find(obj => obj.note === pmod_note ? pmod_note.toString()?.trim() : '')?.id
 }
 
 export const validateItems = (item: NotiUrl, i: number, mchts: Merchandise[], pay_modules: PayModule[]) => {
-    item.mcht_name = item.mcht_name ? item.mcht_name?.trim() : ''
+    item.mcht_name = item.mcht_name ? item.mcht_name.toString()?.trim() : ''
     const mcht = mchts.find(m => m.mcht_name == item.mcht_name)
     if (mcht) {
         item.pmod_id = item.pmod_note == -1 ? -1 : filterPayModuleNote(item.pmod_note, mcht.id, pay_modules) as number

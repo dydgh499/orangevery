@@ -118,8 +118,8 @@ watchEffect(async () => {
                             </VCol>
                             <VCol md="4" cols="12">
                                 <VRow>
-                                    <VCol class="font-weight-bold" md="6">화면타입 사용여부</VCol>
-                                    <VCol md="6">
+                                    <VCol class="font-weight-bold" md="4">화면타입</VCol>
+                                    <VCol md="8">
                                         <VRow>
                                             <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in view_types" :key="key">
                                                 {{ cus.title }} = {{ cus.id }}

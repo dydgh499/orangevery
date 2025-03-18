@@ -21,11 +21,11 @@ const mobileVerfication = ref()
 let resolveCallback: (bill_key: BillKey | null) => void;
 
 const show = (_pay_window: string, _hand_pay: HandPay) => {
-    if(_hand_pay.buyer_name.trim() === '')
+    if(_hand_pay.buyer_name.toString().trim() === '')
         snackbar.value.show('구매자명을 입력해주세요.', 'warning')
-    else if(_hand_pay.buyer_phone.trim() === '')
+    else if(_hand_pay.buyer_phone.toString().trim() === '')
         snackbar.value.show('연락처를 입력해주세요.', 'warning')
-    else if(_hand_pay.resident_num_front?.trim() === '')
+    else if(_hand_pay.resident_num_front?.toString().trim() === '')
     snackbar.value.show('생년월일을 입력해주세요.', 'warning')
     else {
         hand_pay.value = _hand_pay
