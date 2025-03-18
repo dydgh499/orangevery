@@ -17,9 +17,7 @@ provide('head', head)
 provide('exporter', exporter)
 
 const getLogStyle = (item: RealtimeHistory) => {
-    if(item.result_code === '0000' && item.request_type === 6170)
-        return 'text-primary';
-    else if(item.result_code !== '0000')
+    if(item.result_code !== '0000')
         return 'text-error';
     else
         return '';
