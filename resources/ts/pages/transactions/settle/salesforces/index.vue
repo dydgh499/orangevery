@@ -30,6 +30,7 @@ provide('exporter', exporter)
 
 store.params.level = all_sales[0].id
 store.params.is_base_trx = 1
+store.params.use_realtime_deposit = 1
 
 onMounted(() => {
     watchEffect(async () => {
