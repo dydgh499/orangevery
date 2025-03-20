@@ -14,7 +14,6 @@ class SalesforceFeeTable extends Model
     protected   $guarded    = [];
     protected   $hidden     = [];
 
-
     static public function totalFee($parent_id)
     {
         $total_fee = 0;
@@ -28,5 +27,40 @@ class SalesforceFeeTable extends Model
             }
         }
         return round($total_fee, 3);
+    }
+
+    protected function Sales5Fee() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => round($value, 3),
+        );
+    }
+
+    protected function Sales4Fee() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => round($value, 3),
+        );
+    }
+
+    protected function Sales3Fee() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => round($value, 3),
+        );
+    }
+
+    protected function Sales2Fee() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => round($value, 3),
+        );
+    }
+
+    protected function Sales1Fee() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => round($value, 3),
+        );
     }
 }
