@@ -13,4 +13,20 @@ class SalesforceFeeTable extends Model
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
     protected   $hidden     = [];
+
+
+    static public function totalFee($parent_id)
+    {
+        $total_fee = 0;
+        $table = self::where('sales1_id', $parent_id)->first();
+        if($table)
+        {
+            $table = $table->toArray();
+            for ($i=1; $i < 6 ; $i++) 
+            { 
+                $total_fee += $table['sales'.$i.'_fee'];
+            }
+        }
+        return round($total_fee, 3);
+    }
 }

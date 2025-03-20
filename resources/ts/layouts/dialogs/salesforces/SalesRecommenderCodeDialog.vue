@@ -37,7 +37,8 @@ defineExpose({
             <VCardText>
                 <SalesRecommenderCodeItem 
                 v-for="(sales_recommender_code, index) in salesforce.sales_recommender_codes"
-                        :key="sales_recommender_code.id" :item="sales_recommender_code" :level="salesforce.level"/>
+                        :key="sales_recommender_code.id" :item="sales_recommender_code" :level="salesforce.level"
+                        :parent_total_fee="salesforce?.parent_total_fee ?? 0"/>
                 <VRow v-show="Boolean(salesforce.id != 0)">
                     <VCol class="d-flex gap-4">
                         <VBtn type="button" 

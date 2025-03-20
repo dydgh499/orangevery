@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 use App\Models\Salesforce;
 use App\Models\Merchandise;
 
+use App\Http\Controllers\Auth\Login;
 use Illuminate\Support\Facades\Redis;
 use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Traits\Models\EncryptDataTrait;
@@ -31,7 +32,7 @@ class AuthPasswordChange
     {
         $result = [
             'result' => AuthLoginCode::WRONG_ACCESS->value, 
-            'data' => [], 
+            'user' => [], 
             'msg' => '잘못된 접근입니다.',
         ];
 
@@ -43,7 +44,7 @@ class AuthPasswordChange
             if($user && $user['user_name'] && $user['level'] && $user['brand_id'])
             {
                 $result['result'] = AuthLoginCode::SUCCESS->value;
-                $result['data'] = $user;
+                $result['user'] = $user;
             }
         }
         return $result;
@@ -51,11 +52,27 @@ class AuthPasswordChange
 
     static public function updateFirstPassword($result, $user_pw)
     {
-        
-        $orm = $result['data']['level'] === 10 ? Merchandise::with(['onlinePays.payWindows', 'shoppingMall']) : new Salesforce;
+        if($result['user']['level'] === 10)
+        {
+            $orm = Merchandise::with(['onlinePays.payWindows', 'shoppingMall']);
+        }
+        else if($result['user']['level'] < 35)
+        {
+            $brand = BrandInfo::getBrandById($result['user']['brand_id']);
+            if($brand['pv_options']['paid']['brand_mode'] === 1)
+                $orm = Salesforce::with(['salesRecommenderCodes']);
+            else
+                $orm = new Salesforce;
+        }
+        else
+        {
+            $orm = null;
+            critical('만약 이구문이 실행이되면 token 암호화가 뚫린 것');
+        }
+
         $user = $orm
-            ->where('brand_id', $result['data']['brand_id'])
-            ->where('user_name', $result['data']['user_name'])
+            ->where('brand_id', $result['user']['brand_id'])
+            ->where('user_name', $result['user']['user_name'])
             ->where('is_delete', false)
             ->first();
 
@@ -72,7 +89,13 @@ class AuthPasswordChange
                 $user->password_change_at = date('Y-m-d H:i:s');
                 $user->save();
                 AuthAccountLock::initPasswordWrongCounter($user);
-                $result['data'] = $user->loginInfo($result['data']['level']);
+                $result['user'] = $user->loginInfo($result['user']['level']);
+
+                if(Login::isMerchant($result))
+                    $result = Login::setMerchant($result);
+                else if(Login::isRecommenderSales($result))
+                    $result = Login::setRecommenderSales($result);
+
             }
         }
         else

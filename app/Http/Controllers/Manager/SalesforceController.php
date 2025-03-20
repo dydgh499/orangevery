@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager;
 use App\Models\Salesforce;
 use App\Models\Merchandise;
 use App\Models\Log\SfFeeApplyHistory;
+use App\Models\Salesforce\SalesforceFeeTable;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
@@ -190,11 +191,14 @@ class SalesforceController extends Controller
         $with = ['underAutoSettings'];
         $b_info = BrandInfo::getBrandById($request->user()->brand_id);
         if($b_info['pv_options']['paid']['brand_mode'] === 1)
+        {
             $with[] = 'salesRecommenderCodes';
+        }
 
         $data = $this->salesforces->where('id', $id)
             ->with($with)
             ->first();
+
         if($data)
         {
             if(Ablilty::isOperator($request) || Ablilty::isMySalesforce($request, $id) || Ablilty::isUnderSalesforce($request, $id))
@@ -205,7 +209,12 @@ class SalesforceController extends Controller
                 if($request->user()->tokenCan($data->level) === false)
                     return $this->response(951);
                 else
+                {
+                    if($b_info['pv_options']['paid']['brand_mode'] === 1 && $data->level === 13)
+                        $data->parent_total_fee = SalesforceFeeTable::totalFee($data->parent_id);
+
                     return $this->response(0, $data);
+                }
             }
             else
             {   // URL 조작 (영업점인데 하위가아닌 다른영업점 조회하려할 시) 자신아래 영업점이 아닌경우?

@@ -6,7 +6,7 @@ import corp from '@corp'
 export const getTotalFee = (fee_table: any) => {
     let total_fee = 0
     for (let i = 1; i < 6; i++) {
-        total_fee += fee_table[`sales${i}_fee`]        
+        total_fee += parseFloat(fee_table[`sales${i}_fee`])
     }
     return total_fee
 }

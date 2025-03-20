@@ -14,17 +14,19 @@ use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Ablilty\ShoppingMallWindowInterface;
 
+use App\Models\Salesforce\SalesforceFeeTable;
+
 use Illuminate\Support\Facades\Hash;
 use App\Enums\HistoryType;
 
 class LoginValidate
 {
-    static protected function isMerchant($result) 
+    static public function isMerchant($result) 
     {
         return isset($result['user']->mcht_name) ? true : false;
     }
 
-    static protected function setMerchant($result) 
+    static public function setMerchant($result) 
     {
         $result['user']->level = 10;
         if(self::merchantStatusValidate($result) === false)
@@ -41,28 +43,40 @@ class LoginValidate
         return $result;
     }
 
-    static protected function isLockAccount($result) 
+    static public function isRecommenderSales($result)
+    {
+        $brand = BrandInfo::getBrandById($result['user']->brand_id);        
+        return $brand['pv_options']['paid']['brand_mode'] === 1 && $result['user']->level === 13;
+    }
+
+    static public function setRecommenderSales($result)
+    {
+        $result['user']->parent_total_fee = SalesforceFeeTable::totalFee($result['user']->parent_id);
+        return $result;
+    }
+
+    static public function isLockAccount($result) 
     {
         return $result['user']->is_lock ? true : false;
     }
 
-    static protected function isCorrectPassword($result, $user_pw)
+    static public function isCorrectPassword($result, $user_pw)
     {
         return AuthPasswordChange::HashCheck($result['user'], $user_pw) ? true : false;
     }
 
-    static protected function merchantStatusValidate($result)
+    static public function merchantStatusValidate($result)
     {
         return $result['user']->merchant_status === 2 ? false : true;
     }
 
-    static protected function locationValidate($result, $ip)
+    static public function locationValidate($result, $ip)
     {
         if($result['user']->level >= 35 && AuthOperatorIP::valiate($result['user']->brand_id, $ip) === false)
             AbnormalConnection::tryNoRegisterIP($result['user']);
     }
 
-    static protected function secondAuthValidate($result, $request)
+    static public function secondAuthValidate($result, $request)
     {
         $brand = BrandInfo::getBrandById($result['user']->brand_id);
         if($result['user']->level >= 35)

@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { getLevelByIndex } from '@/plugins/axios';
-import corp from '@/plugins/corp';
 import { payWindowStore } from '@/views/quick-view/payWindowStore';
 import { useRequestStore } from '@/views/request';
 import type { SalesRecommenderCode } from '@/views/types';
@@ -10,16 +8,22 @@ import { VForm } from 'vuetify/components';
 interface Props {
     item: SalesRecommenderCode,
     level: number,
+    parent_total_fee: number,
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 const { copy } = payWindowStore()
 const { update, remove } = useRequestStore()
+
 const removeItem = () => {
     if(props.item.id) 
         remove('/salesforces/sales-recommender-codes', props.item, false)
     else 
         props.item.id = -1
+}
+
+const updateMchtFee = () => {
+    props.item.mcht_fee = parseFloat((props.parent_total_fee + parseFloat(props.item.sales_fee || 0)).toFixed(4))
 }
 </script>
 <template>
@@ -62,33 +66,28 @@ const removeItem = () => {
                     </VCol>
                     <VCol class="d-flex justify-space-between small-font">
                         <div>
-                            <div style="margin-bottom: 1em;">
-                                <b>수수료율 입력</b> 
+                            <div>
+                                <b>수익율</b> 
                             </div>
                             <div>
-                                <VTextField 
-                                    v-model="props.item.mcht_fee" 
+                                <VTextField                                     
+                                    v-model="props.item.sales_fee" 
                                     variant="underlined"
-                                    label="가맹점"
                                     suffix="%" 
                                     style="width: 4em;"
-                                    :rules="[requiredValidatorV2(props.item.mcht_fee, '수수료')]"
+                                    @update:modelValue="updateMchtFee()"
+                                    :rules="[requiredValidatorV2(props.item.sales_fee, '수익율')]"
                                 />
                             </div>
                         </div>
                         <div>
                             <div style="margin-bottom: 1em;">
-                                <b>　</b>
+                                <b>가맹점 수수료</b>
                             </div>
                             <div>
-                                <VTextField 
-                                    v-model="props.item.sales_fee" 
-                                    variant="underlined"
-                                    :label="corp.pv_options.auth.levels['sales'+(getLevelByIndex(props.level))+'_name']"
-                                    suffix="%" 
-                                    style="width: 4em;"
-                                    :rules="[requiredValidatorV2(props.item.sales_fee, '수수료')]"
-                                />
+                                <VChip color="info">
+                                    {{ props.item.mcht_fee }} %
+                                </VChip>
                             </div>
                         </div>
                         <VBtn 

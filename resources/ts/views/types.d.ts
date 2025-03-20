@@ -192,6 +192,7 @@ export interface Salesforce extends SalesforcePropertie, UserPropertie, Identity
     withdraw_holiday_limit: number,
     mcht_pg_id: number,
     mcht_ps_id: number,
+    parent_total_fee?: number,
     under_auto_settings?: UnderAutoSetting[],
     sales_recommender_codes?: SalesRecommenderCode[],
     childs?: Salesforce[],
