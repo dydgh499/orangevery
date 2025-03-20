@@ -24,4 +24,13 @@ class PaymentSection extends Model
             get: fn ($value) => number_format($value * 100, 3),
         );
     }
+
+    static public function p2pFee($ps_id)
+    {
+        $section = self::where('id', $ps_id)->first();
+        if($section)
+            return $section->trx_fee;
+        else
+            return 0;
+    }
 }

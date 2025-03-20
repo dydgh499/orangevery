@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Ablilty\ShoppingMallWindowInterface;
 
+use App\Models\Service\PaymentSection;
 use App\Models\Salesforce\SalesforceFeeTable;
 
 use Illuminate\Support\Facades\Hash;
@@ -51,7 +52,9 @@ class LoginValidate
 
     static public function setRecommenderSales($result)
     {
+        $brand = BrandInfo::getBrandById($result['user']->brand_id);
         $result['user']->parent_total_fee = SalesforceFeeTable::totalFee($result['user']->parent_id);
+        $result['user']->p2p_pay_fee      = PaymentSection::p2pFee($brand['pv_options']['p2p']['ps_id']);
         return $result;
     }
 

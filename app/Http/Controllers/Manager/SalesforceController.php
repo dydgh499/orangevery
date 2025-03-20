@@ -6,6 +6,7 @@ use App\Models\Salesforce;
 use App\Models\Merchandise;
 use App\Models\Log\SfFeeApplyHistory;
 use App\Models\Salesforce\SalesforceFeeTable;
+use App\Models\Service\PaymentSection;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
@@ -211,7 +212,10 @@ class SalesforceController extends Controller
                 else
                 {
                     if($b_info['pv_options']['paid']['brand_mode'] === 1 && $data->level === 13)
+                    {
                         $data->parent_total_fee = SalesforceFeeTable::totalFee($data->parent_id);
+                        $data->p2p_pay_fee      = PaymentSection::p2pFee($b_info['pv_options']['p2p']['ps_id']);
+                    }
 
                     return $this->response(0, $data);
                 }

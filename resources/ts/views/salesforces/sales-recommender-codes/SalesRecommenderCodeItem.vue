@@ -9,6 +9,7 @@ interface Props {
     item: SalesRecommenderCode,
     level: number,
     parent_total_fee: number,
+    p2p_pay_fee: number,
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
@@ -23,7 +24,11 @@ const removeItem = () => {
 }
 
 const updateMchtFee = () => {
-    props.item.mcht_fee = parseFloat((props.parent_total_fee + parseFloat(props.item.sales_fee || 0)).toFixed(4))
+    props.item.mcht_fee = parseFloat((
+        props.p2p_pay_fee + 
+        props.parent_total_fee + 
+        parseFloat(props.item.sales_fee || 0)
+    ).toFixed(4))
 }
 </script>
 <template>
