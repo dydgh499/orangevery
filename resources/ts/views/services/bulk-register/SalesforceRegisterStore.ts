@@ -19,27 +19,27 @@ export const validateItems = (item: Salesforce, i: number, user_names: any) => {
     if(user_names.has(item.user_name)) 
         return [false, (i + 2) + '번째줄의 아이디가 중복됩니다.('+item.user_name+")"]
     else if (isEmpty(item.user_name)) 
-        return [false, (i + 2) + '번째줄의 영업라인의 아이디는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 아이디는 필수로 입력해야합니다.']
     else if (isEmpty(item.user_pw)) 
-        return [false, (i + 2) + '번째줄의 영업라인의 패스워드는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 패스워드는 필수로 입력해야합니다.']
     else if (isEmpty(item.resident_num)) 
-        return [false, (i + 2) + '번째줄의 영업라인의 주민등록번호는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 주민등록번호는 필수로 입력해야합니다.']
     else if (typeof lengthValidatorV2(item.business_num, 10) != 'boolean') 
         return [false, (i + 2) + '번째줄의 가맹점의 사업자번호 포멧이 정확하지 않습니다.']    
     else if (typeof lengthValidatorV2(item.resident_num, 14) != 'boolean') 
-        return [false, (i + 2) + '번째줄의 영업라인의 주민등록번호 포멧이 정확하지 않습니다.']
+        return [false, (i + 2) + '번째줄의 주민등록번호 포멧이 정확하지 않습니다.']
     else if (level == null) 
-        return [false, (i + 2) + '번째줄의 영업라인의 등급이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 등급이 이상합니다.']
     else if (settle_cycle == null) 
-        return [false, (i + 2) + '번째줄의 영업라인의 정산주기가 이상합니다.']
+        return [false, (i + 2) + '번째줄의 정산주기가 이상합니다.']
     else if (settle_tax_type == null) 
-        return [false, (i + 2) + '번째줄의 영업라인의 정산세율이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 정산세율이 이상합니다.']
     else if (isEmpty(item.acct_num)) 
-        return [false, (i + 2) + '번째줄의 영업라인의 계좌번호는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 계좌번호는 필수로 입력해야합니다.']
     else if (isEmpty(item.acct_name)) 
-        return [false, (i + 2) + '번째줄의 영업라인의 예금주는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 예금주는 필수로 입력해야합니다.']
     else if (acct_bank_name == null) 
-        return [false, (i + 2) + '번째줄의 영업라인의 입금은행명이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 입금은행명이 이상합니다.']
     else {
         item.acct_bank_code = banks.find(sales => sales.title === item.acct_bank_name)?.code as string
         return [true, '']

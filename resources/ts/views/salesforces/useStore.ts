@@ -461,7 +461,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
                 { id: null, sales_name: '전체' },
                 ...map_sales.sort((a, b) => a.sales_name.localeCompare(b.sales_name))
             ]
-            // 선택한 영업라인이 영업라인 목록에 없을 때 전체로 변경            
+            // 선택한 영업라인이 목록에 없을 때 전체로 변경
             if(sales[i].value.find(obj => obj.id === params[sales_key+'_id']) === undefined)
                 params[sales_key+'_id'] = undefined
         }

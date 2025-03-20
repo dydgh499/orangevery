@@ -144,7 +144,7 @@ const filterPgs = computed(() => {
                     </CreateHalfVColV2>
                     <CreateHalfVColV2 :mdl="6" :mdr="6">
                         <template #l_name>
-                            <BaseQuestionTooltip location="top" text="영업라인 ID 난이도" :content=`'영업라인 ID 추가/수정시 요구되는 검증 난이도입니다.'`/>
+                            <BaseQuestionTooltip location="top" text="영업라인 ID 난이도" :content="`영업라인 ID 추가/수정시 요구되는 검증 난이도입니다.`"/>
                         </template>
                         <template #l_input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.sales_id_level"
