@@ -135,7 +135,7 @@ onMounted(() => {
                                 구간 수수료율 = {{ item['payment_modules'].length ? Number(pss.find(ps => ps.id === item['payment_modules'][0].ps_id)?.trx_fee) : 0}} %<br>
                             </span>
                             본사 수익률 = {{ getBrandSettleFee(item, getSalesSettleInfo(item)).settle_fee }} %<br>
-                            영업점 수익률 합계 = {{ getSalesSettleInfo(item).sales_total_fee }} %<br>
+                            영업라인 수익률 합계 = {{ getSalesSettleInfo(item).sales_total_fee }} %<br>
                         </div>
                     </VTooltip>
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">

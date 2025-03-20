@@ -4,7 +4,7 @@ import { SALES_LEVEL_SIZE, useSalesFilterStore } from "../salesforces/useStore";
 import { useStore } from "../services/pay-gateways/useStore";
 
 export const merchandiseCreateAuth = () => {
-    // 영업점 수수료 수정권한
+    // 영업라인 수수료 수정권한
     const isSalesModifyValidate = (mcht_id: number, idx: number) => {
         if(isAbleModiyV2({id: mcht_id}, 'merchandises')) {
             if(getUserLevel() > 10 && getUserLevel() < 35) {

@@ -144,7 +144,7 @@ class FeeChangeHistoryController extends Controller
 
     public function deleteSalesforce(Request $request, int $id)
     {
-        return $this->deleteHistory($this->sf_fee_histories, '영업점 수수료율', $id);
+        return $this->deleteHistory($this->sf_fee_histories, '영업라인 수수료율', $id);
     }
 
     private function batchDeleteHistory($orm, $target, $ids)
@@ -171,11 +171,11 @@ class FeeChangeHistoryController extends Controller
 
     public function deleteSalesforceBatch(Request $request)
     {
-        return $this->batchDeleteHistory($this->sf_fee_histories, '영업점 수수료율', $request->selected_idxs);
+        return $this->batchDeleteHistory($this->sf_fee_histories, '영업라인 수수료율', $request->selected_idxs);
     }
 
     /**
-     * 가맹점/영업점 수수료율 즉시/예약적용 
+     * 가맹점/영업라인 수수료율 즉시/예약적용 
      */
     public function apply(Request $request, $user)
     {
@@ -204,7 +204,7 @@ class FeeChangeHistoryController extends Controller
                     {
                         $before    = MerchandiseFeeUpdater::getSalesBeforeFee($mcht, $request->level);
                         $after     = MerchandiseFeeUpdater::getSalesAfterFee($request);
-                        $target = '영업점 수수료율';
+                        $target = '영업라인 수수료율';
                     }
                     if($request->apply_type === 0)
                         operLogging(HistoryType::UPDATE, $target, $before, $after, $mcht->mcht_name);

@@ -95,7 +95,7 @@ class EzpgController extends Controller
      * @responseField total string 총 개수
      * @responseField content object[] 결과
      * @responseField content.*.ps_fee integer PG사 구간 수수료(%)
-     * @responseField content.*.sales4_fee integer 영업점 수수료(%)
+     * @responseField content.*.sales4_fee integer 영업라인 수수료(%)
      * @responseField content.*.sales3_fee integer 지사 수수료(%)
      * @responseField content.*.sales2_fee integer 총판 수수료(%)
      * @responseField content.*.sales1_fee integer 대리점 수수료(%)

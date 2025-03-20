@@ -4,7 +4,7 @@ import { Searcher } from '@/views/searcher'
 
 export const useSearchStore = defineStore('salesFeeHistorySearchStore', () => {
     const store = Searcher('salesforces/fee-change-histories')
-    const head  = Header('salesforces/fee-change-histories', '영업점 수수료율 변경이력')
+    const head  = Header('salesforces/fee-change-histories', '영업라인 수수료율 변경이력')
 
     const headers: Record<string, string> = {
         'id' : 'NO.',
@@ -13,9 +13,9 @@ export const useSearchStore = defineStore('salesFeeHistorySearchStore', () => {
         'apply_dt': '적용예정일',
         'change_status' : '변경상태',
         'level': '등급',
-        'bf_sales_name' : '영업점 상호',
+        'bf_sales_name' : '영업라인 상호',
         'bf_trx_fee' : '수수료',
-        'aft_sales_name' : '영업점 상호',
+        'aft_sales_name' : '영업라인 상호',
         'aft_trx_fee' : '수수료',
     }
     head.sub_headers.value = [

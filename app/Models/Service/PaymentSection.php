@@ -29,7 +29,7 @@ class PaymentSection extends Model
     {
         $section = self::where('id', $ps_id)->first();
         if($section)
-            return $section->trx_fee;
+            return (float)$section->trx_fee;
         else
             return 0;
     }

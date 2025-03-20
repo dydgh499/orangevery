@@ -45,7 +45,7 @@ trait SettleTrait
     }
 
     private function getDefaultQuery($query, $request, $ids)
-    {   // 삭제된 가맹점, 영업점도 나와야함
+    {   // 삭제된 가맹점, 영업라인도 나와야함
         return $query
             ->where('brand_id', $request->user()->brand_id)
             ->whereIn('id', $ids);
@@ -102,7 +102,7 @@ trait SettleTrait
             $query = $query->where('transactions.is_cancel', true);
 
         if((int)$request->level === 10)
-        {   // 영업점 단계에서는 없음
+        {   // 영업라인 단계에서는 없음
             if((int)$request->use_realtime_deposit === 1)
             {   // 실패건은 제외하고 조회
                 $fails = RealtimeSendHistory::onlyFailRealtime();

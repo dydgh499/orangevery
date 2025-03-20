@@ -66,11 +66,11 @@ const brand_modes = [
                                 <VRow no-gutters style="align-items: center;">
                                     <VCol cols="12" :md="6">                                        
                                         <VSwitch hide-details v-model="props.item.auth.visibles.abnormal_trans_sales"
-                                            color="primary" label="이상거래, 결제실패, 즉시출금 영업점 노출여부"/>
+                                            color="primary" label="이상거래, 결제실패, 즉시출금 영업라인 노출여부"/>
                                     </VCol>
                                     <VCol cols="12" :md="6">                                        
                                         <VSwitch hide-details v-model="props.item.paid.use_sales_dns"
-                                            color="primary" label="영업점 DNS 허용"/>
+                                            color="primary" label="영업라인 DNS 허용"/>
                                     </VCol>
                                 </VRow>
                             </VCol>
@@ -106,7 +106,7 @@ const brand_modes = [
                         </VRow>
                     </VCol>
                     <VCardTitle class="pt-10">
-                        <BaseQuestionTooltip location="top" text="영업점 옵션(유료)"
+                        <BaseQuestionTooltip location="top" text="영업라인 옵션(유료)"
                             :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`"/>
                     </VCardTitle>
                     <VCol>
@@ -133,7 +133,7 @@ const brand_modes = [
                         </VRow>
                     </VCol>
                     <VCardTitle class="pt-10">
-                        <BaseQuestionTooltip location="top" text="영업점 등급설정" :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`"/>
+                        <BaseQuestionTooltip location="top" text="영업라인 등급설정" :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`"/>
                     </VCardTitle>
                     <VCol>
                         <VRow class="pt-5">

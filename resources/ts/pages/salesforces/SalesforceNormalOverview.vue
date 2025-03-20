@@ -47,7 +47,7 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="아이디, 영업점 상호 검색" :metas="metas" :add="isAbleModiy(0)" add_name="영업점" :date_filter_type="DateFilters.NOT_USE">
+        <BaseIndexView placeholder="아이디, 영업라인 상호 검색" :metas="metas" :add="isAbleModiy(0)" add_name="영업라인" :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                     :sales="true">
@@ -59,7 +59,7 @@ onMounted(() => {
                         </VCol>
                         <VCol cols="6" sm="3" v-if="true">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
-                                :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`영업점 정산주기 선택`"
+                                :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`영업라인 정산주기 선택`"
                                 item-title="title" item-value="id" @update:modelValue="store.updateQueryString({settle_cycle: store.params.settle_cycle})"/>
                         </VCol>
                     </template>

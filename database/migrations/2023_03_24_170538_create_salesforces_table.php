@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('user_name', 30)->index()->comment('ID');
             $table->string('user_pw', 100)->comment('PW');
             $table->string('nick_name', 30)->nullable()->comment('유저명');
-            $table->string('sales_name', 30)->nullable()->comment('영업점명');
-            $table->string('addr', 150)->nullable()->comment('영업점 주소');
+            $table->string('sales_name', 30)->nullable()->comment('영업라인명');
+            $table->string('addr', 150)->nullable()->comment('영업라인 주소');
             $table->string('profile_img')->nullable()->comment('프로필 이미지');
             //
             $table->string('phone_num',20)->nullable()->comment('휴대폰 번호');

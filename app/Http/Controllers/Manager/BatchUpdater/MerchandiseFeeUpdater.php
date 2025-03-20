@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class MerchandiseFeeUpdater
 {
     /**
-     * 영업점 수수료율 적용 포멧 목록
+     * 영업라인 수수료율 적용 포멧 목록
      */
     static private function getSalesResource($request, $change_status, $mchts)
     {
@@ -72,7 +72,7 @@ class MerchandiseFeeUpdater
     }
 
     /**
-     * 영업점 pk, fee
+     * 영업라인 pk, fee
      */
     static public function getSalesKeys($level)
     {
@@ -109,7 +109,7 @@ class MerchandiseFeeUpdater
     }
 
     /**
-     * 상위 영업점 이전 수수료
+     * 영업라인 이전 수수료
      */
     static public function getSalesBeforeFee($mcht, $level)
     {
@@ -122,7 +122,7 @@ class MerchandiseFeeUpdater
     }
 
     /**
-     * 상위 영업점 이후 수수료
+     * 영업라인 이후 수수료
      */
     static public function getSalesAfterFee($request)
     {
@@ -168,7 +168,7 @@ class MerchandiseFeeUpdater
     }
 
     /**
-     * 영업점 일괄적용시 수수료 업데이트
+     * 영업라인 일괄적용시 수수료 업데이트
      */    
     static public function SalesFeeHistoryUpdate($request)
     {

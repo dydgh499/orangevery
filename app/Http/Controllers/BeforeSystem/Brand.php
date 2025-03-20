@@ -57,8 +57,8 @@ class Brand
             $pv_options->auth->levels['sales0_use'] = false;
 
             $pv_options->auth->levels['dev_name'] = '개발사';
-            $pv_options->auth->levels['sales5_name'] = '상위 영업점';
-            $pv_options->auth->levels['sales4_name'] = '영업점';
+            $pv_options->auth->levels['sales5_name'] = '상위 영업라인';
+            $pv_options->auth->levels['sales4_name'] = '영업라인';
             $pv_options->auth->levels['sales3_name'] = '지사';
             $pv_options->auth->levels['sales2_name'] = '총판';
             $pv_options->auth->levels['sales1_name'] = '대리점';

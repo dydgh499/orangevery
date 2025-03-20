@@ -129,7 +129,7 @@ class DashboardController extends Controller
     }
 
     /*
-     * 영업점 증감률 분석(저번달 대비)
+     * 영업라인인 증감률 분석(저번달 대비)
      */
     public function upSideSaleAnalysis(Request $request)
     {

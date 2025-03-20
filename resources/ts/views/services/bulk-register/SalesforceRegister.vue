@@ -57,7 +57,7 @@ const validate = () => {
 }
 
 const register = async () => {
-    if(await bulkRegister('영업점', 'salesforces', items.value))
+    if(await bulkRegister('영업라인', 'salesforces', items.value))
         location.reload()
 }
 watchEffect(async () => {
@@ -87,7 +87,7 @@ watchEffect(async () => {
             <CreateHalfVCol :mdl="8" :mdr="4">
                 <template #name>
                     <VCol style="padding: 0 2em;">
-                        <h3 class="pt-3">영업점 정보</h3>
+                        <h3 class="pt-3">영업라인 정보</h3>
                         <VRow>
                             <VCol md="4" cols="12">
                                 <VRow>
@@ -270,7 +270,7 @@ watchEffect(async () => {
     </VRow>
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">
-            <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('영업점 대량등록 포멧', headers)" style="margin-left: auto;">
+            <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('영업라인 대량등록 포멧', headers)" style="margin-left: auto;">
                 양식 다운로드
                 <VIcon end icon="uiw-file-excel" />
             </VBtn>

@@ -93,7 +93,7 @@
         public $use_bill_key = false;           // 빌키사용 여부
         public $use_shop = false;               // 쇼핑몰 사용여부
         public $fee_input_mode = false;         // 수수료율 정산 방식
-        public $brand_mode = 0;                 // brand mode 0=대표가맹점, 1=P2P, 2=대표가명점(영업점)
+        public $brand_mode = 0;                 // brand mode 0=대표가맹점, 1=P2P, 2=대표가명점(영업라인)
         public $use_sales_dns = false;
 
         public function __construct(array $source)

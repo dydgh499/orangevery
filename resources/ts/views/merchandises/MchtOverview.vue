@@ -119,7 +119,7 @@ watchEffect(() => {
 onMounted(() => {
     initAllSales()
     watchEffect(() => {
-        // 수정가능, 추가상태, 영업점일 경우
+        // 수정가능, 추가상태, 영업라인일 경우
         if(props.item.id === 0 && isAbleModiy(props.item.id)) {
             if(getUserLevel() > 10 && getUserLevel() < 35) {
                 if(corp.pv_options.paid.sales_parent_structure)
@@ -238,7 +238,7 @@ onMounted(() => {
                         <template v-if="getUserLevel() > 10">
                             <VDivider/>
                             <VCol cols="12">
-                                <VCardTitle>영업점 수수료</VCardTitle>
+                                <VCardTitle>영업라인 수수료</VCardTitle>
                             </VCol>
                             <template v-for="i in 6" :key="i">
                                 <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">

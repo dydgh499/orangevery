@@ -2,7 +2,7 @@ import { Header } from '@/views/headers';
 import { transactionHeader } from '../../transacitonsHeader';
 
 export const useSearchStore = defineStore('transSettlesSalesPartSearchStore', () => {    
-    const head  = Header('transactions/settle/salesforces/part', '영업점 부분정산관리')
+    const head  = Header('transactions/settle/salesforces/part', '영업라인 부분정산관리')
     const table = transactionHeader('sales-part')
     const headers: Record<string, string> = {
         ...table.headers0,

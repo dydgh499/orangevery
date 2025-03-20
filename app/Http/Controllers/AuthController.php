@@ -94,7 +94,7 @@ class AuthController extends Controller
     }
 
     /*
-    * 패스워드 1달 연장(가맹점, 영업점, 운영자)
+    * 패스워드 1달 연장(가맹점, 영업라인, 운영자)
     */
     public function extendPasswordAt(Request $request)
     {

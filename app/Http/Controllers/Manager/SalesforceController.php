@@ -44,7 +44,7 @@ class SalesforceController extends Controller
     public function __construct(Salesforce $salesforces)
     {
         $this->salesforces = $salesforces;
-        $this->target = '영업점';
+        $this->target = '영업라인';
         $this->imgs = [
             'params'    => [
                 'contract_file', 'id_file', 'passbook_file', 'bsin_lic_file', 'profile_file',
@@ -110,7 +110,7 @@ class SalesforceController extends Controller
     {
         if(Ablilty::isOperator($request) || Ablilty::isSalesforce($request))
         {
-            // 영업점이면서, 종속구조사용
+            // 영업라인이면서, 종속구조사용
             $b_info = BrandInfo::getBrandById($request->user()->brand_id);
             if($b_info['pv_options']['paid']['sales_parent_structure'])
             {
@@ -206,7 +206,7 @@ class SalesforceController extends Controller
             {
                 if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                     return $this->response(951);
-                // 하위 영업점에서 상위 영업점 추가 불가
+                // 하위 영업라인에서 상위 영업라인 추가 불가
                 if($request->user()->tokenCan($data->level) === false)
                     return $this->response(951);
                 else
@@ -221,7 +221,7 @@ class SalesforceController extends Controller
                 }
             }
             else
-            {   // URL 조작 (영업점인데 하위가아닌 다른영업점 조회하려할 시) 자신아래 영업점이 아닌경우?
+            {   // URL 조작 (영업라인인데 하위가아닌 다른영업라인 조회하려할 시) 자신아래 영업라인이 아닌경우?
                 AbnormalConnection::tryParameterModulationApproach();
                 return $this->response(951);
             }
@@ -233,7 +233,7 @@ class SalesforceController extends Controller
     /**
      * 업데이트
      *
-     * 영업점 이상 가능
+     * 영업라인 이상 가능
      *
      * @urlParam id integer required 유저 PK
      */

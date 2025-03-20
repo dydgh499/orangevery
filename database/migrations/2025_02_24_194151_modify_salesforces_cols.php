@@ -15,7 +15,7 @@ return new class extends Migration
             $table->renameColumn('is_able_modify_mcht', 'auth_level');
         });
         Schema::table('salesforces', function (Blueprint $table) {
-            $table->tinyInteger('auth_level')->comment('영업점 권한(0=권한없음, 1=추가만가능, 2=추가/수정/삭제 가능)')->change();
+            $table->tinyInteger('auth_level')->comment('영업라인 권한(0=권한없음, 1=추가만가능, 2=추가/수정/삭제 가능)')->change();
         });
     }
 

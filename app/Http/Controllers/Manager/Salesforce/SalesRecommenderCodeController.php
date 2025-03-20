@@ -69,7 +69,7 @@ class SalesRecommenderCodeController extends Controller
     /**
      * 단일조회
      *
-     * 영업점 이상 가능
+     * 영업라인인 이상 가능
      *
      * @urlParam id integer required 유저 PK
      */
@@ -82,7 +82,7 @@ class SalesRecommenderCodeController extends Controller
     /**
      * 업데이트
      *
-     * 영업점 이상 가능
+     * 영업라인 이상 가능
      *
      * @urlParam id integer required 유저 PK
      */

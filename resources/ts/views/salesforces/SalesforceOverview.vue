@@ -104,7 +104,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                 <VCardItem>
                     <VCardTitle>
                         <div style="display: flex;align-items: center;justify-content: space-between;">
-                            <span style="margin-right: 1em;">영업점정보</span>
+                            <span style="margin-right: 1em;">영업라인정보</span>
                             <div v-if="props.item.id"
                                 :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
                                 <template v-if="getUserLevel() >= 35">
@@ -127,14 +127,14 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiyV2(props.item, 'salesforces')">
-                                        <VCol cols="4">* 영업점 상호</VCol>
+                                        <VCol cols="4">* 영업라인 상호</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.sales_name" prepend-inner-icon="tabler-building-store"
-                                                placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.sales_name, '영업점 상호')]" />
+                                                placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.sales_name, '영업라인 상호')]" />
                                         </VCol>
                                     </VRow>
                                     <VRow v-else>
-                                        <VCol class="font-weight-bold">영업점 상호</VCol>
+                                        <VCol class="font-weight-bold">영업라인 상호</VCol>
                                         <VCol md="8"><span>{{ props.item.sales_name }}</span></VCol>
                                     </VRow>
                                 </VCol>
@@ -172,13 +172,13 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                     </VCol>
                                     <VCol cols="12" md="6">
                                         <VRow no-gutters style="align-items: center;">
-                                            <VCol>상위 영업점</VCol>
+                                            <VCol>상위 영업라인</VCol>
                                             <VCol md="8">
                                                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.parent_id"
                                                     :items="getParentSales"
-                                                    :label="'상위영업점 선택'"
+                                                    :label="'상위 영업라인 선택'"
                                                     item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network" 
-                                                    :rules="props.item.level < 30 ? [requiredValidatorV2(props.item.parent_id, '상위 영업점')] : []"
+                                                    :rules="props.item.level < 30 ? [requiredValidatorV2(props.item.parent_id, '상위 영업라인')] : []"
                                                     />
                                             </VCol>
                                         </VRow>
@@ -199,7 +199,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                     </VCol>
                                     <VCol cols="12" md="6">
                                         <VRow no-gutters style="align-items: center;">
-                                            <VCol>상위 영업점</VCol>
+                                            <VCol>상위 영업라인</VCol>
                                             <VCol md="8">                                                
                                                 <span>
                                                     {{ getParentSales.find(obj => obj.id === props.item.parent_id)?.sales_name }}
@@ -263,11 +263,11 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol md="4">
                                             <BaseQuestionTooltip :location="'top'" :text="'작업권한'" 
-                                                :content="'하위 가맹점과 하위 등급의 영업점들의 작업권한을 부여합니다.<br>(개인정보는 수정할 수 없습니다.)'"/>
+                                                :content="'하위 가맹점과 하위 등급의 영업라인들의 작업권한을 부여합니다.<br>(개인정보는 수정할 수 없습니다.)'"/>
                                         </VCol>
                                         <VCol md="8">                                            
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.auth_level" 
-                                                    :items="getAuthLevels" item-title="title" item-value="id" label="영업점 권한"/>
+                                                    :items="getAuthLevels" item-title="title" item-value="id" label="영업라인 권한"/>
                                         </VCol>
                                     </VRow>
                                 </VCol>
@@ -279,7 +279,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol>
                                             <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점 언락권한'" 
-                                                :content="'하위 가맹점의 계정잠금해제, 패스워드변경 권한을 부여합니다.<br>하위 모든 가맹점의 패스워드, LOCK 상태를 제어할 수 있으므로 설정 시 해당 영업점은 2FA 설정을 권장합니다.'"/>
+                                                :content="'하위 가맹점의 계정잠금해제, 패스워드변경 권한을 부여합니다.<br>하위 모든 가맹점의 패스워드, LOCK 상태를 제어할 수 있으므로 설정 시 해당 영업라인은 2FA 설정을 권장합니다.'"/>
                                         </VCol>
                                         <VCol md="6">                                            
                                             <BooleanRadio :radio="props.item.is_able_unlock_mcht"

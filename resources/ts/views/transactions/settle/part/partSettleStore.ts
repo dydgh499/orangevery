@@ -17,7 +17,7 @@ export const partSettleStore = (store: any, selected: any, dialog: any, table: a
     })
     const { get, post } = useRequestStore()
     const { titleUpdate } = useDynamicTabStore()
-    const tab_name = user_type === 'merchandises' ? '가맹점' : '영업점'
+    const tab_name = user_type === 'merchandises' ? '가맹점' : '영업라인'
     const snackbar = <any>(inject('snackbar'))
 
     const init = async () => {

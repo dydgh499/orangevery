@@ -27,7 +27,7 @@ class OperatorHistoryContoller extends Controller
 
     public function __construct(OperatorHistory $operator_histories)
     {
-        // 가맹점, 결제모듈, 영업점, 구분정보, 수수료율, 매출, 금융 VAN
+        // 가맹점, 결제모듈, 영업라인, 구분정보, 수수료율, 매출, 금융 VAN
         $this->operator_histories = $operator_histories;
     }
     

@@ -98,7 +98,7 @@ setSecureReport()
                                     <th class='list-square'>작업시간대</th>
                                     <th class='list-square'>결제모듈</th>
                                     <th class='list-square'>가맹점</th>
-                                    <th class='list-square'>영업점</th>
+                                    <th class='list-square'>영업라인</th>
                                     <th class='list-square'>운영자</th>
                                     <!--
                                         <th class='list-square'>상세보기</th>

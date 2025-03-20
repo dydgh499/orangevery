@@ -27,7 +27,7 @@ trait SettleHistoryTrait
     protected function SetNullTransSettle($request, $target_settle_id)
     {
         /*  2024-01-25 JYH
-            정산 후, 가맹점, 영업점 변경한 경우 mcht_id -> user_id를 찾을 수 없음, 
+            정산 후, 가맹점, 영업라인 변경한 경우 mcht_id -> user_id를 찾을 수 없음, 
             target_settle_id(mcht_settle_id, sales5_settle_id ..) -> id 로만 찾아야함
         */
         return Transaction::where('brand_id', request()->user()->brand_id)
@@ -75,7 +75,7 @@ trait SettleHistoryTrait
     }
 
     /*
-    * 이체하기 - 가맹점, 영업점 공통
+    * 이체하기 - 가맹점, 영업라인 공통
     */
     protected function deposit($orm, $id)
     {

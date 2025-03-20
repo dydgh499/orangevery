@@ -23,7 +23,7 @@ use Illuminate\Http\Request;
 /**
  * @group Salesforce-Batch-Updater API
  *
- * 영업점 일괄 업데이트 group 입니다.
+ * 영업라인 일괄 업데이트 group 입니다.
  */
 class BatchUpdateSalesController extends BatchUpdateController
 {
@@ -53,7 +53,7 @@ class BatchUpdateSalesController extends BatchUpdateController
     }
 
     /**
-     * 선택된 영업점 가져오기
+     * 선택된 영업라인 가져오기
      */
     private function salesforceBatch($request)
     {
@@ -88,7 +88,7 @@ class BatchUpdateSalesController extends BatchUpdateController
     {
         $cols = ['settle_tax_type' => $request->settle_tax_type];
         $row = $this->getApplyRow($request, $cols);
-        return $this->batchResponse($row, '영업점');
+        return $this->batchResponse($row, '영업라인');
 
     }
     
@@ -96,28 +96,28 @@ class BatchUpdateSalesController extends BatchUpdateController
     {
         $cols = ['settle_cycle' => $request->settle_cycle];
         $row = $this->getApplyRow($request, $cols);
-        return $this->batchResponse($row, '영업점');
+        return $this->batchResponse($row, '영업라인');
     }
     
     public function setSettleDay(Request $request)	
     {
         $cols = ['settle_day' => $request->settle_day];
         $row = $this->getApplyRow($request, $cols);
-        return $this->batchResponse($row, '영업점');
+        return $this->batchResponse($row, '영업라인');
     }
     
     public function setIsAbleModifyMcht(Request $request)	
     {
         $cols = ['auth_level' => $request->auth_level];
         $row = $this->getApplyRow($request, $cols);
-        return $this->batchResponse($row, '영업점');
+        return $this->batchResponse($row, '영업라인');
     }
     
     public function setViewType(Request $request)	
     {
         $cols = ['view_type' => $request->view_type];
         $row = $this->getApplyRow($request, $cols);
-        return $this->batchResponse($row, '영업점');
+        return $this->batchResponse($row, '영업라인');
     }
     
     public function setAccountInfo(Request $request)	
@@ -129,14 +129,14 @@ class BatchUpdateSalesController extends BatchUpdateController
             'acct_bank_name' => $request->acct_bank_name,
         ];
         $row = $this->getApplyRow($request, $cols);
-        return $this->batchResponse($row, '영업점');
+        return $this->batchResponse($row, '영업라인');
     }
     
     public function setNote(Request $request)	
     {
         $cols = ['note' => $request->note];
         $row = $this->getApplyRow($request, $cols);
-        return $this->batchResponse($row, '영업점');
+        return $this->batchResponse($row, '영업라인');
     }
 
     /**
@@ -145,7 +145,7 @@ class BatchUpdateSalesController extends BatchUpdateController
     public function batchRemove(Request $request)
     {
         $row = $this->salesforceBatch($request)->update(['is_delete' => true]);
-        return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 영업점이 존재하지 않습니다.');
+        return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 영업라인이 존재하지 않습니다.');
     }
 
     

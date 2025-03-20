@@ -160,7 +160,7 @@ class AbnormalConnectionController extends Controller
             ->whereIn('operator_histories.history_type', $activity_types)
             ->where('operator_histories.created_at', '>=', $s_dt)
             ->where('operator_histories.created_at', '<=', $e_dt)
-            ->where('operator_histories.history_target', ['가맹점', '결제모듈', '영업점', '운영자'])
+            ->where('operator_histories.history_target', ['가맹점', '결제모듈', '영업라인', '운영자'])
             ->orderby('operator_histories.created_at', 'desc')
             ->get([
                 'operators.profile_img',

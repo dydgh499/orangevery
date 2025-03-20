@@ -55,7 +55,7 @@ class Salesforce extends Authenticatable
             ->select();
     }
 
-    // 자식 영업점들
+    // 자식 영업라인들
     public function childs()
     {
         $query = $this->hasMany(Salesforce::class, 'parent_id')
@@ -66,7 +66,7 @@ class Salesforce extends Authenticatable
         return $query->with('childs')->select();
     }
     
-    // 부모 영업점
+    // 부모 영업라인
     public function parent()
     {
         return $this->belongsTo(Salesforce::class, 'parent_id', 'id')

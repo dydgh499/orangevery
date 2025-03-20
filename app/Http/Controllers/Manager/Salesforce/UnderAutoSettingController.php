@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 /**
  * @group Under Auto Setting API
  *
- * 영업점 수수료율 세팅 API 입니다.
+ * 영업라인 수수료율 세팅 API 입니다.
  */
 class UnderAutoSettingController extends Controller
 {
@@ -32,7 +32,7 @@ class UnderAutoSettingController extends Controller
     /**
      * 목록출력
      *
-     * 영업점 이상 가능
+     * 영업라인 이상 가능
      */
     public function index(IndexRequest $request)
     {
@@ -56,7 +56,7 @@ class UnderAutoSettingController extends Controller
     /**
      * 단일조회
      *
-     * 영업점 이상 가능
+     * 영업라인 이상 가능
      *
      * @urlParam id integer required 유저 PK
      */
@@ -69,7 +69,7 @@ class UnderAutoSettingController extends Controller
     /**
      * 업데이트
      *
-     * 영업점 이상 가능
+     * 영업라인 이상 가능
      *
      * @urlParam id integer required 유저 PK
      */

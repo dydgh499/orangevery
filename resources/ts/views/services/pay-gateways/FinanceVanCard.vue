@@ -155,7 +155,7 @@ onMounted(async () => {
                             <CreateHalfVColV2 :mdl="5" :mdr="7">
                                 <template #l_name>
                                     <BaseQuestionTooltip :location="'top'" text="입금자 타입"
-                                            :content="`별칭 선택일 경우 해당 금융 VAN의 별칭으로 입금되며<br>예금주 선택일 경우 각 대상의 예금주(가맹점, 영업점)으로 입금됩니다.`" />
+                                            :content="`별칭 선택일 경우 해당 금융 VAN의 별칭으로 입금되며<br>예금주 선택일 경우 각 대상의 예금주(가맹점, 영업라인)으로 입금됩니다.`" />
                                 </template>
                                 <template #l_input>
                                     <BooleanRadio :radio="props.item.deposit_type" @update:radio="props.item.deposit_type = $event">

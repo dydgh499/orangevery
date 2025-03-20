@@ -7,7 +7,7 @@ import corp from '@corp'
 
 export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
     const store = Searcher('transactions/settle/salesforces')
-    const head  = Header('transactions/settle/salesforces', '영업점 정산관리')
+    const head  = Header('transactions/settle/salesforces', '영업라인 정산관리')
 
     const all_sales = salesLevels()
     const all_cycles = settleCycles()
@@ -22,7 +22,7 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
     }
     const headers1:Record<string, string | object> = {
         'id': 'NO.',
-        'user_name' : '영업점 ID',
+        'user_name' : '영업라인 ID',
         'sales_name': '상호',
         'level' : '등급',
         'settle_cycle' : '정산 주기',
@@ -65,7 +65,7 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
         headers3['extra_col'] = '더보기'
     }
     head.sub_headers.value = [
-        head.getSubHeaderFormat('영업점 정보', 'id', 'last_settle_dt', 'string', 8),
+        head.getSubHeaderFormat('영업라인 정보', 'id', 'last_settle_dt', 'string', 8),
         head.getSubHeaderFormat('매출', 'total', 'total', 'object', 4),
         head.getSubHeaderFormat('추가차감', 'deduction', 'deduction', 'object', Object.keys(headers2['deduction']).length),
         head.getSubHeaderFormat('장비', 'terminal', 'terminal', 'object', 2),

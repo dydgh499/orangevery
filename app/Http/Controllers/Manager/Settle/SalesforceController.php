@@ -23,7 +23,7 @@ use App\Http\Controllers\Utils\ChartFormat;
 /**
  * @group Settle-Salesforce API
  *
- * 영업점 정산 관리 API 입니다.
+ * 영업라인 정산 관리 API 입니다.
  */
 class SalesforceController extends Controller
 {
@@ -84,7 +84,7 @@ class SalesforceController extends Controller
         $s_dt   = $request->s_dt;
         $e_dt   = $request->e_dt;
 
-        // ----- 영업점 목록 조회 ---------
+        // ----- 영업라인 목록 조회 ---------
         $sales_ids = $this->getExistTransUserIds($target_id, $target_settle_id);   
         $terminal_settle_ids = $this->getTerminalSettleIds($request, $level, $target_id);
 

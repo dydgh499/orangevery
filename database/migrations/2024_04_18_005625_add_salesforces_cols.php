@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('salesforces', function (Blueprint $table) {
-            $table->boolean('is_able_under_modify')->default(false)->comment('하위 영업점 가맹점 수수료 수정권한(지사고정)');
+            $table->boolean('is_able_under_modify')->default(false)->comment('하위 영업라인 가맹점 수수료 수정권한(지사고정)');
         });
     }
 

@@ -29,7 +29,7 @@ class TransactionFilter
     static public function date($request, $query)
     {
         if($request->s_dt && $request->e_dt)
-        {   // 영업점, 가맹점 정산이력 추출이 아닐때
+        {   // 영업라인, 가맹점 정산이력 추출이 아닐때
             $s_dt = strlen($request->s_dt) === 10 ? date($request->s_dt." 00:00:00") : $request->s_dt;
             $e_dt = strlen($request->e_dt) === 10 ? date($request->e_dt." 23:59:59") : $request->e_dt;
             return $query

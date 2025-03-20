@@ -2,7 +2,7 @@ import { getLevelByIndex, getUserLevel, user_info } from '@/plugins/axios'
 import type { Merchandise, SalesFilter, Salesforce } from '@/views/types'
 import { SALES_LEVEL_SIZE } from './useStore'
 
-// 영업점 수수료 자동업데이트
+// 영업라인 수수료 자동업데이트
 export const autoUpdateMerchandiseParentSalesInfo = (merchandise: Merchandise, all_sales: Salesforce[][]) => {    
     const updateMchtFee = (idx: number, dest_sales: Salesforce, merchandise: Merchandise) => {
         merchandise[`sales${idx}_id`] = dest_sales.id

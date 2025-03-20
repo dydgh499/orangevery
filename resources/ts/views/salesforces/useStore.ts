@@ -58,8 +58,8 @@ const getSalesHeaders = (head :any) => {
         return {
             'id' : 'NO.',
             'level' : '등급',
-            'user_name' : '영업점 ID',
-            'sales_name': '영업점 상호',
+            'user_name' : '영업라인 ID',
+            'sales_name': '영업라인 상호',
             'sector' : '업종',
         }
     }
@@ -140,7 +140,7 @@ const getSalesHeaders = (head :any) => {
     }
 
     const sub_headers: any = []
-    head.getSubHeaderCol('영업점 정보', headers0, sub_headers)
+    head.getSubHeaderCol('영업라인 정보', headers0, sub_headers)
     head.getSubHeaderCol('정산 정보', headers1, sub_headers)
     head.getSubHeaderCol('개인 정보', headers2, sub_headers)
     head.getSubHeaderCol('계좌 정보', headers3, sub_headers)
@@ -151,7 +151,7 @@ const getSalesHeaders = (head :any) => {
 
 export const useSearchStore = defineStore('salesSearchStore', () => {
     const store = Searcher('salesforces')
-    const head  = Header('salesforces', '영업점 관리')
+    const head  = Header('salesforces', '영업라인 관리')
     const all_sales = salesLevels()
     const all_cycles = settleCycles()
     const all_days = settleDays()
@@ -173,28 +173,28 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
             {
                 icon: 'tabler-user-check',
                 color: 'primary',
-                title: '금월 추가된 영업점',
+                title: '금월 추가된 영업라인',
                 stats: '0',
                 percentage: 0,
             },
             {
                 icon: 'tabler-user-exclamation',
                 color: 'error',
-                title: '금월 감소한 영업점',
+                title: '금월 감소한 영업라인',
                 percentage: 0,
                 stats: '0',
             },
             {
                 icon: 'tabler-user-check',
                 color: 'primary',
-                title: '금주 추가된 영업점',
+                title: '금주 추가된 영업라인',
                 percentage: 0,
                 stats: '0',
             },
             {
                 icon: 'tabler-user-exclamation',
                 color: 'error',
-                title: '금주 감소한 영업점',
+                title: '금주 감소한 영업라인',
                 percentage: 0,
                 stats: '0',
             },
@@ -375,7 +375,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
         }
     }
 
-    // 상위 영업점들
+    // 상위 영업라인들
     const getAboveSalesFilter = (select_idx:number, params:any) => {
         let _mcht = [];
         for (let i = select_idx; i < SALES_LEVEL_SIZE; i++) {
@@ -433,7 +433,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     const setUnderSalesFilter = (select_idx: number, params: any) => {
         for (let i = SALES_LEVEL_SIZE - 1; i >= 0; i--) {    
             const sales_key = `sales${i}`
-            // 전산에서 사용하고 있는 영업점레벨이 전체를 선택했을때
+            // 전산에서 사용하고 있는 영업라인레벨이 전체를 선택했을때
             if(levels[sales_key+'_use'] && select_idx == i && !params[sales_key+'_id']) {
                 // 상위가 아무것도 클릭된게 없을 때
                 if(isAboveCheck(i, params) == false) {
@@ -461,7 +461,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
                 { id: null, sales_name: '전체' },
                 ...map_sales.sort((a, b) => a.sales_name.localeCompare(b.sales_name))
             ]
-            // 선택한 영업점이 영업점 목록에 없을 때 전체로 변경            
+            // 선택한 영업라인이 영업라인 목록에 없을 때 전체로 변경            
             if(sales[i].value.find(obj => obj.id === params[sales_key+'_id']) === undefined)
                 params[sales_key+'_id'] = undefined
         }

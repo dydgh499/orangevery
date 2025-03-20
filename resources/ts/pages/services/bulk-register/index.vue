@@ -12,7 +12,7 @@ import corp from '@corp'
 
 const tab = ref(0)
 const tabs = <Tab[]>([
-    { icon: 'tabler-user', title: '영업점 등록' },
+    { icon: 'tabler-user', title: '영업라인 등록' },
     { icon: 'tabler-building-store', title: '가맹점 등록' },
     { icon: 'ic-outline-send-to-mobile', title: '결제모듈 등록' },
 ])

@@ -72,7 +72,7 @@ const getMchtHeaders = (head :any) => {
     }
     const sub_headers: any = []
     head.getSubHeaderCol('NO.', headers0, sub_headers)
-    head.getSubHeaderCol('영업점 정보', headers1, sub_headers)
+    head.getSubHeaderCol('영업라인 정보', headers1, sub_headers)
     head.getSubHeaderCol('수수료율 정보', headers2, sub_headers)
     return [headers, sub_headers]
 }

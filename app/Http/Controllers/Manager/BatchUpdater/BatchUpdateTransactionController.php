@@ -46,7 +46,7 @@ class BatchUpdateTransactionController extends BatchUpdateController
     }
 
     /**
-     * 선택된 영업점 가져오기
+     * 선택된 영업라인 가져오기
      */
     private function transactionBatch($request)
     {

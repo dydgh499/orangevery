@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sales_recommender_codes', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('sales_id')->nullable()->comment('영업점 FK')->constrained('salesforces')->onDelete('SET NULL');
+            $table->unsignedInteger('sales_id')->nullable()->comment('영업라인 FK')->constrained('salesforces')->onDelete('SET NULL');
             $table->float('mcht_fee', 7, 5)->default(0)->comment('가맹점 수수료');
             $table->string('recommend_code', 20)->unique()->nullable()->comment('추천인코드');
             $table->timestamps();

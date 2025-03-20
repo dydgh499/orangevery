@@ -281,7 +281,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     }
     const sub_headers: any = []
     head.getSubHeaderCol('기본 정보', headers0, sub_headers)
-    head.getSubHeaderCol('상위 영업점', headers1, sub_headers)
+    head.getSubHeaderCol('상위 영업라인', headers1, sub_headers)
     head.getSubHeaderCol('PG사 정보', headers2, sub_headers)
     head.getSubHeaderCol('결제/취소 정보', headers3, sub_headers)
     head.getSubHeaderCol('단말기 정보', headers4, sub_headers)

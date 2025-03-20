@@ -27,7 +27,7 @@ defineExpose({
 <template>
     <VDialog v-model="visible" persistent class="v-dialog-sm">
         <DialogCloseBtn @click="selected(-1)" />
-        <VCard title="적용할 영업점 자동세팅 포멧을 선택해주세요.">
+        <VCard title="적용할 영업라인 자동세팅 포멧을 선택해주세요.">
             <VCardText>
                     <VTable style="width: 100%; margin-bottom: 1em;text-align: center;">
                         <thead>

@@ -277,7 +277,7 @@ watchEffect(() => {
                         <template v-if="getUserLevel() >= 35">
                             <VDivider/>
                             <VCol cols="12">
-                                <VCardTitle>영업점 수수료</VCardTitle>
+                                <VCardTitle>영업라인 수수료</VCardTitle>
                             </VCol>
                             <template v-for="i in 6" :key="i">
                                 <VCol cols="12" v-if="levels['sales'+(6-i)+'_use']">

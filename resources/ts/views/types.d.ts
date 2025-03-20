@@ -424,7 +424,7 @@ interface PaidOption {
     use_multiple_hand_pay: boolean, // 다중 수기결제
     use_mcht_blacklist: boolean, // 가맹점 블랙리스트
     use_part_cancel: boolean, // 부분취소 사용여부
-    sales_parent_structure: boolean, // 영업점 종속구조
+    sales_parent_structure: boolean, // 영업라인 종속구조
     use_specified_limit: boolean,   // 지정시간 제한
     use_syslink: boolean,
     use_product: boolean,   // 수기단말기 상품선택
@@ -433,7 +433,7 @@ interface PaidOption {
     use_shop: boolean, // 쇼핑몰 사용여부
     fee_input_mode: boolean,  // 수수료구조 타입
     brand_mode: number, // 브랜드 모드
-    use_sales_dns: boolean, // 영업점 DNS 사용여부
+    use_sales_dns: boolean, // 영업라인 DNS 사용여부
 }
 interface AuthOption {
     levels: {

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('sf_fee_apply_histories', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-            $table->unsignedInteger('sales_id')->nullable()->comment('영업점 FK')->constrained('salesforces')->onDelete('SET NULL');
+            $table->unsignedInteger('sales_id')->nullable()->comment('영업라인 FK')->constrained('salesforces')->onDelete('SET NULL');
             $table->float('trx_fee', 6, 5)->nullable()->comment('적용 거래 수수료');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();

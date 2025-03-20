@@ -87,7 +87,7 @@ const register = async() => {
                                 <b>연동정보: 
                                     <VChip color="primary" style="margin: 0.5em;">본사 및 PG사 정보</VChip>
                                     <VChip color="primary" style="margin: 0.5em;">가맹점</VChip>
-                                    <VChip color="primary" style="margin: 0.5em;">영업점</VChip>
+                                    <VChip color="primary" style="margin: 0.5em;">영업라인</VChip>
                                     <VChip color="primary" style="margin: 0.5em;">결제모듈</VChip>
                                 </b>
                             </VCol>

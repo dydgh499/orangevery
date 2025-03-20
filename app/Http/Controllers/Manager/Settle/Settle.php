@@ -13,7 +13,7 @@ use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
     가맹점:
         1. 취소입금
         2. 통신비
-    영업점
+    영업라인
         1. 통신비
 */
 class Settle

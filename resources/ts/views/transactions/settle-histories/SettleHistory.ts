@@ -147,7 +147,7 @@ export function settlementHistoryFunctionCollect(store: any) {
     }
 
     const linkAccount = async (item: SettlesHistory, is_mcht: boolean) => {
-        const dest_name = is_mcht ? '가맹점' : '영업점'
+        const dest_name = is_mcht ? '가맹점' : '영업라인'
         if (await alert.value.show(`정말 해당 ${dest_name}의 계좌정보를 동기화하시겠습니까?`)) {
             await post(rootUrlBuilder(is_mcht, item.id) + '/link-account', {}, true)
             store.setTable()
@@ -156,7 +156,7 @@ export function settlementHistoryFunctionCollect(store: any) {
 
     const batchLinkAccount = async (selected: number[], is_mcht: boolean) => {
         const params:any = {}
-        const dest_name = is_mcht ? '가맹점' : '영업점'
+        const dest_name = is_mcht ? '가맹점' : '영업라인'
         if (await alert.value.show(`정말 선택한 ${dest_name}들의 계좌정보를 동기화하시겠습니까?`)) {
             params.data = selected
             await post('/api/v1/manager/transactions/settle-histories/' + (is_mcht ? 'merchandises' : 'salesforces') + '/batch-link-account', params, true)

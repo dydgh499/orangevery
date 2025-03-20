@@ -121,7 +121,7 @@ const login = async (is_first: boolean) => {
 }
 
 const forgotPassword = () => {
-    snackbar.value.show('각 영업점들에게 전화해 주세요.', 'warning')
+    snackbar.value.show('각 영업라인들에게 전화해 주세요.', 'warning')
 }
 
 const onSubmit = () => {

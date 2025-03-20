@@ -44,7 +44,7 @@ watchEffect(() => {
         <tfoot v-show="Boolean(props.item.id == 0)">
             <tr>
                 <td colspan="4" class="text-center">
-                    영업점을 추가하신 후 사용 가능합니다.
+                    영업라인을 추가하신 후 사용 가능합니다.
                 </td>
             </tr>
         </tfoot>

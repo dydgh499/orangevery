@@ -20,12 +20,12 @@ const IsAbleThemeDesign = computed(() => {
 const getTab = computed(() => {
     const tabs = <Tab[]>([])
     if(isFixplus()) {
-        tabs.push({ icon: 'tabler-user-check', title: '영업점정보' })
+        tabs.push({ icon: 'tabler-user-check', title: '영업라인정보' })
     }
     else {
         tabs.push(...[
             { icon: 'tabler-user-check', title: '개인정보' },
-            { icon: 'ph-buildings', title: '영업점정보' },
+            { icon: 'ph-buildings', title: '영업라인정보' },
         ])
         if(isAbleThemeDesign(item))
             tabs.push({ icon: 'tabler-color-filter', title: '테마디자인' })

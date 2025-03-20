@@ -15,7 +15,7 @@ const _getSettlementMenu = () => {
                 to: 'transactions-settle-merchandises',
             },
             {
-                title: '지급이체(영업점)',
+                title: '지급이체(영업라인)',
                 to: 'transactions-settle-salesforces',
             },
         )
@@ -43,7 +43,7 @@ const _getSettlementHistoryMenu = () => {
 
     if (getUserLevel() >= 13) {
         settle_histories.children.push({
-            title: '지급이체(영업점)',
+            title: '지급이체(영업라인)',
             to: 'transactions-settle-histories-salesforces',
         })
     }

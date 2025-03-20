@@ -15,7 +15,7 @@ const getMchtChildMenu = () => {
             users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
     }
     else {
-        // 영업점은 .. 고민해봐야함
+        // 영업라인은 .. 고민해봐야함
         if(getUserLevel() >= 35) {
             users.children.push({ title: '장비 관리', to: 'merchandises-terminals'})
             users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
@@ -42,9 +42,9 @@ const getMchtChildMenu = () => {
 
 const getSalesChildMenu = () => {
     const sales = <any>({
-        title: '영업점 관리',
+        title: '영업라인 관리',
         icon: { icon: 'ph:share-network' },
-        children: [{ title: '영업점 목록', to: 'salesforces'}]
+        children: [{ title: '영업라인 목록', to: 'salesforces'}]
     })
     if(getUserLevel() >= 35) {
         sales.children.push({title: '수수료율 변경이력', to: 'salesforces-fee-change-histories'})

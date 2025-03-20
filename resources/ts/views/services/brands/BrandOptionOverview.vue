@@ -33,7 +33,7 @@ const accountLockLimits = <Options[]>([
     {id: 6, title: '6회'},
     {id: 7, title: '7회'},
 ])
-// 화면 타입은 영업점 개별 선택
+// 화면 타입은 영업라인 개별 선택
 
 const filterPgs = computed(() => {
     const filter = pss.filter(item => { return item.pg_id == props.item.p2p.pg_id })
@@ -144,7 +144,7 @@ const filterPgs = computed(() => {
                     </CreateHalfVColV2>
                     <CreateHalfVColV2 :mdl="6" :mdr="6">
                         <template #l_name>
-                            <BaseQuestionTooltip location="top" text="영업점 ID 난이도" :content="`영업점 ID 추가/수정시 요구되는 검증 난이도입니다.`"/>
+                            <BaseQuestionTooltip location="top" text="영업라인 ID 난이도" :content=`'영업라인 ID 추가/수정시 요구되는 검증 난이도입니다.'`/>
                         </template>
                         <template #l_input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.sales_id_level"
@@ -152,7 +152,7 @@ const filterPgs = computed(() => {
                                 label="ID 난이도 선택" item-title="title" item-value="id" single-line />
                         </template>
                         <template #r_name>
-                            <BaseQuestionTooltip location="top" text="영업점 PW 난이도" :content="`영업점 패스워드 추가/수정시 요구되는 검증 난이도입니다.`"/>
+                            <BaseQuestionTooltip location="top" text="영업라인 PW 난이도" :content="`영업라인 패스워드 추가/수정시 요구되는 검증 난이도입니다.`"/>
                         </template>
                         <template #r_input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.sales_pw_level"
@@ -170,7 +170,7 @@ const filterPgs = computed(() => {
                                 label="가맹점 패스워드 허용회수" item-title="title" item-value="id" single-line />
                         </template>
                         <template #r_name>
-                            <BaseQuestionTooltip location="top" text="운영자만 로그인" :content="`가맹점과 영업점은 본 전산에서 로그인할 수 없습니다.`"/>
+                            <BaseQuestionTooltip location="top" text="운영자만 로그인" :content="`가맹점과 영업라인은 본 전산에서 로그인할 수 없습니다.`"/>
                         </template>
                         <template #r_input>
                             <VSwitch hide-details v-model="props.item.free.secure.login_only_operate"

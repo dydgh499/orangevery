@@ -188,7 +188,7 @@ const getMchtHeaders = (head :any) => {
     head.getSubHeaderCol('NO.', headers0, sub_headers)
     head.getSubHeaderCol('원천사 정보', headers10, sub_headers)
     head.getSubHeaderCol('지급보류', headers1, sub_headers)
-    head.getSubHeaderCol('상위 영업점', headers2, sub_headers)
+    head.getSubHeaderCol('상위 영업라인', headers2, sub_headers)
     head.getSubHeaderCol('가맹점 정보', headers3, sub_headers)
     head.getSubHeaderCol('결제모듈 정보', headers4, sub_headers)
     head.getSubHeaderCol('노티 정보', headers7, sub_headers)
@@ -208,8 +208,8 @@ export const feeCalcMenual = () => {
     }
     else {
         sales_fee_text = `
-            <td class='list-square'>본인등급 수수료율 - 하위등급 영업점 수수료율</td>
-            <td class='list-square'>하위등급 영업점이 미존재 시 가맹점 거래 수수료율로 계산</td>`
+            <td class='list-square'>본인등급 수수료율 - 하위등급 영업라인 수수료율</td>
+            <td class='list-square'>하위등급 영업라인이 미존재 시 가맹점 거래 수수료율로 계산</td>`
     }
     return `
     <div class="v-table v-theme--light v-table--density-default text-no-wrap">
@@ -228,7 +228,7 @@ export const feeCalcMenual = () => {
             <br>
             <h3>수수료율 입력 검증방식</h3>
             <span>
-            가맹점 거래 수수료율 = 영업점 수익률 합계 + 본사 수익률 + PG사 구간 수수료율
+            가맹점 거래 수수료율 = 영업라인 수익률 합계 + 본사 수익률 + PG사 구간 수수료율
             </span>
             <br>
             <br>
@@ -243,11 +243,11 @@ export const feeCalcMenual = () => {
                 <tbody>
                     <tr>
                         <th style='text-align: start;'>본사</th>
-                        <td class='list-square'>최상위 영업점 수수료율 - PG사 구간 수수료율</td>
-                        <td class='list-square'>영업점이 미존재 시 가맹점 거래 수수료율로 계산</td>
+                        <td class='list-square'>최상위 영업라인 수수료율 - PG사 구간 수수료율</td>
+                        <td class='list-square'>영업라인이 미존재 시 가맹점 거래 수수료율로 계산</td>
                     </tr>
                     <tr>
-                        <th style='text-align: start;'>영업점</th>
+                        <th style='text-align: start;'>영업라인</th>
                     ` +sales_fee_text + `
                     </tr>
                     <tr>

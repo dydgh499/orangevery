@@ -27,7 +27,7 @@ const {
         passwordAuthDialog,
         post,
         batchRemove
-    } = batch(emits, '영업점', 'salesforces')
+    } = batch(emits, '영업라인', 'salesforces')
 const store = <any>(inject('store'))
 
 const all_cycles = settleCycles()
@@ -109,13 +109,13 @@ watchEffect(() => {
 </script>
 <template>
     <section>
-        <VCard title="영업점 일괄작업" style="max-height: 55em !important;overflow-y: auto !important;">
+        <VCard title="영업라인 일괄작업" style="max-height: 55em !important;overflow-y: auto !important;">
             <VCardText>
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <VRadioGroup v-model="selected_all">
                         <VRadio :value="0" @click="">
                             <template #label>
-                                <b>선택된 영업점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
+                                <b>선택된 영업라인 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
                             </template>
                         </VRadio>
                         <VRadio :value="1" @click="" v-if="corp.pv_options.paid.sales_parent_structure === false && getUserLevel() === 40">
@@ -205,14 +205,14 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                     <VDivider style="margin: 1em 0;" />
-                    <h4 class="pt-3">영업점정보 일괄변경</h4>
+                    <h4 class="pt-3">영업라인정보 일괄변경</h4>
                     <br>
                     <VRow>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="salesforces.auth_level" 
-                                            :items="authLevels()" item-title="title" item-value="id" label="영업점 권한"/>
+                                            :items="authLevels()" item-title="title" item-value="id" label="영업라인 권한"/>
                                 </VCol>
                                 <VCol md="6">
                                     <div class="button-cantainer">

@@ -53,7 +53,7 @@ onMounted(async() => {
         </VCol>
 
         <VCol cols="12" md="4" sm="6" lg="2">
-            <CrmUserGrowth :dest_user="'영업점'" :datas="upside_salesforces"/>
+            <CrmUserGrowth :dest_user="'영업라인'" :datas="upside_salesforces"/>
         </VCol>
 
         <VCol v-for="demo in simpleStatisticsDemoCards" :key="demo.title" cols="12" sm="6" md="4" lg="2">

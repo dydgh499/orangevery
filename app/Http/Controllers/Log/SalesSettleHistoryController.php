@@ -27,7 +27,7 @@ use App\Http\Controllers\Manager\Salesforce\SalesforceOverlap;
 /**
  * @group Sales-Settle-History API
  *
- * 영업점 정산이력 API 입니다.
+ * 영업라인 정산이력 API 입니다.
  */
 class SalesSettleHistoryController extends Controller
 {
@@ -169,7 +169,7 @@ class SalesSettleHistoryController extends Controller
                 return $this->createSalesforceCommon($item, $data, $target_settle_id);
             });
             if($c_id === 0)
-                $fail_res[] = '#'.$item['id'].' 영업점이 정산에 실패했습니다.';
+                $fail_res[] = '#'.$item['id'].' 영업라인이 정산에 실패했습니다.';
             else if($c_id === -1)
                 $fail_res[] = '#'.$item['id'].' 이미 정산이 완료된 건입니다.';
             else

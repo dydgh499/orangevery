@@ -44,7 +44,7 @@ onMounted(() => {
 })
 </script>
 <template>
-    <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.SETTLE_RANGE">
+    <BaseIndexView placeholder="영업라인 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.SETTLE_RANGE">
         <template #index_extra_field>
             <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, false)" v-if="getUserLevel() >= 35" size="small">
                 일괄 정산하기
@@ -62,7 +62,7 @@ onMounted(() => {
                     </VCol>
                     <VCol cols="6" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
-                            :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`영업점 정산주기 필터`"
+                            :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`영업라인 정산주기 필터`"
                             item-title="title" item-value="id" @update:modelValue="[store.updateQueryString({settle_cycle: store.params.settle_cycle})]" />
                     </VCol>
                 </template>
@@ -95,7 +95,7 @@ onMounted(() => {
                         <div class='check-label-container'>
                             <VCheckbox v-model="all_selected" class="check-label" v-if="getUserLevel() >= 35" style="min-width: 1em;"/>
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
-                                :content="'하단 영업점 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'"/>
+                                :content="'하단 영업라인 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'"/>
                         </div>
                     </template>
                     <template v-else>

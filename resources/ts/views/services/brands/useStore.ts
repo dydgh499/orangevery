@@ -176,7 +176,7 @@ export const defaultItemInfo = () => {
                 sales5_use: false,
                 sales5_name: '지사',
                 sales4_use: true,
-                sales4_name: '영업점',
+                sales4_name: '영업라인',
                 sales3_use: true,
                 sales3_name: '지사',
                 sales2_use: true,

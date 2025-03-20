@@ -227,7 +227,7 @@ watchEffect(() => {
                     <VDivider style="margin: 0.5em 0;" />
                 </template>
                 <div style="width: 100%;">
-                    <h4 class="pt-3">상위 영업점 일괄변경</h4>
+                    <h4 class="pt-3">상위 영업라인 일괄변경</h4>
                     <br>
                     <VRow no-gutters style="align-items: center; margin-bottom: 0.5em;">
                             <template v-for="i in 6" :key="i">

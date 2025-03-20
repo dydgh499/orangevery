@@ -103,7 +103,7 @@ class BatchUpdateMchtController extends BatchUpdateController
     }
 
     /**
-     * 가맹점/영업점 수수료율 즉시/예약적용 
+     * 가맹점/영업라인 수수료율 즉시/예약적용 
      */
     public function feeApply(Request $request, $user)
     {
@@ -115,7 +115,7 @@ class BatchUpdateMchtController extends BatchUpdateController
             $query = $this->merchandiseBatch($request);
             $row = MerchandiseFeeUpdater::apply($request, $user, $request->apply_type, $query);
 
-            // 상위영업점 변경건일 시 히스토리 추가
+            // 상위영업라인 변경건일 시 히스토리 추가
             if($row && $user === 'salesforces')
                     MerchandiseFeeUpdater::SalesFeeHistoryUpdate($request);
             return $this->batchResponse($row, '가맹점');

@@ -12,12 +12,12 @@ export const deposit_statuses = [
 
 export const useSearchStore = defineStore('transSettlesHistorySalesSearchStore', () => {    
     const store = Searcher('transactions/settle-histories/salesforces')
-    const head  = Header('transactions/settle-histories/salesforces', '영업점 정산이력')
+    const head  = Header('transactions/settle-histories/salesforces', '영업라인 정산이력')
     
     const getSalesforceCols = () => {
         return {
             'id': 'NO.',
-            'user_name' : '영업점 ID',
+            'user_name' : '영업라인 ID',
             'sales_name': '상호',
             'level' : '등급',
         }
@@ -100,7 +100,7 @@ export const useSearchStore = defineStore('transSettlesHistorySalesSearchStore',
         ...headers7,
     }
     const sub_headers: any = []
-    head.getSubHeaderCol('영업점 정보', headers0, sub_headers)
+    head.getSubHeaderCol('영업라인 정보', headers0, sub_headers)
     head.getSubHeaderCol('승인 정보', headers1, sub_headers)
     head.getSubHeaderCol('취소 정보', headers2, sub_headers)
     head.getSubHeaderCol('매출 정보', headers3, sub_headers)

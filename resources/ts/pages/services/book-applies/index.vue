@@ -42,7 +42,7 @@ const destory = async (id: number) => {
                 <template #filter>
                 </template>
                 <template #index_extra_field>
-                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.dest_type" :items="[{ id: 0, title: '영업점' }, {id: 1, title:'가맹점'}, {id: 2, title:'결제모듈'}, {id: 3, title:'노티주소'}]"
+                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.dest_type" :items="[{ id: 0, title: '영업라인' }, {id: 1, title:'가맹점'}, {id: 2, title:'결제모듈'}, {id: 3, title:'노티주소'}]"
                         density="compact" variant="outlined" item-title="title" item-value="id" label="변경대상"
                         @update:modelValue="store.updateQueryString({dest_type: store.params.dest_type})"
                         :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''"

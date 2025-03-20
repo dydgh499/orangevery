@@ -50,7 +50,7 @@ const transaction = reactive<any>({
 const levels = corp.pv_options.auth.levels
 
 const setSalesFee = async (sales_idx: number, apply_type: number) => {
-    if(await alert.value.show('<b>영업점 및 수수료율 변경시 변경될 수수료율로인해 정산금액이 변경될 수 있습니다.</b>')) {
+    if(await alert.value.show('<b>영업라인 및 수수료율 변경시 변경될 수수료율로인해 정산금액이 변경될 수 있습니다.</b>')) {
         post(`salesforces/set-fee`, {
             'sales_fee': parseFloat(transaction['sales' + sales_idx + "_fee"]),
             'sales_id': transaction['sales' + sales_idx + "_id"],
@@ -126,7 +126,7 @@ watchEffect(() => {
                 </div>
                 <VDivider style="margin: 1em 0;" />
                 <div style="width: 100%;">
-                    <h4 class="pt-3">상위 영업점 일괄변경</h4>
+                    <h4 class="pt-3">상위 영업라인 일괄변경</h4>
                     <br>
                     <VRow no-gutters style="align-items: center; margin-bottom: 0.5em;">
                             <template v-for="i in 6" :key="i">

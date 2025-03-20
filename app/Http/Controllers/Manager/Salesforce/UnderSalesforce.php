@@ -17,7 +17,7 @@ class UnderSalesforce
         return $query->get($s_keys);
     }
 
-    // 영업점 필터가 있는지 선택되었는지 검사
+    // 영업라인 필터가 있는지 선택되었는지 검사
     static public function getSelectedSalesFilter($request)
     {
         $sales_filters = [];
@@ -34,7 +34,7 @@ class UnderSalesforce
             }
         }
         if(Ablilty::isSalesforce($request))
-        {   // 로그인 계정이 영업점이라면 자동으로 본인 선택
+        {   // 로그인 계정이 영업라인이라면 자동으로 본인 선택
             $sales_filters[] = [
                 'id' => 'sales'.globalLevelByIndex($request->user()->level).'_id',
                 'value' => $request->user()->id,
@@ -43,7 +43,7 @@ class UnderSalesforce
         return $sales_filters;
     }
 
-    // 가맹점 목록에 조회될 영업점 필터
+    // 가맹점 목록에 조회될 영업라인 필터
     static private function getMappingMchtFilter($request)
     {
         $s_keys = self::getViewableSalesIds($request);
@@ -63,7 +63,7 @@ class UnderSalesforce
         return $cols;
     }
 
-    // 레벨에 따라 확인 가능한 하위 영업점 정보 세팅
+    // 레벨에 따라 확인 가능한 하위 영업라인 정보 세팅
     static public function setViewableSalesInfos($request, $content)
     {
         foreach([13,15,17,20,25,30] as $level)
@@ -83,7 +83,7 @@ class UnderSalesforce
         return $content;
     }
 
-    // 레벨에 따라 확인 가능한 하위 영업점 ID
+    // 레벨에 따라 확인 가능한 하위 영업라인 ID
     static public function getViewableSalesIds($request)
     {
         $levels = [];
@@ -101,7 +101,7 @@ class UnderSalesforce
         return $s_keys;
     }
 
-    // 레벨에 따라 확인 가능한 하위 영업점 level
+    // 레벨에 따라 확인 가능한 하위 영업라인 level
     static public function getViewableSalesLevels($request)
     {
         $levels = [];
