@@ -276,7 +276,7 @@ defineExpose({
                     <VDivider />
                     <br>
                 </template>
-                <VRow v-if=" isAbleModiy()">
+                <VRow v-if="isAbleModiy()">
                     <VCol cols="12" class="d-flex gap-4">
                         <VBtn type="button" style="margin-left: auto;" @click="operatorUpdate()">
                             {{ operator.id == 0 ? "추가" : "수정" }}

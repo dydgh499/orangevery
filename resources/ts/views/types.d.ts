@@ -572,32 +572,32 @@ export interface Transaction {
     sales5_name?: string,
     sales5_id: number | null,
     sales5_fee: float,
-    sales5_settle_id: Date | null,
+    sales5_settle_id: number | null,
     
     sales4_name?: string,
     sales4_id: number | null,
     sales4_fee: float,
-    sales4_settle_id: Date | null,
+    sales4_settle_id: number | null,
 
     sales3_name?: string,
     sales3_id: number | null,
     sales3_fee: float,
-    sales3_settle_id: Date | null,
+    sales3_settle_id: number | null,
 
     sales2_name?: string,
     sales2_id: number | null,
     sales2_fee: float,
-    sales2_settle_id: Date | null,
+    sales2_settle_id: number | null,
 
     sales1_name?: string,
     sales1_id: number | null,
     sales1_fee: float,
-    sales1_settle_id: Date | null,
+    sales1_settle_id: number | null,
 
     sales0_name?: string,
     sales0_id: number | null,
     sales0_fee: float,
-    sales0_settle_id: Date | null,
+    sales0_settle_id: number | null,
 
     custom_id: number | string | null,
     mcht_name?: string,
@@ -686,7 +686,7 @@ export interface Danger {
     issuer: string,
     acquirer: string,
     card_num: string,
-    trx_dttm: Date,
+    trx_dttm: string,
     terminal_id: number | string
     installment: number | string,
     danger_type: number | string,
@@ -700,7 +700,7 @@ export interface FailTransaction {
     pg_id: number | string,
     ps_id: number | string,
     module_type: number | string,
-    trx_dttm: Date,
+    trx_dttm: string,
     amount: number,
     resuld_cd: string,
     result_msg: string,
@@ -763,8 +763,8 @@ export interface SettlesHistory extends Bank{
     appr_amount: number,
     cxl_amount: number,
     total_amount: number,
-    settle_dt: Date,
-    deposit_dt: Date,
+    settle_dt: string,
+    deposit_dt: string,
     deposit_status: Boolean,
 }
 export interface Post {
@@ -806,7 +806,7 @@ export interface FeeChangeHistory {
     mcht_id: number,
     bf_trx_fee: float,
     aft_trx_fee: float,
-    created_at: Date,
+    created_at: string,
     change_status: boolean,
 }
 

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
-import SalesRecommenderCodeEialog from '@/layouts/dialogs/salesforces/SalesRecommenderCodeEialog.vue'
+import SalesRecommenderCodeDialog from '@/layouts/dialogs/salesforces/SalesRecommenderCodeDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
@@ -27,7 +27,7 @@ const { pgs, pss, psFilter, setFee } = useStore()
 
 const mchtBatchDialog = ref()
 const pmodBatchDialog = ref()
-const salesRecommenderCodeEialog = ref()
+const salesRecommenderCodeDialog = ref()
 
 const getSalesLevel = () => {
     if(props.item.id)
@@ -116,7 +116,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                     </VBtn>
                                 </template>
                                 <VBtn v-if="corp.pv_options.paid.brand_mode === 1 && props.item.level === 13"
-                                    style='margin: 0.25em;' variant="tonal" size="small" color="warning" @click="salesRecommenderCodeEialog.show(props.item)">
+                                    style='margin: 0.25em;' variant="tonal" size="small" color="warning" @click="salesRecommenderCodeDialog.show(props.item)">
                                     추천인코드 관리
                                 </VBtn>
                             </div>
@@ -422,7 +422,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
             :item_type="ItemTypes.Merchandise" @update:select_idxs=""/>
         <BatchDialog ref="pmodBatchDialog" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"
             :item_type="ItemTypes.PaymentModule" @update:select_idxs=""/>
-        <SalesRecommenderCodeEialog ref="salesRecommenderCodeEialog" :key="props.item.id"/>
+        <SalesRecommenderCodeDialog ref="salesRecommenderCodeDialog" :key="props.item.id"/>
     </VRow>
 </template>
 <style scoped>

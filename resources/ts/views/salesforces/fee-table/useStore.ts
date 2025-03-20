@@ -3,27 +3,32 @@ import { Searcher } from '@/views/searcher'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
 
+export const getTotalFee = (fee_table: any) => {
+    let total_fee = 0
+    for (let i = 1; i < 6; i++) {
+        total_fee += fee_table[`sales${i}_fee`]        
+    }
+    return total_fee
+}
+
 const getMchtHeaders = (head :any) => {
     const getSalesforceCols = () => {
         const levels = corp.pv_options.auth.levels
         const headers_2:Record<string, string> = {}
         if (levels.sales5_use && getUserLevel() >= 30) {
-            headers_2['sales5_name'] = levels.sales5_name
+            headers_2['sales5_id'] = levels.sales5_name
         }
         if (levels.sales4_use && getUserLevel() >= 25) {
-            headers_2['sales4_name'] = levels.sales4_name
+            headers_2['sales4_id'] = levels.sales4_name
         }
         if (levels.sales3_use && getUserLevel() >= 20) {
-            headers_2['sales3_name'] = levels.sales3_name
+            headers_2['sales3_id'] = levels.sales3_name
         }
         if (levels.sales2_use && getUserLevel() >= 17) {
-            headers_2['sales2_name'] = levels.sales2_name
+            headers_2['sales2_id'] = levels.sales2_name
         }
         if (levels.sales1_use && getUserLevel() >= 15) {
-            headers_2['sales1_name'] = levels.sales1_name
-        }
-        if (levels.sales0_use && getUserLevel() >= 13) {
-            headers_2['sales0_name'] = levels.sales0_name
+            headers_2['sales1_id'] = levels.sales1_name
         }
         return headers_2
     }
@@ -46,31 +51,29 @@ const getMchtHeaders = (head :any) => {
         if (levels.sales1_use && getUserLevel() >= 15) {
             headers_2['sales1_fee'] = levels.sales1_name
         }
-        if (levels.sales0_use && getUserLevel() >= 13) {
-            headers_2['sales0_fee'] = levels.sales0_name
-        }
+        headers_2['total_fee'] = '합계'
         return headers_2
     }
 
 
-    const getEtcCols = () => {
-        const headers_5:Record<string, string> = {}
-        headers_5['extra_cols'] = '작업하기'
-        return headers_5
+    const getIdCols = () => {
+        return {
+            'id': 'NO.'
+        }
     }
+    const headers0:any = getIdCols()
     const headers1:any = getSalesforceCols()
     const headers2:any = getFeeInputCols()
-    const headers4:any = getEtcCols()
 
     const headers: Record<string, string> = {
+        ...headers0,
         ...headers1,
         ...headers2,
-        ...headers4,
     }
     const sub_headers: any = []
+    head.getSubHeaderCol('NO.', headers0, sub_headers)
     head.getSubHeaderCol('영업점 정보', headers1, sub_headers)
     head.getSubHeaderCol('수수료율 정보', headers2, sub_headers)
-    head.getSubHeaderCol('', headers4, sub_headers)
     return [headers, sub_headers]
 }
 

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Manager\Salesforce;
 
-use App\Models\Salesforce;
+use App\Models\Salesforce\SalesforceFeeTable;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
-use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Requests\Manager\IndexRequest;
+use App\Http\Requests\Manager\Salesforce\SalesforceFeeTableRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -19,82 +19,37 @@ use Illuminate\Http\Request;
 class FeeTableController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
-    protected $salesforces;
+    protected $salesforce_fee_table;
 
-    public function __construct(Salesforce $salesforces)
+    public function __construct(SalesforceFeeTable $salesforce_fee_table)
     {
-        $this->salesforces = $salesforces;
-    }
-
-    public function getMaxSalesIdx($request)
-    {
-        $brand = BrandInfo::getBrandById($request->user()->brand_id);
-        for ($i=5; $i >= 0; $i--) 
-        {
-            if($brand['pv_options']['auth']['levels']['sales'.$i."_use"])
-                return $i;
-        }
-        return 0;
-    }
-
-    public function getLowSalesIdx($request)
-    {
-        $brand = BrandInfo::getBrandById($request->user()->brand_id);
-        for ($i=0; $i < 6; $i++) 
-        {
-            if($brand['pv_options']['auth']['levels']['sales'.$i."_use"])
-                return $i;
-        }
-        return 0;
-    }
-
-    public function flatSalesforce($sales, $child)
-    {
-        $idx = globalLevelByIndex($child['level']);
-        $sales_key = "sales".$idx;
-
-        $sales[$sales_key."_id"] = $child['id'];
-        $sales[$sales_key."_fee"] = $child['sales_fee'] ? number_format($child['sales_fee'], 3) : 0;
-        $sales[$sales_key."_name"] = $child['sales_name'];
-
-        if($child['parent'])
-            return $this->flatSalesforce($sales, $child['parent']);
-        else
-            return $sales;
+        $this->salesforce_fee_table = $salesforce_fee_table;
     }
 
     public function index(Request $request)
     {
-        $query  = $this->salesforces
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('level', $request->level)
-            ->where('is_delete', 0)
-            ->with(['parent']);
-        $data = $this->getIndexData($request, $query, 'id', ['id', 'level', 'sales_name', 'parent_id', 'sales_fee']);
-        $data = json_decode(json_encode($data), true);
-        foreach($data['content'] as &$content)
-        {
-            $sales = $this->flatSalesforce([], $content);
-            $content = array_merge($content, $sales);
-            unset($content['parent']);
-            unset($content['sales_fee']);
-            unset($content['sales_name']);
-        }
+        $query  = $this->salesforce_fee_table->where('brand_id', $request->user()->brand_id);
+        $data   = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }
 
-    public function update(Request $request)
+    public function store(SalesforceFeeTableRequest $request)
     {
-        for ($i=0; $i <6; $i++) 
-        { 
-            $key = 'sales'.$i;
-            $sales_id = $request->input($key."_id", 0);
-            $sales_fee = $request->input($key."_fee", 0);
-            if($sales_id) 
-            {
-                $this->salesforces->where('id', $sales_id)->update(['sales_fee' => $sales_fee]);
-            }
-        }
-        return $this->response(1);
+        $data   = $request->data();
+        $res    = $this->salesforce_fee_table->create($data);
+        return $this->response(1, ['id'=>$res->id]);
+    }
+
+    public function update(SalesforceFeeTableRequest $request, $id)
+    {
+        $data   = $request->data();
+        $res    = $this->salesforce_fee_table->where('id', $id)->update($data);
+        return $this->response(1, ['id'=>$id]);
+    }
+
+    public function destroy(Request $request, int $id)
+    {
+        $res    = $this->salesforce_fee_table->where('id', $id)->delete();
+        return $this->response(1, ['id'=>$id]);
     }
 }

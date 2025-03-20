@@ -35,8 +35,6 @@ Route::prefix('salesforces')->group(function() {
     Route::get('chart', [SalesforceController::class, 'chart']);
     Route::get('fee-apply-histories', [SalesforceController::class, 'feeApplyHistories']);  // 간편보기
     Route::get('classification', [SalesforceController::class, 'classification']);
-    Route::get('fee-table', [FeeTableController::class, 'index']);
-    Route::post('fee-table', [FeeTableController::class, 'update']);
     //FIXPLUS
     Route::middleware(['is.edit.able'])->group(function() {
         Route::prefix('fee-change-histories')->group(function() {
@@ -56,6 +54,7 @@ Route::prefix('salesforces')->group(function() {
         });
         Route::apiResource('under-auto-settings', UnderAutoSettingController::class);    
     });
+    Route::apiResource('fee-table', FeeTableController::class);
     Route::apiResource('sales-recommender-codes', SalesRecommenderCodeController::class);
 });
 Route::apiResource('salesforces', SalesforceController::class);
