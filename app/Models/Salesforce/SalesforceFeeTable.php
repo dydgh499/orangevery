@@ -5,6 +5,7 @@ namespace App\Models\Salesforce;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Traits\Models\AttributeTrait;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class SalesforceFeeTable extends Model
 {

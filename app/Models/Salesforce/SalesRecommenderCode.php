@@ -13,20 +13,4 @@ class SalesRecommenderCode extends Model
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
     protected   $hidden     = [];
-
-    protected function MchtFee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-            set: fn ($value) => $value/100,
-        );
-    }
-
-    protected function SalesFee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-            set: fn ($value) => $value/100,
-        );
-    }
 }
