@@ -137,10 +137,7 @@ class OperatorController extends Controller
     {
         // level이 직원인데 본인이 아닌 유저가 조회하려할 때 실패
         if($request->user()->level === 35 && $request->user()->id !== $id)
-        {
-            AbnormalConnection::tryParameterModulationApproach();
             return $this->response(951);
-        }
         else
         {
             $user = $this->operators->where('id', $id)->first();

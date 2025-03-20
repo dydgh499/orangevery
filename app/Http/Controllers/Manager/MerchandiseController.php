@@ -307,7 +307,6 @@ class MerchandiseController extends Controller
             }
             else
             {   // URL 조작 (가맹점인데 다른가맹점 조회하려할 시) 영업라인일때 자신아래 영업라인이 아닌경우?
-                AbnormalConnection::tryParameterModulationApproach();
                 return $this->response(951);
             }
         }

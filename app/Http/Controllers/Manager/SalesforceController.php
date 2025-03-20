@@ -222,7 +222,6 @@ class SalesforceController extends Controller
             }
             else
             {   // URL 조작 (영업라인인데 하위가아닌 다른영업라인 조회하려할 시) 자신아래 영업라인이 아닌경우?
-                AbnormalConnection::tryParameterModulationApproach();
                 return $this->response(951);
             }
         }
