@@ -24,11 +24,11 @@ const removeItem = () => {
 }
 
 const updateMchtFee = () => {
-    props.item.mcht_fee = parseFloat((
-        props.p2p_pay_fee + 
-        props.parent_total_fee + 
+    props.item.mcht_fee = (
+        parseFloat(props.p2p_pay_fee || 0) + 
+        parseFloat(props.parent_total_fee || 0) + 
         parseFloat(props.item.sales_fee || 0)
-    ).toFixed(4))
+    ).toFixed(4)
 }
 </script>
 <template>

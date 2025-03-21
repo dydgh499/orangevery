@@ -140,6 +140,7 @@ const getMchtHeaders = (head :any) => {
     const getEtcCols = () => {
         const headers_9:Record<string, string> = {}
         if(getUserLevel() >= 35) {
+            headers_9['withdraw_fee'] = '지급이체 수수료'
             headers_9['custom_id'] = '커스텀필터'
             headers_9['note'] = '메모사항'
         }
