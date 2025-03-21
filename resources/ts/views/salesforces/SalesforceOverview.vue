@@ -104,7 +104,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                 <VCardItem>
                     <VCardTitle>
                         <div style="display: flex;align-items: center;justify-content: space-between;">
-                            <span style="margin-right: 1em;">영업라인정보</span>
+                            <span style="margin-right: 1em;">영업라인 정보</span>
                             <div v-if="props.item.id"
                                 :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
                                 <template v-if="getUserLevel() >= 35">

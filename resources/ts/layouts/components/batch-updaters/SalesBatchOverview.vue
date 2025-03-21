@@ -205,7 +205,7 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                     <VDivider style="margin: 1em 0;" />
-                    <h4 class="pt-3">영업라인정보 일괄변경</h4>
+                    <h4 class="pt-3">영업라인 정보 일괄변경</h4>
                     <br>
                     <VRow>
                         <VCol :md="6" :cols="12">

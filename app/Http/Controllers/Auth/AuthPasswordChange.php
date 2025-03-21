@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Redis;
 use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Traits\Models\EncryptDataTrait;
 use App\Enums\AuthLoginCode;
+use App\Http\Controllers\Manager\Service\BrandInfo;
 
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
