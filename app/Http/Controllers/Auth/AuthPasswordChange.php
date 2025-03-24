@@ -92,6 +92,7 @@ class AuthPasswordChange
                 AuthAccountLock::initPasswordWrongCounter($user);
                 $result['user'] = $user->loginInfo($result['user']['level']);
 
+                $result['user'] = json_decode(json_encode($result['user']));
                 if(Login::isMerchant($result))
                     $result = Login::setMerchant($result);
                 else if(Login::isRecommenderSales($result))
