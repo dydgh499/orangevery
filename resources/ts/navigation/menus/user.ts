@@ -15,14 +15,8 @@ const getMchtChildMenu = () => {
             users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
     }
     else {
-        // 영업라인은 .. 고민해봐야함
-        if(getUserLevel() >= 35) {
-            users.children.push({ title: '장비 관리', to: 'merchandises-terminals'})
-            users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
-        }
-        else {
-            users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
-        }
+        users.children.push({ title: '장비 관리', to: 'merchandises-terminals'})
+        users.children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules'})
     }
 
     if((getUserLevel() >= 35 || getUserLevel() == 10) && corp.pv_options.paid.use_bill_key)
