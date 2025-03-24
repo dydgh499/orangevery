@@ -68,17 +68,22 @@ class Ablilty
 
     static function isUnderMerchandise($request, $id)
     {
-        if($request->user()->brand_id === 30 && self::isSalesforce($request))
-            return true;
-        else
+        if(self::isSalesforce($request))
         {
-            $sales_filter = [
-                'id'    => 'sales'.globalLevelByIndex($request->user()->level).'_id',
-                'value' => $request->user()->id,
-            ];
-            $mcht_ids = Merchandise::where($sales_filter['id'], $sales_filter['value'])->pluck('id')->all();
-            return in_array($id, $mcht_ids);    
+            if($request->user()->brand_id === 30)
+                return true;
+            else
+            {
+                $sales_filter = [
+                    'id'    => 'sales'.globalLevelByIndex($request->user()->level).'_id',
+                    'value' => $request->user()->id,
+                ];
+                $mcht_ids = Merchandise::where($sales_filter['id'], $sales_filter['value'])->pluck('id')->all();
+                return in_array($id, $mcht_ids);        
+            }
         }
+        else
+            return false;
     }
 
     static function isOperator($request)
