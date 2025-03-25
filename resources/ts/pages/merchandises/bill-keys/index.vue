@@ -27,7 +27,7 @@ const batchRemove = async() => {
 </script>
 <template>
     <div>
-        <BaseIndexView :placeholder="'구매자명, 연락처 검색'" :metas="[]" :add="false" add_name="빌키"
+        <BaseIndexView :placeholder="'카드번호 검색'" :metas="[]" :add="false" add_name="빌키"
             :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
             </template>

@@ -102,8 +102,7 @@ class BillKeyController extends Controller
         if($search)
         {
             $query = $query->where(function ($query) use ($search) {
-                return $query->where('bill_keys.buyer_phone', 'like', "%".$this->aes256_encode($search)."%")
-                    ->where('bill_keys.buyer_name', 'like', "%".$this->aes256_encode($search)."%");
+                return $query->where('bill_keys.card_num', 'like', "%".$search."%");
             });
         }
         if(Ablilty::isMerchandise($request))
