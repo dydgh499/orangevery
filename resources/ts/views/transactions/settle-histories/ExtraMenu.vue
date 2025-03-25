@@ -2,6 +2,7 @@
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
 import { SettlesHistory } from '@/views/types'
+import { getUserLevel } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -39,19 +40,19 @@ const getDepositParams = async () => {
         <VIcon size="22" icon="tabler-dots-vertical" />
         <VMenu activator="parent" width="250">
             <VList>
-                <VListItem value="deposit" @click="getDepositParams()">
+                <VListItem value="deposit" @click="getDepositParams()" v-if="getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:report-money" />
                     </template>
                     <VListItemTitle>{{ props.item.deposit_status ? '입금취소처리' : '입금처리' }}</VListItemTitle>
                 </VListItem>
-                <VListItem value="deduct" @click="addDeduct(addDeductDialog, props.item, props.is_mcht)">
+                <VListItem value="deduct" @click="addDeduct(addDeductDialog, props.item, props.is_mcht)"  v-if="getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="ic:twotone-plus-minus-alt" />
                     </template>
                     <VListItemTitle>추가차감</VListItemTitle>
                 </VListItem>
-                <VListItem value="account-linking" @click="linkAccount(props.item, props.is_mcht)">
+                <VListItem value="account-linking" @click="linkAccount(props.item, props.is_mcht)"  v-if="getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="ri-bank-card-fill" />
                     </template>

@@ -1,6 +1,5 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
-import { getUserLevel } from '@axios'
 import corp from '@corp'
 
 export const deposit_statuses = [
@@ -75,8 +74,7 @@ export const useSearchStore = defineStore('transSettlesHistorySalesSearchStore',
     const getEtcCols = () => {
         const headers_8:Record<string, string> = {}
         headers_8['created_at'] = '생성시간'    
-        if(getUserLevel() >= 35)
-            headers_8['extra_col'] = '더보기'
+        headers_8['extra_col'] = '더보기'
         return headers_8
     }
 
