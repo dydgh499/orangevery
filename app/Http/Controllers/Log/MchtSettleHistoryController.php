@@ -202,7 +202,7 @@ class MchtSettleHistoryController extends Controller
                 else
                     return false;
             });
-            return $this->response($code ? 1 : 1000, ['id' => $id]);
+            return $this->response($result ? 1 : 1000, ['id' => $id]);
         }
     }
 

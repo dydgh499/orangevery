@@ -217,7 +217,7 @@ class SalesSettleHistoryController extends Controller
                 $this->SetNullTransSettle($id, $target_settle_id);
                 logging(['end'=>date('Y-m-d H:i:s')]);    
             }
-            return $this->response($code ? 1 : 1000, ['id' => $id]);
+            return $this->response($result ? 1 : 1000, ['id' => $id]);
         }
     }
 

@@ -63,7 +63,7 @@ const getDepositParams = async () => {
                         <VIcon size="24" class="me-3" icon="vscode-icons:file-type-excel" />
                     </template>
                     <VListItemTitle style="width: fit-content;">
-                        <BaseQuestionTooltip :location="'bottom'" :text="'정산매출 다운로드'" :content="'해당 정산에 사용되었던 매출건들이 다운로드 됩니다.<br>(결제모듈 정산정보는 추출되지 않습니다.)'"/>
+                        <BaseQuestionTooltip :location="'bottom'" :text="'정산매출 다운로드'" :content="'본정산건에 사용되었던 매출건들이 다운로드 됩니다.<br>(결제모듈 정산정보는 추출되지 않습니다.)'"/>
                     </VListItemTitle>
                 </VListItem>
             </VList>
