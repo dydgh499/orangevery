@@ -161,6 +161,19 @@ class BatchUpdatePayModuleController extends BatchUpdateController
     }
 
     /**
+     * 발급사 필터 적용 
+     */
+    public function setFilterIssuer(Request $request)
+    {
+        $cols = [
+            'filter_issuers' => json_encode($request->filter_issuers),
+        ];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '결제모듈');
+    }
+
+    
+    /**
      * 정산일 일괄적용
      */
     public function setSettleType(Request $request)

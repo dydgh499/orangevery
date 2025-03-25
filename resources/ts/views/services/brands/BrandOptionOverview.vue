@@ -116,8 +116,11 @@ const filterPgs = computed(() => {
                                 color="primary" />
                         </template>
                         <template #r_name>
+                            <BaseQuestionTooltip location="top" text="건별 수수료 제외<br>정산금표기" :content="`매출관리 -상세조회에서 건별 수수료가 제외된 정산금란이 표기됩니다.`"/>
                         </template>
                         <template #r_input>
+                            <VSwitch hide-details v-model="props.item.free.only_mcht_fee_profit"
+                                color="primary" />
                         </template>
                     </CreateHalfVColV2>
 

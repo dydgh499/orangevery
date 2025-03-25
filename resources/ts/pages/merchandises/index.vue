@@ -157,6 +157,9 @@ onMounted(() => {
                                     상세보기
                                 </VTooltip>
                             </span>
+                            <span v-else-if="_key === 'withdraw_fee'">
+                                {{ item[_key] }}원
+                            </span>
                             <span v-else-if="(_key as string).includes('_fee') && (_key as string).includes('_sales')">
                                 <VChip v-if="item[`sales${(_key as string).replace(/\D/g, '')}_id`] && (corp.pv_options.free.use_fee_detail_view || item[_key])">
                                     {{ (item[_key] * 100).toFixed(3) }} %

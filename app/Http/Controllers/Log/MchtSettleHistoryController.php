@@ -101,7 +101,7 @@ class MchtSettleHistoryController extends Controller
     protected function createMerchandiseCommon($item, $data, $target_settle_id)
     {
         $db_count = Transaction::whereIn('id', $item['settle_transaction_idxs'])->noSettlement($target_settle_id)->count();
-        $data['settle_fee']                 = $item['settle_fee'];
+        $data['settle_fee']                 = $item['settle_fee'] + $item['withdraw_fee'];
         $data['cancel_deposit_amount']      = $item['cancel_deposit_amount'] ? $item['cancel_deposit_amount'] : 0;
         $seltte_month = date('Ym', strtotime($data['settle_dt']));
 
@@ -153,7 +153,7 @@ class MchtSettleHistoryController extends Controller
         $success_res = ['ids'=>[]];
 
         for ($i=0; $i < count($request->datas); $i++) 
-        { 
+        {
             $item = $request->datas[$i];
             $data = $request->data('mcht_id', $item);
 
@@ -185,31 +185,25 @@ class MchtSettleHistoryController extends Controller
             return $this->extendResponse(2000, "입금완료, 상계처리된 정산건은 정산취소 할수 없습니다.");
         else
         {
-            $code = $this->deleteMchtforceCommon($request, $id, 'mcht_settle_id');
+            [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(10);
+            $result = DB::transaction(function () use($id, $target_settle_id) {
+                $query = $this->settle_mcht_hist->where('id', $id);
+                $hist  = $query->first();
+                if($hist)
+                {
+                    $hist = $hist->toArray();
+                    // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
+                    $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
+                    $this->SetNullCancelDeposit($hist);
+                    $this->SetNullTransSettle($id, $target_settle_id);
+                    $query->delete();
+                    return true;
+                }
+                else
+                    return false;
+            });
             return $this->response($code ? 1 : 1000, ['id' => $id]);
         }
-    }
-
-    protected function deleteMchtforceCommon($request, $id, $target_settle_id)
-    {
-        $result = DB::transaction(function () use($request, $id, $target_settle_id) {
-            $query = $this->settle_mcht_hist->where('id', $id);
-            $hist  = $query->first();
-            if($hist)
-            {
-                $hist = $hist->toArray();
-                $request = $request->merge(['id' => $id]);
-                // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
-                $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
-                $this->SetNullCancelDeposit($hist);
-                $this->SetNullTransSettle($request, $target_settle_id);
-                $query->delete();
-                return true;
-            }
-            else
-                return false;
-        });
-        return $result;
     }
 
     /**

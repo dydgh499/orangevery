@@ -25,6 +25,7 @@ export function settlementFunctionCollect(store: any) {
             appr_count: item.appr.count,
             deduct_amount: item.deduction.amount, // 추가차감금
             settle_amount: item.settle.amount,    // 정산액
+            withdraw_fee: item.settle?.withdraw_fee,    // 지급이체 수수료
             trx_amount: item.total.total_trx_amount,    // 총 거래 수수료(매출)
             level: is_mcht ? 10 : item.level,
             settle_fee: is_mcht ? item.total.settle_fee : 0,
@@ -75,7 +76,7 @@ export function settlementFunctionCollect(store: any) {
                         return
                     else {
                         if(item.settle.amount < 0) {
-                            snackbar.value.show(`#${item.id} ${is_mcht ? item.mcht_name : item.sales_name}은 정산액이 0원 미만이기 때문에 정산할 수 없습니다.`, 'error')
+                            snackbar.value.show(`#${item.id} ${is_mcht ? item.mcht_name : item.sales_name}: 정산액이 0원 미만이기 때문에 정산할 수 없습니다.`, 'error')
                             return    
                         }
                         else
@@ -94,25 +95,6 @@ export function settlementFunctionCollect(store: any) {
             catch (e: any) {
                 snackbar.value.show(e.response.data.message, 'error')
                 const r = errorHandler(e)
-            }
-        }
-    }
-    
-    const settle = async (name:string, item:Settle, is_mcht: boolean) => {
-        if(isSettleHoldMcht(item))
-            return
-        if(item.settle.amount < 0) {
-            snackbar.value.show(`#${item.id} ${item.mcht_name}은 정산액이 0원 미만이기 때문에 정산할 수 없습니다.`, 'error')
-            return
-        }
-        if (await alert.value.show('정말 ' + name + '님을(를) 정산 하시겠습니까?')) {
-            const params = cloneDeep(store.params)
-            const p = getSettleFormat(item, is_mcht)
-            const page = is_mcht ? 'merchandises' : 'salesforces'
-            const r = await post('/api/v1/manager/transactions/settle-histories/' + page, Object.assign(params, p))
-            if(r.status == 201) {
-                store.setChartProcess()
-                store.setTable()    
             }
         }
     }
@@ -153,7 +135,7 @@ export function settlementFunctionCollect(store: any) {
     }
 
     return {
-        batchSettle, settle, getSettleStyle, isSalesCol, movePartSettle, isAbleMchtDepositCollect,
+        batchSettle, getSettleStyle, isSalesCol, movePartSettle, isAbleMchtDepositCollect,
         representativeSettle
     }
 }

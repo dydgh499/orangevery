@@ -103,7 +103,7 @@ class Transaction extends Model
     }
 
     public function getTrxAmountAttribute()
-    {   //거래 수수료(거래수수료 + 유보금 + 입금수수료)
+    {   //거래 수수료(거래수수료 + 유보금 + 건별 수수료)
         if(request()->level)
         {
             [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(request()->level);

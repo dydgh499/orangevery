@@ -40,14 +40,13 @@ use App\Enums\HistoryType;
 class MerchandiseController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $merchandises, $pay_modules;
+    protected $merchandises;
     protected $target;
     protected $imgs;
 
-    public function __construct(Merchandise $merchandises, PaymentModule $pay_modules)
+    public function __construct(Merchandise $merchandises)
     {
         $this->merchandises = $merchandises;
-        $this->pay_modules = $pay_modules;
         $this->target = '가맹점';
         $this->imgs = [
             'params'    => [
@@ -123,15 +122,6 @@ class MerchandiseController extends Controller
         if($is_all == false)
             $query = $query->where('merchandises.is_delete', false);
         return $query;
-    }
-    
-    private function mappingPayModules($data, $pay_modules)
-    {
-        foreach($data['content'] as $content) 
-        {
-            $content->setFeeFormatting(true);
-        }
-        return $data;
     }
 
     public function isByPayModule($request)
@@ -381,9 +371,9 @@ class MerchandiseController extends Controller
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
             DB::transaction(function () use($id, $data) {
-                $res = $this->delete($this->pay_modules->where('mcht_id', $id));
-                $res = $this->delete($this->merchandises->where('id', $id));
+                $res = $this->delete(PaymentModule::where('mcht_id', $id));
                 $res = $this->delete(NotiUrl::where('mcht_id', $id));
+                $res = $this->delete($this->merchandises->where('id', $id));
                 operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->mcht_name);
             });
             return $this->response(1, ['id'=>$id]);    

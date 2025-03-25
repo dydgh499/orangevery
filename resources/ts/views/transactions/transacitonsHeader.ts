@@ -73,6 +73,8 @@ export const transactionHeader = (table_name: string) => {
             headers_2['mcht_settle_type'] = '가맹점 정산타입'
         }
         if((getUserLevel() === 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
+            if(table_name === 'transactions' && corp.pv_options.free.only_mcht_fee_profit)
+                headers_2['only_mcht_fee_profit'] = '정산금(건별 수수료 제외)'
             headers_2['profit'] = '정산금'
             if(table_name !== 'sales-part') {
                 headers_2['settle_dt'] = '가맹점 정산예정일'

@@ -63,30 +63,6 @@ export function settlementHistoryFunctionCollect(store: any) {
         }
     }
 
-    const cancel = async (item: SettlesHistory, is_mcht: boolean) => {
-        if (await alert.value.show('정말 정산취소 하시겠습니까?')) {
-            try {
-                const res = await axios({
-                    url: rootUrlBuilder(is_mcht, item.id),
-                    method: 'delete',
-                    params: {
-                        level: is_mcht ? 10 : item.level,
-                        current_status: Number(item.deposit_status),
-                        use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
-                    },
-                })
-                if (res.status === 201) {
-                    snackbar.value.show('성공하였습니다.', 'success')
-                    store.setTable()
-                    store.getChartData()
-                }
-            }
-            catch (e: any) {
-                snackbar.value.show(e.response.data.message, 'error')
-            }
-        }
-    }
-
     const batchCancel = async (selected: number[], is_mcht: boolean) => {
         if (selected.length > 20 && is_mcht === false)
             snackbar.value.show('일괄정산취소는 한번에 최대 20개씩 처리 가능합니다.', 'warning')
@@ -174,7 +150,7 @@ export function settlementHistoryFunctionCollect(store: any) {
     }
 
     return {
-        deposit, batchDeposit, cancel, batchCancel, download, addDeduct, linkAccount, 
+        deposit, batchDeposit, batchCancel, download, addDeduct, linkAccount, 
         batchLinkAccount, batchOffsetProcessing
     }
 }

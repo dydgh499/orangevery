@@ -93,14 +93,12 @@ export const useFeeCalculatorStore = defineStore('useFeeCalculatorStore', () => 
             const sales_settle_info = getSalesSettleInfo(mcht)
             const brand_settle_info = getBrandSettleFee(mcht, sales_settle_info)
             const mcht_fee = Number(mcht.trx_fee.toFixed(5))
-            if(corp.pv_options.paid.fee_input_mode) {
-                const left_fee = Number((sales_settle_info.sales_total_fee + brand_settle_info.settle_fee).toFixed(5))
-                return left_fee === mcht_fee? true : false
-            }
-            else {
-                const left_fee = Number((sales_settle_info.sales_total_fee + brand_settle_info.settle_fee + brand_settle_info.ps_fee).toFixed(5))
-                return left_fee === mcht_fee ? true : false
-            }
+            let left_fee = 0
+            if(corp.pv_options.paid.fee_input_mode)
+                left_fee = Number((sales_settle_info.sales_total_fee + brand_settle_info.settle_fee).toFixed(5))
+            else 
+                left_fee = Number((sales_settle_info.sales_total_fee + brand_settle_info.settle_fee + brand_settle_info.ps_fee).toFixed(5))
+            return brand_settle_info.settle_fee < 0 ? false : (left_fee === mcht_fee ? true : false)
         }
         else
             return true

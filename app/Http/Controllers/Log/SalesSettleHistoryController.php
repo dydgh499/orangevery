@@ -194,42 +194,31 @@ class SalesSettleHistoryController extends Controller
             return $this->extendResponse(2000, "입금완료, 상계처리된 정산건은 정산취소 할수 없습니다.");
         else
         {
-            $code = $this->deleteSalesforceCommon($request, $id, 'sales_id');
-            if($code)
-                return $this->response($code, ['id'=>$id]);
-            else
-                return $this->extendResponse(1000, "정산 이력을 찾을 수 없습니다.");
-        }
-    }
-    
-    protected function deleteSalesforceCommon($request, $id, $user_id)
-    {
-        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
-        $result = DB::transaction(function () use($request, $id, $target_settle_id, $user_id) {
-            $query = $this->settle_sales_hist->where('id', $id);
-            $hist  = $query->first();
-            if($hist)
+            [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
+            $result = DB::transaction(function () use($id, $target_settle_id) {
+                $query = $this->settle_sales_hist->where('id', $id);
+                $hist  = $query->first();
+                if($hist)
+                {
+                    $hist = $hist->toArray();
+                    // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
+                    $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
+                    Salesforce::where('id', $hist['sales_id'])->update(['last_settle_dt' => null]);
+                    $query->delete();
+                    return true;
+                }
+                else
+                    return false;
+            });
+            if($result)
             {
-                $hist = $hist->toArray();
-                $request = $request->merge(['id' => $id]);
-                // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
-                $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
-                Salesforce::where('id', $hist[$user_id])->update(['last_settle_dt' => null]);
-                $query->delete();
-                return true;
+                logging(['start'=>date('Y-m-d H:i:s')]);
+                //  Lock wait timeout exceeded; try restarting transaction
+                $this->SetNullTransSettle($id, $target_settle_id);
+                logging(['end'=>date('Y-m-d H:i:s')]);    
             }
-            else
-                return false;
-        });
-        if($result)
-        {
-            logging(['start'=>date('Y-m-d H:i:s')]);
-            //  Lock wait timeout exceeded; try restarting transaction
-            $this->SetNullTransSettle($request, $target_settle_id);
-            logging(['end'=>date('Y-m-d H:i:s')]);    
+            return $this->response($code ? 1 : 1000, ['id' => $id]);
         }
-        return $result;
-
     }
 
     /**

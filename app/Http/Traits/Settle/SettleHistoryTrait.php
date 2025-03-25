@@ -24,14 +24,14 @@ trait SettleHistoryTrait
     /*
     * 정산취소 - 거래건
     */
-    protected function SetNullTransSettle($request, $target_settle_id)
+    protected function SetNullTransSettle($id, $target_settle_id)
     {
         /*  2024-01-25 JYH
             정산 후, 가맹점, 영업라인 변경한 경우 mcht_id -> user_id를 찾을 수 없음, 
             target_settle_id(mcht_settle_id, sales5_settle_id ..) -> id 로만 찾아야함
         */
         return Transaction::where('brand_id', request()->user()->brand_id)
-            ->where($target_settle_id, $request->id)
+            ->where($target_settle_id, $id)
             ->update([$target_settle_id => null]);
     }
 
@@ -130,14 +130,14 @@ trait SettleHistoryTrait
     /*
     * 정산 취소 - 통신비
     */
-    protected function RollbackPayModuleLastSettleMonth($data, $target_settle_id)
+    protected function RollbackPayModuleLastSettleMonth($hist, $target_settle_id)
     {
-        if($data['comm_settle_amount'] || $data['under_sales_amount'])
+        if($hist['comm_settle_amount'] || $hist['under_sales_amount'])
         {   //통신비나, 매출미달 차감금이 존재하면 해당 거래건에 포함된 결제모듈들 날짜 1달전으로 수정
-            $settle_date = Carbon::createFromFormat('Y-m-d', $data['settle_dt']);
+            $settle_date = Carbon::createFromFormat('Y-m-d', $hist['settle_dt']);
             $settle_date->subMonth();
             $settle_month = $settle_date->format('Ym');
-            $pmod_ids = $this->GetSettlePayModuleIds($data, $target_settle_id, $data['id']);
+            $pmod_ids = $this->GetSettlePayModuleIds($hist, $target_settle_id, $hist['id']);
             return PaymentModule::whereIn('id', $pmod_ids)->update(['last_settle_month' => $settle_month]);
         }
         return true;

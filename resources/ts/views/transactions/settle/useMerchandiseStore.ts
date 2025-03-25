@@ -80,9 +80,6 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         headers3['addr'] = '주소'
         headers3['appr'] = settleObject
         headers3['cxl'] = settleObject
-    
-        if(getUserLevel() >= 35)
-            headers3['extra_col'] = '더보기'
         return [settles, headers3]
     }
 
@@ -93,11 +90,11 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
 
     const is_show_acct = (getUserLevel() == 10 || getUserLevel() >= 35) ? true : false
     const settleObject = {
-        'count' :  '건수',
-        'amount' :  '금액',
-        'trx_amount' :  '거래 수수료',
+        'count'     : '건수',
+        'amount'    : '금액',
+        'trx_amount' : '거래 수수료',
         'hold_amount': '유보금',
-        'settle_fee' :  '건별 수수료',
+        'settle_fee' : '건별 수수료',
         'total_trx_amount': '총 거래 수수료',
         'profit': '정산액',    
     }

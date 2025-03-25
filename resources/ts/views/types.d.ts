@@ -375,6 +375,7 @@ interface FreeOption {
     use_mid_duplicate: boolean,
     use_fix_table_view: boolean,
     use_fee_detail_view: boolean,
+    only_mcht_fee_profit: boolean,
     fix_table_size: number,
     excel_search_filter: boolean,
     resident_num_masking: boolean,
@@ -733,6 +734,7 @@ export interface Settle extends TotalSettle, Bank {
         amount:number,       // 정산금액
         deposit:number,      // 입금금액
         transfer: number,    // 이체금액
+        withdraw_fee?: number   // 지급이체 수수료
         cancel_deposit_amount?: number,
     },
     terminal: {

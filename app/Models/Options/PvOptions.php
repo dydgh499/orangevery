@@ -20,6 +20,7 @@
         public $resident_num_masking = true;
         public $pay_module_detail_view = false;
         public $use_fee_detail_view = false;
+        public $only_mcht_fee_profit = false;
         public $bonaeja = [
             'user_id'   => '',
             'api_key'   => '',

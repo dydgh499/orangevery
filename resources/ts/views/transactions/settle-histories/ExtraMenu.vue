@@ -15,7 +15,7 @@ const store = <any>(inject('store'))
 const financeDialog = <any>(inject('financeDialog'))
 const addDeductDialog = <any>(inject('addDeductDialog'))
 
-const { deposit, cancel, download, addDeduct, linkAccount } = settlementHistoryFunctionCollect(store)
+const { deposit, download, addDeduct, linkAccount } = settlementHistoryFunctionCollect(store)
 
 const getDepositParams = async () => {
     const params:any = {
@@ -44,12 +44,6 @@ const getDepositParams = async () => {
                         <VIcon size="24" class="me-3" icon="tabler:report-money" />
                     </template>
                     <VListItemTitle>{{ props.item.deposit_status ? '입금취소처리' : '입금처리' }}</VListItemTitle>
-                </VListItem>
-                <VListItem value="cancel" @click="cancel(props.item, props.is_mcht)">
-                    <template #prepend>
-                        <VIcon size="24" class="me-3" icon="tabler:device-tablet-cancel" />
-                    </template>
-                    <VListItemTitle>정산취소</VListItemTitle>
                 </VListItem>
                 <VListItem value="deduct" @click="addDeduct(addDeductDialog, props.item, props.is_mcht)">
                     <template #prepend>

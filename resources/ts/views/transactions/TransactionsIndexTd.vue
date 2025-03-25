@@ -55,6 +55,9 @@ const { realtimeResult, realtimeMessage } = realtimeHistoryInterface(formatTime)
     <span v-else-if="_key == 'terminal_id'">
         {{ terminals.find(terminal => terminal['id'] === item[_key])?.name }}
     </span>
+    <b v-else-if="_key === 'only_mcht_fee_profit'  && store.params.level === 10 && corp.pv_options.free.only_mcht_fee_profit">
+        {{ Number(item['profit'] + item['mcht_settle_fee']).toLocaleString() }}
+    </b>
     <b v-else-if="_key === 'profit'">
         {{ Number(item[_key]).toLocaleString() }}
     </b>

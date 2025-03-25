@@ -65,7 +65,7 @@ export const useSearchStore = defineStore('terminalSearchStore', () => {
     const getPaymentCols = () => {
         const headers_4:Record<string, string> = {}
         if(getUserLevel() >= 35) {
-            headers_4['settle_fee'] = '입금수수료'
+            headers_4['settle_fee'] = '건별 수수료'
         }
         if(getUserLevel() > 10) {
             headers_4['settle_type'] = '정산일'

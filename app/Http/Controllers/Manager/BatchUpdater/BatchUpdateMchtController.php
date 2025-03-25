@@ -243,8 +243,8 @@ class BatchUpdateMchtController extends BatchUpdateController
             $mcht_ids = (clone $query)->pluck('id')->all();
 
             $row = (clone $query)->update(['is_delete' => true]);
-            $res = PaymentModule::whereIn('id', $mcht_ids)->update(['is_delete' => true]);
-            $res = NotiUrl::whereIn('id', $mcht_ids)->update(['is_delete' => true]);
+            $res = PaymentModule::whereIn('mcht_id', $mcht_ids)->update(['is_delete' => true]);
+            $res = NotiUrl::whereIn('mcht_id', $mcht_ids)->update(['is_delete' => true]);
             return $row;
         });
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 가맹점이 존재하지 않습니다.');        

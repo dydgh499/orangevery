@@ -20,7 +20,6 @@ const { selected, all_selected } = selectFunctionCollect(store)
 const { 
     getSettleStyle, batchSettle, isSalesCol, 
     movePartSettle, representativeSettle,
-    settle
 } = settlementFunctionCollect(store)
 const mchtSettleDepsoitValidateSnackbar = ref()
 provide('store', store)
@@ -80,7 +79,7 @@ onMounted(() => {
             <template #index_extra_field>
                 <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, true)" v-if="getUserLevel() >= 35"
                     size="small">
-                    일괄 정산하기
+                    정산하기
                 </VBtn>
                 <VBtn prepend-icon="tabler-calculator" @click="representativeSettle()" v-if="getUserLevel() >= 35 && corp.id === 4" color="warning"
                     size="small">
@@ -206,12 +205,15 @@ onMounted(() => {
                                         {{ (item[_key] * 100).toFixed(3) }} %
                                     </VChip>
                                 </span>
-                                <span v-else-if="_key.toString().includes('_fee') && _key != 'mcht_settle_fee'">
+                                <span v-else-if="_key === 'withdraw_fee'">
+                                    {{ item[_key] }}
+                                </span>
+                                <span v-else-if="_key.toString().includes('_fee') && _key !== 'mcht_settle_fee'">
                                     <VChip v-if="item[_key]">
                                         {{ (item[_key] * 100).toFixed(3) }} %
                                     </VChip>
                                 </span>
-                                <span v-else-if="_key == 'resident_num'">
+                                <span v-else-if="_key === 'resident_num'">
                                     <span>
                                         <span>{{ item['resident_num_front'] }}</span>
                                         <span style="margin: 0 0.25em;">-</span>
@@ -221,12 +223,6 @@ onMounted(() => {
                                 </span>
                                 <span v-else-if="isSalesCol(_key as string)" style="font-weight: bold;">
                                     {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
-                                </span>
-                                <span v-else-if="_key === 'extra_col'">
-                                    <VBtn size="small" type="button" color="primary" @click="settle(item['mcht_name'], item, true)" v-if="getUserLevel() >= 35">
-                                        정산하기
-                                        <VIcon size="22" icon="tabler-calculator" style="margin-left: 0.25em;"/>
-                                    </VBtn>
                                 </span>
                                 <span v-else>
                                     {{ item[_key] }}

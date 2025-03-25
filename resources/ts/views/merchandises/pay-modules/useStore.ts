@@ -172,7 +172,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     const getPaymentCols = () => {
         const headers_4:Record<string, string> = {}
         if(getUserLevel() >= 35) {
-            headers_4['settle_fee'] = '입금수수료'
+            headers_4['settle_fee'] = '건별 수수료'
             headers_4['cxl_type'] = '취소타입'
         }
         if(getUserLevel() > 10) {

@@ -14,7 +14,7 @@ import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { getSettleStyle, batchSettle, isSalesCol, movePartSettle, settle } = settlementFunctionCollect(store)
+const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = settlementFunctionCollect(store)
 const { settle_types } = useStore()
 const all_sales = salesLevels()
 const all_cycles = settleCycles()
@@ -47,7 +47,7 @@ onMounted(() => {
     <BaseIndexView placeholder="영업라인 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.SETTLE_RANGE">
         <template #index_extra_field>
             <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, false)" v-if="getUserLevel() >= 35" size="small">
-                일괄 정산하기
+                정산하기
             </VBtn>
             <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" @update:modelValue="[store.updateQueryString({is_base_trx: store.params.is_base_trx})]"/>
         </template>
@@ -189,12 +189,6 @@ onMounted(() => {
                             </span>
                             <span v-else-if="isSalesCol(_key as string)" style="font-weight: bold;">
                                 {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
-                            </span>
-                            <span v-else-if="_key === 'extra_col'">
-                                <VBtn size="small" type="button" color="primary" @click="settle(item['user_name'], item, false)" v-if="getUserLevel() >= 35">
-                                    정산하기
-                                    <VIcon size="22" icon="tabler-calculator" style="margin-left: 0.25em;"/>
-                                </VBtn>
                             </span>
                             <span v-else>
                                 {{ item[_key] }}

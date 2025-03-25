@@ -60,10 +60,6 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
         'appr' : settleObject,
         'cxl' : settleObject,
     };
-    
-    if(getUserLevel() >= 35) {
-        headers3['extra_col'] = '더보기'
-    }
     head.sub_headers.value = [
         head.getSubHeaderFormat('영업라인 정보', 'id', 'last_settle_dt', 'string', 8),
         head.getSubHeaderFormat('매출', 'total', 'total', 'object', 4),

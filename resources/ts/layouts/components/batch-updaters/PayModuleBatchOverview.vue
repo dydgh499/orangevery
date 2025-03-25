@@ -1,14 +1,15 @@
 
 
 <script lang="ts" setup>
-import { batch } from '@/layouts/components/batch-updaters/batch'
-import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
-import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
-import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
-import { cxl_types, fin_trx_delays, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels, withdraw_limit_types } from '@/views/merchandises/pay-modules/useStore'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import { getUserLevel } from '@axios'
-import corp from '@corp'
+import { batch } from '@/layouts/components/batch-updaters/batch';
+import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue';
+import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue';
+import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue';
+import { issuers } from '@/views/complaints/useStore';
+import { cxl_types, fin_trx_delays, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels, withdraw_limit_types } from '@/views/merchandises/pay-modules/useStore';
+import { useStore } from '@/views/services/pay-gateways/useStore';
+import { getUserLevel } from '@axios';
+import corp from '@corp';
 
 interface Props {
     selected_idxs: number[],
@@ -68,6 +69,7 @@ const pay_module = reactive<any>({
     withdraw_limit_type: 0,
     withdraw_business_limit: 0,
     withdraw_holiday_limit: 0,
+    filter_issuers: [],
 })
 
 const setPaymentGateway = (apply_type: number) => {
@@ -110,6 +112,12 @@ const setForbiddenPayTime = (apply_type: number) => {
     post('set-pay-disable-time', {
         'pay_disable_s_tm': pay_module.pay_disable_s_tm,
         'pay_disable_e_tm': pay_module.pay_disable_e_tm,
+    }, apply_type)
+}
+
+const setFilterIssuer = (apply_type: number) => {
+    post('set-filter-issuer', {
+        'filter_issuers': pay_module.filter_issuers,
     }, apply_type)
 }
 
@@ -584,7 +592,34 @@ watchEffect(() => {
                         </VRow>
                     </VCol>
                 </VRow>
-
+                <VRow>
+                    
+                    <VCol :md="6" :cols="12">
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol md="6" cols="12" >
+                                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="pay_module.filter_issuers"
+                                    label="발급사 필터링" :items="issuers" item-title="title"
+                                    item-value="code" multiple chips closable-chips />
+                                    <VTooltip activator="parent" location="top" transition="scale-transition">
+                                        해당 발급사로 결제된 카드는 강제취소됩니다.
+                                    </VTooltip>
+                            </VCol>
+                            <VCol md="6" cols="12">                                    
+                                <div class="button-cantainer">
+                                    <VBtn variant="tonal" size="small" @click="setFilterIssuer(0)">
+                                        즉시적용
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
+                                    </VBtn>
+                                    <VBtn variant="tonal" size="small" color="secondary" @click="setFilterIssuer(1)"
+                                        style='margin-left: 0.5em;'>
+                                        예약적용
+                                        <VIcon end size="18" icon="tabler-clock-up" />
+                                    </VBtn>                 
+                                </div>
+                            </VCol>
+                        </VRow>
+                    </VCol>
+                </VRow>
 
                 <VDivider style="margin: 1em 0;" />
                 <h4 class="pt-3">결제정보 일괄변경</h4>
