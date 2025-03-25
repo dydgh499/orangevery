@@ -85,7 +85,10 @@ class AuthController extends Controller
         {
             $result = AuthPasswordChange::updateFirstPassword($result, $request->user_pw);
             if($result['result'] === AuthLoginCode::SUCCESS->value)
-                return $this->response(0, $result['user'])->withHeaders($this->tokenableExpire());
+            {
+                $info = $result['user']->loginInfo($result['user']->level);
+                return $this->response(0, $info)->withHeaders($this->tokenableExpire());
+            }
             else
                 return $this->extendResponse($result['result'], $result['msg'], []);
         }

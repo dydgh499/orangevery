@@ -11,7 +11,7 @@ trait AuthTrait
         $auths = $this->getAuthority($level);
         $this->level = $level;
         $token = $this->createToken($this->user_name, $auths)->plainTextToken;
-        return ['access_token'=>$token, 'user'=>$this];
+        return ['access_token' => $token, 'user' => $this];
     }
 
     public function loginAPIResponse($result, $level)

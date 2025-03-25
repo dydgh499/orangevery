@@ -54,9 +54,7 @@ class AuthPasswordChange
     static public function updateFirstPassword($result, $user_pw)
     {
         if($result['user']['level'] === 10)
-        {
             $orm = Merchandise::with(['onlinePays.payWindows', 'shoppingMall']);
-        }
         else if($result['user']['level'] < 35)
         {
             $brand = BrandInfo::getBrandById($result['user']['brand_id']);
@@ -70,7 +68,6 @@ class AuthPasswordChange
             $orm = null;
             critical('만약 이구문이 실행이되면 token 암호화가 뚫린 것');
         }
-
         $user = $orm
             ->where('brand_id', $result['user']['brand_id'])
             ->where('user_name', $result['user']['user_name'])
@@ -89,15 +86,12 @@ class AuthPasswordChange
                 $user->user_pw = Hash::make($user_pw.$user->created_at);
                 $user->password_change_at = date('Y-m-d H:i:s');
                 $user->save();
-                AuthAccountLock::initPasswordWrongCounter($user);
-                $result['user'] = $user->loginInfo($result['user']['level']);
-
-                $result['user'] = json_decode(json_encode($result['user']));
+                $result['user'] = $user;
+                AuthAccountLock::initPasswordWrongCounter($result['user']);
                 if(Login::isMerchant($result))
                     $result = Login::setMerchant($result);
                 else if(Login::isRecommenderSales($result))
                     $result = Login::setRecommenderSales($result);
-
             }
         }
         else
