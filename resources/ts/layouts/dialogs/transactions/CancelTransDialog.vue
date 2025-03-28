@@ -2,6 +2,7 @@
 import { inputFormater } from '@/@core/utils/formatters';
 import type { Transaction } from '@/views/types';
 import { axios } from '@axios';
+import corp from '@corp';
 import { maxAmountValidator, requiredValidatorV2 } from '@validators';
 
 const store = <any>(inject('store'))
@@ -99,7 +100,7 @@ defineExpose({
                                 />
                             </VCol>
                         </VRow>
-                        <VRow>
+                        <VRow v-if="corp.pv_options.paid.use_part_cancel">
                             <VCol cols="12" md="4">
                                 <label>취소금액</label>
                             </VCol>
