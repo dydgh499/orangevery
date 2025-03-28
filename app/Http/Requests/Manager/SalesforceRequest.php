@@ -56,6 +56,8 @@ class SalesforceRequest extends FormRequest
         'is_able_unlock_mcht',
         'withdraw_business_limit',
         'withdraw_holiday_limit',
+        'resale_withdraw_fee',
+        'resale_settle_fee',
     ];
     public $nullable_keys = [
         'parent_id',

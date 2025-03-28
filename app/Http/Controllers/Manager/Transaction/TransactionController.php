@@ -289,37 +289,60 @@ class TransactionController extends Controller
      */
     public function cancel(Request $request)
     {
-        $data = json_decode(json_encode(
-            DB::table('transactions')->where('id', $request->id)->first()
-        ), true);
-        unset($data['id']);
-        $data['cxl_dt']     = $request->input('cxl_dt', '');
-        $data['cxl_tm']     = $request->input('cxl_tm', '');
-        $data['trx_at']     = $data['cxl_dt']." ".$data['cxl_tm'];
-        $data['ori_trx_id'] = $request->input('trx_id', '');
-        $data['amount']     = $data['amount'] * -1;
-        $data['is_cancel']  = 1;
-        $data['cxl_seq']    = 1; 
-        $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], $data['cxl_dt'], $data['mcht_settle_type'], $data['pg_settle_type']);
-        $settle_ids = ['mcht_settle_id', 'sales0_settle_id', 'sales1_settle_id', 'sales2_settle_id', 'sales3_settle_id', 'sales4_settle_id', 'sales5_settle_id', 'dev_settle_id'];
-        foreach($settle_ids as $settle_id)
+        $trans = DB::table('transactions')->where('id', $request->id)->first();
+        if($trans)
         {
-            $data[$settle_id] = null;
-        }
-        try 
-        {
-            [$data] = SettleAmountCalculator::setSettleAmount([$data]);
-            $res = $this->transactions->create($data);
-            operLogging(HistoryType::CREATE, $this->target, [], $data, "#".$res->id);
-            return $this->response(1);
-        }
-        catch(QueryException $ex)
-        {
-            $msg = $ex->getMessage();
-            if(str_contains($msg, 'Duplicate entry'))
-                $msg = '이미 같은 거래번호의 취소매출이 존재합니다.<br>해당 매출을 삭제하거나 거래번호를 수정한 후 다시 시도해주세요.';     
-                
-            return $this->extendResponse(991, $msg);
+            $cxl_dt = $request->cxl_dt;
+            $cxl_tm = $request->cxl_tm;
+            $ori_trx_id = $request->trx_id;
+            $amount     = $request->amount;
+            
+            $ori_query  = $this->transactions
+                ->where('brand_id', $request->user()->brand_id)
+                ->where('trx_at', $request->trx_at)
+                ->where('ori_trx_id', $ori_trx_id);
+            $cxl_seq = (clone $ori_query)->count() + 1;
+            $cancel  = (clone $ori_query)->first([DB::raw("SUM(amount) AS cancel_amount")]);
+            $total_cancel_amount = ((int)$cancel->cancel_amount * -1) + $amount;
+            if($total_cancel_amount > $trans->amount)
+            {
+                $msg = '부분취소 금액이 원거래 금액보다 높습니다.<br>(시도합계: '.number_format($total_cancel_amount).'원)<br>(원거래: '.number_format($trans->amount).'원)';
+                return $this->extendResponse(991, $msg);
+            }
+            else
+            {
+                $data = json_decode(json_encode($trans), true);
+                unset($data['id']);
+                $data['cxl_dt']     = $cxl_dt;
+                $data['cxl_tm']     = $cxl_tm;
+                $data['trx_at']     = $cxl_dt." ".$cxl_tm;
+                $data['ori_trx_id'] = $ori_trx_id;
+                $data['amount']     = $amount * -1;
+                $data['is_cancel']  = 1;
+                $data['cxl_seq']    = $cxl_seq; 
+    
+                $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], $data['cxl_dt'], $data['mcht_settle_type'], $data['pg_settle_type']);
+                $settle_ids = ['mcht_settle_id', 'sales0_settle_id', 'sales1_settle_id', 'sales2_settle_id', 'sales3_settle_id', 'sales4_settle_id', 'sales5_settle_id', 'dev_settle_id'];
+                foreach($settle_ids as $settle_id)
+                {
+                    $data[$settle_id] = null;
+                }
+                try 
+                {
+                    [$data] = SettleAmountCalculator::setSettleAmount([$data]);
+                    $res = $this->transactions->create($data);
+                    operLogging(HistoryType::CREATE, $this->target, [], $data, "#".$res->id);
+                    return $this->response(1);
+                }
+                catch(QueryException $ex)
+                {
+                    $msg = $ex->getMessage();
+                    if(str_contains($msg, 'Duplicate entry'))
+                        $msg = '이미 같은 거래번호의 취소매출이 존재합니다.<br>해당 매출을 삭제하거나 거래번호를 수정한 후 다시 시도해주세요.';     
+                        
+                    return $this->extendResponse(991, $msg);
+                }
+            }
         }
     }
 

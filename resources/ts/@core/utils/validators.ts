@@ -122,5 +122,9 @@ export const extensionValidator = (files: File[], values: string[]) => {
 }
 
 export const amountValidator = (value: number, name:string, amount: number) => {
-    return value >= amount || checkDirectObject(name)+` 최소 ${amount}이상이어야합니다.` 
+    return value >= amount || checkDirectObject(name)+` ${amount.toLocaleString()}% 이상이어야합니다.` 
+}
+
+export const maxAmountValidator = (value: number, name:string, amount: number) => {
+    return value <= amount || checkDirectObject(name)+` ${amount.toLocaleString()}원 이하여야합니다.` 
 }

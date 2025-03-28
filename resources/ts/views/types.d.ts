@@ -192,6 +192,8 @@ export interface Salesforce extends SalesforcePropertie, UserPropertie, Identity
     withdraw_holiday_limit: number,
     mcht_pg_id: number,
     mcht_ps_id: number,
+    resale_withdraw_fee: number,
+    resale_settle_fee: number,
     p2p_pay_fee?: number,
     parent_total_fee?: number,
     under_auto_settings?: UnderAutoSetting[],

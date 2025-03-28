@@ -1,12 +1,18 @@
 <script setup lang="ts">
+import { inputFormater } from '@/@core/utils/formatters';
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
 
 const visible = ref(false)
-const amount = ref(0)
+const {
+    amount_format,
+    amount,
+    formatAmount,
+} = inputFormater()
 
 let resolveCallback: (amount: number) => void;
 
 const show = (_amount: number): Promise<number> => {
+    amount_format.value = _amount.toString()
     amount.value = _amount
     visible.value = true
 
@@ -15,9 +21,9 @@ const show = (_amount: number): Promise<number> => {
     });
 }
 
-const input = (amount: number) => {
+const input = (a: number) => {
     visible.value = false
-    resolveCallback(amount)
+    resolveCallback(a)
 }
 
 const handleEvent = (event: KeyboardEvent) => {
@@ -40,13 +46,16 @@ defineExpose({
                     <VCol cols="12">
                         <VRow no-gutters>
                             <VCol cols="12" md="4">                                        
-                                <BaseQuestionTooltip :location="'top'" :text="'취소금액'" :content="'전액 입력시, 전액취소됩니다.'">
-                                </BaseQuestionTooltip>
+                                <BaseQuestionTooltip :location="'top'" :text="'취소금액'" :content="'전액 입력시, 전액취소됩니다.'"/>
                             </VCol>
                             <VCol cols="12" md="8">
-                                <VTextField v-model="amount" type="number" suffix="￦" placeholder="취소금액을 입력해주세요"
-                                    prepend-inner-icon="ic:outline-price-change" 
-                                @keydown.enter="handleEvent"
+                                <VTextField 
+                                    v-model="amount_format"
+                                    suffix="원" 
+                                    @input="formatAmount"
+                                    variant="underlined" placeholder="취소금액을 입력해주세요"
+                                    prepend-icon="ic:outline-price-change"
+                                    @keydown.enter="handleEvent"
                                 />
                             </VCol>
                         </VRow>
@@ -64,3 +73,8 @@ defineExpose({
         </VCard>
     </VDialog>
 </template>
+<style scoped>
+:deep(.v-row) {
+  align-items: center;
+}
+</style>

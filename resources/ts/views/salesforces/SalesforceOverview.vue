@@ -332,7 +332,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol v-if="getUserLevel() >= 35 && corp.pv_options.paid.brand_mode === 2">
+        <VCol v-if="corp.pv_options.paid.brand_mode === 2">
             <VCard v-if="props.item.level === 30">
                 <VCardItem>
                     <VCardTitle>
@@ -382,34 +382,78 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                             </VRow>
                         </VCol>
                     </VRow>
+                    <template v-if="getUserLevel() >= 35">
+                        <br>
+                        <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
+                            <VChip variant="outlined">하위 가맹점 추가정보</VChip>    
+                        </VCardSubtitle>
+                        <VRow>
+                            <VCol cols="12">
+                                <VRow>
+                                    <VCol cols="12" md="6">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol md="5" cols="6">
+                                                <span>원천사</span>
+                                            </VCol>
+                                            <VCol md="7">
+                                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_pg_id" :items="pgs"
+                                                    prepend-inner-icon="ph-buildings" label="원천사 선택" item-title="pg_name" item-value="id"
+                                                    :rules="[requiredValidatorV2(props.item.mcht_pg_id, 'PG사')]" />
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                    <VCol cols="12" md="6">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol cols="5">구간</VCol>
+                                            <VCol md="7"> 
+                                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_ps_id" :items="filterPgs"
+                                                    prepend-inner-icon="mdi-vector-intersection" label="구간 선택" item-title="name" item-value="id"
+                                                    :hint="`${setFee(pss, props.item.mcht_ps_id)}`" persistent-hint
+                                                    :rules="[requiredValidatorV2(props.item.mcht_ps_id, '구간')]" />
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                    </template>
                     <br>
                     <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
-                        <VChip variant="outlined">하위 가맹점 추가정보</VChip>    
+                        <VChip variant="outlined">재판매 옵션</VChip>    
                     </VCardSubtitle>
                     <VRow>
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiyV2(props.item, 'salesforces')">
                                         <VCol md="5" cols="6">
-                                            <span>원천사</span>
+                                            <span>지급대행 수수료</span>
                                         </VCol>
                                         <VCol md="7">
-                                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_pg_id" :items="pgs"
-                                                prepend-inner-icon="ph-buildings" label="원천사 선택" item-title="pg_name" item-value="id"
-                                                :rules="[requiredValidatorV2(props.item.mcht_pg_id, 'PG사')]" />
+                                            <VTextField prepend-inner-icon="tabler-currency-won"
+                                                    v-model="props.item.resale_withdraw_fee" type="number" suffix="원"/>
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol md="5" cols="6">
+                                            <span class="font-weight-bold">지급대행 수수료</span>
+                                        </VCol>
+                                        <VCol md="7" cols="6">
+                                            {{ props.item.withdraw_business_limit }} 원
                                         </VCol>
                                     </VRow>
                                 </VCol>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;">
-                                        <VCol cols="5">구간</VCol>
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiyV2(props.item, 'salesforces')">
+                                        <VCol cols="5">건별 수수료</VCol>
                                         <VCol md="7"> 
-                                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_ps_id" :items="filterPgs"
-                                                prepend-inner-icon="mdi-vector-intersection" label="구간 선택" item-title="name" item-value="id"
-                                                :hint="`${setFee(pss, props.item.mcht_ps_id)}`" persistent-hint
-                                                :rules="[requiredValidatorV2(props.item.mcht_ps_id, '구간')]" />
+                                            <VTextField prepend-inner-icon="tabler-currency-won"
+                                                v-model="props.item.resale_settle_fee" type="number" suffix="원"/>
                                         </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol md="5" cols="6" class="font-weight-bold">건별 수수료</VCol>
+                                        <VCol md="7" cols="6"><span>{{ props.item.withdraw_holiday_limit }} 원</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>

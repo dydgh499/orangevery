@@ -534,7 +534,7 @@ export const defaultItemInfo = () => {
         mcht_ps_id: 0,
         name: '',
         dns: '',
-        theme_css: {main_color: "#ABCDEF"},
+        theme_css: { main_color: "#ABCDEF" },
         og_description: '',
         logo_img: '',
         favicon_img: '',
@@ -543,7 +543,9 @@ export const defaultItemInfo = () => {
         logo_file: undefined,
         favicon_file: undefined,
         og_file: undefined,
-        login_file: undefined
+        login_file: undefined,
+        resale_withdraw_fee: 0,
+        resale_settle_fee: 0
     })
     return {
         path, item
