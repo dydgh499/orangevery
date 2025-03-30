@@ -7,7 +7,7 @@ import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Merchandise, Options } from '@/views/types'
-import { banks } from '@/views/users/useStore'
+import { banks, business_types } from '@/views/users/useStore'
 import corp from '@corp'
 
 const { cus_filters } = useStore()
@@ -27,6 +27,7 @@ const is_clear = ref<boolean>(false)
 
 const bank = ref(banks[0])
 const tax_category_type = ref(tax_category_types[0])
+const business_type = ref(business_types[1])
 const cus_filter = ref({id:null, name:''})
 
 const use_types: Options[] = [
@@ -99,7 +100,7 @@ watchEffect(async () => {
                     <VCol style="padding: 0 2em;">
                         <h3 class="pt-3">가맹점 정보</h3>
                         <VRow>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">은행코드 검색</VCol>
                                     <VCol md="6">
@@ -112,7 +113,7 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">사업자 유형</VCol>
                                     <VCol md="6">
@@ -125,7 +126,20 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">구분 검색</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="business_type"
+                                            :items="business_types"
+                                            label="구분 검색"
+                                            :hint="`구분 코드: ${business_type ? business_type.id : ''} `"
+                                            item-title="title" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">커스텀 필터 검색</VCol>
                                     <VCol md="6">
@@ -141,11 +155,12 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
+                            
                         </VRow>
                         <VDivider style="margin: 1em 0;" />
                         <h3 class="pt-3">옵션 정보</h3>
                         <VRow>
-                            <VCol md="4" cols="12" v-if="corp.pv_options.paid.use_collect_withdraw">
+                            <VCol md="3" cols="12" v-if="corp.pv_options.paid.use_collect_withdraw">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">모아서출금 사용여부</VCol>
                                     <VCol md="6">
@@ -157,7 +172,7 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>                            
-                            <VCol md="4" cols="12" v-if="corp.pv_options.paid.use_regular_card">
+                            <VCol md="3" cols="12" v-if="corp.pv_options.paid.use_regular_card">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">단골고객 사용여부</VCol>
                                     <VCol md="6">
@@ -169,7 +184,7 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile">
+                            <VCol md="3" cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">SMS 인증회수 사용여부</VCol>
                                     <VCol md="6">
@@ -181,7 +196,7 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12" v-if="corp.pv_options.paid.use_multiple_hand_pay">
+                            <VCol md="3" cols="12" v-if="corp.pv_options.paid.use_multiple_hand_pay">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">다중결제 사용여부</VCol>
                                     <VCol md="6">

@@ -2,7 +2,7 @@ import { getFixplusSalesHeader, isFixplus } from '@/plugins/fixplus'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { Merchandise, Options, SalesFilter, Salesforce, UnderAutoSetting } from '@/views/types'
-import { avatars } from '@/views/users/useStore'
+import { avatars, business_types } from '@/views/users/useStore'
 import { axios, getSalesLevelByCol, getUserLevel, salesLevels } from '@axios'
 import corp from '@corp'
 import _ from 'lodash'
@@ -61,6 +61,7 @@ const getSalesHeaders = (head :any) => {
             'user_name' : '영업라인 ID',
             'sales_name': '영업라인 상호',
             'sector' : '업종',
+            'business_type': '구분',
         }
     }
 
@@ -84,6 +85,7 @@ const getSalesHeaders = (head :any) => {
             'phone_num' : '대표자 연락처',
             'resident_num' : '주민등록번호',
             'business_num' : '사업자등록번호',
+            'corp_registration_num': '법인등록번호',
             'addr' : '주소',
         }
     }
@@ -210,6 +212,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
             data['settle_tax_type'] = tax_types.find(obj => obj['id'] === salesforce['settle_tax_type'])?.title as string
             data['resident_num'] = salesforce['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : salesforce['resident_num_back'])
             data['view_type'] = data['view_type'] ? '상세보기' : '간편보기'
+            data['business_type'] = business_types.find(cus => cus.id === salesforce['business_type'])?.name as string
             return head.sortAndFilterByHeader(data, keys)
         }
 

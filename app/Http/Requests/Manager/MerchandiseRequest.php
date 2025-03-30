@@ -26,6 +26,7 @@ class MerchandiseRequest extends FormRequest
         'note',
         'website_url',
         'email',
+        'corp_registration_num',
     ];
     public $file_keys = [
         'passbook_file',
@@ -55,6 +56,7 @@ class MerchandiseRequest extends FormRequest
         'is_show_fee',
         'use_regular_card',
         'merchant_status',
+        'business_type',
     ];
     public $nullable_keys = [
         'custom_id',

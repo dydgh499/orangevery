@@ -84,6 +84,8 @@ export interface UserPropertie extends BasePropertie, Bank, Contract {
     addr: string,
     resident_num: string,
     business_num: string,
+    business_type: number,
+    corp_registration_num: string,
 
     resident_num_front: string,
     resident_num_back: string,

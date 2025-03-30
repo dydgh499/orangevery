@@ -5,7 +5,7 @@ import { settleCycles, settleDays, settleTaxTypes, useSearchStore } from '@/view
 import { useRegisterStore, validateItems } from '@/views/services/bulk-register/SalesforceRegisterStore'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import type { Salesforce } from '@/views/types'
-import { banks } from '@/views/users/useStore'
+import { banks, business_types } from '@/views/users/useStore'
 import { salesLevels } from '@axios'
 import corp from '@corp'
 
@@ -35,6 +35,7 @@ const level = ref(all_sales[0])
 const tax_type = ref(tax_types[0])
 const all_cycle = ref(all_cycles[0])
 const all_day = ref(all_days[0])
+const business_type = ref(business_types[1])
 
 const validate = () => {
     error_message.value = ''
@@ -89,7 +90,7 @@ watchEffect(async () => {
                     <VCol style="padding: 0 2em;">
                         <h3 class="pt-3">영업라인 정보</h3>
                         <VRow>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">은행코드 검색</VCol>
                                     <VCol md="6">
@@ -103,7 +104,7 @@ watchEffect(async () => {
 
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">등급 검색</VCol>
                                     <VCol md="6">
@@ -116,7 +117,20 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">구분 검색</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="business_type"
+                                            :items="business_types"
+                                            label="구분 검색"
+                                            :hint="`구분 코드: ${business_type ? business_type.id : ''} `"
+                                            item-title="title" item-value="id" persistent-hint return-object
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="4">화면타입</VCol>
                                     <VCol md="8">
@@ -132,7 +146,7 @@ watchEffect(async () => {
                         <VDivider style="margin: 1em 0;" />
                         <h3 class="pt-3">정산정보</h3>
                         <VRow>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">정산세율 검색</VCol>
                                     <VCol md="6">
@@ -146,7 +160,7 @@ watchEffect(async () => {
 
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">정산주기 검색</VCol>
                                     <VCol md="6">
@@ -159,7 +173,7 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">정산일 검색</VCol>
                                     <VCol md="6">

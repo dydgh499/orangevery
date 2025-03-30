@@ -2,9 +2,10 @@
 import ProfileDialog from '@/layouts/dialogs/users/ProfileDialog.vue';
 import FileInput from '@/layouts/utils/FileInput.vue';
 import type { UserPropertie } from '@/views/types';
-import { avatars, banks, getOnlyNumber, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore';
+import { avatars, banks, business_types, getOnlyNumber, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore';
 import { axios, getUserLevel, isAbleModifyPrimary, isAbleModiy, user_info } from '@axios';
 import corp from '@corp';
+import { requiredValidatorV2 } from '@validators';
 
 interface Props {
     item: UserPropertie,
@@ -18,6 +19,8 @@ const profileDlg = ref()
 const is_show = ref(false)
 const phone_num_format = ref('')
 const business_num_format = ref('')
+const corp_registration_num_format = ref('')
+
 const is_resident_num_back_show = ref(false)
 
 const setAcctBankName = () => {
@@ -79,6 +82,24 @@ const formatBusinessNum = computed(() => {
         business_num_format.value = raw_value.slice(0, 3) + '-' + raw_value.slice(3, 5) + '-' + raw_value.slice(5, 10);
 })
 
+const corpRegistrationNum = computed(() => {
+    let raw_value = corp_registration_num_format.value.replace(/\D/g, '');
+    props.item.corp_registration_num = raw_value
+    if (raw_value.length <= 6)
+        corp_registration_num_format.value = raw_value;
+    else if (raw_value.length <= 13)
+        corp_registration_num_format.value = raw_value.slice(0, 6) + '-' + raw_value.slice(6);
+    else
+        corp_registration_num_format.value = raw_value.slice(0, 6) + '-' + raw_value.slice(6, 13);
+})
+
+const validateCorpRegistrationNumRules = computed(() => {
+    if(props.item.business_type === 1)
+        return [requiredValidatorV2(props.item.corp_registration_num, '법인등록번호')]
+    else
+        return []
+})
+
 const isViewAbleContractFile = () => {
     if(getUserLevel() >= 35)
         return true
@@ -96,6 +117,20 @@ const isViewAbleContractFile = () => {
     }
 }
 
+const getRegidentNum = () => {
+    if(getUserLevel() >= 30) 
+        return `${props.item.resident_num_front} - ${props.item.resident_num_back}`
+    else {
+        if(props.is_mcht && getUserLevel() === 10 && props.item.id === user_info.value.id)
+            return `${props.item.resident_num_front} - ${props.item.resident_num_back}`
+        else if(props.is_mcht === false && getUserLevel() > 10 && props.item.id === user_info.value.id)
+            return `${props.item.resident_num_front} - ${props.item.resident_num_back}`
+        else
+            return `${props.item.resident_num_front} - *******`
+    }
+}
+
+
 watchEffect(() => {
     props.item.resident_num = props.item.resident_num_front + props.item.resident_num_back
 })
@@ -103,6 +138,11 @@ watchEffect(() => {
 watchEffect(() => {
     phone_num_format.value = props.item.phone_num ?? ''
     business_num_format.value = props.item.business_num ?? ''
+    corp_registration_num_format.value = props.item.corp_registration_num ?? ''
+})
+watchEffect(() => {
+    if(props.item.business_type === 2)
+        props.item.corp_registration_num = "000000000"
 })
 </script>
 <template>
@@ -211,14 +251,39 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                     </VRow>
-
                     <VRow>
                         <VCol cols="12">
-                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
-                                <VCol md="2" cols="5">
-                                    <label>사업자등록번호</label>
+                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                                <VCol>
+                                    <label>사업자구분</label>
                                 </VCol>
                                 <VCol md="10">
+                                    <VRadioGroup v-model="props.item.business_type" inline>
+                                    <VRadio v-for="(business_type, key, index) in business_types" :value="business_type.id"
+                                        :key="index">
+                                        <template #label>
+                                            <span>
+                                                {{ business_type.title }}
+                                            </span>
+                                        </template>
+                                    </VRadio>
+                                </VRadioGroup>
+                                </VCol>
+                            </VRow>
+                            <VRow v-else>
+                                <VCol class="font-weight-bold">사업자구분</VCol>
+                                <VCol md="10"><span>{{ business_types.find(obj => obj.id === props.item.business_type)?.title }}</span></VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+
+                    <VRow>
+                        <VCol cols="12" md="6" v-if="props.item.business_type != 2">
+                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
+                                <VCol md="4" cols="5">
+                                    <label>사업자등록번호</label>
+                                </VCol>
+                                <VCol md="8">
                                     <div style="display: flex;">
                                         <VTextField 
                                             v-model="business_num_format" 
@@ -234,20 +299,40 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold" cols="5" md="2">사업자등록번호</VCol>
-                                <VCol md="10"><span>{{ business_num_format }}</span></VCol>
+                                <VCol class="font-weight-bold" cols="5" md="24">사업자등록번호</VCol>
+                                <VCol md="8"><span>{{ business_num_format }}</span></VCol>
                             </VRow>
                         </VCol>
+                        <VCol cols="12" md="6" v-if="props.item.business_type === 1">
+                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                                <VCol md="4" cols="5">
+                                    <label>법인등록번호</label>
+                                </VCol>
+                                <VCol md="8">
+                                    <VTextField 
+                                        v-model="corp_registration_num_format"
+                                        @input="corpRegistrationNum" 
+                                        prepend-inner-icon="carbon-identification" 
+                                        placeholder="123456-1234567"
+                                        :rules="validateCorpRegistrationNumRules"/>
+                                </VCol>
+                            </VRow>
+                            <VRow v-else>
+                                <VCol class="font-weight-bold">법인등록번호</VCol>
+                                <VCol md="10"><span>{{ props.item.corp_registration_num }}</span></VCol>
+                            </VRow>
+                        </VCol>                        
                     </VRow>
+                    
                     <VRow>
-                        <VCol cols="12">
+                        <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
-                                <VCol md=2 cols="12">
+                                <VCol md="4" cols="12">
                                     <label>주민등록번호</label>
                                 </VCol>
-                                <VCol md="10" cols="12">
+                                <VCol md="8" cols="12">
                                     <VRow style="align-items: center;">
-                                        <VCol md="8" :cols="12" style="display: flex;">
+                                        <VCol :cols="12" style="display: flex;">
                                             <VTextField v-model="props.item.resident_num_front"
                                                 prepend-inner-icon="carbon-identification" placeholder="800101" maxlength="6"
                                                 @update:model-value="props.item.resident_num_front = getOnlyNumber($event)"
@@ -265,8 +350,8 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold" cols="5" md="2">주민등록번호</VCol>
-                                <VCol md="10"><span>{{ props.item.resident_num_front }} - *******</span></VCol>
+                                <VCol class="font-weight-bold" cols="5" md="4">주민등록번호</VCol>
+                                <VCol md="8"><span>{{ getRegidentNum() }}</span></VCol>
                             </VRow>
                         </VCol>
                     </VRow>

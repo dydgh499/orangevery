@@ -4,7 +4,7 @@ import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { Merchandise, Options } from '@/views/types'
-import { avatars } from '@/views/users/useStore'
+import { avatars, business_types } from '@/views/users/useStore'
 import { getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
@@ -80,6 +80,7 @@ const getMchtHeaders = (head :any) => {
             headers_3['hold_fee'] = '유보금 수수료'
         }
         headers_3['sector'] = '업종'
+        headers_3['business_type'] = '구분'
         return headers_3
     }
 
@@ -99,10 +100,12 @@ const getMchtHeaders = (head :any) => {
     const getPrivacyCols = () => {
         const headers_5:Record<string, string> = {}
         headers_5['nick_name'] = '대표자명'
+        headers_5['email'] = '이메일'        
         headers_5['phone_num'] = '대표자 연락처'
         headers_5['contact_num'] = '사업장 연락처'
         headers_5['resident_num'] = '주민등록번호'
         headers_5['business_num'] = '사업자등록번호'
+        headers_5['corp_registration_num'] = '법인등록번호'
         headers_5['addr'] = '주소'
         return headers_5
     }
@@ -333,6 +336,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
             datas[i]['settle_types'] = datas[i]['payment_modules'].map(module => settle_types.find(settle_type => settle_type.id === module.settle_type)?.title).join(',')  
             datas[i]['resident_num'] = datas[i]['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
             datas[i]['custom_id'] = cus_filters.find(cus => cus.id === datas[i]['custom_id'])?.name as string
+            datas[i]['business_type'] = business_types.find(cus => cus.id === datas[i]['business_type'])?.name as string
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         head.exportToExcel(datas)
@@ -411,6 +415,8 @@ export const defaultItemInfo = () => {
         contact_num: '',
         specified_time_disable_limit: 0,
         phone_auth_limit_count: 0,
+        business_type: 0,
+        corp_registration_num: ''
     })
     return {
         path, item

@@ -3,6 +3,7 @@
 
 import SalesforceChildOverview from '@/pages/salesforces/SalesforceChildOverview.vue';
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
+import { business_types } from '@/views/users/useStore';
 
 import { authLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
 import { Salesforce } from '@/views/types';
@@ -58,6 +59,11 @@ const getChildDepth = computed(() => {
                     <VChip
                         :color="store.getSelectIdColor(all_cycles.find(obj => obj.id === props.salesforce[key])?.id)">
                         {{ all_cycles.find(sales => sales.id === props.salesforce[key])?.title }}
+                    </VChip>
+                </span>
+                <span v-else-if="key == 'business_type'">
+                    <VChip :color="store.getSelectIdColor(props.salesforce[key])">
+                        {{ business_types.find(obj => obj.id === props.salesforce[key])?.title }}
                     </VChip>
                 </span>
                 <span v-else-if="key == 'sales_fee'">

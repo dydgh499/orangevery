@@ -23,11 +23,13 @@ class BulkSalesforceRequest extends FormRequest
         'acct_name',
         'acct_bank_name',
         'acct_bank_code',
+        'corp_registration_num',
     ];
     public $integer_keys = [
         'settle_tax_type',
         'settle_cycle',
         'view_type',
+        'business_type',
     ];
     public $nullable_keys = [
         'settle_day',

@@ -57,7 +57,9 @@ export const useRegisterStore = defineStore('salesRegisterStore', () => {
         { key: 'phone_num', title : '휴대폰번호(X)' }, 
         { key: 'resident_num', title : '주민등록번호(O)' }, 
         { key: 'business_num', title : '사업자등록번호(X)' }, 
+        { key: 'corp_registration_num', title: '법인등록번호(X)'},
         { key: 'sector', title : '업종(X)' },
+        { key: 'business_type', title: '구분(X)'},
         { key: 'acct_num', title : '계좌번호(O)' },
         { key: 'acct_name', title : '예금주(O)' }, 
         { key: 'acct_bank_name', title : '입금은행명(O)' },
@@ -68,7 +70,7 @@ export const useRegisterStore = defineStore('salesRegisterStore', () => {
     ]
 
     const isPrimaryHeader = (key: string) => {
-        const keys = ['level', 'settle_tax_type', 'settle_cycle', 'settle_day', 'view_type']
+        const keys = ['level', 'settle_tax_type', 'settle_cycle', 'settle_day', 'view_type', 'acct_bank_name', 'business_type']
         return keys.includes(key)
     }
 

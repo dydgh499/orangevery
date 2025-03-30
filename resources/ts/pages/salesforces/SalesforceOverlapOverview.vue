@@ -7,6 +7,7 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import SalesforceChildOverview from '@/pages/salesforces/SalesforceChildOverview.vue';
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
+import { business_types } from '@/views/users/useStore';
 
 import { authLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
 import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios';
@@ -152,6 +153,11 @@ watchEffect(() => {
                                         <VChip
                                             :color="store.getSelectIdColor(tax_types.find(obj => obj.id === item[_key])?.id)">
                                             {{ tax_types.find(sales => sales.id === item[_key])?.title }}
+                                        </VChip>
+                                    </span>
+                                    <span v-else-if="_key == 'business_type'">
+                                        <VChip :color="store.getSelectIdColor(item[_key])">
+                                            {{ business_types.find(obj => obj.id === item[_key])?.title }}
                                         </VChip>
                                     </span>
                                     <span v-else-if="_key == 'view_type'">

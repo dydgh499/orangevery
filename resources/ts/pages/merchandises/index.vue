@@ -6,6 +6,7 @@ import { feeCalcMenual, merchant_statuses, MerchantStatusColor, useSearchStore }
 import { selectFunctionCollect } from '@/views/selected';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
+import { business_types } from '@/views/users/useStore';
 
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue';
 import InitPayVerficationDialog from '@/layouts/dialogs/users/InitPayVerficationDialog.vue';
@@ -261,6 +262,11 @@ onMounted(() => {
                             <span v-else-if="_key == 'merchant_status'">
                                 <VChip :color="MerchantStatusColor(item[_key])">
                                     {{ merchant_statuses.find(obj => obj.id === item[_key])?.title }}
+                                </VChip>
+                            </span>
+                            <span v-else-if="_key == 'business_type'">
+                                <VChip :color="store.getSelectIdColor(item[_key])">
+                                    {{ business_types.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'is_lock'">

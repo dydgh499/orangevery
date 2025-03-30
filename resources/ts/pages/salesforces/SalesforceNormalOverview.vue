@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/salesforces/useStore';
 import { selectFunctionCollect } from '@/views/selected';
+import { business_types } from '@/views/users/useStore';
 
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue';
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
@@ -164,6 +165,11 @@ onMounted(() => {
                                     <VChip
                                         :color="store.getSelectIdColor(tax_types.find(obj => obj.id === item[_key])?.id)">
                                         {{ tax_types.find(sales => sales.id === item[_key])?.title }}
+                                    </VChip>
+                                </span>
+                                <span v-else-if="_key == 'business_type'">
+                                    <VChip :color="store.getSelectIdColor(item[_key])">
+                                        {{ business_types.find(obj => obj.id === item[_key])?.title }}
                                     </VChip>
                                 </span>
                                 <span v-else-if="_key == 'auth_level'">

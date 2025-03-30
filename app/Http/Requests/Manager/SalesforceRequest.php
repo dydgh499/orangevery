@@ -31,6 +31,7 @@ class SalesforceRequest extends FormRequest
         'name',
         'dns',
         'og_description',
+        'corp_registration_num',
     ];
 
     public $file_keys = [
@@ -58,6 +59,7 @@ class SalesforceRequest extends FormRequest
         'withdraw_holiday_limit',
         'resale_withdraw_fee',
         'resale_settle_fee',
+        'business_type',
     ];
     public $nullable_keys = [
         'parent_id',

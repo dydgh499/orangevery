@@ -1,12 +1,16 @@
 <script lang="ts" setup>
 import LoginImageDialog from '@/layouts/dialogs/services/LoginImageDialog.vue';
 import type { IdentityDesign } from '@/views/types';
-import { isAbleModiyV2 } from '@axios';
+import { isAbleModiy } from '@axios';
+import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant';
+import authV2MaskDark from '@images/pages/misc-mask-dark.png';
+import authV2MaskLight from '@images/pages/misc-mask-light.png';
 import { requiredValidatorV2 } from '@validators';
 
 interface Props {
     item: IdentityDesign,
 }
+const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 const props = defineProps<Props>()
 const loginImageDialog = ref()
 
@@ -58,9 +62,9 @@ watchEffect(() => {
                             <VCol>
                                 <VRow no-gutters>
                                     <VColorPicker 
-                                        :disabled="isAbleModiyV2(props.item, 'salesforces') === false"
+                                        :disabled="isAbleModiy(props.item.id) === false"
                                         v-model="props.item.theme_css.main_color" 
-                                        :show-swatches="isAbleModiyV2(props.item, 'salesforces')"
+                                        :show-swatches="isAbleModiy(props.item.id)"
                                         swatches-max-height="220px" mode="rgb"/>
                                 </VRow>
                             </VCol>
@@ -74,7 +78,7 @@ watchEffect(() => {
                             <VCol>
                                 <VRow>
                                     <VTextField
-                                        :readonly="isAbleModiyV2(props.item, 'salesforces') === false"
+                                        :readonly="isAbleModiy(props.item.id) === false"
                                         v-model="props.item.name" 
                                         variant="underlined"
                                         prepend-inner-icon="twemoji-desktop-computer"
@@ -83,7 +87,6 @@ watchEffect(() => {
                                 </VRow>
                             </VCol>
                             <br>
-
                             <VCardTitle>
                                 <div style="display: flex;align-items: center;justify-content: space-between;">
                                     <span style="margin-right: 1em;">도메인주소</span>
@@ -92,7 +95,7 @@ watchEffect(() => {
                             <VCol>
                                 <VRow>
                                     <VTextField
-                                            :readonly="isAbleModiyV2(props.item, 'salesforces') === false"
+                                            :readonly="isAbleModiy(props.item.id) === false"
                                             v-model="props.item.dns" 
                                             variant="underlined"
                                             prepend-inner-icon="carbon:dns-services"
@@ -101,82 +104,12 @@ watchEffect(() => {
                             </VCol>
                             <br>
                             <VDivider style="margin-bottom: 1em;"/>
+                            
                             <VCardTitle>
                                 <div style="display: flex;align-items: center;justify-content: space-between;">
-                                    <span style="margin-right: 1em;">파비콘 이미지</span>
+                                    <span style="margin-right: 1em;">카카오톡 미리보기 <b style="font-size: 0.8em;">(1260x630)</b></span>
                                     <div 
-                                        v-if="isAbleModiyV2(props.item, 'salesforces')"
-                                        :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
-                                        <VChip variant="elevated" color="warning" @click="triggerFileInput('favicon-upload')">
-                                            파비콘 이미지 업로드
-                                        </VChip>
-                                        <VFileInput 
-                                            accept="image/*" v-model="favicon_files" 
-                                            id="favicon-upload"
-                                            style="display: none;"/>
-                                    </div>
-                                </div>
-                            </VCardTitle>
-                            <br>
-                            <VCol>
-                                <VRow>
-                                    <div class="preview-box" :style="'height:3em; width:16em; background: rgb(var(--v-theme-background)); display:inline-flex; align-items: center; border-bottom-color: black; border-radius: 8px 8px 0 0;'">
-                                        <div :style="`background-repeat: round; background-image: url(${favicon_preview}); block-size: 32px; width:32px;  margin:0.5em; display: inline-block;`">
-                                        </div>
-                                        <b>{{ props.item.name }}</b>
-                                        <b style="position: relative;top: -0.5em;margin-right: 0.5em;margin-left: auto;">X</b>
-                                    </div>
-                                    <div class="preview-box" :style="'height:3em; width:3em; display:inline-flex; align-items: center; border-bottom-color: black; border-radius: 8px 8px 0 0;'">
-                                        <b> ...</b>
-                                    </div>
-                                    <div class="preview-box" :style="'height:3em; width:3em; display:inline-flex; align-items: center; border-bottom-color: black; border-radius: 8px 8px 0 0;'">
-                                        <b> ...</b>
-                                    </div>
-                                    <div class="preview-box" :style="'height:4em; width:22em; display:inline-flex; align-items: center; border-radius:0px;'">
-                                        <VIcon :icon="'material-symbols:refresh'" style="margin: 0 0.5em;"/>
-                                        <div class="preview-box" :style="'background: rgb(var(--v-theme-background));height:2.5em; display:flex; align-items: center; border-radius:1.5em 0 0px 1.5em;'">
-                                            <b style=" width: 18.7em;padding-left: 1em;">https://{{ props.item.dns }}</b>
-                                        </div>
-                                    </div>
-                                </VRow>
-                            </VCol>
-                            <br>
-                            <VCardTitle>
-                                <div style="display: flex;align-items: center;justify-content: space-between;">
-                                    <span style="margin-right: 1em;">전산 로고</span>
-                                    <div :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
-                                        <VChip 
-                                            v-if="isAbleModiyV2(props.item, 'salesforces')"
-                                            variant="elevated" color="warning" @click="triggerFileInput('logo-upload')">
-                                            로고 이미지 업로드
-                                        </VChip>
-                                        <VFileInput 
-                                            accept="image/*" v-model="logo_files" 
-                                            id="logo-upload"
-                                            style="display: none;"/>
-                                    </div>
-                                </div>
-                            </VCardTitle>
-                            <br>
-                            <VCol>
-                                <VImg :src="logo_preview" height="72"/>
-                            </VCol>
-                            <br>
-                        </VCol>
-                    </VRow>
-                </VCardItem>
-            </VCard>
-        </VCol>
-        <VCol cols="12" md="6">
-            <VCard>
-                <VCardItem>
-                    <VRow class="pt-5">
-                        <VCol cols="6">
-                            <VCardTitle>
-                                <div style="display: flex;align-items: center;justify-content: space-between;">
-                                    <span style="margin-right: 1em;">카카오톡 미리보기</span>
-                                    <div 
-                                        v-if="isAbleModiyV2(props.item, 'salesforces')"
+                                        v-if="isAbleModiy(props.item.id)"
                                         :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
                                         <VChip variant="elevated" color="primary" @click="triggerFileInput('kakao-upload')">
                                             미리보기 이미지 업로드
@@ -196,7 +129,7 @@ watchEffect(() => {
                                         <div class="preview-text-box">
                                             <p class="title">{{ props.item.name }}</p>
                                             <VTextarea 
-                                                :readonly="isAbleModiyV2(props.item, 'salesforces') === false"
+                                                :readonly="isAbleModiy(props.item.id) === false"
                                                 
                                                 v-model="props.item.og_description" 
                                                 auto-grow rows="3"
@@ -207,7 +140,59 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="6">
+                    </VRow>
+                </VCardItem>
+            </VCard>
+        </VCol>
+        <VCol cols="12" md="6">
+            <VCard>
+                <VCardItem>
+                    <VRow>
+                        <VCol cols="12">
+                            <VCardTitle>
+                                <div style="display: flex;align-items: center;justify-content: space-between;">
+                                    <span style="margin-right: 1em;">파비콘 이미지 <b style="font-size: 0.8em;">(32x32)</b></span>
+                                    <div 
+                                        v-if="isAbleModiy(props.item.id)"
+                                        :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
+                                        <VChip variant="elevated" color="warning" @click="triggerFileInput('favicon-upload')">
+                                            파비콘 이미지 업로드
+                                        </VChip>
+                                        <VFileInput 
+                                            accept="image/*" v-model="favicon_files" 
+                                            id="favicon-upload"
+                                            style="display: none;"/>
+                                    </div>
+                                </div>
+                            </VCardTitle>
+                            <VCol>
+                                <div>
+                                    <div class="preview-box" :style="'height:3em; width:16em; background: rgb(var(--v-theme-background)); display:inline-flex; align-items: center; border-bottom-color: black; border-radius: 8px 8px 0 0; position: relative;top: 11px;'">
+                                        <div :style="`background-repeat: round; background-image: url(${favicon_preview}); block-size: 32px; width:32px;  margin:0.5em; display: inline-block;`">
+                                        </div>
+                                        <b>{{ props.item.name }}</b>
+                                        <b style="position: relative;top: -0.5em;margin-right: 0.5em;margin-left: auto;">X</b>
+                                    </div>
+                                    <div class="preview-box" :style="'height:3em; width:3em; display:inline-flex; align-items: center; border-bottom-color: black; border-radius: 8px 8px 0 0;'">
+                                        <b> ...</b>
+                                    </div>
+                                    <div class="preview-box" :style="'height:3em; width:3em; display:inline-flex; align-items: center; border-bottom-color: black; border-radius: 8px 8px 0 0;'">
+                                        <b> ...</b>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="preview-box" :style="'height:4em; width:100%; display:inline-flex; align-items: center; border-radius:0px;'">
+                                        <VIcon :icon="'material-symbols:refresh'" style="margin: 0 0.5em;"/>
+                                        <div class="preview-box" :style="'background: rgb(var(--v-theme-background));height:2.5em; display:flex; align-items: center; border-radius:1.5em 0 0px 1.5em; width: 100%;'">
+                                            <b style="padding-left: 1em;">https://{{ props.item.dns }}</b>
+                                        </div>
+                                    </div>
+                                </div>
+                            </VCol>
+                        </VCol>
+                    </VRow>
+                    <VRow>
+                        <VCol cols="7">
                             <VCardTitle>
                                 <div style="display: flex;align-items: center;justify-content: space-between;">
                                     <span style="margin-right: 1em;">로그인페이지 배경</span>
@@ -220,16 +205,63 @@ watchEffect(() => {
                                 </div>
                             </VCardTitle>
                             <br>
-                            <VRow no-gutters>
-                                <VCol md="12" style="padding: 0.5em;">
-                                    <div class="preview-box">
-                                        <div 
-                                            class="preview-image-box" 
-                                            :style="`background-image: url(${props.item.login_img}); block-size: 345px;`">
+                            <VRow no-gutters class="auth-wrapper bg-surface">
+                                <VCol md="12" class="d-none d-md-flex">
+                                    <div class="position-relative bg-background rounded-lg w-100 ma-8 me-0">
+                                        <div class="d-flex align-center justify-center w-100 h-100">
+                                            <VImg max-width="220" max-height="150" :src="props.item.login_img" class="auth-illustration mt-16 mb-2" />
                                         </div>
+                                        <VImg :src="authThemeMask" class="auth-footer-mask" />
                                     </div>
                                 </VCol>
                             </VRow>
+                        </VCol>
+                        <VCol cols="5" class="auth-card-v2">
+                            <VCardTitle>
+                                <div style="display: flex;align-items: center;justify-content: space-between;">
+                                    <span style="margin-right: 1em;">전산 로고 <b style="font-size: 0.8em;">(256x256)</b></span>
+                                    <div :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
+                                        <VChip 
+                                            v-if="isAbleModiy(props.item.id)"
+                                            variant="elevated" color="warning" @click="triggerFileInput('logo-upload')">
+                                            로고 이미지 업로드
+                                        </VChip>
+                                        <VFileInput 
+                                            accept="image/*" v-model="logo_files" 
+                                            id="logo-upload"
+                                            style="display: none;"/>
+                                    </div>
+                                </div>
+                            </VCardTitle>
+                            <br>
+                            <VCol>
+                                <VCard flat class="mt-sm-0 pa-4" :max-width="320" style=" margin-right: auto;margin-left: auto;">
+                                    <VCardText style="padding: 0; padding-bottom: 24px;">
+                                        <div class="mb-6">
+                                            <VImg :src="logo_preview" width="32" height="32"/>
+                                        </div>
+                                        <h4 class="mb-1 font-weight-bold">
+                                            <span class="text-capitalize">{{ props.item.name }}</span>에 오신것을 환영합니다! 👋🏻
+                                        </h4>
+                                    </VCardText>
+                                    <VCardText style="padding: 0; font-size: 0.9em;">
+                                        <div style="padding: 0.25em 0.5em; border: 1px solid rgba(var(--v-border-color), 0.9); border-radius: 5px; margin-bottom: 1em;">
+                                            <span>아이디 입력</span>
+                                        </div>
+                                        <div style="padding: 0.25em 0.5em; border: 1px solid rgba(var(--v-border-color), 0.9); border-radius: 5px; margin-bottom: 1em;">
+                                            <span>패스워드 입력</span>
+                                        </div>
+                                        <div class="d-flex align-center flex-wrap mb-4">
+                                            <div class="text-primary" style="cursor: pointer;">
+                                                패스워드를 잊으셨나요?
+                                            </div>
+                                        </div>
+                                        <VBtn block size="small">
+                                            LOGIN
+                                        </VBtn>
+                                    </VCardText>
+                                </VCard>
+                            </VCol>
                         </VCol>
                     </VRow>
                 </VCardItem>
@@ -271,4 +303,7 @@ watchEffect(() => {
 .title {
   font-weight: 500;
 }
+</style>
+<style lang="scss">
+@use "@core-scss/template/pages/page-auth.scss";
 </style>

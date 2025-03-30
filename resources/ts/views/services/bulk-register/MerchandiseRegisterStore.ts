@@ -59,23 +59,21 @@ export const validateItems = (item: Merchandise, i: number, user_names: any, mch
     else if (isNotExistCustomFilter(item.custom_id)) 
         return [false, (i + 2) + '번째줄의 커스텀필터가 존재하지 않습니다.']
     else if (isEmpty(item.user_name)) 
-        return [false, (i + 2) + '번째줄의 가맹점의 아이디는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 아이디는 필수로 입력해야합니다.']
     else if (isEmpty(item.mcht_name)) 
-        return [false, (i + 2) + '번째줄의 가맹점의 상호는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 상호는 필수로 입력해야합니다.']
     else if (isEmpty(item.user_pw)) 
-        return [false, (i + 2) + '번째줄의 가맹점의 패스워드는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 패스워드는 필수로 입력해야합니다.']
     else if (typeof lengthValidatorV2(item.business_num, 10) != 'boolean') 
-        return [false, (i + 2) + '번째줄의 가맹점의 사업자번호 포멧이 정확하지 않습니다.']    
+        return [false, (i + 2) + '번째줄의 사업자번호 포멧이 정확하지 않습니다.']    
     else if (typeof lengthValidatorV2(item.resident_num, 14) != 'boolean') 
-        return [false, (i + 2) + '번째줄의 가맹점의 주민등록번호 포멧이 정확하지 않습니다.']
-    else if (isEmpty(item.sector)) 
-        return [false, (i + 2) + '번째줄의 가맹점의 업종은 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 주민등록번호 포멧이 정확하지 않습니다.']
     else if (isEmpty(item.acct_num)) 
-        return [false, (i + 2) + '번째줄의 가맹점의 계좌번호는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 계좌번호는 필수로 입력해야합니다.']
     else if (isEmpty(item.acct_name)) 
-        return [false, (i + 2) + '번째줄의 가맹점의 예금주는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째줄의 예금주는 필수로 입력해야합니다.']
     else if (banks.find(bank => bank.title === item.acct_bank_name) == null) 
-        return [false, (i + 2) + '번째줄의 가맹점의 입금은행명이 이상합니다.']
+        return [false, (i + 2) + '번째줄의 입금은행명이 이상합니다.']
     else {
         item.acct_bank_code = banks.find(bank => bank.title === item.acct_bank_name)?.code as string
         return [true, '']
@@ -126,12 +124,15 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
         {title: '가맹점 수수료(X)', key: 'trx_fee'},
         {title: '유보금 수수료(X)', key: 'hold_fee'},
         {title: '상호(O)', key: 'mcht_name'},
-        {title: '대표자명(O)', key: 'nick_name'},
-        {title: '주소(O)', key: 'addr'},
-        {title: '휴대폰번호(O)', key: 'phone_num'},
+        {title: '대표자명(X)', key: 'email'},
+        {title: '이메일(X)', key: 'nick_name'},
+        {title: '주소(X)', key: 'addr'},
+        {title: '휴대폰번호(X)', key: 'phone_num'},
         {title: '주민등록번호(X)', key: 'resident_num'},
         {title: '사업자등록번호(X)', key: 'business_num'},
-        {title: '업종(O)', key: 'sector'},
+        {title: '법인등록번호(X)', key: 'corp_registration_num'},
+        {title: '업종(X)', key: 'sector'},
+        {title: '구분(X)', key: 'business_type'},
         {title: '계좌번호(O)', key: 'acct_num'},
         {title: '예금주(O)', key: 'acct_name'},
         {title: '입금은행명(O)', key: 'acct_bank_name'},
@@ -155,7 +156,7 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
         headers.push({title: '노티 사용(X)', key: 'use_noti'})
 
     const isPrimaryHeader = (key: string) => {
-        const keys = ['tax_category_type', 'custom_id']
+        const keys = ['tax_category_type', 'custom_id', 'acct_bank_name', 'business_type']
         return keys.includes(key)
     }
 

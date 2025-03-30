@@ -36,7 +36,7 @@ defineExpose({
 });
 </script>
 <template>
-    <VDialog v-model="visible" max-width="600">
+    <VDialog v-model="visible" max-width="400">
         <!-- Dialog close btn -->
         <DialogCloseBtn @click="visible = false" />
         <!-- Dialog Content -->

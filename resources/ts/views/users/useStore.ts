@@ -1,5 +1,6 @@
 import corp from '@corp'
 import { lengthValidator, passwordValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators'
+import { Options } from '../types'
 
 export const banks = [
     { code: "001", title: "한국은행" }, { code: "002", title: "산업은행" }, { code: "003", title: "기업은행" },
@@ -78,6 +79,10 @@ export const avatars = [
     '/utils/avatars/24.svg',
     '/utils/avatars/25.svg',
 ]
+
+export const business_types = <Options[]>([
+    {id:0, title:'개인사업자'}, {id:1, title:'법인사업자'}, {id:2, title:'비사업자'}
+])
 
 export const getUserTypeName = (type: number) => {
     if(type === 0)

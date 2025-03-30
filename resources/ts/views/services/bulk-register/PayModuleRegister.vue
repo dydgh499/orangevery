@@ -179,7 +179,7 @@ watchEffect(async () => {
                     <VCol>
                         <h3 class="pt-3">정산 정보</h3>
                         <VRow>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">가맹점 정산타입</VCol>
                                     <VCol md="6">
@@ -192,7 +192,7 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">PG사</VCol>
                                     <VCol md="6">
@@ -205,7 +205,7 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">구간</VCol>
                                     <VCol md="6">
@@ -222,7 +222,7 @@ watchEffect(async () => {
                         <VDivider style="margin: 1em 0;" />
                         <h3 class="pt-3">결제 정보</h3>
                         <VRow>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">결제모듈 타입</VCol>
                                     <VCol md="6">
@@ -235,7 +235,7 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">수기결제 여부</VCol>
                                     <VCol md="6">
@@ -251,7 +251,7 @@ watchEffect(async () => {
                         <VDivider style="margin: 1em 0;" />
                         <h3 class="pt-3">제한 정보</h3>
                         <VRow>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">취소 타입</VCol>
                                     <VCol md="6">
@@ -264,7 +264,7 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">결제창 보안등급</VCol>
                                     <VCol md="6">
@@ -284,7 +284,7 @@ watchEffect(async () => {
                         :content="'<b>통신비, 통신비 정산타입, 개통일, 정산일, 정산주체</b>가 설정되어있어야 적용됩니다.<br>ex)<br>통신비: 30,000<br>통신비 정산타입: 개통월 M+2부터 적용<br>개통일: 2023-09-25<br>정산일: 1일<br>정산주체: 가맹점<br><br>통신비 차감적용일: 2023-11-01, 2023-12-01, 2024-01-01 ...'"/>
                         </h3>
                         <VRow>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">장비 종류</VCol>
                                     <VCol md="6">
@@ -297,7 +297,7 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">통신비 정산타입</VCol>
                                     <VCol md="6">
@@ -310,7 +310,7 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">매출미달 적용타입</VCol>
                                     <VCol md="6">
@@ -323,7 +323,7 @@ watchEffect(async () => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol md="4" cols="12">
+                            <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">정산주체</VCol>
                                     <VCol md="6">
@@ -341,7 +341,7 @@ watchEffect(async () => {
                             <VDivider style="margin: 1em 0;" />
                             <h3 class="pt-3">즉시출금 정보</h3>
                             <VRow>
-                                <VCol md="4" cols="12">
+                                <VCol md="3" cols="12">
                                     <VRow>
                                         <VCol class="font-weight-bold" md="6">실시간 사용여부</VCol>
                                         <VCol md="6">
@@ -354,7 +354,7 @@ watchEffect(async () => {
                                         </VCol>
                                     </VRow>
                                 </VCol>
-                                <VCol md="4" cols="12">
+                                <VCol md="3" cols="12">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">이체모듈 검색</VCol>
                                         <VCol md="6">
@@ -372,7 +372,7 @@ watchEffect(async () => {
                                         </VCol>
                                     </VRow>
                                 </VCol>
-                                <VCol md="4" cols="12">
+                                <VCol md="3" cols="12">
                                     <VRow>
                                         <VCol class="font-weight-bold" md="6">이체 딜레이 검색</VCol>
                                         <VCol md="6">
@@ -385,9 +385,7 @@ watchEffect(async () => {
                                         </VCol>
                                     </VRow>
                                 </VCol>
-                            </VRow>
-                            <VRow>
-                                <VCol md="4" cols="12">
+                                <VCol md="3" cols="12">
                                     <VRow>
                                         <VCol class="font-weight-bold" md="6">출금금지타입</VCol>
                                         <VCol md="6">

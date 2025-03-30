@@ -13,6 +13,7 @@ class BulkMerchandiseRequest extends FormRequest
         'user_name',
         'user_pw',
         'nick_name',
+        'email',
         'resident_num',
         'business_num',
         'sector',
@@ -22,6 +23,7 @@ class BulkMerchandiseRequest extends FormRequest
         'acct_name',
         'acct_bank_name',
         'acct_bank_code',
+        'corp_registration_num',
     ];
     public $integer_keys = [
         'use_multiple_hand_pay',
@@ -39,6 +41,7 @@ class BulkMerchandiseRequest extends FormRequest
         'withdraw_fee',
         'tax_category_type',
         'use_noti',
+        'business_type',
     ];
     public $nullable_keys = [
         'custom_id',
