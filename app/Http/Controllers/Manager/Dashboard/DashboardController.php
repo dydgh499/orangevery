@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Merchandise;
 use App\Models\Salesforce;
 use App\Models\Operator;
+use App\Models\Gmid;
 
 use App\Models\Log\DangerTransaction;
 use App\Models\Log\OperatorHistory;
