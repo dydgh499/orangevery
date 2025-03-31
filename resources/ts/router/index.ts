@@ -1,8 +1,9 @@
-import { axios, getViewType, pay_token } from '@axios'
-import { canNavigate } from '@layouts/plugins/casl'
-import { setupLayouts } from 'virtual:generated-layouts'
-import { createRouter, createWebHistory } from 'vue-router'
-import routes from '~pages'
+import { axios, getUserLevel, getViewType, pay_token } from '@axios';
+import { canNavigate } from '@layouts/plugins/casl';
+import { setupLayouts } from 'virtual:generated-layouts';
+import { createRouter, createWebHistory } from 'vue-router';
+import routes from '~pages';
+import { isBrightFix } from '../plugins/fixplus';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,8 +12,12 @@ const router = createRouter({
             path: '/',
             redirect: to => {
                 const isLoggedIn = pay_token.value != ''
-                if (isLoggedIn)
-                    return { name: getViewType(), query: to.query }
+                if (isLoggedIn) {
+                    if(getUserLevel() === 11 || (isBrightFix() && getUserLevel() > 10))
+                        return { name: 'transactions-summary', query: to.query }
+                    else
+                        return { name: getViewType(), query: to.query }
+                }
                 else
                     return { name: 'login', query: to.query }
             },

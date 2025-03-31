@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Controllers\Auth\AuthOperatorIP;
 use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\PayWindowInterface;
 use App\Http\Controllers\Ablilty\ShoppingMallWindowInterface;
 
 use App\Models\Service\PaymentSection;
@@ -40,6 +41,15 @@ class LoginValidate
                 $result['user']->shoppingMall = $shop_info;
                 $result['user']->shopping_mall = $shop_info;
             }
+            for ($i=0; $i <count($result['user']->onlinePays); $i++) 
+            {
+                if(isset($result['user']->onlinePays[$i]->payWindows) === false)
+                {
+                    [$code, $data] = PayWindowInterface::renew($result['user']->onlinePays[$i]->id);
+                    if($code === 1)
+                        $result['user']->onlinePays[$i]->payWindows = $data;
+                }
+            }
         }
         return $result;
     }
@@ -55,6 +65,17 @@ class LoginValidate
         $brand = BrandInfo::getBrandById($result['user']->brand_id);
         $result['user']->parent_total_fee = SalesforceFeeTable::totalFee($result['user']->parent_id);
         $result['user']->p2p_pay_fee      = PaymentSection::p2pFee($brand['pv_options']['p2p']['ps_id']);
+        return $result;
+    }
+
+    static public function isGmid($result)
+    {
+        return isset($result['user']->g_mid) ? true : false;
+    }
+
+    static public function setGmid($result)
+    {
+        $result['user']->level = 11;
         return $result;
     }
 

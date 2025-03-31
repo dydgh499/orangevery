@@ -102,8 +102,12 @@ watchEffect(() => {
                             <VCol cols="8" :md="8">
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.hand_pay.installment" name="installment"
                                     variant="underlined"
+                                     :disabled="props.hand_pay.amount < 50000"
                                     :items="filterInstallment" prepend-icon="fluent-credit-card-clock-20-regular"
                                     label="할부기간 선택" item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(props.hand_pay.installment, '할부기간')]" />
+                                <VTooltip activator="parent" location="top" v-if="props.hand_pay.amount < 50000">
+                                    결제금액이 50,000원 이상일 때 가능합니다.
+                                </VTooltip>
                             </VCol>
                         </VRow>
                     </VCol>

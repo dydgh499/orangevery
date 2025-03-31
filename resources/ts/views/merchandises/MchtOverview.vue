@@ -121,7 +121,7 @@ onMounted(() => {
     watchEffect(() => {
         // 수정가능, 추가상태, 영업라인일 경우
         if(props.item.id === 0 && isAbleModiy(props.item.id)) {
-            if(getUserLevel() > 10 && getUserLevel() < 35) {
+            if(getUserLevel() > 11 && getUserLevel() < 35) {
                 if(corp.pv_options.paid.sales_parent_structure)
                     autoUpdateMerchandiseParentSalesInfo(props.item, all_sales)
                 else {
@@ -233,9 +233,28 @@ onMounted(() => {
                                         <VCol md="8"><span>{{ contact_num_format }}</span></VCol>
                                     </VRow>
                                 </VCol>
+
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol cols="4">GMID</VCol>
+                                        <VCol md="8">
+                                            <VTextField 
+                                                v-model="props.item.g_mid" 
+                                                prepend-inner-icon="material-symbols:ad-group"
+                                                placeholder="GMID 입력" 
+                                                persistent-placeholder 
+                                                maxlength=20
+                                            />
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">GMID</VCol>
+                                        <VCol md="8"><span>{{ props.item.g_mid }}</span></VCol>
+                                    </VRow>
+                                </VCol>
                             </VRow>
                         </VCol>
-                        <template v-if="getUserLevel() > 10">
+                        <template v-if="getUserLevel() > 11">
                             <VDivider/>
                             <VCol cols="12">
                                 <VCardTitle>영업라인 수수료</VCardTitle>

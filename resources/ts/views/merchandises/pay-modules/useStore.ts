@@ -443,6 +443,7 @@ export const defaultItemInfo =  () => {
         withdraw_limit_type: 0,
         withdraw_business_limit: 0,
         withdraw_holiday_limit: 0,
+        last_settle_month: 0
     })
     //카드사 필터 및 다른 필터옵션들
     return {

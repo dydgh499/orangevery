@@ -20,21 +20,19 @@ const getPaymentTestTap = () => {
 
 const getRiskTap = () => {
     const risks = []
-    if (getUserLevel() >= 35 || (corp.pv_options.auth.visibles.abnormal_trans_sales && getUserLevel() >= 13)) {
+    risks.push({
+        title: '이상거래 이력',
+        to: 'transactions-dangers',
+    },
+    {
+        title: '결제실패 이력',
+        to: 'transactions-fails',
+    })        
+    if (getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit) {
         risks.push({
-            title: '이상거래 이력',
-            to: 'transactions-dangers',
-        },
-        {
-            title: '결제실패 이력',
-            to: 'transactions-fails',
-        })        
-        if (corp.pv_options.paid.use_realtime_deposit) {
-            risks.push({
-                title: '즉시출금 이력',
-                to: 'transactions-realtime-histories',
-            })
-        }
+            title: '즉시출금 이력',
+            to: 'transactions-realtime-histories',
+        })
     }
     return risks
 }

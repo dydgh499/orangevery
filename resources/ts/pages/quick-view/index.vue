@@ -107,7 +107,7 @@ onMounted(() => {
                     <Recent30DaysContentOverview :transactions="transactions.daily" />
                 </template>
             </CardLayout>
-            <CardLayout :padding="false" v-if="getUserLevel() > 10">
+            <CardLayout :padding="false" v-if="getUserLevel() > 11">
                 <template #content>
                     <Recent30DaysRankOverview :transactions="transactions.mchts" />
                 </template>

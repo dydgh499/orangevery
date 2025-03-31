@@ -188,7 +188,12 @@ class DashboardController extends Controller
         $brand_id = $request->user()->brand_id;
         $getUsers = function($orm, $brand_id, $type) {
             $cols = ['id', 'user_name', 'nick_name', 'phone_num', 'locked_at'];
-            $cols[] = $type === 'merchandise' ? DB::raw('10 as level') : 'level';
+            if($type === 'merchandise')
+                $cols[] = DB::raw('10 as level');
+            else if($type === 'gmid')
+                $cols[] = DB::raw('11 as level');
+            else
+                $cols[] = 'level';
 
             return $orm
                 ->where('brand_id', $brand_id)
@@ -200,6 +205,7 @@ class DashboardController extends Controller
         {
             $mcht = $getUsers(new Merchandise, $brand_id, 'merchandise');
             $sale = $getUsers(new Salesforce, $brand_id, 'salesforce');
+            $oper = $getUsers(new Gmid, 'gmid');
             $oper = $getUsers(new Operator, $brand_id, 'operator');
             $query = $mcht->unionAll($sale)->unionAll($oper);    
             

@@ -17,7 +17,7 @@ const props = defineProps<Props>()
     <AppCardActions action-collapsed title="검색 옵션">
         <VDivider />
         <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
-            <VCol cols="12" md="6" v-if="getUserLevel() > 10">
+            <VCol cols="12" md="6" v-if="getUserLevel() > 11">
                 <VCardText style="padding: 1em;">
                     <BaseIndexSalesFilter :show="sales">
                         <template #sales_extra_field>
@@ -26,7 +26,7 @@ const props = defineProps<Props>()
                     </BaseIndexSalesFilter>
                 </VCardText>
             </VCol>
-            <VDivider :vertical="$vuetify.display.mdAndUp" v-if="getUserLevel() > 10"/>
+            <VDivider :vertical="$vuetify.display.mdAndUp" v-if="getUserLevel() > 11"/>
             <VCol cols="12" md="6">
                 <VCardText style="padding: 1em;">
                     <BaseIndexPGFilter :pg="props.pg" :ps="props.ps" :settle_type="props.settle_type" :terminal="props.terminal"

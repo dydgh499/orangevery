@@ -150,7 +150,7 @@ class MchtSettleHistoryController extends Controller
     public function batch(BatchSettleHistoryRequest $request)
     {
         $fail_res    = [];
-        $success_res = ['ids'=>[]];
+        $success_res = ['ids' => []];
 
         for ($i=0; $i < count($request->datas); $i++) 
         {

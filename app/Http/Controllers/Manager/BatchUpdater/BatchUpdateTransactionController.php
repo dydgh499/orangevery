@@ -156,21 +156,9 @@ class BatchUpdateTransactionController extends BatchUpdateController
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 매출이 존재하지 않습니다.');
     }
 
-    public function salesFeeApply(Request $request)
+    public function feeApply($db_trans)
     {
-        $db_trans = $this->transactionBatch($request)->get();
-        $idx  = globalLevelByIndex($request->level);
-
-        $sales_id_field = "sales{$idx}_id";
-        $sales_fee_field = "sales{$idx}_fee";
-        foreach($db_trans as $tran)
-        {
-            $tran->{$sales_id_field} = $request->sales_id;
-            $tran->{$sales_fee_field} = $request->sales_fee / 100;
-        }
-        
         $trans = SettleAmountCalculator::setSettleAmount(json_decode(json_encode($db_trans), true));
-
         foreach($db_trans as $key => $tran)
         {
             $fields = [
@@ -192,6 +180,34 @@ class BatchUpdateTransactionController extends BatchUpdateController
             }
             $tran->save();
         }
+        return $db_trans;
+    }
+
+    public function salesFeeApply(Request $request)
+    {
+        $db_trans = $this->transactionBatch($request)->get();
+        $idx  = globalLevelByIndex($request->level);
+
+        $sales_id_field = "sales{$idx}_id";
+        $sales_fee_field = "sales{$idx}_fee";
+        foreach($db_trans as $tran)
+        {
+            $tran->{$sales_id_field} = $request->sales_id;
+            $tran->{$sales_fee_field} = $request->sales_fee / 100;
+        }
+        $db_trans = $this->feeApply($db_trans);
         return $this->batchResponse(count($db_trans), '매출');
     }
+
+    public function mchtFeeApply(Request $request)
+    {
+        $db_trans = $this->transactionBatch($request)->get();
+        foreach($db_trans as $tran)
+        {
+            $tran->hold_fee = $request->hold_fee / 100;
+            $tran->mcht_fee = $request->mcht_fee / 100;
+        }
+        $db_trans = $this->feeApply($db_trans);
+        return $this->batchResponse(count($db_trans), '매출');
+    } 
 }

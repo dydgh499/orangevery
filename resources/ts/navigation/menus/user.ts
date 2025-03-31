@@ -53,5 +53,13 @@ export const getUserMenu = () => {
     menu.push(getMchtChildMenu())
     if(getUserLevel() >= 13) 
         menu.push(getSalesChildMenu())
+    if(getUserLevel() >= 35) {
+        menu.push({
+            title: 'GMID 관리',
+            icon: { icon: 'material-symbols:ad-group' },
+            to: 'gmids',
+        })
+    }
+
     return menu
 }

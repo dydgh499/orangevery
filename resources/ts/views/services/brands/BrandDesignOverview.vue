@@ -183,8 +183,8 @@ watchEffect(() => {
                                 <div>
                                     <div class="preview-box" :style="'height:4em; width:100%; display:inline-flex; align-items: center; border-radius:0px;'">
                                         <VIcon :icon="'material-symbols:refresh'" style="margin: 0 0.5em;"/>
-                                        <div class="preview-box" :style="'background: rgb(var(--v-theme-background));height:2.5em; display:flex; align-items: center; border-radius:1.5em 0 0px 1.5em; width: 100%;'">
-                                            <b style="padding-left: 1em;">https://{{ props.item.dns }}</b>
+                                        <div class="preview-box" :style="'background: rgb(var(--v-theme-background));height:2.5em; display:flex; align-items: center; border-radius:1.5em 0 0px 1.5em;'">
+                                            <b style=" width: 44.5em;padding-left: 1em;">https://{{ props.item.dns }}</b>
                                         </div>
                                     </div>
                                 </div>
@@ -209,7 +209,7 @@ watchEffect(() => {
                                 <VCol md="12" class="d-none d-md-flex">
                                     <div class="position-relative bg-background rounded-lg w-100 ma-8 me-0">
                                         <div class="d-flex align-center justify-center w-100 h-100">
-                                            <VImg max-width="220" max-height="150" :src="props.item.login_img" class="auth-illustration mt-16 mb-2" />
+                                            <VImg max-width="220" :src="props.item.login_img" class="auth-illustration mt-16 mb-2" />
                                         </div>
                                         <VImg :src="authThemeMask" class="auth-footer-mask" />
                                     </div>

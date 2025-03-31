@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Manager\Gmid\GmidInformation;
 
 class TransactionDashboard
 {
@@ -176,6 +177,8 @@ class TransactionDashboard
             [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(request()->user()->level);
             $query = $query->where($target_id, $id);
         }
+        else if(Ablilty::isGmid(request()))
+            $query = $query->whereIn('mcht_id', GmidInformation::getMchtIds(request()->user()->g_mid));
         return $query;
     }
 

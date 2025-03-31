@@ -60,23 +60,20 @@ provide('exporter', exporter)
                 </VTooltip>                
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <td v-show="_header.visible" class='list-square'>
-                        <span v-if="_key === 'id' && getUserLevel() > 10" class="edit-link" @click="store.edit(item['id'])">
+                        <span v-if="_key === 'id'" class="edit-link" @click="store.edit(item['id'])">
                             #{{ item[_key] }}
                             <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
                                 상세보기
                             </VTooltip>
                         </span>
-                        <span v-else-if="_key === 'id' && getUserLevel() === 10">
+                        <span v-else-if="_key === 'id'">
                             #{{ item[_key] }}
                         </span>
-                        <span v-else-if="_key == 'note' && getUserLevel() > 10" class="edit-link" @click="store.edit(item['id'])">
+                        <span v-else-if="_key == 'note'" class="edit-link" @click="store.edit(item['id'])">
                             {{ item[_key] }}
                             <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
                                 상세보기
                             </VTooltip>
-                        </span>
-                        <span v-else-if="_key == 'note' && getUserLevel() === 10">
-                            {{ item[_key] }}
                         </span>
                         <span v-else-if="_key == 'module_type'">
                             <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">

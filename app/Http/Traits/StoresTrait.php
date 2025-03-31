@@ -4,6 +4,7 @@ use App\Models\Operator;
 use App\Models\Salesforce;
 use App\Models\Merchandise;
 use Illuminate\Support\Facades\DB;
+use App\Models\Gmid;
 
 trait StoresTrait
 {
@@ -50,8 +51,9 @@ trait StoresTrait
         $mcht = $checkExist(new Merchandise, $brand_id, $user_name);
         $sale = $checkExist(new Salesforce, $brand_id, $user_name);
         $oper = $checkExist(new Operator, $brand_id, $user_name);
+        $gmid = $checkExist(new Gmid, $brand_id, $user_name);
 
-        return $mcht->unionAll($sale)->unionAll($oper)->exists();
+        return $mcht->unionAll($sale)->unionAll($oper)->unionAll($gmid)->exists();
     }
 
     public function isExistBulkUserName($brand_id, $user_names)
@@ -66,8 +68,9 @@ trait StoresTrait
         $mcht = $checkExist(new Merchandise, $brand_id, $user_names);
         $sale = $checkExist(new Salesforce, $brand_id, $user_names);
         $oper = $checkExist(new Operator, $brand_id, $user_names);
+        $gmid = $checkExist(new Gmid, $brand_id, $user_names);
 
-        return $mcht->unionAll($sale)->unionAll($oper)->pluck('user_name')->toArray();
+        return $mcht->unionAll($sale)->unionAll($oper)->unionAll($gmid)->pluck('user_name')->toArray();
     }
 
     public function isExistMutual($orm, $brand_id, $col, $mutual)

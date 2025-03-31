@@ -249,19 +249,6 @@ const filterPgs = computed(() => {
                                             type="number" suffix="만원" label="이상거래 한도"/>
                             </template>
                         </CreateHalfVColV2>
-                        <CreateHalfVColV2 :mdl="6" :mdr="6">
-                            <template #l_name>
-                                가맹점 수수료율 노출
-                            </template>
-                            <template #l_input>
-                                <VSwitch hide-details v-model="props.item.free.default.is_show_fee"
-                                    color="primary" :false-value=0 :true-value=1 />
-                            </template>
-                            <template #r_name>
-                            </template>
-                            <template #r_input>
-                            </template>
-                        </CreateHalfVColV2>
                         <template v-if="props.item.paid.brand_mode === 1">
                             <VDivider style="margin-top: 1em;"/>
                             <VCardTitle class="pt-5">

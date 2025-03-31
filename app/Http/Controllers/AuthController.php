@@ -10,6 +10,7 @@ use App\Models\Brand;
 use App\Models\Salesforce;
 use App\Models\Merchandise;
 use App\Models\Operator;
+use App\Models\Gmid;
 
 use Illuminate\Http\Request;
 use App\Http\Traits\ManagerTrait;
@@ -96,23 +97,6 @@ class AuthController extends Controller
             return $this->extendResponse($result['result'], $result['msg'], []);
     }
 
-    /*
-    * 패스워드 1달 연장(가맹점, 영업라인, 운영자)
-    */
-    public function extendPasswordAt(Request $request)
-    {
-        $params = ['password_change_at' => Carbon::now()->addMonthNoOverflow(1)->format('Y-m-d H:i:s')];
-        if(Ablilty::isMerchandise($request))
-            $orm = new Merchandise;
-        else if(Ablilty::isSalesforce($request))
-            $orm = new Salesforce;
-        else
-            $orm = new Operator;
-
-        $orm->where('id', $request->user()->id)->update($params);
-        return $this->response(1, $params);
-    }
-
     /**
      * 로그인(관리자)
      * @unauthenticated
@@ -131,6 +115,10 @@ class AuthController extends Controller
             return $result;
         
         $result = Login::isSafeAccount(Salesforce::with($sales_with), $request);    // check sales
+        if($result !== null)
+            return $result;
+
+        $result = Login::isSafeAccount(new Gmid(), $request);    // check sales
         if($result !== null)
             return $result;
 

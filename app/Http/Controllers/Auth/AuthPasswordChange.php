@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Salesforce;
 use App\Models\Merchandise;
+use App\Models\Gmid;
 
 use App\Http\Controllers\Auth\Login;
 use Illuminate\Support\Facades\Redis;
@@ -55,6 +56,8 @@ class AuthPasswordChange
     {
         if($result['user']['level'] === 10)
             $orm = Merchandise::with(['onlinePays.payWindows', 'shoppingMall']);
+        else if($result['user']['level'] === 11)
+            $orm = new Gmid;
         else if($result['user']['level'] < 35)
         {
             $brand = BrandInfo::getBrandById($result['user']['brand_id']);
@@ -92,6 +95,8 @@ class AuthPasswordChange
                     $result = Login::setMerchant($result);
                 else if(Login::isRecommenderSales($result))
                     $result = Login::setRecommenderSales($result);
+                else if(Login::isGmid($result))
+                    $result = Login::setGmid($result);
             }
         }
         else

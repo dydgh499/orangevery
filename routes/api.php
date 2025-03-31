@@ -52,7 +52,7 @@ Route::prefix('v1')->group(function() {
     Route::prefix('bonaejas')->group(function() {
         Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
         Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);
-        Route::middleware(['auth:sanctum', 'log.route'])->group(function () {
+        Route::middleware(['auth:sanctum', 'log.route', 'auth.update'])->group(function () {
             Route::post('sms-link-send', [MessageController::class, 'smslinkSend']);
             Route::middleware(['is.operate', 'is.edit.able'])->post('mobile-code-head-office-issuence', [MessageController::class, 'headOfficeMobileCodeIssuence']);
             Route::middleware(['is.operate', 'is.edit.able'])->post('pay-verfication-init', [MessageController::class, 'payVerficationInit']);
@@ -84,7 +84,7 @@ Route::prefix('v1')->group(function() {
         });
     });
 
-    Route::prefix('quick-view')->middleware(['auth:sanctum', 'log.route'])->group(function() {
+    Route::prefix('quick-view')->middleware(['auth:sanctum', 'log.route', 'auth.update'])->group(function() {
         Route::get('', [QuickViewController::class, 'index']);
         Route::get('collect-withdraws/balance', [CollectWithdrawController::class, 'withdrawAbleAmount']);
         Route::post('collect-withdraws', [CollectWithdrawController::class, 'collectDeposit']);    

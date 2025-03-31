@@ -44,6 +44,8 @@ trait AuthTrait
         $authoritys = [];
         if($level >= 10)
             array_push($authoritys, 10);    // merchandise
+        if($level >= 11)
+            array_push($authoritys, 11);    // GMID        
         if($level >= 13)
             array_push($authoritys, 13);    // under agency
         if($level >= 15)

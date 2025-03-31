@@ -162,16 +162,6 @@ class BatchUpdateMchtController extends BatchUpdateController
     }
 
     /**
-     * 수수료율 노출여부 적용
-     */
-    public function setShowFee(Request $request)
-    {
-        $cols = ['is_show_fee' => $request->is_show_fee];
-        $row = $this->getApplyRow($request, $cols);
-        return $this->batchResponse($row, '가맹점');
-    }
-
-    /**
      * 계좌정보 적용 
     */
     public function setAccountInfo(Request $request)
@@ -185,10 +175,21 @@ class BatchUpdateMchtController extends BatchUpdateController
         $row = $this->getApplyRow($request, $cols);
         return $this->batchResponse($row, '가맹점');
     }
+
+    /**
+     * GMID 적용 
+    */
+    public function setGmid(Request $request)
+    {
+        $cols = [
+            'g_mid' => $request->g_mid,
+        ];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
+    }
+
     /**
      * 노티 URL 일괄등록
-     *
-     * 가맹점 이상 가능
      *
      */
     public function setNotiUrl(Request $request)

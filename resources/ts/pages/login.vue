@@ -4,9 +4,8 @@ import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import { UserAbility } from '@/plugins/casl/AppAbility'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
-import { isBrightFix } from '@/plugins/fixplus'
 import router from '@/router'
-import { axios, getUserLevel, pay_token, token_expire_time, user_info } from '@axios'
+import { axios, pay_token, token_expire_time, user_info } from '@axios'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import corp from '@corp'
 import authV2MaskDark from '@images/pages/misc-mask-dark.png'
@@ -94,10 +93,7 @@ const login = async (is_first: boolean) => {
         localStorage.setItem('token-expire-time', token_expire_time.value)
         localStorage.setItem('abilities', JSON.stringify(abilities))
 
-        if(isBrightFix() && getUserLevel() > 10)
-            router.replace('transactions/summary')
-        else
-            router.replace(route.query.to ? String(route.query.to) : '/')
+        router.replace(route.query.to ? String(route.query.to) : '/')
     }
     catch(e: any) {
         console.log(e)

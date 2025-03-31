@@ -91,6 +91,8 @@ export const getUserTypeName = (type: number) => {
         return ['영업자', 'salesforces']
     else if(type === 2)
         return ['운영자', 'services/operators']
+    else if(type === 3)
+        return ['GMID', 'gmids']
     else
         return ['', '']
 }

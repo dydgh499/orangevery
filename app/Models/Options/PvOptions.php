@@ -32,7 +32,6 @@
         public $default = [
             'installment'   => 0,
             'abnormal_trans_limit' => 0,
-            'is_show_fee'   => 0,
         ];
         
         public $secure = [
@@ -53,7 +52,6 @@
             }
             
             $this->default['installment'] = $this->initIntKey($this->default, 'installment', 0);
-            $this->default['is_show_fee'] = $this->initIntKey($this->default, 'is_show_fee', 0);
             $this->default['abnormal_trans_limit'] = $this->initIntKey($this->default, 'abnormal_trans_limit', 0);
 
             $this->secure['mcht_id_level'] = $this->initIntKey($this->secure, 'mcht_id_level', 1);

@@ -18,9 +18,8 @@ export const useSearchStore = defineStore('terminalSearchStore', () => {
             'id' : 'NO.',
             'mcht_name' : '가맹점 상호',
             'note' : '별칭',
+            'module_type': '모듈타입',
         }
-        if(getUserLevel() > 10)
-            headers1['module_type'] = '모듈타입'
         return headers1
     }
 
@@ -67,35 +66,31 @@ export const useSearchStore = defineStore('terminalSearchStore', () => {
         if(getUserLevel() >= 35) {
             headers_4['settle_fee'] = '건별 수수료'
         }
-        if(getUserLevel() > 10) {
-            headers_4['settle_type'] = '정산일'
-            headers_4['mid'] = 'MID'
-            headers_4['tid'] = 'TID'    
-        }
+        headers_4['settle_type'] = '정산일'
+        headers_4['mid'] = 'MID'
+        headers_4['tid'] = 'TID'    
         return headers_4
     }
 
     const getTerminalCols = () => {
         const headers_5:Record<string, string> = {}        
-        if(getUserLevel() > 10) {
+        if(getUserLevel() > 11) {
             headers_5['terminal_id'] = '장비타입'
         }
         headers_5['serial_num'] = '시리얼번호'
-        if(getUserLevel() > 10) {
-            headers_5['begin_dt'] = '개통일'
-            headers_5['ship_out_dt'] = '출고일'
-            headers_5['ship_out_stat'] = '출고상태'
-        }
+        headers_5['begin_dt'] = '개통일'
+        headers_5['ship_out_dt'] = '출고일'
+        headers_5['ship_out_stat'] = '출고상태'
         return headers_5
     }
 
     const getCommCols = () => {
         const headers_6:Record<string, string> = {}        
-        if(getUserLevel() > 10) {
-            headers_6['comm_settle_fee'] = '통신비'
-            headers_6['comm_settle_day'] = '정산일'
-            headers_6['comm_settle_type'] = '정산타입'
-            headers_6['comm_calc_level'] = '정산주체'
+        headers_6['comm_settle_fee'] = '통신비'
+        headers_6['comm_settle_day'] = '정산일'
+        headers_6['comm_settle_type'] = '정산타입'
+        headers_6['comm_calc_level'] = '정산주체'
+        if(getUserLevel() > 11) {
             headers_6['under_sales_amt'] = '매출미달 차감금'            
             headers_6['under_sales_type'] = '매출미달 적용타입'
         }
@@ -104,7 +99,7 @@ export const useSearchStore = defineStore('terminalSearchStore', () => {
     
     const getOptionCols = () => {
         const headers_7:Record<string, string> = {}
-        if(getUserLevel() > 10) {
+        if(getUserLevel() > 11) {
             headers_7['installment'] = '할부 한도'
             headers_7['abnormal_trans_limit'] = '이상거래 한도'
             headers_7['pay_dupe_least'] = '중복거래 하한금'    

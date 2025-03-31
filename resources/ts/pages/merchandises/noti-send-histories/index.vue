@@ -7,6 +7,7 @@ import { useSearchStore } from '@/views/merchandises/noti-send-histories/useStor
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { notiSendHistoryInterface } from '@/views/transactions/transactions'
+import TransactionsIndexTd from '@/views/transactions/TransactionsIndexTd.vue'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 
@@ -110,17 +111,6 @@ const getResponseBody = (body: string) => {
                                 <span v-else-if="_key == 'message'">
                                     {{ getResponseBody(item[_key]) }}
                                 </span>
-                                <span v-else-if="_key == 'module_type'">
-                                    <VChip
-                                        :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
-                                        {{ module_types.find(module_type => module_type['id'] === item[_key])?.title }}
-                                    </VChip>
-                                </span>
-                                <span v-else-if="_key == `is_cancel`">
-                                    <VChip :color="store.booleanTypeColor(item[_key])">
-                                        {{ item[_key] ? '취소' : '승인' }}
-                                    </VChip>
-                                </span>
                                 <span v-else-if="_key == `http_code`">
                                     <VChip :color="httpCodeColor(item[_key])">
                                         {{ item[_key] }}
@@ -129,9 +119,7 @@ const getResponseBody = (body: string) => {
                                 <span v-else-if="_key == 'extra_col'">
                                     <ExtraMenu :item="item"/>
                                 </span>
-                                <span v-else>
-                                    {{ item[_key] }}
-                                </span>
+                                <TransactionsIndexTd v-else :item="item" :_key="_key"/>
                             </td>
                         </template>
                     </template>

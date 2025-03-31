@@ -46,8 +46,23 @@ const transaction = reactive<any>({
     settle_dt: null,
     mid: '',
     tid: '',
+    mcht_fee: 0,
+    hold_fee: 0,
+    sales0_fee: 0,
+    sales1_fee: 0,
+    sales2_fee: 0,
+    sales3_fee: 0,
+    sales4_fee: 0,
+    sales5_fee: 0,
 })
 const levels = corp.pv_options.auth.levels
+
+const setMchtFee = async (apply_type: number) => {
+    post(`merchandises/set-fee`, {
+        'mcht_fee': parseFloat(transaction.mcht_fee),
+        'hold_fee': parseFloat(transaction.hold_fee),
+    }, apply_type)
+}
 
 const setSalesFee = async (sales_idx: number, apply_type: number) => {
     if(await alert.value.show('<b>영업라인 및 수수료율 변경시 변경될 수수료율로인해 정산금액이 변경될 수 있습니다.</b>')) {
@@ -98,6 +113,11 @@ const setTid = (apply_type: number) => {
     post('set-tid', {
         'tid': transaction.tid,
     }, apply_type)
+}
+
+const notiReSend = async () => {
+    await notiSend(selected_idxs.value); 
+    emits('update:select_idxs', [])
 }
 
 watchEffect(() => {
@@ -157,7 +177,29 @@ watchEffect(() => {
                                 </template>
                         </template>
                     </VRow>
-                    <VDivider style="margin: 0.5em 0;" />
+                    <h4 class="pt-3">가맹점 수수료 일괄변경</h4>
+                    <br>                    
+                    <VRow>
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="8" cols="12">
+                                    <div class="batch-container">
+                                        <VTextField v-model="transaction.mcht_fee" type="number" suffix="%" :label="`거래 수수료율`"/>
+                                        <VTextField v-model="transaction.hold_fee" type="number" suffix="%" :label="`유보금 수수료율`"/>
+                                    </div>
+                                </VCol>
+                                <VCol md="4" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setMchtFee(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <VDivider style="margin: 1em 0;" />
                     <h4 class="pt-3">개인정보 일괄변경</h4>
                     <br>
                     <VRow no-gutters style="align-items: center;">
@@ -236,7 +278,7 @@ watchEffect(() => {
                                     <h4 class="pt-3">노티 재발송</h4>
                                     <br>
                                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                                        <VBtn prepend-icon="gridicons:reply" @click="notiSend(selected_idxs); emits('update:select_idxs', [])" size="small">
+                                        <VBtn prepend-icon="gridicons:reply" @click="notiReSend()" size="small">
                                             재발송
                                         </VBtn>
                                         <VBtn prepend-icon="gridicons:reply" @click="notiSelfSend(selected_idxs); emits('update:select_idxs', [])" v-if="getUserLevel() >= 50" size="small" color="info">

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { MchtRecentTransaction } from '@/views/types';
-import { getUserLevel, user_info } from '@axios';
 
 interface Props {
     transaction: MchtRecentTransaction,
@@ -43,7 +42,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VCol class="d-flex justify-space-between small-font" v-if="((getUserLevel() === 10 && user_info.is_show_fee) || getUserLevel() >= 13)">
+    <VCol class="d-flex justify-space-between small-font">
         <div>
             <div class="small-font">
                 <span :class="'text-' + style">{{ date }} </span> 정산금액

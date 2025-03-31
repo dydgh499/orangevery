@@ -18,6 +18,8 @@ export const notiViewable = (id: number) => {
     if(corp.pv_options.paid.use_noti) {
         if(getUserLevel() >= 35)
             return true
+        else if(getUserLevel() === 11)
+            return true
         else if(getUserLevel() > 10)
             return isAbleModiy(id)
         else if(getUserLevel() === 10 && user_info.value.use_noti)

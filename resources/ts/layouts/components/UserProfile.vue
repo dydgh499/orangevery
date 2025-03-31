@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GmidDialog from '@/layouts/dialogs/users/GmidDialog.vue'
 import Google2FACreateDialog from '@/layouts/dialogs/users/Google2FACreateDialog.vue'
 import OperatorDialog from '@/layouts/dialogs/users/OperatorDialog.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
@@ -17,6 +18,7 @@ const all_levels = allLevels()
 
 const snackbar = <any>(inject('snackbar'))
 const imageDialog = ref()
+const gmidDialog = ref()
 const operatorDialog = ref()
 const google2FACreateDialog = ref()
 
@@ -33,10 +35,12 @@ const mytype = getUserType()
 
 // 개발사는 이동할 수 없음
 const profile = () => {
-    if(mytype.id < 2)
+    if(mytype.id === 0 || mytype.id === 1)
         router.push(mytype.link)
     else if(mytype.id === 2)
         operatorDialog.value.show(user_info.value)
+    else if(mytype.id === 3)
+        gmidDialog.value.show(user_info.value)
     else   
         snackbar.value.show(`${corp.pv_options.auth.levels.dev_name}는 프로필로 이동할 수 없습니다.`, 'warning')
 }
@@ -71,7 +75,7 @@ const show2FAAuthDialog = async () => {
 }
 
 const noticeOperator2FaStatus = () => {
-    if(getUserLevel() > 10) {
+    if(getUserLevel() > 11) {
         if(user_info.value.is_2fa_use === false) {
             notice_mark.value.dot = false
             notice_mark.value.location = 'top right'
@@ -128,7 +132,7 @@ require_2fa.value = noticeOperator2FaStatus()
                             </template>
                             <VListItemTitle>패스워드 변경</VListItemTitle>
                         </VListItem>
-                        <template v-if="getUserLevel() > 10">
+                        <template v-if="getUserLevel() > 11">
                             <VDivider class="my-2" />
                             <VListItem value="2fa" @click="show2FAAuthDialog()" 
                             :class="require_2fa ? 'pg-cancel' : ''">
@@ -155,6 +159,7 @@ require_2fa.value = noticeOperator2FaStatus()
         <ImageDialog ref="imageDialog" :style="`inline-size:20em !important;`"/>
         <Google2FACreateDialog ref="google2FACreateDialog"/>
         <OperatorDialog ref="operatorDialog" />
+        <GmidDialog ref="gmidDialog" />
     </VBadge>
 </template>
 <style scoped>

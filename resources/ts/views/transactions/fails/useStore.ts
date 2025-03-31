@@ -3,23 +3,57 @@ import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { FailTransaction } from '@/views/types'
+import { getUserLevel } from '@axios'
 
+
+const failTransactionHeader = () => {
+    const getMchtCols = () => {
+        return {
+            'id': 'NO.',
+            'mcht_name': '가맹점 상호',    
+            'module_type': '거래 타입',
+        }
+    }
+    const getPGCols = () => {
+        if(getUserLevel() >= 35) {
+            return {
+                'pg_id': 'PG사',
+                'ps_id': '구간',
+            }
+        }
+        else
+            return {}
+    }
+    const getPaymentCols = () => {
+        return {
+            'amount': '결제시도 금액',
+            'result_cd': '에러 코드',
+            'result_msg': '에러 메세지',
+            'trx_dttm': '결제시도시간',
+        }
+    }
+    const headers0:any = getMchtCols()
+    const headers1:any = getPGCols()
+    const headers2:any = getPaymentCols()
+
+    return {
+        headers0,
+        headers1,
+        headers2,
+    }
+}
 
 export const useSearchStore = defineStore('failSearchStore', () => {
     const store = Searcher('transactions/fails')
     const head = Header('transactions/fails', '결제실패 관리')
     const { pgs, pss } = useStore()
+    const { headers0, headers1, headers2 } = failTransactionHeader()
     const headers = {
-        'id': 'NO.',
-        'pg_id': 'PG사',
-        'ps_id': '구간',
-        'mcht_name': '가맹점 상호',
-        'module_type': '거래타입',
-        'amount': '결제시도 금액',
-        'result_cd': '에러 코드',
-        'result_msg': '에러 메세지',
-        'trx_dttm': '결제시도시간',
+        ...headers0,
+        ...headers1,
+        ...headers2,
     }
+
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)

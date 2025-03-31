@@ -19,7 +19,7 @@ return new class extends Migration
             $table->tinyInteger('level')->unsigned()->default(0)->comment('(13,15,17,20,25,30)등급');
             $table->string('user_name', 30)->index()->comment('ID');
             $table->string('user_pw', 100)->comment('PW');
-            $table->string('nick_name', 30)->nullable()->comment('유저명');
+            $table->string('nick_name', 30)->nullable()->comment('대표자명');
             $table->string('sales_name', 30)->nullable()->comment('영업라인명');
             $table->string('addr', 150)->nullable()->comment('영업라인 주소');
             $table->string('profile_img')->nullable()->comment('프로필 이미지');

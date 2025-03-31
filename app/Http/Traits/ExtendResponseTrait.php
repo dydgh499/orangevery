@@ -39,11 +39,13 @@ trait ExtendResponseTrait
 
     public function apiResponse($code, $msg, $data=[])
     {
-        return Response::json(['code'=>$code, 'message'=>$msg, 'data'=>$data], $code === '0000' ? 201 : 409, [], JSON_UNESCAPED_UNICODE);        
+        $headers = $code === '0000' ? $this->tokenableExpire() : [];
+        return Response::json(['code'=>$code, 'message'=>$msg, 'data'=>$data], $code === '0000' ? 201 : 409, [], JSON_UNESCAPED_UNICODE)->withHeaders($headers);
     }
 
     public function extendResponse($code, $msg, $data=[])
     {
+        $headers = [];
         $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all(), 'url' => request()->url()];
         if($code == 990)
         {
@@ -53,14 +55,17 @@ trait ExtendResponseTrait
             Log::error($msg, $logs);
         }
         else if($code < 5)
-            $http_code = '20'.$code;
+        {
+            $headers = $this->tokenableExpire();
+            $http_code = (int)('20'.$code);
+        }
         else
         {
             $http_code = 409;            
             Log::notice($msg, $logs);
         }
-        
-        return Response::json(['code'=>$code, 'message'=>$msg, 'data'=>$data], $http_code, [], JSON_UNESCAPED_UNICODE);        
+
+        return Response::json(['code'=>$code, 'message'=>$msg, 'data'=>$data], $http_code, [], JSON_UNESCAPED_UNICODE)->withHeaders($headers);     
     }
     
     private function checkAbnormalConnection($code)
@@ -100,11 +105,11 @@ trait ExtendResponseTrait
             default:    $msg = "알려지지 않은 코드입니다.";
         }
         if($code == 0)
-            return Response::json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return Response::json($data, 200, [], JSON_UNESCAPED_UNICODE)->withHeaders($this->tokenableExpire());
         else if($code == 1)
-            return Response::json($data, 201, [], JSON_UNESCAPED_UNICODE);
+            return Response::json($data, 201, [], JSON_UNESCAPED_UNICODE)->withHeaders($this->tokenableExpire());
         else if($code == 4)
-            return Response::json($data, 204, [], JSON_UNESCAPED_UNICODE);
+            return Response::json($data, 204, [], JSON_UNESCAPED_UNICODE)->withHeaders($this->tokenableExpire());
         else
         {
             $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all(), 'url' => request()->url()];

@@ -162,7 +162,7 @@ const isUseCancelDeposit = () => {
                     <VListItemTitle>이체예약취소</VListItemTitle>
                 </VListItem>
                 <VListItem value="noti" class="noti" @click="notiSend([props.item.id])"
-                    v-if="corp.pv_options.paid.use_noti && getUserLevel() >= 35">
+                    v-if="corp.pv_options.paid.use_noti">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="emojione:envelope" />
                     </template>

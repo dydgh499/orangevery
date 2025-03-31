@@ -10,34 +10,78 @@ export const danger_types = <Options[]>([
     {id:0, title:'중복결제'}, {id:1, title:'한도초과'}, {id:2, title:'할부초과'}
 ])
 
+
+const dangerTransactionHeader = () => {
+    const getMchtCols = () => {
+        return {
+            'id': 'NO.',
+            'mcht_name': '가맹점 상호',
+            'module_type': '거래 타입',
+            'item_name': '상품명',
+            'amount': '거래금액',
+            'ord_num': '주문번호',
+            'appr_num': '승인번호',
+            'installment': '할부',
+            'mid': 'MID',
+            'tid': 'TID',
+        }    
+    }
+    const getPGCols = () => {
+        if(getUserLevel() >= 35) {
+            return {
+                'pg_id': 'PG사',
+                'ps_id': '구간',
+            }    
+        }
+        else
+            return {}
+    }
+    const getPaymentCols = () => {
+        return {
+            'terminal_id': '장비 타입',
+            'issuer': '발급사',
+            'acquirer': '매입사',
+            'card_num': '카드번호',
+            'trx_dttm': '거래시간',
+            'buyer_name': '구매자명',
+            'danger_type': '이상거래타입',
+            'is_checked': '확인 여부',
+        }
+    }
+    const getEtcCols = () => {
+        if(getUserLevel() >= 35) {
+            return {
+                'extra_col': '더보기'
+            }
+        }
+        else
+            return {}
+    }
+    const headers0:any = getMchtCols()
+    const headers1:any = getPGCols()
+    const headers2:any = getPaymentCols()
+    const headers3:any = getEtcCols()
+
+    return {
+        headers0,
+        headers1,
+        headers2,
+        headers3,
+    }
+}
+
 export const useSearchStore = defineStore('dangerSearchStore', () => {    
     const store = Searcher('transactions/dangers')
     const head  = Header('transactions/dangers', '이상거래 관리')
     const { pgs, pss, terminals } = useStore()
+    const { headers0, headers1, headers2, headers3 } = dangerTransactionHeader()
+
     const headers:Record<string, string> = {
-        'id': 'NO.',
-        'mcht_name': '가맹점 상호',
-        'module_type': '거래 타입',
-        'item_name': '상품명',
-        'amount': '거래금액',
-        'ord_num': '주문번호',
-        'appr_num': '승인번호',
-        'installment': '할부',
-        'mid': 'MID',
-        'tid': 'TID',
-        'pg_id': 'PG사',
-        'ps_id': '구간',
-        'terminal_id': '장비 타입',
-        'issuer': '발급사',
-        'acquirer': '매입사',
-        'card_num': '카드번호',
-        'trx_dttm': '거래시간',
-        'buyer_name': '구매자명',
-        'danger_type': '이상거래타입',
-        'is_checked': '확인 여부',
+        ...headers0,
+        ...headers1,
+        ...headers2,
+        ...headers3,
     }
-    if(getUserLevel() >= 35)
-        headers['extra_col'] = '더보기'
 
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})

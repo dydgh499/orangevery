@@ -107,7 +107,7 @@ const isViewAbleContractFile = () => {
         if(props.item.id) {
             if(props.is_mcht && getUserLevel() === 10 && props.item.id === user_info.value.id)
                 return true
-            else if(props.is_mcht === false && getUserLevel() > 10 && props.item.id === user_info.value.id)
+            else if(props.is_mcht === false && getUserLevel() > 11 && props.item.id === user_info.value.id)
                 return true
             else
                 return false
@@ -299,7 +299,7 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold" cols="5" md="24">사업자등록번호</VCol>
+                                <VCol class="font-weight-bold" md="4" cols="5">사업자등록번호</VCol>
                                 <VCol md="8"><span>{{ business_num_format }}</span></VCol>
                             </VRow>
                         </VCol>
@@ -318,8 +318,8 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold">법인등록번호</VCol>
-                                <VCol md="10"><span>{{ props.item.corp_registration_num }}</span></VCol>
+                                <VCol class="font-weight-bold" md="4" cols="5">법인등록번호</VCol>
+                                <VCol md="8"><span>{{ props.item.corp_registration_num }}</span></VCol>
                             </VRow>
                         </VCol>                        
                     </VRow>

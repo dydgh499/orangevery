@@ -32,10 +32,6 @@ class ExceptionWorkTimeController extends Controller
 
     public function index(Request $request)
     {
-        $request->merge([
-            'page' => 1,
-            'page_size' => 999,
-        ]);
         $query  = $this->work_times
             ->join('operators', 'exception_work_times.oper_id', '=', 'operators.id')
             ->where('exception_work_times.brand_id', $request->user()->brand_id);

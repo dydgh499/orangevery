@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Ablilty;
 
 use App\Models\Salesforce;
+use App\Http\Controllers\Manager\Gmid\GmidInformation;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Controllers\Manager\Salesforce\SalesforceOverlap;
@@ -18,7 +19,9 @@ class Ablilty
     
     static function isMerchandise($request)
     {
-        return $request->user()->tokenCan(13) == false ? true : false;
+        $cond_1 = $request->user()->tokenCan(10) === true;
+        $cond_2 = $request->user()->tokenCan(11) === false;
+        return $cond_1 && $cond_2;
     }
 
     static function salesAuthValidate($request, $id)
@@ -38,8 +41,8 @@ class Ablilty
 
     static function isSalesforce($request)
     {
-        $cond_1 = $request->user()->tokenCan(13) == true;
-        $cond_2 = $request->user()->tokenCan(35) == false;
+        $cond_1 = $request->user()->tokenCan(13) === true;
+        $cond_2 = $request->user()->tokenCan(35) === false;
         return $cond_1 && $cond_2;
     }
 
@@ -82,10 +85,24 @@ class Ablilty
                 return in_array($id, $mcht_ids);        
             }
         }
+        else if(self::isGmid($request))
+            return in_array($id, GmidInformation::getMchtIds($request->user()->g_mid));
         else
             return false;
     }
 
+    static function isGmid($request)
+    {
+        $cond_1 = $request->user()->tokenCan(11) == true;
+        $cond_2 = $request->user()->tokenCan(13) == false;
+        return $cond_1 && $cond_2;
+    }
+
+    static function isMyGmid($request, int $id)
+    {
+        return self::isGmid($request) && $request->user()->id === $id;
+    }
+    
     static function isOperator($request)
     {
         return $request->user()->tokenCan(35);

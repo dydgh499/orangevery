@@ -7,7 +7,7 @@ import { operatorActionAuthStore } from '../services/operators/useStore'
 import { getUserTypeName } from './useStore'
 interface Props {
     item: BasePropertie,
-    type: number, //0 == 가맹점, 1 == 영업자, 2 == 운영자
+    type: number,  //0 == 가맹점, 1 == 영업자, 2 == 운영자, 3 == GMID
 }
 
 const props = defineProps<Props>()

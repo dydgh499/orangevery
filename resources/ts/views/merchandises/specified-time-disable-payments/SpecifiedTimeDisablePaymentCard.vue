@@ -57,7 +57,7 @@ watchEffect(() => {
                         <b>단건 결제한도 하향금</b>
                     </VCol>
                     <VCol md="6" cols="5">
-                        <span>{{ props.item.specified_time_disable_limit?.toLocaleString()}}</span>
+                        <span>{{ props.item.specified_time_disable_limit?.toLocaleString()}} 만원</span>
                     </VCol>
                 </VRow>
             </VCol>

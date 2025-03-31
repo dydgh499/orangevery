@@ -60,7 +60,6 @@ const merchandise = reactive<any>({
     
     business_num: "",
     merchant_status: 0,
-    is_show_fee: 0,
     phone_auth_limit_count: 0,
     phone_auth_limit_s_tm:'00:00',
     phone_auth_limit_e_tm:'00:00',
@@ -132,12 +131,6 @@ const setAccountInfo = (apply_type: number) => {
     }, apply_type)
 }
 
-const setIsShowFee = async (apply_type: number) => {
-    post('set-show-fee', {
-        'is_show_fee': merchandise.is_show_fee,
-    }, apply_type)
-}
-
 // -------------- noti ----------------
 const setNotiUrl = (apply_type: number) => {
     post('set-noti-url', {
@@ -175,6 +168,12 @@ const setSpecifiedTimeDisableTime = (apply_type: number) => {
 const setUseNoti = (apply_type: number) => {
     post('set-use-noti', {
         'use_noti': merchandise.use_noti,
+    }, apply_type)
+}
+
+const setGmid = (apply_type: number) => {
+    post('set-gmid', {
+        'g_mid': merchandise.g_mid,
     }, apply_type)
 }
 
@@ -478,30 +477,8 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-
                     </VRow>
                     <VRow>
-                        <VCol :md="6" :cols="12">
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol md="6" cols="12">
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="merchandise.is_show_fee" 
-                                        :items="show_fees" item-title="title" item-value="id" label="수수료율 노출"/>
-                                </VCol>
-                                <VCol md="6" cols="12">
-                                    <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setIsShowFee(0)">
-                                            즉시적용
-                                            <VIcon end size="18" icon="tabler-direction-sign" />
-                                        </VBtn>
-                                        <VBtn variant="tonal" size="small" color="secondary" @click="setIsShowFee(1)"
-                                            style='margin-left: 0.5em;'>
-                                            예약적용
-                                            <VIcon end size="18" icon="tabler-clock-up" />
-                                        </VBtn>                 
-                                    </div>
-                                </VCol>
-                            </VRow>
-                        </VCol>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
@@ -516,6 +493,28 @@ watchEffect(() => {
                                             <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
                                         <VBtn variant="tonal" size="small" color="secondary" @click="setMerchantStatus(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>                 
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <VRow>
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12">
+                                    <VTextField v-model="merchandise.g_mid" label="GMID"/>
+                                </VCol>
+                                <VCol md="6" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setGmid(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setGmid(1)"
                                             style='margin-left: 0.5em;'>
                                             예약적용
                                             <VIcon end size="18" icon="tabler-clock-up" />

@@ -30,58 +30,60 @@ use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Log\OperatorHistoryContoller;
 use App\Http\Controllers\Manager\BatchUpdater\ApplyBookController;
 
-Route::get('services/pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
-Route::get('popups/currently', [PopupController::class, 'currently']);
-Route::get('posts/{id}/parent', [PostController::class, 'parent']);
-Route::get('posts/recent', [PostController::class, 'recent']);
+Route::middleware(['auth.update'])->group(function() {
+    Route::get('services/pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
+    Route::get('popups/currently', [PopupController::class, 'currently']);
+    Route::get('posts/{id}/parent', [PostController::class, 'parent']);
+    Route::get('posts/recent', [PostController::class, 'recent']);
 
-Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
-    Route::middleware(['is.edit.able'])->post('posts/upload', [PostController::class, 'upload']);  
-    Route::prefix('services')->group(function() {
-        Route::get('bonaejas', [MessageController::class, 'index']);
-        Route::get('bonaejas/chart', [MessageController::class, 'chart']);
-        Route::get('brands/chart', [BrandController::class, 'chart']);
-        Route::get('abnormal-connection-histories/secure-report', [AbnormalConnectionController::class, 'secureReport']);
-        Route::get('abnormal-connection-histories/secure-report/detail-work-status', [AbnormalConnectionController::class, 'detailWorkStatus']);
-        Route::get('abnormal-connection-histories/last-login', [AbnormalConnectionController::class, 'findLastLogin']);
-        Route::get('abnormal-connection-histories', [AbnormalConnectionController::class, 'index']);
+    Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
+        Route::middleware(['is.edit.able'])->post('posts/upload', [PostController::class, 'upload']);  
+        Route::prefix('services')->group(function() {
+            Route::get('bonaejas', [MessageController::class, 'index']);
+            Route::get('bonaejas/chart', [MessageController::class, 'chart']);
+            Route::get('brands/chart', [BrandController::class, 'chart']);
+            Route::get('abnormal-connection-histories/secure-report', [AbnormalConnectionController::class, 'secureReport']);
+            Route::get('abnormal-connection-histories/secure-report/detail-work-status', [AbnormalConnectionController::class, 'detailWorkStatus']);
+            Route::get('abnormal-connection-histories/last-login', [AbnormalConnectionController::class, 'findLastLogin']);
+            Route::get('abnormal-connection-histories', [AbnormalConnectionController::class, 'index']);
 
-        Route::middleware(['is.edit.able'])->group(function() {
-            Route::post('operators/{id}/password-change', [OperatorController::class, 'passwordChange']);
-            Route::post('operators/{id}/unlock-account', [OperatorController::class, 'unlockAccount']);  
-            Route::post('operators/{id}/2fa-qrcode', [OperatorController::class, 'create2FAQRLink']);  
-            Route::post('operators/{id}/2fa-qrcode/init', [OperatorController::class, 'init2FA']);  
-            Route::post('operators/{id}/2fa-qrcode/create-vertify', [OperatorController::class, 'vertify2FAQRLink']);
-            Route::post('cms-transactions/withdraw', [CMSTransactionController::class, 'withdraw']);
+            Route::middleware(['is.edit.able'])->group(function() {
+                Route::post('operators/{id}/password-change', [OperatorController::class, 'passwordChange']);
+                Route::post('operators/{id}/unlock-account', [OperatorController::class, 'unlockAccount']);  
+                Route::post('operators/{id}/2fa-qrcode', [OperatorController::class, 'create2FAQRLink']);  
+                Route::post('operators/{id}/2fa-qrcode/init', [OperatorController::class, 'init2FA']);  
+                Route::post('operators/{id}/2fa-qrcode/create-vertify', [OperatorController::class, 'vertify2FAQRLink']);
+                Route::post('cms-transactions/withdraw', [CMSTransactionController::class, 'withdraw']);
+            });
+        
+            Route::apiResource('brands/before-brand-infos', BeforeBrandInfoController::class);
+            Route::apiResource('brands/different-settlement-infos', DifferentSettlementInfoController::class);        
+            Route::apiResource('brands/identity-auth-infos', IdentityAuthInfoController::class);        
+            
+            Route::apiResource('operator-ips', OperatorIPController::class);
+            Route::apiResource('brands', BrandController::class);
+        
+            Route::apiResource('operators', OperatorController::class);            
+            Route::get('operator-histories', [OperatorHistoryContoller::class, 'index']);
+            Route::get('operator-histories/{id}/detail', [OperatorHistoryContoller::class, 'detail']); 
+            
+            Route::apiResource('pay-gateways', PaymentGatewayController::class);
+            Route::apiResource('pay-sections', PaymentSectionController::class);
+            Route::apiResource('finance-vans', FinanceVanController::class);
+            Route::apiResource('classifications', ClassificationController::class);
+            Route::apiResource('mcht-blacklists', MchtBlacklistController::class);            
+            Route::apiResource('holidays', HolidayController::class);
+            Route::apiResource('exception-work-times', ExceptionWorkTimeController::class);        
+            Route::get('head-office-accounts', [HeadOfficeAccountController::class, 'index']);        
+            Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
+            Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
+            Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);
+            Route::get('book-applies', [ApplyBookController::class, 'index']);
+            Route::delete('book-applies/{dest_type}/{id}', [ApplyBookController::class, 'destroy']);
         });
-    
-        Route::apiResource('brands/before-brand-infos', BeforeBrandInfoController::class);
-        Route::apiResource('brands/different-settlement-infos', DifferentSettlementInfoController::class);        
-        Route::apiResource('brands/identity-auth-infos', IdentityAuthInfoController::class);        
-        
-        Route::apiResource('operator-ips', OperatorIPController::class);
-        Route::apiResource('brands', BrandController::class);
-    
-        Route::apiResource('operators', OperatorController::class);            
-        Route::get('operator-histories', [OperatorHistoryContoller::class, 'index']);
-        Route::get('operator-histories/{id}/detail', [OperatorHistoryContoller::class, 'detail']); 
-        
-        Route::apiResource('pay-gateways', PaymentGatewayController::class);
-        Route::apiResource('pay-sections', PaymentSectionController::class);
-        Route::apiResource('finance-vans', FinanceVanController::class);
-        Route::apiResource('classifications', ClassificationController::class);
-        Route::apiResource('mcht-blacklists', MchtBlacklistController::class);            
-        Route::apiResource('holidays', HolidayController::class);
-        Route::apiResource('exception-work-times', ExceptionWorkTimeController::class);        
-        Route::get('head-office-accounts', [HeadOfficeAccountController::class, 'index']);        
-        Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
-        Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
-        Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);
-        Route::get('book-applies', [ApplyBookController::class, 'index']);
-        Route::delete('book-applies/{dest_type}/{id}', [ApplyBookController::class, 'destroy']);
+        Route::apiResource('popups', PopupController::class);
     });
-    Route::apiResource('popups', PopupController::class);
-});
 
-Route::apiResource('complaints', ComplaintController::class);
-Route::apiResource('posts', PostController::class);
+    Route::apiResource('complaints', ComplaintController::class);
+    Route::apiResource('posts', PostController::class);
+});

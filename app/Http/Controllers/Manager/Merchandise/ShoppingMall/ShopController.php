@@ -89,7 +89,7 @@ class ShopController extends Controller
             'merchandises.nick_name', 'merchandises.contact_num',
             'merchandises.addr', 
             'merchandises.resident_num', 'merchandises.business_num', 
-            'merchandises.tax_category_type', 'merchandises.is_show_fee',
+            'merchandises.tax_category_type',
             'merchandises.use_saleslip_prov',
 
             'transactions.is_cancel',

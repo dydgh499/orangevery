@@ -27,6 +27,7 @@ class MerchandiseRequest extends FormRequest
         'website_url',
         'email',
         'corp_registration_num',
+        'g_mid',
     ];
     public $file_keys = [
         'passbook_file',
@@ -53,7 +54,6 @@ class MerchandiseRequest extends FormRequest
         'tax_category_type',
         'collect_withdraw_fee',
         'withdraw_fee',
-        'is_show_fee',
         'use_regular_card',
         'merchant_status',
         'business_type',
@@ -97,7 +97,6 @@ class MerchandiseRequest extends FormRequest
             'collect_withdraw_fee' => 'nullable|integer',
             'tax_category_type' => 'nullable|integer',
             'withdraw_fee' => 'nullable|integer',
-            'is_show_fee' => 'required|boolean',
             'resident_num' => 'nullable',
             'business_num' => 'nullable',
             'phone_num' => 'nullable|string',

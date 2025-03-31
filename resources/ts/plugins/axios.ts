@@ -17,12 +17,14 @@ export const getUserMutual = () => {
 export const getUserType = () => {
     if (getUserLevel() == 10) 
         return {id:0, link:'/merchandises/edit/' + user_info.value.id}
+    else if (getUserLevel() === 11)
+        return {id:3, link:''}
     else if (getUserLevel() <= 30)
         return {id:1, link:'/salesforces/edit/' + user_info.value.id}
     else if (getUserLevel() <= 45) 
         return {id:2, link:''}
     else
-        return {id:3, link:''}
+        return {id:4, link:''}
 }
 
 export const getSalesLevelByCol = (key: string) => {
@@ -103,6 +105,8 @@ export const allLevels = () => {
     const sales = salesLevels()
     if(getUserLevel() >= 10)
         sales.unshift(<Options>({id: 10, title: '가맹점'}))
+    if(getUserLevel() >= 11)
+        sales.unshift(<Options>({id: 11, title: 'GMID'}))
     if(getUserLevel() >= 35) {
         sales.push(<Options>({id: 35, title: '직원'}))
         sales.push(<Options>({id: 40, title: '본사'}))
@@ -138,6 +142,10 @@ export const salesAuthLevelValidate = (id: number) => {
         return true
     else
         return false
+}
+
+export const isAbleUnlockMcht = () => {
+    return getUserLevel() >= 35 && (getUserLevel() > 11 && user_info.is_able_unlock_mcht)
 }
 
 export const isAbleModiy = (id: number) => {    
@@ -219,6 +227,13 @@ axios.interceptors.request.use((config:any) => {
     // 해당 Interceptor에서 헤더를 설정하기 전에 pay_token.value를 사용하여 헤더 값을 동적으로 설정합니다.
     config.headers['Authorization'] = `Bearer ${pay_token.value}`;
     return config;
+});
+
+axios.interceptors.response.use((response) => {
+    if(response.headers['token-expire-time']) {
+        token_expire_time.value = response.headers['token-expire-time']
+    }
+    return response;
 });
 
 watchEffect(() => {

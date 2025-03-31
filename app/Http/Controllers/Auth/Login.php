@@ -90,6 +90,8 @@ class Login extends LoginValidate
                 $result = self::setMerchant($result);
             else if(self::isRecommenderSales($result))
                 $result = self::setRecommenderSales($result);
+            else if(self::isGmid($result))
+                $result = self::setGmid($result);
 
             if(self::isLockAccount($result))
                 $result['result'] = AuthLoginCode::LOCK_ACCOUNT->value;
@@ -125,7 +127,10 @@ class Login extends LoginValidate
         $result = self::isSafeLogin((clone $orm), $request);
 
         if($result['result'] === AuthLoginCode::SUCCESS->value)
-            return $inst->response($result['result'], $result['user']->loginInfo($result['user']->level))->withHeaders($inst->tokenableExpire());
+        {
+            $info = $result['user']->loginInfo($result['user']->level);
+            return $inst->response($result['result'], $info)->withHeaders($inst->tokenableExpire());            
+        }
         else if($result['result'] === AuthLoginCode::NOT_FOUND->value)
             return null;
         else

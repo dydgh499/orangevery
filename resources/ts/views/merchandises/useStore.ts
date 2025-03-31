@@ -5,7 +5,7 @@ import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { Merchandise, Options } from '@/views/types'
 import { avatars, business_types } from '@/views/users/useStore'
-import { getUserLevel, user_info } from '@axios'
+import { getUserLevel, isAbleUnlockMcht } from '@axios'
 import corp from '@corp'
 
 export const tax_category_types = <Options[]>([
@@ -75,12 +75,11 @@ const getMchtHeaders = (head :any) => {
         const headers_3:Record<string, string> = {}
         headers_3['user_name'] = '가맹점 ID'
         headers_3['mcht_name'] = '상호'
-        if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
-            headers_3['trx_fee'] = '가맹점 수수료'
-            headers_3['hold_fee'] = '유보금 수수료'
-        }
+        headers_3['trx_fee'] = '가맹점 수수료'
+        headers_3['hold_fee'] = '유보금 수수료'
         headers_3['sector'] = '업종'
         headers_3['business_type'] = '구분'
+        headers_3['g_mid']  = 'GMID'
         return headers_3
     }
 
@@ -133,7 +132,7 @@ const getMchtHeaders = (head :any) => {
     const getSecureCols = () => {
         const headers_8:Record<string, string> = {}
         headers_8['merchant_status'] = '가맹점 상태'
-        if(getUserLevel() >= 35 || (getUserLevel() >= 13 && user_info.value.is_able_unlock_mcht)) {
+        if(isAbleUnlockMcht()) {
             headers_8['is_lock'] = '계정잠김여부'
             headers_8['locked_at'] = '계정잠금시간'
         }
@@ -149,7 +148,7 @@ const getMchtHeaders = (head :any) => {
         }
         headers_9['created_at'] = '생성시간'
         headers_9['updated_at'] = '업데이트시간'
-        if(getUserLevel() >= 35 || (getUserLevel() >= 13 && user_info.value.is_able_unlock_mcht)) 
+        if(isAbleUnlockMcht()) 
             headers_9['extra_col'] = '더보기'
         return headers_9
     }
@@ -396,7 +395,6 @@ export const defaultItemInfo = () => {
         custom_id: null,
         merchant_status: 0,
         use_saleslip_prov: 1,
-        is_show_fee: Number(corp.pv_options.free.default.is_show_fee),
         note: '',
         dev_fee: 0,
         use_regular_card: 0,
@@ -416,7 +414,8 @@ export const defaultItemInfo = () => {
         specified_time_disable_limit: 0,
         phone_auth_limit_count: 0,
         business_type: 0,
-        corp_registration_num: ''
+        corp_registration_num: '',
+        g_mid: ''
     })
     return {
         path, item

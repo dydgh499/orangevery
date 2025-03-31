@@ -75,8 +75,6 @@ Sentry.init({
     beforeSend(event: Event): Event | null {
         if (process.env.APP_ENV === 'local')
             return null; // 개발 환경에서는 전송을 하지 않음
-        if (event.level !== 'error') 
-          return null; // 에러가 아닌 이벤트 무시
         else
             return event; // 에러 이벤트 전송
       },

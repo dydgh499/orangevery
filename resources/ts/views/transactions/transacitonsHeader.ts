@@ -1,4 +1,4 @@
-import { getLevelByIndex, getUserLevel, user_info } from "@/plugins/axios"
+import { getLevelByIndex, getUserLevel } from "@/plugins/axios"
 import corp from "@/plugins/corp"
 import { isFixplus } from "@/plugins/fixplus"
 import { installments, module_types } from "../merchandises/pay-modules/useStore"
@@ -72,14 +72,12 @@ export const transactionHeader = (table_name: string) => {
         if(getUserLevel() >= 35) {
             headers_2['mcht_settle_type'] = '가맹점 정산타입'
         }
-        if((getUserLevel() === 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
-            if(table_name === 'transactions' && corp.pv_options.free.only_mcht_fee_profit)
-                headers_2['only_mcht_fee_profit'] = '정산금(건별 수수료 제외)'
-            headers_2['profit'] = '정산금'
-            if(table_name !== 'sales-part') {
-                headers_2['settle_dt'] = '가맹점 정산예정일'
-                headers_2['settle_id'] = '정산번호'
-            }
+        if(table_name === 'transactions' && corp.pv_options.free.only_mcht_fee_profit)
+            headers_2['only_mcht_fee_profit'] = '정산금(건별 수수료 제외)'
+        headers_2['profit'] = '정산금'
+        if(table_name !== 'sales-part') {
+            headers_2['settle_dt'] = '가맹점 정산예정일'
+            headers_2['settle_id'] = '정산번호'
         }
         return headers_2
     }
@@ -119,16 +117,13 @@ export const transactionHeader = (table_name: string) => {
         if (levels.sales0_use && getUserLevel() >= 13) {
             headers_4['sales0_name'] = levels.sales0_name
             headers_4['sales0_fee'] = '수수료'
-        }
-    
-        if((getUserLevel() === 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
-            headers_4['mcht_fee'] = '가맹점 수수료'
-            headers_4['hold_fee'] = '유보금 수수료'
-            headers_4['trx_amount'] = '거래 수수료'
-            headers_4['hold_amount'] = '유보금'
-            headers_4['mcht_settle_fee'] = '건별 수수료'
-            headers_4['total_trx_amount'] = '총 거래 수수료'
-        }
+        }    
+        headers_4['mcht_fee'] = '가맹점 수수료'
+        headers_4['hold_fee'] = '유보금 수수료'
+        headers_4['trx_amount'] = '거래 수수료'
+        headers_4['hold_amount'] = '유보금'
+        headers_4['mcht_settle_fee'] = '건별 수수료'
+        headers_4['total_trx_amount'] = '총 거래 수수료'
         return headers_4
     }
 
@@ -204,16 +199,14 @@ export const transactionHeader = (table_name: string) => {
                 subtitle: '0건',
             },
         ]
-        if((getUserLevel() === 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
-            chart.push({
-                icon: 'ic-outline-payments',
-                color: 'warning',
-                title: '정산액 합계',
-                stats: '0',
-                percentage: 0,
-                subtitle: '0건',
-            })
-        }
+        chart.push({
+            icon: 'ic-outline-payments',
+            color: 'warning',
+            title: '정산액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        })
         return chart
     }
 
@@ -266,14 +259,9 @@ export const transactionHeader = (table_name: string) => {
             _chart[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
             _chart[2]['subtitle'] = r.data.count.toLocaleString() + '건'
     
-            if (getUserLevel() === 10 && user_info.value.is_show_fee === 0) { 
-    
-            }
-            else {
-                _chart[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
-                _chart[3]['subtitle'] = r.data.count.toLocaleString() + '건'
-                _chart[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
-            }
+            _chart[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
+            _chart[3]['subtitle'] = r.data.count.toLocaleString() + '건'
+            _chart[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
         }
         return _chart
     }

@@ -123,7 +123,6 @@ export interface MerchandisePropertie {
     custom_id: number | null,
     use_saleslip_prov: number,
     use_noti: number,
-    is_show_fee: number,
     use_regular_card: number,
     use_collect_withdraw: number,
     collect_withdraw_fee: number,
@@ -144,6 +143,10 @@ export interface SalesforcePropertie {
     level: number,
     view_type: number,
     note: string,
+}
+
+export interface GMID extends BasePropertie {
+    g_mid : string,
 }
 
 export interface RegularCreditCard {
@@ -176,6 +179,7 @@ export interface Merchandise extends MerchandisePropertie, UserPropertie {
     //
     tid?: string,
     tid_auto_issue?: number,
+    g_mid: string,
 }
 
 export interface SalesFilter {
@@ -398,7 +402,6 @@ interface FreeOption {
     default: {
         installment: number,
         abnormal_trans_limit: number,
-        is_show_fee: number,
     },
     secure: {
         mcht_id_level: number,

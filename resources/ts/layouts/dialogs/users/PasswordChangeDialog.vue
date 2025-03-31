@@ -35,9 +35,11 @@ const show = (_user_id: number, _user_type: number) => {
         if(user_id.value === user_info.value.id) {
             if(user_type.value === 0 && getUserLevel() === 10)
                 is_my_password.value = true
-            else if(user_type.value === 1 && getUserLevel() > 10 && getUserLevel() < 35)
+            else if(user_type.value === 1 && getUserLevel() > 11 && getUserLevel() < 35)
                 is_my_password.value = true
             else if(user_type.value === 2 && getUserLevel() >= 35)
+                is_my_password.value = true
+            else if(user_type.value === 3 && getUserLevel() === 11)
                 is_my_password.value = true
         }
     }

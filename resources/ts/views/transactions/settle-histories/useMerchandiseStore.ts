@@ -65,7 +65,7 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
     }
 
     const getPrivacyCols = () => {
-        if(getUserLevel() == 10 || getUserLevel() >= 35) {
+        if(getUserLevel() == 10 || getUserLevel() == 11 || getUserLevel() >= 35) {
             return {
                 'acct_bank_name': '은행',
                 'acct_bank_code': '은행코드',

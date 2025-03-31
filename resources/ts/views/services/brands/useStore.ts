@@ -112,8 +112,6 @@ export const defaultItemInfo = () => {
             default: {
                 installment: 0,
                 abnormal_trans_limit: 0,
-                is_show_fee: 1,
-
             },
             use_tid_duplicate: false,
             use_mid_duplicate: false,

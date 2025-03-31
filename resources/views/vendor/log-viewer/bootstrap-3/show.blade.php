@@ -172,7 +172,7 @@
 
                                             @if ($entry->hasContext())
                                             <div class="stack-content collapse" id="log-context-{{ $key }}">
-                                                <pre>{{ $entry->context() }}</pre>
+                                                <pre>{{ trim(json_encode(json_decode($entry->context()), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)) }}</pre>
                                             </div>
                                             @endif
                                         </td>

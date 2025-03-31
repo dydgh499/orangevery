@@ -11,6 +11,7 @@
     use App\Models\Options\PvOptions;
     use App\Http\Controllers\Ablilty\Ablilty;
     use App\Http\Controllers\Ablilty\AbnormalConnection;
+    use App\Http\Controllers\Manager\Gmid\GmidInformation;
 
     function getPGType($pg_type)
     {
@@ -40,12 +41,17 @@
             $idx = globalLevelByIndex($request->user()->level);            
             $query = $query->where($table."sales".$idx."_id",  $request->user()->id);
         }
+        else if(Ablilty::isGmid($request))
+        {
+            $col = $parent_table === 'merchandises' ? "id" : 'mcht_id';
+            $query = $query->whereIn($table.$col, GmidInformation::getMchtIds($request->user()->g_mid));
+        }
         else if(Ablilty::isOperator($request))
         {   // all
 
         }
         else
-            throw new Exception('알 수 없는 등급');
+            throw new Exception('알 수 없는 등급1');
         return $query;
     }
 
@@ -105,7 +111,7 @@
             case 5:
                 return 30;
             default:
-                throw new Exception('알 수 없는 등급');
+                throw new Exception('알 수 없는 등급2');
                 return "UNKNOWUN";
         }
     }
@@ -133,7 +139,7 @@
             case 50;
                 return 6;
             default:
-                throw new Exception('알 수 없는 등급');
+                throw new Exception('알 수 없는 등급3');
                 return "UNKNOWUN";
         }
     }
@@ -281,6 +287,12 @@
             $target_id = 'mcht_id';
             $target_settle_id = 'mcht_settle_id';
             $target_settle_amount = 'mcht_settle_amount';
+        }
+        else if($level === 11)
+        {
+            $target_id = '';
+            $target_settle_id = 'mcht_settle_id';
+            $target_settle_amount = 'mcht_settle_amount';            
         }
         else if($level < 35)
         {
