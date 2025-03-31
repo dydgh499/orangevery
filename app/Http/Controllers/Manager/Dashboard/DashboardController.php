@@ -206,7 +206,7 @@ class DashboardController extends Controller
         {
             $mcht = $getUsers(new Merchandise, $brand_id, 'merchandise');
             $sale = $getUsers(new Salesforce, $brand_id, 'salesforce');
-            $oper = $getUsers(new Gmid, 'gmid');
+            $oper = $getUsers(new Gmid, $brand_id, 'gmid');
             $oper = $getUsers(new Operator, $brand_id, 'operator');
             $query = $mcht->unionAll($sale)->unionAll($oper);    
             
