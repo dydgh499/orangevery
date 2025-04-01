@@ -5,6 +5,7 @@ use App\Models\Brand;
 use App\Models\Salesforce;
 use Illuminate\Support\Facades\Redis;
 use App\Models\Options\PvOptions;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 
 class BrandInfo
 {
@@ -95,7 +96,10 @@ class BrandInfo
                 return json_decode(json_encode($brand), true);
             }
             else
+            {
+                AbnormalConnection::tryParameterModulationApproach();
                 return [];
+            }
         }
         else
         {

@@ -124,7 +124,7 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
         {title: '가맹점 수수료(X)', key: 'trx_fee'},
         {title: '유보금 수수료(X)', key: 'hold_fee'},
         {title: '상호(O)', key: 'mcht_name'},
-        {title: '가맹점 명(O)', key: 'mcht_sub_name'},
+        {title: '가맹점 명(X)', key: 'mcht_sub_name'},
         {title: '대표자명(X)', key: 'nick_name'},
         {title: '이메일(X)', key: 'email'},
         {title: '주소(X)', key: 'addr'},

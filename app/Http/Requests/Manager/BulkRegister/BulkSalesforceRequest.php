@@ -51,7 +51,6 @@ class BulkSalesforceRequest extends FormRequest
             '*' => 'required|array',
             '*.user_name' => 'required',
             '*.user_pw' => 'required',
-            '*.nick_name' => 'required',
             '*.level'     => 'required',
             '*.resident_num' => 'required',
             '*.acct_num' => 'required',
