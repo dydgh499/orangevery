@@ -54,22 +54,19 @@ class SalesSettleHistoryController extends Controller
             $query = $query->where('settle_histories_salesforces.settle_dt', '<=', $request->e_dt);
         if($request->has('deposit_status'))
             $query = $query->where('settle_histories_salesforces.deposit_status', $request->deposit_status);
-
-        if(Ablilty::isSalesforce($request))
-        {
-            $brand = BrandInfo::getBrandById($request->user()->brand_id);
-            if($brand['pv_options']['paid']['sales_parent_structure'])
-            {
-                $sales = Salesforce::where('id', $request->user()->id)->with(['childs'])->first();
-                $sales_ids = SalesforceOverlap::getAllChildIds([$sales->id], $sales->childs);
-            }
-            else
-                $sales_ids = UnderSalesforce::getSalesIds($request);
-            if(count($sales_ids))
-                $query = $query->whereIn('salesforces.id', $sales_ids);
-        }
         if($request->level)
-            $query = $query->where('salesforces.level', $request->level);
+            $query = $query->where('settle_histories_salesforces.level', $request->level);    
+
+        $sales_filters = UnderSalesforce::getSelectedSalesFilter($request);
+        if(count($sales_filters))
+        {
+            $query = $query->whereIn('settle_histories_salesforces.sales_id', UnderSalesforce::getSalesIds($request));
+            $levels = UnderSalesforce::colToLevel($sales_filters);
+            foreach($levels as $level)
+            {
+                $query = $query->where('settle_histories_salesforces.level', '<=', $level);
+            }
+        }
         return $query;
     }
 

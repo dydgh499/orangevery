@@ -326,17 +326,18 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
                 datas[i]['pgs'] = datas[i]['payment_modules'].map(module => pgs.find(pg => pg.id === module.pg_id)?.pg_name).join(',')
                 datas[i]['pss'] = datas[i]['payment_modules'].map(module => pss.find(ps => ps.id === module.ps_id)?.trx_fee).join(',')
                 datas[i]['contract_img'] = datas[i]['payment_modules'].map(module => pss.find(ps => ps.id === module.ps_id)?.trx_fee).join(',')
-                datas[i]['mids'] = datas[i]['payment_modules'].map(module => module.mid).join(',')
-                datas[i]['tids'] = datas[i]['payment_modules'].map(module => module.tid).join(',')                
             }
             if(corp.pv_options.paid.use_noti && getUserLevel() >= 35) {
                 datas[i]['notis'] = datas[i]['notis'].map(noti => noti.note).join(',')                
             }
-
-            datas[i]['settle_types'] = datas[i]['payment_modules'].map(module => settle_types.find(settle_type => settle_type.id === module.settle_type)?.title).join(',')  
+            datas[i]['mids'] = datas[i]['payment_modules'].map(module => module.mid).join(',')
+            datas[i]['tids'] = datas[i]['payment_modules'].map(module => module.tid).join(',')
+            datas[i]['settle_types'] = datas[i]['payment_modules'].map(module => settle_types.find(settle_type => settle_type.id === module.settle_type)?.name).join(',')  
             datas[i]['resident_num'] = datas[i]['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
-            datas[i]['custom_id'] = cus_filters.find(cus => cus.id === datas[i]['custom_id'])?.name as string
-            datas[i]['business_type'] = business_types.find(cus => cus.id === datas[i]['business_type'])?.name as string
+            datas[i]['custom_id'] = cus_filters.find(cus => cus.id === datas[i]['custom_id'])?.name
+            datas[i]['business_type'] = business_types.find(cus => cus.id === datas[i]['business_type'])?.title
+            datas[i]['merchant_status'] = merchant_statuses.find(cus => cus.id === datas[i]['merchant_status'])?.title
+            datas[i]['is_lock'] = datas[i]['is_lock'] ? 'LOCK' : 'X'
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         head.exportToExcel(datas)

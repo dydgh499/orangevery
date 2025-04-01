@@ -131,7 +131,16 @@ class BatchUpdateSalesController extends BatchUpdateController
         $row = $this->getApplyRow($request, $cols);
         return $this->batchResponse($row, '영업라인');
     }
-    
+
+    public function setBusinessType(Request $request)
+    {
+        $cols = [
+            'business_type' => $request->business_type,
+        ];
+        $row = $this->getApplyRow($request, $cols);
+        return $this->batchResponse($row, '가맹점');
+    }
+
     public function setNote(Request $request)	
     {
         $cols = ['note' => $request->note];

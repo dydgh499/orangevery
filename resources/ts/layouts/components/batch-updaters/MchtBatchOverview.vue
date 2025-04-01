@@ -9,8 +9,7 @@ import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { merchant_statuses } from '@/views/merchandises/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import type { Options } from '@/views/types'
-import { banks, getOnlyNumber } from '@/views/users/useStore'
+import { banks, business_types, getOnlyNumber } from '@/views/users/useStore'
 import { getIndexByLevel, getLevelByIndex, getUserLevel } from '@axios'
 import corp from '@corp'
 
@@ -39,8 +38,6 @@ const { cus_filters } = useStore()
 const { sales, initAllSales } = useSalesFilterStore()
 
 const levels = corp.pv_options.auth.levels
-const show_fees = <Options[]>([{id:0, title:"숨김"}, {id:1, title:"노출"}])
-
 const merchandise = reactive<any>({
     resident_num: '',
     custom_id: null,
@@ -59,6 +56,7 @@ const merchandise = reactive<any>({
     acct_bank_code: "000",
     
     business_num: "",
+    business_type: 0,
     merchant_status: 0,
     phone_auth_limit_count: 0,
     phone_auth_limit_s_tm:'00:00',
@@ -102,6 +100,12 @@ const setMchtFee = async (apply_type: number) => {
 const setMerchantStatus = (apply_type: number) => {
     post('set-merchant-status', {
         'merchant_status': Number(merchandise.merchant_status),
+    }, apply_type)
+}
+
+const setBusinessType = (apply_type: number) => {
+    post('set-business-type', {
+        'business_type': Number(merchandise.business_type),
     }, apply_type)
 }
 
@@ -479,6 +483,28 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                     <VRow>
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12">
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="merchandise.business_type" 
+                                        :items="business_types" item-title="title" item-value="id" 
+                                        label="사업자 구분"/>
+                                </VCol>
+                                <VCol md="6" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setBusinessType(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setBusinessType(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>                 
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">

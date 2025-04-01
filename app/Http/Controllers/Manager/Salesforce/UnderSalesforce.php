@@ -137,4 +137,16 @@ class UnderSalesforce
         else
             return [];
     }
+
+    static public function colToLevel($sales_filters)
+    {
+        $levels = [];
+        foreach($sales_filters as $sales_filter)
+        {
+            $key = str_replace('sales', '', $sales_filter['id']);
+            $key = str_replace('_id', '', $key);
+            $levels[] = globalIndexByLevel(($key));
+        }
+        return $levels;
+    }
 }

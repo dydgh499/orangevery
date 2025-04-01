@@ -6,8 +6,7 @@ import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
 import { settleCycles, settleDays, settleTaxTypes, authLevels } from '@/views/salesforces/useStore'
-import { Salesforce } from '@/views/types'
-import { banks } from '@/views/users/useStore'
+import { banks, business_types } from '@/views/users/useStore'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
 
@@ -37,6 +36,7 @@ const view_types = [{id:0, title:'간편보기'}, {id:1, title:'상세보기'}]
 
 
 const salesforces = reactive<any>({
+    business_type: 0,
     settle_tax_type: 0,
     settle_cycle: 0,
     settle_day: 0,
@@ -82,6 +82,12 @@ const setIsAbleModifyMcht = (apply_type: number) => {
 const setViewType = (apply_type: number) => {
     post('set-view-type', {
         'view_type': salesforces.view_type,
+    }, apply_type)
+}
+
+const setBusinessType = (apply_type: number) => {
+    post('set-business-type', {
+        'business_type': Number(salesforces.business_type),
     }, apply_type)
 }
 
@@ -252,6 +258,29 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                     <VRow>
+                        
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="6" cols="12">
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="salesforces.business_type" 
+                                        :items="business_types" item-title="title" item-value="id" 
+                                        label="사업자 구분"/>
+                                </VCol>
+                                <VCol md="6" cols="12">
+                                    <div class="button-cantainer">
+                                        <VBtn variant="tonal" size="small" @click="setBusinessType(0)">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setBusinessType(1)"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end size="18" icon="tabler-clock-up" />
+                                        </VBtn>                 
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
