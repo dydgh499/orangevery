@@ -75,7 +75,7 @@ const downloadPDF = async () => {
     if(zoom.value === 100) {
         if (card.value) {
             try {
-                await createPDF(card.value, 450, 5.6, 3, 900, 800, 800, 'pdf_name')
+                await createPDF(card.value, 450, 5.6, 3, 900, 800, 800, statement.value.trans_seq_num)
             } 
             catch (error) {
                 console.error(error)
