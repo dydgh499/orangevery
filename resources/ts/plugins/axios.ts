@@ -145,7 +145,7 @@ export const salesAuthLevelValidate = (id: number) => {
 }
 
 export const isAbleUnlockMcht = () => {
-    return getUserLevel() >= 35 && (getUserLevel() > 11 && user_info.is_able_unlock_mcht)
+    return getUserLevel() >= 35 || (getUserLevel() > 11 && user_info.is_able_unlock_mcht)
 }
 
 export const isAbleModiy = (id: number) => {    

@@ -145,9 +145,9 @@ export const overlap = (all_sales: Salesforce[][], sales: Ref<SalesFilter[]>[]) 
         else {
             if(select_idx === 5) {
                 sales[5].value = [{ id: null, sales_name: '전체'}, ...all_sales[5].sort((a, b) => a.sales_name.localeCompare(b.sales_name))]
-                params[`sales${5}_id`] = null              
+                params[`sales${5}_id`] = null
             }
-            if(select_idx !== 5) {
+            else {
                 for (let i = select_idx; i < SALES_LEVEL_SIZE - 1; i++) {
                     const sales_key = `sales${i}`
                     if(params[`${sales_key}_id`]) {

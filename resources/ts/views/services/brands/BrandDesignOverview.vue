@@ -183,8 +183,8 @@ watchEffect(() => {
                                 <div>
                                     <div class="preview-box" :style="'height:4em; width:100%; display:inline-flex; align-items: center; border-radius:0px;'">
                                         <VIcon :icon="'material-symbols:refresh'" style="margin: 0 0.5em;"/>
-                                        <div class="preview-box" :style="'background: rgb(var(--v-theme-background));height:2.5em; display:flex; align-items: center; border-radius:1.5em 0 0px 1.5em;'">
-                                            <b style=" width: 44.5em;padding-left: 1em;">https://{{ props.item.dns }}</b>
+                                        <div class="preview-box" :style="'background: rgb(var(--v-theme-background));height:2.5em; display:flex; align-items: center; border-radius:1.5em 0 0px 1.5em;width:100%;'">
+                                            <b style="padding-left: 1em;">https://{{ props.item.dns }}</b>
                                         </div>
                                     </div>
                                 </div>
