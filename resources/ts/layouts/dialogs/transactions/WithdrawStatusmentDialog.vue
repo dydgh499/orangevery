@@ -23,6 +23,7 @@ const { createPDF } = htmlToPDF()
 
 const errorHandler = <any>(inject('$errorHandler'))
 const formatDate = <any>(inject('$formatDate'))
+const formatTime = <any>(inject('$formatTime'))
 const snackbar = <any>(inject('snackbar'))
 const visible = ref(false)
 const statement = ref<WithdrawStatement>({
@@ -66,7 +67,7 @@ const setCurrentDate = () => {
     const month = String(now.getMonth() + 1).padStart(2, '0')
     const day = String(now.getDate()).padStart(2, '0')
 
-    issue_date.value = formatDate(now)
+    issue_date.value = formatDate(now) + ' ' + formatTime(now)
     current_date.value = `${year}년 ${month}월 ${day}일`
 }
 
@@ -75,7 +76,9 @@ const downloadPDF = async () => {
     if(zoom.value === 100) {
         if (card.value) {
             try {
+                snackbar.value.show('PDF를 다운로드하고있습니다..', 'success')
                 await createPDF(card.value, 450, 5.6, 3, 900, 800, 800, statement.value.trans_seq_num)
+                snackbar.value.show('PDF가 다운로드 되었습니다.', 'success')
             } 
             catch (error) {
                 console.error(error)
