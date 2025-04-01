@@ -57,7 +57,6 @@ class BrandInfo
                     return $brand;    
                 }
             }
-            AbnormalConnection::tryParameterModulationApproach();
             return [];    
         }
         else

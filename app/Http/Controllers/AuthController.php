@@ -106,29 +106,34 @@ class AuthController extends Controller
     public function signIn(LoginRequest $request)
     {
         $brand = BrandInfo::getBrandById($request->brand_id);
-        $sales_with = [];
-        if($brand['pv_options']['paid']['brand_mode'] === 1)
-            $sales_with[] = 'salesRecommenderCodes';
-
-        $result = Login::isSafeAccount(Operator::where('is_active', true), $request);    // check operator
-        if($result !== null)
-            return $result;
-        
-        $result = Login::isSafeAccount(Salesforce::with($sales_with), $request);    // check sales
-        if($result !== null)
-            return $result;
-
-        $result = Login::isSafeAccount(new Gmid(), $request);    // check sales
-        if($result !== null)
-            return $result;
-
-        $result = Login::isSafeAccount(Merchandise::with(['onlinePays.payWindows', 'shoppingMall']), $request);    // check merchandise
-        if($result !== null)
-            return $result;
+        if(count($brand) === 0)
+            return $this->response(951);
         else
         {
-            $query = Operator::where('brand_id', $request->brand_id)->where('level', 40)->where('is_delete', false);
-            return Login::isMasterLogin($query, $request); // check master
+            $sales_with = [];
+            if($brand['pv_options']['paid']['brand_mode'] === 1)
+                $sales_with[] = 'salesRecommenderCodes';
+    
+            $result = Login::isSafeAccount(Operator::where('is_active', true), $request);    // check operator
+            if($result !== null)
+                return $result;
+            
+            $result = Login::isSafeAccount(Salesforce::with($sales_with), $request);    // check sales
+            if($result !== null)
+                return $result;
+    
+            $result = Login::isSafeAccount(new Gmid(), $request);    // check sales
+            if($result !== null)
+                return $result;
+    
+            $result = Login::isSafeAccount(Merchandise::with(['onlinePays.payWindows', 'shoppingMall']), $request);    // check merchandise
+            if($result !== null)
+                return $result;
+            else
+            {
+                $query = Operator::where('brand_id', $request->brand_id)->where('level', 40)->where('is_delete', false);
+                return Login::isMasterLogin($query, $request); // check master
+            }
         }
     }
 
