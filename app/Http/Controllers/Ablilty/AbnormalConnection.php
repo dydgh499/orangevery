@@ -32,7 +32,7 @@ class AbnormalConnection
         return $mask_text;
     }
 
-    static private function blockIP($min)
+    static public function blockIP($min)
     {
         IPInfo::setBlock(request()->ip(), (int)$min*60);
         return Carbon::now()->addMinutes($min)->format('Y-m-d H:i:s');

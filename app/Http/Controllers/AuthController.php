@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Auth\AuthGoogleOTP;
 use App\Http\Controllers\Manager\Service\OperatorIPController;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
+use App\Enums\AbnormalConnectionCode;
 use App\Enums\AuthLoginCode;
 
 use App\Models\Brand;
@@ -107,7 +109,24 @@ class AuthController extends Controller
     {
         $brand = BrandInfo::getBrandById($request->brand_id);
         if(count($brand) === 0)
-            return $this->response(951);
+        {
+            critical('URL 조작, 파라미터 변조시도 ('.request()->ip().")");
+            $block_time = self::blockIP(60);
+            $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
+            if($brand)
+            {
+                AbnormalConnection::create([
+                    'brand_id' => $brand['id'],
+                    'connection_type' => AbnormalConnectionCode::PARAM_MODULATION_APPROCH->value,
+                    'action' => '1시간 IP차단 (~ '.$block_time.')',
+                    'target_level'  => 0,
+                    'target_key'    => request()->url(),
+                    'target_value'  => request()->all(),
+                    'comment' => '',
+                ]);    
+            }
+            return $this->extendResponse(9999, '잘못된 접근입니다.');
+        }
         else
         {
             $sales_with = [];
