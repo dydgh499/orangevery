@@ -58,7 +58,8 @@
     "vuedraggable": "^4.1.0",
     "vuetify": "npm:@vuetify/nightly@latest",
     "webfontloader": "1.6.28",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "jspdf": "^3.0.0"
   },
   "devDependencies": {
     "@antfu/eslint-config-vue": "0.38.5",

@@ -29,10 +29,11 @@ const cancelPart = <any>(inject('cancelPart'))
 const mchtBlackListDlg = <any>(inject('mchtBlackListDlg'))
 const notiSendHistoriesDialog = <any>(inject('notiSendHistoriesDialog'))
 const realtimeHistoryDialog = <any>(inject('realtimeHistoryDialog'))
+const withdrawStatusmentDialog = <any>(inject('withdrawStatusmentDialog'))
 
 const { notiSend } = notiSendHistoryInterface()
 const { 
-    realtimeResult, realtimeRetryAble, realtimeRetry, 
+    realtimeResult, realtimeRetryAble, realtimeRetry, getSuccessResultId,
     isRealtimeTransaction, singleDepositCancelJobReservation 
 } = realtimeHistoryInterface(formatTime)
 
@@ -134,6 +135,14 @@ const isUseCancelDeposit = () => {
                         <VIcon size="24" class="me-3" icon="tabler:receipt" />
                     </template>
                     <VListItemTitle>매출전표</VListItemTitle>
+                </VListItem>
+                <VListItem value="saleslip" @click="withdrawStatusmentDialog.show(getSuccessResultId(props.item), 0)"
+                    v-if="corp.pv_options.paid.use_realtime_deposit && realtimeResult(item) === StatusColors.Success"
+                    >
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="tabler:receipt-2" />
+                    </template>
+                    <VListItemTitle>이체내역서</VListItemTitle>
                 </VListItem>
                 <VListItem value="complaint" @click="complaint()" v-if="getUserLevel() >= 35">
                     <template #prepend>

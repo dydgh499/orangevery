@@ -16,9 +16,6 @@ class SettleHistorySalesforce extends Model
 
     public function deposits()
     {
-        return $this->hasMany(SettleHistorySalesforceDeposit::class, 'settle_hist_sales_id')
-            ->where('is_delete', false)
-            ->orderby('id', 'desc')
-            ->select();
+        return $this->hasMany(SettleHistorySalesforceDeposit::class, 'settle_hist_sales_id');
     }
 }

@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Log\SettleHistoryMerchandise;
 use App\Models\Merchandise;
 use App\Models\Transaction;
+use App\Models\Log\SettleHistoryMerchandiseDeposit;
+use App\Models\Log\RealtimeSendHistory;
+use App\Models\CollectWithdraw;
 use App\Models\Merchandise\PaymentModule;
 
 use App\Http\Controllers\Controller;
@@ -18,7 +21,9 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Log\CreateSettleHistoryRequest;
 use App\Http\Requests\Manager\Log\BatchSettleHistoryRequest;
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Utils\Comm;
+use App\Http\Controllers\Manager\Service\BrandInfo;
 
 /**
  * @group Merchandise-Settle-History API
@@ -40,13 +45,7 @@ class MchtSettleHistoryController extends Controller
     {
         $search = $request->input('search', '');
         $query  = $this->settle_mcht_hist
-                ->join('merchandises', 'settle_histories_merchandises.mcht_id', 'merchandises.id')
-                /*
-                ->rightJoin('payment_modules', 'settle_histories_merchandises.mcht_id', '=', 'payment_modules.mcht_id')
-                ->where(function ($query) use($request) {
-                    return globalPGFilter($query, $request, 'payment_modules');
-                })
-                */
+                ->join('merchandises', 'settle_histories_merchandises.mcht_id', '=', 'merchandises.id')
                 ->where('settle_histories_merchandises.brand_id', $request->user()->brand_id)
                 ->where('settle_histories_merchandises.is_delete', false)
                 ->where('merchandises.mcht_name', 'like', "%$search%");
@@ -92,8 +91,11 @@ class MchtSettleHistoryController extends Controller
     */
     public function index(IndexRequest $request)
     {
+        $brand = BrandInfo::getBrandById($request->user()->brand_id);
         $cols = ['merchandises.user_name', 'merchandises.mcht_name', 'settle_histories_merchandises.*'];
         $query = $this->commonQuery($request);
+        if($brand['pv_options']['paid']['use_finance_van_deposit'])
+            $query = $query->with(['deposits']);
         $data = $this->getIndexData($request, $query, 'settle_histories_merchandises.id', $cols, 'settle_histories_merchandises.created_at', false);
         return $this->response(0, $data);
     }
@@ -318,5 +320,75 @@ class MchtSettleHistoryController extends Controller
             'deposit_status' => 2,
         ]);
         return $this->response(1);
+    }
+
+    /*
+    * 이체내역서
+    */
+    public function withdrawStatement(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required|integer',
+            'type' => 'required|integer',
+        ]);
+        $cols = [
+            "merchandises.mcht_name",
+            DB::raw("finance_vans.bank_code as withdraw_bank_code"),
+            DB::raw("finance_vans.corp_name as withdraw_corp_name"),
+            "finance_vans.withdraw_acct_num",
+        ];
+
+        if((int)$request->type === 0)
+        {
+            $table      = 'realtime_send_histories';
+            $parent     = 'realtime_send_histories';
+            $fin_col    = 'finance_id';
+            $orm        = new RealtimeSendHistory();
+            $cols[]     = "$parent.acct_num";
+            $cols[]     = "$parent.acct_bank_name";
+            $cols[]     = "$parent.trans_seq_num";
+            $cols[]     = "$parent.created_at";
+            $cols[]     = "$table.amount";
+        }
+        else if((int)$request->type === 1)
+        {
+            $table      = 'collect_withdraws';
+            $parent     = 'collect_withdraws';
+            $fin_col    = 'fin_id';
+            $orm        = new CollectWithdraw();
+            $cols[]     = "$parent.acct_num";
+            $cols[]     = "$parent.acct_bank_name";
+            $cols[]     = "$parent.trans_seq_num";
+            $cols[]     = "$parent.created_at";
+            $cols[]     = "$table.withdraw_amount";
+        }
+        else if((int)$request->type === 2)
+        {
+            $table      = 'settle_histories_merchandises';
+            $parent     = 'settle_histories_merchandises_deposits';
+            $fin_col    = 'fin_id';
+            $orm        = SettleHistoryMerchandise::join($parent, "$table.id", '=', "$parent.settle_hist_mcht_id");
+            $cols[]     = "$table.acct_num";
+            $cols[]     = "$table.acct_bank_name";
+            $cols[]     = "$parent.trans_seq_num";
+            $cols[]     = "$parent.created_at";
+            $cols[]     = "$table.deposit_amount";
+        }
+        else
+            return $this->extendResponse(2000, '잘못된 거래 구분입니다.');
+
+        $statement = $orm
+            ->join('merchandises', "$table.mcht_id", '=', 'merchandises.id')
+            ->join('finance_vans', "$parent.$fin_col", '=', 'finance_vans.id')
+            ->where("$table.brand_id", $request->user()->brand_id)
+            ->where("$table.id", $request->id)
+            ->first($cols);
+        if($statement)
+        {
+            $statement->withdraw_acct_num = AbnormalConnection::masking($statement->withdraw_acct_num);
+            return $this->response(0, $statement);
+        }
+        else
+            return $this->extendResponse(2000, '이체정보가 존재하지 않습니다.');
     }
 }

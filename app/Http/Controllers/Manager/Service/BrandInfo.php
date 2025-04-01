@@ -57,6 +57,7 @@ class BrandInfo
                     return $brand;    
                 }
             }
+            AbnormalConnection::tryParameterModulationApproach();
             return [];    
         }
         else
@@ -96,10 +97,7 @@ class BrandInfo
                 return json_decode(json_encode($brand), true);
             }
             else
-            {
-                AbnormalConnection::tryParameterModulationApproach();
                 return [];
-            }
         }
         else
         {

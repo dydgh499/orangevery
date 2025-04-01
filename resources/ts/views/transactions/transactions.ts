@@ -115,6 +115,11 @@ export const realtimeHistoryInterface = (formatTime: any) => {
             return 'text-default'
     }
     
+    const getSuccessResultId = (item: Transaction) => {
+        const realtime = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
+        return realtime ? realtime.id : 0
+    }
+
     const realtimeResult = (item: Transaction) => {
         if(item.is_cancel)
             return StatusColors.Default
@@ -218,6 +223,7 @@ export const realtimeHistoryInterface = (formatTime: any) => {
         realtimeDetailClass,
         realtimeRetryAble,
         realtimeRetry,
+        getSuccessResultId,
         isRealtimeTransaction,
         singleDepositCancelJobReservation,
     }

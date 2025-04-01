@@ -46,6 +46,7 @@ declare module '@vue/runtime-core' {
     ExceptionWorkTimeDialog: typeof import('./resources/ts/layouts/dialogs/services/ExceptionWorkTimeDialog.vue')['default']
     FeeBookDialog: typeof import('./resources/ts/layouts/dialogs/users/FeeBookDialog.vue')['default']
     FinanceVanDialog: typeof import('./resources/ts/layouts/dialogs/services/FinanceVanDialog.vue')['default']
+    GmidDialog: typeof import('./resources/ts/layouts/dialogs/users/GmidDialog.vue')['default']
     Google2FACreateDialog: typeof import('./resources/ts/layouts/dialogs/users/Google2FACreateDialog.vue')['default']
     Google2FAVertifyDialog: typeof import('./resources/ts/layouts/dialogs/users/Google2FAVertifyDialog.vue')['default']
     HeadOfficeWithdrawDialog: typeof import('./resources/ts/layouts/dialogs/services/HeadOfficeWithdrawDialog.vue')['default']
@@ -95,5 +96,7 @@ declare module '@vue/runtime-core' {
     TheCustomizer: typeof import('./resources/ts/@core/components/TheCustomizer.vue')['default']
     ThemeSwitcher: typeof import('./resources/ts/@core/components/ThemeSwitcher.vue')['default']
     UnderAutoSettingDialog: typeof import('./resources/ts/layouts/dialogs/users/UnderAutoSettingDialog.vue')['default']
+    WithdrawDetailDialog: typeof import('./resources/ts/layouts/dialogs/transactions/WithdrawDetailDialog.vue')['default']
+    WithdrawStatusmentDialog: typeof import('./resources/ts/layouts/dialogs/transactions/WithdrawStatusmentDialog.vue')['default']
   }
 }

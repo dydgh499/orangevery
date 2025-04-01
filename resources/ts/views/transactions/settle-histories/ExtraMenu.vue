@@ -15,6 +15,7 @@ const props = defineProps<Props>()
 const store = <any>(inject('store'))
 const financeDialog = <any>(inject('financeDialog'))
 const addDeductDialog = <any>(inject('addDeductDialog'))
+const withdrawStatusmentDialog = <any>(inject('withdrawStatusmentDialog'))
 
 const { deposit, download, addDeduct, linkAccount } = settlementHistoryFunctionCollect(store)
 
@@ -32,6 +33,11 @@ const getDepositParams = async () => {
             params.use_finance_van_deposit = 0
     }
     deposit(props.item, props.is_mcht, params)
+}
+
+const getSuccessResultId = () => {
+    const realtime = props.item.deposits?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
+    return realtime ? realtime.id : 0
 }
 
 </script>
@@ -57,6 +63,13 @@ const getDepositParams = async () => {
                         <VIcon size="24" class="me-3" icon="ri-bank-card-fill" />
                     </template>
                     <VListItemTitle>계좌정보 동기화</VListItemTitle>
+                </VListItem>
+                <VListItem value="saleslip" @click="withdrawStatusmentDialog.show(getSuccessResultId(), 2)"
+                    v-if="getSuccessResultId() !== 0">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="tabler:receipt-2" />
+                    </template>
+                    <VListItemTitle>이체내역서</VListItemTitle>
                 </VListItem>
                 <VListItem value="download" @click="download(props.item, props.is_mcht)" style="width: fit-content;">
                     <template #prepend>

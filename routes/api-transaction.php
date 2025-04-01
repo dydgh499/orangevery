@@ -105,6 +105,7 @@ Route::middleware(['auth.update'])->group(function() {
             });
         });
         Route::prefix('settle-histories')->group(function() {
+            Route::get('merchandises/withdraw-statement', [MchtSettleHistoryController::class, 'withdrawStatement']);
             Route::get('merchandises/chart', [MchtSettleHistoryController::class, 'chart']);
             Route::get('salesforces/chart', [SalesSettleHistoryController::class, 'chart']);
             Route::apiResource('merchandises', MchtSettleHistoryController::class);

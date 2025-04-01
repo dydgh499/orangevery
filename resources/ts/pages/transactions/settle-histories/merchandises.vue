@@ -2,6 +2,7 @@
 import SettleHistoryBatchDialog from '@/layouts/dialogs/SettleHistoryBatchDialog.vue'
 import FinanceVanDialog from '@/layouts/dialogs/services/FinanceVanDialog.vue'
 import AddDeductDialog from '@/layouts/dialogs/transactions/AddDeductDialog.vue'
+import WithdrawStatusmentDialog from '@/layouts/dialogs/transactions/WithdrawStatusmentDialog.vue'
 
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
@@ -19,6 +20,7 @@ const totals = ref(<any[]>([]))
 const financeDialog = ref()
 const addDeductDialog = ref()
 const settleHistoryBatchDialog = ref()
+const withdrawStatusmentDialog = ref()
 
 store.params.use_finance_van_deposit = Number(corp.pv_options.paid.use_finance_van_deposit)
 
@@ -27,6 +29,7 @@ provide('head', head)
 provide('exporter', exporter)
 provide('financeDialog', financeDialog)
 provide('addDeductDialog', addDeductDialog)
+provide('withdrawStatusmentDialog', withdrawStatusmentDialog)
 
 const isNumberFormatCol = (_key: string) => {
     return _key.includes('amount') || _key.includes('_fee') || _key.includes('_deposit') || _key.includes('_count')
@@ -128,5 +131,6 @@ onMounted(() => {
         <FinanceVanDialog ref="financeDialog" />
         <AddDeductDialog ref="addDeductDialog" />
         <SettleHistoryBatchDialog ref="settleHistoryBatchDialog" :selected_idxs="selected" :store="store" :is_mcht="true"/>
+        <WithdrawStatusmentDialog ref="withdrawStatusmentDialog" />
     </div>
 </template>
