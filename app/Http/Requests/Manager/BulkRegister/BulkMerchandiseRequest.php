@@ -10,6 +10,7 @@ class BulkMerchandiseRequest extends FormRequest
     use FormRequestTrait;
     public $keys = [
         'mcht_name',
+        'mcht_sub_name',
         'user_name',
         'user_pw',
         'nick_name',

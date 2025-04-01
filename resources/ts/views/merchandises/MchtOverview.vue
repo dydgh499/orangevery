@@ -171,46 +171,21 @@ onMounted(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" v-if="corp.use_different_settlement">
-                            <VRow>
-                                <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol cols="4">이메일</VCol>
-                                        <VCol md="8"> 
-                                            <VTextField v-model="props.item.email" prepend-inner-icon="material-symbols:mail"
-                                                placeholder="이메일을 입력해주세요" persistent-placeholder>
-                                                <VTooltip activator="parent" location="top" maxlength="50">
-                                                    하위몰이 대표 이메일주소
-                                                </VTooltip>
-                                            </VTextField>
-                                        </VCol>
-                                    </VRow>
-                                    <VRow v-else>
-                                        <VCol class="font-weight-bold">이메일</VCol>
-                                        <VCol md="8"><span>{{ props.item.email }}</span></VCol>
-                                    </VRow>
-                                </VCol>
-                                <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol cols="4">웹사이트 URL</VCol>
-                                        <VCol md="8">
-                                            <VTextField v-model="props.item.website_url" prepend-inner-icon="streamline:browser-website-1-solid"
-                                                placeholder="웹사이트 URL 입력해주세요" persistent-placeholder maxlength="250">
-                                                <VTooltip activator="parent" location="top">
-                                                    하위몰이 없는경우 2차PG사 URL을 입력해주세요.
-                                                </VTooltip>
-                                            </VTextField>
-                                        </VCol>
-                                    </VRow>
-                                    <VRow v-else>
-                                        <VCol class="font-weight-bold">웹사이트 URL</VCol>
-                                        <VCol md="8"><span>{{ props.item.website_url }}</span></VCol>
-                                    </VRow>
-                                </VCol>
-                            </VRow>
-                        </VCol>
                         <VCol cols="12">
                             <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol cols="4">가맹점명</VCol>
+                                        <VCol md="8">
+                                            <VTextField v-model="props.item.mcht_sub_name" prepend-inner-icon="tabler-building-store"
+                                            placeholder="가맹점명을 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.mcht_sub_name, '가맹점명')]" />
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">가맹점 명</VCol>
+                                        <VCol md="8"><span>{{ props.item.mcht_sub_name }}</span></VCol>
+                                    </VRow>
+                                </VCol>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol cols="4">사업장 연락처</VCol>
@@ -233,7 +208,27 @@ onMounted(() => {
                                         <VCol md="8"><span>{{ contact_num_format }}</span></VCol>
                                     </VRow>
                                 </VCol>
-
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol cols="4">이메일</VCol>
+                                        <VCol md="8"> 
+                                            <VTextField v-model="props.item.email" prepend-inner-icon="material-symbols:mail"
+                                                placeholder="이메일을 입력해주세요" persistent-placeholder>
+                                                <VTooltip activator="parent" location="top" maxlength="50">
+                                                    하위몰이 대표 이메일주소
+                                                </VTooltip>
+                                            </VTextField>
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">이메일</VCol>
+                                        <VCol md="8"><span>{{ props.item.email }}</span></VCol>
+                                    </VRow>
+                                </VCol>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol cols="4">GMID</VCol>
@@ -250,6 +245,24 @@ onMounted(() => {
                                     <VRow v-else>
                                         <VCol class="font-weight-bold">GMID</VCol>
                                         <VCol md="8"><span>{{ props.item.g_mid }}</span></VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12">
+                            <VRow>
+                                <VCol cols="12" md="12">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol md="2" cols="4">웹사이트 URL</VCol>
+                                        <VCol md="10">
+                                            <VTextField v-model="props.item.website_url" prepend-inner-icon="streamline:browser-website-1-solid"
+                                                placeholder="웹사이트 URL 입력해주세요" persistent-placeholder maxlength="250">
+                                            </VTextField>
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol md="2" cols="4" class="font-weight-bold">웹사이트 URL</VCol>
+                                        <VCol md="10"><span>{{ props.item.website_url }}</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>
@@ -365,11 +378,6 @@ onMounted(() => {
                                     </span>
                                 </VCol>
                             </VRow>
-                        </VCol>
-                        <VCol v-if="isAbleModiy(props.item.id)">
-                            <VTextarea v-model="props.item.note" counter label="메모사항"
-                                variant="filled"
-                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
                         </VCol>
                     </VRow>
                 </VCardItem>

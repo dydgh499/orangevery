@@ -86,6 +86,7 @@ export interface UserPropertie extends BasePropertie, Bank, Contract {
     business_num: string,
     business_type: number,
     corp_registration_num: string,
+    note: string,
 
     resident_num_front: string,
     resident_num_back: string,
@@ -129,7 +130,6 @@ export interface MerchandisePropertie {
     withdraw_fee: number,
     settle_hold_s_dt: string,
     settle_hold_reason: string,
-    note: string,
 
     website_url: string,
     email: string,
@@ -142,7 +142,6 @@ export interface SalesforcePropertie {
     settle_day: number | null,
     level: number,
     view_type: number,
-    note: string,
 }
 
 export interface GMID extends BasePropertie {
@@ -165,6 +164,7 @@ export interface Product {
 }
 
 export interface Merchandise extends MerchandisePropertie, UserPropertie {    
+    mcht_sub_name: string,
     contact_num: string,
     regular_credit_cards?: RegularCreditCard[],
     use_multiple_hand_pay: number,

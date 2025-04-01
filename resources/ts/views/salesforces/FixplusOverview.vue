@@ -252,9 +252,6 @@ watchEffect(() => {
                                         <VTextField v-model="props.item.business_num" type="text"
                                             prepend-inner-icon="ic-outline-business-center" placeholder="1231212345"
                                             persistent-placeholder maxlength="13">
-                                            <VTooltip activator="parent" location="top" v-if="corp.use_different_settlement">
-                                                {{ "사업자번호를 입력하지 않거나, 정확하게 입력하지 않으면 차액정산대상에서 제외됩니다." }}
-                                            </VTooltip>
                                         </VTextField>
                                     </div>
                                 </VCol>

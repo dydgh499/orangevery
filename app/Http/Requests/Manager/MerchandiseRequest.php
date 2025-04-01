@@ -13,6 +13,7 @@ class MerchandiseRequest extends FormRequest
         'user_name',
         'nick_name',
         'mcht_name',
+        'mcht_sub_name',
         'addr',
         'sector',
         'resident_num',

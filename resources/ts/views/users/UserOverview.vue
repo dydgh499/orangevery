@@ -3,7 +3,7 @@ import ProfileDialog from '@/layouts/dialogs/users/ProfileDialog.vue';
 import FileInput from '@/layouts/utils/FileInput.vue';
 import type { UserPropertie } from '@/views/types';
 import { avatars, banks, business_types, getOnlyNumber, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore';
-import { axios, getUserLevel, isAbleModifyPrimary, isAbleModiy, user_info } from '@axios';
+import { axios, getUserLevel, isAbleModifyPrimary, isAbleModiy, isAbleModiyV2, user_info } from '@axios';
 import corp from '@corp';
 import { requiredValidatorV2 } from '@validators';
 
@@ -429,9 +429,9 @@ watchEffect(() => {
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol cols="12" md="6" v-if="isViewAbleContractFile()">
+        <VCol cols="12" md="6" v-if="isViewAbleContractFile() || isAbleModiy(props.item.id)">
             <VCard>
-                <VCardItem>
+                <VCardItem v-if="isViewAbleContractFile()">
                     <VCardTitle>계약파일</VCardTitle>
                     <VRow class="pt-5">
                         <VCol cols="6" md=6>
@@ -464,6 +464,16 @@ watchEffect(() => {
                                     @update:file="props.item.bsin_lic_file = $event"
                                     @update:path="props.item.bsin_lic_img = $event" />
                             </VRow>
+                        </VCol>
+                    </VRow>
+                </VCardItem>
+                <VCardItem v-if="isAbleModiyV2(props.item.id, props.is_mcht ? 'merchandises' : 'salesforces')">
+                    <VCardTitle>메모사항</VCardTitle>
+                    <VRow class="pt-5">
+                        <VCol>
+                            <VTextarea v-model="props.item.note" counter label="메모사항"
+                                variant="filled"
+                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
                         </VCol>
                     </VRow>
                 </VCardItem>

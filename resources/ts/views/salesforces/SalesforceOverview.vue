@@ -311,12 +311,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                     </VRow>
                                 </VCol>
                             </VRow>
-                        </VCol>
-                        <VCol v-if="isAbleModiyV2(props.item, 'salesforces')">
-                            <VTextarea v-model="props.item.note" counter label="메모사항"
-                                variant="filled"
-                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
-                        </VCol>                        
+                        </VCol>             
                     </VRow>
                 </VCardItem>
             </VCard>

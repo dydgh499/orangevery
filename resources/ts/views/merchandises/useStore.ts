@@ -75,6 +75,7 @@ const getMchtHeaders = (head :any) => {
         const headers_3:Record<string, string> = {}
         headers_3['user_name'] = '가맹점 ID'
         headers_3['mcht_name'] = '상호'
+        headers_3['mcht_sub_name'] = '가맹점 명'
         headers_3['trx_fee'] = '가맹점 수수료'
         headers_3['hold_fee'] = '유보금 수수료'
         headers_3['sector'] = '업종'
@@ -358,6 +359,7 @@ export const defaultItemInfo = () => {
         hold_fee: 0,
         trx_fee: 0,
         mcht_name: '',
+        mcht_sub_name: '',
         user_name: '',
         user_pw: '',
         nick_name: '',

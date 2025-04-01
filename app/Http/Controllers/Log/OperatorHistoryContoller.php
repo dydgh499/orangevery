@@ -180,11 +180,6 @@ class OperatorHistoryContoller extends Controller
             if($pv_options->paid->use_noti === false)
                 unset($conv_history_detail['use_noti']);
             
-            if($data->use_different_settlement === false)
-            {
-                unset($conv_history_detail['website_url']);
-                unset($conv_history_detail['email']);
-            }
             if($pv_options->paid->use_pmid === false)
                 unset($conv_history_detail['p_mid']);
             if($pv_options->paid->use_specified_limit === false)
