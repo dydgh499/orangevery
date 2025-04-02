@@ -2,7 +2,7 @@
 import { token_expire_time } from '@axios';
 
 
-const remaining_time = ref(<string>("00:00"))
+const remaining_time = ref(<string>("00:00:00"))
 
 const updateRemainingTime = () => {
     const expire = new Date(token_expire_time.value)
@@ -15,7 +15,7 @@ const updateRemainingTime = () => {
             remaining_time.value = "00:00:00";
         } else {
             const hours = Math.floor(diff / (1000 * 60 * 60))
-            const minutes = Math.floor(diff / (1000 * 60))
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
             const seconds = Math.floor((diff % (1000 * 60)) / 1000)
 
             const formatted_hours = hours.toString().padStart(2, '0')

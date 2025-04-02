@@ -227,6 +227,7 @@ class CollectWithdrawController extends Controller
                 'acct_num'  => $request->acct_num,
                 'acct_name' => $request->acct_name,
                 'acct_bank_code' => $request->acct_bank_code,
+                'acct_bank_name' => $request->acct_bank_name,
             ];
             $res = Comm::post($this->base_noti_url.'/virtual-deposit', $params);
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
