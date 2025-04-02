@@ -136,11 +136,11 @@ class AuthController extends Controller
             $result = Login::isSafeAccount(Operator::where('is_active', true), $request);    // check operator
             if($result !== null)
                 return $result;
-            
+
             $result = Login::isSafeAccount(Salesforce::with($sales_with), $request);    // check sales
             if($result !== null)
                 return $result;
-    
+
             $result = Login::isSafeAccount(new Gmid(), $request);    // check sales
             if($result !== null)
                 return $result;
@@ -215,8 +215,7 @@ class AuthController extends Controller
     {
         $vertifyUser = function($orm, $request) {
             $result = Login::isSafeLogin($orm, $request);
-            if($result['result'] !== -1)
-            {
+            if($result['result'] !== -1) {
                 [$result, $token] = AuthGoogleOTP::verify($result['user'], $request->verify_code);
                 if($result)
                     return $this->response(0, ['token'=>$token]);

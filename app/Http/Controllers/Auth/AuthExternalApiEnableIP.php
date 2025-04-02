@@ -11,7 +11,7 @@ class AuthExternalApiEnableIP
     {
         $ip             = $request->ip();
         $external_api   = str_replace("Bearer ", "", $request->header('External-Api'));
-        $json = self::get($request->user()->id);
+        $json = self::get($request->user());
         if(in_array($ip, $json['ips']) && $json['external_api'] === $external_api)
             return true;
         else
@@ -27,7 +27,7 @@ class AuthExternalApiEnableIP
         ]), 'EX', 300);
     }
 
-    static public function get($id)
+    static public function get($mcht)
     {
         $key_name = "external-enabled-ip-".$id;
         $ips = Redis::get($key_name);
@@ -35,11 +35,9 @@ class AuthExternalApiEnableIP
             return json_decode($ips, true);
         else
         {
-            $ips = ExternalApiEnableIp::where('mcht_id', $id)
-                    ->get()
+            $ips = ExternalApiEnableIp::where('mcht_id', $mcht->id)
                     ->pluck('enable_ip')
                     ->all();
-            $mcht = Merchandise::where('id', $id)->first();
             if($mcht && count($ips))
             {
                 self::set($mcht, $ips);

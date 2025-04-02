@@ -39,6 +39,7 @@ const statement = ref<WithdrawStatement>({
 })
 const issue_date = ref<string>('')
 const current_date = ref<string>('')
+const logo_img = ref()
 const card = ref()
 
 // type 0=realtime, 1=collect, 2=deposit
@@ -51,6 +52,7 @@ const show = async (id: number, type: number) => {
                 type : type,
             }
         })
+        getLogo()
         setCurrentDate()
         statement.value = res.data
         visible.value = true
@@ -87,6 +89,25 @@ const downloadPDF = async () => {
     }
     else
         snackbar.value.show('화면 배율을 100%로 설정한 후 출력해주세요.','error')
+}
+
+const getLogo = async () => {
+    try {
+        const image_url = corp.logo_img
+        if (image_url) {
+            const response = await fetch(image_url)
+            const blob = await response.blob()
+            const reader = new FileReader()
+
+            reader.onloadend = () => {
+                logo_img.value = reader.result as string
+            }
+            reader.readAsDataURL(blob)
+        }
+    }
+    catch (error) {
+        console.error(error)
+    }
 }
 
 defineExpose({
@@ -186,7 +207,7 @@ defineExpose({
                         발급일(Date of Issue): {{ current_date }}
                     </div>
                     <div style="text-align: center;">
-                        <img :src="corp.logo_img" width="80">
+                        <img :src="logo_img" width="80">
                     </div>
                 </VCardText>
             </section>
