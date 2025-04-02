@@ -175,14 +175,14 @@ onMounted(() => {
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol cols="4">가맹점명</VCol>
+                                        <VCol cols="4">사업자명</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.mcht_sub_name" prepend-inner-icon="tabler-building-store"
-                                            placeholder="가맹점명을 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.mcht_sub_name, '가맹점명')]" />
+                                            placeholder="사업자명을 입력해주세요" persistent-placeholder />
                                         </VCol>
                                     </VRow>
                                     <VRow v-else>
-                                        <VCol class="font-weight-bold">가맹점 명</VCol>
+                                        <VCol class="font-weight-bold">사업자명</VCol>
                                         <VCol md="8"><span>{{ props.item.mcht_sub_name }}</span></VCol>
                                     </VRow>
                                 </VCol>

@@ -5,7 +5,6 @@ import { isAbleModiy } from '@axios';
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant';
 import authV2MaskDark from '@images/pages/misc-mask-dark.png';
 import authV2MaskLight from '@images/pages/misc-mask-light.png';
-import { requiredValidatorV2 } from '@validators';
 
 interface Props {
     item: IdentityDesign,
@@ -82,7 +81,7 @@ watchEffect(() => {
                                         v-model="props.item.name" 
                                         variant="underlined"
                                         prepend-inner-icon="twemoji-desktop-computer"
-                                        placeholder="운영사명을 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.name, '운영사명')]" />
+                                        placeholder="운영사명을 입력해주세요" persistent-placeholder />
 
                                 </VRow>
                             </VCol>
@@ -99,7 +98,7 @@ watchEffect(() => {
                                             v-model="props.item.dns" 
                                             variant="underlined"
                                             prepend-inner-icon="carbon:dns-services"
-                                            placeholder="DNS를 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.name, 'DNS')]" />
+                                            placeholder="DNS를 입력해주세요" persistent-placeholder />
                                 </VRow>
                             </VCol>
                             <br>

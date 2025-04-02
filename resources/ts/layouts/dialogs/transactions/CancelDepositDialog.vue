@@ -75,7 +75,7 @@ onMounted(() => {
                 <VTable class="text-no-wrap" style="width: 100%; margin: 1em 0;">
                     <thead>
                         <tr>
-                            <th class='list-square' style="width: 25%;">가맹점명</th>
+                            <th class='list-square' style="width: 25%;">가맹점 상호</th>
                             <th class='list-square' style="width: 25%;">입금일자</th>
                             <th class='list-square' style="width: 25%;">입금금액</th>
                             <th class='list-square' style="width: 25%;">입금내역</th>

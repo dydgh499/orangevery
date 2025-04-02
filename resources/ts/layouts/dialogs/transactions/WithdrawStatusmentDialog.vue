@@ -142,7 +142,7 @@ defineExpose({
                                 <td class="text-center" style="width: 25%;">{{ statement.acct_num || '-' }}</td>
                             </tr>
                             <tr>
-                                <th class="text-center" style="width: 25%;">가맹점명</th>
+                                <th class="text-center" style="width: 25%;">사업자명</th>
                                 <td class="text-center" style="width: 25%;">{{ statement.mcht_name }}</td>
                                 <th class="text-center" style="width: 25%;">수취금액</th>
                                 <td class="text-center" style="width: 25%;">{{ statement.amount.toLocaleString() }}원</td>

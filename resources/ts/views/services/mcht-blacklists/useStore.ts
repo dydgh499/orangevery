@@ -9,7 +9,7 @@ export const useSearchStore = defineStore('mchtBlacklistSearchStore', () => {
     const head = Header('services/mcht-blacklists', '가맹점 블랙리스트 관리')
     const headers: Record<string, string | object> = {
         'id': 'NO.',
-        'mcht_name': '가맹점명',
+        'mcht_name': '사업자명',
         'nick_name': '대표자명',
         'phone_num': '전화번호',
         'business_num': '사업자번호',

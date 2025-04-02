@@ -41,7 +41,7 @@ class CreateMerchandisesTable extends Migration
             $table->string('nick_name', 30)->nullable()->comment('대표자명');
             
             $table->string('profile_img')->nullable()->comment('프로필 이미지');
-            $table->string('mcht_name', 100)->comment('가맹점명');
+            $table->string('mcht_name', 100)->comment('사업자명');
             $table->string('addr', 200)->nullable()->comment('가맹점 주소');
             //
             $table->float('hold_fee', 6, 5)->default(0)->comment('보유금액 수수료');

@@ -20,7 +20,7 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 provide('notiDetail', notiDetail)
-const search_placeholder = getUserLevel() >= 35 ? "MID, TID, 승인번호, 가맹점명 검색" : "승인번호 검색"
+const search_placeholder = getUserLevel() >= 35 ? "MID, TID, 승인번호, 가맹점 상호 검색" : "승인번호 검색"
 
 const httpCodeColor = (http_code: number) => {
     if (http_code < 300)
