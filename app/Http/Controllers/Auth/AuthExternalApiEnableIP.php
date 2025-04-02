@@ -12,7 +12,7 @@ class AuthExternalApiEnableIP
         $ip             = $request->ip();
         $external_api   = str_replace("Bearer ", "", $request->header('External-Api'));
         $json = self::get($request->user());
-        if(in_array($ip, $json['ips']) && $json['external_api'] === $external_api)
+        if(in_array($ip, $json['ips']) && $json['api_key'] === $external_api)
             return true;
         else
             return false;
@@ -22,14 +22,14 @@ class AuthExternalApiEnableIP
     {
         $key_name = "external-enabled-ip-".$mcht->id;
         Redis::set($key_name, json_encode([
-            'ips'           => $ips,
-            'external_api'  => $mcht->api_key,
+            'ips'       => $ips,
+            'api_key'  => $mcht->api_key,
         ]), 'EX', 300);
     }
 
     static public function get($mcht)
     {
-        $key_name = "external-enabled-ip-".$id;
+        $key_name = "external-enabled-ip-".$mcht->id;
         $ips = Redis::get($key_name);
         if($ips)
             return json_decode($ips, true);
@@ -42,15 +42,15 @@ class AuthExternalApiEnableIP
             {
                 self::set($mcht, $ips);
                 return [
-                    'ips'           => $ips,
-                    'external_api'  => $mcht->api_key,
+                    'ips'       => $ips,
+                    'api_key'   => $mcht->api_key,
                 ];    
             }
             else
             {
                 return [
-                    'ips'           => [],
-                    'external_api'  => '',
+                    'ips'       => [],
+                    'api_key'   => '',
                 ];  
             }
         }

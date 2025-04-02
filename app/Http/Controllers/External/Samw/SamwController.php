@@ -49,7 +49,7 @@ class SamwController extends Controller
             $external_api   = str_replace("Bearer ", "", $request->header('External-Api'));
             $json           = AuthExternalApiEnableIP::get($result['user']);
 
-            if(in_array($ip, $json['ips']) && $json['external_api'] === $external_api)
+            if(in_array($ip, $json['ips']) && $json['api_key'] === $external_api)
             {
                 $data = $result['user']->loginAPI(10);
                 $data['user'] = [
