@@ -90,12 +90,16 @@ class TransactionRequest extends FormRequest
 
     public function bodyParameters()
     {
-        $params = $this->getDocsParameters($this->keys);
-        return $params;
+        return $this->getDocsParameters($this->keys);
     }
+    
     public function data()
     {
-        $data = array_merge($this->getParmasBaseKey(), $this->getParmasBaseKeyV2($this->integer_keys, 0));
+        $data = array_merge(
+            $this->getParmasBaseKey(), 
+            $this->getParmasBaseKeyV2($this->integer_keys, 0), 
+            $this->getParmasBaseKeyV2($this->nullable_keys, null)
+        );
         $data['ps_fee']  = $this->input('ps_fee', 0)/100;
         $data['hold_fee']  = $this->input('hold_fee', 0)/100;
         $data['mcht_fee']    = $this->input('mcht_fee', 0)/100;
