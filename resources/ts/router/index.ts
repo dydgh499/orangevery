@@ -1,3 +1,4 @@
+import corp from '@/plugins/corp';
 import { axios, getUserLevel, getViewType, pay_token } from '@axios';
 import { canNavigate } from '@layouts/plugins/casl';
 import { setupLayouts } from 'virtual:generated-layouts';
@@ -21,6 +22,10 @@ const router = createRouter({
                 else
                     return { name: 'login', query: to.query }
             },
+        },
+        {
+            path: '/services/brands',
+            redirect: to => { return `/services/brands/edit/${corp.id}` }
         },
         {
             path: '/merchandises/terminals/edit/:id',

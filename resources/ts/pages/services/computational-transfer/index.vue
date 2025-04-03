@@ -51,7 +51,6 @@ const register = async() => {
         try {
             const params = {
                 token: login_info.token,
-                brand_id: corp.id,
             }
             const r = await axios.post('/api/v1/manager/computational-transfer/register', params);
             snackbar.value.show(r.data.message, 'success')

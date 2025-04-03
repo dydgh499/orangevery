@@ -46,7 +46,6 @@ const getAbilities = (): UserAbility[] => {
 }
 const signUp = () => {
     const params = {
-        brand_id: corp.id,
         ceo_name: ceo_name.value,
         phone_num: phone_num.value,
         business_num: business_num.value,

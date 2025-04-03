@@ -81,7 +81,7 @@ onMounted(() => {
                     size="small">
                     정산하기
                 </VBtn>
-                <VBtn prepend-icon="tabler-calculator" @click="representativeSettle()" v-if="getUserLevel() >= 35 && corp.id === 4" color="warning"
+                <VBtn prepend-icon="tabler-calculator" @click="representativeSettle()" v-if="getUserLevel() >= 35" color="warning"
                     size="small">
                     대표가맹점 정산하기
                     <VTooltip activator="parent" location="top" maxlength="50">

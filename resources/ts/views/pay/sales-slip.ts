@@ -208,7 +208,6 @@ export const salesSlip = () => {
         try {
             res = await axios.get(`/api/v1/pay/sales-slip/${ord_num}`, {
                  params : { 
-                    brand_id: corp.id,
                     is_cancel: is_cancel,
                 }
             })

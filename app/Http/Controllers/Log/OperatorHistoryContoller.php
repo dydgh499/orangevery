@@ -9,6 +9,9 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
+use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
+
 use Illuminate\Support\Facades\DB;
 use App\Models\Options\PvOptions;
 use App\Http\Controllers\Controller;
@@ -133,16 +136,25 @@ class OperatorHistoryContoller extends Controller
      */
     public function store(Request $request)
     {
-        $data = [
-            'brand_id' => $request->brand_id ? $request->brand_id : $request->user()->brand_id,
-            'oper_id' => $request->oper_id ? $request->oper_id : $request->user()->id,
-            'history_type' => $request->history_type,
-            'history_title' => $request->history_title,
-            'history_target' => $request->history_target,
-            'before_history_detail' => $request->before_history_detail,
-            'after_history_detail' => $request->after_history_detail,
-        ];
-        return $this->operator_histories->create($data);
+        $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
+        if(count($brand) === 0)
+        {
+            AbnormalConnection::tryParameterModulationApproach();
+            return $this->extendResponse(9999, '잘못된 접근입니다.');    
+        }
+        else
+        {
+            $data = [
+                'brand_id' => $request->user() ? $request->user()->brand_id : $brand['id'],
+                'oper_id' => $request->user() ? $request->user()->id : $brand['id'],
+                'history_type' => $request->history_type,
+                'history_title' => $request->history_title,
+                'history_target' => $request->history_target,
+                'before_history_detail' => $request->before_history_detail,
+                'after_history_detail' => $request->after_history_detail,
+            ];
+            return $this->operator_histories->create($data);    
+        }
     }
 
     private function paidOptionFilter($data, $history_detail)

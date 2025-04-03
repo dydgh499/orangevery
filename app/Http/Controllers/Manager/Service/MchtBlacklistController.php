@@ -7,6 +7,8 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
+use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Requests\Manager\BulkRegister\BulkMchtBlacklistRequest;
 use App\Http\Requests\Manager\Service\MchtBlacklistRequest;
 use App\Http\Requests\Manager\IndexRequest;
@@ -102,8 +104,17 @@ class MchtBlacklistController extends Controller
 
     public function all(Request $request)
     {
-        $data = $this->mcht_blacklists->where('brand_id', $request->brand_id)->get();
-        return $this->response(0, $data);
+        $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
+        if(count($brand) === 0)
+        {
+            AbnormalConnection::tryParameterModulationApproach();
+            return $this->extendResponse(9999, '잘못된 접근입니다.');    
+        }
+        else
+        {
+            $data = $this->mcht_blacklists->where('brand_id', $brand['id'])->get();
+            return $this->response(0, $data);    
+        }
     }
 
     /**

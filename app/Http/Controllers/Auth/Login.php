@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\LoginValidate;
 
 use Illuminate\Support\Facades\Hash;
 use App\Enums\HistoryType;
+use App\Http\Controllers\Manager\Service\BrandInfo;
 
 class Login extends LoginValidate
 {
@@ -72,6 +73,7 @@ class Login extends LoginValidate
     
     static public function isSafeLogin($orm, $request)
     {
+        $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
         $result = [
             'result' => AuthLoginCode::NOT_FOUND->value, 
             'user' => null,
@@ -80,7 +82,7 @@ class Login extends LoginValidate
         ];
         $result['user'] = (clone $orm)
             ->where('is_delete', false)
-            ->where('brand_id', $request->brand_id)
+            ->where('brand_id', $brand['id'])
             ->where('user_name', $request->user_name)
             ->first();
 

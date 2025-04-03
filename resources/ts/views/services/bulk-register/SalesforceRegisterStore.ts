@@ -15,7 +15,7 @@ export const validateItems = (item: Salesforce, i: number, user_names: any) => {
     const settle_tax_type = tax_types.find(sales => sales.id === parseInt(item.settle_tax_type))
     const acct_bank_name = banks.find(sales => sales.title === item.acct_bank_name)
     item.resident_num = item.resident_num ? item.resident_num.toString()?.trim() : ''
-    item.phone_num = item.phone_num.replace(/\D/g, '')
+    item.phone_num = item.phone_num?.replace(/\D/g, '')
 
     if(user_names.has(item.user_name)) 
         return [false, (i + 2) + '번째줄의 아이디가 중복됩니다.('+item.user_name+")"]

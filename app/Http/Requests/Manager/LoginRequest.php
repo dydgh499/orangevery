@@ -8,7 +8,7 @@ use App\Http\Traits\FormRequestTrait;
 class LoginRequest extends FormRequest
 {
     use FormRequestTrait;
-    public $keys = ['brand_id', 'user_name','user_pw'];
+    public $keys = ['user_name','user_pw'];
 
     public function authorize()
     {
@@ -18,7 +18,6 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         $sub = [
-            'brand_id'  => 'required|integer',
             'user_name' => 'required|string',
             'user_pw'   => 'required|string',
         ];
@@ -33,8 +32,6 @@ class LoginRequest extends FormRequest
     public function bodyParameters()
     {
         $params = $this->getDocsParameters($this->keys);
-        $params['brand_id']['description'] = '법인코드';
-        $params['brand_id']['example']     = 12;
         $params['user_name']['example']    = 'test0001';
         $params['user_pw']['example']      = 'test0001';
         return $params;

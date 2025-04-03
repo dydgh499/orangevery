@@ -21,7 +21,6 @@ const { deposit, download, addDeduct, linkAccount } = settlementHistoryFunctionC
 
 const getDepositParams = async () => {
     const params:any = {
-        brand_id: corp.id,
         use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
     }
     if(params['use_finance_van_deposit']) {

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
-import corp from '@/plugins/corp';
 import { useRequestStore } from '@/views/request';
 import OperatorIpCardTr from '@/views/services/operator-ips/OperatorIpCardTr.vue';
 import type { OperatorIp } from '@/views/types';
@@ -17,7 +16,6 @@ const token = <any>(inject('token'))
 const addNewOperatorIpCard = () => {
     props.operator_ips.push(<OperatorIp>({
         id: 0,
-        brand_id: corp.id,
         enable_ip: '',
         token: token,
     }))

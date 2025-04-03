@@ -39,7 +39,7 @@ export const validateItems = (item: Merchandise, i: number, user_names: any, mch
     item.sales4_name = item.sales4_name ? item.sales4_name.toString()?.trim() : null
     item.sales5_name = item.sales5_name ? item.sales5_name.toString()?.trim() : null
     item.resident_num = item.resident_num ? item.resident_num.toString()?.trim() : ''
-    item.phone_num = item.phone_num.replace(/\D/g, '')
+    item.phone_num = item.phone_num?.replace(/\D/g, '')
 
     if(user_names.has(item.user_name)) 
         return [false, (i + 2) + '번째줄의 아이디가 중복됩니다.('+item.user_name+")"]

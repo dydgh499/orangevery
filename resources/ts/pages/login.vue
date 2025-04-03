@@ -79,7 +79,11 @@ const opt2FAValidate = async (e: any) => {
 
 const login = async (is_first: boolean) => {
     try {
-        const r = await axios.post('/api/v1/auth/sign-in', { brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value, token: token.value })
+        const r = await axios.post('/api/v1/auth/sign-in', {
+             user_name: user_name.value, 
+             user_pw: user_pw.value, 
+             token: token.value 
+        })
         const { access_token, user } = r.data
         pay_token.value = access_token
 

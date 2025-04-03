@@ -5,11 +5,11 @@ import PaymentInfoOverview from '@/layouts/components/pay-module-windows/Payment
 import PaymentTypeOverview from '@/layouts/components/pay-module-windows/PaymentTypeOverview.vue'
 import TerminalInfoOverview from '@/layouts/components/pay-module-windows/TerminalInfoOverview.vue'
 import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
+import { isFixplus } from '@/plugins/fixplus'
 
 import { useRequestStore } from '@/views/request'
 import type { PayModule } from '@/views/types'
 import { isAbleModiyV2 } from '@axios'
-import corp from '@corp'
 import { VForm } from 'vuetify/components'
 
 interface Props {
@@ -49,7 +49,7 @@ onDeactivated(() => {
                     <VCol cols="12" :md="md">
                         <PaymentInfoOverview :item="props.item" />
                     </VCol>
-                    <template v-if="corp.id !== 30">
+                    <template v-if="isFixplus() === false">
                         <VDivider :vertical="$vuetify.display.mdAndUp" />
                         <VCol cols="12" :md="md">
                             <TerminalInfoOverview :item="props.item" />

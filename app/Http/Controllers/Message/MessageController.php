@@ -11,6 +11,7 @@ use App\Http\Traits\Models\EncryptDataTrait;
 
 use App\Enums\AuthLoginCode;
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Utils\Comm;
@@ -187,9 +188,18 @@ class MessageController extends Controller
      */
     public function mobileCodeIssuence(Request $request)
     {
-        $validated = $request->validate(['phone_num'=>'required', 'brand_id'=>'required', 'mcht_id'=>'required']);
-        [$code, $msg] = $this->mobileCodeSend($request->brand_id, $request->phone_num, $request->mcht_id);
-        return $this->extendResponse($code, $msg);
+        $validated = $request->validate(['phone_num'=>'required', 'mcht_id'=>'required']);
+        $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
+        if(count($brand) === 0)
+        {
+            AbnormalConnection::tryParameterModulationApproach();
+            return $this->extendResponse(9999, '잘못된 접근입니다.');   
+        }
+        else
+        {
+            [$code, $msg] = $this->mobileCodeSend($brand['id'], $request->phone_num, $request->mcht_id);
+            return $this->extendResponse($code, $msg);    
+        }
     }
 
     /**
@@ -217,8 +227,14 @@ class MessageController extends Controller
 
             if($request->mcht_id !== null)
             {
-                $brand = BrandInfo::getBrandById($request->brand_id);
-                AuthPhoneNum::clearValidate($brand, $request->mcht_id, $phone_num);
+                $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
+                if(count($brand) === 0)
+                {
+                    AbnormalConnection::tryParameterModulationApproach();
+                    return $this->extendResponse(9999, '잘못된 접근입니다.');   
+                }
+                else
+                    AuthPhoneNum::clearValidate($brand, $request->mcht_id, $phone_num);
             }
             return $this->response(0,  ['token' => $this->aes256_encode($token)]);
         }

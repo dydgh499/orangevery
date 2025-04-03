@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { pinInputEvent } from '@/@core/utils/pinInputEvent';
 import { axios } from '@/plugins/axios';
-import corp from '@/plugins/corp';
 
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
@@ -26,7 +25,6 @@ const show = async (_user_name: string, _user_pw: string) => {
 
 const onAgree = async (fin_number: string) => {
     const params = {
-        brand_id: corp.id,
         verify_code : fin_number,
         user_name: user_name.value,
         user_pw: user_pw.value,

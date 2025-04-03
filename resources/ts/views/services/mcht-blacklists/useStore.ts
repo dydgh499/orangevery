@@ -59,7 +59,7 @@ export const useMchtBlacklistStore = defineStore('useMchtBlacklistStore', () => 
 
     const getAllMchtBlacklist = async() => {
         if(Number(corp.pv_options.paid.use_mcht_blacklist)) {
-            const r = await axios.get('/api/v1/services/mcht-blacklists/all?brand_id='+corp.id)
+            const r = await axios.get('/api/v1/services/mcht-blacklists/all')
             mcht_blacklists.value = r.data
         }
     }

@@ -3,7 +3,6 @@ import { timerV1 } from '@/@core/utils/timer';
 import { Merchandise } from '@/views/types';
 import { axios, getUserLevel } from '@axios';
 import { pinInputEvent } from '@core/utils/pinInputEvent';
-import corp from '@corp';
 
 interface Props {
     totalInput?: number,
@@ -43,7 +42,6 @@ const requestCodeIssuance = async () => {
     try {
         const r = await axios.post('/api/v1/bonaejas/mobile-code-issuance', { 
             phone_num: props.phone_num, 
-            brand_id: corp.id, 
             mcht_id: props.merchandise.id
         })
         snackbar.value.show('휴대폰번호로 인증번호를 보냈습니다!<br>6자리 인증번호를 입력해주세요.', 'success')
@@ -64,7 +62,6 @@ const verification = async () => {
             const r = await axios.post('/api/v1/bonaejas/mobile-code-auth', { 
                 phone_num: props.phone_num, 
                 verification_number: digits.value.join(''),
-                brand_id: corp.id, 
                 mcht_id: props.merchandise.id
             })
             emits('update:token', r.data.token)

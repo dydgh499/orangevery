@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import corp from '@/plugins/corp'
+import { isBrightFix } from '@/plugins/fixplus'
 import router from '@/router'
 import CardLayout from '@/views/quick-view/CardLayout.vue'
 import CollectWithdrawOverview from '@/views/quick-view/CollectWithdrawOverview.vue'
@@ -24,7 +25,7 @@ const my_level = getUserLevel()
 const payShow  = <any>(inject('payShow'))
 
 const isAbleCollectWithdraw = () => {
-    if(corp.pv_options.paid.use_collect_withdraw && [12,14,31].includes(corp.id) === false)
+    if(corp.pv_options.paid.use_collect_withdraw && isBrightFix() === false)
         return getUserLevel() === 10 && user_info.value.use_collect_withdraw
     else
         return false

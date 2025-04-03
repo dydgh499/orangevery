@@ -24,9 +24,6 @@ onMounted(() => {
     watchEffect(() => {
         store.setTable()
     })
-    watchEffect(() => {
-        //useDynamicTabStore().updateParams(store.params)
-    })
 });
 </script>
 <template>

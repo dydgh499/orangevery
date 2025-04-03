@@ -23,7 +23,6 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
         const path = to.fullPath.slice(1).replaceAll('/', '-')
         const edit_pattern = /-edit-\d+/;
         const part_settle_pattern = /-part-\d+/;
-        const edit_brand_pattern = /services-brands-edit-\d+/;
         const post_view_pattern = /-\d+/;
         const getTitle = (nav_title: string) => {            
             const numbers = path.match(/\d+/g);
@@ -54,9 +53,7 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
                 return title
             }
 
-            if(edit_brand_pattern.test(path))
-                return nav_title
-            else if(path.includes('posts-reply'))
+            if(path.includes('posts-reply'))
                 return getReplyViewTitle()
             else if(path.includes('create'))
                 return getCreateViewTitle()

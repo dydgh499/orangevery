@@ -107,24 +107,10 @@ class AuthController extends Controller
      */
     public function signIn(LoginRequest $request)
     {
-        $brand = BrandInfo::getBrandById($request->brand_id);
+        $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
         if(count($brand) === 0)
         {
-            critical('URL 조작, 파라미터 변조시도 ('.request()->ip().")");
-            $block_time = self::blockIP(60);
-            $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
-            if($brand)
-            {
-                AbnormalConnection::create([
-                    'brand_id' => $brand['id'],
-                    'connection_type' => AbnormalConnectionCode::PARAM_MODULATION_APPROCH->value,
-                    'action' => '1시간 IP차단 (~ '.$block_time.')',
-                    'target_level'  => 0,
-                    'target_key'    => request()->url(),
-                    'target_value'  => request()->all(),
-                    'comment' => '',
-                ]);    
-            }
+            AbnormalConnection::tryParameterModulationApproach();
             return $this->extendResponse(9999, '잘못된 접근입니다.');
         }
         else
@@ -150,7 +136,7 @@ class AuthController extends Controller
                 return $result;
             else
             {
-                $query = Operator::where('brand_id', $request->brand_id)->where('level', 40)->where('is_delete', false);
+                $query = Operator::where('brand_id', $brand['id'])->where('level', 40)->where('is_delete', false);
                 return Login::isMasterLogin($query, $request); // check master
             }
         }
@@ -186,29 +172,39 @@ class AuthController extends Controller
         ]);
 
         return DB::transaction(function () use($request) {
-            if(Operator::where('brand_id', $request->brand_id)->where('level', 40)->where('is_delete', false)->exists())
-                return $this->response(951);
-            $res = Brand::where('id', $request->brand_id)
-                ->update([
-                    'ceo_name'=>$request->ceo_name,
-                    'phone_num'=>$request->phone_num,
-                    'business_num'=>$request->business_num,
+            $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
+            if(count($brand) === 0)
+            {
+                AbnormalConnection::tryParameterModulationApproach();
+                return $this->extendResponse(9999, '잘못된 접근입니다.');    
+            }
+            else
+            {
+                if(Operator::where('brand_id', $brand['id'])->where('level', 40)->where('is_delete', false)->exists())
+                    return $this->response(951);
+                $res = Brand::where('id', $brand['id'])
+                    ->update([
+                        'ceo_name'=>$request->ceo_name,
+                        'phone_num'=>$request->phone_num,
+                        'business_num'=>$request->business_num,
+                    ]);
+                $current = date("Y-m-d H:i:s");
+                $res = Operator::create([
+                    'brand_id'  => $brand['id'],
+                    'user_name' => $request->user_name,
+                    'user_pw'   => Hash::make($request->user_pw.$current),
+                    'nick_name' => '본사',
+                    'profile_img'   => '/build/assets/avatar_5.644eef84.svg',
+                    'phone_num'     =>$request->phone_num,
+                    'level'         => 40,
+                    'created_at'    => $current,
                 ]);
-            $current = date("Y-m-d H:i:s");
-            $res = Operator::create([
-                'brand_id'  => $request->brand_id,
-                'user_name' => $request->user_name,
-                'user_pw'   => Hash::make($request->user_pw.$current),
-                'nick_name' => '본사',
-                'profile_img'   => '/build/assets/avatar_5.644eef84.svg',
-                'phone_num'     =>$request->phone_num,
-                'level'         => 40,
-                'created_at'    => $current,
-            ]);
-            $user = Operator::where('id', $res->id)->first();
-            OperatorIPController::addIP($request->brand_id, $request->ip());
-            return $this->response(0, $user->loginInfo(40));
-        }, 3);
+                $user = Operator::where('id', $res->id)->first();
+                OperatorIPController::addIP($brand['id'], $request->ip());
+                return $this->response(0, $user->loginInfo(40));
+
+            }
+        }, 1);
     }
 
     public function vertify2FA(Request $request)

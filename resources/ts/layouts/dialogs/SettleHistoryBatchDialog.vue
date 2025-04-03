@@ -29,7 +29,6 @@ const getTotalSettleAmount = () => {
 const getBatchDepositParams = async () => {
     if (props.selected_idxs.length) {
         const params: any = {
-            brand_id: corp.id,
             use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
         }
         if (params['use_finance_van_deposit']) {

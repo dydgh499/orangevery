@@ -31,7 +31,7 @@ const setAcctBankName = () => {
 
 const phoneNumberUpdater = () => {
     var regex = /[^0-9]/g;
-    props.item.phone_num = props.item.phone_num.replace(regex, "");
+    props.item.phone_num = props.item.phone_num?.replace(regex, "");
 }
 
 const ownerCheck = async () => {

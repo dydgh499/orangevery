@@ -80,6 +80,8 @@ watchEffect(() => {
             store.titleUpdate(props.item.id, '가맹점', props.item.mcht_name)
         else if(props.path === 'salesforces')
             store.titleUpdate(props.item.id, '영업라인', props.item.sales_name)
+        else if(props.path === 'services/brands')
+            store.titleUpdate(props.item.id, '운영사', props.item.name)
         else if(props.path === 'posts') {
             if(store.postTitleUpdate(' 수정', props.item.type, props.item.id, `/${props.path}/edit/${props.item.id}`) === false)
                 store.postTitleUpdate(' 답변', props.item.type, props.item.id, `/${props.path}/reply?parent_id=${route.query.parent_id}`)

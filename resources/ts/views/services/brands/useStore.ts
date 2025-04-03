@@ -4,10 +4,6 @@ import type { AuthOption, Brand, FreeOption, Options, P2pAppOption, PaidOption, 
 import { getUserLevel } from '@axios';
 import corp from '@corp';
 
-export const isMaster = () => {
-    return getUserLevel() >= 50 && corp.id == parseInt(import.meta.env.VITE_MAIN_BRAND_ID as string)
-}
-
 export const dev_settle_types = <Options[]>([
     {id:0, title:'적용안함'},
     {id:1, title:'본사이익 대비 방식'},

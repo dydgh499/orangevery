@@ -11,6 +11,8 @@ use App\Http\Traits\ExtendResponseTrait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
+use App\Http\Controllers\Manager\Service\BrandInfo;
 
 use App\Http\Controllers\BeforeSystem\Merchandise;
 use App\Http\Controllers\BeforeSystem\PaymentModule;
@@ -68,29 +70,37 @@ class BeforeSystemController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate(['token'=>'required']);
-        $dehashing = function($token) {
-            $parted = explode('%', base64_decode($token));      // 토큰 만들때의 구분자 . 으로 나누기
-            if(count($parted) > 1) {
-                $signature = $parted[2];
-                // 위에서 토큰 만들때와 같은 방식으로 시그니처 만들고 비교
-                if(hash('sha256', $parted[0].$parted[1]) != $signature)
+        $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
+        if(count($brand) === 0)
+        {
+            AbnormalConnection::tryParameterModulationApproach();
+            return $this->extendResponse(9999, '잘못된 접근입니다.');   
+        }
+        else
+        {
+            $dehashing = function($token) {
+                $parted = explode('%', base64_decode($token));      // 토큰 만들때의 구분자 . 으로 나누기
+                if(count($parted) > 1) {
+                    $signature = $parted[2];
+                    // 위에서 토큰 만들때와 같은 방식으로 시그니처 만들고 비교
+                    if(hash('sha256', $parted[0].$parted[1]) != $signature)
+                        return [];
+                    $payload = json_decode($parted[1], true);
+                    return $payload;    
+                }
+                else
                     return [];
-                $payload = json_decode($parted[1], true);
-                return $payload;    
-            }
-            else
-                return [];
-        };
-        $user = $dehashing($request->token);
-        $before_brand_id = $user['data']['DNS_PK'];
-        $brand_id = $request->brand_id;
-
-        $current_brand = $this->payvery->table('brands')->where('id', $brand_id)->first();
-        BeforeSystemRegisterJob::dispatch($brand_id, $before_brand_id, $current_brand->dns)
-            ->onConnection('redis')
-            ->onQueue('computational-transfer');
-        sleep(10);
-        return $this->extendResponse(1, '전산 이전 작업을 예약하였습니다.<br>5분 내외로 이전 전산에대한 정보가 반영됩니다.');
+            };
+            $user = $dehashing($request->token);
+            $before_brand_id = $user['data']['DNS_PK'];
+    
+            $current_brand = $this->payvery->table('brands')->where('id', $brand['id'])->first();
+            BeforeSystemRegisterJob::dispatch($brand['id'], $before_brand_id, $current_brand->dns)
+                ->onConnection('redis')
+                ->onQueue('computational-transfer');
+            sleep(10);
+            return $this->extendResponse(1, '전산 이전 작업을 예약하였습니다.<br>5분 내외로 이전 전산에대한 정보가 반영됩니다.');
+        }
     }
 
     public function mchtUpdate()

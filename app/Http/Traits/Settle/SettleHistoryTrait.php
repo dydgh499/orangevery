@@ -8,6 +8,7 @@ use App\Models\CancelDeposit;
 use App\Models\Salesforce;
 use Carbon\Carbon;
 use App\Http\Controllers\Utils\Comm;
+use App\Http\Controllers\Manager\Service\BrandInfo;
 
 trait SettleHistoryTrait
 {
@@ -42,6 +43,7 @@ trait SettleHistoryTrait
 
     protected function depositContainer($request, $target, $data, $orm)
     {
+        $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
         $getDBResponseMessage = function($code) {
             if($code === 1)
                 return '';
@@ -58,7 +60,7 @@ trait SettleHistoryTrait
              if($data['current_status'] == 0)
              {
                 $url = env('NOTI_URL', 'http://localhost:81')."/api/v2/realtimes/$target-settle-deposit/".$data['id'];
-                $params = ['brand_id'=> $request->brand_id, 'fin_id'=> $request->fin_id];
+                $params = ['brand_id'=> $brand['id'], 'fin_id'=> $request->fin_id];
 
                 $res = Comm::post($url, $params);
                 sleep(0.1);
