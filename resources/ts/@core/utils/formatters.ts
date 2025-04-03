@@ -56,6 +56,30 @@ export const inputFormater = () => {
 
     }
 
+    const formatTime = (raw_value: string) => {
+        raw_value = raw_value.replace(/\D/g, '');
+        if (raw_value.length >= 1 && raw_value.length <= 2) {
+            return raw_value; // 입력 중 (시작 시)
+        } else if (raw_value.length <= 4) {
+            // HHMM → HH:MM
+            const fromHour = raw_value.slice(0, 2);
+            const fromMin = raw_value.slice(2);
+            return `${fromHour}:${fromMin}`;
+        } else if (raw_value.length <= 6) {
+            // HHMMHH → HH:MM~HH
+            const fromHour = raw_value.slice(0, 2);
+            const fromMin = raw_value.slice(2, 4);
+            const toHour = raw_value.slice(4);
+            return `${fromHour}:${fromMin}:${toHour}`;
+        } else {
+            raw_value = raw_value.slice(0, 6);
+            const fromHour = raw_value.slice(0, 2);
+            const fromMin = raw_value.slice(2, 4);
+            const toHour = raw_value.slice(4);
+            return `${fromHour}:${fromMin}:${toHour}`;
+        }
+    }
+
     return {
         business_num_format,
         phone_num_format,
@@ -74,6 +98,7 @@ export const inputFormater = () => {
         formatCardNum,
         formatYYmm,
         formatAmount,
+        formatTime,
 
         changeBusinessFormat
     }

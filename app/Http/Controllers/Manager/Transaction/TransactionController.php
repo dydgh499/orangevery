@@ -247,9 +247,9 @@ class TransactionController extends Controller
         {
             $tran = $this->transactions->where('id', $id)->first();
             $data = $request->data();
-
             $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], ($data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt']), $data['mcht_settle_type'], 1);
             [$data] = SettleAmountCalculator::setSettleAmount([$data]);
+
             $res = $this->transactions->where('id', $id)->update($data);
             operLogging(HistoryType::UPDATE, $this->target, $tran, $data, "#".$id);
             return $this->response($res ? 1 : 990, ['id'=>$id]);

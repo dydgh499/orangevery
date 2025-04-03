@@ -682,6 +682,7 @@ onMounted(() => {
                             <VDivider />
                         </VCol>
                         <VCol cols="12" v-if="corp.pv_options.paid.use_specified_limit">
+                            <VDivider style="margin-bottom: 1em;" />
                             <SpecifiedTimeDisablePaymentCard :item="props.item"/>
                         </VCol>
                     </VRow>

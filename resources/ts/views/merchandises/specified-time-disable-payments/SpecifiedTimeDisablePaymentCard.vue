@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { inputFormater } from '@/@core/utils/formatters';
 import SpecifiedTimeDisablePaymentTr from '@/views/merchandises/specified-time-disable-payments/SpecifiedTimeDisablePaymentTr.vue';
 import { useRequestStore } from '@/views/request';
 import type { Merchandise, SpecifiedTimeDisablePayment } from '@/views/types';
@@ -10,24 +11,33 @@ interface Props {
 }
 const props = defineProps<Props>()
 const { setNullRemove } = useRequestStore()
+const { formatTime } = inputFormater()
+
 const specified_time_disable_limit_payments = reactive<SpecifiedTimeDisablePayment[]>(props.item.specified_time_disable_limit_payments || [])
 const addNewSpecifiedTimeDisablePayment = () => {
     const specified_time_disable_limit_payment = <SpecifiedTimeDisablePayment>({
         id: 0,
         mcht_id: props.item.id,
-        disable_s_tm: null,
-        disable_e_tm: null,
+        disable_s_tm: "00:00:00",
+        disable_e_tm: "00:00:00",
         disable_type: 0,
     })
     specified_time_disable_limit_payments.push(specified_time_disable_limit_payment)
 }
+
+const formatDisableStm = computed(() => {
+    props.item.single_payment_limit_s_tm = formatTime(props.item.single_payment_limit_s_tm)    
+})
+const formatDisableEtm = computed(() => {
+    props.item.single_payment_limit_e_tm = formatTime(props.item.single_payment_limit_e_tm)    
+})
+
 watchEffect(() => {
     setNullRemove(specified_time_disable_limit_payments)
 })
 </script>
 <template>
     <div>
-        <VDivider style="margin-bottom: 1em;" />
         <VRow cols="12">
             <VCol :md="6" :cols="12">
                 <VCardTitle>지정시간 결제제한</VCardTitle>
@@ -67,19 +77,19 @@ watchEffect(() => {
                         <span>하향적용시간</span>
                     </VCol>
                     <VCol md="6" cols="7">
-                        <div class="flex-container">
-                            <AppDateTimePicker 
-                                v-model="props.item.single_payment_limit_s_tm" placeholder="시작시간"
-                                variant='underlined'
-                                :config="{ mode: 'range', enableTime: true, noCalendar: true, dateFormat: 'H:i'  }"   
-                                style="min-width: 5em;"
+                        <div class="flex-container" style="align-items: center;">
+                            <VTextField 
+                            variant='underlined'
+                            v-model="props.item.single_payment_limit_s_tm" 
+                                @input="formatDisableStm"
+                                placeholder="시작시간"
                             />
                             <span style="margin: 0 0.5em;">~</span>
-                            <AppDateTimePicker 
-                                v-model="props.item.single_payment_limit_e_tm" placeholder="종료시간"
+                            <VTextField 
                                 variant='underlined'
-                                :config="{ mode: 'range', enableTime: true, noCalendar: true, dateFormat: 'H:i'  }"   
-                                style="min-width: 5em;"
+                                v-model="props.item.single_payment_limit_e_tm" 
+                                @input="formatDisableEtm"
+                                placeholder="종료시간"
                             />
                         </div>
                     </VCol>

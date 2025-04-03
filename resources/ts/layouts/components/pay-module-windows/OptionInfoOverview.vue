@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { inputFormater } from '@/@core/utils/formatters';
 import corp from '@/plugins/corp';
 import { issuers } from '@/views/complaints/useStore';
 import { cxl_types, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore';
@@ -11,6 +12,15 @@ interface Props {
     item: PayModule,
 }
 const props = defineProps<Props>()
+const { formatTime } = inputFormater()
+
+const formatDisableStm = computed(() => {
+    props.item.pay_disable_s_tm = formatTime(props.item.pay_disable_s_tm)    
+})
+const formatDisableEtm = computed(() => {
+    props.item.pay_disable_e_tm = formatTime(props.item.pay_disable_e_tm)    
+})
+
 </script>
 <template>
     <VCardItem>
@@ -107,17 +117,17 @@ const props = defineProps<Props>()
             <VRow>
                 <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                     <VCol md="6" cols="12">
-                        <AppDateTimePicker 
-                            v-model="props.item.pay_disable_s_tm" label="결제금지 시작시간"
-                            :config="{ mode: 'range', enableTime: true, noCalendar: true, dateFormat: 'H:i'  }"   
-                            style="min-width: 10em;"
+                        <VTextField 
+                            v-model="props.item.pay_disable_s_tm" 
+                            @input="formatDisableStm"
+                            label="결제금지 시작시간"
                         />
                     </VCol>
                     <VCol md="6" cols="12">
-                        <AppDateTimePicker 
-                            v-model="props.item.pay_disable_e_tm" label="결제금지 종료시간"
-                            :config="{ mode: 'range', enableTime: true, noCalendar: true, dateFormat: 'H:i'  }"
-                            style="min-width: 10em;"
+                        <VTextField 
+                            v-model="props.item.pay_disable_e_tm" 
+                            @input="formatDisableEtm"
+                            label="결제금지 시작시간"
                         />
                     </VCol>
                     <VTooltip activator="parent" location="top" transition="scale-transition">
