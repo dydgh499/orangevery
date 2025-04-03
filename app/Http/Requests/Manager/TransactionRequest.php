@@ -17,22 +17,28 @@ class TransactionRequest extends FormRequest
         'sales1_id', 'sales1_fee',
         'sales0_id', 'sales0_fee',
         'dev_realtime_fee',
-        'custom_id', 'mcht_fee', 'hold_fee',
+        'mcht_fee', 'hold_fee',
         'mid','tid',
-        'module_type',
         'pg_id', 'pmod_id', 'ps_id',
-        'terminal_id',
         'ps_fee',
-        'mcht_settle_fee', 'mcht_settle_type',
+        'mcht_settle_fee', 
         'trx_dt',
         'trx_tm',
         'amount',
-        'installment',
         'cxl_dt', 
         'cxl_tm', 
         'buyer_name',   //
         'buyer_phone',  //
         'item_name',    //
+    ];
+    public $integer_keys = [
+        'installment',
+        'custom_id', 
+        'terminal_id',
+        'module_type',
+        'cxl_seq',
+        'mcht_settle_type',
+        'is_cancel',
     ];
 
     public function authorize()
@@ -77,7 +83,7 @@ class TransactionRequest extends FormRequest
     }
     public function data()
     {
-        $data = $this->getParmasBaseKey();
+        $data = array_merge($this->getParmasBaseKey(), $this->getParmasBaseKeyV2($this->integer_keys, 0));
         $data['amount'] = abs($data['amount']);
         $data['mcht_settle_fee']  = abs($data['mcht_settle_fee']);
         
@@ -107,6 +113,7 @@ class TransactionRequest extends FormRequest
         $data['is_cancel'] = $data['cxl_dt'] == null ? false : true;
         $data['terminal_id'] = $data['terminal_id'] == '' ? null : $data['terminal_id'];
         $data['custom_id'] = $data['custom_id'] == '' ? null : $data['custom_id'];
+        $data['cxl_seq'] = 1;
         if($data['is_cancel'])
         {
             $data['amount'] *= -1;
