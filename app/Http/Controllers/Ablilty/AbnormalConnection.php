@@ -49,7 +49,7 @@ class AbnormalConnection
         else
         {
             $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
-            $brand_id = $brand['id'];
+            $brand_id = count($brand) === 0 ? 1 : $brand['id'];
             $level    = 0;
             $user_name = '';
         }
