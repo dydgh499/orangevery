@@ -54,7 +54,7 @@ class AuthController extends Controller
         if($result === false)
         {
             $msg = 'Abnormal access has been detected. The access log will be sent to the administrator and analyzed.';
-            return Response::json(['message'=>$msg], 403, [], JSON_UNESCAPED_UNICODE);
+            return Response::json(['message' => $msg], 403, [], JSON_UNESCAPED_UNICODE);
         }
 
         $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
@@ -73,7 +73,10 @@ class AuthController extends Controller
                 ->withCookie('XSRF-TOKEN', csrf_token());
         }
         else
-            return $this->response(1000);
+        {
+            AbnormalConnection::tryParameterModulationApproach();
+            return $this->extendResponse(9999, '잘못된 접근입니다.');            
+        }
     }
     
     /*
@@ -102,8 +105,6 @@ class AuthController extends Controller
     /**
      * 로그인(관리자)
      * @unauthenticated
-     *
-     * @bodyParam brand_id integer required 브랜드 ID Example: 1
      */
     public function signIn(LoginRequest $request)
     {
