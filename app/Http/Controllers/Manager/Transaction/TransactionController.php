@@ -251,10 +251,6 @@ class TransactionController extends Controller
 
             $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], ($data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt']), $data['mcht_settle_type'], 1);
             $data['pg_settle_type'] = 1;
-
-            $data['dev_fee'] = $tran->dev_fee;
-            $data['dev_realtime_fee'] = $tran->dev_realtime_fee;
-
             [$data] = SettleAmountCalculator::setSettleAmount([$data]);
             $res = $this->transactions->where('id', $id)->update($data);
             operLogging(HistoryType::UPDATE, $this->target, $tran, $data, "#".$id);
