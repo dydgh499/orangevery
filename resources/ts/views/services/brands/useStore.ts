@@ -119,7 +119,6 @@ export const defaultItemInfo = () => {
             use_fee_detail_view: false,
             only_mcht_fee_profit: false,
             fix_table_size: 749,
-            excel_search_filter: false,
             resident_num_masking: false,
             pay_module_detail_view: false,
             secure: {

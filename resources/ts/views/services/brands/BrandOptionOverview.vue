@@ -60,11 +60,8 @@ const filterPgs = computed(() => {
                     </CreateHalfVColV2>
                     <CreateHalfVColV2 :mdl="8" :mdr="4">
                         <template #l_name>
-                            <BaseQuestionTooltip location="top" text="엑셀 다운로드시 검색필터 적용"
-                                    :content="`검색필터에서 숨김처리한 내용들은 엑셀출력시 출력되지 않습니다.`"/>
                         </template>
                         <template #l_input>
-                                <VSwitch hide-details v-model="props.item.free.excel_search_filter" color="primary" />
                         </template>
                         <template #r_name>
                             <BaseQuestionTooltip location="top" text="결제모듈 상세보기" :content="`가맹점 정보 - 결제모듈 정보에서 결제모듈이 리스트로 표현됩니다.<br>(가맹점당 결제모듈 여러개 보유시 사용)`"/>

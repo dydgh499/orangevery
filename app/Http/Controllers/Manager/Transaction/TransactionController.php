@@ -177,6 +177,7 @@ class TransactionController extends Controller
      */
     public function store(TransactionRequest $request)
     {
+        /*
         try
         {
             $data = $request->data();
@@ -202,6 +203,8 @@ class TransactionController extends Controller
                 $msg = '이미 같은 거래번호의 취소매출이 존재합니다.<br>해당 매출을 삭제하거나 거래번호를 수정한 후 다시 시도해주세요.';                
             return $this->extendResponse(991, $msg);
         }
+        */
+        return $this->extendResponse(951, '사용중지기능');
     }
 
     /**
@@ -297,12 +300,13 @@ class TransactionController extends Controller
             $ori_trx_id = $request->trx_id;
             $amount     = $request->amount;
             
-            $ori_query  = $this->transactions
+            $cxl_query  = $this->transactions
                 ->where('brand_id', $request->user()->brand_id)
                 ->where('trx_at', $request->trx_at)
-                ->where('ori_trx_id', $ori_trx_id);
-            $cxl_seq = (clone $ori_query)->count() + 1;
-            $cancel  = (clone $ori_query)->first([DB::raw("SUM(amount) AS cancel_amount")]);
+                ->where('ori_trx_id', $ori_trx_id)
+                ->where('is_cancel', 1);
+            $cxl_seq = (clone $cxl_query)->count() + 1;
+            $cancel  = (clone $cxl_query)->first([DB::raw("SUM(amount) AS cancel_amount")]);
             $total_cancel_amount = ((int)$cancel->cancel_amount * -1) + $amount;
             if($total_cancel_amount > $trans->amount)
             {

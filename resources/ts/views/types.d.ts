@@ -385,7 +385,6 @@ interface FreeOption {
     use_fee_detail_view: boolean,
     only_mcht_fee_profit: boolean,
     fix_table_size: number,
-    excel_search_filter: boolean,
     resident_num_masking: boolean,
     pay_module_detail_view: boolean,
     sales_slip: {

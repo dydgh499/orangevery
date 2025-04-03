@@ -16,7 +16,6 @@
         public $use_mid_duplicate = false;
         public $use_fix_table_view = true;
         public $fix_table_size = 749;
-        public $excel_search_filter = true;
         public $resident_num_masking = true;
         public $pay_module_detail_view = false;
         public $use_fee_detail_view = false;

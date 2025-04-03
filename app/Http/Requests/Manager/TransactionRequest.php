@@ -108,7 +108,6 @@ class TransactionRequest extends FormRequest
         $data['custom_id'] = $data['custom_id'] == '' ? null : $data['custom_id'];
         if($data['is_cancel'])
         {
-            $data['cxl_seq'] = 1;
             $data['amount'] *= -1;
             $data['mcht_settle_fee'] *= -1;
             $data['trx_at'] = $data['cxl_dt']." ".$data['cxl_tm'];
