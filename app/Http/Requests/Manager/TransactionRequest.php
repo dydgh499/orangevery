@@ -9,41 +9,53 @@ class TransactionRequest extends FormRequest
 {
     use FormRequestTrait;
     public $keys = [
-        'mcht_id',
-        'sales5_id', 'sales5_fee',
-        'sales4_id', 'sales4_fee',
-        'sales3_id', 'sales3_fee',
-        'sales2_id', 'sales2_fee',
-        'sales1_id', 'sales1_fee',
-        'sales0_id', 'sales0_fee',
-        'dev_realtime_fee',
-        'mcht_fee', 'hold_fee',
-        'mid','tid',
-        'pg_id', 'pmod_id', 'ps_id',
-        'ps_fee',
-        'mcht_settle_fee', 
-        'trx_dt',
-        'trx_tm',
-        'amount',
-        'cxl_dt', 
-        'cxl_tm', 
+        'mid',
+        'tid',
         'buyer_name',   //
         'buyer_phone',  //
         'item_name',    //
     ];
     public $integer_keys = [
+        'mcht_id',
+        'pmod_id', 
+        'pg_id', 
+        'ps_id',
+        'sales5_fee',
+        'sales4_fee',
+        'sales3_fee',
+        'sales2_fee',
+        'sales1_fee',
+        'sales0_fee',
+        'dev_realtime_fee',
+        'mcht_fee', 
+        'hold_fee',
+        'ps_fee',
         'installment',
-        'custom_id', 
-        'terminal_id',
         'module_type',
         'cxl_seq',
         'mcht_settle_type',
         'is_cancel',
+        'amount',
+        'mcht_settle_fee',
+        'pg_settle_type',
     ];
-
+    public $nullable_keys = [
+        'custom_id', 
+        'terminal_id',
+        'sales0_id',
+        'sales1_id',
+        'sales2_id',
+        'sales3_id',
+        'sales4_id',
+        'sales5_id',
+        'cxl_dt',
+        'cxl_tm',
+        'trx_dt',
+        'trx_tm',
+    ];
     public function authorize()
     {
-        return $this->user()->tokenCan(10) ? true : false;
+        return $this->user()->tokenCan(35) ? true : false;
     }
 
     /**
@@ -84,17 +96,6 @@ class TransactionRequest extends FormRequest
     public function data()
     {
         $data = array_merge($this->getParmasBaseKey(), $this->getParmasBaseKeyV2($this->integer_keys, 0));
-        $data['amount'] = abs($data['amount']);
-        $data['mcht_settle_fee']  = abs($data['mcht_settle_fee']);
-        
-        $data['sales0_id'] = $this->input('sales0_id', null);
-        $data['sales1_id'] = $this->input('sales1_id', null);
-        $data['sales2_id'] = $this->input('sales2_id', null);
-        $data['sales3_id'] = $this->input('sales3_id', null);
-        $data['sales4_id'] = $this->input('sales4_id', null);
-        $data['sales5_id'] = $this->input('sales5_id', null);
-        $data['custom_id'] = $this->input('custom_id', null);
-        
         $data['ps_fee']  = $this->input('ps_fee', 0)/100;
         $data['hold_fee']  = $this->input('hold_fee', 0)/100;
         $data['mcht_fee']    = $this->input('mcht_fee', 0)/100;
@@ -106,14 +107,7 @@ class TransactionRequest extends FormRequest
         $data['sales5_fee'] = $this->input('sales5_fee', 0)/100;
         $data['dev_fee']    = $this->input('dev_fee', 0)/100;
         $data['dev_realtime_fee'] = $this->input('dev_realtime_fee', 0)/100;
-        
         $data['brand_id'] = $this->user()->brand_id;
-        $data['cxl_dt'] = $data['cxl_dt'] == '' ? null : $data['cxl_dt'];
-        $data['cxl_tm'] = $data['cxl_tm'] == '' ? null : $data['cxl_tm'];
-        $data['is_cancel'] = $data['cxl_dt'] == null ? false : true;
-        $data['terminal_id'] = $data['terminal_id'] == '' ? null : $data['terminal_id'];
-        $data['custom_id'] = $data['custom_id'] == '' ? null : $data['custom_id'];
-        $data['cxl_seq'] = 1;
         if($data['is_cancel'])
         {
             $data['amount'] *= -1;

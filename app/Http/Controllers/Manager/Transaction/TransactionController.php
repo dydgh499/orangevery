@@ -185,7 +185,6 @@ class TransactionController extends Controller
             $data['dev_realtime_fee'] = (((float)$request->input('dev_realtime_fee', 0))/100);
 
             $data['settle_dt'] = SettleDateCalculator::getSettleDate($request->user()->brand_id, $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'], $data['mcht_settle_type'], 1);
-            $data['pg_settle_type'] = 1;
             if($data['dev_fee'] >= 1)
                 return $this->extendResponse(991, '개발사 수수료가 이상합니다.<br>관리자에게 문의하세요.');
             else
@@ -250,8 +249,6 @@ class TransactionController extends Controller
             $data = $request->data();
 
             $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], ($data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt']), $data['mcht_settle_type'], 1);
-            $data['pg_settle_type'] = 1;
-
             [$data] = SettleAmountCalculator::setSettleAmount([$data]);
             $res = $this->transactions->where('id', $id)->update($data);
             operLogging(HistoryType::UPDATE, $this->target, $tran, $data, "#".$id);
