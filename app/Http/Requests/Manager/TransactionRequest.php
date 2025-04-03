@@ -98,6 +98,7 @@ class TransactionRequest extends FormRequest
         $data['sales3_fee'] = $this->input('sales3_fee', 0)/100;
         $data['sales4_fee'] = $this->input('sales4_fee', 0)/100;
         $data['sales5_fee'] = $this->input('sales5_fee', 0)/100;
+        $data['dev_fee']    = $this->input('dev_fee', 0)/100;
         $data['dev_realtime_fee'] = $this->input('dev_realtime_fee', 0)/100;
         
         $data['brand_id'] = $this->user()->brand_id;
