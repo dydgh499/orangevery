@@ -146,7 +146,8 @@ class OperatorHistoryContoller extends Controller
         {
             $data = [
                 'brand_id' => $request->user() ? $request->user()->brand_id : $brand['id'],
-                'oper_id' => $request->user() ? $request->user()->id : $brand['id'],
+//                'oper_id' => $request->oper_id ? $request->oper_id : $request->user()->id,
+                'oper_id' => $request->user() ? $request->user()->id : $request->oper_id,
                 'history_type' => $request->history_type,
                 'history_title' => $request->history_title,
                 'history_target' => $request->history_target,
