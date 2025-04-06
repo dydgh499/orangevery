@@ -13,6 +13,8 @@ class SalesforceRequest extends FormRequest
         'user_name',
         'nick_name',
         'sales_name',
+        'sales_sub_name',
+        'email',
         'view_type',
         'level',
         'resident_num',

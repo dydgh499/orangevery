@@ -76,7 +76,6 @@ class BulkMerchandiseRequest extends FormRequest
             '*.mcht_name' => 'required',
             '*.user_name' => 'required',
             '*.user_pw' => 'required',
-            '*.sector' => 'required',
             '*.acct_num' => 'required|max:30',
             '*.business_num' => 'nullable|max:30',
             '*.acct_name' => 'required',

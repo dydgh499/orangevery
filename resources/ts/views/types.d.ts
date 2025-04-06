@@ -137,11 +137,13 @@ export interface MerchandisePropertie {
 
 export interface SalesforcePropertie {
     sales_name: string,
+    sales_sub_name: string,
     settle_tax_type: number,
     settle_cycle: number,
     settle_day: number | null,
     level: number,
     view_type: number,
+    email: string,
 }
 
 export interface GMID extends BasePropertie {

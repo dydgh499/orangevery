@@ -4,7 +4,7 @@ import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { Merchandise, Options } from '@/views/types'
-import { avatars, business_types } from '@/views/users/useStore'
+import { avatars, business_types, getRegidentNum } from '@/views/users/useStore'
 import { getUserLevel, isAbleUnlockMcht } from '@axios'
 import corp from '@corp'
 
@@ -149,7 +149,7 @@ const getMchtHeaders = (head :any) => {
         }
         headers_9['created_at'] = '생성시간'
         headers_9['updated_at'] = '업데이트시간'
-        if(isAbleUnlockMcht()) 
+        if(getUserLevel() >= 35 || getUserLevel() > 11) 
             headers_9['extra_col'] = '더보기'
         return headers_9
     }
@@ -333,7 +333,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
             datas[i]['mids'] = datas[i]['payment_modules'].map(module => module.mid).join(',')
             datas[i]['tids'] = datas[i]['payment_modules'].map(module => module.tid).join(',')
             datas[i]['settle_types'] = datas[i]['payment_modules'].map(module => settle_types.find(settle_type => settle_type.id === module.settle_type)?.name).join(',')  
-            datas[i]['resident_num'] = datas[i]['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
+            datas[i]['resident_num'] = getRegidentNum(datas[i], true)
             datas[i]['custom_id'] = cus_filters.find(cus => cus.id === datas[i]['custom_id'])?.name
             datas[i]['business_type'] = business_types.find(cus => cus.id === datas[i]['business_type'])?.title
             datas[i]['merchant_status'] = merchant_statuses.find(cus => cus.id === datas[i]['merchant_status'])?.title
@@ -415,6 +415,8 @@ export const defaultItemInfo = () => {
         email: '',
         contact_num: '',
         specified_time_disable_limit: 0,
+        single_payment_limit_s_tm:'00:00:00',
+        single_payment_limit_e_tm:'00:00:00',
         phone_auth_limit_count: 0,
         business_type: 0,
         corp_registration_num: '',

@@ -2,7 +2,7 @@
 import ProfileDialog from '@/layouts/dialogs/users/ProfileDialog.vue';
 import FileInput from '@/layouts/utils/FileInput.vue';
 import type { UserPropertie } from '@/views/types';
-import { avatars, banks, business_types, getOnlyNumber, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore';
+import { avatars, banks, business_types, getOnlyNumber, getRegidentNum, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore';
 import { axios, getUserLevel, isAbleModifyPrimary, isAbleModiy, isAbleModiyV2, user_info } from '@axios';
 import corp from '@corp';
 import { requiredValidatorV2 } from '@validators';
@@ -116,20 +116,6 @@ const isViewAbleContractFile = () => {
             return isAbleModiy(0)
     }
 }
-
-const getRegidentNum = () => {
-    if(getUserLevel() >= 30) 
-        return `${props.item.resident_num_front} - ${props.item.resident_num_back}`
-    else {
-        if(props.is_mcht && getUserLevel() === 10 && props.item.id === user_info.value.id)
-            return `${props.item.resident_num_front} - ${props.item.resident_num_back}`
-        else if(props.is_mcht === false && getUserLevel() > 10 && props.item.id === user_info.value.id)
-            return `${props.item.resident_num_front} - ${props.item.resident_num_back}`
-        else
-            return `${props.item.resident_num_front} - *******`
-    }
-}
-
 
 watchEffect(() => {
     props.item.resident_num = props.item.resident_num_front + props.item.resident_num_back
@@ -253,7 +239,7 @@ watchEffect(() => {
                     </VRow>
                     <VRow>
                         <VCol cols="12">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
                                 <VCol>
                                     <label>사업자구분</label>
                                 </VCol>
@@ -304,7 +290,7 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                         <VCol cols="12" md="6" v-if="props.item.business_type === 1">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
                                 <VCol md="4" cols="5">
                                     <label>법인등록번호</label>
                                 </VCol>
@@ -351,7 +337,7 @@ watchEffect(() => {
                             </VRow>
                             <VRow v-else>
                                 <VCol class="font-weight-bold" cols="5" md="4">주민등록번호</VCol>
-                                <VCol md="8"><span>{{ getRegidentNum() }}</span></VCol>
+                                <VCol md="8"><span>{{ getRegidentNum(props.item, props.is_mcht) }}</span></VCol>
                             </VRow>
                         </VCol>
                     </VRow>
@@ -371,8 +357,8 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold" cols="4">계좌번호</VCol>
-                                <VCol md="8"><span>{{ props.item.acct_num }}</span></VCol>
+                                <VCol class="font-weight-bold" md="2" cols="4">계좌번호</VCol>
+                                <VCol md="10"><span>{{ props.item.acct_num }}</span></VCol>
                             </VRow>
                         </VCol>
                         <VCol md="6" v-if="getUserLevel() === 10">
@@ -429,7 +415,7 @@ watchEffect(() => {
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol cols="12" md="6" v-if="isViewAbleContractFile() || isAbleModiy(props.item.id)">
+        <VCol cols="12" md="6" v-if="isViewAbleContractFile() || isAbleModiyV2(props.item, props.is_mcht ? 'merchandises' : 'salesforces')">
             <VCard>
                 <VCardItem v-if="isViewAbleContractFile()">
                     <VCardTitle>계약파일</VCardTitle>
@@ -467,7 +453,7 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                 </VCardItem>
-                <VCardItem v-if="isAbleModiyV2(props.item.id, props.is_mcht ? 'merchandises' : 'salesforces')">
+                <VCardItem v-if="isAbleModiyV2(props.item, props.is_mcht ? 'merchandises' : 'salesforces')">
                     <VCardTitle>메모사항</VCardTitle>
                     <VRow class="pt-5">
                         <VCol>

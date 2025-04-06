@@ -26,10 +26,10 @@ const addNewSpecifiedTimeDisablePayment = () => {
 }
 
 const formatDisableStm = computed(() => {
-    props.item.single_payment_limit_s_tm = formatTime(props.item.single_payment_limit_s_tm)    
+    props.item.single_payment_limit_s_tm = formatTime(props.item.single_payment_limit_s_tm || "")
 })
 const formatDisableEtm = computed(() => {
-    props.item.single_payment_limit_e_tm = formatTime(props.item.single_payment_limit_e_tm)    
+    props.item.single_payment_limit_e_tm = formatTime(props.item.single_payment_limit_e_tm || "")    
 })
 
 watchEffect(() => {

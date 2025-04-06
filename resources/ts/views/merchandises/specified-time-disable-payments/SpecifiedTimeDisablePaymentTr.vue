@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { inputFormater } from '@/@core/utils/formatters';
 import { useRequestStore } from '@/views/request';
 import type { Options, SpecifiedTimeDisablePayment } from '@/views/types';
 import { isAbleModiy } from '@axios';
@@ -11,9 +12,18 @@ interface Props {
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 const { update, remove } = useRequestStore()
+const { formatTime } = inputFormater()
+
 const disable_types = <Options[]>[
     {id:0, title: '결제금지'}, {id:1, title: '이체금지'}
 ]
+const formatDisableStm = computed(() => {
+    props.item.disable_s_tm = formatTime(props.item.disable_s_tm || "")
+})
+const formatDisableEtm = computed(() => {
+    props.item.disable_e_tm = formatTime(props.item.disable_e_tm || "")    
+})
+
 </script>
 <template>
     <tr>
@@ -39,12 +49,12 @@ const disable_types = <Options[]>[
             <VForm ref="vForm">
                 <VCol cols="12">
                     <VRow no-gutters>
-                        <AppDateTimePicker 
+                        <VTextField 
                             v-if="isAbleModiy(props.item.id)"
-                            v-model="props.item.disable_s_tm" placeholder="시작시간"
+                            v-model="props.item.disable_s_tm" 
+                            placeholder="시작시간"
+                            @input="formatDisableStm"
                             variant='underlined'
-                            :config="{ mode: 'range', enableTime: true, noCalendar: true, dateFormat: 'H:i'  }"   
-                            style="min-width: 8em;"
                         />
                         <span v-else>
                             {{ props.item.disable_s_tm }}
@@ -56,12 +66,12 @@ const disable_types = <Options[]>[
         <td class='list-square'>
             <VCol cols="12">
                 <VRow no-gutters>
-                    <AppDateTimePicker 
+                    <VTextField 
                         v-if="isAbleModiy(props.item.id)"
-                        v-model="props.item.disable_e_tm" placeholder="종료시간"
+                        v-model="props.item.disable_e_tm" 
+                        placeholder="종료시간"
+                        @input="formatDisableEtm"
                         variant='underlined'
-                        :config="{ mode: 'range', enableTime: true, noCalendar: true, dateFormat: 'H:i'  }"   
-                        style="min-width: 8em;"
                     />
                     <span v-else>
                         {{ props.item.disable_e_tm }}

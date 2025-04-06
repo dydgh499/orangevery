@@ -22,10 +22,10 @@ const getMchtChildMenu = () => {
     if((getUserLevel() >= 35 || getUserLevel() == 10) && corp.pv_options.paid.use_bill_key)
         users.children.push({ title: '빌키 관리', to: 'merchandises-bill-keys'})
 
-    if(getUserLevel() >= 35) {
+    if(getUserLevel() >= 11) {
         users.children.push({ title: '수수료율 변경이력', to: 'merchandises-fee-change-histories'})
     }
-    if((getUserLevel() >= 35 || getUserLevel() === 10) && corp.pv_options.paid.use_noti) {
+    if(corp.pv_options.paid.use_noti) {
         users.children.push({ title: '노티 발송이력', to: 'merchandises-noti-send-histories'})
         users.children.push({ title: '노티 목록', to: 'merchandises-noti-urls' })
     }
@@ -40,8 +40,10 @@ const getSalesChildMenu = () => {
         icon: { icon: 'ph:share-network' },
         children: [{ title: '영업라인 목록', to: 'salesforces'}]
     })
-    if(getUserLevel() >= 35) {
+    if(getUserLevel() >= 13) {
         sales.children.push({title: '수수료율 변경이력', to: 'salesforces-fee-change-histories'})
+    }
+    if(getUserLevel() >= 35) {
         if(corp.pv_options.paid.sales_parent_structure)
             sales.children.push({title: '수수료율 테이블', to: 'salesforces-fee-table'})
     }

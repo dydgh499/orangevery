@@ -5,9 +5,16 @@ namespace App\Http\Controllers\Manager\BatchUpdater;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Enums\HistoryType;
 
 class BatchUpdateController extends Controller
 {
+    public function __construct()
+    {
+        $this->target = '';
+    }
+
+
     protected function batchResponse($row, $apply_type)
     {
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 적용되었습니다.' : "적용된 ".$apply_type."이 존재하지 않습니다.");
@@ -57,6 +64,23 @@ class BatchUpdateController extends Controller
             logging([], '잘못된 접근');
             echo "wrong access";
             return 0;
+        }
+    }
+
+    protected function addLogs($history_type, $after_datas)
+    {
+        foreach($after_datas as $after_data)
+        {
+            operLogging(HistoryType::CREATE, $this->target, [], $after_data, $after_data['mcht_name']);
+        }
+    }
+
+    protected function updateLogs($history_type, $query, $after_data, $update_keys, $title_key)
+    {
+        $before_datas = (clone $query)->get($update_keys)->toArray();
+        foreach($before_datas as $before_data)
+        {
+            operLogging(HistoryType::UPDATE, $this->target, $before_data, $after_data, $before_data[$title_key]);
         }
     }
 }

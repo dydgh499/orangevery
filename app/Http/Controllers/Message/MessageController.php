@@ -10,6 +10,7 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
 
 use App\Enums\AuthLoginCode;
+use App\Http\Controllers\Ablilty\SMS;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Manager\Service\BrandInfo;
@@ -80,33 +81,6 @@ class MessageController extends Controller
         }
     }
 
-    /*
-     * 예치금 잔액 검증
-     */
-    private function bonaejaDepositValidate($bonaeja, $brand_name)
-    {
-        $params = [
-            'user_id'   => $bonaeja['user_id'],
-            'api_key'   => $bonaeja['api_key'],
-        ];
-        $res = Comm::post("https://api.bonaeja.com/api/msg/v1/remain", $params);
-        if($res['body']['code'] == 100)
-        {
-            $total_deposit = $res['body']['data']['TOTAL_DEPOSIT'];
-            if($total_deposit < ((int)$bonaeja['min_balance_limit'] * 10000))
-            {
-                $sms = [
-                    'user_id'   => $bonaeja['user_id'],
-                    'sender'    => $bonaeja['sender_phone'],
-                    'api_key'   => $bonaeja['api_key'],
-                    'receiver'  => $bonaeja['receive_phone'],
-                    'msg'       => "[".$brand_name."] 보내자 예치금이 부족합니다. 예치금을 충전해주세요.(현재 잔액:".number_format($total_deposit)."원)",
-                ];
-                $_res = Comm::post("https://api.bonaeja.com/api/msg/v1/send", $sms);
-            }
-        }
-    }
-
     public function send($phone_num, $message, $brand_id)
     {
         $brand = BrandInfo::getBrandById($brand_id);
@@ -137,7 +111,8 @@ class MessageController extends Controller
     public function smslinkSend(Request $request)
     {
         $validated = $request->validate(['buyer_phone'=>'required']);
-        $res = $this->send($request->buyer_phone, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n".$request->url, $request->user()->brand_id);
+        $message = $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n";
+        $res = SMS::send($request->buyer_phone, $message, $request->user()->brand_id);
 
         if($res === null)
             return $this->extendResponse(1999, '문자발송 플랫폼과 연동되어있지 않습니다.<br>계약 이후 사용 가능합니다.');
@@ -145,13 +120,14 @@ class MessageController extends Controller
             return $this->extendResponse(1999, '통신 과정에서 에러가 발생했습니다.');
         else
         {
-            $brand = BrandInfo::getBrandById($request->user()->brand_id);
-            $bonaeja = $brand['pv_options']['free']['bonaeja'];
-            $this->bonaejaDepositValidate($bonaeja, $brand['name']);
+            SMS::validate($request->user()->brand_id);
             return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1999, $res['body']['message']);
         }
     }
 
+    /*
+    * 모바일 인증코드 발송
+    */
     public function mobileCodeSend($brand_id, $phone_num, $mcht_id)
     {
         $brand = BrandInfo::getBrandById($brand_id);
@@ -160,20 +136,17 @@ class MessageController extends Controller
             if($mcht_id === -1 || AuthPhoneNum::limitValidate($brand, $phone_num, $mcht_id))
             {
                 $rand = random_int(100000, 999999);
-                $res = $this->send($phone_num, "인증번호 [$rand]을(를) 입력해주세요", $brand_id);
-
+                $message = "인증번호 [$rand]을(를) 입력해주세요";
+                $res = SMS::send($phone_num, $message, $brand_id);
                 if($res == null)
                     return [1999, '문자발송 플랫폼과 연동되어있지 않습니다. 계약 이후 사용 가능합니다.'];
                 else if($res['code'] == 500)
                     return [1999, '통신 과정에서 에러가 발생했습니다.'];
                 else
                 {
+                    SMS::validate($brand_id);
                     if($res['body']['code'] === 100)
                         Redis::set("verify-code:".$phone_num, $rand, 'EX', 180);
-
-                    $bonaeja = $brand['pv_options']['free']['bonaeja'];
-                    $this->bonaejaDepositValidate($bonaeja, $brand['name']);
-
                     return [$res['body']['code'] == 100 ? 0 : 1999, $res['body']['message']];
                 }
             }

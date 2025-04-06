@@ -17,7 +17,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
-use App\Http\Controllers\Ablilty\AbnormalConnection;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Auth\AuthOperatorIP;
 use App\Http\Controllers\Auth\AuthPasswordChange;
@@ -25,6 +25,7 @@ use App\Http\Controllers\Auth\AuthPasswordChange;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+
 
 /**
  * @group Merchandise-Batch-Updater API
@@ -38,7 +39,9 @@ class BatchUpdateMchtController extends BatchUpdateController
 
     public function __construct(Merchandise $merchandises)
     {
+        parent::__construct();
         $this->merchandises = $merchandises;
+        $this->target = '가맹점';
     }
 
     private function applyBook($query, $request, $cols)
@@ -52,9 +55,20 @@ class BatchUpdateMchtController extends BatchUpdateController
     {
         $query = $this->merchandiseBatch($request);
         if($request->apply_type === 0) 
-            $row = $query->update($cols);
+        {
+            $row = DB::transaction(function () use($query, $cols) {
+                ActivityHistoryInterface::update($this->target, $query, $cols, 'mcht_name');
+                return $query->update($cols);
+            });
+        }
         else
-            $row = $this->applyBook($query, $request, $cols);
+        {
+            $row = DB::transaction(function () use($query, $cols, $request) {
+                ActivityHistoryInterface::book($this->target, $query, $cols, 'mcht_name');
+                return $this->applyBook($query, $request, $cols);
+            });
+
+        }
         return $row;
     }
 
@@ -242,10 +256,16 @@ class BatchUpdateMchtController extends BatchUpdateController
         $row = DB::transaction(function () use($request) {
             $query = $this->merchandiseBatch($request);
             $mcht_ids = (clone $query)->pluck('id')->all();
+            $p_query = PaymentModule::whereIn('mcht_id', $mcht_ids);
+            $n_query = NotiUrl::whereIn('mcht_id', $mcht_ids);
+
+            ActivityHistoryInterface::destory($this->target, $query, 'mcht_name');
+            ActivityHistoryInterface::destory('결제모듈', $p_query, 'note');
+            ActivityHistoryInterface::destory('노티 URL', $n_query, 'note');
 
             $row = (clone $query)->update(['is_delete' => true]);
-            $res = PaymentModule::whereIn('mcht_id', $mcht_ids)->update(['is_delete' => true]);
-            $res = NotiUrl::whereIn('mcht_id', $mcht_ids)->update(['is_delete' => true]);
+            $res = $p_query->update(['is_delete' => true]);
+            $res = $n_query->update(['is_delete' => true]);
             return $row;
         });
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 가맹점이 존재하지 않습니다.');        
@@ -360,7 +380,7 @@ class BatchUpdateMchtController extends BatchUpdateController
                     if($result === false)
                         return $this->extendResponse(954, $data['user_name']." ".$msg, $datas);    
                 }
-    
+
                 $merchandises = $datas->map(function ($data) use($current, $brand_id) {
                     $data['user_pw'] = Hash::make($data['user_pw'].$current);
                     $data['brand_id'] = $brand_id;
@@ -368,6 +388,7 @@ class BatchUpdateMchtController extends BatchUpdateController
                     $data['updated_at'] = $current;
                     return $data;
                 })->toArray();
+                ActivityHistoryInterface::add($this->target, $merchandises, 'mcht_name');
                 $res = $this->manyInsert($this->merchandises, $merchandises);
                 $mcht_ids = $this->merchandises
                         ->where('brand_id', $brand_id)

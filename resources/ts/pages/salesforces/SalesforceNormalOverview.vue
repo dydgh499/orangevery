@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/salesforces/useStore';
 import { selectFunctionCollect } from '@/views/selected';
-import { business_types } from '@/views/users/useStore';
+import { business_types, getRegidentNum } from '@/views/users/useStore';
 
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue';
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
@@ -12,7 +12,6 @@ import { authLevels, getAutoSetting, settleCycles, settleDays, settleTaxTypes } 
 import type { Options } from '@/views/types';
 import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios';
 import { DateFilters, ItemTypes } from '@core/enums';
-import corp from '@corp';
 
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
@@ -156,10 +155,8 @@ onMounted(() => {
                                     {{ all_days.find(sales => sales.id === item[_key])?.title }}
                                 </span>
                                 <span v-else-if="_key == 'resident_num'">
-                                    <span>{{ item['resident_num_front'] }}</span>
-                                    <span style="margin: 0 0.25em;">-</span>
-                                    <span v-if="corp.pv_options.free.resident_num_masking">*******</span>
-                                    <span v-else>{{ item['resident_num_back'] }}</span>
+                                    <span>123123</span>
+                                    <span>{{ getRegidentNum(item, false) }}</span>
                                 </span>
                                 <span v-else-if="_key == 'settle_tax_type'">
                                     <VChip

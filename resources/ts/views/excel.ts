@@ -89,10 +89,16 @@ const excelSubHeader = (_sub_headers: Ref<any>, _flat_headers: Ref<Filter>) => {
     }
 
     // 보조 헤더 제작
-    const setMergeCell = (worksheet:any, headers:any, sub_headers:any) => {
+    const setMergeCell = (worksheet:any, headers:any, sub_headers:any, is_apply_filter:boolean) => {
         for (let i = 0; i < sub_headers.length; i++) {
             let [min_col, max_col] = sub_headers[i].type === 'string' ? getStringCellName(i) : getOjectCellColName(i, headers)
-            let [visible_min_col, visible_max_col] = setVisiable(headers, min_col, max_col)
+            let [visible_min_col, visible_max_col] = ['', '']
+
+            if(is_apply_filter)
+                [visible_min_col, visible_max_col] = setVisiable(headers, min_col, max_col)
+            else
+                [visible_min_col, visible_max_col] = [min_col, max_col]
+            
             // 둘다 없을 경우 continue
             if(visible_min_col !== '' && visible_max_col !== '') {
                 const s_col = worksheet.getColumn(visible_min_col)
@@ -118,7 +124,7 @@ const excelSubHeader = (_sub_headers: Ref<any>, _flat_headers: Ref<Filter>) => {
     return { setMergeCell }
 }
 
-export const ExcelExporter = (_sub_headers: Ref<any>, _flat_headers: Ref<Filter>, _file_name: string) => {
+export const ExcelExporter = (_sub_headers: Ref<any>, _flat_headers: Ref<Filter>, _file_name: string, alert: any) => {
     const { setMergeCell } = excelSubHeader(_sub_headers, _flat_headers)
     const getDataRows = (worksheet:any, datas: { [key: string]: any}[]) => {
         for (let i = 0; i < datas.length; i++) {
@@ -137,14 +143,17 @@ export const ExcelExporter = (_sub_headers: Ref<any>, _flat_headers: Ref<Filter>
     }
 
     const exportToExcel = async (_datas: object[]) => {
+        const is_apply_filter = await alert.value.show('검색필터를 적용하시겠습니까?')
         const date = new Date().toISOString().split('T')[0];
         const wb = new Workbook();
         const worksheet = wb.addWorksheet(_file_name);
-        const headers = Object.fromEntries(
+
+        const headers = is_apply_filter ? Object.fromEntries(
             Object.entries(_flat_headers.value)
               .filter(([key, value]) => value?.visible !== false)
               .map(([key, value]) => [key, value])
-        )
+        ) : _flat_headers.value
+
         const datas = _datas.map(data =>
             Object.fromEntries(
               Object.entries(data)
@@ -161,7 +170,7 @@ export const ExcelExporter = (_sub_headers: Ref<any>, _flat_headers: Ref<Filter>
         if(sub_headers.length) {
             // sub header setting
             worksheet.spliceRows(1, 0, {});
-            setMergeCell(worksheet, headers, sub_headers)
+            setMergeCell(worksheet, headers, sub_headers, is_apply_filter)
             ExcelStyle().setHeaderStyle(worksheet.getRow(2));
         }
         else

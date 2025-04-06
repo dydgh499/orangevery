@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getUserLevel } from '@/plugins/axios'
+import { getUserLevel, isAbleUnlockMcht } from '@/plugins/axios'
 import { BasePropertie } from '@/views/types'
 import { axios } from '@axios'
 import corp from '@corp'
@@ -21,10 +21,12 @@ const { headOfficeAuthValidate } = operatorActionAuthStore()
     
 const isAbleUnlock = () => {
     if(props.item?.is_lock) {
-        if(props.type === 0 && getUserLevel() >= 13)
-            return true
-        else if(getUserLevel() >= 35)
-            return true
+        if(props.type === 0)
+            return isAbleUnlockMcht()
+        else if(props.type === 1)
+            return getUserLevel() >= 35
+        else if(props.type === 2)
+            return getUserLevel() >= 40
         else
             return false
     }

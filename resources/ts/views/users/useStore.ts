@@ -1,6 +1,7 @@
+import { getUserLevel, user_info } from '@/plugins/axios'
 import corp from '@corp'
 import { lengthValidator, passwordValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators'
-import { Options } from '../types'
+import { Options, UserPropertie } from '../types'
 
 export const banks = [
     { code: "001", title: "한국은행" }, { code: "002", title: "산업은행" }, { code: "003", title: "기업은행" },
@@ -125,4 +126,27 @@ export const getUserPasswordValidate = (user_type: number, password: string) => 
 
 export const getOnlyNumber = (value: string) => {
     return value.replace(/\D/g, '').trim()
+}
+
+export const getRegidentNum = (item: UserPropertie, is_mcht: boolean) => {
+    const brandMode2Method = () => {
+        if(getUserLevel() >= 30) 
+            return `${item.resident_num_front} - ${item.resident_num_back}`
+        else {
+            if(is_mcht && getUserLevel() === 10 && item.id === user_info.value.id)
+                return `${item.resident_num_front} - ${item.resident_num_back}`
+            else if(is_mcht === false && getUserLevel() > 10 && item.id === user_info.value.id)
+                return `${item.resident_num_front} - ${item.resident_num_back}`
+            else
+                return `${item.resident_num_front} - *******`
+        }
+    }
+    if(corp.pv_options.free.resident_num_masking) {
+        if(corp.pv_options.paid.brand_mode === 2) 
+            return brandMode2Method()
+        else
+            return `${item.resident_num_front} - *******`
+    }
+    else
+        return `${item.resident_num_front} - ${item.resident_num_back}`
 }

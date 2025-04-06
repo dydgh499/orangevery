@@ -6,7 +6,7 @@ import { feeCalcMenual, merchant_statuses, MerchantStatusColor, useSearchStore }
 import { selectFunctionCollect } from '@/views/selected';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
-import { business_types } from '@/views/users/useStore';
+import { business_types, getRegidentNum } from '@/views/users/useStore';
 
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue';
 import InitPayVerficationDialog from '@/layouts/dialogs/users/InitPayVerficationDialog.vue';
@@ -28,8 +28,6 @@ const shoppingMallDialog = ref()
 const initPayVerficationDialog = ref()
 
 const alert = <any>(inject('alert'))
-
-
 
 provide('password', password)
 provide('store', store)
@@ -241,10 +239,7 @@ onMounted(() => {
                                 </select>
                             </span>
                             <span v-else-if="_key == 'resident_num'">
-                                <span>{{ item['resident_num_front'] }}</span>
-                                <span style="margin: 0 0.25em;">-</span>
-                                <span v-if="corp.pv_options.free.resident_num_masking">*******</span>
-                                <span v-else>{{ item['resident_num_back'] }}</span>
+                                <span>{{ getRegidentNum(item, true) }}</span>
                             </span>
                             <span v-else-if="_key == 'settle_hold_s_dt'">
                                 <VChip color="error" v-if="item[_key]">

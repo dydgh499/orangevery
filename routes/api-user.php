@@ -50,12 +50,12 @@ Route::middleware(['auth.update'])->group(function() {
             Route::post('{id}/2fa-qrcode/create-vertify', [SalesforceController::class, 'vertify2FAQRLink']);
         });
         Route::middleware(['is.operate'])->group(function() {
-            Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
             Route::middleware(['is.edit.able'])->group(function() {
                 Route::post('{id}/unlock-account', [SalesforceController::class, 'unlockAccount']);
             });
             Route::apiResource('under-auto-settings', UnderAutoSettingController::class);    
         });
+        Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
         Route::apiResource('fee-table', FeeTableController::class);
         Route::apiResource('sales-recommender-codes', SalesRecommenderCodeController::class);
     });
@@ -103,7 +103,6 @@ Route::middleware(['auth.update'])->group(function() {
                 Route::delete('fee-change-histories/batch-remove', [FeeChangeHistoryController::class, 'deleteMerchandiseBatch']);
                 Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
             });
-            Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
             Route::get('sub-business-registrations', [SubBusinessRegistrationController::class, 'index']);
         
             Route::prefix('pay-modules')->group(function() {               
@@ -118,6 +117,7 @@ Route::middleware(['auth.update'])->group(function() {
                 Route::apiResource('bill-keys', BillKeyController::class); 
             });
         });   
+        Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
         Route::get('bill-keys', [BillKeyController::class, 'managerIndex']); 
         Route::get('noti-urls/chart', [NotiUrlController::class, 'chart']);
         

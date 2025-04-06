@@ -51,10 +51,12 @@ export const useRegisterStore = defineStore('salesRegisterStore', () => {
     const headers = [
         { key: 'user_name', title : '아이디(O)' },
         { key: 'user_pw', title : '패스워드(O)' },
-        { key: 'sales_name', title : '영업라인 상호(0)' },
+        { key: 'sales_name', title : '상호(0)' },
+        { key: 'sales_sub_name', title : '사업자명(X)' },
         { key: 'level', title : '등급(O)' }, 
         { key: 'nick_name', title : '대표자명(O)' },
         { key: 'addr', title : '주소(X)' }, 
+        { key: 'email', title : '이메일(X)' },
         { key: 'phone_num', title : '휴대폰번호(X)' }, 
         { key: 'resident_num', title : '주민등록번호(O)' }, 
         { key: 'business_num', title : '사업자등록번호(X)' }, 

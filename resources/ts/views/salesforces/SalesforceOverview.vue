@@ -83,7 +83,7 @@ const getAuthLevels = computed(() => {
             if(user_info.value.auth_level >= 1) 
                 auth_levels.push({id:1, title:'추가가능'})
             if(user_info.value.auth_level >= 2) 
-                auth_levels.push({id:2, title:'추가/수정/삭제 가능음'})
+                auth_levels.push({id:2, title:'추가/수정/삭제 가능'})
             return auth_levels
         }
         else
@@ -104,7 +104,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                 <VCardItem>
                     <VCardTitle>
                         <div style="display: flex;align-items: center;justify-content: space-between;">
-                            <span style="margin-right: 1em;">영업라인 정보</span>
+                            <VCardTitle style="margin-right: 1em;">영업라인 정보</VCardTitle>
                             <div v-if="props.item.id"
                                 :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
                                 <template v-if="getUserLevel() >= 35">
@@ -159,6 +159,47 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                 </VCol>
                             </VRow>
                         </VCol>
+                        <VCol cols="12" v-if="isAbleModiyV2(props.item, 'salesforces')">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>사업자명</VCol>
+                                        <VCol md="8">
+                                            <VTextField v-model="props.item.sales_sub_name" prepend-inner-icon="tabler-building-store"
+                                            placeholder="사업자명을 입력해주세요" persistent-placeholder />
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>이메일</VCol>
+                                        <VCol md="8">
+                                            <VTextField v-model="props.item.email" prepend-inner-icon="material-symbols:mail"
+                                                placeholder="이메일을 입력해주세요" persistent-placeholder>
+                                            </VTextField>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12" v-else>
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol class="font-weight-bold">사업자명</VCol>
+                                        <VCol md="8">
+                                            <span>{{ props.item.sales_sub_name }} </span>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol class="font-weight-bold">이메일</VCol>
+                                        <VCol md="8"><span>{{ props.item.email }}</span></VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
                         <template v-if="corp.pv_options.paid.sales_parent_structure">
                             <VCol cols="12" v-if="isAbleModiyV2(props.item, 'salesforces')">
                                 <VRow>
@@ -189,7 +230,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                 <VRow>
                                     <VCol cols="12" md="6">
                                         <VRow no-gutters style="align-items: center;">
-                                            <VCol>기본 수수료</VCol>
+                                            <VCol class="font-weight-bold">기본 수수료</VCol>
                                             <VCol md="8">
                                                 <VChip :color="'default'">
                                                     {{ props.item.sales_fee }} %
@@ -199,10 +240,10 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                     </VCol>
                                     <VCol cols="12" md="6">
                                         <VRow no-gutters style="align-items: center;">
-                                            <VCol>상위 영업라인</VCol>
+                                            <VCol class="font-weight-bold">상위 영업라인</VCol>
                                             <VCol md="8">                                                
                                                 <span>
-                                                    {{ getParentSales.find(obj => obj.id === props.item.parent_id)?.sales_name }}
+                                                    {{ getParentSales.find(obj => obj.id === props.item.parent_id)?.sales_name || '미존재' }}
                                                 </span>
                                             </VCol>
                                         </VRow>
@@ -211,6 +252,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                             </VCol>
                         </template>
                         <VCol cols="12">
+                            <VCardTitle style="margin: 1em 0;">정산 정보</VCardTitle>
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiyV2(props.item, 'salesforces')">
@@ -259,6 +301,11 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                         <VCol md="8"><span>{{ tax_types.find(obj => obj.id === props.item.settle_tax_type).title }}</span></VCol>
                                     </VRow>
                                 </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12">
+                            <VCardTitle style="margin: 1em 0;">권한 정보</VCardTitle>
+                            <VRow>
                                 <VCol cols="12" md="6" v-if="isAbleModiyV2(props.item, 'salesforces')">
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol md="4">
@@ -268,25 +315,6 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                         <VCol md="8">                                            
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.auth_level" 
                                                     :items="getAuthLevels" item-title="title" item-value="id" label="영업라인 권한"/>
-                                        </VCol>
-                                    </VRow>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol cols="12">
-                            <VRow>
-                                <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
-                                    <VRow no-gutters style="align-items: center;">
-                                        <VCol>
-                                            <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점 언락권한'" 
-                                                :content="'하위 가맹점의 계정잠금해제, 패스워드변경 권한을 부여합니다.<br>하위 모든 가맹점의 패스워드, LOCK 상태를 제어할 수 있으므로 설정 시 해당 영업라인은 2FA 설정을 권장합니다.'"/>
-                                        </VCol>
-                                        <VCol md="6">                                            
-                                            <BooleanRadio :radio="props.item.is_able_unlock_mcht"
-                                                @update:radio="props.item.is_able_unlock_mcht = $event">
-                                                <template #true>가능</template>
-                                                <template #false>불가능</template>
-                                            </BooleanRadio>
                                         </VCol>
                                     </VRow>
                                 </VCol>
@@ -307,6 +335,23 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                             <VChip :color="props.item.view_type ? 'success' : 'default'">
                                                 {{ props.item.view_type ? '상세보기' : '간편보기' }}
                                             </VChip>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                            <VRow  v-if="getUserLevel() >= 35">
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>
+                                            <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점 언락권한'" 
+                                                :content="'하위 가맹점의 계정잠금해제, 패스워드변경 권한을 부여합니다.<br>하위 모든 가맹점의 패스워드, LOCK 상태를 제어할 수 있으므로 설정 시 해당 영업라인은 2FA 설정을 권장합니다.'"/>
+                                        </VCol>
+                                        <VCol md="6">                                            
+                                            <BooleanRadio :radio="props.item.is_able_unlock_mcht"
+                                                @update:radio="props.item.is_able_unlock_mcht = $event">
+                                                <template #true>가능</template>
+                                                <template #false>불가능</template>
+                                            </BooleanRadio>
                                         </VCol>
                                     </VRow>
                                 </VCol>

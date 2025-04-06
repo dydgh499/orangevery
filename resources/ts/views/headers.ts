@@ -60,6 +60,7 @@ const SubHeader = (path: string) => {
 
 export const Header = (path: string, file_name: string) => {
     let header_count = 0
+    const alert = <any>(inject('alert'))
     const filter = ref<any>(null)
     const flat_headers = ref<Filter>({})
     const {
@@ -68,7 +69,7 @@ export const Header = (path: string, file_name: string) => {
         getSubHeaderComputed
     } = SubHeader(path)
 
-    const { exportToExcel } = ExcelExporter(sub_headers, flat_headers, file_name)
+    const { exportToExcel } = ExcelExporter(sub_headers, flat_headers, file_name, alert)
 
     const _init = (_headers: object) => {
         const getLocalStorageCols = (localstrage_headers: Filter, depth: number) => {

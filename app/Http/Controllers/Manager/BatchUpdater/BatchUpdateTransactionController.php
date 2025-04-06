@@ -17,6 +17,8 @@ use App\Models\Brand;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Manager\Transaction\SettleAmountCalculator;
 
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -33,13 +35,19 @@ class BatchUpdateTransactionController extends BatchUpdateController
     public function __construct(Transaction $transactions)
     {
         $this->transactions = $transactions;
+        $this->target = '매출';
     }
 
     private function getApplyRow($request, $cols)
     {
         $query = $this->transactionBatch($request);
         if($request->apply_type === 0) 
-            $row = $query->update($cols);
+        {
+            $row = DB::transaction(function () use($query, $cols) {
+                ActivityHistoryInterface::update($this->target, $query, $cols, 'id');
+                return $query->update($cols);
+            });
+        }
         else
             $this->wrongTypeAccess();
         return $row;
@@ -152,7 +160,11 @@ class BatchUpdateTransactionController extends BatchUpdateController
      */
     public function batchRemove(Request $request)
     {
-        $row = $this->transactionBatch($request)->delete();
+        $row = DB::transaction(function () use($request) {
+            $query = $this->transactionBatch($request);
+            ActivityHistoryInterface::destory($this->target, $query, 'id');
+            return $query->delete();
+        });
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 매출이 존재하지 않습니다.');
     }
 

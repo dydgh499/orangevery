@@ -14,6 +14,8 @@ class BulkSalesforceRequest extends FormRequest
         'addr',
         'phone_num',
         'sales_name',
+        'sales_sub_name',
+        'email',
         'nick_name',
         'level',
         'resident_num',

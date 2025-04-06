@@ -3,12 +3,11 @@
 
 import SalesforceChildOverview from '@/pages/salesforces/SalesforceChildOverview.vue';
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
-import { business_types } from '@/views/users/useStore';
+import { business_types, getRegidentNum } from '@/views/users/useStore';
 
 import { authLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
 import { Salesforce } from '@/views/types';
 import { getLevelByIndex, getUserLevel, salesLevels } from '@axios';
-import corp from '@corp';
 
 interface Props {
     salesforce: Salesforce,
@@ -73,10 +72,7 @@ const getChildDepth = computed(() => {
                     {{ all_days.find(sales => sales.id === props.salesforce[key])?.title }}
                 </span>
                 <span v-else-if="key == 'resident_num'">
-                    <span>{{ props.salesforce['resident_num_front'] }}</span>
-                    <span style="margin: 0 0.25em;">-</span>
-                    <span v-if="corp.pv_options.free.resident_num_masking">*******</span>
-                    <span v-else>{{ props.salesforce['resident_num_back'] }}</span>
+                    <span>{{ getRegidentNum(props.salesforce, false) }}</span>
                 </span>
                 <span v-else-if="key == 'settle_tax_type'">
                     <VChip

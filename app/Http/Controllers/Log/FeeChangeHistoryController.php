@@ -104,6 +104,8 @@ class FeeChangeHistoryController extends Controller
         if($request->change_status !== null)
             $query = $query->where('mcht_fee_change_histories.change_status', $request->change_status);
 
+        $query = globalSalesFilter($query, $request, 'merchandises');
+        $query = globalAuthFilter($query, $request, 'merchandises');
         $data = $this->getIndexData($request, $query, 'mcht_fee_change_histories.id', ['mcht_fee_change_histories.*', 'merchandises.mcht_name'], 'mcht_fee_change_histories.created_at');
         return $this->response(0, $data);
     }
@@ -118,9 +120,16 @@ class FeeChangeHistoryController extends Controller
             ->where('sf_fee_change_histories.brand_id', $request->user()->brand_id)
             ->where('merchandises.mcht_name', 'like', "%$search%");
 
+        $query = globalSalesFilter($query, $request, 'merchandises');
+        $query = globalAuthFilter($query, $request, 'merchandises');
+        if(Ablilty::isSalesforce($request))
+        {
+            $level = $request->user()->level;
+            $query = $query->where('sf_fee_change_histories.level', '<=', $level);
+        }
         if($request->change_status !== null)
             $query = $query->where('sf_fee_change_histories.change_status', $request->change_status);
-
+    
         $query = $query->with(['bfSales', 'aftSales']);
         $data = $this->getIndexData($request, $query, 'sf_fee_change_histories.id', ['sf_fee_change_histories.*', 'merchandises.mcht_name'], 'sf_fee_change_histories.created_at');
         return $this->response(0, $data);

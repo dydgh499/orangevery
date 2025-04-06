@@ -2,7 +2,7 @@ import { getFixplusSalesHeader, isFixplus } from '@/plugins/fixplus'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { Merchandise, Options, SalesFilter, Salesforce, UnderAutoSetting } from '@/views/types'
-import { avatars, business_types } from '@/views/users/useStore'
+import { avatars, business_types, getRegidentNum } from '@/views/users/useStore'
 import { axios, getSalesLevelByCol, getUserLevel, salesLevels } from '@axios'
 import corp from '@corp'
 import _ from 'lodash'
@@ -59,7 +59,8 @@ const getSalesHeaders = (head :any) => {
             'id' : 'NO.',
             'level' : '등급',
             'user_name' : '영업라인 ID',
-            'sales_name': '영업라인 상호',
+            'sales_name': '상호',
+            'sales_sub_name': '사업자명',
             'sector' : '업종',
             'business_type': '구분',
         }
@@ -82,6 +83,7 @@ const getSalesHeaders = (head :any) => {
     const getPrivacyCols = () => {
         return {
             'nick_name' : '대표자명',
+            'email'     : '이메일',
             'phone_num' : '대표자 연락처',
             'resident_num' : '주민등록번호',
             'business_num' : '사업자등록번호',
@@ -210,7 +212,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
             data['settle_cycle'] = all_cycles.find(obj => obj['id'] === salesforce['settle_cycle'])?.title as string
             data['settle_day'] = all_days.find(obj => obj['id'] === salesforce['settle_day'])?.title as string
             data['settle_tax_type'] = tax_types.find(obj => obj['id'] === salesforce['settle_tax_type'])?.title as string
-            data['resident_num'] = salesforce['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : salesforce['resident_num_back'])
+            data['resident_num'] = getRegidentNum(data, false)
             data['view_type'] = data['view_type'] ? '상세보기' : '간편보기'
             data['business_type'] = business_types.find(cus => cus.id === salesforce['business_type'])?.name as string
             return head.sortAndFilterByHeader(data, keys)
@@ -548,7 +550,11 @@ export const defaultItemInfo = () => {
         og_file: undefined,
         login_file: undefined,
         resale_withdraw_fee: 0,
-        resale_settle_fee: 0
+        resale_settle_fee: 0,
+        sales_sub_name: '',
+        email: '',
+        business_type: 0,
+        corp_registration_num: '',
     })
     return {
         path, item

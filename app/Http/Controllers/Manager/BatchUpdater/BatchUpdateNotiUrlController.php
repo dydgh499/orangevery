@@ -14,6 +14,8 @@ use App\Http\Traits\StoresTrait;
 
 use App\Http\Requests\Manager\BulkRegister\BulkNotiUrlRequest;
 
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -30,6 +32,7 @@ class BatchUpdateNotiUrlController extends BatchUpdateController
     public function __construct(NotiUrl $noti_urls)
     {
         $this->noti_urls = $noti_urls;
+        $this->target = '노티 URL';
     }
 
     private function applyBook($query, $request, $cols)
@@ -42,10 +45,20 @@ class BatchUpdateNotiUrlController extends BatchUpdateController
     private function getApplyRow($request, $cols)
     {
         $query = $this->notiUrlBatch($request);
-        if($request->apply_type === 0) 
-            $row = $query->update($cols);
+        if($request->apply_type === 0)
+        {
+            $row = DB::transaction(function () use($query, $cols) {
+                ActivityHistoryInterface::update($this->target, $query, $cols, 'note');
+                return $query->update($cols);
+            });
+        }
         else
-            $row = $this->applyBook($query, $request, $cols);
+        {
+            $row = DB::transaction(function () use($query, $cols, $request) {
+                ActivityHistoryInterface::book($this->target, $query, $cols, 'note');
+                return $this->applyBook($query, $request, $cols);
+            });
+        }
         return $row;
     }
 
@@ -115,7 +128,11 @@ class BatchUpdateNotiUrlController extends BatchUpdateController
      */
     public function batchRemove(Request $request)
     {
-        $row = $this->notiUrlBatch($request)->update(['is_delete' => true]);
+        $row = DB::transaction(function () use($request) {
+            $query = $this->notiUrlBatch($request);
+            ActivityHistoryInterface::destory($this->target, $query, 'note');
+            return $query->update(['is_delete' => true]);
+        });
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 노티주소가 존재하지 않습니다.');
     }
 
@@ -135,6 +152,7 @@ class BatchUpdateNotiUrlController extends BatchUpdateController
             $data['updated_at'] = $current;
             return $data;
         })->toArray();
+        ActivityHistoryInterface::add($this->target, $noti_urls, 'note');
         $res = $this->manyInsert($this->noti_urls, $noti_urls);
         return $this->response($res ? 1 : 990);
     }
