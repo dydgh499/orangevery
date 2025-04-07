@@ -72,7 +72,9 @@ class SMS
                 $res = Comm::post("https://api.bonaeja.com/api/msg/v1/send", $sms);
                 if($res['body']['code'] !== 100)
                     Log::warning("bonaeja response error", $res);
+                return $res;
             }
         }
+        return null;
     }
 }

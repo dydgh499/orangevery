@@ -58,11 +58,11 @@ class MerchandiseRequest extends FormRequest
         'use_regular_card',
         'merchant_status',
         'business_type',
+        'single_payment_limit_s_tm',
+        'single_payment_limit_e_tm',
     ];
     public $nullable_keys = [
         'custom_id',
-        'single_payment_limit_s_tm',
-        'single_payment_limit_e_tm',
         'phone_auth_limit_s_tm',
         'phone_auth_limit_e_tm',
     ];
@@ -140,6 +140,10 @@ class MerchandiseRequest extends FormRequest
             $data['acct_bank_code'] = "000";
         if($data['brand_id'] === 30)    // fixplus의 경우 무조건 1
             $data['use_regular_card'] = 1;
-        return $data;
+        if($data['single_payment_limit_s_tm'] === ':') 
+            $data['single_payment_limit_s_tm'] = '';
+        if($data['single_payment_limit_e_tm'] === ':') 
+            $data['single_payment_limit_e_tm'] = '';
+    return $data;
     }
 }
