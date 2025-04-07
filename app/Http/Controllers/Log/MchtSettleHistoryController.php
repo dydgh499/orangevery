@@ -103,7 +103,7 @@ class MchtSettleHistoryController extends Controller
     protected function createMerchandiseCommon($item, $data, $target_settle_id)
     {
         $db_count = Transaction::whereIn('id', $item['settle_transaction_idxs'])->noSettlement($target_settle_id)->count();
-        $data['settle_fee']                 = $item['settle_fee'] + $item['withdraw_fee'];
+        $data['settle_fee']                 = $item['settle_fee'] + (isset($item['withdraw_fee']) ? $item['withdraw_fee'] : 0);
         $data['cancel_deposit_amount']      = $item['cancel_deposit_amount'] ? $item['cancel_deposit_amount'] : 0;
         $seltte_month = date('Ym', strtotime($data['settle_dt']));
 
