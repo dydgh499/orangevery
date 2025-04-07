@@ -111,7 +111,7 @@ class MessageController extends Controller
     public function smslinkSend(Request $request)
     {
         $validated = $request->validate(['buyer_phone'=>'required']);
-        $message = $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n";
+        $message = $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n".$request->url;
         $res = SMS::send($request->buyer_phone, $message, $request->user()->brand_id);
 
         if($res === null)
