@@ -2,7 +2,7 @@ import { getLevelByIndex, getUserLevel } from "@/plugins/axios"
 import corp from "@/plugins/corp"
 import { isFixplus } from "@/plugins/fixplus"
 import { installments, module_types } from "../merchandises/pay-modules/useStore"
-import { useStore } from "../services/pay-gateways/useStore"
+import { round_types, useStore } from "../services/pay-gateways/useStore"
 import { Transaction } from "../types"
 import { notiSendHistoryInterface, realtimeHistoryInterface } from "./transactions"
 
@@ -88,6 +88,7 @@ export const transactionHeader = (table_name: string) => {
             headers_3['pg_id'] = '원천사'
             headers_3['ps_id'] = '구간'
             headers_3['ps_fee'] = '구간 수수료'
+            headers_3['round_type'] = '소수점 계산방식'
         }
         return headers_3
     }
@@ -217,6 +218,7 @@ export const transactionHeader = (table_name: string) => {
         data['ps_id'] =  pss.find(ps => ps['id'] === data['ps_id'])?.name as string
         data['terminal_id'] = terminals.find(terminal => terminal['id'] === data['terminal_id'])?.name as string
         data['custom_id'] = cus_filters.find(cus => cus.id === data['custom_id'])?.name as string
+        data['round_type'] = round_types.find(obj => obj.id === data['round_type'])?.title as string
         data['mcht_settle_type'] = settle_types.find(settle_type => settle_type.id === data['mcht_settle_type'])?.name as string
         data['resident_num'] = data['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : data['resident_num_back'])
         data['settle_id'] = settleIdCol(data, select_level) === null ? '정산안함' : "#"+settleIdCol(data, select_level)

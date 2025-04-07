@@ -16,7 +16,8 @@ const addNewPG = () => {
         business_num: '',
         phone_num: '',
         addr:'',
-        settle_type:1,
+        settle_type: 1,
+        round_type: 0,
     }))
 }
 

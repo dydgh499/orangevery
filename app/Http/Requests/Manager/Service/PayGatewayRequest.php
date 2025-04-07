@@ -9,18 +9,21 @@ class PayGatewayRequest extends FormRequest
 {
     use FormRequestTrait;
     public $keys = [
-        'pg_type',
         'pg_name',
         'rep_name',
         'company_name',
         'business_num',
         'phone_num',
         'addr',
-        'settle_type',
         'p_mid',
         'mid',
         'api_key',
         'sub_key',
+    ];
+    public $integer_keys = [
+        'pg_type',
+        'settle_type',
+        'round_type',
     ];
 
     public function authorize()
@@ -39,23 +42,23 @@ class PayGatewayRequest extends FormRequest
             'phone_num' => 'nullable',
             'addr' => 'nullable',
         ];
-        return $this->getRules($this->keys, $sub);
+        
+        return $this->getRules(array_merge($this->keys, $this->integer_keys), $sub);
     }
 
     public function attributes()
     {
-        return $this->getAttributes($this->keys);
+        return $this->getAttributes(array_merge($this->keys, $this->integer_keys));
     }
 
     public function bodyParameters()
     {
-        $params = $this->getDocsParameters($this->keys);
-        return $params;
+        return $this->getDocsParameters(array_merge($this->keys, $this->integer_keys));
     }
 
     public function data()
     {
-        $data = $this->getParmasBaseKey();
+        $data = array_merge($this->getParmasBaseKeyV2($this->keys, ''), $this->getParmasBaseKeyV2($this->integer_keys, 0));
         $data['brand_id'] = $this->user()->brand_id;
         return $data;
     }

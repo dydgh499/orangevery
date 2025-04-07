@@ -1,9 +1,19 @@
 <script setup lang="ts">
 import corp from '@/plugins/corp'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import { getUserLevel } from '@axios'
+import { coocon_error_codes } from './finance-vans-error-codes/coocon'
+import { dozn_error_codes } from './finance-vans-error-codes/dozn'
+import { hecto_error_codes } from './finance-vans-error-codes/hecto'
+import { hyphen_error_codes } from './finance-vans-error-codes/hyphen'
+import VanWithdrawErrorCodeDialog from './finance-vans-error-codes/VanWithdrawErrorCodeDialog.vue'
+import { welcome_error_codes } from './finance-vans-error-codes/welcome'
 
 
 const visible = ref(false)
 const errors = ref(<any>([]))
+const vanWithdrawErrorCodeDialog = ref()
+const { finance_companies, finance_vans } = useStore()
 
 const show = () => {
     visible.value = true
@@ -43,6 +53,25 @@ const setErrorCode = () => {
     ])
 }
 
+const getFindFianceVan = (finance_company_num: number) => {
+    return finance_vans.find(obj => obj.finance_company_num === finance_company_num) ? true : false
+}
+
+const getFindFianceVanErrors = (finance_company_num: number) => {
+    if(finance_company_num === 1)
+        return coocon_error_codes
+    else if(finance_company_num === 2)
+        return hecto_error_codes
+    else if(finance_company_num === 3)
+        return welcome_error_codes
+    else if(finance_company_num === 4)
+        return dozn_error_codes
+    else if(finance_company_num === 5)
+        return hyphen_error_codes
+    else
+        return []
+}
+
 onMounted(() => {
     setErrorCode()
 })
@@ -53,10 +82,24 @@ defineExpose({
 </script>
 <template>
     <VDialog v-model="visible" max-width="1300">
-        <!-- Dialog close btn -->
         <DialogCloseBtn @click="visible = false" />
-        <!-- Dialog Content -->
-        <VCard title="출금 에러코드">
+        <VCard title="">
+            <VCardTitle>
+                <div style="display: flex;align-items: center;justify-content: space-between;">
+                    <span style="margin-left: 1em;">출금 에러코드</span>
+                    <div :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
+                        <template v-if="getUserLevel() >= 35">
+                            <template v-for="(finance_company, key) in finance_companies">
+                                <VBtn v-if="getFindFianceVan(finance_company.id)"
+                                    @click="vanWithdrawErrorCodeDialog.show(getFindFianceVanErrors(finance_company.id))"
+                                    style='margin: 0.25em;' variant="tonal" size="small">
+                                    {{ finance_company.title}} 에러코드
+                                </VBtn>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+            </VCardTitle>
             <VCardText>
                 <VTable class="text-no-wrap" style="width: 100%;">
                     <thead>
@@ -79,4 +122,5 @@ defineExpose({
             </VCardText>
         </VCard>
     </VDialog>
+    <VanWithdrawErrorCodeDialog ref="vanWithdrawErrorCodeDialog"/>
 </template>

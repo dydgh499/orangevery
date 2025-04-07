@@ -4,7 +4,13 @@ import type { Classification, FinanceVan, Options, PayGateway, PaySection } from
 
 export const pg_settle_types = <Options[]>([
     {id:0, title:'매일정산'},
-    {id:1, title:'주말, 공휴일 건너뛰고 정산'},
+    {id:1, title:'영업일만 정산'},
+])
+
+export const round_types = <Options[]>([
+    {id:0, title:'반올림'},
+    {id:1, title:'올림'},
+    {id:2, title:'내림'},
 ])
 
 export const useStore = defineStore('payGatewayStore', () => {

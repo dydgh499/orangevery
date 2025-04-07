@@ -2,7 +2,7 @@
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { useRequestStore } from '@/views/request'
 import PaySectionTr from '@/views/services/pay-gateways/PaySectionTr.vue'
-import { pg_settle_types, useStore } from '@/views/services/pay-gateways/useStore'
+import { pg_settle_types, round_types, useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayGateway } from '@/views/types'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
@@ -141,18 +141,17 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                     <VRow>
-                        <VCol :md="6" :cols="12">
+                        <VCol>
                             <VRow no-gutters>
                                 <VCol>
-                                    <label>주소</label>
+                                    <label>소수점 정산방식</label>
                                 </VCol>
                                 <VCol md="7">
-                                    <VTextField v-model="props.item.addr" prepend-inner-icon="tabler-map-pin"
-                                        placeholder="주소 입력" persistent-placeholder maxlength="200"
-                                        :rules="[requiredValidatorV2(props.item.addr, '주소')]" />
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.round_type"
+                                        :items="round_types" prepend-inner-icon="tabler-calculator" label="소수점 정산방식 선택"
+                                        item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(props.item.round_type, '소수점 정산방식')]" />
                                 </VCol>
                             </VRow>
-
                         </VCol>
                         <VCol>
                             <VRow no-gutters>
@@ -166,7 +165,21 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                    </VRow>                        
+                    </VRow>         
+                    <VRow>
+                        <VCol :md="12" :cols="12">
+                            <VRow no-gutters>
+                                <VCol md="2">
+                                    <label>주소</label>
+                                </VCol>
+                                <VCol md="10">
+                                    <VTextField v-model="props.item.addr" prepend-inner-icon="tabler-map-pin"
+                                        placeholder="주소 입력" persistent-placeholder maxlength="200"
+                                        :rules="[requiredValidatorV2(props.item.addr, '주소')]" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>               
                     <VCardTitle style=" margin-top: 1em; margin-bottom: 1em;">                            
                         <BaseQuestionTooltip :location="'top'" :text="'대표 결제 정보'"
                             :content="'결제모듈 등록 시 대표 결제정보 값들을 불러올 수 있습니다.'"/>
@@ -283,5 +296,9 @@ watchEffect(() => {
 <style scoped>
 :deep(.v-table__wrapper) {
   block-size: auto !important;
+}
+
+:deep(.v-row) {
+  align-items: center;
 }
 </style>

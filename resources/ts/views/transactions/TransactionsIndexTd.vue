@@ -2,8 +2,9 @@
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
 import ExtraMenu from '@/views/transactions/ExtraMenu.vue';
 import { getDateFormat, settleIdCol } from '@/views/transactions/transacitonsHeader';
+import { getRegidentNum } from '@/views/users/useStore';
 import corp from '@corp';
-import { useStore } from '../services/pay-gateways/useStore';
+import { round_types, useStore } from '../services/pay-gateways/useStore';
 import { settlementFunctionCollect } from './settle/Settle';
 import { notiSendHistoryInterface, realtimeHistoryInterface } from './transactions';
 
@@ -49,6 +50,11 @@ const { realtimeResult, realtimeMessage } = realtimeHistoryInterface(formatTime)
     <span v-else-if="_key == 'ps_id'">
         {{ pss.find(ps => ps['id'] === item[_key])?.name }}
     </span>
+    <span v-else-if="_key == 'round_type'">
+        <VChip :color="store.getSelectIdColor(item[_key])">
+            {{ round_types.find(obj => obj.id === item['round_type'])?.title }}
+        </VChip>
+    </span>
     <span v-else-if="_key == 'mcht_settle_type'">
         {{ settle_types.find(settle_type => settle_type['id'] === item[_key])?.name }}
     </span>
@@ -75,10 +81,7 @@ const { realtimeResult, realtimeMessage } = realtimeHistoryInterface(formatTime)
         </VChip>
     </span>
     <span v-else-if="_key == 'resident_num'">
-        <span>{{ item['resident_num_front'] }}</span>
-        <span style="margin: 0 0.25em;">-</span>
-        <span v-if="corp.pv_options.free.resident_num_masking">*******</span>
-        <span v-else>{{ item['resident_num_back'] }}</span>
+        <span>{{ getRegidentNum(item, true) }}</span>
     </span>
     <span v-else-if="_key == 'custom_id'">
         {{ cus_filters.find(cus => cus.id === item[_key])?.name }}

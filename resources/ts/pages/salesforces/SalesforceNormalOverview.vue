@@ -155,7 +155,6 @@ onMounted(() => {
                                     {{ all_days.find(sales => sales.id === item[_key])?.title }}
                                 </span>
                                 <span v-else-if="_key == 'resident_num'">
-                                    <span>123123</span>
                                     <span>{{ getRegidentNum(item, false) }}</span>
                                 </span>
                                 <span v-else-if="_key == 'settle_tax_type'">

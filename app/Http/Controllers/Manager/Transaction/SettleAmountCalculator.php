@@ -6,6 +6,21 @@ use App\Http\Controllers\Manager\Service\BrandInfo;
 
 class SettleAmountCalculator
 {
+    static private function getRoundAmount($amount, $round_type)
+    {
+        if($round_type === 0)
+            return round($amount);
+        else if($round_type === 1)
+            return ceil($amount);
+        else if($round_type === 2)
+            return floor($amount);
+        else
+        {
+            error([], '잘못된 round type');
+            return round($amount);
+        }
+    }
+
     static private function setOperatorSettleAmount($tran, $dev_settle_type)
     {
         if($dev_settle_type == DevSettleType::DEDUCT_FEE->value)
@@ -13,8 +28,8 @@ class SettleAmountCalculator
             $dev_profit = self::getSettleAmount(6, $tran, true);
             $brand_profit = self::getSettleAmount(7, $tran, true);
 
-            $tran['dev_settle_amount']   = round($dev_profit);
-            $tran['brand_settle_amount'] = round($brand_profit);
+            $tran['dev_settle_amount']   = self::getRoundAmount($dev_profit, $tran['round_type']);
+            $tran['brand_settle_amount'] = self::getRoundAmount($brand_profit, $tran['round_type']);
         }
         else
         {
@@ -28,11 +43,12 @@ class SettleAmountCalculator
             else if($dev_settle_type == DevSettleType::TOTAL_SALES->value)
                 $dev_profit = $tran['amount'] * $tran['dev_fee'];
 
-            $tran['dev_settle_amount']   = round($dev_profit);
-            $tran['brand_settle_amount'] = round($brand_profit - $dev_profit);
+            $tran['dev_settle_amount']   = self::getRoundAmount($dev_profit, $tran['round_type']);
+            $tran['brand_settle_amount'] = self::getRoundAmount($brand_profit - $dev_profit, $tran['round_type']);
         }
+        
         // 실시간 비용
-        $tran['dev_realtime_settle_amount'] = round($tran['amount'] * $tran['dev_realtime_fee']);
+        $tran['dev_realtime_settle_amount'] = self::getRoundAmount($tran['amount'] * $tran['dev_realtime_fee'], $tran['round_type']);
         $tran['brand_settle_amount'] -= $tran['dev_realtime_settle_amount'];
         return $tran;
     }
@@ -80,8 +96,8 @@ class SettleAmountCalculator
 
     static private function setOperatorSettleAmountV2($tran)
     {
-        $tran['dev_settle_amount']   = 0;
-        $tran["brand_settle_amount"] = round($tran['amount'] * $tran["ps_fee"]) ;
+        $tran['dev_settle_amount']      = 0;
+        $tran['brand_settle_amount']    = self::getRoundAmount($tran['amount'] * $tran["ps_fee"], $tran['round_type']);
         return $tran;
     }
 
@@ -90,7 +106,7 @@ class SettleAmountCalculator
         for($i=0; $i<6; $i++)
         {
             $key = 'sales'.$i;
-            $tran[$key."_settle_amount"] = $tran[$key."_id"] ? round($tran['amount'] * $tran[$key."_fee"]) : 0;
+            $tran[$key."_settle_amount"] = $tran[$key."_id"] ? self::getRoundAmount($tran['amount'] * $tran[$key."_fee"], $tran['round_type']) : 0;
         }
         return $tran;
     }
@@ -111,7 +127,7 @@ class SettleAmountCalculator
                     $profit = self::setTaxAmount($saleses[$idx]['settle_tax_type'], $profit);
                 }
             }
-            $tran[$key."_settle_amount"] = round($profit);
+            $tran[$key."_settle_amount"] = self::getRoundAmount($profit, $tran['round_type']);
         }
         return $tran;
     }
@@ -142,7 +158,8 @@ class SettleAmountCalculator
         foreach($trans as &$tran)
         {
             //가맹점 수수료 세팅
-            $tran["mcht_settle_amount"] = round(($tran['amount'] - ($tran['amount'] * ($tran['mcht_fee'] + $tran['hold_fee']))) - $tran['mcht_settle_fee']);
+            $mcht_settle_amount = ($tran['amount'] - ($tran['amount'] * ($tran['mcht_fee'] + $tran['hold_fee'])));
+            $tran["mcht_settle_amount"] = self::getRoundAmount(($mcht_settle_amount - $tran['mcht_settle_fee']), $tran['round_type']);
             if($brand['pv_options']['paid']['fee_input_mode'])
             {
                 $tran = self::setSalesSettleAmountV2($tran, $saleses);

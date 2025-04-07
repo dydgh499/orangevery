@@ -177,7 +177,7 @@ class AbnormalConnection
             self::create([
                 'brand_id' => $brand_id,
                 'connection_type' => AbnormalConnectionCode::OPERATION_PERMIITED->value,
-                'action' => "1시간 IP차단 (~ ".$block_time.")",
+                'action'        => "1시간 IP차단 (~ ".$block_time.")",
                 'target_level'  => $level,
                 'target_key'    => request()->url(),
                 'target_value'  => self::privateDataHidden(request()->all()),

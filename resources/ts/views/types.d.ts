@@ -309,8 +309,9 @@ export interface PayGateway {
     company_name: string,
     business_num: string,
     phone_num: string,
-    addr:string,
-    settle_type:number,
+    addr: string,
+    settle_type: number,
+    round_type: number,
     p_mid: string,
     mid: string,
     api_key: string,
@@ -332,7 +333,7 @@ export interface Classification {
 }
 
 export interface FinanceVan {
-    id: number | null,
+    id: number,
     finance_company_num: number | null,
     is_agency_van: number,
     api_key: string,
