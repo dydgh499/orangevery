@@ -119,7 +119,6 @@ class MchtBlacklistController extends Controller
 
     /**
      * 대량등록
-     *
      */
     public function register(BulkMchtBlacklistRequest $request)
     {

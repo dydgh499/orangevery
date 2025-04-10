@@ -8,7 +8,6 @@ use App\Http\Traits\ExtendResponseTrait;
 
 use App\Http\Requests\Manager\Merchandise\SpecifiedTimeDisablePaymentRequest;
 use App\Http\Requests\Manager\IndexRequest;
-use App\Enums\HistoryType;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

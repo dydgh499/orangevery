@@ -55,19 +55,12 @@ class BatchUpdateMchtController extends BatchUpdateController
     {
         $query = $this->merchandiseBatch($request);
         if($request->apply_type === 0) 
-        {
-            $row = DB::transaction(function () use($query, $cols) {
-                ActivityHistoryInterface::update($this->target, $query, $cols, 'mcht_name');
-                return $query->update($cols);
-            });
-        }
+            $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $cols, 'mcht_name');
         else
         {
-            $row = DB::transaction(function () use($query, $cols, $request) {
-                ActivityHistoryInterface::book($this->target, $query, $cols, 'mcht_name');
-                return $this->applyBook($query, $request, $cols);
-            });
-
+            $datas = $this->getApplyBookDatas($request, $query->pluck('id')->all(), 'mcht_id', $cols);
+            $result = app(ActivityHistoryInterface::class)->book($this->target, $query, $cols, 'mcht_name', new MerchandiseColumnApplyBook, $datas);
+            $row = $result ? count($datas) : 0;
         }
         return $row;
     }
@@ -131,7 +124,7 @@ class BatchUpdateMchtController extends BatchUpdateController
 
             // 상위영업라인 변경건일 시 히스토리 추가
             if($row && $user === 'salesforces')
-                    MerchandiseFeeUpdater::SalesFeeHistoryUpdate($request);
+                MerchandiseFeeUpdater::SalesFeeHistoryUpdate($request);
             return $this->batchResponse($row, '가맹점');
         }
         else
@@ -259,14 +252,9 @@ class BatchUpdateMchtController extends BatchUpdateController
             $p_query = PaymentModule::whereIn('mcht_id', $mcht_ids);
             $n_query = NotiUrl::whereIn('mcht_id', $mcht_ids);
 
-            ActivityHistoryInterface::destory($this->target, $query, 'mcht_name');
-            ActivityHistoryInterface::destory('결제모듈', $p_query, 'note');
-            ActivityHistoryInterface::destory('노티 URL', $n_query, 'note');
-
-            $row = (clone $query)->update(['is_delete' => true]);
-            $res = $p_query->update(['is_delete' => true]);
-            $res = $n_query->update(['is_delete' => true]);
-            return $row;
+            app(ActivityHistoryInterface::class)->destory('결제모듈', $p_query, 'note');
+            app(ActivityHistoryInterface::class)->destory('노티 URL', $n_query, 'note');
+            return app(ActivityHistoryInterface::class)->destory($this->target, $query, 'mcht_name');
         });
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 가맹점이 존재하지 않습니다.');        
     }
@@ -388,15 +376,9 @@ class BatchUpdateMchtController extends BatchUpdateController
                     $data['updated_at'] = $current;
                     return $data;
                 })->toArray();
-                ActivityHistoryInterface::add($this->target, $merchandises, 'mcht_name');
-                $res = $this->manyInsert($this->merchandises, $merchandises);
-                $mcht_ids = $this->merchandises
-                        ->where('brand_id', $brand_id)
-                        ->where('created_at', $current)
-                        ->pluck('id')
-                        ->all();
-
-                return $this->response($res ? 1 : 990, $mcht_ids);
+                
+                $ids = app(ActivityHistoryInterface::class)->batchAdd($this->target, $this->merchandises, $merchandises, 'mcht_name', $current, $brand_id);
+                return $this->response(1, $ids);
             }    
         }
     }

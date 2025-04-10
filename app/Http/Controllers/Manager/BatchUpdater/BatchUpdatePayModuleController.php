@@ -35,29 +35,16 @@ class BatchUpdatePayModuleController extends BatchUpdateController
         $this->target = '결제모듈';
     }
 
-    private function applyBook($query, $request, $cols)
-    {
-        $datas = $this->getApplyBookDatas($request, $query->pluck('payment_modules.id')->all(), 'pmod_id', $cols);
-        $res = $this->manyInsert(new PaymentModuleColumnApplyBook, $datas);
-        return count($datas);
-    }
-
     private function getApplyRow($request, $cols)
     {
         $query = $this->payModuleBatch($request);
         if($request->apply_type === 0) 
-        {
-            $row = DB::transaction(function () use($query, $cols) {
-                ActivityHistoryInterface::update($this->target, $query, $cols, 'note');
-                return $query->update($cols);
-            });
-        }
+            $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $cols, 'note');
         else
         {
-            $row = DB::transaction(function () use($query, $cols, $request) {
-                ActivityHistoryInterface::book($this->target, $query, $cols, 'note');
-                return $this->applyBook($query, $request, $cols);
-            });
+            $datas = $this->getApplyBookDatas($request, $query->pluck('payment_modules.id')->all(), 'pmod_id', $cols);
+            $result = app(ActivityHistoryInterface::class)->book($this->target, $query, $cols, 'note', new PaymentModuleColumnApplyBook, $datas);
+            $row = $result ? count($datas) : 0;
         }
         return $row;
     }
@@ -329,11 +316,8 @@ class BatchUpdatePayModuleController extends BatchUpdateController
      */
     public function batchRemove(Request $request)
     {
-        $row = DB::transaction(function () use($request) {
-            $query = $this->payModuleBatch($request);
-            ActivityHistoryInterface::destory($this->target, $query, 'note');
-            return $query->update(['payment_modules.is_delete' => true]);
-        });
+        $query = $this->payModuleBatch($request);
+        $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'note');
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 결제모듈이 존재하지 않습니다.');
     }
 
@@ -406,9 +390,9 @@ class BatchUpdatePayModuleController extends BatchUpdateController
                 $data['updated_at'] = $current;
                 return $data;
             })->toArray();
-            ActivityHistoryInterface::add($this->target, $pay_modules, 'note');
-            $res = $this->manyInsert($this->pay_modules, $pay_modules);
-            return $this->response($res ? 1 : 990);
+
+            $ids = app(ActivityHistoryInterface::class)->batchAdd($this->target, $this->pay_modules, $pay_modules, 'note', $current, $brand_id);
+            return $this->response(1, $ids);
         }
     }
 }

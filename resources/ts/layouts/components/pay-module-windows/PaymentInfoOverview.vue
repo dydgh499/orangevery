@@ -273,85 +273,100 @@ watchEffect(() => {
         <template v-if="corp.pv_options.paid.use_realtime_deposit">
             <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                 <VDivider style="margin: 1em 0;" />
-                    <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
-                        <VChip variant="outlined">출금정보</VChip>
-                        <div style="display: inline-block;">
-                            <VSwitch 
-                                hide-details :false-value=0 :true-value=1 
-                                v-model="props.item.use_realtime_deposit"
-                                label="출금사용여부" color="warning"
-                            />
-                        </div>
-                    </VCardSubtitle>
-                    <br>
-                    <VRow>
-                        <VCol md="6" cols="12">
-                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_id" :items="finance_vans"
-                                prepend-inner-icon="streamline-emojis:ant" label="이체모듈 타입" item-title="nick_name"
-                                item-value="id" />
-                        </VCol>
-                        <VCol md="6">
-                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_trx_delay"
-                                :items="fin_trx_delays" prepend-inner-icon="streamline-emojis:bug" label="이체딜레이 선택"
-                                item-title="title" item-value="id" :readonly="is_readonly_fin_trx_delay"/>
-                            <VTooltip activator="parent" location="top">
-                                사고 방지를 위해 결제모듈이 최초거래가 발생한 순간부터 이체 딜레이를 수정할 수 없습니다.
-                            </VTooltip>
-                        </VCol>
-                    </VRow>
+                <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
+                    <VChip variant="outlined">출금정보</VChip>
+                    <div style="display: inline-block;">
+                        <VSwitch 
+                            hide-details :false-value=0 :true-value=1 
+                            v-model="props.item.use_realtime_deposit"
+                            label="출금사용여부" color="warning"
+                        />
+                    </div>
+                </VCardSubtitle>
+                <br>
+                <VRow>
+                    <VCol md="6" cols="12">
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_id" :items="finance_vans"
+                            prepend-inner-icon="streamline-emojis:ant" label="이체모듈 타입" item-title="nick_name"
+                            item-value="id" />
+                    </VCol>
+                    <VCol md="6">
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_trx_delay"
+                            :items="fin_trx_delays" prepend-inner-icon="streamline-emojis:bug" label="이체딜레이 선택"
+                            item-title="title" item-value="id" :readonly="is_readonly_fin_trx_delay"/>
+                        <VTooltip activator="parent" location="top">
+                            사고 방지를 위해 결제모듈이 최초거래가 발생한 순간부터 이체 딜레이를 수정할 수 없습니다.
+                        </VTooltip>
+                    </VCol>
+                </VRow>
+                <VDivider style="margin: 1em 0;" />
+                <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
+                    <VChip variant="outlined">출금제한</VChip>
+                </VCardSubtitle>
+                <br>
+                <VRow>
+                    <VCol md="6">
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.withdraw_limit_type"
+                            :items="withdraw_limit_types" prepend-inner-icon="streamline-emojis:pig" label="출금제한타입"
+                            item-title="title" item-value="id"/>
+                    </VCol>
+                </VRow>
+                <VRow>
+                    <VCol md="6">
+                        <VTextField prepend-inner-icon="tabler-currency-won"
+                                v-model="props.item.withdraw_business_limit" type="number" suffix="만원" label="일 출금한도(영업일)"/>
+                    </VCol>
+                    <VCol md="6">
+                        <VTextField prepend-inner-icon="tabler-currency-won"
+                                v-model="props.item.withdraw_holiday_limit" type="number" suffix="만원" label="일 출금한도(휴무일)"/>
+                    </VCol>
+                </VRow>
             </template>
-            <VDivider style="margin: 1em 0;" />
-            <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
-                <VChip variant="outlined">출금제한</VChip>
-                <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules') === false">
-                    <VChip :color="props.item.use_realtime_deposit ? 'success' : 'error'">
-                        {{ props.item.use_realtime_deposit ? "출금사용" : "출금미사용" }}
-                    </VChip>
-                </template>
-            </VCardSubtitle>
-            <br>
-            <VRow v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
-                <VCol md="6">
-                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.withdraw_limit_type"
-                        :items="withdraw_limit_types" prepend-inner-icon="streamline-emojis:pig" label="출금제한타입"
-                        item-title="title" item-value="id"/>
-                </VCol>
-            </VRow>
-            <VRow v-else>
-                <VCol md="5" cols="6">
-                    <span class="font-weight-bold">출금제한타입</span>
-                </VCol>
-                <VCol md="7" cols="6">
-                    <VChip :color="StatusColorSetter().getSelectIdColor(props.item.withdraw_limit_type || 0)">
-                        {{ withdraw_limit_types.find(obj => obj.id === props.item.withdraw_limit_type)?.title }}
-                    </VChip>
-                </VCol>
-            </VRow>
+            <template v-else-if="props.item.use_realtime_deposit">
+                <VDivider style="margin: 1em 0;" />
+                <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
+                    <VChip variant="outlined">출금정보</VChip>
+                </VCardSubtitle>
+                <br>
+                <VRow>
+                    <VCol md="5" cols="6">
+                        <span class="font-weight-bold">이체딜레이</span>
+                    </VCol>
+                    <VCol md="7" cols="6">
+                            {{ fin_trx_delays.find(obj => obj.id === props.item.fin_trx_delay)?.title }}
+                    </VCol>
+                </VRow>
+                <VDivider style="margin: 1em 0;" />
+                <VCardSubtitle style="display: flex; align-items: center; justify-content: space-between;">
+                    <VChip variant="outlined">출금제한</VChip>
+                </VCardSubtitle>
+                <br>
+                <VRow>
+                    <VCol md="5" cols="6">
+                        <span class="font-weight-bold">출금제한타입</span>
+                    </VCol>
+                    <VCol md="7" cols="6">
+                        <VChip :color="StatusColorSetter().getSelectIdColor(props.item.withdraw_limit_type || 0)">
+                            {{ withdraw_limit_types.find(obj => obj.id === props.item.withdraw_limit_type)?.title }}
+                        </VChip>
+                    </VCol>
+                </VRow>
+                <VRow>
+                    <VCol md="5" cols="6">
+                        <span class="font-weight-bold">일 출금한도(영업일)</span>
+                    </VCol>
+                    <VCol md="7" cols="6">
+                        {{ props.item.withdraw_business_limit }} 만원
+                    </VCol>
+                    <VCol md="5" cols="6">
+                        <span class="font-weight-bold">일 출금한도(휴무일)</span>
+                    </VCol>
+                    <VCol md="7" cols="6">
+                        {{ props.item.withdraw_holiday_limit }} 만원
+                    </VCol>
+                </VRow>
 
-            <VRow v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
-                <VCol md="6">
-                    <VTextField prepend-inner-icon="tabler-currency-won"
-                            v-model="props.item.withdraw_business_limit" type="number" suffix="만원" label="일 출금한도(영업일)"/>
-                </VCol>
-                <VCol md="6">
-                    <VTextField prepend-inner-icon="tabler-currency-won"
-                            v-model="props.item.withdraw_holiday_limit" type="number" suffix="만원" label="일 출금한도(휴무일)"/>
-                </VCol>
-            </VRow>
-            <VRow v-else>
-                <VCol md="5" cols="6">
-                    <span class="font-weight-bold">일 출금한도(영업일)</span>
-                </VCol>
-                <VCol md="7" cols="6">
-                    {{ props.item.withdraw_business_limit }} 만원
-                </VCol>
-                <VCol md="5" cols="6">
-                    <span class="font-weight-bold">일 출금한도(휴무일)</span>
-                </VCol>
-                <VCol md="7" cols="6">
-                    {{ props.item.withdraw_holiday_limit }} 만원
-                </VCol>
-            </VRow>
+            </template>          
         </template>
     </VCardItem>
 </template>

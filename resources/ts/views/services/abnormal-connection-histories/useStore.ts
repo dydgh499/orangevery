@@ -1,5 +1,5 @@
 import { Header } from '@/views/headers';
-import { Searcher } from '@/views/searcher';
+import { Searcher, StatusColorSetter } from '@/views/searcher';
 import type { Options } from '@/views/types';
 import { allLevels, getLevelByIndex } from '@axios';
 
@@ -15,13 +15,13 @@ export const connection_types = <Options[]>([
     {id:8, title:'브라우저 미감지'},
 ])
 
-export const getLevelByChipColor = (level: number) => {
-    if(level === 10)
-        return 0
-    else if(level >= 35)
-        return getLevelByIndex(level)
-    else
-        return 2
+export const getLevelColor = (level: number) => {
+    if(level === 35)
+        return 'default'
+    else if(level === 40)
+        return 'primary'
+    else 
+        return StatusColorSetter().getSelectIdColor(getLevelByIndex(level))
 }
 
 export const useSearchStore = defineStore('abnormalConnectionHistoSearchStore', () => {

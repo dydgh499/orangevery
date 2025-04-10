@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useRequestStore } from '@/views/request';
-import { history_types, replaceVariable } from '@/views/services/operator-histories/useStore';
-import { OperatorHistory } from '@/views/types';
-import corp from '@corp';
+import { StatusColorSetter } from '@/views/searcher';
+import { getLevelColor } from '@/views/services/abnormal-connection-histories/useStore';
+import { historyLevels, history_types, replaceHistories } from '@/views/services/activity-histories/useStore';
+import { ActivityHistory } from '@/views/types';
 
 import { EffectCoverflow, Navigation, Pagination } from 'swiper';
 import 'swiper/css';
@@ -14,46 +15,30 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 const { get } = useRequestStore()
 
 const visible = ref(false)
-const history_info = ref()
-const temp_histories = ref(<OperatorHistory[]>([]))
-const histories = ref(<OperatorHistory[]>([]))
-const temp_history = ref(<OperatorHistory>({}))
-const swiper = ref()
-const hide_login = ref(false)
+const history_info = ref(<ActivityHistory>({}))
+const activity_s_at = ref('')
+const activity_e_at = ref('')
 
-const store = <any>(inject('store'))
+const histories = ref(<ActivityHistory[]>([]))
+const temp_history = ref(<ActivityHistory>({}))
+const swiper = ref()
+
 const getRef = (swiperInstance:any) => {
     swiper.value = swiperInstance
 }
 
-const show = async (item: any) => {
-    history_info.value = item
-    const res = await get(`/api/v1/manager/services/operator-histories/${item.oper_id}/detail`, {
+const show = async (target_id: number, target_name: string) => {
+    history_info.value.target_id = target_id
+    history_info.value.history_target = target_name
+    const res = await get(`/api/v1/manager/services/activity-histories/${target_id}/target`, {
         params: {
-            ...store.params,
-            search: (document.getElementById('search') as HTMLInputElement)?.value,
+            history_target: target_name,
         }
     })
-    temp_histories.value = res.data
-    for (let i = 0; i < temp_histories.value.length; i++) {
-        temp_histories.value[i].before_history_detail = replaceVariable(temp_histories.value[i].before_history_detail)
-        temp_histories.value[i].after_history_detail = replaceVariable(temp_histories.value[i].after_history_detail)
-        if(temp_histories.value[i].history_target === '구분 정보') {
-            if(temp_histories.value[i].before_history_detail['타입'] === 0) {
-                delete temp_histories.value[i].after_history_detail['타입']
-                delete temp_histories.value[i].before_history_detail['타입']
-                temp_histories.value[i].after_history_detail['구분 타입'] = '장비'
-                temp_histories.value[i].before_history_detail['구분 타입'] = '장비'
-            }
-            else if(temp_histories.value[i].before_history_detail['타입'] === 1) {
-                delete temp_histories.value[i].after_history_detail['타입']
-                delete temp_histories.value[i].before_history_detail['타입']
-                temp_histories.value[i].after_history_detail['구분 타입'] = '커스텀 필터'
-                temp_histories.value[i].before_history_detail['구분 타입'] = '커스텀 필터'
-            }
-        }
-        else if(corp.pv_options.paid.use_issuer_filter && temp_histories.value[i].history_target === '결제모듈')
-            temp_histories.value[i].before_history_detail['카드사 필터'] = JSON.stringify(temp_histories.value[i].before_history_detail['카드사 필터'])
+    histories.value = replaceHistories(res.data)
+    if(histories.value.length) {
+        activity_s_at.value = histories.value[0].created_at
+        activity_e_at.value = histories.value[histories.value.length - 1].created_at
     }
     visible.value = true
 }
@@ -91,6 +76,7 @@ const getBackgroundcolor = (idx: number) => {
 }
 
 
+
 let isDragging = false;
 let progressBar = null;
 
@@ -125,13 +111,6 @@ watchEffect(() => {
     }
 })
 
-watchEffect(() => {
-    if(hide_login.value)
-        histories.value = temp_histories.value.filter(history => history.history_type !== 4)
-    else
-        histories.value = temp_histories.value
-})
-
 defineExpose({
     show
 });
@@ -141,9 +120,7 @@ defineExpose({
              <VRow style="align-items: center;">
                 <VCol md="4" cols="12">
                     <DialogCloseBtn @click="visible = false" />
-                    <VCard :title="history_info.nick_name+`님 활동이력(총 ${histories.length}개)`">
-                        <VCheckbox v-model="hide_login" class="check-label not-open-today" label="로그인 제외" 
-                            style="position: absolute; top: 1em;"/>
+                    <VCard :title="history_info.history_target+` 작업이력(총 ${histories.length}개)`">
                         <VCardText>
                             <div class="coverflow-example">
                                 <Swiper class="swiper" 
@@ -159,17 +136,22 @@ defineExpose({
                                     <SwiperSlide class="slide" v-for="(history, key) in histories" :key="key">
                                         <div :style="getBackgroundcolor(key)">
                                             <div style="text-align: center;">
-                                                <h6 class="text-base font-weight-semibold me-3">
-                                                    {{ history.history_target }}
-                                                    {{ history.history_title ? " - "+history.history_title : ''}}
+                                                <h6 
+                                                    v-if="history.level !== 0"
+                                                    class="text-base font-weight-semibold me-3" 
+                                                    style="display: flex; align-items: center; justify-content: center;">
+                                                    <span>{{ history.nick_name }}</span>
+                                                    <span style="margin: 0 0.5em;"> - </span>
+                                                    <VChip :color="getLevelColor(history.level)">
+                                                        {{ historyLevels().find(level => level.id === history.level)?.title }}
+                                                    </VChip>
                                                 </h6>
-                                            </div>
-                                            <div style="text-align: center;">
-                                                <VChip
-                                                    :color="store.getSelectIdColor(history_types.find(obj => obj.id === history.history_type)?.id as number)">
+                                                <VChip style="margin: 0.5em;"
+                                                    :color="StatusColorSetter().getSelectIdColor(history_types.find(obj => obj.id === history.history_type)?.id as number)">
                                                     {{ history_types.find(obj => obj.id === history.history_type)?.title }}
                                                 </VChip>
-                                                <br>
+                                            </div>
+                                            <div style="text-align: center;">
                                                 <b>{{ history.created_at }}</b>
                                             </div>
                                         </div>
@@ -179,8 +161,8 @@ defineExpose({
                                 </div>
                             </div>
                             <div style="display: flex; justify-content: space-between;">
-                                <span style="text-align: center;">
-                                    <b>{{ history_info.activity_s_at }}</b>
+                                <span style="text-align: center;" v-if="activity_s_at">
+                                    <b>{{ activity_s_at }}</b>
                                     <br>처음
                                 </span>
 
@@ -199,8 +181,8 @@ defineExpose({
                                         <span>20페이지 이동</span>
                                     </VTooltip>
                                 </b>
-                                <span style="text-align: center;">                                    
-                                    <b>{{ history_info.activity_e_at }}</b>
+                                <span style="text-align: center;"  v-if="activity_e_at">
+                                    <b>{{ activity_e_at }}</b>
                                     <br>마지막
                                 </span>
                             </div>
@@ -211,21 +193,6 @@ defineExpose({
                     <Transition :name="'fade-transition'" mode="out-in">
                         <VCard v-if="temp_history" :key="temp_history?.id">
                             <VCardText>
-                                <b>
-                                    <div class="d-flex justify-space-between">
-                                        <h6 class="text-base font-weight-semibold me-3">
-                                            {{ temp_history.history_target }}
-                                            {{ temp_history.history_title ? " - "+temp_history.history_title : ''}}
-                                            <VChip :color="store.getSelectIdColor(temp_history.history_type)">
-                                                {{ history_types.find(history_type => history_type['id'] === temp_history.history_type)?.title  }}
-                                            </VChip>   
-                                        </h6>
-                                        <span class="text-sm">
-                                            활동시간: {{ temp_history.created_at }}
-                                        </span>
-                                    </div>
-                                </b>
-                                <br>
                                 <VTable class="text-no-wrap" style="width: 100%;">
                                     <thead>
                                         <tr>
@@ -263,6 +230,13 @@ defineExpose({
                                             </td>
                                         </tr>
                                     </tbody>
+                                    <tfoot v-if="histories.length === 0">
+                                        <tr>
+                                            <td :colspan="3" class='list-square' style="border: 0;">
+                                                작업이력이 존재하지 않습니다.
+                                            </td>
+                                        </tr>
+                                    </tfoot>
                                 </VTable>
                             </VCardText>
                         </VCard>

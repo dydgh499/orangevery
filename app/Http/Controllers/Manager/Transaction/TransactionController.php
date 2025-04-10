@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\Manager\Transaction;
 
+use App\Enums\HistoryType;
+use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
+
 use App\Models\Salesforce;
 use App\Models\Transaction;
 use App\Models\Log\RealtimeSendHistory;
@@ -31,7 +36,6 @@ use Illuminate\Database\QueryException;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Enums\HistoryType;
 
 /**
  * @group Transaction API
@@ -177,32 +181,6 @@ class TransactionController extends Controller
      */
     public function store(TransactionRequest $request)
     {
-        /*
-        try
-        {
-            $data = $request->data();
-            $data['dev_fee'] = (((float)$request->input('dev_fee', 0))/100);
-            $data['dev_realtime_fee'] = (((float)$request->input('dev_realtime_fee', 0))/100);
-
-            $data['settle_dt'] = SettleDateCalculator::getSettleDate($request->user()->brand_id, $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'], $data['mcht_settle_type'], 1);
-            if($data['dev_fee'] >= 1)
-                return $this->extendResponse(991, '개발사 수수료가 이상합니다.<br>관리자에게 문의하세요.');
-            else
-            {
-                [$data] = SettleAmountCalculator::setSettleAmount([$data]);
-                $res = $this->transactions->create($data);
-                operLogging(HistoryType::CREATE, $this->target, [], $data, "#".$res->id);
-                return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
-            }
-        }
-        catch(QueryException $ex)
-        {
-            $msg = $ex->getMessage();
-            if(str_contains($msg, 'Duplicate entry'))
-                $msg = '이미 같은 거래번호의 취소매출이 존재합니다.<br>해당 매출을 삭제하거나 거래번호를 수정한 후 다시 시도해주세요.';                
-            return $this->extendResponse(991, $msg);
-        }
-        */
         return $this->extendResponse(951, '사용중지기능');
     }
 
@@ -245,14 +223,17 @@ class TransactionController extends Controller
     {
         try
         {
-            $tran = $this->transactions->where('id', $id)->first();
+            $query = $this->transactions->where('id', $id);
+            $tran = $query->first();
             $data = $request->data();
             $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], ($data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt']), $data['mcht_settle_type'], 1);
             [$data] = SettleAmountCalculator::setSettleAmount([$data]);
 
-            $res = $this->transactions->where('id', $id)->update($data);
-            operLogging(HistoryType::UPDATE, $this->target, $tran, $data, "#".$id);
-            return $this->response($res ? 1 : 990, ['id'=>$id]);
+            $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'id');
+            if($row)
+                return $this->response(1, ['id' => $id]);
+            else
+                return $this->response(990);
         }
         catch(QueryException $ex)
         {
@@ -270,11 +251,16 @@ class TransactionController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        if($this->authCheck($request->user(), $id, 35))
+        if(Ablilty::isOperator($request))
         {
-            $res = $this->transactions->where('id', $id)->delete();
-            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], ['id' => $id], "#".$id);
-            return $this->response($res ? 1 : 990, ['id'=>$id]);
+            if(EditAbleWorkTime::validate() === false)
+                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+            else
+            {
+                $query  = $this->transactions->where('id', $id);
+                $row    = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'id', HistoryType::DELETE, false);
+                return $this->response(1, ['id' => $id]);    
+            }
         }
         else
             return $this->response(951);
@@ -328,9 +314,11 @@ class TransactionController extends Controller
                 try 
                 {
                     [$data] = SettleAmountCalculator::setSettleAmount([$data]);
-                    $res = $this->transactions->create($data);
-                    operLogging(HistoryType::CREATE, $this->target, [], $data, "#".$res->id);
-                    return $this->response(1);
+                    $res = app(ActivityHistoryInterface::class)->add($this->target, $this->transactions, $data, 'id');
+                    if($res)
+                        return $this->response(1, ['id' => $res->id]);    
+                    else
+                        return $this->response(990, []);
                 }
                 catch(QueryException $ex)
                 {

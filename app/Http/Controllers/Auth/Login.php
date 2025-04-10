@@ -11,8 +11,8 @@ use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Controllers\Auth\LoginValidate;
 
 use Illuminate\Support\Facades\Hash;
-use App\Enums\HistoryType;
 use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
 class Login extends LoginValidate
 {
@@ -22,16 +22,16 @@ class Login extends LoginValidate
     {
         if($result['result'] === AuthLoginCode::SUCCESS->value)
         {
-            AuthAccountLock::initPasswordWrongCounter($result['user']);
-            if($result['user']->level >= 35)
-            {
-                operLogging(HistoryType::LOGIN, '', [], [], '', $result['user']->brand_id, $result['user']->id);
-            }
-            
-            (clone $orm)->where('id', $result['user']->id)->update([
+            $after_data = [
                 'last_login_at' => date('Y-m-d H:i:s'),
-                'last_login_ip' => (new Login)->aes256_encode(request()->ip()),
-            ]);
+                'last_login_ip' => request()->ip(),
+            ];
+            if($result['user']->level >= 13)
+                app(ActivityHistoryInterface::class)->login($result['user'], $after_data);
+
+            AuthAccountLock::initPasswordWrongCounter($result['user']);
+            $after_data['last_login_ip'] = (new Login)->aes256_encode($after_data['last_login_ip']);
+            (clone $orm)->where('id', $result['user']->id)->update($after_data);
         }
         else if($result['result'] === AuthLoginCode::WRONG_PASSWORD->value)
         {

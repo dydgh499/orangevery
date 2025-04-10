@@ -3,7 +3,7 @@ import IPDetailDialog from '@/layouts/dialogs/services/IPDetailDialog.vue';
 import LastLoginDialog from '@/layouts/dialogs/services/LastLoginDialog.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import { getUserLevel, pay_token, user_info } from '@/plugins/axios';
-import { connection_types, getLevelByChipColor, useSearchStore } from '@/views/services/abnormal-connection-histories/useStore';
+import { connection_types, getLevelColor, useSearchStore } from '@/views/services/abnormal-connection-histories/useStore';
 import { allLevels } from '@axios';
 import { DateFilters } from '@core/enums';
 
@@ -68,7 +68,7 @@ if(getUserLevel() < 35) {
                                 </span>
                                 <span v-else-if="_key === 'target_level'">
                                     <VChip v-if="item[_key]"
-                                        :color="store.getSelectIdColor(getLevelByChipColor(item[_key]))">
+                                        :color="getLevelColor(item[_key])">
                                             {{ allLevels().find(obj => obj.id === item[_key])?.title }}
                                     </VChip>
                                     <span v-else>세션없음</span>

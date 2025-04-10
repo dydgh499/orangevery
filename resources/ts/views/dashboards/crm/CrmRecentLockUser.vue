@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue';
 import { useCRMStore } from '@/views/dashboards/crm/crm';
-import { allLevels, getLevelByIndex } from '@axios';
+import { getLevelColor } from '@/views/services/abnormal-connection-histories/useStore';
+import { allLevels } from '@axios';
 
 const is_skeleton = <any>(inject('is_skeleton'))
 
@@ -22,14 +23,6 @@ const getSelectIdColor = (id: number | undefined) => {
         return "error"
     else
         return 'default'
-}
-const getLevelByChipColor = (level: number) => {
-    if(level === 10)
-        return 0
-    else if(level >= 35)
-        return getLevelByIndex(level)
-    else
-        return 2
 }
 
 </script>
@@ -63,12 +56,12 @@ const getLevelByChipColor = (level: number) => {
                     </template>
                     <template v-else>
                         <VTimelineItem v-for="(user, key, index) in locked_users" :key="key"
-                            :dot-color="getSelectIdColor(getLevelByChipColor(user.level))" size="x-small">
+                            :dot-color="getLevelColor(user.level)" size="x-small">
                             <!-- 👉 Header -->
                             <div class="d-flex justify-space-between">
                                 <h6 class="text-base font-weight-semibold me-3">
                                     <VChip
-                                        :color="getSelectIdColor(getLevelByChipColor(user.level))">
+                                        :color="getLevelColor(user.level)">
                                     {{ allLevels().find(obj => obj.id === user.level)?.title }}
                                     </VChip>
                                     {{ user.user_name }}
@@ -86,6 +79,7 @@ const getLevelByChipColor = (level: number) => {
                                     </p>
                                 </div>
                             </div>
+                            <VDivider style="margin-top: 1em;"/>
                         </VTimelineItem>
                         <VTimelineItem v-show="!Boolean(locked_users.length) && !is_skeleton" size="x-small">
                             <div class="d-flex justify-space-between">

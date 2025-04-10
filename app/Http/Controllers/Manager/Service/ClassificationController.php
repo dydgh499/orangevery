@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Manager\Service;
 
+use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
+
 use App\Models\Service\Classification;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\Service\ClassificationReqeust;
 use App\Http\Requests\Manager\IndexRequest;
 
-use App\Http\Controllers\Ablilty\Ablilty;
-use App\Http\Controllers\Ablilty\EditAbleWorkTime;
-
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Enums\HistoryType;
 
 /**
  * @group Classification API
@@ -59,10 +60,11 @@ class ClassificationController extends Controller
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $data = $request->data();
-        $res = $this->classifications->create($data);
-
-        operLogging(HistoryType::CREATE, $this->target, [], $data, $data['name']);
-        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
+        $res = app(ActivityHistoryInterface::class)->add($this->target, $this->classifications, $data, 'name');
+        if($res)
+            return $this->response(1, ['id' => $res->id]);    
+        else
+            return $this->response(990, []);
     }
 
     /**
@@ -91,11 +93,12 @@ class ClassificationController extends Controller
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $data = $request->data();
-        $before = $this->classifications->where('id', $id)->first()->toArray();
-        $res = $this->classifications->where('id', $id)->update($data);
-
-        operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['name']);
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
+        $query = $this->classifications->where('id', $id);
+        $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'name');
+        if($row)
+            return $this->response(1, ['id' => $id]);
+        else
+            return $this->response(990);
     }
 
     /**
@@ -108,10 +111,8 @@ class ClassificationController extends Controller
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
-        $res = $this->classifications->where('id', $id)->update(['is_delete'=>true]);
-        $data = $this->classifications->where('id', $id)->first();
-        if($data)
-            operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->name);
-        return $this->response($res ? 1 : 990, ['id'=>$id]);    
+        $query  = $this->classifications->where('id', $id);
+        $row    = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'name');
+        return $this->response(1, ['id' => $id]);   
     }
 }

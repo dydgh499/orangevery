@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager\Gmid;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
 use App\Models\Gmid;
 use App\Http\Traits\StoresTrait;
@@ -13,11 +14,11 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\GmidRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\Enums\HistoryType;
 
 class GmidController extends Controller
 {
@@ -92,9 +93,11 @@ class GmidController extends Controller
                 $data['brand_id']   = $request->user()->brand_id;
                 $data['user_pw']    = Hash::make($request->user_pw.$current);
                 $data['created_at'] = $current;
-                $res  = $this->gmids->create($data);
-                operLogging(HistoryType::CREATE, $this->target, [], $data, $data['g_mid']);
-                return $this->response($res ? 1 : 990, ['id' => $res->id]);    
+                $res = app(ActivityHistoryInterface::class)->add($this->target, $this->gmids, $data, 'g_mid');
+                if($res)
+                    return $this->response(1, ['id' => $res->id]);    
+                else
+                    return $this->response(990, []);
             }
         }
         else
@@ -126,7 +129,8 @@ class GmidController extends Controller
     {
         if(Ablilty::isOperator($request))
         {
-            $user = $this->gmids->where('id', $id)->first();
+            $query  = $this->gmids->where('id', $id);
+            $user   = $query->first();
             if(EditAbleWorkTime::validate() === false)
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
             if($this->isExistMutual($this->gmids->where('id', '!=', $id), $request->user()->brand_id, 'g_mid', $request->g_mid))
@@ -137,9 +141,12 @@ class GmidController extends Controller
             {
                 $data = $request->data();
                 $data = $this->saveImages($request, $data, $this->imgs);
-                $res  = $this->gmids->where('id', $id)->update($data);
-                operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['g_mid']);
-                return $this->response($res ? 1 : 990, ['id' => $id]);
+                $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'g_mid');
+                if($row)
+                    return $this->response(1, ['id' => $id]);
+                else
+                    return $this->response(990);
+
             }
         }
         else
@@ -157,14 +164,13 @@ class GmidController extends Controller
     {
         if(Ablilty::isOperator($request))
         {
-            $user = $this->gmids->where('id', $id)->first();
             if(EditAbleWorkTime::validate() === false)
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
             else
             {
-                $res = $this->delete($this->gmids->where('id', $id));
-                operLogging(HistoryType::DELETE, $this->target, $user, ['id' => $id], $user->g_mid);
-                return $this->response($res ? 1 : 990, ['id' => $id]);        
+                $query = $this->gmids->where('id', $id);
+                $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'g_mid');
+                return $this->response(1, ['id' => $id]);
             }
         }
         else

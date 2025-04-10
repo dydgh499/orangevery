@@ -4,6 +4,7 @@ import { useRequestStore } from '@/views/request'
 import PaySectionTr from '@/views/services/pay-gateways/PaySectionTr.vue'
 import { pg_settle_types, round_types, useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayGateway } from '@/views/types'
+import { HistoryTargetNames } from '@core/enums'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
 import { VForm } from 'vuetify/components'
@@ -13,6 +14,7 @@ interface Props {
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
+const activityHistoryTargetDialog = <any>(inject('activityHistoryTargetDialog'))
 
 const { pss, pg_companies } = useStore()
 const { update, remove, setNullRemove } = useRequestStore()
@@ -234,20 +236,34 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                     <VRow>
-                        <VCol class="d-flex gap-4 pt-10">
-                            <VBtn type="button" style="margin-left: auto;"
+                        <VCol class="pt-10" style="text-align: end;">
+                            <VBtn v-if="props.item.id"
+                                style="margin-left: auto;"
+                                color="secondary" 
+                                variant="tonal"
+                                @click="activityHistoryTargetDialog.show(props.item.id, HistoryTargetNames['services/pay-gateways'])">
+                                이력
+                                <VIcon end size="20" icon="tabler:history" />
+                            </VBtn>                            
+                            <VBtn 
+                                style="margin-left: 1em;"
                                 @click="update('/services/pay-gateways', props.item, vForm, false)">
                                 {{ props.item.id == 0 ? "추가" : "수정" }}
-                                <VIcon end icon="tabler-pencil" />
+                                <VIcon end size="20" icon="tabler-pencil" />
                             </VBtn>
-                            <VBtn type="button" color="error" v-if="props.item.id"
+                            <VBtn v-if="props.item.id"
+                                style="margin-left: 1em;"
+                                color="error"
                                 @click="remove('/services/pay-gateways', props.item, false)">
                                 삭제
-                                <VIcon end icon="tabler-trash" />
+                                <VIcon end size="20" icon="tabler-trash" />
                             </VBtn>
-                            <VBtn type="button" color="warning" v-else @click="props.item.id = -1">
+                            <VBtn v-else
+                                style="margin-left: 1em;"
+                                color="warning"
+                                @click="props.item.id = -1">
                                 입력란 제거
-                                <VIcon end icon="tabler-trash" />
+                                <VIcon end size="20" icon="tabler-trash" />
                             </VBtn>
                         </VCol>
                     </VRow>
@@ -281,7 +297,7 @@ watchEffect(() => {
                 </VTable>
                 <VRow v-show="Boolean(props.item.id != 0)">
                     <VCol class="d-flex gap-4 pt-10">
-                        <VBtn type="button" style="margin-left: auto;" @click="addNewSection()">
+                        <VBtn style="margin-left: auto;" @click="addNewSection()">
                             구간 추가
                             <VIcon end icon="tabler-plus" />
                         </VBtn>

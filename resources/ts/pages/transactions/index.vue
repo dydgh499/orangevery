@@ -186,13 +186,18 @@ onMounted(() => {
                         <td v-if="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
                             <span v-if="_key == 'id'">
                                 <div class='check-label-container'>
-                                    <VCheckbox v-if="getUserLevel() >= 35" v-model="selected" :value="item[_key]"
-                                        class="check-label" />
-                                    <span class="edit-link" @click="getUserLevel() >= 35 ? store.edit(item['id']) : ''">
+                                    <template v-if="getUserLevel() >= 35">
+                                        <VCheckbox v-model="selected" :value="item[_key]"
+                                            class="check-label" />
+                                            <span class="edit-link" @click="store.edit(item['id'])">
+                                                #{{ item[_key]}}
+                                                <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                                    상세보기
+                                                </VTooltip>
+                                            </span>
+                                    </template>
+                                    <span v-else>
                                         #{{ item[_key]}}
-                                        <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
-                                            상세보기
-                                        </VTooltip>
                                     </span>
                                 </div>
                             </span>

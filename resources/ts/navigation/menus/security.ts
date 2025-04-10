@@ -8,8 +8,8 @@ const _getSecurityMenu = () => {
         children: []
     }
     securities.children.push({
-        title: '운영자 활동이력',
-        to: 'services-operator-histories',
+        title: '활동이력',
+        to: 'services-activity-histories',
     })
     securities.children.push({
         title: '이상접속 이력',

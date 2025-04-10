@@ -6,6 +6,7 @@ use App\Http\Controllers\Manager\MerchandiseController;
 use App\Models\Log\SfFeeApplyHistory;
 use App\Models\Log\MchtFeeChangeHistory;
 use App\Models\Log\SfFeeChangeHistory;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +15,7 @@ class MerchandiseFeeUpdater
     /**
      * 영업라인 수수료율 적용 포멧 목록
      */
-    static private function getSalesResource($request, $change_status, $mchts)
+    static public function getSalesResource($request, $change_status, $mchts)
     {
         $bf_sales_key = self::getSalesKeys($request->level);
         $aft_trx_fee = $request->sales_fee/100;
@@ -46,7 +47,7 @@ class MerchandiseFeeUpdater
     /**
      * 가맹점 수수료율 적용 포멧 목록
      */
-    static private function getMchtResource($request, $change_status, $mchts)
+    static public function getMchtResource($request, $change_status, $mchts)
     {
         $aft_trx_fee = $request->trx_fee/100;
         $aft_hold_fee = $request->hold_fee/100;
@@ -144,27 +145,27 @@ class MerchandiseFeeUpdater
             $resources  = self::getMchtResource($request, $change_status, (clone $query)->get());
             $after      = self::getMchtAfterFee($request);
             $history_orm = new MchtFeeChangeHistory();
+            $target     = '가맹점 수수료율';
         }
         else
         {
             $resources  = self::getSalesResource($request, $change_status, (clone $query)->get());
             $after      = self::getSalesAfterFee($request);
             $history_orm = new SfFeeChangeHistory();
+            $target     = '영업라인 수수료율';
         }
 
-        return DB::transaction(function () use($history_orm, $change_status, $user, $resources, $after, $query) {
-            // 수수료율 변경이력 추가
+        if($request->apply_type === 0)
+        {   // 즉시변경
+            $row = app(ActivityHistoryInterface::class)->update($target, $query, $after, 'mcht_name');
             $res = resolve(MerchandiseController::class)->manyInsert($history_orm, $resources);
-            if($res)
-            {
-                // 즉시변경일 시 수수료율 업데이트
-                if($change_status)
-                    $row = $query->update($after);
-                return count($resources);
-            }
-            else
-                return 0;
-        });
+        }
+        else
+        {   // 예약변경
+            $row = count($resources);
+            $res = app(ActivityHistoryInterface::class)->book($target, $query, $after, 'mcht_name', $history_orm, $resources);
+        }
+        return $row;
     }
 
     /**

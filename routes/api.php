@@ -79,7 +79,7 @@ Route::prefix('v1')->group(function() {
             Route::get('upside-merchandises-analysis', [DashboardController::class, 'upSideMchtAnalysis']);
             Route::get('upside-salesforces-analysis', [DashboardController::class, 'upSideSaleAnalysis']);
             Route::get('recent-danger-histories', [DashboardController::class, 'getRecentDangerHistories']);
-            Route::get('recent-operator-histories', [DashboardController::class, 'getRecentOperatorHistories']);
+            Route::get('recent-activity-histories', [DashboardController::class, 'getRecentOperatorHistories']);
             Route::get('locked-users', [DashboardController::class, 'getLockedUsers']);            
         });
     });

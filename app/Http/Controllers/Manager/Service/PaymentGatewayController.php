@@ -13,6 +13,7 @@ use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -26,11 +27,13 @@ class PaymentGatewayController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
     protected $pay_gateways, $pay_sections;
+    protected $target;
 
     public function __construct(PaymentGateway $pay_gateways, PaymentSection $pay_sections)
     {
         $this->pay_gateways = $pay_gateways;
         $this->pay_sections = $pay_sections;
+        $this->target       = 'PG사';
         $this->imgs = [];
     }
 
@@ -56,12 +59,15 @@ class PaymentGatewayController extends Controller
      */
     public function store(PayGatewayRequest $request)
     {
+        $data   = $request->data();
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
-        $user = $request->data();
-        $res = $this->pay_gateways->create($user);
-        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
+        $res = app(ActivityHistoryInterface::class)->add($this->target, $this->pay_gateways, $data, 'pg_name');
+        if($res)
+            return $this->response(1, ['id'=>$res->id]);
+        else
+            return $this->response(990);
     }
 
     /**
@@ -94,14 +100,18 @@ class PaymentGatewayController extends Controller
      */
     public function update(PayGatewayRequest $request, int $id)
     {
-        $data = $this->pay_gateways->where('id', $id)->first();
+        $query  = $this->pay_gateways->where('id', $id);
+        $pg     = $query->first();
+        $data   = $request->data();
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-        if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
+        if(Ablilty::isBrandCheck($request, $pg->brand_id) === false)
                 return $this->response(951);
-        $data = $request->data();
-        $res = $this->pay_gateways->where('id', $id)->update($data);
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
+        $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'pg_name');
+        if($row)
+            return $this->response(1, ['id' => $id]);
+        else
+            return $this->response(990);
     }
 
     /**
@@ -111,18 +121,15 @@ class PaymentGatewayController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        if($this->authCheck($request->user(), $id, 35))
-        {
-            $data = $this->pay_gateways->where('id', $id)->first();
-            if(EditAbleWorkTime::validate() === false)
-                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-            if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
-                return $this->response(951);
-            $res = $this->delete($this->pay_gateways->where('id', $id));
-            return $this->response($res ? 1 : 990, ['id'=>$id]);
-        }
-        else
+        $query  = $this->pay_gateways->where('id', $id);
+        $pg     = $query->first();
+        if(EditAbleWorkTime::validate() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+        if(Ablilty::isBrandCheck($request, $pg->brand_id) === false)
             return $this->response(951);
+
+        $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'pg_name');
+        return $this->response(1, ['id' => $id]);
     }
 
     /**

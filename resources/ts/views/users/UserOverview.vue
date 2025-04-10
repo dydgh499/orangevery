@@ -7,6 +7,7 @@ import { axios, getUserLevel, isAbleModifyPrimary, isAbleModiy, isAbleModiyV2, u
 import corp from '@corp';
 import { requiredValidatorV2 } from '@validators';
 
+
 interface Props {
     item: UserPropertie,
     is_mcht: boolean,
@@ -15,6 +16,7 @@ const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
+        
 const profileDlg = ref()
 const is_show = ref(false)
 const phone_num_format = ref('')
@@ -346,25 +348,36 @@ watchEffect(() => {
                 <VCardItem v-if="isAbleModiy(props.item.id) || getUserLevel() === 10">
                     <VCardTitle>은행정보</VCardTitle>
                     <VRow class="pt-3">
-                        <VCol cols="12" :md="getUserLevel() === 10 ? 6: 12">
+                        <VCol cols="12" :md="6">
                             <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
-                                <VCol md="2" cols="4">
+                                <VCol md="4" cols="5">
                                     <label>계좌번호</label>
                                 </VCol>
-                                <VCol md="10">
+                                <VCol md="8">
                                     <VTextField id="acctNumHorizontalIcons" v-model="props.item.acct_num"
                                     prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" persistent-placeholder maxlength="20" />
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold" md="2" cols="4">계좌번호</VCol>
-                                <VCol md="10"><span>{{ props.item.acct_num }}</span></VCol>
+                                <VCol class="font-weight-bold" md="4" cols="5">계좌번호</VCol>
+                                <VCol md="8"><span>{{ props.item.acct_num }}</span></VCol>
                             </VRow>
                         </VCol>
-                        <VCol md="6" v-if="getUserLevel() === 10">
-                            <VRow>
-                                <VCol class="font-weight-bold" cols="4">은행코드</VCol>
-                                <VCol md="8"><span>{{ props.item.acct_bank_code }}</span></VCol>
+                        <VCol md="6">
+                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
+                                <VCol md="4" cols="5">
+                                    <label>은행</label>
+                                </VCol>
+                                <VCol md="8">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.acct_bank_code"
+                                        :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
+                                        label="은행 선택" item-title="title" item-value="code" single-line
+                                        @update:modelValue="setAcctBankName()" />
+                                </VCol>
+                            </VRow>
+                            <VRow v-else>
+                                <VCol class="font-weight-bold" cols="4">은행</VCol>
+                                <VCol md="8"><span>{{ props.item.acct_bank_name }}</span></VCol>
                             </VRow>
                         </VCol>
                     </VRow>
@@ -390,25 +403,13 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                         <VCol cols="12" md="6">
-                            <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
-                                <VCol md="2" cols="5">
-                                    <label>은행</label>
-                                </VCol>
-                                <VCol md="6">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.acct_bank_code"
-                                        :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
-                                        label="은행 선택" item-title="title" item-value="code" single-line
-                                        @update:modelValue="setAcctBankName()" />
-                                </VCol>
-                                <VCol md="4" cols="12" :style="$vuetify.display.smAndDown ? 'text-align: end;' : ''">
-                                    <h5 style="margin-top: 0.5em; margin-left: 0.5em;">
-                                        {{ `은행 코드: ${props.item.acct_bank_code ? props.item.acct_bank_code : '000'} ` }}
-                                    </h5>
-                                </VCol>
+                            <VRow v-if="isAbleModifyPrimary(props.item.id)">
+                                <VCol md="4" cols="5">은행코드</VCol>
+                                <VCol class="font-weight-bold" md="8"><span>{{ props.item.acct_bank_code }}</span></VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold" cols="4">은행</VCol>
-                                <VCol md="8"><span>{{ props.item.acct_bank_name }}</span></VCol>
+                                <VCol class="font-weight-bold" md="4" cols="5">은행코드</VCol>
+                                <VCol md="8"><span>{{ props.item.acct_bank_code }}</span></VCol>
                             </VRow>
                         </VCol>
                     </VRow>

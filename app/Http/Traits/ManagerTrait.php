@@ -121,24 +121,24 @@ trait ManagerTrait
     }
     public function delete($query, $imgs=[])
     {
-        $data = $query->first();
-        if($data)
+        if(env('FILESYSTEM_DISK') === 'local')
         {
-            $data = $data->toArray();
-            for($i=0; $i<count($imgs); $i++)
+            $datas = $query->get($imgs);
+            if(count($datas))
             {
-                if(Str::contains($data[$imgs[$i]], env('APP_URL')))
+                $datas = $datas->toArray();
+                foreach($datas as $data)
                 {
-                    $path = str_replace(env('APP_URL').'/storage/', '', $data[$imgs[$i]]);
-                    if(Storage::disk('public')->exists($path))
-                        Storage::disk('public')->delete($path);
+                    if(Str::contains($data[$imgs[$i]], env('APP_URL')))
+                    {
+                        $path = str_replace(env('APP_URL').'/storage/', '', $data[$imgs[$i]]);
+                        if(Storage::disk('public')->exists($path))
+                            Storage::disk('public')->delete($path);
+                    }
                 }
-            }
-            $res = $query->update(['is_delete' => true]);
-            return $res ? 1 : 990;
+            }    
         }
-        else
-            return 1000;
+        return $query->update(['is_delete' => true]);
     }
 
     public function authCheck($session, $id, $req_level)

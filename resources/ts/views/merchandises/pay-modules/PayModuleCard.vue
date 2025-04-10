@@ -10,6 +10,7 @@ import { isFixplus } from '@/plugins/fixplus'
 import { useRequestStore } from '@/views/request'
 import type { PayModule } from '@/views/types'
 import { isAbleModiyV2 } from '@axios'
+import { HistoryTargetNames } from '@core/enums'
 import { VForm } from 'vuetify/components'
 
 interface Props {
@@ -19,6 +20,7 @@ interface Props {
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 const midCreateDlg = ref(null)
+const activityHistoryTargetDialog = <any>(inject('activityHistoryTargetDialog'))
 const { update, remove } = useRequestStore()
 
 const md = ref<number>(3)
@@ -58,22 +60,38 @@ onDeactivated(() => {
                     <VDivider :vertical="$vuetify.display.mdAndUp" />
                     <VCol cols="12" :md="md">
                         <OptionInfoOverview :item="props.item">
-                            <template #edit v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
+                            <template #edit>
                                 <VCol style="text-align: end;">
-                                    <VBtn type="button"
-                                        @click="update('/merchandises/pay-modules', props.item, vForm, props.able_mcht_chanage)">
-                                        {{ props.item.id == 0 ? "추가" : "수정" }}
-                                        <VIcon end icon="tabler-pencil" />
+                                    <VBtn v-if="props.item.id"
+                                        style="margin-left: auto;"
+                                        color="secondary" 
+                                        variant="tonal"
+                                        @click="activityHistoryTargetDialog.show(props.item.id, HistoryTargetNames['merchandises/pay-modules'])">
+                                        이력
+                                        <VIcon end size="20" icon="tabler:history" />
                                     </VBtn>
-                                    <VBtn type="button" color="error" v-if="props.item.id" style="margin-left: 1em;"
-                                        @click="remove('/merchandises/pay-modules', props.item, props.able_mcht_chanage)">
-                                        삭제
-                                        <VIcon end icon="tabler-trash" />
-                                    </VBtn>
-                                    <VBtn type="button" color="warning" v-else @click="props.item.id = -1" style="margin-left: 1em;">
-                                        입력란 제거
-                                        <VIcon end icon="tabler-trash" />
-                                    </VBtn>
+                                    <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
+                                        <VBtn 
+                                            style="margin-left: 1em;"
+                                            @click="update('/merchandises/pay-modules', props.item, vForm, props.able_mcht_chanage)">
+                                            {{ props.item.id == 0 ? "추가" : "수정" }}
+                                            <VIcon end size="20" icon="tabler-pencil" />
+                                        </VBtn>
+                                        <VBtn v-if="props.item.id"
+                                            style="margin-left: 1em;"
+                                            color="error"
+                                            @click="remove('/merchandises/pay-modules', props.item, props.able_mcht_chanage)">
+                                            삭제
+                                            <VIcon end size="20" icon="tabler-trash" />
+                                        </VBtn>
+                                        <VBtn v-else
+                                            style="margin-left: 1em;"
+                                            color="warning"
+                                            @click="props.item.id = -1">
+                                            입력란 제거
+                                            <VIcon end size="20" icon="tabler-trash" />
+                                        </VBtn>
+                                    </template>
                                 </VCol>
                             </template>
                         </OptionInfoOverview>

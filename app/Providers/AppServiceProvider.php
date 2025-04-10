@@ -2,11 +2,15 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
+use App\Models\Log\ActivityHistory;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Doctrine\DBAL\Types\Type;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(ActivityHistoryInterface::class, function ($app) {
+            return new ActivityHistoryInterface(new ActivityHistory());
+        });
     }
 
     /**

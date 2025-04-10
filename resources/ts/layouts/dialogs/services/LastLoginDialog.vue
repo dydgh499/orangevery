@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useRequestStore } from '@/views/request';
-import { StatusColorSetter } from '@/views/searcher';
-import { getLevelByChipColor } from '@/views/services/abnormal-connection-histories/useStore';
+import { getLevelColor } from '@/views/services/abnormal-connection-histories/useStore';
 import { allLevels } from '@axios';
 
 interface LoginInfo {
@@ -57,7 +56,7 @@ defineExpose({
                             <tr>
                                 <td class='list-square'>
                                     <VChip
-                                    :color="StatusColorSetter().getSelectIdColor(getLevelByChipColor(item.level))">
+                                    :color="getLevelColor(item.level)">
                                         {{ allLevels().find(obj => obj.id === item.level)?.title  }}
                                     </VChip>
                                 </td>

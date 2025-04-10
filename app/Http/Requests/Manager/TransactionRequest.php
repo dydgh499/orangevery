@@ -38,6 +38,7 @@ class TransactionRequest extends FormRequest
         'amount',
         'mcht_settle_fee',
         'pg_settle_type',
+        'round_type',
     ];
     public $nullable_keys = [
         'custom_id', 

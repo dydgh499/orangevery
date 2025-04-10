@@ -8,11 +8,13 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
+
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Merchandise\NotiRequest;
 use App\Http\Controllers\Utils\ChartFormat;
-use App\Enums\HistoryType;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -93,13 +95,11 @@ class NotiUrlController extends Controller
     public function store(NotiRequest $request)
     {
         $data = $request->data();
-        $res = $this->noti_urls->create($data);//use_noti
+        $res = app(ActivityHistoryInterface::class)->add($this->target, $this->noti_urls, $data, 'note');
         if($res)
-        {
-            $this->merchandises->where('id', $data['mcht_id'])->update(['use_noti'=>true]);
-            operLogging(HistoryType::CREATE, $this->target, [], $data, $data['note']);
-        }
-        return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);
+            return $this->response(1, ['id' => $res->id, 'mcht_id' => $data['mcht_id']]);    
+        else
+            return $this->response(990, []);
     }
 
     /**
@@ -125,13 +125,12 @@ class NotiUrlController extends Controller
     public function update(NotiRequest $request, int $id)
     {
         $data = $request->data();
-        $before = $this->noti_urls->where('id', $id)->first();
-        $res = $this->noti_urls->where('id', $id)->update($data);
-        if($res)
-        {
-            operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['note']);
-        }
-        return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
+        $query = $this->noti_urls->where('id', $id);
+        $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'note');
+        if($row)
+            return $this->response(1, ['id' => $id]);
+        else
+            return $this->response(990);
     }
 
     /**
@@ -141,18 +140,8 @@ class NotiUrlController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        $res = $this->delete($this->noti_urls->where('id', $id));    
-        $data = ['id'=> $id];
-        if($res)
-        {
-            $noti   = $this->noti_urls->where('id', $id)->first();
-            $count  = $this->noti_urls->where('mcht_id', $noti->mcht_id)->where('is_delete', false)->count();
-            if($count == 0)
-                $this->merchandises->where('id', $noti->mcht_id)->update(['use_noti'=>false]);
-
-            $data['mcht_id'] = $noti->mcht_id;
-            operLogging(HistoryType::DELETE, $this->target, $noti, ['id' => $id], $noti->note);
-        }
-        return $this->response($res, $data);
+        $query = $this->noti_urls->where('id', $id);
+        $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'note');
+        return $this->response(1, ['id' => $id]);    
     }
 }

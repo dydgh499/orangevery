@@ -9,6 +9,7 @@ import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 
 import { useRequestStore } from '@/views/request'
 import { isAbleModiyV2 } from '@axios'
+import { HistoryTargetNames } from '@core/enums'
 import { VForm } from 'vuetify/components'
 
 interface Props {
@@ -20,6 +21,8 @@ const tab = ref(0)
 const vForm = ref<VForm>()
 const visible = ref(false)
 const midCreateDlg = ref(null)
+const activityHistoryTargetDialog = <any>(inject('activityHistoryTargetDialog'))
+
 const pay_module = ref(<PayModule>({}))
 
 provide('midCreateDlg', midCreateDlg)
@@ -94,16 +97,28 @@ defineExpose({
                 </PerfectScrollbar>
             </VForm>
             <VDivider />
-            <VRow v-if="isAbleModiyV2(pay_module, 'merchandises/pay-modules')" style="padding: 1em;">
+            <VRow style="padding: 1em;">
                 <VCol cols="12" class="d-flex gap-4">
-                    <VBtn type="button" style="margin-left: auto;" @click="payModuleUpdate()">
-                        {{ pay_module.id == 0 ? "추가" : "수정" }}
-                        <VIcon end icon="tabler-pencil" />
+                    <VBtn v-if="pay_module.id"
+                        style="margin-left: auto;"
+                        color="secondary" 
+                        variant="tonal"
+                        @click="activityHistoryTargetDialog.show(pay_module.id, HistoryTargetNames['merchandises/pay-modules'])">
+                        이력
+                        <VIcon end size="20" icon="tabler:history" />
                     </VBtn>
-                    <VBtn type="button" color="error" v-if="pay_module.id" @click="payModuleRemove()">
-                        삭제
-                        <VIcon end icon="tabler-trash" />
-                    </VBtn>
+                    <template v-if="isAbleModiyV2(pay_module, 'merchandises/pay-modules')">
+                        <VBtn 
+                            style="margin-left: 1em;"
+                            @click="payModuleUpdate()">
+                            {{ pay_module.id == 0 ? "추가" : "수정" }}
+                            <VIcon end icon="tabler-pencil" />
+                        </VBtn>
+                        <VBtn color="error" v-if="pay_module.id" @click="payModuleRemove()">
+                            삭제
+                            <VIcon end icon="tabler-trash" />
+                        </VBtn>
+                    </template>
                 </VCol>
             </VRow>
         </VNavigationDrawer>

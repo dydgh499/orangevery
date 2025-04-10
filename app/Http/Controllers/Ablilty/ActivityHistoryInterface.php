@@ -1,77 +1,98 @@
 <?php
 namespace App\Http\Controllers\Ablilty;
+
 use App\Enums\HistoryType;
-use App\Models\Log\OperatorHistory;
-use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Models\Log\ActivityHistory;
+use App\Http\Controllers\Ablilty\ActivityHistoryBase;
+use Illuminate\Support\Facades\DB;
 
-class ActivityHistoryInterface
-{   // add column: nick_name, level, target_id
-    // del column: oper_id
-    static public function login($target)
+class ActivityHistoryInterface extends ActivityHistoryBase
+{
+    public function __construct(ActivityHistory $activity_histories)
     {
-        self::logging(HistoryType::LOGIN, $target, [], [], '');
+        parent::__construct($activity_histories);
     }
 
-    static public function add($target, $after_datas, $title_key)
+    public function login($user, $after_data)
     {
-        foreach($after_datas as $after_data)
-        {
-            self::logging(HistoryType::CREATE, $target, [], $after_data, $after_data[$title_key]);
-        }
+        $this->manyInsert($this->activity_histories, [$this->getLoginFormat($user, $after_data)]);
     }
 
-    static public function update($target, $query, $after_data, $title_key)
+    public function batchAdd($target, $query, $datas, $title_key, $current, $brand_id)
     {
-        $update_keys = array_keys($after_data);
-        $update_keys[] = $title_key;
-        $before_datas = (clone $query)->get($update_keys)->toArray();
-        foreach($before_datas as $before_data)
-        {
-            self::logging(HistoryType::UPDATE, $target, $before_data, $after_data, $before_data[$title_key]);
-        }
+        return DB::transaction(function () use($target, $query, $datas, $title_key, $current, $brand_id) {
+            if($this->manyInsert($query, $datas))
+            {
+                $ids = $query
+                    ->where('brand_id', $brand_id)
+                    ->where('created_at', $current)
+                    ->pluck('id')
+                    ->all();
+                if(count($ids))
+                {
+                    $datas = $this->getAddFormat($target, $datas, $title_key, $ids);
+                    $this->manyInsert($this->activity_histories, $datas);
+                    return $ids;
+                }
+                else
+                    return [];
+            }
+        });
     }
 
-    static public function book($target, $query, $after_data, $title_key)
+    public function add($target, $query, $data, $title_key)
     {
-        $update_keys = array_keys($after_data);
-        $update_keys[] = $title_key;
-        $before_datas = (clone $query)->get($update_keys)->toArray();
-        foreach($before_datas as $before_data)
-        {
-            self::logging(HistoryType::BOOK, $target, $before_data, $after_data, $before_data[$title_key]);
-        }
+        return DB::transaction(function () use($target, $query, $data, $title_key) {
+            $res = $query->create($data);
+            if($res)
+            {
+                $datas = $this->getAddFormat($target, [$data], $title_key, [$res->id]);
+                $this->manyInsert($this->activity_histories, $datas);        
+            }
+            return $res;
+        });
     }
 
-    static public function destory($target, $query, $title_key)
+    public function update($target, $query, $after_data, $title_key)
     {
-        $before_datas = (clone $query)->get([$title_key])->toArray();
-        foreach($before_datas as $before_data)
-        {
-            self::logging(HistoryType::DELETE, $target, $before_data, [], $before_data[$title_key]);
-        }
-    }
-    static public function bookDestory($target, $query, $title_key)
-    {
-        $before_datas = (clone $query)->get()->toArray();
-        foreach($before_datas as $before_data)
-        {
-            self::logging(HistoryType::BOOK_DELETE, $target, $before_data, [], $before_data[$title_key]);
-        }
+        $before_datas = $this->getBeforeData(array_keys($after_data), $title_key, $query);
+        $datas = $this->getUpdateFormat(HistoryType::UPDATE, $target, $title_key, $after_data, $before_datas);
+
+        return DB::transaction(function () use($query, $datas, $after_data) {
+            $row = $query->update($after_data);
+            if($row)
+                $this->manyInsert($this->activity_histories, $datas);
+            return $row;
+        });
     }
 
-    static private function logging(HistoryType $history_type, $history_target, $before_history_detail, $after_history_detail, $history_title)
+    public function book($target, $query, $after_data, $title_key, $orm, $book_datas)
     {
-        $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
-        $before_history_detail = s3ImageLinkConvert(json_decode(json_encode($before_history_detail), true));
-        $data = [
-            'history_type' => $history_type->value,
-            'history_target' => $history_target,
-            'before_history_detail' => json_encode($before_history_detail, JSON_UNESCAPED_UNICODE),
-            'after_history_detail' => json_encode($after_history_detail, JSON_UNESCAPED_UNICODE),
-            'history_title'  => $history_title,
-            'brand_id' => request()->user() ? request()->user()->brand_id : $brand['id'],
-            'oper_id' => request()->user() ? request()->user()->id : 0,
-        ];
-        return OperatorHistory::create($data);    
+        $before_datas = $this->getBeforeData(array_keys($after_data), $title_key, $query);
+        $datas = $this->getUpdateFormat(HistoryType::BOOK, $target, $title_key, $after_data, $before_datas);
+
+        return DB::transaction(function () use($query, $datas, $after_data, $orm, $book_datas) {
+            $result = $this->manyInsert($orm, $book_datas);
+            if($result)
+                $this->manyInsert($this->activity_histories, $datas);
+            return $result;
+        });
+    }
+
+    public function destory($target, $query, $title_key, $history_type=HistoryType::DELETE, $is_delete=true)
+    {
+        $before_datas = $this->getBeforeData([], $title_key, $query);
+        $datas = $this->getDestoryFormat($history_type, $target, $title_key, $before_datas);
+
+        return DB::transaction(function () use($query, $datas, $is_delete) {
+            if($is_delete)
+                $row = $this->delete($query);
+            else
+                $row = $query->delete();
+
+            if($row)
+                $this->manyInsert($this->activity_histories, $datas);
+            return $row;
+        });
     }
 }

@@ -1,23 +1,23 @@
 <script lang="ts" setup>
 import { StatusColorSetter } from '@/views/searcher';
-import { getLevelByChipColor } from '@/views/services/abnormal-connection-histories/useStore';
-import { history_types } from '@/views/services/operator-histories/useStore';
-import type { OperatorHistory } from '@/views/types';
+import { getLevelColor } from '@/views/services/abnormal-connection-histories/useStore';
+import { history_types } from '@/views/services/activity-histories/useStore';
+import type { ActivityHistory } from '@/views/types';
 import { allLevels, axios } from '@axios';
 
-interface DetailWorkContent extends OperatorHistory {
+interface DetailWorkContent extends ActivityHistory {
     level: number,
 }
 
 const visible = ref(false)
 const work_time_comment = ref('')
-const operator_histories = ref(<DetailWorkContent[]>([]))
+const activity_histories = ref(<DetailWorkContent[]>([]))
 
 const show = async (detail_time_type: number, _work_time_comment: string) => {
     const res = await axios.get('/api/v1/manager/services/abnormal-connection-histories/secure-report/detail-work-status', {
         params: {detail_time_type: detail_time_type}
     })
-    operator_histories.value = res.data
+    activity_histories.value = res.data
     work_time_comment.value = _work_time_comment
     visible.value = true
 }
@@ -44,7 +44,7 @@ defineExpose({
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(history, key) in operator_histories" :key="key">
+                        <tr v-for="(history, key) in activity_histories" :key="key">
                             <td class='list-square'>
                                 <b># {{ history.id }}</b>
                             </td>
@@ -55,7 +55,7 @@ defineExpose({
                             </td>
                             <td class='list-square'>
                                 <VChip v-if="history.level"
-                                :color="StatusColorSetter().getSelectIdColor(getLevelByChipColor(history.level))">
+                                :color="getLevelColor(history.level)">
                                     {{ allLevels().find(obj => obj.id === history.level)?.title }}
                                 </VChip>
                             </td>
@@ -76,7 +76,7 @@ defineExpose({
                             </td>
                         </tr>
                     </tbody>
-                    <tfoot v-if="!Boolean(operator_histories.length)">
+                    <tfoot v-if="!Boolean(activity_histories.length)">
                         <tr>
                             <td :colspan="8" class='list-square' style="border: 0;">
                                 작업내역이 존재하지 않습니다.

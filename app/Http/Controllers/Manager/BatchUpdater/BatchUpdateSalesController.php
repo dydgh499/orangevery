@@ -38,29 +38,18 @@ class BatchUpdateSalesController extends BatchUpdateController
         $this->target = '영업라인';
     }
 
-    private function applyBook($query, $request, $cols)
-    {
-        $datas = $this->getApplyBookDatas($request, $query->pluck('id')->all(), 'sales_id', $cols);
-        $res = $this->manyInsert(new SalesforceColumnApplyBook, $datas);
-        return count($datas);
-    }
-
     private function getApplyRow($request, $cols)
     {
         $query = $this->salesforceBatch($request);
         if($request->apply_type === 0) 
         {
-            $row = DB::transaction(function () use($query, $cols) {
-                ActivityHistoryInterface::update($this->target, $query, $cols, 'sales_name');
-                return $query->update($cols);
-            });
+            $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $cols, 'sales_name');
         }
         else
         {
-            $row = DB::transaction(function () use($query, $cols, $request) {
-                ActivityHistoryInterface::book($this->target, $query, $cols, 'sales_name');
-                return $this->applyBook($query, $request, $cols);
-            });
+            $datas = $this->getApplyBookDatas($request, $query->pluck('payment_modules.id')->all(), 'pmod_id', $cols);
+            $result = app(ActivityHistoryInterface::class)->book($this->target, $query, $cols, 'sales_name', new SalesforceColumnApplyBook, $datas);
+            $row = $result ? count($datas) : 0;
         }
         return $row;
     }
@@ -166,11 +155,8 @@ class BatchUpdateSalesController extends BatchUpdateController
      */
     public function batchRemove(Request $request)
     {
-        $row = DB::transaction(function () use($request) {
-            $query = $this->salesforceBatch($request);
-            ActivityHistoryInterface::destory($this->target, $query, 'sales_name');
-            return $query->update(['is_delete' => true]);
-        });
+        $query  = $this->salesforceBatch($request);
+        $row    = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'sales_name');
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 영업라인이 존재하지 않습니다.');
     }
 
@@ -205,9 +191,8 @@ class BatchUpdateSalesController extends BatchUpdateController
                 return $data;
             })->toArray();
 
-            ActivityHistoryInterface::add($this->target, $salesforces, 'sales_name');
-            $res = $this->manyInsert($this->salesforces, $salesforces);
-            return $this->response($res ? 1 : 990);
+            $ids = app(ActivityHistoryInterface::class)->batchAdd($this->target, $this->salesforces, $salesforces, 'sales_name', $current, $brand_id);
+            return $this->response(1, $ids);
         }
     }
 }

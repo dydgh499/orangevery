@@ -127,7 +127,7 @@ const formatDisableEtm = computed(() => {
                         <VTextField 
                             v-model="props.item.pay_disable_e_tm" 
                             @input="formatDisableEtm"
-                            label="결제금지 시작시간"
+                            label="결제금지 종료시간"
                         />
                     </VCol>
                     <VTooltip activator="parent" location="top" transition="scale-transition">

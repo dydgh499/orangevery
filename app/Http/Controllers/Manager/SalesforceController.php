@@ -10,6 +10,7 @@ use App\Models\Service\PaymentSection;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 
 use App\Http\Traits\StoresTrait;
@@ -25,10 +26,10 @@ use App\Http\Requests\Manager\SalesforceRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Utils\ChartFormat;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Enums\HistoryType;
 use Illuminate\Support\Facades\Redis;
 
 /**
@@ -171,10 +172,11 @@ class SalesforceController extends Controller
                     $user = $this->saveImages($request, $user, $this->imgs);
                     $user['user_pw'] = Hash::make($request->user_pw.$current);
                     $user['created_at'] = $current;
-                    $res = $this->salesforces->create($user);
-    
-                    operLogging(HistoryType::CREATE, $this->target, [], $user, $user['sales_name']);
-                    return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
+                    $res = app(ActivityHistoryInterface::class)->add($this->target, $this->salesforces, $user, 'sales_name');
+                    if($res)
+                        return $this->response(1, ['id' => $res->id]);    
+                    else
+                        return $this->response(990, []);
                 }
             }
         }
@@ -255,15 +257,17 @@ class SalesforceController extends Controller
                 return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
             else
             {
-                $data = $this->saveImages($request, $data, $this->imgs);
-                $data = Ablilty::emptyPrivacyInfo($request, $data);        
-                $res = $query->update($data);
-                operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['sales_name']);
-
                 if($request->dns)
                     Redis::set("brand-info-sales-".$request->dns, null, 'EX', 1);
 
-                return $this->response($res ? 1 : 990, ['id'=>$id]);
+                $data = $this->saveImages($request, $data, $this->imgs);
+                $data = Ablilty::emptyPrivacyInfo($request, $data);        
+
+                $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'sales_name');
+                if($row)
+                    return $this->response(1, ['id' => $id]);
+                else
+                    return $this->response(990);
             }
         }
         else
@@ -278,17 +282,17 @@ class SalesforceController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        if(EditAbleWorkTime::validate() === false)
-            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-        if($this->authCheck($request->user(), $id, 15))
+        if(Ablilty::isOperator($request) || Ablilty::isUnderSalesforce($request, $id))
         {
-            $data = $this->salesforces->where('id', $id)->first();
+            $query = $this->salesforces->where('id', $id);
+            $data = $query->first();
             if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                 return $this->response(951);
+            if(EditAbleWorkTime::validate() === false)
+                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
-            $res = $this->delete($this->salesforces->where('id', $id));
-            operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->sales_name);
-            return $this->response($res ? 1 : 990, ['id'=>$id]);
+            $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'sales_name');
+            return $this->response(1, ['id' => $id]);    
         }
         else
             return $this->response(951);

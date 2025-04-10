@@ -4,6 +4,7 @@ import { payModFilter } from '@/views/merchandises/pay-modules/useStore';
 import { useRequestStore } from '@/views/request';
 import { useSalesFilterStore } from '@/views/salesforces/useStore';
 import type { NotiUrl, PayModule } from '@/views/types';
+import { HistoryTargetNames } from '@core/enums';
 import { requiredValidatorV2, urlValidator } from '@validators';
 import { VForm } from 'vuetify/components';
 
@@ -14,6 +15,7 @@ interface Props {
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
+const activityHistoryTargetDialog = <any>(inject('activityHistoryTargetDialog'))
 
 const { mchts } = useSalesFilterStore()
 const { update, remove } = useRequestStore()
@@ -112,22 +114,38 @@ const filterPayMod = computed(() => {
                                 </VCol>
                             </VRow>
 
-                        <VRow v-if="notiViewable(props.item.id)">
-                            <VCol class="d-flex gap-4">
-                                <VBtn type="button" style="margin-left: auto;"
-                                    @click="update('/merchandises/noti-urls', props.item, vForm, props.able_mcht_chanage)">
-                                    {{ props.item.id == 0 ? "추가" : "수정" }}
-                                    <VIcon end icon="tabler-pencil" />
+                        <VRow>
+                            <VCol style="text-align: end;">
+                                <VBtn v-if="props.item.id"
+                                    style="margin-left: auto;"
+                                    color="secondary" 
+                                    variant="tonal"
+                                    @click="activityHistoryTargetDialog.show(props.item.id, HistoryTargetNames['merchandises/noti-urls'])">
+                                    이력
+                                    <VIcon end size="20" icon="tabler:history" />
                                 </VBtn>
-                                <VBtn type="button" color="error" v-if="props.item.id"
-                                    @click="remove('/merchandises/noti-urls', props.item, props.able_mcht_chanage)">
-                                    삭제
-                                    <VIcon end icon="tabler-trash" />
-                                </VBtn>
-                                <VBtn type="button" color="warning" v-else @click="props.item.id = -1">
-                                    입력란 제거
-                                    <VIcon end icon="tabler-trash" />
-                                </VBtn>
+                                <template v-if="notiViewable(props.item.id)">
+                                    <VBtn 
+                                        style="margin-left: 1em;"
+                                        @click="update('/merchandises/noti-urls', props.item, vForm, props.able_mcht_chanage)">
+                                        {{ props.item.id == 0 ? "추가" : "수정" }}
+                                        <VIcon end size="20" icon="tabler-pencil" />
+                                    </VBtn>
+                                    <VBtn v-if="props.item.id"
+                                        style="margin-left: 1em;"
+                                        color="error"
+                                        @click="remove('/merchandises/noti-urls', props.item, props.able_mcht_chanage)">
+                                        삭제
+                                        <VIcon end size="20" icon="tabler-trash" />
+                                    </VBtn>
+                                    <VBtn v-else
+                                        style="margin-left: 1em;"
+                                        color="warning"
+                                        @click="props.item.id = -1">
+                                        입력란 제거
+                                        <VIcon end size="20" icon="tabler-trash" />
+                                    </VBtn>
+                                </template>
                             </VCol>
                         </VRow>
                         </VCardItem>

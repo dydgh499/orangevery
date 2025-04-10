@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Manager\BatchUpdater;
 
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Enums\HistoryType;
+use Illuminate\Support\Facades\DB;
 
 class BatchUpdateController extends Controller
 {
@@ -13,7 +14,6 @@ class BatchUpdateController extends Controller
     {
         $this->target = '';
     }
-
 
     protected function batchResponse($row, $apply_type)
     {
@@ -64,23 +64,6 @@ class BatchUpdateController extends Controller
             logging([], '잘못된 접근');
             echo "wrong access";
             return 0;
-        }
-    }
-
-    protected function addLogs($history_type, $after_datas)
-    {
-        foreach($after_datas as $after_data)
-        {
-            operLogging(HistoryType::CREATE, $this->target, [], $after_data, $after_data['mcht_name']);
-        }
-    }
-
-    protected function updateLogs($history_type, $query, $after_data, $update_keys, $title_key)
-    {
-        $before_datas = (clone $query)->get($update_keys)->toArray();
-        foreach($before_datas as $before_data)
-        {
-            operLogging(HistoryType::UPDATE, $this->target, $before_data, $after_data, $before_data[$title_key]);
         }
     }
 }

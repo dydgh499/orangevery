@@ -18,6 +18,7 @@ import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { StatusColorSetter } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getIndexByLevel, getLevelByIndex, getUserLevel, isAbleModiy, user_info } from '@axios'
+import { HistoryTargetNames } from '@core/enums'
 import corp from '@corp'
 import { autoUpdateMerchandiseParentSalesInfo } from '../salesforces/overlap'
 import { merchandiseCreateAuth, useFeeCalculatorStore } from './feeCalculatorStore'
@@ -39,6 +40,8 @@ const contact_num_format = ref('')
 const feeBookDialog = ref()
 const underAutoSetting = ref()
 const passwordCheckDialog = ref()
+const activityHistoryTargetDialog = <any>(inject('activityHistoryTargetDialog'))
+
 
 provide('feeBookDialog', feeBookDialog)
 
@@ -270,7 +273,19 @@ onMounted(() => {
                         <template v-if="getUserLevel() > 11">
                             <VDivider/>
                             <VCol cols="12">
-                                <VCardTitle>영업라인 수수료</VCardTitle>
+                                <VCardTitle>
+                                    <div style="display: flex;align-items: center;justify-content: space-between;">
+                                        <VCardTitle style="margin-right: 1em;">영업라인 수수료</VCardTitle>
+                                        <div v-if="props.item.id && getUserLevel() >= 30"
+                                            :style="$vuetify.display.smAndDown ? 'display: inline-flex; flex-direction: column;' : 'display: inline-flex;'">
+                                            <VBtn
+                                                 variant="tonal" size="small" color="secondary" @click="activityHistoryTargetDialog.show(props.item.id, HistoryTargetNames['salesforces/fee-change-histories'])">
+                                                수수료율 변경이력
+                                                <VIcon end size="20" icon="tabler:history" />
+                                            </VBtn>
+                                        </div>
+                                    </div>
+                                </VCardTitle>
                             </VCol>
                             <template v-for="i in 6" :key="i">
                                 <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">
@@ -344,7 +359,19 @@ onMounted(() => {
                         </template>
                         <VDivider/>
                         <VCol cols="12">
-                            <VCardTitle>가맹점 수수료</VCardTitle>
+                            <VCardTitle>
+                                    <div style="display: flex;align-items: center;justify-content: space-between;">
+                                        <VCardTitle style="margin-right: 1em;">가맹점 수수료</VCardTitle>
+                                        <div v-if="props.item.id"
+                                            :style="$vuetify.display.smAndDown ? 'display: inline-flex; flex-direction: column;' : 'display: inline-flex;'">
+                                            <VBtn
+                                                 variant="tonal" size="small" color="secondary" @click="activityHistoryTargetDialog.show(props.item.id, HistoryTargetNames['merchandises/fee-change-histories'])">
+                                                수수료율 변경이력
+                                                <VIcon end size="20" icon="tabler:history" />
+                                            </VBtn>
+                                        </div>
+                                    </div>
+                                </VCardTitle>
                         </VCol>
                         <VCol cols="12">
                             <VRow v-if="isAbleModiy(props.item.id)">
@@ -612,42 +639,40 @@ onMounted(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12">
-                            <template v-if="getUserLevel() > 10">
-                                <VDivider style="margin-bottom: 1em;"/>
-                                <VRow>
-                                    <VCol :md="12" :cols="12">
-                                        <VRow style="align-items: center;" class="match-height">
-                                            <VCol md="6" cols=12>
-                                                <VTextarea v-model="props.item.settle_hold_reason" counter label="지급보류 사유"
-                                                    variant="filled"
-                                                    prepend-inner-icon="twemoji-spiral-notepad" maxlength="200" auto-grow />
-                                            </VCol>
-                                            <VCol md="6" cols="12" style="display: flex;flex-direction: column;text-align: end;">
-                                                <div>
-                                                    <AppDateTimePicker
-                                                        v-model="props.item.settle_hold_s_dt" 
-                                                        variant='underlined'
-                                                        placeholder="지급보류 시작일"
-                                                        style="max-width: 8em; margin-bottom: 3em; margin-left: auto;"
-                                                    />
-                                                </div>
-                                                <div style="float: inline-end;">
-                                                    <VBtn color="error" size="small" @click="setSettleHoldClear()">
-                                                        지급보류
-                                                        <VIcon end icon="icon-park-solid:clear-format" />
-                                                    </VBtn>
-                                                    <VBtn v-if="getUserLevel() >= 35" 
-                                                        color="error" variant="tonal" size="small" @click="clearSettleHoldClear()" style="margin-left: 1em;">
-                                                        지급보류해제
-                                                        <VIcon end icon="icon-park-solid:clear-format" />
-                                                    </VBtn>
-                                                </div>
-                                            </VCol>
-                                        </VRow>
-                                    </VCol>
-                                </VRow>
-                            </template>
+                        <VCol cols="12" v-if="getUserLevel() > 10">
+                            <VDivider style="margin-bottom: 1em;"/>
+                            <VRow>
+                                <VCol :md="12" :cols="12">
+                                    <VRow style="align-items: center;" class="match-height">
+                                        <VCol md="6" cols=12>
+                                            <VTextarea v-model="props.item.settle_hold_reason" counter label="지급보류 사유"
+                                                variant="filled"
+                                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="200" auto-grow />
+                                        </VCol>
+                                        <VCol md="6" cols="12" style="display: flex;flex-direction: column;text-align: end;">
+                                            <div>
+                                                <AppDateTimePicker
+                                                    v-model="props.item.settle_hold_s_dt" 
+                                                    variant='underlined'
+                                                    placeholder="지급보류 시작일"
+                                                    style="max-width: 8em; margin-bottom: 3em; margin-left: auto;"
+                                                />
+                                            </div>
+                                            <div style="float: inline-end;">
+                                                <VBtn color="error" size="small" @click="setSettleHoldClear()">
+                                                    지급보류
+                                                    <VIcon end icon="icon-park-solid:clear-format" />
+                                                </VBtn>
+                                                <VBtn v-if="getUserLevel() >= 35" 
+                                                    color="error" variant="tonal" size="small" @click="clearSettleHoldClear()" style="margin-left: 1em;">
+                                                    지급보류해제
+                                                    <VIcon end icon="icon-park-solid:clear-format" />
+                                                </VBtn>
+                                            </div>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
                         </VCol>
                         <VCol cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile && getUserLevel() >= 35">
                             <VRow>

@@ -27,15 +27,15 @@ use App\Http\Controllers\Manager\OperatorController;
 
 use App\Http\Controllers\Manager\PostController;
 use App\Http\Controllers\Manager\ComplaintController;
-use App\Http\Controllers\Log\OperatorHistoryContoller;
+use App\Http\Controllers\Log\ActivityHistoryContoller;
 use App\Http\Controllers\Manager\BatchUpdater\ApplyBookController;
 
 Route::middleware(['auth.update'])->group(function() {
     Route::get('services/pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
+    Route::get('services/activity-histories/{target_id}/target', [ActivityHistoryContoller::class, 'target']); 
     Route::get('popups/currently', [PopupController::class, 'currently']);
     Route::get('posts/{id}/parent', [PostController::class, 'parent']);
     Route::get('posts/recent', [PostController::class, 'recent']);
-
     Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
         Route::middleware(['is.edit.able'])->post('posts/upload', [PostController::class, 'upload']);  
         Route::prefix('services')->group(function() {
@@ -64,8 +64,8 @@ Route::middleware(['auth.update'])->group(function() {
             Route::apiResource('brands', BrandController::class);
         
             Route::apiResource('operators', OperatorController::class);            
-            Route::get('operator-histories', [OperatorHistoryContoller::class, 'index']);
-            Route::get('operator-histories/{id}/detail', [OperatorHistoryContoller::class, 'detail']); 
+            Route::get('activity-histories', [ActivityHistoryContoller::class, 'index']);
+            Route::get('activity-histories/{id}/detail', [ActivityHistoryContoller::class, 'detail']); 
             
             Route::apiResource('pay-gateways', PaymentGatewayController::class);
             Route::apiResource('pay-sections', PaymentSectionController::class);

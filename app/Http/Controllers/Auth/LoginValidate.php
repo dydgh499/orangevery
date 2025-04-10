@@ -19,7 +19,6 @@ use App\Models\Service\PaymentSection;
 use App\Models\Salesforce\SalesforceFeeTable;
 
 use Illuminate\Support\Facades\Hash;
-use App\Enums\HistoryType;
 
 class LoginValidate
 {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
 use App\Models\Operator;
 use App\Models\Merchandise;
@@ -29,7 +30,6 @@ use App\Http\Controllers\Utils\ChartFormat;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Enums\HistoryType;
 
 
 /**
@@ -251,13 +251,9 @@ class MerchandiseController extends Controller
                             return $this->extendResponse(1999, $res['message']);
                     }
 
-                    $res = $this->merchandises->create($user);
+                    $res = app(ActivityHistoryInterface::class)->add($this->target, $this->merchandises, $user, 'mcht_name');
                     if($res)
-                    {
-                        $p_res = $this->createPayModuleByTID($request, $res->id);
-                        operLogging(HistoryType::CREATE, $this->target, [], $user, $user['mcht_name']);
-                        return $this->response(1, ['id'=>$res->id]);    
-                    }
+                        return $this->response(1, ['id' => $res->id]);    
                     else
                         return $this->response(990, []);
                 }
@@ -344,10 +340,11 @@ class MerchandiseController extends Controller
                     if($res['code'] !== 'SUCCESS')
                         return $this->extendResponse(1999, $res['message']);
                 }
-
-                $res = $query->update($data);                
-                operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['mcht_name']);
-                return $this->response($res ? 1 : 990, ['id'=>$id]);        
+                $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'mcht_name');
+                if($row)
+                    return $this->response(1, ['id' => $id]);
+                else
+                    return $this->response(990);
             }
         }        
         else
@@ -364,19 +361,22 @@ class MerchandiseController extends Controller
     {
         if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $id))
         {
-            $data = $this->merchandises->where('id', $id)->first();
+            $query = $this->merchandises->where('id', $id);
+            $data = $query->first();
             if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                 return $this->response(951);
             if(EditAbleWorkTime::validate() === false)
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
-            DB::transaction(function () use($id, $data) {
-                $res = $this->delete(PaymentModule::where('mcht_id', $id));
-                $res = $this->delete(NotiUrl::where('mcht_id', $id));
-                $res = $this->delete($this->merchandises->where('id', $id));
-                operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->mcht_name);
+            $row = DB::transaction(function () use($id, $query) {
+                $p_query = PaymentModule::where('mcht_id', $id);
+                $n_query = NotiUrl::where('mcht_id', $id);
+
+                app(ActivityHistoryInterface::class)->destory('결제모듈', $p_query, 'note');
+                app(ActivityHistoryInterface::class)->destory('노티 URL', $n_query, 'note');
+                return app(ActivityHistoryInterface::class)->destory($this->target, $query, 'mcht_name');
             });
-            return $this->response(1, ['id'=>$id]);    
+            return $this->response(1, ['id' => $id]);    
         }
         else
             return $this->response(951);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Merchandise } from '@/views/types'
-import { axios, getLevelByIndex } from '@axios'
+import type { Merchandise } from '@/views/types';
+import { axios, getLevelByIndex } from '@axios';
 
 interface Props {
     level: number,
@@ -68,7 +68,7 @@ const bookFeeChange = async () => {
         <VBtn size="small" variant="tonal" @click="directFeeChange()" style='flex-grow: 1; margin: 0.25em 0.5em;'>
             즉시적용
         </VBtn>
-        <VBtn size="small" variant="tonal" color="secondary" @click="bookFeeChange()"
+        <VBtn size="small" variant="tonal" color="warning" @click="bookFeeChange()"
             style='flex-grow: 1; margin: 0.25em 0.5em;'>
             예약적용
         </VBtn>

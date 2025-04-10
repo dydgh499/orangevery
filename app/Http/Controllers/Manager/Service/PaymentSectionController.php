@@ -10,6 +10,7 @@ use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -23,10 +24,12 @@ class PaymentSectionController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
     protected $pay_sections;
+    protected $target;
 
     public function __construct(PaymentSection $pay_sections)
     {
         $this->pay_sections = $pay_sections;
+        $this->target       = '구간';
         $this->imgs = [];
     }
 
@@ -55,9 +58,12 @@ class PaymentSectionController extends Controller
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
-        $user = $request->data();
-        $res = $this->pay_sections->create($user);
-        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
+        $data = $request->data();
+        $res = app(ActivityHistoryInterface::class)->add($this->target, $this->pay_sections, $data, 'name');
+        if($res)
+            return $this->response(1, ['id'=>$res->id]);
+        else
+            return $this->response(990);
     }
 
     /**
@@ -82,12 +88,20 @@ class PaymentSectionController extends Controller
      */
     public function update(PaySectionRequest $request, int $id)
     {
+        $query      = $this->pay_sections->where('id', $id);
+        $section    = $query->first();
+        $data       = $request->data();
+
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+        if(Ablilty::isBrandCheck($request, $section->brand_id) === false)
+            return $this->response(951);
 
-        $data = $request->data();
-        $res = $this->pay_sections->where('id', $id)->update($data);
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
+        $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'name');
+        if($row)
+            return $this->response(1, ['id' => $id]);
+        else
+            return $this->response(990);
     }
 
     /**
@@ -97,10 +111,15 @@ class PaymentSectionController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
+        $query      = $this->pay_sections->where('id', $id);
+        $section    = $query->first();
+        
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+        if(Ablilty::isBrandCheck($request, $section->brand_id) === false)
+            return $this->response(951);
 
-        $res = $this->delete($this->pay_sections->where('id', $id));
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
+        $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'name');
+        return $this->response(1, ['id' => $id]);
     }
 }

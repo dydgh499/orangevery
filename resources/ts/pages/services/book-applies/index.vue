@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import { useRequestStore } from '@/views/request';
+import { replaceVariable } from '@/views/services/activity-histories/useStore';
 import { useSearchStore } from '@/views/services/book-applies/useStore';
-import { replaceVariable } from '@/views/services/operator-histories/useStore';
 import { getUserLevel } from '@axios';
 import { DateFilters } from '@core/enums';
 

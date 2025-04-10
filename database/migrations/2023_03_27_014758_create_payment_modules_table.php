@@ -42,7 +42,7 @@ return new class extends Migration
             $table->tinyInteger('ship_out_stat')->nullable()->comment('출고 상태(0=공장비, 1=입고, 2=출고, 3=해지)');
             //-------------------------- 4
             $table->integer('fin_id')->nullable()->comment('실시간 이체 ID');
-            $table->tinyInteger('fin_trx_delay')->nullable()->comment('실시간 이체 딜레이(15,30,45,60)');
+            $table->tinyInteger('fin_trx_delay')->nullable()->comment('이체 딜레이(15,30,45,60)');
             //-------------------------- option
             $table->tinyInteger('cxl_type')->default(2)->comment('취소타입(0=취소금지, 1=이체시간 -5분, 2=당일허용)');
             $table->boolean('is_old_auth')->default(false)->comment('수기결제 타입(0=비인증, 1=구인증)');

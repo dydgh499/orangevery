@@ -751,7 +751,7 @@ response.json()</code></pre></div>
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>실시간 이체 딜레이(모아서 출금=-1, 즉시입금=0, 15분=15, 30분=30, 45분=45, 60분=60), 모아서 출금 외 모두 즉시입금</p>
+<p>이체 딜레이(모아서 출금=-1, 즉시입금=0, 15분=15, 30분=30, 45분=45, 60분=60), 모아서 출금 외 모두 즉시입금</p>
         </div>
                         <h2 id="bf-mobile-api-GETapi-v1-bf-transactions">결제내역 조회</h2>
 

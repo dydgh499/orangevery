@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager\BatchUpdater;
 
+use App\Enums\HistoryType;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateController;
 use App\Http\Controllers\Manager\Transaction\TransactionController;
 use App\Http\Controllers\Manager\Transaction\TransactionFilter;
@@ -42,12 +43,7 @@ class BatchUpdateTransactionController extends BatchUpdateController
     {
         $query = $this->transactionBatch($request);
         if($request->apply_type === 0) 
-        {
-            $row = DB::transaction(function () use($query, $cols) {
-                ActivityHistoryInterface::update($this->target, $query, $cols, 'id');
-                return $query->update($cols);
-            });
-        }
+            $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $cols, 'id');
         else
             $this->wrongTypeAccess();
         return $row;
@@ -160,11 +156,8 @@ class BatchUpdateTransactionController extends BatchUpdateController
      */
     public function batchRemove(Request $request)
     {
-        $row = DB::transaction(function () use($request) {
-            $query = $this->transactionBatch($request);
-            ActivityHistoryInterface::destory($this->target, $query, 'id');
-            return $query->delete();
-        });
+        $query = $this->transactionBatch($request);
+        $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'id', HistoryType::DELETE, false);
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 매출이 존재하지 않습니다.');
     }
 

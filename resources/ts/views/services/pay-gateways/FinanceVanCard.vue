@@ -7,6 +7,7 @@ import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { FinanceVan } from '@/views/types'
 import { banks } from '@/views/users/useStore'
+import { HistoryTargetNames } from '@core/enums'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
 import { VForm } from 'vuetify/components'
@@ -16,6 +17,7 @@ interface Props {
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
+    const activityHistoryTargetDialog = <any>(inject('activityHistoryTargetDialog'))
 
 const { finance_companies, is_agency_vans } = useStore()
 const { update, remove } = useRequestStore()
@@ -191,20 +193,34 @@ onMounted(async () => {
                             </CreateHalfVColV2>
 
                             <VRow>
-                                <VCol class="d-flex gap-4 pt-10">
-                                    <VBtn type="button" style="margin-left: auto;"
+                                <VCol class="pt-10" style="text-align: end;">
+                                    <VBtn v-if="props.item.id"
+                                        style="margin-left: auto;"
+                                        variant="tonal"
+                                        color="secondary" 
+                                        @click="activityHistoryTargetDialog.show(props.item.id, HistoryTargetNames['services/finance-vans'])">
+                                        이력
+                                        <VIcon end size="20" icon="tabler:history" />
+                                    </VBtn>                            
+                                    <VBtn 
+                                        style="margin-left: 1em;"
                                         @click="update('/services/finance-vans', props.item, vForm, false)">
                                         {{ props.item.id == 0 ? "추가" : "수정" }}
-                                        <VIcon end icon="tabler-pencil" />
+                                        <VIcon end size="20" icon="tabler-pencil" />
                                     </VBtn>
-                                    <VBtn type="button" color="error" v-if="props.item.id"
+                                    <VBtn v-if="props.item.id"
+                                        style="margin-left: 1em;"
+                                        color="error"
                                         @click="remove('/services/finance-vans', props.item, false)">
                                         삭제
-                                        <VIcon end icon="tabler-trash" />
+                                        <VIcon end size="20" icon="tabler-trash" />
                                     </VBtn>
-                                    <VBtn type="button" color="warning" v-else @click="props.item.id = -1">
+                                    <VBtn v-else
+                                        style="margin-left: 1em;"
+                                        color="warning"
+                                        @click="props.item.id = -1">
                                         입력란 제거
-                                        <VIcon end icon="tabler-trash" />
+                                        <VIcon end size="20" icon="tabler-trash" />
                                     </VBtn>
                                 </VCol>
                             </VRow>

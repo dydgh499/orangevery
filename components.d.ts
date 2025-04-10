@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ActivityHistoryDetailDialog: typeof import('./resources/ts/layouts/dialogs/histories/ActivityHistoryDetailDialog.vue')['default']
     AddDeductDialog: typeof import('./resources/ts/layouts/dialogs/transactions/AddDeductDialog.vue')['default']
     AlertDialog: typeof import('./resources/ts/layouts/dialogs/utils/AlertDialog.vue')['default']
     AppAutocomplete: typeof import('./resources/ts/@core/components/app-form-elements/AppAutocomplete.vue')['default']

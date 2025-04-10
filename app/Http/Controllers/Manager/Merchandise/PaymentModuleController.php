@@ -23,9 +23,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
-use App\Enums\HistoryType;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
 
 /**
@@ -148,23 +148,20 @@ class PaymentModuleController extends Controller
             if($res)
                 return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
         }
-
-        $res = DB::transaction(function () use($data) {
-            $res = $this->pay_modules->create($data);
+        $res = app(ActivityHistoryInterface::class)->add($this->target, $this->pay_modules, $data, 'note');
+        if($res)
+        {
             if($data['module_type'] != 0)
             {
-                $this->pay_modules
-                    ->where('id', $res->id)
-                    ->update([
-                        'pay_key' => $this->getNewPayKey($res->id),
-                        'sign_key' => $this->getNewPayKey($res->id)
-                    ]);
+                $this->pay_modules->where('id', $res->id)->update([
+                    'pay_key' => $this->getNewPayKey($res->id),
+                    'sign_key' => $this->getNewPayKey($res->id)
+                ]);
             }
-            return $res;
-        });
-
-        operLogging(HistoryType::CREATE, $this->target, [], $data, $data['note']."(#".$res->id.")");
-        return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);
+            return $this->response(1, ['id' => $res->id, 'mcht_id' => $data['mcht_id']]);
+        }
+        else
+            return $this->response(990);
     }
 
     /**
@@ -202,7 +199,6 @@ class PaymentModuleController extends Controller
      */
     public function update(PayModuleRequest $request, int $id)
     {
-        $brand = BrandInfo::getBrandById($request->user()->brand_id);
         // 같은 브랜드에서 똑같은 값이 존재할 떄
         $isDuplicateId = function($bid, $pid, $key, $value) {
             return $this->pay_modules
@@ -222,6 +218,7 @@ class PaymentModuleController extends Controller
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $data['mcht_id']))
         {
+            $brand = BrandInfo::getBrandById($request->user()->brand_id);
             if($brand['pv_options']['free']['use_tid_duplicate'] && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
                 return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid' => $data['tid']]);
             if($brand['pv_options']['free']['use_mid_duplicate'] && $data['mid'] != '' && $isDuplicateId($data['brand_id'], $id, 'mid', $data['mid']))
@@ -232,7 +229,6 @@ class PaymentModuleController extends Controller
                 if($brand['pv_options']['free']['bonaeja']['user_id'] === '')
                     return $this->extendResponse(1999, '문자발송 플랫폼과 연동되어있지 않아 결제창 보안등급을 설정 할 수 없습니다.<br>계약 이후 사용 가능합니다.');
             }
-
             if($data['module_type'] == 0 && $data['serial_num'] != '')
             {
                 $res = $this->pay_modules
@@ -244,9 +240,12 @@ class PaymentModuleController extends Controller
                 if($res)
                     return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
             }
-            $res = $query->update($data);
-            operLogging(HistoryType::UPDATE, $this->target, $module, $data, $data['note']."(#".$id.")");
-            return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
+            $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'note');
+            if($row)
+                return $this->response(1, ['id' => $id, 'mcht_id' => $data['mcht_id']]);
+            else
+                return $this->response(990);
+
         }
         else
             return $this->response(951);
@@ -260,7 +259,8 @@ class PaymentModuleController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        $data = $this->pay_modules->where('id', $id)->first();
+        $query = $this->pay_modules->where('id', $id);
+        $data = $query->first();
         if($data)
         {
             if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
@@ -269,9 +269,8 @@ class PaymentModuleController extends Controller
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
             if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $data->mcht_id))
             {
-                $res = $this->delete($this->pay_modules->where('id', $id));            
-                operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->note);
-                return $this->response($res, ['id'=>$id, 'mcht_id'=>$data->mcht_id]);        
+                $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'note');
+                return $this->response(1, ['id' => $id]);
             }
             else
                 return $this->response(951);

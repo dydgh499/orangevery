@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Enums\HistoryType;
 
 /**
  * @group Operator API
@@ -113,9 +112,12 @@ class OperatorController extends Controller
                         $user['user_pw'] = Hash::make($request->input('user_pw').$current);
                         $user['created_at'] = $current;
                         $res = $this->operators->create($user);
-    
-                        operLogging(HistoryType::CREATE, $this->target, [], ['msg'=>'운영자는 보안상 이력이 남지 않습니다.'], $user['nick_name']);
-                        return $this->response($res ? 1 : 990, ['id'=>$res->id]);        
+                        if($res)
+                        {
+                            return $this->response(1, ['id' => $res->id]);
+                        }
+                        else
+                            return $this->response(990, []);
                     }
                     else
                         return $this->extendResponse($result, $msg, $datas);
@@ -190,7 +192,6 @@ class OperatorController extends Controller
             else
             {
                 $res = $query->update($data);
-                operLogging(HistoryType::UPDATE, $this->target, [], ['msg'=>'운영자는 보안상 이력이 남지 않습니다.'], $data['nick_name']);
                 return $this->response($res ? 1 : 990);    
             }
         }
@@ -214,7 +215,6 @@ class OperatorController extends Controller
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
             $res = $this->delete($this->operators->where('id', $id));
-            operLogging(HistoryType::DELETE, $this->target, [], ['msg'=>'운영자는 보안상 이력이 남지 않습니다.'], $user->nick_name);
             return $this->response($res ? 1 : 990, ['id'=>$id]);
         }
     }

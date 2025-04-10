@@ -15,6 +15,7 @@ const headers = [
     { title: '에러 메세지', key: 'message' },
 ]
 const show = (_errors: any) => {
+    page.value = 1
     visible.value = true
     errors.value = _errors
 }

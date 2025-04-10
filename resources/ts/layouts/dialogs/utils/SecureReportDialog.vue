@@ -3,7 +3,7 @@ import IPDetailDialog from '@/layouts/dialogs/services/IPDetailDialog.vue';
 import LastLoginDialog from '@/layouts/dialogs/services/LastLoginDialog.vue';
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue';
 import { StatusColorSetter } from '@/views/searcher';
-import { connection_types, getLevelByChipColor } from '@/views/services/abnormal-connection-histories/useStore';
+import { connection_types, getLevelColor } from '@/views/services/abnormal-connection-histories/useStore';
 import { operator_levels } from '@/views/services/operators/useStore';
 import type { AbnormalConnectionHistory, Popup } from '@/views/types';
 import { allLevels, axios, getUserLevel } from '@axios';
@@ -250,7 +250,7 @@ setSecureReport()
                             </td>
                             <td class='list-square'>
                                 <VChip v-if="history['target_level']"
-                                    :color="history['target_level'] >= 35 ? (history['target_level'] ? 'default' : 'primary') : StatusColorSetter().getSelectIdColor(getLevelByChipColor(history['target_level']))">
+                                    :color="history['target_level'] >= 35 ? (history['target_level'] ? 'default' : 'primary') : getLevelColor(history['target_level'])">
                                         {{ allLevels().find(obj => obj.id === history['target_level'])?.title }}
                                 </VChip>
                                 <span v-else>세션없음</span>

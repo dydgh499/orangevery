@@ -4,6 +4,7 @@ import { useRequestStore } from '@/views/request';
 import type { GMID } from '@/views/types';
 import { avatars } from '@/views/users/useStore';
 import { axios, getUserLevel } from '@axios';
+import { HistoryTargetNames } from '@core/enums';
 import { lengthValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators';
 import { VForm } from 'vuetify/components';
 
@@ -13,6 +14,7 @@ const is_show = ref(false)
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const profileDlg = ref()
+const activityHistoryTargetDialog = <any>(inject('activityHistoryTargetDialog'))
 
 const vForm = ref<VForm>()
 const gmid = ref(<GMID>({id:0}))
@@ -204,13 +206,26 @@ defineExpose({
                 <br>
                 <VRow v-if="getUserLevel() >= 35">
                     <VCol cols="12" class="d-flex gap-4">
-                        <VBtn type="button" style="margin-left: auto;" @click="formRequest('/gmids', gmid, vForm, false)">
-                            {{ gmid.id == 0 ? "추가" : "수정" }}
-                            <VIcon end icon="tabler-pencil" />
+                        <VBtn v-if="gmid.id"
+                            style="margin-left: auto;"
+                            color="secondary" 
+                            variant="tonal"
+                            @click="activityHistoryTargetDialog.show(gmid.id, HistoryTargetNames['gmids'])">
+                            이력
+                            <VIcon end size="20" icon="tabler:history" />
                         </VBtn>
-                        <VBtn type="button" color="error" v-if="gmid.id" @click="remove('/gmids', gmid)">
+                        <VBtn 
+                            style="margin-left: 1em;"
+                            @click="formRequest('/gmids', gmid, vForm, false)">
+                            {{ gmid.id == 0 ? "추가" : "수정" }}
+                            <VIcon end size="20" icon="tabler-pencil" />
+                        </VBtn>
+                        <VBtn v-if="gmid.id"
+                            style="margin-left: 1em;"
+                            color="error"
+                            @click="remove('/gmids', gmid)">
                             삭제
-                            <VIcon end icon="tabler-trash" />
+                            <VIcon end size="20" icon="tabler-trash" />
                         </VBtn>
                     </VCol>
                 </VRow>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import OperatorHistoryDetailDialog from '@/layouts/dialogs/histories/OperatorHistoryDetailDialog.vue'
+import ActivityHistoryDetailDialog from '@/layouts/dialogs/histories/ActivityHistoryDetailDialog.vue'
 import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { history_types, useSearchStore } from '@/views/services/operator-histories/useStore'
+import { history_types, useSearchStore } from '@/views/services/activity-histories/useStore'
+import { allLevels, getLevelByIndex } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
@@ -17,6 +18,15 @@ provide('operDetail', operDetail)
 
 const showAvatar = (preview: string) => {
     imageDialog.value.show(preview)
+}
+
+const getLevelColor = (level: number) => {
+    if(level === 35)
+        return 'default'
+    else if(level === 40)
+        return 'primary'
+    else 
+        return store.getSelectIdColor(getLevelByIndex(level))
 }
 
 </script>
@@ -54,9 +64,14 @@ const showAvatar = (preview: string) => {
                 <tr v-for="(item, index) in store.getItems" :key="index">
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" class='list-square'>
-                            <span v-if="_key == `oper_id`">
+                            <span v-if="_key == `user_id`">
                                 #{{ item[_key] }}
-                            </span>                                
+                            </span>
+                            <span v-else-if="_key === 'level'">
+                                <VChip :color="getLevelColor(item[_key])">
+                                    {{ allLevels().find(level => level.id === item[_key])?.title }}
+                                </VChip>
+                            </span>
                             <span v-else-if="_key === 'profile_img'">
                                 <VAvatar :image="item[_key]" class="me-3 preview" @click="showAvatar(item['profile_img'])"/>
                             </span>
@@ -83,7 +98,7 @@ const showAvatar = (preview: string) => {
                 </tr>
             </template>
         </BaseIndexView>
-        <OperatorHistoryDetailDialog ref="operDetail" />
+        <ActivityHistoryDetailDialog ref="operDetail" />
         <ImageDialog ref="imageDialog" :style="`inline-size:20em !important;`"/>
     </div>
 </template>

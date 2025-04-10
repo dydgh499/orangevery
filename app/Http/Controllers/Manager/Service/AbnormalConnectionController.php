@@ -7,7 +7,7 @@ use App\Models\Merchandise\PaymentModule;
 use App\Models\Merchandise;
 use App\Models\Salesforce;
 use App\Models\Operator;
-use App\Models\Log\OperatorHistory;
+use App\Models\Log\ActivityHistory;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -106,16 +106,17 @@ class AbnormalConnectionController extends Controller
             ->get();
 
         // 운영자 로그인 현황
-        $login_histories = OperatorHistory::join('operators', 'operator_histories.oper_id', '=', 'operators.id')
-            ->where('operator_histories.brand_id', $request->user()->brand_id)
-            ->where('operator_histories.history_type', HistoryType::LOGIN->value)
-            ->where('operator_histories.created_at', '>=', $abnormal_s_at)
+        $login_histories = ActivityHistory::join('operators', 'activity_histories.user_id', '=', 'operators.id')
+            ->where('activity_histories.level', '>=', 35)
+            ->where('activity_histories.brand_id', $request->user()->brand_id)
+            ->where('activity_histories.history_type', HistoryType::LOGIN->value)
+            ->where('activity_histories.created_at', '>=', $abnormal_s_at)
             ->orderby('created_at', 'desc')
             ->get([
                 'operators.profile_img',
                 'operators.nick_name',
                 'operators.level',
-                'operator_histories.created_at',
+                'activity_histories.created_at',
             ]);
         return $this->response(0, [
             'current_at' => $current_at,
@@ -155,22 +156,23 @@ class AbnormalConnectionController extends Controller
             return $this->response(951);
 
         $activity_types = [HistoryType::CREATE->value, HistoryType::UPDATE->value, HistoryType::DELETE->value];
-        $histories = OperatorHistory::join('operators', 'operator_histories.oper_id', '=', 'operators.id')
-            ->where('operator_histories.brand_id', $request->user()->brand_id)
-            ->whereIn('operator_histories.history_type', $activity_types)
-            ->where('operator_histories.created_at', '>=', $s_dt)
-            ->where('operator_histories.created_at', '<=', $e_dt)
-            ->where('operator_histories.history_target', ['가맹점', '결제모듈', '영업라인', '운영자'])
-            ->orderby('operator_histories.created_at', 'desc')
+        $histories = ActivityHistory::join('operators', 'activity_histories.user_id', '=', 'operators.id')
+            ->where('activity_histories.level', '>=', 35)
+            ->where('activity_histories.brand_id', $request->user()->brand_id)
+            ->whereIn('activity_histories.history_type', $activity_types)
+            ->where('activity_histories.created_at', '>=', $s_dt)
+            ->where('activity_histories.created_at', '<=', $e_dt)
+            ->where('activity_histories.history_target', ['가맹점', '결제모듈', '영업라인', '운영자'])
+            ->orderby('activity_histories.created_at', 'desc')
             ->get([
                 'operators.profile_img',
                 'operators.nick_name',
                 'operators.level',
-                'operator_histories.id',
-                'operator_histories.created_at',
-                'operator_histories.history_type',
-                'operator_histories.history_title',
-                'operator_histories.history_target',
+                'activity_histories.id',
+                'activity_histories.created_at',
+                'activity_histories.history_type',
+                'activity_histories.history_title',
+                'activity_histories.history_target',
             ]);
         return $this->response(0, $histories);
     }

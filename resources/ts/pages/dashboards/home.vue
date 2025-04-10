@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
-import CrmOperatorHistory from '@/views/dashboards/crm/CrmOperatorHistory.vue'
+import CrmActivityHistory from '@/views/dashboards/crm/CrmActivityHistory.vue'
 import CrmPayModuleGrowth from '@/views/dashboards/crm/CrmPayModuleGrowth.vue'
 import CrmRecentDanagerTransaction from '@/views/dashboards/crm/CrmRecentDanagerTransaction.vue'
 import CrmRecentLockUser from '@/views/dashboards/crm/CrmRecentLockUser.vue'
@@ -105,7 +105,7 @@ onMounted(async() => {
             <CrmRecentDanagerTransaction />
         </VCol>
         <VCol cols="12" md="4" v-if="getUserLevel() >= 35">
-            <CrmOperatorHistory />
+            <CrmActivityHistory />
         </VCol>
         <VCol cols="12" md="4" v-if="getUserLevel() >= 35 || (getUserLevel() >= 13 && user_info.is_able_unlock_mcht)">
             <CrmRecentLockUser />

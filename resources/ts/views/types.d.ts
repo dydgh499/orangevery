@@ -971,8 +971,10 @@ export interface NotiUrl {
     note: string,
 }
 
-export interface OperatorHistory {
+export interface ActivityHistory {
     id: number,
+    level: number,
+    target_id: number,
     nick_name: string,
     profile_img: string,
     history_type: number,

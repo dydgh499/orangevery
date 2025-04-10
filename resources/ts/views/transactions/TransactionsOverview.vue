@@ -312,8 +312,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>MID</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.mid" type="text" :rules="[requiredValidatorV2(props.item.mid, 'MID')]"
-                                            prepend-inner-icon="tabler-user" />
+                                        <VTextField v-model="props.item.mid" prepend-inner-icon="jam-key-f" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -323,7 +322,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>TID</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.tid" type="text" prepend-inner-icon="jam-key-f" />
+                                        <VTextField v-model="props.item.tid" prepend-inner-icon="jam-key-f" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>

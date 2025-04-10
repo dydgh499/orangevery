@@ -4,6 +4,7 @@ import router from '@/router';
 import { useRequestStore } from '@/views/request';
 import type { Tab } from '@/views/types';
 import { getUserLevel, isAbleModiyV2, user_info } from '@axios';
+import { HistoryTargetNames } from '@core/enums';
 
 import { VForm } from 'vuetify/components';
 
@@ -21,6 +22,7 @@ const vForm = ref<VForm>()
 
 const { formRequest, remove, setOneObject } = useRequestStore()
 const store = useDynamicTabStore()
+const activityHistoryTargetDialog = <any>(inject('activityHistoryTargetDialog'))
 
 const disabledConditions = (index: number) => {
     const cond_1 = index == 2 && props.id == 0 && props.path == 'merchandises'
@@ -29,17 +31,22 @@ const disabledConditions = (index: number) => {
     return cond_1 || cond_2 || cond_3
 }
 
+const hideHistoryConditions = () => {
+    const cond_1 = props.path === 'posts' ? false : true
+    const cond_2 = props.path === 'complaints' ? false : true
+    return cond_1 && cond_2
+}
+
 const hideConditions = () => {
     const cond_1 = tab.value === 2 && props.path === 'merchandises' ? false : true
     const cond_2 = tab.value === 3 && props.path === 'merchandises' ? false : true
     const cond_3 = props.path === 'merchandises/pay-modules' ? false : true
     const cond_4 = props.path === 'merchandises/noti-urls' ? false : true
     const cond_5 = props.path === 'services/pay-gateways' ? false : true
-    const cond_6 = props.path === 'services/bulk-register' ? false : true
-    const cond_7 = props.path === 'posts/view' ? false : true
-    const cond_8 = tab.value === 3 && props.path === 'services/brands' ? false : true
+    const cond_6 = props.path === 'posts/view' ? false : true
+    const cond_7 = tab.value === 3 && props.path === 'services/brands' ? false : true
 
-    return cond_1 && cond_2 && cond_3 && cond_4 && cond_5 && cond_6 && cond_7 && cond_8
+    return cond_1 && cond_2 && cond_3 && cond_4 && cond_5 && cond_6 && cond_7
 }
 
 const authHideConditions = () => {
@@ -116,21 +123,33 @@ onDeactivated(() => {
         </VWindow>
     </VForm>
     <VCard style="margin-top: 1em;" slot="button">
-        <VCol class="d-flex gap-4" style="justify-content: end;">
-            <template v-if="hideConditions() && authHideConditions()">
-                <VBtn type="button" @click="formRequest('/'+props.path, props.item, vForm)">
-                    {{ props.id == 0 ? "추가" : "수정" }}
-                    <VIcon end icon="tabler-pencil" />
-                </VBtn>
-                <VBtn type="button" color="error" v-if="props.id" @click="remove('/'+props.path, props.item)">
-                    삭제
-                    <VIcon size="22" icon="tabler-trash" />
-                </VBtn>
-            </template>
-            <VBtn type="button" color="warning" @click="back()">
-                뒤로가기
-                <VIcon end size="22" icon="tabler:arrow-back" />
-            </VBtn>
+        <VCol>
+            <div>
+                <div class="d-flex gap-4" style="justify-content: end;">
+                    <VBtn v-if="props.id && hideConditions() && hideHistoryConditions()"
+                        type="button" 
+                        color="secondary" 
+                        variant="tonal"
+                        @click="activityHistoryTargetDialog.show(props.id, HistoryTargetNames[props.path])">
+                        이력
+                        <VIcon end size="20" icon="tabler:history" />
+                    </VBtn>
+                    <template v-if="hideConditions() && authHideConditions()">
+                        <VBtn type="button" @click="formRequest('/'+props.path, props.item, vForm)">
+                            {{ props.id == 0 ? "추가" : "수정" }}
+                            <VIcon end size="20" icon="tabler-pencil" />
+                        </VBtn>
+                        <VBtn type="button" color="error" v-if="props.id" @click="remove('/'+props.path, props.item)">
+                            삭제
+                            <VIcon end size="20" icon="tabler-trash" />
+                        </VBtn>
+                    </template>
+                    <VBtn type="button" color="warning" @click="back()">
+                        뒤로가기
+                        <VIcon end size="20" icon="tabler:arrow-back" />
+                    </VBtn>
+                </div>
+            </div>
         </VCol>
     </VCard>
 </template>

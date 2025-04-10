@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Log;
 
 use App\Http\Controllers\Manager\BatchUpdater\MerchandiseFeeUpdater;
 
+use App\Enums\HistoryType;
+use App\Http\Controllers\Manager\MerchandiseController;
 use App\Models\Log\MchtFeeChangeHistory;
 use App\Models\Log\SfFeeChangeHistory;
 use App\Models\Merchandise;
@@ -11,8 +13,9 @@ use App\Models\Merchandise;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 use App\Http\Controllers\Auth\AuthOperatorIP;
 
 use App\Http\Traits\StoresTrait;
@@ -21,7 +24,6 @@ use App\Http\Traits\ExtendResponseTrait;
 
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
-use App\Enums\HistoryType;
 use Carbon\Carbon;
 
 /**
@@ -138,12 +140,10 @@ class FeeChangeHistoryController extends Controller
     private function deleteHistory($orm, $target, $id)
     {
         $query      = $orm->where('id', $id);
-        $history    = $query->first()->toArray();
-        $history_type = $history['change_status'] ? HistoryType::HISTORY_DELETE : HistoryType::BOOK_DELETE;
-
-        $res  = $query->update(['is_delete' => true]);
-        operLogging($history_type, $target, $history, $history, "#".$id);
-        return $this->response($res ? 4 : 990);
+        $history    = $query->first();
+        $history_type = $history->change_status ? HistoryType::HISTORY_DELETE : HistoryType::BOOK_DELETE;
+        $row = app(ActivityHistoryInterface::class)->destory($target, $query, 'id', $history_type);
+        return $this->response($row ? 4 : 990);
     }
 
     public function deleteMerchandise(Request $request, int $id)
@@ -159,18 +159,8 @@ class FeeChangeHistoryController extends Controller
     private function batchDeleteHistory($orm, $target, $ids)
     {
         $query = $orm->whereIn('id', $ids);
-        $res = DB::transaction(function () use($query, $target) {
-            $res  = $query->update(['is_delete' => true]);    
-            $histories = (clone $query)->get();
-            foreach($histories as $history)
-            {
-                $_history = json_decode(json_encode($history), true);
-                $history_type = $_history['change_status'] ? HistoryType::HISTORY_DELETE : HistoryType::BOOK_DELETE;
-                operLogging($history_type, $target, $_history, $_history, "#".$history['id']);
-            }
-            return true;
-        });
-        return $this->response($res ? 4 : 990);
+        $row = app(ActivityHistoryInterface::class)->destory($target, $query, 'id', HistoryType::HISTORY_DELETE);
+        return $this->response($row ? 4 : 990);
     }
 
     public function deleteMerchandiseBatch(Request $request)
@@ -201,29 +191,7 @@ class FeeChangeHistoryController extends Controller
             else
             {
                 $row = MerchandiseFeeUpdater::apply($request, $user, $request->apply_type, $query);
-                if($row)
-                {
-                    if($user == 'merchandises')
-                    {
-                        $before    = MerchandiseFeeUpdater::getMchtBeforeFee($mcht);
-                        $after     = MerchandiseFeeUpdater::getMchtAfterFee($request);
-                        $target = '가맹점 수수료율';
-                    }
-                    else
-                    {
-                        $before    = MerchandiseFeeUpdater::getSalesBeforeFee($mcht, $request->level);
-                        $after     = MerchandiseFeeUpdater::getSalesAfterFee($request);
-                        $target = '영업라인 수수료율';
-                    }
-                    if($request->apply_type === 0)
-                        operLogging(HistoryType::UPDATE, $target, $before, $after, $mcht->mcht_name);
-                    else
-                        operLogging(HistoryType::BOOK, $target, $before, $after, $mcht->mcht_name);
-    
-                    return $this->response(0);
-                }
-                else
-                    return $this->response(1000);
+                return $this->response(0);
             }
         }
         else

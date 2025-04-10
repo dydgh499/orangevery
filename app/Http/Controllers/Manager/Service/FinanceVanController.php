@@ -12,11 +12,11 @@ use App\Http\Requests\Manager\Service\FinanceRequest;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use App\Enums\HistoryType;
 
 /**
  * @group FinanceVan API
@@ -64,9 +64,11 @@ class FinanceVanController extends Controller
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         else
         {
-            $res = $this->finance_vans->create($data);        
-            operLogging(HistoryType::CREATE, $this->target, [], $data, $data['nick_name']);
-            return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
+            $res = app(ActivityHistoryInterface::class)->add($this->target, $this->finance_vans, $data, 'nick_name');
+            if($res)
+                return $this->response(1, ['id' => $res->id]);    
+            else
+                return $this->response(990, []);
         }
     }
 
@@ -98,16 +100,19 @@ class FinanceVanController extends Controller
      */
     public function update(FinanceRequest $request, int $id)
     {
-        $before = $this->finance_vans->where('id', $id)->first();
-        if(Ablilty::isBrandCheck($request, $before->brand_id) === false)
+        $data    = $request->data();
+        $query   = $this->finance_vans->where('id', $id);
+        $finance = $query->first();
+        if(Ablilty::isBrandCheck($request, $finance->brand_id) === false)
             return $this->response(951);
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
-        $data = $request->data();
-        $res = $this->finance_vans->where('id', $id)->update($data);
-        operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['nick_name']);
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
+        $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'nick_name');
+        if($row)
+            return $this->response(1, ['id' => $id]);
+        else
+            return $this->response(990);
     }
 
     /**
@@ -117,14 +122,14 @@ class FinanceVanController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        $data = $this->finance_vans->where('id', $id)->first();
+        $query  = $this->finance_vans->where('id', $id);
+        $data   = $query->first();
         if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
             return $this->response(951);
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
-        $res = $this->delete($this->finance_vans->where('id', $id));
-        operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->nick_name);
-        return $this->response($res, ['id'=>$id]);
+        $row    = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'nick_name');
+        return $this->response(1, ['id' => $id]);    
     }
 }

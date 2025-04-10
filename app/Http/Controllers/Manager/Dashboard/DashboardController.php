@@ -9,7 +9,7 @@ use App\Models\Operator;
 use App\Models\Gmid;
 
 use App\Models\Log\DangerTransaction;
-use App\Models\Log\OperatorHistory;
+use App\Models\Log\ActivityHistory;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -18,6 +18,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\Manager\Dashboard\TransactionDashboard;
+use App\Http\Controllers\Ablilty\ActivityHistoryViewer;
 use App\Http\Controllers\Ablilty\Ablilty;
 
 
@@ -168,20 +169,9 @@ class DashboardController extends Controller
     public function getRecentOperatorHistories(Request $request)
     {   
         if(Ablilty::isOperator($request))
-        {
-            request()->merge([
-                'page' => 1,
-                'page_size' => 20,
-            ]);
-            $operator_histories = new OperatorHistory();
-            $query = $operator_histories
-                ->join('operators', 'operator_histories.oper_id', '=', 'operators.id')
-                ->where('operator_histories.brand_id', $request->user()->brand_id);
-            $data = $this->getIndexData($request, $query, 'operator_histories.id', $operator_histories->cols, 'operator_histories.created_at');
-            return $this->response(0, $data);
-        }
+            return $this->response(0, ['content' => ActivityHistoryViewer::getRecentSelect($request)]);
         else
-            return $this->response(0, ['content'=>[]]);
+            return $this->response(0, ['content' => []]);
     }
 
     public function getLockedUsers(Request $request)
