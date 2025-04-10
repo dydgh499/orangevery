@@ -264,7 +264,10 @@ class ActivityHistoryViewer
                     if(strpos($key, '_id') !== false)
                         $key_name = $levels[str_replace('_id', '', $key)."_name"];
                     else if(strpos($key, '_fee') !== false)
+                    {
                         $key_name = $levels[str_replace('_fee', '', $key)."_name"]. " 수수료";
+                        $conv_history_detail[$key] = round($conv_history_detail[$key], 7);
+                    }
                     else if(strpos($key, '_settlement') !== false)
                         $key_name = $levels[str_replace('_settlement', '', $key)."_name"]. " 정산금";
                     else if(strpos($key, '_settle_id') !== false)
