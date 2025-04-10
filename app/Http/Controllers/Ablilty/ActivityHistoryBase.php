@@ -98,12 +98,12 @@ class ActivityHistoryBase
         ];
     }
 
-    protected function getBeforeData($keys, $title_key, $query)
+    protected function getBeforeData($keys, $title_key, $query, $parent_table='')
     {
         $datas = [];
-        $keys[] = $title_key;
+        $keys[] = $parent_table ? $parent_table.".".$title_key : $title_key;
         if(isset($update_keys['id']) === false)
-            $keys[] = 'id';
+            $keys[] = $parent_table ? $parent_table.".id" : 'id';
         return (clone $query)->get($keys)->toArray();
     }
 

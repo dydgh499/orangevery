@@ -170,7 +170,7 @@ class BrandController extends Controller
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         $brand = $this->brands->where('id', $id)->first();
-        $res = $this->delete($this->brands->where('id', $id), ['logo_img', 'favicon_img']);
+        $res = $this->delete($this->brands->where('id', $id));
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 }

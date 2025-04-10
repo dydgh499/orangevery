@@ -53,9 +53,9 @@ class ActivityHistoryInterface extends ActivityHistoryBase
         });
     }
 
-    public function update($target, $query, $after_data, $title_key)
+    public function update($target, $query, $after_data, $title_key, $parent_table='')
     {
-        $before_datas = $this->getBeforeData(array_keys($after_data), $title_key, $query);
+        $before_datas = $this->getBeforeData(array_keys($after_data), $title_key, $query, $parent_table);
         $datas = $this->getUpdateFormat(HistoryType::UPDATE, $target, $title_key, $after_data, $before_datas);
 
         return DB::transaction(function () use($query, $datas, $after_data) {
@@ -79,14 +79,14 @@ class ActivityHistoryInterface extends ActivityHistoryBase
         });
     }
 
-    public function destory($target, $query, $title_key, $history_type=HistoryType::DELETE, $is_delete=true)
+    public function destory($target, $query, $title_key, $parent_table='', $history_type=HistoryType::DELETE, $is_delete=true)
     {
-        $before_datas = $this->getBeforeData([], $title_key, $query);
+        $before_datas = $this->getBeforeData([], $title_key, $query, $parent_table);
         $datas = $this->getDestoryFormat($history_type, $target, $title_key, $before_datas);
 
-        return DB::transaction(function () use($query, $datas, $is_delete) {
+        return DB::transaction(function () use($query, $datas, $parent_table, $is_delete) {
             if($is_delete)
-                $row = $this->delete($query);
+                $row = $this->delete($query, $parent_table);
             else
                 $row = $query->delete();
 

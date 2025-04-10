@@ -60,6 +60,7 @@ export const batch = (emits:any, batch_name: string, batch_type: string) => {
                         filter: store.params
                     })
                     params.filter.search = (document.getElementById('search') as HTMLInputElement)?.value
+                    params.filter.search2 = (document.getElementById('search2') as HTMLInputElement)?.value
                     params.total_selected_count = store.pagenation.total_count
                 }
                 return [true, params]

@@ -157,7 +157,7 @@ class BatchUpdateTransactionController extends BatchUpdateController
     public function batchRemove(Request $request)
     {
         $query = $this->transactionBatch($request);
-        $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'id', HistoryType::DELETE, false);
+        $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'id', '', HistoryType::DELETE, false);
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 매출이 존재하지 않습니다.');
     }
 

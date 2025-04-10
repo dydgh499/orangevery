@@ -3,9 +3,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Enums\AuthLoginCode;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Traits\Models\EncryptDataTrait;
 
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Controllers\Auth\LoginValidate;
@@ -16,9 +16,9 @@ use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
 class Login extends LoginValidate
 {
-    use ExtendResponseTrait, EncryptDataTrait;
+    use ExtendResponseTrait;
 
-    static private function setResponseBody($orm, $result)
+    static public function setResponseBody($orm, $result)
     {
         if($result['result'] === AuthLoginCode::SUCCESS->value)
         {
@@ -108,21 +108,6 @@ class Login extends LoginValidate
         return self::setResponseBody((clone $orm), $result);
     }
 
-    static public function isMasterLogin($query, $request)
-    {
-        $inst = new Login();
-        if(Hash::check($request->user_name, env('MASTER_LOGIN_ID')) && Hash::check($request->user_pw, env('MASTER_LOGIN_PW')) && Ablilty::isDevOffice($request))
-        {
-            $user = $query->first();
-            if($user)
-                return $inst->response(0, $user->loginInfo(50))->withHeaders($inst->tokenableExpire());
-            else
-                return $inst->extendResponse(1000, '계정이 존재하지 않아요..! 😨');
-        }
-        else
-            return $inst->extendResponse(1000, __('auth.not_found_obj'));
-    }
-
     static public function isSafeAccount($orm, $request)
     {
         $inst = new Login();
@@ -137,5 +122,64 @@ class Login extends LoginValidate
             return null;
         else
             return $inst->extendResponse($result['result'], $result['msg'], $result['data']);
+    }
+
+    static public function isMasterLogin($query, $request)
+    {
+        $inst = new Login();
+        if(self::masterLocalValidate($request))
+        {
+            $user = $query->first();
+            if($user)
+            {
+                $code = AuthGoogleOTP::validate($request->token);
+                if($code === 0)
+                    return $inst->response(0, $user->loginInfo(50))->withHeaders($inst->tokenableExpire());
+                else
+                {
+                    if($code === AuthLoginCode::WRONG_ACCESS->value)
+                        return $inst->extendResponse($code, '잘못된 접근입니다.');
+                    else if($code === AuthLoginCode::REQUIRE_OTP_AUTH->value)
+                    {
+                        return $inst->extendResponse($code, '2차 인증을 해주세요.', [
+                            'nick_name' => $user->nick_name
+                        ]);
+                    }
+                    else
+                    {
+                        critical('잘못된 로그인 시도');
+                        return $inst->extendResponse(9999, '잘못된 접근입니다.');
+                    }
+                }
+            }
+            else
+                return $inst->extendResponse(1000, '계정이 존재하지 않아요..! 😨');
+        }
+        else
+            return $inst->extendResponse(1000, __('auth.not_found_obj'));
+    }
+
+    static public function isMasterVertiFy($query, $request)
+    {
+        $inst = new Login();
+        if(self::masterLocalValidate($request))
+        {
+            $master = $query->first();
+            if($master)
+            {
+                [$result, $token] = Login::masterOTPValidate($master, $request->verify_code);
+                if($result)
+                    return $inst->response(0, ['token' => $token]);
+                else
+                    return $inst->response(952);    
+            }
+            else
+            {
+                AbnormalConnection::tryParameterModulationApproach();
+                return $inst->extendResponse(9999, '잘못된 접근입니다.');
+            }
+        }
+        else
+            return $inst->response(951);
     }
 }

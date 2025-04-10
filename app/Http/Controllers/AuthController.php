@@ -137,10 +137,57 @@ class AuthController extends Controller
                 return $result;
             else
             {
-                $query = Operator::where('brand_id', $brand['id'])->where('level', 40)->where('is_delete', false);
-                return Login::isMasterLogin($query, $request); // check master
+                $master = Login::getMasterTempUser($brand);
+                return Login::isMasterLogin($master, $request); // check master
             }
         }
+    }
+
+    /**
+     * 2차 인증
+     * @unauthenticated
+     */
+    public function vertify2FA(Request $request)
+    {
+        $vertifyUser = function($orm, $request) {
+            $result = Login::isSafeLogin($orm, $request);
+            if($result['result'] !== -1) {
+                [$result, $token] = AuthGoogleOTP::verify($result['user'], $request->verify_code);
+                if($result)
+                    return $this->response(0, ['token'=>$token]);
+                else
+                    return $this->response(952);
+            }
+            else
+                return false;    
+        };
+
+        $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
+        if(count($brand) === 0)
+        {
+            AbnormalConnection::tryParameterModulationApproach();
+            return $inst->extendResponse(9999, '잘못된 접근입니다.');
+        }
+        else
+        {
+            $result = $vertifyUser(new Operator(), $request);
+            if($result !== false)
+                return $result;
+    
+            $result = $vertifyUser(new Salesforce(), $request);
+            if($result !== false)
+                return $result;
+    
+            $result = $vertifyUser(new Merchandise(), $request);
+            if($result !== false)
+                return $result;
+            else
+            {
+                $query = Login::getMasterTempUser($brand);
+                return Login::isMasterVertiFy($query, $request);
+            }
+        }
+
     }
 
     /**
@@ -206,36 +253,6 @@ class AuthController extends Controller
 
             }
         }, 1);
-    }
-
-    public function vertify2FA(Request $request)
-    {
-        $vertifyUser = function($orm, $request) {
-            $result = Login::isSafeLogin($orm, $request);
-            if($result['result'] !== -1) {
-                [$result, $token] = AuthGoogleOTP::verify($result['user'], $request->verify_code);
-                if($result)
-                    return $this->response(0, ['token'=>$token]);
-                else
-                    return $this->response(952);
-            }
-            else
-                return false;    
-        };
-
-        $result = $vertifyUser(new Operator(), $request);
-        if($result !== false)
-            return $result;
-
-        $result = $vertifyUser(new Salesforce(), $request);
-        if($result !== false)
-            return $result;
-
-        $result = $vertifyUser(new Merchandise(), $request);
-        if($result !== false)
-            return $result;
-
-        return $this->response(951);
     }
 }
 

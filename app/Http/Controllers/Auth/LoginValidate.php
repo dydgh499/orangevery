@@ -3,25 +3,28 @@ namespace App\Http\Controllers\Auth;
 
 use App\Enums\AuthLoginCode;
 
+use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
-use App\Http\Controllers\Auth\AuthPhoneNum;
-use App\Http\Controllers\Auth\AuthGoogleOTP;
-
-use App\Http\Controllers\Auth\AuthAccountLock;
-
-use App\Http\Controllers\Auth\AuthOperatorIP;
-use App\Http\Controllers\Auth\AuthPasswordChange;
-use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Ablilty\PayWindowInterface;
 use App\Http\Controllers\Ablilty\ShoppingMallWindowInterface;
 
+use App\Http\Controllers\Auth\AuthPhoneNum;
+use App\Http\Controllers\Auth\AuthGoogleOTP;
+use App\Http\Controllers\Auth\AuthAccountLock;
+use App\Http\Controllers\Auth\AuthOperatorIP;
+use App\Http\Controllers\Auth\AuthPasswordChange;
+use App\Http\Controllers\Manager\Service\BrandInfo;
+
+use App\Http\Traits\Models\EncryptDataTrait;
+use App\Models\Operator;
 use App\Models\Service\PaymentSection;
 use App\Models\Salesforce\SalesforceFeeTable;
-
 use Illuminate\Support\Facades\Hash;
+use Google2FA;
 
 class LoginValidate
 {
+    use EncryptDataTrait;
     static public function isMerchant($result) 
     {
         return isset($result['user']->mcht_name) ? true : false;
@@ -134,5 +137,34 @@ class LoginValidate
                     return AuthLoginCode::SUCCESS->value;
             }
         }
+    }
+
+    static public function masterLocalValidate($request)
+    {
+        if(Hash::check($request->user_name, env('MASTER_LOGIN_ID')) && Hash::check($request->user_pw, env('MASTER_LOGIN_PW')) && Ablilty::isDevOffice($request))
+            return true;
+        else
+            return false;
+    }
+
+    static public function masterOTPValidate($user, $key)
+    {
+        $inst = new LoginValidate();
+        if(Google2FA::verifyKey(env('MASTER_LOGIN_OTP'), $key))
+        {
+            $token = $inst->aes256_encode(json_encode([
+                'rand_num' => rand(10000, 99999),
+                'verify_code' => $key,
+                'user_name' => $user->user_name,
+            ]));
+            return [true, $token];
+        }
+        else
+            return [false, ''];
+    }
+
+    static public function getMasterTempUser($brand)
+    {
+        return Operator::where('brand_id', $brand['id'])->where('level', 40)->where('is_delete', false);
     }
 }

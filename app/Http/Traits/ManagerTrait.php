@@ -119,7 +119,7 @@ trait ManagerTrait
         }
         return $data;
     }
-    public function delete($query, $imgs=[])
+    public function delete($query, $parent_table='', $imgs=[])
     {
         if(env('FILESYSTEM_DISK') === 'local')
         {
@@ -138,7 +138,10 @@ trait ManagerTrait
                 }
             }    
         }
-        return $query->update(['is_delete' => true]);
+        if($parent_table)
+            return $query->update([$parent_table.'.is_delete' => true]);
+        else
+            return $query->update(['is_delete' => true]);
     }
 
     public function authCheck($session, $id, $req_level)

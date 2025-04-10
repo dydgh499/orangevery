@@ -10,6 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ActivityHistoryDetailDialog: typeof import('./resources/ts/layouts/dialogs/histories/ActivityHistoryDetailDialog.vue')['default']
+    ActivityHistoryTargetDialog: typeof import('./resources/ts/layouts/dialogs/histories/ActivityHistoryTargetDialog.vue')['default']
     AddDeductDialog: typeof import('./resources/ts/layouts/dialogs/transactions/AddDeductDialog.vue')['default']
     AlertDialog: typeof import('./resources/ts/layouts/dialogs/utils/AlertDialog.vue')['default']
     AppAutocomplete: typeof import('./resources/ts/@core/components/app-form-elements/AppAutocomplete.vue')['default']
@@ -97,6 +98,7 @@ declare module '@vue/runtime-core' {
     TheCustomizer: typeof import('./resources/ts/@core/components/TheCustomizer.vue')['default']
     ThemeSwitcher: typeof import('./resources/ts/@core/components/ThemeSwitcher.vue')['default']
     UnderAutoSettingDialog: typeof import('./resources/ts/layouts/dialogs/users/UnderAutoSettingDialog.vue')['default']
+    VanWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/transactions/finance-vans-error-codes/VanWithdrawErrorCodeDialog.vue')['default']
     WithdrawDetailDialog: typeof import('./resources/ts/layouts/dialogs/transactions/WithdrawDetailDialog.vue')['default']
     WithdrawStatusmentDialog: typeof import('./resources/ts/layouts/dialogs/transactions/WithdrawStatusmentDialog.vue')['default']
   }

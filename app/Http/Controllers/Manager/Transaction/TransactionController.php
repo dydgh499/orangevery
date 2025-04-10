@@ -258,7 +258,7 @@ class TransactionController extends Controller
             else
             {
                 $query  = $this->transactions->where('id', $id);
-                $row    = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'id', HistoryType::DELETE, false);
+                $row    = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'id', '', HistoryType::DELETE, false);
                 return $this->response(1, ['id' => $id]);    
             }
         }

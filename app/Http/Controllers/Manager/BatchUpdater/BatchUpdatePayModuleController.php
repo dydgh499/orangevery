@@ -39,7 +39,7 @@ class BatchUpdatePayModuleController extends BatchUpdateController
     {
         $query = $this->payModuleBatch($request);
         if($request->apply_type === 0) 
-            $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $cols, 'note');
+            $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $cols, 'note', 'payment_modules');
         else
         {
             $datas = $this->getApplyBookDatas($request, $query->pluck('payment_modules.id')->all(), 'pmod_id', $cols);
@@ -317,7 +317,7 @@ class BatchUpdatePayModuleController extends BatchUpdateController
     public function batchRemove(Request $request)
     {
         $query = $this->payModuleBatch($request);
-        $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'note');
+        $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'note', 'payment_modules');
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 결제모듈이 존재하지 않습니다.');
     }
 
