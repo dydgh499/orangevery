@@ -6,18 +6,38 @@ use App\Http\Controllers\Manager\Service\BrandInfo;
 
 class SettleAmountCalculator
 {
-    static private function getRoundAmount($amount, $round_type)
+    static private function getRoundAmount($amount, $_round_type)
     {
+        $is_minus   = $amount < 0;
+        $round_type = (int)$_round_type;
         if($round_type === 0)
             return round($amount);
-        else if($round_type === 1)
-            return ceil($amount);
-        else if($round_type === 2)
-            return floor($amount);
         else
         {
-            error([], '잘못된 round type');
-            return round($amount);
+            if($is_minus)
+            {
+                if($round_type === 1)
+                    return floor($amount);
+                else if($round_type === 2)
+                    return ceil($amount);
+                else
+                {
+                    error([], '잘못된 round type');
+                    return round($amount);
+                }    
+            }
+            else
+            {
+                if($round_type === 1)
+                    return ceil($amount);
+                else if($round_type === 2)
+                    return floor($amount);
+                else
+                {
+                    error([], '잘못된 round type');
+                    return round($amount);
+                }    
+            }
         }
     }
 
