@@ -113,14 +113,6 @@ class TransactionRequest extends FormRequest
         $data['dev_fee']    = $this->input('dev_fee', 0)/100;
         $data['dev_realtime_fee'] = $this->input('dev_realtime_fee', 0)/100;
         $data['brand_id'] = $this->user()->brand_id;
-        if($data['is_cancel'])
-        {
-            $data['amount'] *= -1;
-            $data['mcht_settle_fee'] *= -1;
-            $data['trx_at'] = $data['cxl_dt']." ".$data['cxl_tm'];
-        }
-        else
-            $data['trx_at'] = $data['trx_dt']." ".$data['trx_tm'];
         return $data;
     }
 }
