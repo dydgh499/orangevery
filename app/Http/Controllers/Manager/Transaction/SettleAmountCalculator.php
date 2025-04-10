@@ -17,21 +17,21 @@ class SettleAmountCalculator
             if($is_minus)
             {
                 if($round_type === 1)
-                    return floor($amount);
+                    return ceil(round($amount, 6)); //올림
                 else if($round_type === 2)
-                    return ceil($amount);
+                    return floor(round($amount, 6)); // 내림
                 else
                 {
                     error([], '잘못된 round type');
                     return round($amount);
-                }    
+                }
             }
             else
             {
                 if($round_type === 1)
-                    return ceil($amount);
+                    return floor(round($amount, 6));
                 else if($round_type === 2)
-                    return floor($amount);
+                    return ceil(round($amount, 6));
                 else
                 {
                     error([], '잘못된 round type');

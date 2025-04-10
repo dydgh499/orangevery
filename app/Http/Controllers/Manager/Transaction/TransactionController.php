@@ -397,14 +397,33 @@ class TransactionController extends Controller
     public function _test()
     {
         $db_trans = $this->transactions
-            ->where('trx_at', '>=', '2024-12-19 00:00:00')
+            ->where('is_cancel', 1)
+            ->where('trx_at', '>=', '2025-04-01 00:00:00')
             ->orderBy('id', 'desc')
             ->get();
 
-        $i=0;
-        foreach($db_trans as $tran)
+        $trans = json_decode(json_encode($db_trans), true);
+        [$data] = SettleAmountCalculator::setSettleAmount([$data]);
+        foreach($db_trans as $key => $tran)
         {
-            $tran->settle_dt = SettleDateCalculator::getSettleDate($tran->brand_id, $tran->is_cancel ? $tran->cxl_dt : $tran->trx_dt, $tran->mcht_settle_type, $tran->pg_settle_type);
+            
+            $fields = [
+                'brand_settle_amount',
+                'dev_realtime_settle_amount',
+                'dev_settle_amount',
+                'sales5_settle_amount',
+                'sales4_settle_amount',
+                'sales3_settle_amount',
+                'sales2_settle_amount',
+                'sales1_settle_amount',
+                'sales0_settle_amount',
+                'mcht_settle_amount',
+            ];
+
+            foreach ($fields as $field) 
+            {
+                $tran->{$field} = $trans[$key][$field];
+            }
             $tran->save();
             $i++;
             echo $i."\n";

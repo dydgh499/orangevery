@@ -279,6 +279,8 @@ return [
         'p_mid' => 'PMID',
         'g_mid' => 'GMID',
         'mid' => 'MID',
+        'pay_Key' => '결제 KEY',
+        'sign_Key' => '서명 KEY',
         'serial_num' => '시리얼번호',
         'ship_out_stat' => '출고 상태',
         'under_sales_type' => '통신비 정산타입',
