@@ -8,18 +8,17 @@ class SettleAmountCalculator
 {
     static private function getRoundAmount($amount, $_round_type)
     {
-        $is_minus   = $amount < 0;
         $round_type = (int)$_round_type;
         if($round_type === 0)
             return round($amount);
         else
         {
-            if($is_minus)
+            if($amount < 0)
             {
-                if($round_type === 1)
-                    return ceil(round($amount, 6)); //올림
-                else if($round_type === 2)
-                    return floor(round($amount, 6)); // 내림
+                if($round_type === 1)               // 올림
+                    return floor(round($amount, 6));    // 내림
+                else if($round_type === 2)          // 내림
+                    return ceil(round($amount, 6));     // 올림
                 else
                 {
                     error([], '잘못된 round type');
@@ -29,9 +28,9 @@ class SettleAmountCalculator
             else
             {
                 if($round_type === 1)
-                    return floor(round($amount, 6));
-                else if($round_type === 2)
                     return ceil(round($amount, 6));
+                else if($round_type === 2)
+                    return floor(round($amount, 6));
                 else
                 {
                     error([], '잘못된 round type');
