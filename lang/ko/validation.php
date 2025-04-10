@@ -214,12 +214,6 @@ return [
         'email' => '이메일',
         'password' => '비밀번호',
         'password_confirmation' => '비밀번호 확인',
-        'sales0_fee' => "수수료",
-        'sales1_fee' => "수수료",
-        'sales2_fee' => "수수료",
-        'sales3_fee' => "수수료",
-        'sales4_fee' => "수수료",
-        'sales5_fee' => "수수료",
 
         'settle_hold_s_dt' => '지급보류 시작일',
         'settle_hold_reason' => '지급보류 사유',
@@ -394,13 +388,6 @@ return [
         'bf_sales_name' => '이전 영업라인 상호',
         'aft_sales_name' => '이후 영업라인 상호',
         //
-        
-        'sales5_settlement' => '정산여부',
-        'sales4_settlement' => '정산여부',
-        'sales3_settlement' => '정산여부',
-        'sales2_settlement' => '정산여부',
-        'sales1_settlement' => '정산여부',
-        'sales0_settlement' => '정산여부',
 
         'fee_type' => '수수료 타입',
         'tax_free_fee' => '영세 수수료',        

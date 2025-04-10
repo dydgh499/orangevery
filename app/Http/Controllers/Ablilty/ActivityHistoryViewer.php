@@ -173,7 +173,19 @@ class ActivityHistoryViewer
         else if($request->history_target === '가맹점')
         {
             if(Ablilty::isSalesforce($request))
+            {
                 $history_detail = $disableImages($history_detail);
+                foreach([13,15,17,20,25,30] as $level)
+                {
+                    if($request->user()->tokenCan($level) === false)
+                    {
+                        $idx = globalLevelByIndex($level);
+                        $key = 'sales'.$idx;
+                        unset($history_detail[$key."_id"]);
+                        unset($history_detail[$key."_fee"]);
+                    }
+                }
+            }
             if(Ablilty::isOperator($request) === false)
             {
                 unset($history_detail['phone_auth_limit_s_tm']);
@@ -243,10 +255,28 @@ class ActivityHistoryViewer
             unset($conv_history_detail['user_pw']);
             $conv_history_detail = self::authVisiable($request, $conv_history_detail);
 
+            $levels = $pv_options->auth->levels;
             $history_detail = [];
             foreach($conv_history_detail as $key => $value)
             {
-                $history_detail[__('validation.attributes.'.$key)] = $conv_history_detail[$key];
+                if(preg_match('/^sales[0-9]_/', $key))
+                {
+                    if(strpos($key, '_id') !== false)
+                        $key_name = $levels[str_replace('_id', '', $key)."_name"];
+                    else if(strpos($key, '_fee') !== false)
+                        $key_name = $levels[str_replace('_fee', '', $key)."_name"]. " 수수료";
+                    else if(strpos($key, '_settlement') !== false)
+                        $key_name = $levels[str_replace('_settlement', '', $key)."_name"]. " 정산금";
+                    else if(strpos($key, '_settle_id') !== false)
+                        $key_name = $levels[str_replace('_settle_id', '', $key)."_name"]. " 정산번호";
+                    else if(strpos($key, '_settle_amount') !== false)
+                        $key_name = $levels[str_replace('_settle_amount', '', $key)."_name"]. " 정산금";
+                    else
+                        continue;
+                    $history_detail[$key_name] = $conv_history_detail[$key];
+                }
+                else
+                    $history_detail[__('validation.attributes.'.$key)] = $conv_history_detail[$key];
             }
             return $history_detail;
         }

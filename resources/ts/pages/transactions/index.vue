@@ -66,7 +66,7 @@ const getAllLevels = () => {
     if (getUserLevel() >= 10)
         sales.unshift(<Options>({ id: 10, title: '가맹점' }))
     if (getUserLevel() >= 35) {
-        sales.push(<Options>({ id: 40, title: '본사' }))
+        sales.push(<Options>({ id: 40, title: '운영사' }))
     }
     if (levels.dev_use && getUserLevel() >= 35)
         sales.push(<Options>({ id: 50, title: levels.dev_name }))
