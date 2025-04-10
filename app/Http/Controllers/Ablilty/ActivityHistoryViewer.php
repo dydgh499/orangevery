@@ -89,7 +89,7 @@ class ActivityHistoryViewer
     static public function getDetailSelect($request)
     {
         $activity_cols = [
-            'activity_histories.*',
+            'activity_histories.id',
             'activity_histories.history_type',
             'activity_histories.history_title',
             'activity_histories.history_target',
@@ -107,15 +107,15 @@ class ActivityHistoryViewer
         if($request->level)
         {
             if((int)$request->level >= 35)
-                $query = self::operatorSelect($request)->get(array_merge($activity_cols, $oper_cols));
+                $query = self::operatorSelect($request)->orderBy('created_at')->get(array_merge($activity_cols, $oper_cols));
             else
-                $query = self::salesforceSelect($request)->get(array_merge($activity_cols, $sales_cols));
+                $query = self::salesforceSelect($request)->orderBy('created_at')->get(array_merge($activity_cols, $sales_cols));
         }
         else
         {
             $oper_query = self::operatorSelect($request)->select(array_merge($activity_cols, $oper_cols));
             $sales_query = self::salesforceSelect($request)->select(array_merge($activity_cols, $sales_cols));
-            $query = $oper_query->unionAll($sales_query)->get();
+            $query = $oper_query->unionAll($sales_query)->orderBy('created_at')->get();
         }
         return $query;
     }
