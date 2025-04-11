@@ -229,7 +229,7 @@ class TransactionController extends Controller
             $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], ($data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt']), $data['mcht_settle_type'], 1);
             [$data] = SettleAmountCalculator::setSettleAmount([$data]);
 
-            $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'id');
+            $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'trx_id');
             if($row)
                 return $this->response(1, ['id' => $id]);
             else
@@ -258,7 +258,7 @@ class TransactionController extends Controller
             else
             {
                 $query  = $this->transactions->where('id', $id);
-                $row    = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'id', '', HistoryType::DELETE, false);
+                $row    = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'trx_id', '', HistoryType::DELETE, false);
                 return $this->response(1, ['id' => $id]);    
             }
         }
@@ -314,7 +314,7 @@ class TransactionController extends Controller
                 try 
                 {
                     [$data] = SettleAmountCalculator::setSettleAmount([$data]);
-                    $res = app(ActivityHistoryInterface::class)->add($this->target, $this->transactions, $data, 'id');
+                    $res = app(ActivityHistoryInterface::class)->add($this->target, $this->transactions, $data, 'trx_id');
                     if($res)
                         return $this->response(1, ['id' => $res->id]);    
                     else
