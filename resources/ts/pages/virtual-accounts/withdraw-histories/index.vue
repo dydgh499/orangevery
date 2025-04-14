@@ -62,11 +62,11 @@ const getLogStyle = (item: VirtualAccountWithdraw) => {
                         @update:modelValue="store.updateQueryString({result_code: store.params.result_code})"
                         :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''"
                     />
-                    <VBtn prepend-icon="line-md:emoji-frown-twotone" @click="pvErrorCodeDialog.show()" v-if="getUserLevel() >= 35" color="error" size="small"
+                    <VBtn prepend-icon="line-md:emoji-frown-twotone" @click="pvErrorCodeDialog.show()" color="error" size="small"
                         :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
                         출금 에러코드 정의
                     </VBtn>
-                <table>
+                <table v-if="getUserLevel() >= 35" >
                     <tr v-for="(finance_van, key) in finance_vans.filter(t => t.is_agency_van === 0 && t.use_kakao_auth === 0 && t.use_account_auth === 0)" :key="key" :style="finance_van.balance_status === 0 ? '' : 'color:red'">
                         <th style="text-align: start;">{{ finance_van.nick_name }} 잔액: </th>
                         <td style="text-align: end;">{{ finance_van.balance ? finance_van.balance.toLocaleString() : 0 }} &#8361;</td>
