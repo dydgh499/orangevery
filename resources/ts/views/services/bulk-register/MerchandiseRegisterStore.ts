@@ -143,12 +143,8 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
         {title: '커스텀 필터(X)', key: 'custom_id'},
     )
 
-    if(corp.pv_options.paid.use_collect_withdraw) 
-        headers.push({title: '모아서 출금 사용여부(X)', key: 'use_collect_withdraw'})
     if(corp.pv_options.paid.use_regular_card) 
         headers.push({title: '단골고객 사용여부(X)', key: 'use_regular_card'})
-    if(corp.pv_options.paid.use_collect_withdraw)
-        headers.push({title: '모아서 출금 수수료(X)', key: 'collect_withdraw_fee'})
     headers.push({title: '지급이체 수수료(X)', key: 'withdraw_fee'})
     if(corp.pv_options.paid.use_pay_verification_mobile)
         headers.push({title: '결제전 휴대폰 인증(X)', key: 'use_pay_verification_mobile'})

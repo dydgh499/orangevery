@@ -28,7 +28,6 @@ class BulkMerchandiseRequest extends FormRequest
     ];
     public $integer_keys = [
         'use_multiple_hand_pay',
-        'use_collect_withdraw',
         'use_regular_card',
         'hold_fee',
         'trx_fee',
@@ -38,7 +37,6 @@ class BulkMerchandiseRequest extends FormRequest
         'sales3_fee',
         'sales4_fee',
         'sales5_fee',        
-        'collect_withdraw_fee',
         'withdraw_fee',
         'tax_category_type',
         'use_noti',
@@ -82,7 +80,6 @@ class BulkMerchandiseRequest extends FormRequest
             '*.acct_bank_name' => 'required',
             '*.acct_bank_code' => 'required',
             '*.use_multiple_hand_pay' => 'nullable|integer',
-            '*.use_collect_withdraw' => 'nullable|integer',
             '*.use_regular_card' => 'nullable|integer',
             '*.hold_fee' => 'nullable|numeric',
             '*.trx_fee' => 'nullable|numeric',
@@ -92,7 +89,6 @@ class BulkMerchandiseRequest extends FormRequest
             '*.sales3_fee' => 'nullable|numeric',
             '*.sales4_fee' => 'nullable|numeric',
             '*.sales5_fee' => 'nullable|numeric',
-            '*.collect_withdraw_fee' => 'nullable|integer',
             '*.withdraw_fee' => 'nullable|integer',
             '*.tax_category_type' => 'nullable|integer',
         ];

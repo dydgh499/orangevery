@@ -9,6 +9,7 @@ import { keyCreater, useRegisterStore, validateItems } from '@/views/services/bu
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Options, PayModule } from '@/views/types'
+import { useWalletFilterStore } from '@/views/virtual-accounts/wallets/useStore'
 import { axios, salesLevels } from '@axios'
 import corp from '@corp'
 
@@ -39,8 +40,9 @@ const items = ref<PayModule[]>([])
 const is_clear = ref<boolean>(false)
 
 const midCreateDlg = ref()
-const finance_van = ref({id: null, nick_name: ''})
-const withdraw_limit_type = ref({id: null, title: ''})
+const { mcht_wallets } = useWalletFilterStore()
+const virtual_account = ref({id: null, account_name: ''})
+
 
 const comm_settle_type = ref(comm_settle_types[0])
 const under_sales_type = ref(under_sales_types[0])
@@ -339,11 +341,11 @@ watchEffect(async () => {
                         </VRow>
                         <template v-if="corp.pv_options.paid.use_realtime_deposit">
                             <VDivider style="margin: 1em 0;" />
-                            <h3 class="pt-3">즉시출금 정보</h3>
+                            <h3 class="pt-3">정산지갑 정보</h3>
                             <VRow>
                                 <VCol md="3" cols="12">
                                     <VRow>
-                                        <VCol class="font-weight-bold" md="6">실시간 사용여부</VCol>
+                                        <VCol class="font-weight-bold" md="6">정산지갑 사용여부</VCol>
                                         <VCol md="6">
 
                                             <VRow>
@@ -356,14 +358,15 @@ watchEffect(async () => {
                                 </VCol>
                                 <VCol md="3" cols="12">
                                 <VRow>
-                                    <VCol class="font-weight-bold" md="6">이체모듈 검색</VCol>
+                                    <VCol class="font-weight-bold" md="6">정산지갑 검색</VCol>
                                         <VCol md="6">
-                                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="finance_van"
-                                                :items="finance_vans"
-                                                label="이체모듈 검색"
-                                                :hint="`이체모듈 코드: ${finance_van ? finance_van.id : ''} `"
-                                                item-title="nick_name" item-value="id" persistent-hint return-object
-                                            />
+                                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="virtual_account" :items="mcht_wallets"
+                                                prepend-inner-icon="marketeq:wallet-money" 
+                                                label="정산지갑" 
+                                                :hint="`지갑코드: ${virtual_account ? virtual_account.id : ''}`"
+                                                persistent-hint
+                                                item-title="account_name"
+                                                item-value="id" />
                                             <VTooltip activator="parent" location="top" transition="scale-transition" v-if="finance_vans.length == 0">
                                                 <b>
                                                     "운영 관리 - PG사 관리 - 실시간 이체모듈"에서 금융 VAN 추가 후 입력 가능합니다.

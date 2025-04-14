@@ -540,49 +540,6 @@ onMounted(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <template v-if="corp.pv_options.paid.use_collect_withdraw">
-                            <VCol cols="12">
-                                <VDivider style="margin-bottom: 1em;"/>
-                                <VRow>
-                                    <VCol :md="6" :cols="12">
-                                        <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                            <VCol>모아서 출금</VCol>
-                                            <VCol md="6">
-                                                <div class="batch-container">
-                                                    <BooleanRadio :radio="props.item.use_collect_withdraw"
-                                                        @update:radio="props.item.use_collect_withdraw = $event">
-                                                        <template #true>사용</template>
-                                                        <template #false>미사용</template>
-                                                    </BooleanRadio>
-                                                </div>
-                                            </VCol>
-                                        </VRow>
-                                        <VRow v-else>
-                                            <VCol class="font-weight-bold">모아서 출금</VCol>
-                                            <VCol md="6"><span>{{ props.item.use_collect_withdraw ? "사용" : "미사용" }}</span></VCol>
-                                        </VRow>
-                                    </VCol>
-                                    <VCol>
-                                        <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                            <VCol md="6" cols="7">
-                                                <BaseQuestionTooltip :location="'top'" :text="'모아서 출금 수수료'"
-                                                    :content="'모아서 출금 사용시마다 적용되는 수수료 입니다.'"/>
-                                            </VCol>
-                                            <VCol md="6">
-                                                <div class="batch-container">     
-                                                    <VTextField v-model="props.item.collect_withdraw_fee" type="number" suffix="원"
-                                                        :rules="[requiredValidatorV2(props.item.collect_withdraw_fee, '모아서 출금')]" />
-                                                </div>
-                                            </VCol>
-                                        </VRow>
-                                        <VRow v-else>
-                                            <VCol class="font-weight-bold">모아서 출금 수수료</VCol>
-                                            <VCol md="6"><span>{{ props.item.collect_withdraw_fee }} 원</span></VCol>
-                                        </VRow>
-                                    </VCol>
-                                </VRow>
-                            </VCol>
-                        </template>
                         <VCol cols="12" v-if="isSalesAddTIDMode(props.item.id)">
                             <VDivider style="margin-bottom: 1em;"/>
                             <VRow>

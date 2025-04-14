@@ -280,7 +280,6 @@ const brand_modes = [
                         <VRow>
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
-                                    <VSwitch hide-details v-model="props.item.paid.use_collect_withdraw" color="primary" label="모아서 출금"/>
                                 </template>
                                 <template #input>
                                     <VSwitch hide-details v-model="props.item.paid.use_collect_withdraw_scheduler"

@@ -221,11 +221,7 @@ class ActivityHistoryViewer
 
             if($pv_options->paid->use_regular_card === false)
                 unset($conv_history_detail['use_regular_card']);
-            if($pv_options->paid->use_collect_withdraw === false)
-            {
-                unset($conv_history_detail['use_collect_withdraw']);  
-                unset($conv_history_detail['collect_withdraw_fee']);
-            }
+
             if($pv_options->paid->use_noti === false)
                 unset($conv_history_detail['use_noti']);
 

@@ -126,8 +126,6 @@ export interface MerchandisePropertie {
     use_saleslip_prov: number,
     use_noti: number,
     use_regular_card: number,
-    use_collect_withdraw: number,
-    collect_withdraw_fee: number,
     withdraw_fee: number,
     settle_hold_s_dt: string,
     settle_hold_reason: string,
@@ -408,7 +406,7 @@ interface PaidOption {
     use_pmid: boolean,
     use_pay_verification_mobile: boolean, //휴대폰 인증 
     use_regular_card: boolean,
-    use_collect_withdraw: boolean, // 가맹점 모아서 출금
+    use_collect_withdraw: number,
     use_collect_withdraw_scheduler: boolean, // 모아서 출금 스케줄링
     use_head_office_withdraw: boolean,
     use_noti: boolean,
@@ -652,7 +650,6 @@ export interface Transaction {
     withdraw_status?: string,
     withdraw_histories?: VirtualAccountHistory,
 
-    use_collect_withdraw?: number,
     profit?: number,
     trx_amount?: number,    
     pg_settle_type: number,

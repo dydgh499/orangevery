@@ -401,8 +401,6 @@ export const defaultItemInfo = () => {
         note: '',
         dev_fee: 0,
         use_regular_card: 0,
-        use_collect_withdraw: 0,
-        collect_withdraw_fee: 0,
         withdraw_fee: 0,
         resident_num_front: '',
         resident_num_back: '',

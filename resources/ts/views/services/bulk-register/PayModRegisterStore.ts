@@ -44,7 +44,7 @@ export const keyCreater = (snackbar: any, items: any) => {
 }
 
 export const validateItems = (item: PayModule, i: number, mchts: Merchandise[]) => {
-    const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
+    const { pgs, pss, settle_types } = useStore()
     const date_regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
     item.mcht_name = item.mcht_name ? item.mcht_name.toString()?.trim() : ''
     const pg = pgs.find(a => a.id === parseInt(item.pg_id))
@@ -158,7 +158,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         if(corp.pv_options.paid.use_realtime_deposit) {
             headers2.push(
                 {title: '실시간 사용여부(X)', key: 'use_realtime_deposit'},
-                {title: '출금금지타입(X)', key: 'withdraw_limit_type'},
+                {title: '정산지갑(X)', key: 'va_id'},
             )
         }
         return [...headers1, ...headers2]
@@ -168,7 +168,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         const keys = [
             'pg_id', 'ps_id', 'settle_type', 'is_old_auth', 
             'comm_settle_type', 'cxl_type', 'module_type', 'terminal_id', 
-            'comm_calc_level', 'under_sales_type', 'withdraw_limit_type'
+            'comm_calc_level', 'under_sales_type', 'va_id'
         ]
         if(corp.pv_options.paid.use_realtime_deposit)
         {

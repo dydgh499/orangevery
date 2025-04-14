@@ -55,7 +55,7 @@ class TransactionController extends Controller
         $this->cols = [
             'merchandises.mcht_name', 'merchandises.user_name', 'merchandises.nick_name', 'merchandises.contact_num',
             'merchandises.addr', 'merchandises.resident_num', 'merchandises.business_num', 'merchandises.tax_category_type',
-            'merchandises.use_saleslip_prov', 'merchandises.use_collect_withdraw',
+            'merchandises.use_saleslip_prov',
             'merchandises.use_noti',
             'transactions.*',
             'payment_modules.note', 'payment_modules.use_realtime_deposit', 

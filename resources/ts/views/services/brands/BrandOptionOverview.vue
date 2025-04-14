@@ -279,8 +279,7 @@ const filterPgs = computed(() => {
                                         :items="finance_vans"
                                         prepend-inner-icon="streamline-emojis:ant" label="출금모듈 타입" item-title="nick_name"
                                         item-value="id" 
-                                        v-if="props.item.paid.use_collect_withdraw"/>
-
+                                    />
                                 </template>
                             </CreateHalfVColV2>
                             <CreateHalfVColV2 :mdl="6" :mdr="6">

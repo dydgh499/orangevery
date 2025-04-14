@@ -140,7 +140,6 @@ export const defaultItemInfo = () => {
             use_mid_create: false,
             use_pay_verification_mobile: false,
             use_regular_card: false,
-            use_collect_withdraw: false,
             use_noti: false,
             use_head_office_withdraw: false,
             use_collect_withdraw_scheduler: false,

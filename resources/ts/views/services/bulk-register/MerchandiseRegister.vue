@@ -160,18 +160,6 @@ watchEffect(async () => {
                         <VDivider style="margin: 1em 0;" />
                         <h3 class="pt-3">옵션 정보</h3>
                         <VRow>
-                            <VCol md="3" cols="12" v-if="corp.pv_options.paid.use_collect_withdraw">
-                                <VRow>
-                                    <VCol class="font-weight-bold" md="6">모아서출금 사용여부</VCol>
-                                    <VCol md="6">
-                                        <VRow>
-                                            <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
-                                                {{ cus.title }} = {{ cus.id }}
-                                            </VChip>
-                                        </VRow>
-                                    </VCol>
-                                </VRow>
-                            </VCol>                            
                             <VCol md="3" cols="12" v-if="corp.pv_options.paid.use_regular_card">
                                 <VRow>
                                     <VCol class="font-weight-bold" md="6">단골고객 사용여부</VCol>
