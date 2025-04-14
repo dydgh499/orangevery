@@ -71,11 +71,13 @@ export const getUserMenu = () => {
     if(getUserLevel() >= 10) {
         if(corp.pv_options.paid.use_realtime_deposit)
             menu.push(getWithdrawChildMenu())
-        menu.push({
-            title: 'GMID 관리',
-            icon: { icon: 'material-symbols:ad-group' },
-            to: 'gmids',
-        })
+        if(getUserLevel() >= 35) {
+            menu.push({
+                title: 'GMID 관리',
+                icon: { icon: 'material-symbols:ad-group' },
+                to: 'gmids',
+            })    
+        }
     }
 
     return menu
