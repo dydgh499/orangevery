@@ -60,7 +60,18 @@ class VirtualAccountHistoryController extends Controller
             DB::raw("SUM(trans_type = 0) AS deposit_count"),
             DB::raw("SUM(trans_type = 1) AS withdraw_count"),
         ];
-        $chart = $this->common($request)->first($cols);
+        $query = $this->common($request);
+        if($request->has('s_dt'))
+        {
+            $s_dt = strlen($request->s_dt) === 10 ? date($request->s_dt." 00:00:00") : $request->s_dt;
+            $query = $query->where('virtual_account_histories.created_at', '>=', $s_dt);
+        }
+        if($request->has('e_dt'))
+        {
+            $e_dt = strlen($request->e_dt) === 10 ? date($request->e_dt." 23:59:59") : $request->e_dt;
+            $query = $query->where('virtual_account_histories.created_at', '<=', $e_dt);
+        }        
+        $chart = $query->first($cols);
         return $this->response(0, $chart);
     }
 
