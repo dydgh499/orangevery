@@ -53,8 +53,12 @@ export const useSearchStore = defineStore('failSearchStore', () => {
         ...headers1,
         ...headers2,
     }
+    const sub_headers: any = []
+    head.getSubHeaderCol('가맹점 정보', headers0, sub_headers)
+    head.getSubHeaderCol('PG사 정보', headers1, sub_headers)
+    head.getSubHeaderCol('결제실패 정보', headers2, sub_headers)
 
-    head.sub_headers.value = []
+    head.sub_headers.value = sub_headers
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 

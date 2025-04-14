@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('virtual_account_histories', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('va_id')->nullable()->comment('가상계좌 ID');
+            $table->unsignedInteger('va_id')->nullable()->comment('정산지갑 ID');
             $table->unsignedInteger('trans_id')->nullable()->comment('거래 ID');
             $table->integer('trans_amount')->nullable()->comment('거래금액');
             $table->boolean('trans_type')->default(false)->comment('입금/출금');
@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('note', 100)->nullable()->default('')->comment('메모사항');
             $table->string('fin_trans_num', 50)->index()->nullable()->comment('거래번호');
 
-            $table->string('acct_num')->nullable()->comment('가상계좌번호');
-            $table->string('acct_name')->nullable()->comment('가상계좌명');
+            $table->string('acct_num')->nullable()->comment('계좌번호');
+            $table->string('acct_name')->nullable()->comment('계좌명');
             $table->string('acct_bank_name')->nullable()->comment('은행명');
             $table->string('acct_bank_code')->nullable()->comment('은행코드');
             $table->timestamps();

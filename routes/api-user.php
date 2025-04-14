@@ -22,7 +22,6 @@ use App\Http\Controllers\Log\SubBusinessRegistrationController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\NotiSendHistoryController;
 
-//
 use App\Http\Controllers\Manager\AuthInfo\AuthInfoController;
 use App\Http\Controllers\Manager\Merchandise\ShoppingMall\CategoryController;
 use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ProductController;
@@ -30,6 +29,10 @@ use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ProductOptionControlle
 use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ProductOptionGroupController;
 use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ShopController;
 use App\Http\Controllers\Manager\Gmid\GmidController;
+
+use App\Http\Controllers\Manager\Withdraws\VirtualAccountController;
+use App\Http\Controllers\Manager\Withdraws\VirtualAccountHistoryController;
+use App\Http\Controllers\Manager\Withdraws\VirtualAccountWithdrawController;
 
 Route::middleware(['auth.update'])->group(function() {
     Route::prefix('salesforces')->group(function() {
@@ -128,6 +131,15 @@ Route::middleware(['auth.update'])->group(function() {
     });
     Route::apiResource('merchandises', MerchandiseController::class);
     
+    Route::prefix('virtual-accounts')->group(function() {
+        Route::get('histories/withdraw-statement', [VirtualAccountHistoryController::class, 'withdrawStatement']);
+        Route::get('histories/chart', [VirtualAccountHistoryController::class, 'chart']);
+        Route::get('histories', [VirtualAccountHistoryController::class, 'index']);
+        Route::get('withdraw-histories', [VirtualAccountWithdrawController::class, 'index']);
+        Route::get('wallets/all', [VirtualAccountController::class, 'all']);
+        Route::apiResource('wallets', VirtualAccountController::class);
+    });
+
     Route::prefix('gmids')->group(function() {
         Route::post('{id}/password-change', [GmidController::class, 'passwordChange']);
     });

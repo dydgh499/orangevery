@@ -8,12 +8,10 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Http\Controllers\Manager\Service\HolidayController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\DangerTransController;
-use App\Http\Controllers\Log\RealtimeSendHistoryController;
 use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlementBatchController;
 use App\Http\Controllers\Manager\BatchUpdater\ApplyBookController;
 
 use App\Models\Log\MchtFeeChangeHistory;
-use App\Models\Log\RealtimeSendHistory;
 use App\Models\Log\SfFeeChangeHistory;
 use App\Models\Log\DangerTransaction;
 use App\Models\Service\Holiday;

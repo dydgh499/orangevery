@@ -9,18 +9,18 @@ use Illuminate\Notifications\Notifiable;
 use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 
-use App\Models\Merchandise\PaymentModule;
 use App\Models\Transaction;
-use App\Models\CollectWithdraw;
 
+use App\Models\Merchandise\PaymentModule;
 use App\Models\Merchandise\NotiUrl;
 use App\Models\Merchandise\RegularCreditCard;
+use App\Models\Merchandise\SpecifiedTimeDisablePayment;
 use App\Models\Merchandise\ShoppingMall\Product;
 use App\Models\Merchandise\ShoppingMall\ShoppingMall;
-use App\Models\Merchandise\SpecifiedTimeDisablePayment;
+use App\Models\Withdraws\VirtualAccount;
 
 use App\Models\Log\SettleDeductMerchandise;
-use App\Models\Log\RealtimeSendHistory;
+use App\Models\Withdraws\VirtualAccountHistory;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Http\Traits\Models\AttributeTrait;
@@ -55,6 +55,14 @@ class Merchandise extends Authenticatable
     public function notis()
     {
         return $this->hasMany(NotiUrl::class, 'mcht_id')->where('is_delete', false)->select();
+    }
+    
+    public function virtualAccounts()
+    {
+        return $this
+            ->hasMany(VirtualAccount::class, 'user_id')
+            ->where('level', 10)
+            ->select();
     }
 
     public function onlinePays()
@@ -96,9 +104,9 @@ class Merchandise extends Authenticatable
         {
             if((int)request()->use_realtime_deposit === 1)
             {
-                $fails = RealtimeSendHistory::onlyFailRealtime();
-                if(count($fails))
-                    $query = $query->whereNotIn('id', $fails);
+                $fail_trx_ids = VirtualAccountHistory::failIds(request(), request()->user()->brand_id);
+                if(count($fail_trx_ids))
+                    $query = $query->whereNotIn('trx_id', $fail_trx_ids);
             }
             else
                 $query = $query->where('mcht_settle_type', '!=', -1);    
@@ -111,15 +119,6 @@ class Merchandise extends Authenticatable
         $query = $this->hasMany(Transaction::class, 'mcht_id')
             ->noSettlement('mcht_settle_id')
             ->selectRaw('id', 'mcht_id', 'profit', 'pmod_id');
-    }
-
-    public function collectWithdraws()
-    {
-        return $this->hasMany(CollectWithdraw::class, 'mcht_id')
-            ->whereNull('mcht_settle_id')
-            ->whereIn('result_code',['0000', '0050'])
-            ->groupBy('mcht_id')
-            ->selectRaw('mcht_id, SUM(withdraw_amount + withdraw_fee) as total_withdraw_amount');
     }
     
     /*

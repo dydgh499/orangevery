@@ -9,9 +9,8 @@ use App\Models\Service\Holiday;
 use App\Models\Salesforce;
 use App\Models\Merchandise;
 use App\Models\CancelDeposit;
-use App\Models\CollectWithdraw;
 use App\Models\Log\NotiSendHistory;
-use App\Models\Log\RealtimeSendHistory;
+use App\Models\Withdraws\VirtualAccountHistory;
 
 use Illuminate\Support\Facades\Redis;
 use App\Http\Traits\Models\AttributeTrait;
@@ -138,16 +137,16 @@ class Transaction extends Model
             return 0;        
     }
     
-    public function notiSendHistories()
+    public function withdrawHistories()
     {
-        return $this->hasMany(NotiSendHistory::class, 'trans_id')
-            ->orderby('id', 'desc')
+        return $this->hasOne(VirtualAccountHistory::class, 'trx_id', 'trx_id')
+            ->where('trans_type', 1)
             ->select();
     }
 
-    public function realtimes()
+    public function notiSendHistories()
     {
-        return $this->hasMany(RealtimeSendHistory::class, 'trans_id')
+        return $this->hasMany(NotiSendHistory::class, 'trans_id')
             ->orderby('id', 'desc')
             ->select();
     }

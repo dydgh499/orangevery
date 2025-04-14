@@ -4,9 +4,7 @@ import CancelDepositDialog from '@/layouts/dialogs/transactions/CancelDepositDia
 import CancelPartDialog from '@/layouts/dialogs/transactions/CancelPartDialog.vue'
 import CancelTransDialog from '@/layouts/dialogs/transactions/CancelTransDialog.vue'
 import NotiSendHistoriesDialog from '@/layouts/dialogs/transactions/NotiSendHistoriesDialog.vue'
-import RealtimeHistoriesDialog from '@/layouts/dialogs/transactions/RealtimeHistoriesDialog.vue'
 import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
-import WithdrawStatusmentDialog from '@/layouts/dialogs/transactions/WithdrawStatusmentDialog.vue'
 import MchtBlacklistCreateDialog from '@/layouts/dialogs/users/MchtBlacklistCreateDialog.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { issuers } from '@/views/complaints/useStore'
@@ -34,11 +32,9 @@ const salesslip = ref()
 const cancelTran = ref()
 const cancelPart = ref()
 const cancelDeposit = ref()
-const realtimeHistoryDialog = ref()
 const notiSendHistoriesDialog = ref()
 const batchDialog = ref()
 const mchtBlackListDlg = ref()
-const withdrawStatusmentDialog = ref()
 
 const levels = corp.pv_options.auth.levels
 
@@ -50,10 +46,8 @@ provide('salesslip', salesslip)
 provide('cancelTran', cancelTran)
 provide('cancelPart', cancelPart)
 provide('cancelDeposit', cancelDeposit)
-provide('realtimeHistoryDialog', realtimeHistoryDialog)
 provide('notiSendHistoriesDialog', notiSendHistoriesDialog)
 provide('mchtBlackListDlg', mchtBlackListDlg)
-provide('withdrawStatusmentDialog', withdrawStatusmentDialog)
 
 store.params.level = 10
 store.params.issuer = '전체'
@@ -211,11 +205,9 @@ onMounted(() => {
         <CancelTransDialog ref="cancelTran" />
         <CancelPartDialog ref="cancelPart" />
         <CancelDepositDialog ref="cancelDeposit" />
-        <RealtimeHistoriesDialog ref="realtimeHistoryDialog" />
         <NotiSendHistoriesDialog ref="notiSendHistoriesDialog" />
         <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.Transaction"
             @update:select_idxs="selected = $event; store.setTable(); store.getChartData()" />
         <MchtBlacklistCreateDialog ref="mchtBlackListDlg" />
-        <WithdrawStatusmentDialog ref="withdrawStatusmentDialog" />
     </div>
 </template>

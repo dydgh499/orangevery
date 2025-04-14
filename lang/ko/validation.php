@@ -430,5 +430,11 @@ return [
         'is_reply' => '답변여부',
         'detail_addr' => '상세주소',
         'option_groups' => '옵션그룹',
+        // virtual account
+        'account_name' => '지갑별칭',
+        'account_code' => '지갑코드',
+        'user_id' => '유저 NO.',
+        'withdraw_type' => '출금타입',
+        'va_id' => '정산지갑 NO.',
     ],
 ];

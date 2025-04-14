@@ -3,11 +3,15 @@ import { installments, module_types } from '@/views/merchandises/pay-modules/use
 import ExtraMenu from '@/views/transactions/ExtraMenu.vue';
 import { getDateFormat, settleIdCol } from '@/views/transactions/transacitonsHeader';
 import { getRegidentNum } from '@/views/users/useStore';
+import {
+    withdrawInterface,
+    withdrawStatusColors,
+    withdrawStatusNames
+} from '@/views/virtual-accounts/histories/useStore';
 import corp from '@corp';
 import { round_types, useStore } from '../services/pay-gateways/useStore';
 import { settlementFunctionCollect } from './settle/Settle';
-import { notiSendHistoryInterface, realtimeHistoryInterface } from './transactions';
-
+import { notiSendHistoryInterface } from './transactions';
 
 interface Props {
     item: any,
@@ -16,13 +20,13 @@ interface Props {
 
 const props = defineProps<Props>()  // defineProps으로 인해 props. 접근방식으로 안해도됨
 
-const formatTime = <any>(inject('$formatTime'))
 const store = <any>(inject('store'))
+const formatTime = <any>(inject('$formatTime'))
 
 const { isSalesCol } = settlementFunctionCollect(store)
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 const { notiSendResult, notiSendMessage } = notiSendHistoryInterface()
-const { realtimeResult, realtimeMessage } = realtimeHistoryInterface(formatTime)
+const { isReSettleAble } = withdrawInterface()
 
 </script>
 <template>
@@ -91,9 +95,22 @@ const { realtimeResult, realtimeMessage } = realtimeHistoryInterface(formatTime)
             {{ notiSendMessage(item) }}
         </VChip>
     </span>
-    <span v-else-if="_key == 'realtime_result'">
-        <VChip :color="store.getSelectIdColor(realtimeResult(item))">
-            {{ realtimeMessage(item) }}
+    <span v-else-if="_key === 'withdraw_status'">
+        <VChip :color="withdrawStatusColors(item['withdraw_histories'] ? item['withdraw_histories'].withdraw_status : 0)">
+            <span v-if="item['withdraw_histories']">
+                <span v-if="item['withdraw_histories'].withdraw_status === 0">
+                    {{ formatTime(new Date(item['withdraw_histories'].withdraw_schedule_time)) }}초 이체예정
+                </span>
+                <span v-else>
+                    {{ withdrawStatusNames(item['withdraw_histories'].withdraw_status) }}
+                </span>
+            </span>
+            <span v-else-if="isReSettleAble(props.item)">
+                {{ '지갑 정산하기 필요' }}
+            </span>
+            <span v-else>
+                {{ 'N/A' }}
+            </span>
         </VChip>
     </span>
     <span v-else-if="_key == 'extra_col'">

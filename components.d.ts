@@ -82,7 +82,7 @@ declare module '@vue/runtime-core' {
     ProductOptionDialog: typeof import('./resources/ts/layouts/dialogs/shopping-mall/ProductOptionDialog.vue')['default']
     ProfileDialog: typeof import('./resources/ts/layouts/dialogs/users/ProfileDialog.vue')['default']
     PVErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/transactions/PVErrorCodeDialog.vue')['default']
-    PVWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/transactions/PVWithdrawErrorCodeDialog.vue')['default']
+    PVWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/PVWithdrawErrorCodeDialog.vue')['default']
     RealtimeHistoriesDialog: typeof import('./resources/ts/layouts/dialogs/transactions/RealtimeHistoriesDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -98,8 +98,10 @@ declare module '@vue/runtime-core' {
     TheCustomizer: typeof import('./resources/ts/@core/components/TheCustomizer.vue')['default']
     ThemeSwitcher: typeof import('./resources/ts/@core/components/ThemeSwitcher.vue')['default']
     UnderAutoSettingDialog: typeof import('./resources/ts/layouts/dialogs/users/UnderAutoSettingDialog.vue')['default']
-    VanWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/transactions/finance-vans-error-codes/VanWithdrawErrorCodeDialog.vue')['default']
+    VanWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/finance-vans-error-codes/VanWithdrawErrorCodeDialog.vue')['default']
+    WalletDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/WalletDialog.vue')['default']
     WithdrawDetailDialog: typeof import('./resources/ts/layouts/dialogs/transactions/WithdrawDetailDialog.vue')['default']
+    WithdrawHistoriesDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/WithdrawHistoriesDialog.vue')['default']
     WithdrawStatusmentDialog: typeof import('./resources/ts/layouts/dialogs/transactions/WithdrawStatusmentDialog.vue')['default']
   }
 }

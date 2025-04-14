@@ -144,17 +144,6 @@ trait ManagerTrait
             return $query->update(['is_delete' => true]);
     }
 
-    public function authCheck($session, $id, $req_level)
-    {
-        $auth = false;
-        if($session->tokenCan($req_level))
-            $auth = true;
-        else if($session->id === $id)
-            $auth = true;
-
-        return $auth;
-    }
-
     public function _passwordChange($query, $request, $is_me)
     {
         if($is_me)

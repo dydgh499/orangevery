@@ -50,12 +50,27 @@ const getSalesChildMenu = () => {
     return sales
 }
 
+const getWithdrawChildMenu = () => {
+    const withdraws = <any>({
+        title: '정산지갑 관리',
+        icon: { icon: 'tabler:wallet' },
+        children: [
+            { title: '지갑 관리', to: 'virtual-accounts-wallets'},
+            { title: '입출금 내역', to: 'virtual-accounts-histories'},
+            { title: '출금 상세이력', to: 'virtual-accounts-withdraw-histories'}
+        ]
+    })    
+    return withdraws
+}
+
 export const getUserMenu = () => {
     const menu = <any[]>[{ heading: 'User information' }]
     menu.push(getMchtChildMenu())
     if(getUserLevel() >= 13) 
         menu.push(getSalesChildMenu())
-    if(getUserLevel() >= 35) {
+    if(getUserLevel() >= 10) {
+        if(corp.pv_options.paid.use_realtime_deposit)
+            menu.push(getWithdrawChildMenu())
         menu.push({
             title: 'GMID 관리',
             icon: { icon: 'material-symbols:ad-group' },

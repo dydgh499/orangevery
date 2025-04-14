@@ -4,16 +4,15 @@ namespace App\Http\Controllers\External\Bf;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuickView\QuickViewController;
-use App\Http\Controllers\Manager\Settle\CollectWithdrawController;
-use App\Http\Controllers\Log\CollectWithdrawHistoryController;
 use App\Http\Controllers\Manager\Transaction\TransactionController;
-use App\Http\Controllers\Log\RealtimeSendHistoryController;
+
+use App\Http\Controllers\Manager\Withdraws\VirtualAccountHistoryController;
+use App\Models\Withdraws\VirtualAccountHistory;
+
 
 use App\Models\Merchandise;
 use App\Models\Merchandise\PaymentModule;
 use App\Models\Transaction;
-use App\Models\CollectWithdraw;
-use App\Models\Log\RealtimeSendHistory;
 
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\LoginRequest;
@@ -168,8 +167,8 @@ class BfController extends Controller
      */
     public function withdrawsBalance(Request $request)
     {
-        $inst = new CollectWithdrawController(new CollectWithdraw);
-        return $inst->withdrawAbleAmount($request);
+        $inst = new VirtualAccountHistoryController(new VirtualAccountHistory);
+        return $inst->withdrawsBalance($request);
     }
 
     /**
@@ -180,13 +179,9 @@ class BfController extends Controller
      * @responseField id integer 출금요청 고유번호
      */
     public function withdrawsStore(CollectWithdrawRequest $request)
-    {
-        $inst = new CollectWithdrawController(new CollectWithdraw);
-        $json = $inst->_withdrawAbleAmount($request, $request->user()->id);
-        if($json['profit'] >= $request->withdraw_amount)
-            return $inst->collectDeposit($request);
-        else
-            return $this->response(1002);
+    {   //TODO: add va_id
+        $inst = new VirtualAccountHistoryController(new VirtualAccountHistory);
+        return $inst->collectWithdraw($request);
     }
 
     /**
@@ -301,17 +296,8 @@ class BfController extends Controller
      */
     public function realtimeHistoryIndex(IndexRequest $request)
     {
-        $cols = [
-            'merchandises.mcht_name',
-            'transactions.appr_num',
-            'transactions.trx_id',
-            'realtime_send_histories.*',
-        ];
-        $inst = new RealtimeSendHistoryController(new RealtimeSendHistory);
-        $query = $inst->commonSelect($request)
-            ->where('transactions.mcht_id', $request->user()->id);
-
-        $data = $this->getIndexData($request, $query, 'realtime_send_histories.id', $cols, 'realtime_send_histories.created_at');
+        //TODO:: 
+        $data = [];
         return $this->response(0, $data);
     }
 
@@ -333,23 +319,7 @@ class BfController extends Controller
      */
     public function selfWithdrawIndex(IndexRequest $request)
     {
-        $cols = [
-            'collect_withdraws.withdraw_amount',
-            'collect_withdraws.withdraw_fee',
-            'collect_withdraws.created_at',
-            'collect_withdraws.acct_num',
-            'collect_withdraws.acct_name',
-            'collect_withdraws.acct_bank_name',
-            'collect_withdraws.acct_bank_code',
-            'collect_withdraws.result_code',
-            'collect_withdraws.message',
-        ];
-        $inst = new CollectWithdrawHistoryController(new CollectWithdraw);
-        $query = $inst->commonSelect($request)
-            ->where('merchandises.id', $request->user()->id);
-
-        $data = $this->getIndexData($request, $query, 'collect_withdraws.id', $cols, 'collect_withdraws.created_at');
-        return $this->response(0, $data);
+        //TODO: []
     }
 
     /*

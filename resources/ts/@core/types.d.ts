@@ -42,10 +42,6 @@ export interface UserThemeConfig {
   }
 }
 
-/*
-  TODO: use MergeDeep for DRY
-   Waiting for https://github.com/sindresorhus/type-fest/issues/150
-*/
 export interface ThemeConfig {
   app: {
     title: UserThemeConfig['app']['title']

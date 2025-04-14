@@ -8,7 +8,7 @@ import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { notiSendHistoryInterface, realtimeHistoryInterface } from '@/views/transactions/transactions'
+import { notiSendHistoryInterface } from '@/views/transactions/transactions'
 import { getIndexByLevel, getUserLevel } from '@axios'
 import corp from '@corp'
 
@@ -16,7 +16,6 @@ interface Props {
     selected_idxs: number[],
 }
 
-const formatTime = <any>(inject('$formatTime'))
 const props = defineProps<Props>()
 const emits = defineEmits(['update:select_idxs'])
 const {
@@ -34,7 +33,6 @@ const {
 const { cus_filters, terminals } = useStore()
 const { sales, initAllSales } = useSalesFilterStore()
 const { notiSend, notiSelfSend } = notiSendHistoryInterface()
-const { isRealtimeTransaction, singleDepositCancelJobReservation } = realtimeHistoryInterface(formatTime)
 
 const store = <any>(inject('store'))
 const alert = <any>(inject('alert'))
@@ -286,23 +284,17 @@ watchEffect(() => {
                                         </VBtn>
                                     </div>
                                 </VCol>
-                                <template v-if="isRealtimeTransaction() || corp.pv_options.paid.use_collect_withdraw_scheduler">
-                                    <VCol cols="12" md="6" style="display: flex; flex-direction: column;" >
-                                        <h4 class="pt-3">부가기능</h4>
-                                        <br>
-                                        <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                                            <VBtn prepend-icon="tabler-calculator" @click="singleDepositCancelJobReservation(selected_idxs)" size="small" color="warning"
-                                                v-if="isRealtimeTransaction()">
-                                                이체예약취소
+                                <VCol cols="12" md="6" style="display: flex; flex-direction: column;" >
+                                    <h4 class="pt-3">부가기능</h4>
+                                    <br>
+                                    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                        <template v-if="corp.pv_options.paid.use_collect_withdraw_scheduler">
+                                            <VBtn prepend-icon="tabler:column-remove" @click="removeDepositFee(0)" size="small" color="primary">
+                                                건별 수수료 삭제
                                             </VBtn>
-                                            <template v-if="corp.pv_options.paid.use_collect_withdraw_scheduler">
-                                                <VBtn prepend-icon="tabler:column-remove" @click="removeDepositFee(0)" size="small" color="primary">
-                                                    건별 수수료 삭제
-                                                </VBtn>
-                                            </template>
-                                        </div>
-                                    </VCol>
-                                </template>
+                                        </template>
+                                    </div>
+                                </VCol>
                             </VRow>
                     </template>
                     

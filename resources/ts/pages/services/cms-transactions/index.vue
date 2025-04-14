@@ -5,9 +5,8 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
 import corp from '@/plugins/corp'
-import { useSearchStore } from '@/views/services/cms-transactions/useStore'
+import { realtimeMessage, realtimeResult, useSearchStore } from '@/views/services/cms-transactions/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { depositMessage, depositResult } from '@/views/transactions/settle-histories/useCollectWithdrawHistoryStore'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter, metas } = useSearchStore()
@@ -165,8 +164,8 @@ onMounted(() => {
                                         </VChip>
                                     </span>
                                     <span v-else-if="_key === 'result_code'">
-                                        <VChip :color="store.getSelectIdColor(depositResult(item[_key]))">
-                                            {{ depositMessage(item) }}
+                                        <VChip :color="store.getSelectIdColor(realtimeResult(item[_key]))">
+                                            {{ realtimeMessage(item) }}
                                         </VChip>
                                     </span>
                                     <span v-else-if="_key === 'note'" v-html="item[_key]" style="line-height: 2em;"></span>

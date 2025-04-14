@@ -29,10 +29,10 @@ export const autoUpdateMerchandiseInfo = (merchandise: Merchandise) => {
 } 
 export const getAutoInsertPaymentModuleFormat = (mcht_id: number) => {
     const { pgs } = useStore()
-    const fin_id = 30
+    //const fin_id = 30
     const pg_id  = 171
     const ps_id  = 340
-
+    //TODO: fixplus 정산지갑
     const pay_module = <PayModule><unknown>({
         id: 0,
         mcht_id: mcht_id,
@@ -76,7 +76,6 @@ export const getAutoInsertPaymentModuleFormat = (mcht_id: number) => {
         p_mid: ''
     })
 
-    pay_module.fin_id = fin_id
     const pg = pgs.find(obj => obj.id === pg_id)
     if(pg) {
         pay_module.pg_id = pg_id

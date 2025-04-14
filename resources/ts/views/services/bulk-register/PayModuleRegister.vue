@@ -2,7 +2,7 @@
 import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_types, pay_window_secure_levels, under_sales_types, useSearchStore, withdraw_limit_types } from '@/views/merchandises/pay-modules/useStore'
+import { comm_settle_types, cxl_types, installments, module_types, pay_window_secure_levels, under_sales_types, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { Registration } from '@/views/registration'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { keyCreater, useRegisterStore, validateItems } from '@/views/services/bulk-register/PayModRegisterStore'
@@ -40,7 +40,6 @@ const is_clear = ref<boolean>(false)
 
 const midCreateDlg = ref()
 const finance_van = ref({id: null, nick_name: ''})
-const fin_trx_delay = ref(fin_trx_delays[0])
 const withdraw_limit_type = ref({id: null, title: ''})
 
 const comm_settle_type = ref(comm_settle_types[0])
@@ -63,6 +62,7 @@ const filterPgs = computed(() => {
     else
         return []
 })
+//TODO: 정산지갑 정보
 
 const use_types: Options[] = [
     { id: 0, title: '미사용'},
@@ -369,32 +369,6 @@ watchEffect(async () => {
                                                     "운영 관리 - PG사 관리 - 실시간 이체모듈"에서 금융 VAN 추가 후 입력 가능합니다.
                                                 </b>
                                             </VTooltip>
-                                        </VCol>
-                                    </VRow>
-                                </VCol>
-                                <VCol md="3" cols="12">
-                                    <VRow>
-                                        <VCol class="font-weight-bold" md="6">이체 딜레이 검색</VCol>
-                                        <VCol md="6">
-                                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="fin_trx_delay"
-                                                :items="fin_trx_delays"
-                                                label="이체 딜레이 검색"
-                                                :hint="`이체 딜레이 코드: ${fin_trx_delay ? fin_trx_delay.id : ''} `"
-                                                item-title="title" item-value="id" persistent-hint return-object
-                                            />
-                                        </VCol>
-                                    </VRow>
-                                </VCol>
-                                <VCol md="3" cols="12">
-                                    <VRow>
-                                        <VCol class="font-weight-bold" md="6">출금금지타입</VCol>
-                                        <VCol md="6">
-                                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="withdraw_limit_type"
-                                                :items="withdraw_limit_types"
-                                                label="출금금지타입 검색"
-                                                :hint="`출금금지타입 코드: ${withdraw_limit_type ? withdraw_limit_type.id : ''} `"
-                                                item-title="title" item-value="id" persistent-hint return-object
-                                            />
                                         </VCol>
                                     </VRow>
                                 </VCol>

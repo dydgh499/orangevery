@@ -6,7 +6,7 @@ import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue';
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue';
 import CheckAgreeDialog from '@/layouts/dialogs/utils/CheckAgreeDialog.vue';
 import { issuers } from '@/views/complaints/useStore';
-import { cxl_types, fin_trx_delays, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels, withdraw_limit_types } from '@/views/merchandises/pay-modules/useStore';
+import { cxl_types, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import { getUserLevel } from '@axios';
 import corp from '@corp';
@@ -56,9 +56,7 @@ const pay_module = reactive<any>({
     pay_month_limit: 0,
     pay_year_limit: 0,
     payment_term_min: 1,
-    fin_id: null,
     use_realtime_deposit: 0,
-    fin_trx_delay: 0,
     note: '',
     pg_id: null,
     ps_id: null,
@@ -66,9 +64,6 @@ const pay_module = reactive<any>({
     pay_window_extend_hour: 1,
     cxl_type: 0,
     pay_limit_type: 0,
-    withdraw_limit_type: 0,
-    withdraw_business_limit: 0,
-    withdraw_holiday_limit: 0,
     filter_issuers: [],
 })
 
@@ -124,35 +119,6 @@ const setFilterIssuer = (apply_type: number) => {
 const setUseRealtimeDeposit = (apply_type: number) => {
     post('set-use-realtime-deposit', {
         'use_realtime_deposit': pay_module.use_realtime_deposit,
-    }, apply_type)
-}
-const setWithdrawLimitType = (apply_type: number) => {
-    post('set-withdraw-limit-type', {
-        'withdraw_limit_type': pay_module.withdraw_limit_type,
-    }, apply_type)
-}
-
-const setWithdrawBusinessLimit = (apply_type: number) => {
-    post('set-withdraw-business-limit', {
-        'withdraw_business_limit': pay_module.withdraw_business_limit,
-    }, apply_type)
-}
-
-const setWithdrawHolidayLimit = (apply_type: number) => {
-    post('set-withdraw-holiday-limit', {
-        'withdraw_holiday_limit': pay_module.withdraw_holiday_limit,
-    }, apply_type)
-}
-
-const setFinId = (apply_type: number) => {
-    post('set-fin-id', {
-        'fin_id': pay_module.fin_id,
-    }, apply_type)
-}
-
-const setFinTrxDelay = (apply_type: number) => {
-    post('set-fin-trx-delay', {
-        'fin_trx_delay': pay_module.fin_trx_delay,
     }, apply_type)
 }
 
@@ -852,28 +818,6 @@ watchEffect(() => {
                         <VCol :md="6" :cols="12" >
                             <VRow no-gutters style="align-items: center;">
                                 <VCol md="6" cols="12">
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.withdraw_limit_type"
-                                            :items="withdraw_limit_types" prepend-inner-icon="streamline-emojis:pig" label="출금제한타입"
-                                            item-title="title" item-value="id"/>
-                                </VCol>
-                                <VCol md="6" col="12">
-                                    <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setWithdrawLimitType(0)">
-                                            즉시적용
-                                            <VIcon end size="18" icon="tabler-direction-sign" />
-                                        </VBtn>
-                                        <VBtn variant="tonal" size="small" color="secondary" @click="setWithdrawLimitType(1)"
-                                            style='margin-left: 0.5em;'>
-                                            예약적용
-                                            <VIcon end size="18" icon="tabler-clock-up" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol :md="6" :cols="12" >
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol md="6" cols="12">
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.use_realtime_deposit"
                                             :items="is_realtime_deposit_use" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
                                             item-title="title" item-value="id" label="실시간 사용여부" />
@@ -885,103 +829,6 @@ watchEffect(() => {
                                             <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
                                         <VBtn variant="tonal" size="small" color="secondary" @click="setUseRealtimeDeposit(1)"
-                                            style='margin-left: 0.5em;'>
-                                            예약적용
-                                            <VIcon end size="18" icon="tabler-clock-up" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                    <VRow>
-                        <VCol :md="6" :cols="12" >
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol md="6" cols="12">
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.fin_id" :items="finance_vans"
-                                            prepend-inner-icon="streamline-emojis:ant" label="모듈 타입 선택" item-title="nick_name"
-                                            item-value="id" />
-                                </VCol>
-                                <VCol md="6">
-                                    <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setFinId(0)">
-                                            즉시적용
-                                            <VIcon end size="18" icon="tabler-direction-sign" />
-                                        </VBtn>
-                                        <VBtn variant="tonal" size="small" color="secondary" @click="setFinId(1)"
-                                            style='margin-left: 0.5em;'>
-                                            예약적용
-                                            <VIcon end size="18" icon="tabler-clock-up" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol :md="6" :cols="12" >
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol md="6" cols="12">
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.fin_trx_delay"
-                                        prepend-inner-icon="streamline-emojis:bug" :items="fin_trx_delays" label="이체 딜레이 선택"
-                                        item-title="title" item-value="id" single-line
-                                    />
-                                    <VTooltip activator="parent" location="top">
-                                        모아서 출금을 사용하는 가맹점을 변경할경우 중복출금이 발생할 수 있습니다.<br>
-                                        해당가맹점의 경우 거래중지 이후 변경해주세요.
-                                    </VTooltip>
-                                </VCol>
-                                <VCol md="6" col="12">
-                                    <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setFinTrxDelay(0)">
-                                            즉시적용
-                                            <VIcon end size="18" icon="tabler-direction-sign" />
-                                        </VBtn>
-                                        <VBtn variant="tonal" size="small" color="secondary" @click="setFinTrxDelay(1)"
-                                            style='margin-left: 0.5em;'>
-                                            예약적용
-                                            <VIcon end size="18" icon="tabler-clock-up" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-
-                    
-                    <VRow>
-                        <VCol :md="6" :cols="12" >
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol md="6" cols="12">
-                                    <VTextField prepend-inner-icon="tabler-currency-won"
-                                        v-model="pay_module.withdraw_business_limit" type="number" suffix="만원" label="일 출금한도(영업일)"/>
-                                </VCol>
-                                <VCol md="6">
-                                    <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setWithdrawBusinessLimit(0)">
-                                            즉시적용
-                                            <VIcon end size="18" icon="tabler-direction-sign" />
-                                        </VBtn>
-                                        <VBtn variant="tonal" size="small" color="secondary" @click="setWithdrawBusinessLimit(1)"
-                                            style='margin-left: 0.5em;'>
-                                            예약적용
-                                            <VIcon end size="18" icon="tabler-clock-up" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol :md="6" :cols="12" >
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol md="6" cols="12">
-                                    <VTextField prepend-inner-icon="tabler-currency-won"
-                                            v-model="pay_module.withdraw_holiday_limit" type="number" suffix="만원" label="일 출금한도(휴무일)"/>
-                                </VCol>
-                                <VCol md="6" col="12">
-                                    <div class="button-cantainer">
-                                        <VBtn variant="tonal" size="small" @click="setWithdrawHolidayLimit(0)">
-                                            즉시적용
-                                            <VIcon end size="18" icon="tabler-direction-sign" />
-                                        </VBtn>
-                                        <VBtn variant="tonal" size="small" color="secondary" @click="setWithdrawHolidayLimit(1)"
                                             style='margin-left: 0.5em;'>
                                             예약적용
                                             <VIcon end size="18" icon="tabler-clock-up" />

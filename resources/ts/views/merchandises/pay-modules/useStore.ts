@@ -60,21 +60,6 @@ export const comm_settle_types = <Options[]>([
     {id: 1, title:'개통월 M+1'},
     {id: 2, title:'개통월 M+2'},
 ])
-export const fin_trx_delays = <Options[]>([
-    {id: 0, title:'즉시입금'},
-    {id: 1, title:'1분'},
-    {id: 5, title:'5분'},
-    {id: 15, title:'15분'},
-    {id: 30, title:'30분'}, 
-    {id: 45, title:'45분'},
-    {id: 60, title:'60분'},
-])
-if(corp.pv_options.paid.use_collect_withdraw)
-    fin_trx_delays.unshift(<Options>{id: -1, title:'모아서 출금(직접 정산)'})
-if(corp.pv_options.paid.use_collect_withdraw_scheduler) {
-    fin_trx_delays.unshift(<Options>{id: -2, title: '모아서 출금(1시간 스케줄링)'})
-    fin_trx_delays.unshift(<Options>{id: 31, title: '자동정산(30분)'})
-}
 
 export const cxl_types = <Options[]>([
     {id: 0, title:'취소금지'},
@@ -221,10 +206,8 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     const getRealtimeCols = () => {
         const headers_8:Record<string, string> = {}
         if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit) {
-            headers_8['use_realtime_deposit'] = '실시간 사용여부'
-            headers_8['fin_id'] = '이체 모듈 타입'
-            headers_8['fin_trx_delay'] = '이체 딜레이'
-            headers_8['withdraw_limit_type'] = '이체 금지타입'
+            headers_8['use_realtime_deposit'] = '출금 사용여부'
+            // TODO:: 정산지갑정보
         }
         return headers_8
     }
@@ -344,8 +327,6 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
             datas[i]['settle_type'] = settle_types.find(settle_type => settle_type['id'] === datas[i]['settle_type'])?.name as string
             datas[i]['comm_settle_type'] = comm_settle_types.find(obj => obj.id === datas[i]['comm_settle_type'])?.title
             datas[i]['terminal_id'] = terminals.find(obj => obj.id === datas[i]['terminal_id'])?.title
-            datas[i]['fin_id'] = finance_vans.find(obj => obj['id'] === datas[i]['fin_id'])?.nick_name
-            datas[i]['fin_trx_delay'] = fin_trx_delays.find(obj => obj['id'] === datas[i]['fin_trx_delay'])?.title            
             datas[i]['pay_disable_tm'] = datas[i].pay_disable_s_tm + "~" + datas[i].pay_disable_e_tm
             datas[i]['use_realtime_deposit'] = datas[i].use_realtime_deposit ? '사용' : '미사용'
             datas[i]['pay_window_secure_level'] = pay_window_secure_levels.find(obj => obj.id === datas[i].pay_window_secure_level)?.title
@@ -430,8 +411,6 @@ export const defaultItemInfo =  () => {
         filter_issuers: [],
         contract_s_dt: null,
         contract_e_dt: null,
-        fin_id: null,
-        fin_trx_delay: 15,
         cxl_type: 2,
         use_realtime_deposit: 0,
         pay_dupe_least: 0,
@@ -440,10 +419,8 @@ export const defaultItemInfo =  () => {
         pay_window_extend_hour: 1,
         is_different_settlement: 1,
         pay_limit_type: 0,
-        withdraw_limit_type: 0,
-        withdraw_business_limit: 0,
-        withdraw_holiday_limit: 0,
-        last_settle_month: 0
+        va_id: null,
+        last_settle_month: 0,
     })
     //카드사 필터 및 다른 필터옵션들
     return {

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('virtual_account_noti_histories', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('va_history_id')->nullable()->comment('가상계좌 거래통지 ID');
-            $table->unsignedInteger('va_noti_url_id')->nullable()->comment('가상계좌 노티 URL ID');
+            $table->unsignedInteger('va_history_id')->nullable()->comment('정산지갑 거래통지 ID');
+            $table->unsignedInteger('va_noti_url_id')->nullable()->comment('정산지갑 노티 URL ID');
             $table->integer('http_code')->comment('응답 HTTP CODE');
             $table->string('response')->comment('응답 내용');
             $table->timestamps();

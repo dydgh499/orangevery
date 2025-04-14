@@ -144,7 +144,9 @@ class MerchandiseController extends Controller
 
         if($b_info['pv_options']['paid']['use_noti'])
             array_push($with, 'notis');
-        
+        if($b_info['pv_options']['paid']['use_regular_card'])
+            array_push($with, 'regularCreditCards');
+
         $query = $query->with($with);
         $data = $this->getIndexData($request, $query, 'merchandises.id', ['merchandises.*'], 'merchandises.id', false);
         return $data;
@@ -278,6 +280,8 @@ class MerchandiseController extends Controller
             array_push($with, 'specifiedTimeDisableLimitPayments');
         if($b_info['pv_options']['paid']['use_product']);
             array_push($with, 'products');
+        if($b_info['pv_options']['paid']['use_realtime_deposit']);
+            array_push($with, 'virtualAccounts');
 
         $data = $this->merchandises->where('id', $id)->with($with)->first();
         if($data)

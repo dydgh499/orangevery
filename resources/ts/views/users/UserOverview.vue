@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import ProfileDialog from '@/layouts/dialogs/users/ProfileDialog.vue';
+import WalletDialog from '@/layouts/dialogs/virtual-accounts/WalletDialog.vue';
 import FileInput from '@/layouts/utils/FileInput.vue';
 import type { UserPropertie } from '@/views/types';
 import { avatars, banks, business_types, getOnlyNumber, getRegidentNum, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore';
@@ -17,6 +18,7 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
         
+const walletDlg = ref()
 const profileDlg = ref()
 const is_show = ref(false)
 const phone_num_format = ref('')
@@ -139,7 +141,27 @@ watchEffect(() => {
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>기본정보</VCardTitle>
+                    <VCardTitle>
+                        <div style="display: flex;align-items: center;justify-content: space-between;">
+                            <VCardTitle style="margin-right: 1em;">기본정보</VCardTitle>
+                            <div v-if="props.item.id"
+                                :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
+                                <VBtn 
+                                    v-if="getUserLevel() >= 50"
+                                    style='margin: 0.25em;'
+                                    variant="tonal"
+                                    size="small" 
+                                    color="warning" 
+                                    @click="walletDlg.show(props.item.id, props.item?.virtual_accounts)"
+                                >
+                                    지갑 관리
+                                    <span v-if="(props.item?.virtual_accounts || []).length">
+                                        ({{ (props.item?.virtual_accounts || []).length }})
+                                    </span>
+                                </VBtn>
+                            </div>
+                        </div>
+                    </VCardTitle>
                     <VRow class="pt-3">
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModifyPrimary(props.item.id)">
@@ -480,6 +502,7 @@ watchEffect(() => {
             </VCard>
         </VCol>
         <ProfileDialog ref="profileDlg" :item="props.item" :key="props.item.profile_img"/>
+        <WalletDialog ref="walletDlg"/>
     </VRow>
 </template>
 <style scoped>

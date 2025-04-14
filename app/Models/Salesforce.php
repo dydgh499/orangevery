@@ -20,6 +20,7 @@ use App\Models\Options\ThemeCSS;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Http\Traits\Models\AttributeTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
+use App\Models\Withdraws\VirtualAccount;
 
 class Salesforce extends Authenticatable
 {
@@ -83,6 +84,14 @@ class Salesforce extends Authenticatable
     public function salesRecommenderCodes()
     {
         return $this->hasMany(SalesRecommenderCode::class, 'sales_id');
+    }
+
+    public function virtualAccounts()
+    {
+        return $this
+            ->hasMany(VirtualAccount::class, 'user_id')
+            ->where('level', '>', 10)
+            ->select();
     }
 
     public function merchandises()

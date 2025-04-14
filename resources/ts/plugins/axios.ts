@@ -161,7 +161,7 @@ export const isAbleModiy = (id: number) => {
         return false
 }
 
-export const isAbleModiyV2 = (item: any, path: string) => {    
+export const isAbleModiyV2 = (item: any, path: string) => {
     if(getUserLevel() >= 35)
         return true
     else if(getUserLevel() >= 13) {

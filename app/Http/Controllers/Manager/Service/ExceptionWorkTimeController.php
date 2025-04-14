@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Manager\Service;
 
-use App\Models\CollectWithdraw;
 use App\Models\Service\ExceptionWorkTime;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;

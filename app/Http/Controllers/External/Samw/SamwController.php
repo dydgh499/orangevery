@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\External\Samw;
 
-use App\Http\Controllers\Manager\Settle\CollectWithdrawController;
+use App\Http\Controllers\Manager\Withdraws\VirtualAccountHistoryController;
 
 use App\Models\Merchandise;
-use App\Models\CollectWithdraw;
+use App\Models\Withdraws\VirtualAccountHistory;
 
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\LoginRequest;
@@ -80,8 +80,8 @@ class SamwController extends Controller
      */
     public function withdrawsBalance(Request $request)
     {
-        $inst = new CollectWithdrawController(new CollectWithdraw);
-        return $inst->withdrawAbleAmount($request);
+        $inst = new VirtualAccountHistoryController(new VirtualAccountHistory);
+        return $inst->withdrawsBalance($request);
     }
 
     /**
@@ -94,11 +94,7 @@ class SamwController extends Controller
      */
     public function withdrawsStore(CollectWithdrawRequestV2 $request)
     {
-        $inst = new CollectWithdrawController(new CollectWithdraw);
-        $json = $inst->_withdrawAbleAmount($request, $request->user()->id);
-        if($json['profit'] >= $request->withdraw_amount)
-            return $inst->collectDepositV2($request);
-        else
-            return $this->response(1002);
+        $inst = new VirtualAccountHistoryController(new VirtualAccountHistory);
+        return $inst->collectWithdrawCustom($request);
     }
 }

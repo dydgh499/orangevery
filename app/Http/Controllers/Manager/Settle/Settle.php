@@ -6,7 +6,7 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
-use App\Models\Log\RealtimeSendHistory;
+use App\Models\Withdraws\VirtualAccountHistory;
 
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 /*
@@ -124,9 +124,9 @@ class Settle
         //실시간 포함여부
         if((int)$request->use_realtime_deposit === 1)
         {
-            $fails = RealtimeSendHistory::onlyFailRealtime();
-            if(count($fails))
-                $query = $query->whereNotIn('id', $fails);
+            $fail_trx_ids = VirtualAccountHistory::failIds($request, $request->user()->brand_id);
+            if(count($fail_trx_ids))
+                $query = $query->whereNotIn('trx_id', $fail_trx_ids);
         }
         else
             $query = $query->where('transactions.mcht_settle_type', '!=', -1);

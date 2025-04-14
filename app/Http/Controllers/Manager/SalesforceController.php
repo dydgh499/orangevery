@@ -194,14 +194,13 @@ class SalesforceController extends Controller
         $with = ['underAutoSettings'];
         $b_info = BrandInfo::getBrandById($request->user()->brand_id);
         if($b_info['pv_options']['paid']['brand_mode'] === 1)
-        {
             $with[] = 'salesRecommenderCodes';
-        }
+        if($b_info['pv_options']['paid']['use_realtime_deposit']);
+            $with[] = 'virtualAccounts';
 
         $data = $this->salesforces->where('id', $id)
             ->with($with)
             ->first();
-
         if($data)
         {
             if(Ablilty::isOperator($request) || Ablilty::isMySalesforce($request, $id) || Ablilty::isUnderSalesforce($request, $id))

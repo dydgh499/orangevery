@@ -1,0 +1,233 @@
+<?php
+
+namespace App\Http\Controllers\Manager\Withdraws;
+
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
+
+use App\Http\Requests\Manager\Settle\CollectWithdrawRequest;
+use App\Http\Requests\Manager\Settle\CollectWithdrawRequestV2;
+use App\Http\Controllers\Manager\Withdraws\VirtualAccountController;
+use App\Http\Controllers\Utils\Comm;
+
+use App\Models\Salesforce;
+use App\Models\Merchandise;
+use App\Models\Withdraws\VirtualAccount;
+use App\Models\Withdraws\VirtualAccountHistory;
+
+use App\Http\Traits\ManagerTrait;
+use App\Http\Traits\ExtendResponseTrait;
+
+use App\Http\Requests\Manager\IndexRequest;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class VirtualAccountHistoryController extends Controller
+{
+    use ManagerTrait, ExtendResponseTrait;
+    protected $virtual_account_histories;
+
+    public function __construct(VirtualAccountHistory $virtual_account_histories)
+    {
+        $this->virtual_account_histories = $virtual_account_histories;
+        $this->target   = '';
+    }
+
+    public function common($request)
+    {
+        $query  = $this->virtual_account_histories
+            ->join('virtual_accounts', 'virtual_account_histories.va_id', '=' ,'virtual_accounts.id');
+        $query  = VirtualAccountController::getCommonQuery($query, $request);
+        if($request->trans_type !== null)
+            $query = $query->where('virtual_account_histories.trans_type', $request->trans_type);
+        if($request->withdraw_status !== null)
+            $query = $query->where('virtual_account_histories.withdraw_status', $request->withdraw_status);
+        return $query;
+    }
+    /**
+     * 차트 데이터 출력
+     *
+     * 가맹점 이상 가능
+     */
+    public function chart(Request $request)
+    {
+        $cols = [
+            DB::raw("SUM(IF(trans_type = 0, trans_amount, 0)) AS deposit_amount"),
+            DB::raw("SUM(IF(trans_type = 1, trans_amount, 0)) AS withdraw_amount"),
+            DB::raw("SUM(IF(trans_type = 1, virtual_account_histories.withdraw_fee, 0)) AS withdraw_fee_amount"),
+            DB::raw("SUM(trans_type = 0) AS deposit_count"),
+            DB::raw("SUM(trans_type = 1) AS withdraw_count"),
+        ];
+        $chart = $this->common($request)->first($cols);
+        return $this->response(0, $chart);
+    }
+
+    /**
+     * 목록출력
+     *
+     * 운영자 이상 가능
+     *
+     * @queryParam search string 검색어(아아디)
+     */
+    public function index(IndexRequest $request)
+    {
+        $cols   = [
+            'virtual_account_histories.*',
+            'virtual_accounts.account_name',
+            'virtual_accounts.account_code',
+        ];
+        $cols[] = VirtualAccountController::getUserNameCol($request);
+        $query = $this->common($request)->with(['withdraws']);
+        $data = $this->getIndexData($request, $query, 'virtual_account_histories.id', $cols, 'virtual_account_histories.created_at');
+        return $this->response(0, $data);
+    }
+
+    public function cancelJob(Request $request)
+    {
+        if(Ablilty::isOperator($request))
+        {
+            $validated = $request->validate(['trx_ids.*'=>'required']);
+            $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/cancel-job';
+            $res = Comm::post($url, ['trx_ids' => $request->trx_ids]);
+            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
+        }
+        else
+            return $this->response(951);
+    }
+
+    public function retryWithdraw(Request $request)
+    {
+        if(Ablilty::isOperator($request))
+        {
+            $validated = $request->validate([
+                'id'=>'required|integer'
+            ]);
+            $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/retry-withdraw';
+            $res = Comm::post($url, ['id' => $request->id]);
+            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
+        }
+        else
+            return $this->response(951);
+    }
+
+    public function retrySettlement(Request $request)
+    {
+        if(Ablilty::isOperator($request))
+        {
+            $validated = $request->validate([
+                'id'        => 'required|integer', 
+                'va_id'     => 'required|integer', 
+                'user_id'   => 'required|integer', 
+                'level'     => 'required|integer'
+            ]);
+            $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/retry-settlement';
+            $res = Comm::post($url, [
+                'id'        => $request->id,
+                'va_id'     => $request->va_id,
+                'user_id'   => $request->user_id,
+                'level'     => $request->level,
+            ]);
+            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
+        }
+        else
+            return $this->response(951);
+    }
+    
+
+    /**
+     * 출금가능금액 조회
+     *
+     * 출금가능한금액을 조회합니다.
+     */
+    public function withdrawsBalance(Request $request)
+    {
+        $validated = $request->validate(['va_id' => 'required|integer']);
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/balance';
+        $res = Comm::post($url, ['va_id' => $request->va_id]);
+        return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);        
+    }
+
+    /**
+     * 모아서 출금요청
+     */
+    public function collectWithdraw(Request $request)
+    {
+        $validated = $request->validate([
+            'va_id' => 'required|integer', 
+            'withdraw_amount' => 'required|integer'
+        ]);
+
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/collect';
+        $res = Comm::post($url, [
+            'va_id' => $request->va_id,
+            'withdraw_amount' => $withdraw_amount->va_id,
+        ]);
+        return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']); 
+    }
+
+    /**
+     * 모아서 출금요청(주누)
+     */
+    public function collectWithdrawCustom(CollectWithdrawRequestV2 $request)
+    {
+        $virtual_account = VirtualAccount::where('user_id', $request->user()->id)
+            ->where('account_code', $request->samw_code)
+            ->where('level', 10)
+            ->first();
+        if($virtual_account)
+        {
+            $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/collect-custom';
+            $res = Comm::post($url, [
+                'va_id' => $virtual_account->id,
+                'withdraw_amount'   => $request->withdraw_amount,
+                'acct_num'          => $request->acct_num,
+                'acct_name'         => $request->acct_name,
+                'acct_bank_code' => $request->acct_bank_code,
+                'acct_bank_name' => $request->acct_bank_name,
+            ]);
+            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);     
+        }
+        else
+            return $this->extendResponse(1000, "정산지갑을 찾을 수 없습니다.");
+    }
+
+
+    /*
+    * 이체내역서
+    */
+    public function withdrawStatement(Request $request)
+    {
+        $validated = $request->validate(['id' => 'required|integer']);
+        $statement = $this->virtual_account_histories
+                ->join('virtual_accounts', "virtual_accounts.id", '=', 'virtual_account_histories.va_id')
+                ->join('virtual_account_withdraws', "virtual_account_withdraws.va_history_id", '=', 'virtual_account_histories.id')
+                ->join('finance_vans', "virtual_accounts.fin_id", '=', 'finance_vans.id')
+                ->where("virtual_account_histories.brand_id", $request->user()->brand_id)
+                ->where('virtual_account_withdraws.id', $request->id)
+                ->where('virtual_account_withdraws.result_code', '0000')
+                ->first([
+                    'virtual_accounts.user_id',
+                    'virtual_accounts.level',
+                    'virtual_account_withdraws.acct_num',
+                    'virtual_account_withdraws.acct_bank_name',
+                    'virtual_account_withdraws.trans_seq_num',
+                    'virtual_account_withdraws.trans_amount',
+                    DB::raw("finance_vans.bank_code as withdraw_bank_code"),
+                    DB::raw("finance_vans.corp_name as withdraw_corp_name"),
+                    "finance_vans.withdraw_acct_num",
+                    'virtual_account_withdraws.created_at',
+                ]);
+        if($statement)
+        {
+            $query = $statement->level === 10 ? new Merchandise : new Salesforce;
+            $user = $query->where('id', $statement->user_id)->first();
+            $statement->user_name = $statement->level === 10 ? $user->mcht_name : $user->sales_name;
+            $statement->withdraw_acct_num = AbnormalConnection::masking($statement->withdraw_acct_num);
+            return $this->response(0, $statement);
+        }
+        else
+            return $this->extendResponse(2000, '이체정보가 존재하지 않습니다.');
+    }
+}

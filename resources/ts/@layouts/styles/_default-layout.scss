@@ -15,8 +15,6 @@ body,
   @include mixins.boxed-content(true);
 
   flex-grow: 1;
-
-  // TODO: Use grid gutter variable here
   padding-block: 1.5rem;
 }
 

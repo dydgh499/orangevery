@@ -23,7 +23,6 @@ use App\Http\Controllers\BeforeSystem\Merchandise;
 use App\Http\Controllers\BeforeSystem\PaymentModule;
 
 use App\Http\Controllers\BeforeSystem\Transaction;
-use App\Http\Controllers\BeforeSystem\RealtimeSendHistory;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
@@ -119,13 +118,6 @@ class BeforeSystemRegisterJob implements ShouldQueue
             $transaction->getPaywell($this->paywell->table('deposit'), $this->brand_id, $this->before_brand_id);
             $transaction->setPayvery($this->payvery->table('transactions'), $this->brand_id);
             logging(['transactions'=>'ok'], 'before-system-register-job');
-
-            //두리페이 고정
-            $realtime_logs = new RealtimeSendHistory();
-            $realtime_logs->connectUsers($mcht->paywell_to_payvery, $transaction->paywell_to_payvery, $mcht->payvery);
-            $realtime_logs->getPaywell($this->paywell->table('realtime_trans_log'), $this->brand_id, $this->before_brand_id);
-            $realtime_logs->setPayvery($this->payvery->table('realtime_send_histories'), $this->brand_id);
-            logging(['realtime histories'=>'ok'], 'before-system-register-job');
             */
             $this->payvery->table('brands')->where('id', $this->brand_id)->update(['is_transfer'=>2]);
             return true;

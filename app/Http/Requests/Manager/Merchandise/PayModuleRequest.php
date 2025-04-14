@@ -45,8 +45,7 @@ class PayModuleRequest extends FormRequest
         'contract_e_dt',
         'begin_dt',
         'ship_out_dt',
-        'fin_id',
-        'fin_trx_delay',
+        'va_id',
         'pay_disable_s_tm',
         'pay_disable_e_tm',
     ];
@@ -62,9 +61,6 @@ class PayModuleRequest extends FormRequest
         'pay_window_secure_level',
         'pay_window_extend_hour',
         'pay_limit_type',
-        'withdraw_limit_type',
-        'withdraw_business_limit',
-        'withdraw_holiday_limit',
     ];
 
     public function authorize()
@@ -127,8 +123,6 @@ class PayModuleRequest extends FormRequest
         $data['note'] = $data['note'] == null ? '' : $data['note'];
         $data['brand_id'] = $this->user()->brand_id;
         $data['filter_issuers'] = json_encode($this->filter_issuers);
-        if($this->fin_trx_delay !== null)
-            $data['fin_trx_delay'] = $this->fin_trx_delay;
         return $data;
     }
 }

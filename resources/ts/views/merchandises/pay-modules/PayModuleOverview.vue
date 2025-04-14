@@ -99,8 +99,6 @@ const addNewPayModule = async () => {
         filter_issuers: [],
         contract_s_dt: null,
         contract_e_dt: null,
-        fin_id: null,
-        fin_trx_delay: 15,
         cxl_type: 2,
         use_realtime_deposit: 0,
         pay_dupe_least: 0,
@@ -108,9 +106,7 @@ const addNewPayModule = async () => {
         pay_window_extend_hour: 25,
         is_different_settlement: 1,
         pay_limit_type: 0,
-        withdraw_limit_type: 0,
-        withdraw_business_limit: 0,
-        withdraw_holiday_limit: 0,
+        va_id: null,
         last_settle_month: 0,
     })
     const res = await payModuleDlg.value.show(pay_module)

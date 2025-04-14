@@ -4,7 +4,8 @@ import { isFixplus } from "@/plugins/fixplus"
 import { installments, module_types } from "../merchandises/pay-modules/useStore"
 import { round_types, useStore } from "../services/pay-gateways/useStore"
 import { Transaction } from "../types"
-import { notiSendHistoryInterface, realtimeHistoryInterface } from "./transactions"
+import { withdrawStatusNames } from "../virtual-accounts/histories/useStore"
+import { notiSendHistoryInterface } from "./transactions"
 
 export const getProfitColName = (level: number) => {
     const levels = corp.pv_options.auth.levels
@@ -41,11 +42,9 @@ export const settleIdCol = (item: Transaction, search_level: number) => {
 }
 
 export const transactionHeader = (table_name: string) => {
-    const formatTime = <any>(inject('$formatTime'))
     const levels = corp.pv_options.auth.levels
     const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
     const { notiSendMessage } = notiSendHistoryInterface()
-    const { realtimeMessage } = realtimeHistoryInterface(formatTime)
     
     const getTransactionCols = () => {
         const headers_1:Record<string, string> = {}
@@ -160,9 +159,9 @@ export const transactionHeader = (table_name: string) => {
         const headers_7:Record<string, string> = {}
         if(table_name !== 'mcht-part' && table_name !== 'sales-part') {
             if(corp.pv_options.paid.use_noti)
-                headers_7['noti_send_result'] = '노티전송결과'
+                headers_7['noti_send_result'] = '노티발송상태'
             if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit)
-                headers_7['realtime_result'] = '이체결과'    
+                headers_7['withdraw_status'] = '출금상태'    
         }
         
         headers_7['created_at'] = '거래수신 시간'
@@ -235,12 +234,16 @@ export const transactionHeader = (table_name: string) => {
             data['sales1_fee'] = (data['sales1_fee'] * 100).toFixed(3)
         if(levels.sales0_use)
             data['sales0_fee'] = (data['sales0_fee'] * 100).toFixed(3)
-
+        
         if(corp.pv_options.paid.use_noti)
             data['noti_send_result'] = notiSendMessage(data)
-        if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit)
-            data['realtime_result'] = realtimeMessage(data)
-        
+        if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit) {
+            if(data.withdraw_histories) 
+                data['withdraw_status'] = withdrawStatusNames(data.withdraw_histories.withdraw_status)
+            else
+                data['withdraw_status'] = ''
+        }
+        //TODO: 이체결과        
         data['mcht_fee'] = (data['mcht_fee'] * 100).toFixed(3)
         data['hold_fee'] = (data['hold_fee'] * 100).toFixed(3)
         data['ps_fee'] = (data['ps_fee'] * 100).toFixed(3)

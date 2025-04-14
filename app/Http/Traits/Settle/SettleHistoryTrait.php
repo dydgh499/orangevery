@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Traits\Settle;
-use App\Models\CollectWithdraw;
 use App\Models\Transaction;
 use App\Models\Merchandise\PaymentModule;
 use App\Models\CancelDeposit;

@@ -1,10 +1,27 @@
 
+import { StatusColors } from '@/@core/enums'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { depositMessage } from '@/views/transactions/settle-histories/useCollectWithdrawHistoryStore'
 import type { HeadOffceAccount } from '@/views/types'
 import { axios } from '@axios'
+
+export const realtimeResult = (result_code: string) => {
+    if(result_code == '0000')  //성공
+        return StatusColors.Success
+    else if(result_code == '0050')
+        return StatusColors.Processing
+    else
+        return StatusColors.Error
+}
+export const realtimeMessage = (item: any) => {
+    if(item.result_code == '0000')  //성공
+        return '성공'
+    else if(item.result_code == '0050')
+        return '결과 처리중'
+    else
+        return item.message
+}
 
 export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => {
     const store = Searcher('services/cms-transactions')
@@ -40,7 +57,7 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
         for (let i = 0; i < datas.length; i++) {
             datas[i]['fin_id'] = (finance_vans.find(obj => obj.id == datas[i]['fin_id']))?.nick_name
             datas[i]['is_withdraw'] = datas[i]['is_withdraw'] ? '출금' : '입금'
-            datas[i]['result_code'] = depositMessage(datas[i]['result_code'])
+            datas[i]['result_code'] = realtimeMessage(datas[i])
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         head.exportToExcel(datas)

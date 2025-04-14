@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('virtual_account_noti_urls', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('va_id')->nullable()->comment('가상계좌 ID');
+            $table->unsignedInteger('va_id')->nullable()->comment('정산지갑 ID');
             $table->string('send_url')->comment('발송 url');
             $table->string('note', 200)->nullable()->comment('비고');
             $table->boolean('noti_status')->default(true)->comment('사용 여부(0=미사용, 1=사용)');

@@ -82,7 +82,7 @@ const formatDisableEtm = computed(() => {
             <VCardSubtitle>
                 <VChip variant="outlined">결제/취소 제한</VChip>
             </VCardSubtitle>
-            <br>            
+            <br>
             <VRow>
                 <template v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
                     <VCol md="6" cols="12">

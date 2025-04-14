@@ -1,6 +1,6 @@
 
 
-import { cxl_types, fin_trx_delays, installments, module_types } from '@/views/merchandises/pay-modules/useStore';
+import { cxl_types, installments, module_types } from '@/views/merchandises/pay-modules/useStore';
 import { Merchandise, PayModule } from '@/views/types';
 import { isEmpty } from '@core/utils';
 import corp from '@corp';
@@ -54,14 +54,8 @@ export const validateItems = (item: PayModule, i: number, mchts: Merchandise[]) 
     const installment = installments.find(a => a.id === parseInt(item.installment))
     const mcht = mchts.find(a => a.mcht_name == item.mcht_name)
 
-    let finance_van = corp.pv_options.paid.use_realtime_deposit ? finance_vans.find(a => a.id === parseInt(item.fin_id)) : true
-    let fin_trx_delay = corp.pv_options.paid.use_realtime_deposit ? fin_trx_delays.find(a => a.id === parseInt(item.fin_trx_delay)) : true
     let cxl_type = corp.pv_options.paid.use_realtime_deposit ? cxl_types.find(a => a.id === parseInt(item.cxl_type)) : true
 
-    if (item.fin_id == null)
-        finance_van = true
-    if (item.fin_trx_delay == null)
-        fin_trx_delay = true
     if (item.cxl_type == null)
         cxl_type = true
 
@@ -85,10 +79,6 @@ export const validateItems = (item: PayModule, i: number, mchts: Merchandise[]) 
         return [false, (i + 2) + '번째줄의 결제모듈의 모듈타입이 이상합니다.']
     else if (installment == null) 
         return [false, (i + 2) + '번째줄의 결제모듈의 할부기간이 이상합니다.']
-    else if (finance_van == null) 
-        return [false, (i + 2) + '번째줄의 금융 VAN을 찾을 수 없습니다.']
-    else if (fin_trx_delay == null) 
-        return [false, (i + 2) + '번째줄의 이체 딜레이 타입을 찾을 수 없습니다.']
     else if (cxl_type == null) 
         return [false, (i + 2) + '번째줄의 취소 타입을 찾을 수 없습니다.']
     else if (item.contract_s_dt && date_regex.test(item.contract_s_dt) == false) 
@@ -168,8 +158,6 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         if(corp.pv_options.paid.use_realtime_deposit) {
             headers2.push(
                 {title: '실시간 사용여부(X)', key: 'use_realtime_deposit'},
-                {title: '이체 모듈 타입(X)', key: 'fin_id'},
-                {title: '이체 딜레이(X)', key: 'fin_trx_delay'},
                 {title: '출금금지타입(X)', key: 'withdraw_limit_type'},
             )
         }
@@ -185,8 +173,6 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         if(corp.pv_options.paid.use_realtime_deposit)
         {
             keys.push('use_realtime_deposit')
-            keys.push('fin_id')
-            keys.push('fin_trx_delay')
         }
         return keys.includes(key)
     }

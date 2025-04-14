@@ -53,20 +53,6 @@ const _getSettlementHistoryMenu = () => {
             to: 'transactions-settle-histories-difference',
         })
     }
-        
-    if((getUserLevel() === 10 || getUserLevel() >= 35) && corp.pv_options.paid.use_collect_withdraw) {
-        settle_histories.children.push({
-            title: '모아서출금',
-            to: 'transactions-settle-histories-collect-withdraws',
-        })
-        if(getUserLevel() >= 35) {
-            settle_histories.children.push({
-                title: '모아서출금 통계조회',
-                to: 'transactions-settle-collect-withdraws',
-            })
-            
-        }
-    }
     return settle_histories
 }
 

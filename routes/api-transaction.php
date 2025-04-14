@@ -7,7 +7,6 @@ use App\Http\Controllers\Manager\Transaction\TransactionSummaryController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateTransactionController;
 
 use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
-use App\Http\Controllers\Log\RealtimeSendHistoryController;
 use App\Http\Controllers\Log\MchtSettleHistoryController;
 use App\Http\Controllers\Log\SalesSettleHistoryController;
 use App\Http\Controllers\Log\DangerTransController;
@@ -15,11 +14,9 @@ use App\Http\Controllers\Log\FailTransController;
 
 use App\Http\Controllers\Manager\Settle\MerchandiseController as MchtSettleController;
 use App\Http\Controllers\Manager\Settle\SalesforceController as SalesSettleController;
-use App\Http\Controllers\Manager\Settle\CollectWithdrawController;
 use App\Http\Controllers\Manager\Settle\RepMerchandiseController;
 use App\Http\Controllers\Manager\Settle\CancelDepositController;
 
-use App\Http\Controllers\Log\CollectWithdrawHistoryController;
 use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ShopController;
 
 
@@ -39,7 +36,6 @@ Route::middleware(['auth.update'])->group(function() {
                     Route::post('salesforces/set-fee', [BatchUpdateTransactionController::class, 'salesFeeApply']);      
                     Route::post('merchandises/set-fee', [BatchUpdateTransactionController::class, 'mchtFeeApply']);  
                     Route::post('remove-deposit-fee', [BatchUpdateTransactionController::class, 'removeDepositFee']);
-                    Route::post('single-deposit-cancel-job-reservation', [BatchUpdateTransactionController::class, 'singleDepositCancelJobReservation']);
                 });
             });
             Route::prefix('settle-histories')->group(function() {
@@ -64,12 +60,10 @@ Route::middleware(['auth.update'])->group(function() {
                     Route::post('salesforces/{id}/deposit', [SalesSettleHistoryController::class, 'setDeposit']);
                     Route::post('salesforces/batch-deposit', [SalesSettleHistoryController::class, 'setBatchDeposit']);
                 });
-                Route::post('merchandises/single-deposit', [MchtSettleHistoryController::class, 'singleDeposit']);
             });
             Route::post('settle/merchandises/deposit-validate', [MchtSettleController::class, 'depositValidate']);
         });
 
-        Route::get('settle-histories/collect-withdraws', [CollectWithdrawHistoryController::class, 'index']); 
         Route::post('cancel', [TransactionController::class, 'cancel']);
         Route::get('chart', [TransactionController::class, 'chart']);
         Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);
@@ -83,10 +77,7 @@ Route::middleware(['auth.update'])->group(function() {
         Route::post('dangers/{id}/checked', [DangerTransController::class, 'checked']);
         Route::post('dangers/batch-checked', [DangerTransController::class, 'batchChecked']);            
         
-        Route::prefix('settle')->group(function() {
-            Route::get('collect-withdraws/dangers', [CollectWithdrawController::class, 'danger']);
-            Route::apiResource('collect-withdraws', CollectWithdrawController::class);
-            
+        Route::prefix('settle')->group(function() {            
             Route::prefix('merchandises')->group(function() {
                 #Route::get('/test', [MchtSettleController::class, 'test']);
                 Route::get('/', [MchtSettleController::class, 'index']);
@@ -105,13 +96,11 @@ Route::middleware(['auth.update'])->group(function() {
             });
         });
         Route::prefix('settle-histories')->group(function() {
-            Route::get('merchandises/withdraw-statement', [MchtSettleHistoryController::class, 'withdrawStatement']);
             Route::get('merchandises/chart', [MchtSettleHistoryController::class, 'chart']);
             Route::get('salesforces/chart', [SalesSettleHistoryController::class, 'chart']);
             Route::apiResource('merchandises', MchtSettleHistoryController::class);
             Route::apiResource('salesforces', SalesSettleHistoryController::class);
         });
-        Route::get('realtime-histories', [RealtimeSendHistoryController::class, 'index']);
     });
     Route::apiResource('transactions', TransactionController::class);
 });

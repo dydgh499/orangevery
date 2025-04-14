@@ -18,7 +18,8 @@ class VisiableSetter
     static public function financeVanCols()
     {
         return [
-            'fin_id', 'fin_trx_delay', 'use_realtime_deposit',
+            'use_realtime_deposit',
+            // 'fin_id', 'fin_trx_delay', 
         ];
     }
 

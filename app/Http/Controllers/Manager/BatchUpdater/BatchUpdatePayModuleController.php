@@ -279,28 +279,6 @@ class BatchUpdatePayModuleController extends BatchUpdateController
     }
 
     /**
-     * 결제모듈 이체 모듈 타입 일괄적용
-     *
-     */
-    public function setFinId(Request $request)
-    {
-        $cols = ['fin_id' => $request->fin_id];
-        $row = $this->getApplyRow($request, $cols);
-        return $this->batchResponse($row, '결제모듈');
-    }
-    
-    /**
-     * 결제모듈 이체 딜레이 일괄적용
-     *
-     */
-    public function setFinTrxDelay(Request $request)
-    {
-        $cols = ['fin_trx_delay' => $request->fin_trx_delay];
-        $row = $this->getApplyRow($request, $cols);
-        return $this->batchResponse($row, '결제모듈');        
-    }
-
-    /**
      * 결제모듈 허용간격 일괄적용
      * 
      */
@@ -349,25 +327,11 @@ class BatchUpdatePayModuleController extends BatchUpdateController
         return $this->batchResponse($row, '결제모듈');
     }
 
-    public function setWithdrawLimitType(Request $request)
+    public function setVaId(Request $request)
     {
-        $cols = ['withdraw_limit_type' => $request->withdraw_limit_type];
+        $cols = ['va_id' => $request->va_id];
         $row = $this->getApplyRow($request, $cols);
-        return $this->batchResponse($row, '결제모듈');
-    }
-
-    public function setWithdrawBusinessLimit(Request $request)
-    {
-        $cols = ['withdraw_business_limit' => $request->withdraw_business_limit];
-        $row = $this->getApplyRow($request, $cols);
-        return $this->batchResponse($row, '결제모듈');
-    }
-
-    public function setWithdrawHolidayLimit(Request $request)
-    {
-        $cols = ['withdraw_holiday_limit' => $request->withdraw_holiday_limit];
-        $row = $this->getApplyRow($request, $cols);
-        return $this->batchResponse($row, '결제모듈');
+        return $this->batchResponse($row, '결제모듈');        
     }
     
     /**

@@ -36,7 +36,6 @@ class BulkPayModuleRequest extends FormRequest
         'under_sales_limit',
         'under_sales_type',
         'pay_limit_type',
-        'withdraw_limit_type',
     ];
     public $string_keys = [
         'api_key',
@@ -50,7 +49,7 @@ class BulkPayModuleRequest extends FormRequest
         'note',
     ];
     public $nullable_keys = [
-        'fin_id',
+        'va_id',
         'begin_dt',
         'ship_out_dt',
         'contract_s_dt',
@@ -82,7 +81,6 @@ class BulkPayModuleRequest extends FormRequest
             '*.pay_disable_s_tm' => 'nullable|date_format:H:i:s',
             '*.pay_disable_e_tm' => 'nullable|date_format:H:i:s',
             '*.module_type' => 'required|integer',
-            '*.fin_trx_delay' => 'nullable|integer',
             '*.terminal_id' => 'nullable|integer',
             '*.settle_fee' => 'nullable|integer',
             '*.comm_settle_fee' => 'nullable|integer',

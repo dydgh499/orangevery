@@ -70,7 +70,7 @@ export const useRequestStore = defineStore('requestStore', () => {
                         autoInsertPaymentModule(params.id)
                     }
                 }
-                else if (back_url == '/salesforces/under-auto-settings') {
+                else if (back_url === '/salesforces/under-auto-settings') {
                     all_sales.forEach(sales => {
                         sales.forEach(sale => {
                             if (sale.id === res.data.sales_id) {
@@ -82,9 +82,13 @@ export const useRequestStore = defineStore('requestStore', () => {
                         })
                     })
                 }
-                else if (back_url == '/salesforces/sales-recommender-codes') {
+                else if (back_url === '/salesforces/sales-recommender-codes') {
                     params.id = res.data.id
                     params.recommend_code = res.data.recommend_code
+                }
+                else if (back_url === '/virtual-accounts/wallets') {
+                    params.id = res.data.id
+                    params.account_code = res.data.account_code
                 }
                 else if (back_url === '/merchandises/shopping-mall/categories') {
                     categories.push({ ...params})

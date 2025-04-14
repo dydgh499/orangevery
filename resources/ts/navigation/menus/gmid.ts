@@ -38,9 +38,8 @@ export const getGmidMenu = () => {
             icon: { icon: 'tabler:calendar-time' },
             children: [
                 { title: '지급이체', to: 'transactions-settle-histories-merchandises',},
-                { title: '모아서출금', to: 'transactions-settle-histories-collect-withdraws', },
-                { title: '모아서출금 통계조회', to: 'transactions-settle-collect-withdraws',}
             ],
         }
     ]
+    //TODO: 정산지갑?
 }

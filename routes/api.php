@@ -16,7 +16,6 @@ use App\Http\Controllers\Manager\Merchandise\BillKeyController;
 use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ShopController;
 
 use App\Http\Controllers\BeforeSystem\BeforeSystemController;
-use App\Http\Controllers\Manager\Settle\CollectWithdrawController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,8 +85,7 @@ Route::prefix('v1')->group(function() {
 
     Route::prefix('quick-view')->middleware(['auth:sanctum', 'log.route', 'auth.update'])->group(function() {
         Route::get('', [QuickViewController::class, 'index']);
-        Route::get('collect-withdraws/balance', [CollectWithdrawController::class, 'withdrawAbleAmount']);
-        Route::post('collect-withdraws', [CollectWithdrawController::class, 'collectDeposit']);    
+        //TODO: 잔고조회, 이체
         Route::get('pay-modules/{id}/pay-window-renew', [PayWindowController::class, 'renew']);
         Route::post('pay-windows/{window_code}/extend', [PayWindowController::class, 'extend']);
     });

@@ -255,8 +255,10 @@ class PaymentModule
                 'updated_at' => $this->current_time,
                 //
                 'use_realtime_deposit' => $mcht->FIN_PK ? true : false,
+                /*
                 'fin_id' => $mcht->FIN_PK ? $this->paywell_to_payvery_finance[$mcht->FIN_PK] : 0,
                 'fin_trx_delay' => $mcht->RT_DELAY,
+                */
                 'cxl_type' => 2,
                 'comm_settle_type' => 0,
             ];            

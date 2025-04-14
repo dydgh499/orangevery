@@ -25,7 +25,7 @@ return new class extends Migration
             $table->timestamp('locked_at')->nullable()->comment('계정잠금 시간');
             $table->timestamp('last_login_at')->nullable()->comment('마지막 로그인시간');
             $table->string('last_login_ip', 100)->nullable()->comment('마지막 로그인 IP');
-            $table->boolean('is_delete')->default(false)->comment('삭제 여부');            
+            $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });
     }

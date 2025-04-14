@@ -9,7 +9,6 @@ use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
 use App\Models\Salesforce;
 use App\Models\Transaction;
-use App\Models\Log\RealtimeSendHistory;
 use App\Models\Merchandise\NotiUrl;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -59,7 +58,8 @@ class TransactionController extends Controller
             'merchandises.use_saleslip_prov', 'merchandises.use_collect_withdraw',
             'merchandises.use_noti',
             'transactions.*',
-            'payment_modules.note', 'payment_modules.use_realtime_deposit', 'payment_modules.cxl_type', 'payment_modules.fin_trx_delay',
+            'payment_modules.note', 'payment_modules.use_realtime_deposit', 
+            'payment_modules.cxl_type', 'payment_modules.va_id',
             DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
             DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
         ];
@@ -149,10 +149,11 @@ class TransactionController extends Controller
         $with  = ['cancelDeposits'];
         $query = TransactionFilter::common($request);
 
-        if($request->use_realtime_deposit && (int)$request->level === 10)
-            $with[] = 'realtimes';
         if($b_info['pv_options']['paid']['use_noti'])
-            $with[] = 'notiSendHistories';            
+            $with[] = 'notiSendHistories';
+        if($b_info['pv_options']['paid']['use_realtime_deposit'])
+            $with[] = 'withdrawHistories';
+
         if(count($with))
             $query = $query->with($with);
         $data = TransactionFilter::pagenation($request, $query, $this->cols, 'transactions.trx_at', false);

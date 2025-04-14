@@ -1,12 +1,13 @@
 import { salesLevels } from '@/plugins/axios';
 import corp from '@/plugins/corp';
 import { Header } from '@/views/headers';
-import { cxl_types, fin_trx_delays, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels, withdraw_limit_types } from '@/views/merchandises/pay-modules/useStore';
+import { cxl_types, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore';
 import { merchant_statuses, tax_category_types } from '@/views/merchandises/useStore';
 import { authLevels, settleCycles, settleDays, settleTaxTypes, useSalesFilterStore } from '@/views/salesforces/useStore';
 import { Searcher } from '@/views/searcher';
 import { pg_settle_types, round_types } from '@/views/services/pay-gateways/useStore';
 import type { ActivityHistory, Options } from '@/views/types';
+import { fin_trx_delays, withdraw_limit_types, withdraw_types } from '@/views/virtual-accounts/wallets/useStore';
 import { useStore } from '../pay-gateways/useStore';
 
 export const historyLevels = () => {
@@ -91,7 +92,8 @@ export const replaceVariable = (history_detail: any, history_target:string) => {
         _replaceToName(finance_vans, "금융벤 ID", 'nick_name')
         _replaceToName(fin_trx_delays, "이체 딜레이", 'title')
         _replaceToName(withdraw_limit_types, "출금제한타입", 'title')
-
+        _replaceToName(withdraw_types, "출금타입", 'title')
+        
         _replaceToName(cxl_types, "취소 타입", 'title')
         _replaceToName(installments, "할부", 'title')
         _replaceToName(pay_limit_types, "결제제한타입", 'title')

@@ -2,7 +2,7 @@
 
 namespace App\Http\Traits\Settle;
 use Illuminate\Support\Facades\DB;
-use App\Models\Log\RealtimeSendHistory;
+use App\Models\Withdraws\VirtualAccountHistory;
 use App\Models\Transaction;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
@@ -105,9 +105,9 @@ trait SettleTrait
         {   // 영업라인 단계에서는 없음
             if((int)$request->use_realtime_deposit === 1)
             {   // 실패건은 제외하고 조회
-                $fails = RealtimeSendHistory::onlyFailRealtime();
-                if(count($fails))
-                    $query = $query->whereNotIn('transactions.id', $fails);
+                $fail_trx_ids = VirtualAccountHistory::failIds($request, $request->user()->brand_id);
+                if(count($fail_trx_ids))
+                    $query = $query->whereNotIn('transactions.trx_id', $fail_trx_ids);
             }
             else
                 $query = $query->where('transactions.mcht_settle_type', '!=', -1);    

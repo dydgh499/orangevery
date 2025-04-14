@@ -17,13 +17,6 @@ const dangerTransactionHeader = () => {
             'id': 'NO.',
             'mcht_name': '가맹점 상호',
             'module_type': '거래 타입',
-            'item_name': '상품명',
-            'amount': '거래금액',
-            'ord_num': '주문번호',
-            'appr_num': '승인번호',
-            'installment': '할부',
-            'mid': 'MID',
-            'tid': 'TID',
         }    
     }
     const getPGCols = () => {
@@ -38,24 +31,35 @@ const dangerTransactionHeader = () => {
     }
     const getPaymentCols = () => {
         return {
+            'mid': 'MID',
+            'tid': 'TID',
             'terminal_id': '장비 타입',
+            'item_name': '상품명',
+            'amount': '거래금액',
+            'ord_num': '주문번호',
+            'appr_num': '승인번호',
+            'installment': '할부',
             'issuer': '발급사',
             'acquirer': '매입사',
             'card_num': '카드번호',
             'trx_dttm': '거래시간',
             'buyer_name': '구매자명',
-            'danger_type': '이상거래타입',
-            'is_checked': '확인 여부',
         }
     }
     const getEtcCols = () => {
         if(getUserLevel() >= 35) {
             return {
+                'danger_type': '이상거래타입',
+                'is_checked': '확인 여부',
                 'extra_col': '더보기'
             }
         }
-        else
-            return {}
+        else {
+            return {
+                'danger_type': '이상거래타입',
+                'is_checked': '확인 여부',
+            }
+        }
     }
     const headers0:any = getMchtCols()
     const headers1:any = getPGCols()
@@ -82,8 +86,13 @@ export const useSearchStore = defineStore('dangerSearchStore', () => {
         ...headers2,
         ...headers3,
     }
+    const sub_headers: any = []
+    head.getSubHeaderCol('가맹점 정보', headers0, sub_headers)
+    head.getSubHeaderCol('PG사 정보', headers1, sub_headers)
+    head.getSubHeaderCol('결제 정보', headers2, sub_headers)
+    head.getSubHeaderCol('기타 정보', headers3, sub_headers)
 
-    head.sub_headers.value = []
+    head.sub_headers.value = sub_headers
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
     

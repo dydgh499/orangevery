@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Manager\Settle;
 
 use App\Models\Merchandise;
 use App\Models\Transaction;
-use App\Models\Log\RealtimeSendHistory;
 use App\Models\Log\SettleDeductMerchandise;
 use App\Models\Merchandise\PaymentModule;
 use App\Models\Service\CMSTransaction;

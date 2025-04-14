@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Log;
 
+use App\Http\Controllers\Ablilty\Ablilty;
 use App\Models\Transaction;
 use App\Models\Log\DangerTransaction;
 
@@ -150,7 +151,7 @@ class DangerTransController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        if($this->authCheck($request->user(), $id, 35))
+        if(Ablilty::isOperator($request))
         {
             $res = $this->delete($this->danger_transactions->where('mcht_id', $id));
             return $this->response($res ? 1 : 990, ['id'=>$id]);

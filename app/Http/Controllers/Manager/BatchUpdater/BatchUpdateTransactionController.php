@@ -67,21 +67,6 @@ class BatchUpdateTransactionController extends BatchUpdateController
             $this->wrongTypeAccess();
     }
 
-    public function singleDepositCancelJobReservation(Request $request)
-    {
-        if($request->user()->tokenCan(35))
-        {
-            $validated = $request->validate(['selected_idxs.*'=>'required|integer']);
-            $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/single-deposit-cancel-job-reservation';
-            $res = Comm::post($url, [
-                'trx_ids' => $request->selected_idxs,
-            ]);
-            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
-        }
-        else
-            return $this->response(951);
-    }
-
     public function removeDepositFee(Request $request)
     {
         $this->transactions

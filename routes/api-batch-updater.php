@@ -65,11 +65,7 @@ Route::middleware(['auth.update'])->group(function() {
         Route::post('set-pay-disable-time', [BatchUpdatePayModuleController::class, 'setForbiddenPayTime']);
         Route::post('set-filter-issuer', [BatchUpdatePayModuleController::class, 'setFilterIssuer']);
         Route::post('set-use-realtime-deposit', [BatchUpdatePayModuleController::class, 'setUseRealtimeDeposit']);
-        Route::post('set-withdraw-limit-type', [BatchUpdatePayModuleController::class, 'setWithdrawLimitType']);
-        Route::post('set-withdraw-business-limit', [BatchUpdatePayModuleController::class, 'setWithdrawBusinessLimit']);
-        Route::post('set-withdraw-holiday-limit', [BatchUpdatePayModuleController::class, 'setWithdrawHolidayLimit']);
-        Route::post('set-fin-id', [BatchUpdatePayModuleController::class, 'setFinId']);
-        Route::post('set-fin-trx-delay', [BatchUpdatePayModuleController::class, 'setFinTrxDelay']);
+        Route::post('set-va-id', [BatchUpdatePayModuleController::class, 'setVaId']);
         Route::post('set-payment-term-min', [BatchUpdatePayModuleController::class, 'setPaymentTermMin']);
         Route::post('set-pay-window-secure-level', [BatchUpdatePayModuleController::class, 'setPayWindowSecureLevel']);
         Route::post('set-pay-window-extend-hour', [BatchUpdatePayModuleController::class, 'setPayWindowExtendHour']);

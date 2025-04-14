@@ -30,12 +30,17 @@ use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Log\ActivityHistoryContoller;
 use App\Http\Controllers\Manager\BatchUpdater\ApplyBookController;
 
+use App\Http\Controllers\Manager\Withdraws\VirtualAccountController;
+use App\Http\Controllers\Manager\Withdraws\VirtualAccountHistoryController;
+use App\Http\Controllers\Manager\Withdraws\VirtualAccountWithdrawController;
+
 Route::middleware(['auth.update'])->group(function() {
     Route::get('services/pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
     Route::get('services/activity-histories/{target_id}/target', [ActivityHistoryContoller::class, 'target']); 
     Route::get('popups/currently', [PopupController::class, 'currently']);
     Route::get('posts/{id}/parent', [PostController::class, 'parent']);
     Route::get('posts/recent', [PostController::class, 'recent']);
+
     Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
         Route::middleware(['is.edit.able'])->post('posts/upload', [PostController::class, 'upload']);  
         Route::prefix('services')->group(function() {
@@ -81,6 +86,10 @@ Route::middleware(['auth.update'])->group(function() {
             Route::get('book-applies', [ApplyBookController::class, 'index']);
             Route::delete('book-applies/{dest_type}/{id}', [ApplyBookController::class, 'destroy']);
         });
+
+        Route::post('virtual-accounts/histories/cancel-job', [VirtualAccountHistoryController::class, 'cancelJob']);
+        Route::post('virtual-accounts/histories/retry-withdraw', [VirtualAccountHistoryController::class, 'retryWithdraw']);
+        Route::post('virtual-accounts/histories/retry-settlement', [VirtualAccountHistoryController::class, 'retrySettlement']);
         Route::apiResource('popups', PopupController::class);
     });
 

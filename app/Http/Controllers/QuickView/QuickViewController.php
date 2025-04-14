@@ -6,7 +6,6 @@ use App\Models\Transaction;
 
 use App\Models\Merchandise;
 use App\Models\Merchandise\PaymentModule;
-use App\Models\CollectWithdraw;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 

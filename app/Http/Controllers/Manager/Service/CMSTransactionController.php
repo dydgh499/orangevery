@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Manager\Service;
 
-use App\Models\CollectWithdraw;
-use App\Models\Log\RealtimeSendHistory;
 use App\Models\Service\FinanceVan;
 use App\Models\Service\HeadOfficeAccount;
 use App\Models\Service\CMSTransaction;
@@ -95,17 +93,13 @@ class CMSTransactionController extends Controller
                 DB::raw("SUM(is_withdraw = 1) AS total_withdraw_count"),
             ]);
 
-        $realtime = $getOtherWithdraw(new RealtimeSendHistory, $request, 'finance_id')
-            ->first([DB::raw('SUM(amount) as total_amount')]);
-        $collect_withdraw = $getOtherWithdraw(new CollectWithdraw, $request)
-            ->first([DB::raw('SUM(withdraw_amount + withdraw_fee) as total_amount')]);        
         $mcht_payment_agency = $getPaymentAgencyWithdraw(new SettleHistoryMerchandiseDeposit, $request, 'merchandises', 'mcht_id')
             ->first([DB::raw('SUM(deposit_amount) as total_amount')]);
         $sales_payment_agency = $getPaymentAgencyWithdraw(new SettleHistorySalesforceDeposit, $request, 'salesforces', 'sales_id')
             ->first([DB::raw('SUM(deposit_amount) as total_amount')]);
 
-        $data->total_realtime_withdraw_amount = (int)$realtime->total_amount * -1;
-        $data->total_collect_withdraw_amount  = (int)$collect_withdraw->total_amount * -1;
+        $data->total_realtime_withdraw_amount = 0;
+        $data->total_collect_withdraw_amount  = 0;
         $data->total_payment_agency_withdraw_amount = ((int)$mcht_payment_agency->total_amount + (int)$sales_payment_agency->total_amount)  * -1;
         return $this->response(0, $data);
     }
@@ -197,33 +191,5 @@ class CMSTransactionController extends Controller
         }
         else
             return $this->response(951);
-    }
-
-    static public function updateFromCollectWithdraw()
-    {
-        $cms_transactions = [];
-        $collect_withdraws = CollectWithdraw::whereNull('mcht_id')->get();
-        foreach($collect_withdraws as $collect_withdraw)
-        {
-            $cms_transactions[] = [
-                'brand_id' => $collect_withdraw->brand_id,
-                'fin_id' => null,
-                'is_withdraw' => true,
-                'trans_seq_num' => $collect_withdraw->trans_seq_num,
-                'amount' => $collect_withdraw->withdraw_amount * -1,
-                'trx_at' => $collect_withdraw->created_at,
-                'created_at' => $collect_withdraw->created_at,
-                'updated_at' => $collect_withdraw->updated_at,
-                'note' => $collect_withdraw->note,
-                'result_code' => $collect_withdraw->result_code,
-                'message' => $collect_withdraw->message,
-                'acct_num' => $collect_withdraw->acct_num,
-                'acct_name' => $collect_withdraw->acct_name,
-                'acct_bank_name' => $collect_withdraw->acct_bank_name,
-                'acct_bank_code' => $collect_withdraw->acct_bank_code,
-            ];
-        }
-        $inst = (new CMSTransactionController(new CMSTransaction));
-        $res = $inst->manyInsert(new CMSTransaction, $cms_transactions);
     }
 }

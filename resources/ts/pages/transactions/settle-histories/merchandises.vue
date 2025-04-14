@@ -2,7 +2,7 @@
 import SettleHistoryBatchDialog from '@/layouts/dialogs/SettleHistoryBatchDialog.vue'
 import FinanceVanDialog from '@/layouts/dialogs/services/FinanceVanDialog.vue'
 import AddDeductDialog from '@/layouts/dialogs/transactions/AddDeductDialog.vue'
-import WithdrawStatusmentDialog from '@/layouts/dialogs/transactions/WithdrawStatusmentDialog.vue'
+import WithdrawStatusmentDialog from '@/layouts/dialogs/virtual-accounts/WithdrawStatusmentDialog.vue';
 
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'

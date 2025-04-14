@@ -92,6 +92,7 @@ export interface UserPropertie extends BasePropertie, Bank, Contract {
     resident_num_back: string,
     use_syslink?: boolean,
     syslink?: any,
+    virtual_accounts?: VirtualAccount[],
 }
 
 export interface MerchandisePropertie {
@@ -285,8 +286,6 @@ export interface PayModule {
     pay_window_extend_hour: number,
     note: string,
     filter_issuers: string[],
-    fin_id: number | null,
-    fin_trx_delay: number,
     cxl_type: number,
     use_realtime_deposit: number,
     payment_term_min: number,
@@ -295,9 +294,8 @@ export interface PayModule {
     pay_window?: PayWindow | null,
     is_different_settlement: number,
     pay_limit_type: number,
-    withdraw_limit_type: number,
-    withdraw_business_limit: number,
-    withdraw_holiday_limit: number,
+    va_id: number | null,
+    // TODO: remove
     last_settle_month: number,
 }
 
@@ -356,22 +354,6 @@ export interface FinanceVan {
     balance?: number,
 }
 
-export interface RealtimeHistory {
-    id: number,
-    mcht_name: string,
-    appr_num: string,
-    trans_id: number,
-    result_code: string,
-    request_type: number,
-    message: string,
-    amount: number,
-    acct_num: string,
-    acct_bank_name: string,
-    acct_bank_code: string,
-    trans_seq_num: string,
-    created_at: string,
-    updated_at: string,
-}
 interface BrandBaseInfo {
     company_name: string,
     rep_name: string,
@@ -660,13 +642,15 @@ export interface Transaction {
     
     use_noti?: number,
     noti_status?: number,
-    realtimes?: RealtimeHistory[],
     noti_send_histories?: NotiSendHistory[],
+
     cancel_deposits?: CancelDeposit[],
-    use_realtime_deposit?: number,
     cxl_type?: number,
-    fin_trx_delay?: number
-    realtime_result?: string,
+
+    use_realtime_deposit?: number,
+    va_id: number | null,
+    withdraw_status?: string,
+
     use_collect_withdraw?: number,
     profit?: number,
     trx_amount?: number,    
@@ -1214,4 +1198,47 @@ export interface IdentityAuthInfo {
     api_key: string,
     sub_key: string,
     enc_key: string,
+}
+
+export interface VirtualAccount {
+    id: number,
+    user_id: number,
+    balance: number,
+    account_code: string,
+    account_name: string,
+    fin_id: number | null,
+    fin_trx_delay: number,
+    withdraw_type: number,
+    withdraw_fee: number,
+    withdraw_limit_type: number,
+    withdraw_business_limit: number,
+    withdraw_holiday_limit: number,
+}
+
+export interface VirtualAccountHistory {
+    id: number,
+    settle_id: number,
+    trans_type: number,
+    trans_amount: number,
+    deposit_status: number,
+    deposit_schedule_time: string,
+    withdraw_status: number,
+    withdraw_type: number,
+    trx_id: string,
+    withdraws: VirtualAccountWithdraw[],
+}
+
+export interface VirtualAccountWithdraw {
+    id: number,
+    va_history_id: number
+    trans_amount: number,
+    result_code: string,
+    request_type: number,
+    note: string,
+    trans_seq_num: string,
+    acct_num: string,
+    acct_name: string,
+    acct_bank_name: string,
+    acct_bank_code: string,
+    created_at: string,
 }

@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Manager\Transaction;
 
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
-use App\Models\Log\RealtimeSendHistory;
+use App\Models\Withdraws\VirtualAccountHistory;
 
 class TransactionFilter
 {
@@ -72,7 +72,7 @@ class TransactionFilter
         if($request->mcht_settle_id)
             $query = $query->where('transactions.mcht_settle_id', $request->mcht_settle_id);
         if($request->only_realtime_fail)
-            $query->whereIn('transactions.id', RealtimeSendHistory::onlyFailRealtime());
+            $query->whereIn('transactions.trx_id', VirtualAccountHistory::failIds($request, $request->user()->brand_id));
         
         if($request->no_settlement)
         {

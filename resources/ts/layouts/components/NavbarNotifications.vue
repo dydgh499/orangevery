@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import CollectWithdrawDangerDialog from '@/layouts/dialogs/transactions/CollectWithdrawDangerDialog.vue'
 import DetailWorkStatusDialog from '@/layouts/dialogs/utils/DetailWorkStatusDialog.vue'
 import SecureReportDialog from '@/layouts/dialogs/utils/SecureReportDialog.vue'
 
@@ -31,9 +30,6 @@ axios.get('/api/v1/manager/posts/recent')
     <div class="me-2">
         <Notifications :notifications="notifications" />
         <template v-if="is_login">
-            <Suspense>
-                <CollectWithdrawDangerDialog ref="collectWithdrawDangerDialog" />
-            </Suspense>
             <Suspense>
                 <SecureReportDialog ref="secureReportDialog"/>
             </Suspense>
