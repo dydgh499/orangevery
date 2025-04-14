@@ -26,7 +26,7 @@ const formatTime = <any>(inject('$formatTime'))
 const { isSalesCol } = settlementFunctionCollect(store)
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 const { notiSendResult, notiSendMessage } = notiSendHistoryInterface()
-const { isReSettleAble } = withdrawInterface()
+const { isReSettleAble, isCollectWithdraw } = withdrawInterface()
 
 </script>
 <template>
@@ -108,6 +108,9 @@ const { isReSettleAble } = withdrawInterface()
             <span v-else-if="isReSettleAble(props.item)">
                 {{ '지갑 정산하기 필요' }}
             </span>
+            <span v-else-if="isCollectWithdraw(props.item)">
+                {{ '모아서 출금' }}
+            </span>            
             <span v-else>
                 {{ 'N/A' }}
             </span>

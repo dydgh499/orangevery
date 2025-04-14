@@ -157,7 +157,7 @@ const isUseCancelDeposit = () => {
                     <VListItemTitle>취소매출생성</VListItemTitle>
                 </VListItem>
                 <VListItem 
-                        v-if="isReSettleAble(props.item)"
+                        v-if="isReSettleAble(props.item) && getUserLevel() >= 35"
                         value="re-settle" 
                         class="retry-realtime-deposit" 
                         @click="settleRetry(props.item.id, props.item.mcht_id, props.item.va_id, 10)"

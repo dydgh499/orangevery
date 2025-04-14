@@ -1,4 +1,3 @@
-import { getUserLevel } from '@/plugins/axios';
 import { Header } from '@/views/headers';
 import { useRequestStore } from '@/views/request';
 import { Searcher } from '@/views/searcher';
@@ -72,7 +71,15 @@ export const withdrawInterface = () => {
 
     const isReSettleAble = (transaction: Transaction) => {
         if(transaction.use_realtime_deposit && transaction.va_id) {
-            if(transaction.mcht_settle_id === null && getUserLevel() >= 35)
+            if(transaction.mcht_settle_id === null)
+                return true
+        }
+        return false
+    }
+
+    const isCollectWithdraw = (transaction: Transaction) => {
+        if(transaction.use_realtime_deposit && transaction.va_id) {
+            if(transaction.mcht_settle_id)
                 return true
         }
         return false
@@ -128,6 +135,7 @@ export const withdrawInterface = () => {
 
     return {
         isReSettleAble,
+        isCollectWithdraw,
         withdrawStatusColors,
         withdrawRetry,
         settleRetry,
