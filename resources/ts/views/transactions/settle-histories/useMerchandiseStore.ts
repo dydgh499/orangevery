@@ -8,6 +8,7 @@ export const deposit_statuses = [
     { id: 0, title: '미입금' },
     { id: 1, title: '입금완료' },
     { id: 2, title: '상계처리' },
+    { id: 5, title: '지갑정산' },
 ]
 
 export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', () => {    

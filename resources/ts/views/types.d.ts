@@ -650,6 +650,7 @@ export interface Transaction {
     use_realtime_deposit?: number,
     va_id: number | null,
     withdraw_status?: string,
+    withdraw_histories?: VirtualAccountHistory,
 
     use_collect_withdraw?: number,
     profit?: number,

@@ -88,6 +88,12 @@ const blacklist = () => {
     })
 }
 const isCancelSafeDate = () => {
+    //TODO: 모아서출금일경우 이체 후에도 가능해야함
+    if(props.item.withdraw_histories) {
+        if(props.item.withdraw_histories.withdraw_status === 1)
+            return false
+    }
+    
     if (getUserLevel() === 10) {
         if (props.item.cxl_type === -1)
             return true

@@ -189,7 +189,7 @@ class SalesSettleHistoryController extends Controller
     public function destroy(Request $request, int $id)
     {        
         if($request->use_finance_van_deposit && $request->current_status)
-            return $this->extendResponse(2000, "입금완료, 상계처리된 정산건은 정산취소 할수 없습니다.");
+            return $this->extendResponse(2000, "입급전 정산건만 정산취소 가능합니다.");
         else
         {
             [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
