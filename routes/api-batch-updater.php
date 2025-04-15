@@ -6,6 +6,7 @@ use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateSalesController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdatePayModuleController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateNotiUrlController;
+use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateWalletController;
 use App\Http\Controllers\Manager\Merchandise\RegularCreditCardController;
 
 use App\Http\Controllers\Manager\Service\HolidayController;
@@ -90,5 +91,9 @@ Route::middleware(['auth.update'])->group(function() {
 
     Route::prefix('services/holidays/batch-updaters')->group(function() { 
         Route::post('register', [HolidayController::class, 'register']);
+    });
+
+    Route::prefix('virtual-accounts/wallets/batch-updaters')->group(function() { 
+        Route::post('register', [BatchUpdateWalletController::class, 'register']);
     });
 });

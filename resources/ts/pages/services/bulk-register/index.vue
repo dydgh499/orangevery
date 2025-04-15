@@ -8,14 +8,19 @@ import NotiUrlRegister from '@/views/services/bulk-register/NotiUrlRegister.vue'
 import PayModuleRegister from '@/views/services/bulk-register/PayModuleRegister.vue'
 import RegularCardRegister from '@/views/services/bulk-register/RegularCardRegister.vue'
 import SalesforceRegister from '@/views/services/bulk-register/SalesforceRegister.vue'
+import VirtualAccountRegister from '@/views/services/bulk-register/VirtualAccountRegister.vue'
+
 import corp from '@corp'
 
 const tab = ref(0)
 const tabs = <Tab[]>([
     { icon: 'tabler-user', title: '영업라인 등록' },
     { icon: 'tabler-building-store', title: '가맹점 등록' },
-    { icon: 'ic-outline-send-to-mobile', title: '결제모듈 등록' },
 ])
+if(corp.pv_options.paid.use_realtime_deposit)
+    tabs.push({ icon: 'marketeq:wallet-money', title: '정산지갑 등록' })
+
+tabs.push({ icon: 'ic-outline-send-to-mobile', title: '결제모듈 등록' })
 if(corp.pv_options.paid.use_regular_card)
     tabs.push({ icon: 'emojione:credit-card', title: '단골고객 카드정보 등록' })
 if(corp.pv_options.paid.use_mcht_blacklist)
@@ -38,6 +43,11 @@ if(corp.pv_options.paid.use_noti)
                 </VWindowItem>
                 <VWindowItem>
                     <MerchandiseRegister/>
+                </VWindowItem>
+                <VWindowItem v-if="corp.pv_options.paid.use_realtime_deposit">
+                    <Suspense>
+                        <VirtualAccountRegister/>
+                    </Suspense>
                 </VWindowItem>
                 <VWindowItem>
                     <Suspense>
