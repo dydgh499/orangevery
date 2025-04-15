@@ -91,11 +91,22 @@ class VirtualAccountController extends Controller
      */
     public function index(IndexRequest $request)
     {
+        $sp     = ($request->page - 1) * $request->page_size;
         $cols   = ['virtual_accounts.*'];
         $query  = self::getCommonQuery($this->virtual_accounts, $request);
         $cols[] = self::getUserNameCol($request);
-        $data = $this->getIndexData($request, $query, 'virtual_accounts.id', $cols, 'virtual_accounts.created_at');
-        return $this->response(0, $data);
+        $res    = [
+            'page'      => $request->page, 
+            'page_size' => $request->page_size
+        ];
+        $res['total']   = $query->count();
+        $res['content'] = $query
+            ->orderBy('virtual_accounts.balance', 'asc')
+            ->orderBy('virtual_accounts.updated_at', 'desc')
+            ->offset($sp)
+            ->limit($request->page_size)
+            ->get($cols);
+        return $this->response(0, $res);
     }
 
     /**

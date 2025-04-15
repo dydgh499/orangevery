@@ -45,6 +45,7 @@ export const transactionHeader = (table_name: string) => {
     const levels = corp.pv_options.auth.levels
     const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
     const { notiSendMessage } = notiSendHistoryInterface()
+    const formatTime = <any>(inject('$formatTime'))
     
     const getTransactionCols = () => {
         const headers_1:Record<string, string> = {}
@@ -71,9 +72,9 @@ export const transactionHeader = (table_name: string) => {
         if(getUserLevel() >= 35) {
             headers_2['mcht_settle_type'] = '가맹점 정산타입'
         }
-        if(table_name === 'transactions' && corp.pv_options.free.only_mcht_fee_profit)
-            headers_2['only_mcht_fee_profit'] = '정산금(건별 수수료 제외)'
         headers_2['profit'] = '정산금'
+        if(table_name === 'transactions' && corp.pv_options.paid.use_realtime_deposit && corp.pv_options.free.only_mcht_fee_profit)
+            headers_2['only_mcht_fee_profit'] = '정산금(출금 수수료 포함)'
         if(table_name !== 'sales-part') {
             headers_2['settle_dt'] = '가맹점 정산예정일'
             headers_2['settle_id'] = '정산번호'
@@ -160,8 +161,9 @@ export const transactionHeader = (table_name: string) => {
         if(table_name !== 'mcht-part' && table_name !== 'sales-part') {
             if(corp.pv_options.paid.use_noti)
                 headers_7['noti_send_result'] = '노티발송상태'
-            if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit)
-                headers_7['withdraw_status'] = '출금상태'    
+            if(corp.pv_options.paid.use_realtime_deposit) {
+                headers_7['withdraw_status'] = '출금상태'
+            }  
         }
         
         headers_7['created_at'] = '거래수신 시간'
@@ -238,8 +240,12 @@ export const transactionHeader = (table_name: string) => {
         if(corp.pv_options.paid.use_noti)
             data['noti_send_result'] = notiSendMessage(data)
         if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit) {
-            if(data.withdraw_histories) 
-                data['withdraw_status'] = withdrawStatusNames(data.withdraw_histories.withdraw_status)
+            if(data.withdraw_histories) {
+                if(data.withdraw_histories.withdraw_status === 0) 
+                    data['withdraw_status'] = formatTime(new Date(data.withdraw_histories.withdraw_schedule_time)) + "초 이체예정"
+                else
+                    data['withdraw_status'] = withdrawStatusNames(data.withdraw_histories.withdraw_status)
+            }
             else
                 data['withdraw_status'] = ''
         }

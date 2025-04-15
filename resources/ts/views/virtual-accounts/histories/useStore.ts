@@ -70,9 +70,13 @@ export const withdrawInterface = () => {
     const { post } = useRequestStore()
 
     const isReSettleAble = (transaction: Transaction) => {
-        if(transaction.use_realtime_deposit && transaction.va_id) {
-            if(transaction.mcht_settle_id === null)
-                return true
+        if(transaction.withdraw_histories) 
+            return false
+        else {
+            if(transaction.use_realtime_deposit && transaction.va_id) {
+                if(transaction.mcht_settle_id === null)
+                    return true
+            }    
         }
         return false
     }
@@ -176,6 +180,7 @@ export const useSearchStore = defineStore('WalletHistoryStore', () => {
         return {
             'withdraw_type'     : '출금타입',
             'withdraw_status'   : '출금상태',
+            'withdraw_amount'   : '출금금액',
             'withdraw_fee'      : '출금수수료',
             'withdraw_schedule_time': '출금예정시간',
             'withdraw_etc': '더보기',
@@ -243,6 +248,7 @@ export const useSearchStore = defineStore('WalletHistoryStore', () => {
                 datas[i]['withdraw_type']   = withdraw_types.find(obj => obj.id === datas[i]['withdraw_type'])?.title
                 datas[i]['withdraw_status'] = withdrawStatusNames(datas[i]['withdraw_status']);
                 datas[i]['deposit_status']  = '';
+                datas[i]['withdraw_amount'] = datas[i]['trans_amount'] - datas[i]['withdraw_fee'];
             }
             else {
                 // 입금

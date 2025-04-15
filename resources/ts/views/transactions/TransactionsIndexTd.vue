@@ -65,8 +65,12 @@ const { isReSettleAble, isCollectWithdraw } = withdrawInterface()
     <span v-else-if="_key == 'terminal_id'">
         {{ terminals.find(terminal => terminal['id'] === item[_key])?.name }}
     </span>
-    <b v-else-if="_key === 'only_mcht_fee_profit'  && store.params.level === 10 && corp.pv_options.free.only_mcht_fee_profit">
-        {{ Number(item['profit'] + item['mcht_settle_fee']).toLocaleString() }}
+    <b v-else-if="_key === 'only_mcht_fee_profit' && corp.pv_options.free.only_mcht_fee_profit">
+        <span v-if="item['withdraw_histories'] && store.params.level === 10">
+                <span v-if="item['withdraw_histories'].withdraw_status === 1">
+                    {{ Number(item['profit'] - item['withdraw_histories'].withdraw_fee).toLocaleString() }}
+                </span>
+        </span>
     </b>
     <b v-else-if="_key === 'profit'">
         {{ Number(item[_key]).toLocaleString() }}
@@ -97,13 +101,16 @@ const { isReSettleAble, isCollectWithdraw } = withdrawInterface()
     </span>
     <span v-else-if="_key === 'withdraw_status'">
         <VChip :color="withdrawStatusColors(item['withdraw_histories'] ? item['withdraw_histories'].withdraw_status : 0)">
-            <span v-if="item['withdraw_histories']">
+            <span v-if="item['withdraw_histories'] && store.params.level === 10">
                 <span v-if="item['withdraw_histories'].withdraw_status === 0">
                     {{ formatTime(new Date(item['withdraw_histories'].withdraw_schedule_time)) }}초 이체예정
                 </span>
                 <span v-else>
                     {{ withdrawStatusNames(item['withdraw_histories'].withdraw_status) }}
                 </span>
+            </span>
+            <span v-else-if="store.params.level !== 10">
+                {{ 'N/A' }}
             </span>
             <span v-else-if="isReSettleAble(props.item)">
                 {{ '지갑 정산하기 필요' }}

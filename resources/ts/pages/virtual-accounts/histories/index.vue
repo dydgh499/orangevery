@@ -173,6 +173,11 @@ onMounted(() => {
                                         {{ item[_key] }}
                                     </span>
                                 </span>
+                                <b v-else-if="_key === 'withdraw_amount'">
+                                    <span v-if="item['trans_type']">
+                                        {{ (item['trans_amount'] - item['withdraw_fee']).toLocaleString() }}
+                                    </span>
+                                </b>
                                 <span v-else-if="_key === 'withdraw_schedule_time'">
                                     <span v-if="item['trans_type']">
                                         {{ item[_key] }}
