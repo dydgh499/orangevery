@@ -175,7 +175,14 @@ class VirtualAccountHistoryController extends Controller
             'va_id' => $request->va_id,
             'withdraw_amount' => $withdraw_amount->va_id,
         ]);
-        return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']); 
+        if($res['body']['result_cd'] === '0000') {
+            return $this->response(0, [
+                'profit'        =>  $res['body']['temp']['withdraw_able_amount'],
+                'withdraw_fee'  =>  $res['body']['temp']['withdraw_fee'],
+            ]);
+        }
+        else
+            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']); 
     }
 
     /**
