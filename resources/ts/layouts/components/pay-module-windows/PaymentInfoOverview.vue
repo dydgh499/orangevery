@@ -19,7 +19,7 @@ const is_readonly_fin_trx_delay = ref(false)
 const occuerred_sale_load = ref(false)
 
 const { pgs, finance_vans, settle_types } = useStore()
-const { walletFiter } = useWalletFilterStore()
+const { walletFilter } = useWalletFilterStore()
 
 const tidCreate = async() => {
     if(await alert.value.show('정말 TID를 신규 발급하시겠습니까?')) {
@@ -284,9 +284,9 @@ watchEffect(() => {
                 <br>
                 <VRow>
                     <VCol md="6" cols="12">
-                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.va_id" :items="walletFiter(props.item.mcht_id, 10)"
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.va_id" :items="walletFilter(props.item.mcht_id, 10)"
                             prepend-inner-icon="marketeq:wallet-money" label="정산지갑" item-title="account_name"
-                            :hint="`지갑코드: ${walletFiter(props.item.mcht_id, 10).find(obj => obj.id === props.item.va_id)?.account_code}`"
+                            :hint="`지갑코드: ${walletFilter(props.item.mcht_id, 10).find(obj => obj.id === props.item.va_id)?.account_code}`"
                              persistent-hint
                             item-value="id" />
                     </VCol>
@@ -303,7 +303,7 @@ watchEffect(() => {
                         <span class="font-weight-bold">정산지갑</span>
                     </VCol>
                     <VCol md="7" cols="6">
-                        {{ walletFiter(props.item.mcht_id, 10).find(obj => obj.id === props.item.va_id)?.account_code }}
+                        {{ walletFilter(props.item.mcht_id, 10).find(obj => obj.id === props.item.va_id)?.account_code }}
                     </VCol>
                 </VRow>
             </template>          

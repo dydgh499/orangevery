@@ -57,6 +57,7 @@ export const useSearchStore = defineStore('WalletStore', () => {
             'withdraw_limit_type': '출금제한타입',    
             'withdraw_business_limit': '일 출금한도(영업일)',
             'withdraw_holiday_limit': '일 출금한도(휴무일)',    
+            'withdraw_fee': '출금 수수료',    
         }
     }
     const getEtcHeader = () => {
@@ -131,7 +132,7 @@ export const useWalletFilterStore = defineStore('useWalletFilterStore', () => {
         }    
     }
 
-    const walletFiter = (user_id: number | null, level: number) => {
+    const walletFilter = (user_id: number | null, level: number) => {
         if(level === 10) 
             return mcht_wallets.value.filter(obj => obj.user_id === user_id)
         else 
@@ -139,7 +140,7 @@ export const useWalletFilterStore = defineStore('useWalletFilterStore', () => {
     }
 
     return {
-        walletFiter,
+        walletFilter,
         mcht_wallets,
         sales_wallets
     }

@@ -43,7 +43,7 @@ export const keyCreater = (snackbar: any, items: any) => {
     }
 }
 
-export const validateItems = (item: PayModule, i: number, mchts: Merchandise[]) => {
+export const validateItems = (item: PayModule, i: number, mchts: Merchandise[], walletFilter:any) => {
     const { pgs, pss, settle_types } = useStore()
     const date_regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
     item.mcht_name = item.mcht_name ? item.mcht_name.toString()?.trim() : ''
@@ -56,40 +56,49 @@ export const validateItems = (item: PayModule, i: number, mchts: Merchandise[]) 
 
     let cxl_type = corp.pv_options.paid.use_realtime_deposit ? cxl_types.find(a => a.id === parseInt(item.cxl_type)) : true
 
-    if (item.cxl_type == null)
-        cxl_type = true
-
     if (mcht == null) 
-        return [false, (i + 2) + '번째줄의 결제모듈의 가맹점 상호가 이상합니다.(' + item.mcht_name + ")"]
+        return [false, (i + 2) + '번째 가맹점 상호가 이상합니다.(' + item.mcht_name + ")"]
     else if (corp.pv_options.paid.use_pmid && item.p_mid == null) 
-        return [false, (i + 2) + '번째줄의 PMID가 입력되지 않았습니다.']
+        return [false, (i + 2) + '번째 PMID가 입력되지 않았습니다.']
     else if (pg === null || pg === undefined) 
-        return [false, (i + 2) + '번째줄의 결제모듈의 PG사명이 이상합니다.']
+        return [false, (i + 2) + '번째 PG사명이 이상합니다.']
     else if (ps === null || ps === undefined)
-        return [false, (i + 2) + '번째줄의 결제모듈의 구간이 이상합니다.']
+        return [false, (i + 2) + '번째 구간이 이상합니다.']
     else if (ps.pg_id != pg.id)
-        return [false, (i + 2) + '번째줄의 결제모듈의 구간이 ' + pg.pg_name + '에 포함되는 구간이 아닙니다.']
+        return [false, (i + 2) + '번째 구간이 ' + pg.pg_name + '에 포함되는 구간이 아닙니다.']
     else if (isEmpty(item.note))
-        return [false, (i + 2) + '번째줄의 결제모듈의 별칭은 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째 별칭은 필수로 입력해야합니다.']
     else if (isEmpty(item.mcht_name ?? ''))
-        return [false, (i + 2) + '번째줄의 결제모듈의 가맹점 상호는 필수로 입력해야합니다.']
+        return [false, (i + 2) + '번째 가맹점 상호는 필수로 입력해야합니다.']
     else if (settle_type == null)
-        return [false, (i + 2) + '번째줄의 결제모듈의 가맹점 정산타입이 이상합니다.']
+        return [false, (i + 2) + '번째 가맹점 정산타입이 이상합니다.']
     else if (module_type == null)
-        return [false, (i + 2) + '번째줄의 결제모듈의 모듈타입이 이상합니다.']
+        return [false, (i + 2) + '번째 모듈타입이 이상합니다.']
     else if (installment == null) 
-        return [false, (i + 2) + '번째줄의 결제모듈의 할부기간이 이상합니다.']
+        return [false, (i + 2) + '번째 할부기간이 이상합니다.']
     else if (cxl_type == null) 
-        return [false, (i + 2) + '번째줄의 취소 타입을 찾을 수 없습니다.']
+        return [false, (i + 2) + '번째 취소 타입을 찾을 수 없습니다.']
     else if (item.contract_s_dt && date_regex.test(item.contract_s_dt) == false) 
-        return [false, (i + 2) + '번째줄의 계약 시작일 포멧이 이상합니다.']
+        return [false, (i + 2) + '번째 계약 시작일 포멧이 이상합니다.']
     else if (item.contract_e_dt && date_regex.test(item.contract_e_dt) == false) 
-        return [false, (i + 2) + '번째줄의 계약 종료일 포멧이 이상합니다.']
+        return [false, (i + 2) + '번째 계약 종료일 포멧이 이상합니다.']
     else if (item.begin_dt && date_regex.test(item.begin_dt) == false) 
-        return [false, (i + 2) + '번째줄의 장비 개통일 포멧이 이상합니다.']
+        return [false, (i + 2) + '번째 장비 개통일 포멧이 이상합니다.']
     else if (item.ship_out_dt && date_regex.test(item.ship_out_dt) == false)
-        return [false, (i + 2) + '번째줄의 장비 출고일 포멧이 이상합니다.']
+        return [false, (i + 2) + '번째 장비 출고일 포멧이 이상합니다.']
     else {
+        if (item.cxl_type == null)
+            cxl_type = true
+        if(corp.pv_options.paid.use_realtime_deposit) {
+            if(item.va_id) {
+                let wallets = walletFilter(mcht?.id, 10)
+                let wallet = wallets.find(obj => obj.account_name === item.va_id)
+                if(wallet)
+                    item.va_id = wallet.id
+                else
+                    return [false, (i + 2) + '번째 정산지갑을 찾을 수 없습니다.']
+            }
+        }
         item.mcht_id = mcht?.id || null
         return [true, '']
     }
@@ -158,7 +167,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         if(corp.pv_options.paid.use_realtime_deposit) {
             headers2.push(
                 {title: '실시간 사용여부(X)', key: 'use_realtime_deposit'},
-                {title: '정산지갑(X)', key: 'va_id'},
+                {title: '정산지갑 별칭(X)', key: 'va_id'},
             )
         }
         return [...headers1, ...headers2]
