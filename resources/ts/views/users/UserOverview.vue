@@ -146,7 +146,8 @@ watchEffect(() => {
                             <VCardTitle style="margin-right: 1em;">기본정보</VCardTitle>
                             <div v-if="props.item.id"
                                 :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
-                                <VBtn
+                                <VBtn 
+                                    v-if="corp.pv_options.paid.use_realtime_deposit"
                                     style='margin: 0.25em;'
                                     variant="tonal"
                                     size="small" 
