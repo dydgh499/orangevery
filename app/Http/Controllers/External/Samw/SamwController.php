@@ -80,6 +80,9 @@ class SamwController extends Controller
      */
     public function withdrawsBalance(Request $request)
     {
+        $request = $request->merge([
+            'va_id' => 1
+        ]);
         $inst = new VirtualAccountHistoryController(new VirtualAccountHistory);
         return $inst->withdrawsBalance($request);
     }
