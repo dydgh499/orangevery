@@ -144,6 +144,8 @@ class MerchandiseController extends Controller
 
         if($b_info['pv_options']['paid']['use_noti'])
             array_push($with, 'notis');
+        if($b_info['pv_options']['paid']['use_realtime_deposit'])
+            array_push($with, 'virtualAccounts');
         if($b_info['pv_options']['paid']['use_regular_card'])
             array_push($with, 'regularCreditCards');
 

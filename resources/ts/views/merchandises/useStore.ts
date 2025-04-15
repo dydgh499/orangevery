@@ -81,6 +81,8 @@ const getMchtHeaders = (head :any) => {
         headers_3['sector'] = '업종'
         headers_3['business_type'] = '구분'
         headers_3['g_mid']  = 'GMID'
+        if(corp.pv_options.paid.use_realtime_deposit)
+            headers_3['virtual_accounts']  = '정산지갑'
         return headers_3
     }
 
@@ -327,9 +329,11 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
                 datas[i]['pss'] = datas[i]['payment_modules'].map(module => pss.find(ps => ps.id === module.ps_id)?.trx_fee).join(',')
                 datas[i]['contract_img'] = datas[i]['payment_modules'].map(module => pss.find(ps => ps.id === module.ps_id)?.trx_fee).join(',')
             }
-            if(corp.pv_options.paid.use_noti && getUserLevel() >= 35) {
-                datas[i]['notis'] = datas[i]['notis'].map(noti => noti.note).join(',')                
-            }
+            if(corp.pv_options.paid.use_noti && getUserLevel() >= 35) 
+                datas[i]['notis'] = datas[i]['notis'].map(noti => noti.note).join(',')                            
+            if(corp.pv_options.paid.use_realtime_deposit)
+                datas[i]['virtual_accounts'] = datas[i]['virtual_accounts'].map(obj => obj.account_name).join(',') 
+            
             datas[i]['mids'] = datas[i]['payment_modules'].map(module => module.mid).join(',')
             datas[i]['tids'] = datas[i]['payment_modules'].map(module => module.tid).join(',')
             datas[i]['settle_types'] = datas[i]['payment_modules'].map(module => settle_types.find(settle_type => settle_type.id === module.settle_type)?.name).join(',')  

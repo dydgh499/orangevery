@@ -207,7 +207,6 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         const headers_8:Record<string, string> = {}
         if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit) {
             headers_8['use_realtime_deposit'] = '출금 사용여부'
-            // TODO:: 정산지갑정보
         }
         return headers_8
     }

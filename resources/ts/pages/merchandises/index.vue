@@ -186,6 +186,13 @@ onMounted(() => {
                                     </option>
                                 </select>
                             </span>
+                            <span v-else-if="_key == 'virtual_accounts'">
+                                <select class="custom-select">
+                                    <option v-for="(virtual_account, key) in item['virtual_accounts']" :key="key">
+                                        {{ virtual_account['account_name'] }}
+                                    </option>
+                                </select>
+                            </span>
                             <span v-else-if="_key == 'mids'">
                                 <select class="custom-select">
                                     <option v-for="(payment_module, key) in item['payment_modules']" :key="key">
