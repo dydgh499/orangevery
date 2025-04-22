@@ -14,6 +14,7 @@ use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\QuickView\PayWindowController;
 use App\Http\Controllers\Manager\Merchandise\BillKeyController;
 use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ShopController;
+use App\Http\Controllers\Manager\Withdraws\VirtualAccountHistoryController;
 
 use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 
@@ -85,7 +86,8 @@ Route::prefix('v1')->group(function() {
 
     Route::prefix('quick-view')->middleware(['auth:sanctum', 'log.route', 'auth.update'])->group(function() {
         Route::get('', [QuickViewController::class, 'index']);
-        //TODO: 잔고조회, 이체
+        Route::get('withdraws/balance', [VirtualAccountHistoryController::class, 'withdrawsBalance']);
+        Route::get('withdraws/collect', [VirtualAccountHistoryController::class, 'collectWithdraw']);
         Route::get('pay-modules/{id}/pay-window-renew', [PayWindowController::class, 'renew']);
         Route::post('pay-windows/{window_code}/extend', [PayWindowController::class, 'extend']);
     });

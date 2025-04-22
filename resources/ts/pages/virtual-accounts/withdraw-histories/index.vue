@@ -25,7 +25,7 @@ const getLogStyle = (item: VirtualAccountWithdraw) => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="상호, 지갑별칭 검색" :metas="[]" :add="false" add_name="출금 상세이력" :date_filter_type="DateFilters.DATE_RANGE">
+        <BaseIndexView placeholder="상호, 지갑별칭, 거래번호, 계좌번호 검색" :metas="[]" :add="false" add_name="출금 상세이력" :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
             </template>
             <template #index_extra_field>

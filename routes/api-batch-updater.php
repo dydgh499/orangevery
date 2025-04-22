@@ -15,7 +15,7 @@ use App\Http\Controllers\Manager\Service\MchtBlacklistController;
 
 Route::middleware(['auth.update'])->group(function() {
     Route::prefix('salesforces/batch-updaters')->group(function() {
-        Route::post('business_type', [BatchUpdateSalesController::class, 'setBusinessType']);
+        Route::post('set-business-type', [BatchUpdateSalesController::class, 'setBusinessType']);
         Route::post('set-settle-tax-type', [BatchUpdateSalesController::class, 'setSettleTaxType']);
         Route::post('set-settle-cycle', [BatchUpdateSalesController::class, 'setSettleCycle']);
         Route::post('set-settle-day', [BatchUpdateSalesController::class, 'setSettleDay']);
@@ -28,7 +28,7 @@ Route::middleware(['auth.update'])->group(function() {
     });
         
     Route::prefix('merchandises/batch-updaters')->group(function() {
-        Route::post('business_type', [BatchUpdateMchtController::class, 'setBusinessType']);
+        Route::post('set-business-type', [BatchUpdateMchtController::class, 'setBusinessType']);
         Route::post('set-noti-url', [BatchUpdateMchtController::class, 'setNotiUrl']);
         Route::post('set-merchant-status', [BatchUpdateMchtController::class, 'setMerchantStatus']);
         Route::post('set-custom-filter', [BatchUpdateMchtController::class, 'setCustomFilter']);

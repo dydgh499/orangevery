@@ -37,7 +37,7 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="상호, 지갑별칭 검색" :metas="metas" :add="false" add_name=""
+        <BaseIndexView placeholder="상호, 지갑별칭, 거래번호 검색" :metas="metas" :add="false" add_name=""
             :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
             </template>

@@ -116,10 +116,18 @@ class AuthController extends Controller
         }
         else
         {
-            $sales_with = [];
+            $mcht_with  = ['onlinePays.payWindows'];
+            $sales_with = [];            
+            if($brand['pv_options']['paid']['use_shop'])
+                $mcht_with[] = 'shoppingMall';
+            if($brand['pv_options']['paid']['use_finance_van_deposit'])
+                $mcht_with[] = 'virtualAccounts';
+
             if($brand['pv_options']['paid']['brand_mode'] === 1)
                 $sales_with[] = 'salesRecommenderCodes';
-    
+            if($brand['pv_options']['paid']['use_finance_van_deposit'])
+                $sales_with[] = 'virtualAccounts';
+
             $result = Login::isSafeAccount(Operator::where('is_active', true), $request);    // check operator
             if($result !== null)
                 return $result;
@@ -132,7 +140,7 @@ class AuthController extends Controller
             if($result !== null)
                 return $result;
     
-            $result = Login::isSafeAccount(Merchandise::with(['onlinePays.payWindows', 'shoppingMall']), $request);    // check merchandise
+            $result = Login::isSafeAccount(Merchandise::with($mcht_with), $request);    // check merchandise
             if($result !== null)
                 return $result;
             else

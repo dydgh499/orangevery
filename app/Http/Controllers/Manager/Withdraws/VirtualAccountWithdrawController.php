@@ -35,6 +35,8 @@ class VirtualAccountWithdrawController extends Controller
      */
     public function index(IndexRequest $request)
     {
+        $search = $request->input('search', '');
+        $level  = (int)$request->input('level', 10);
         $cols   = [
             'virtual_account_withdraws.*',
             'virtual_accounts.account_name',
@@ -45,6 +47,25 @@ class VirtualAccountWithdrawController extends Controller
             ->join('virtual_account_histories', 'virtual_account_withdraws.va_history_id', '=' ,'virtual_account_histories.id')
             ->join('virtual_accounts', 'virtual_account_histories.va_id', '=' ,'virtual_accounts.id');
         $query  = VirtualAccountController::getCommonQuery($query, $request);
+
+        if(Ablilty::isMerchandise($request) || $level === 10)
+        {
+            $query  = $query->where(function ($query) use ($search) {
+                    return $query->where('virtual_accounts.account_name', 'like', "%$search%")
+                        ->orWhere('virtual_account_withdraws.acct_num', 'like', "%$search%")
+                        ->orWhere('virtual_account_histories.trx_id', 'like', "%$search%")
+                        ->orWhere('merchandises.mcht_name', 'like', "%$search%");
+                });
+        }
+        else
+        {
+            $query  = $query->where(function ($query) use ($search) {
+                    return $query->where('virtual_accounts.account_name', 'like', "%$search%")
+                        ->orWhere('virtual_account_withdraws.acct_num', 'like', "%$search%")
+                        ->orWhere('virtual_account_histories.trx_id', 'like', "%$search%")
+                        ->orWhere('salesforces.sales_name', 'like', "%$search%");
+                });
+        }
 
         if($request->result_code !== null)
         {

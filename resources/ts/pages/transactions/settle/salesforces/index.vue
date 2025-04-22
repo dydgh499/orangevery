@@ -49,17 +49,17 @@ onMounted(() => {
             <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, false)" v-if="getUserLevel() >= 35" size="small">
                 정산하기
             </VBtn>
+            <div :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''">
+                <VSelect v-model="store.params.level" :items="salesLevels()" density="compact" label="조회 등급"
+                    item-title="title" item-value="id"
+                    @update:modelValue="store.updateQueryString({ level: store.params.level })" />
+            </div>
             <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" @update:modelValue="[store.updateQueryString({is_base_trx: store.params.is_base_trx})]"/>
         </template>
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                 :sales="true">
                 <template #sales_extra_field>
-                    <VCol cols="6" sm="3">
-                        <VSelect v-model="store.params.level" :items="salesLevels()" density="compact" label="조회 등급"
-                            item-title="title" item-value="id"
-                            @update:modelValue="store.updateQueryString({ level: store.params.level })" />
-                    </VCol>
                     <VCol cols="6" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
                             :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`영업라인 정산주기 필터`"

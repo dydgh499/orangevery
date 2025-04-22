@@ -746,7 +746,17 @@ export interface Settle extends TotalSettle, Bank {
     settle_hold_reason?: string,
 }
 
-export interface SettlesHistory extends Bank{
+export interface SettlesHistoryDeposit {
+    id: number,
+    fin_id: number,
+    trans_seq_num: string,
+    request_type: number,
+    result_code: string,
+    message: string,
+    created_at: string,
+}
+
+export interface SettlesHistory extends Bank {
     id: number,
     mcht_id: number
     mcht_name: string,    
@@ -755,12 +765,14 @@ export interface SettlesHistory extends Bank{
     user_name: string,
     settle_amount: number,
     deduct_amount: number,
+    deposit_amount: number,
     appr_amount: number,
     cxl_amount: number,
     total_amount: number,
     settle_dt: string,
     deposit_dt: string,
     deposit_status: Boolean,
+    deposits?: SettlesHistoryDeposit[],
 }
 export interface Post {
     id: number,
@@ -996,6 +1008,7 @@ export interface CancelDeposit {
     id: number,
     trans_id: number,
     mcht_name?: string,
+    va_id?: number,
     deposit_amount: number,
     deposit_history: string,
     deposit_dt: string,

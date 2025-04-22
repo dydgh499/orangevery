@@ -24,6 +24,7 @@ export const useSearchStore = defineStore('WithdrawHistoryStore', () => {
 
     const getAccountHeader = () => {
         return {
+            'acct_name': '예금주',
             'acct_num': '계좌번호',
             'acct_bank_name': '입금은행명',
             'acct_bank_code': '은행코드',

@@ -10,12 +10,7 @@ trait SettleTerminalTrait
     // 통신비 세팅
     protected function setSettleTerminals($data, $settle_e_dt)
     {
-        $getCarbonToYm = function($date) {
-            return (int)($date->year.$date->month);
-        };
         $c_settle_e_dt = Carbon::parse($settle_e_dt)->copy();   //정산 종료일
-        $c_settle_e_ym = $getCarbonToYm($c_settle_e_dt);
-
         foreach($data['content'] as $content) 
         {
             $terminal = $content->terminal;

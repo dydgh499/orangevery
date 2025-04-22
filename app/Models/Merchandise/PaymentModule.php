@@ -48,8 +48,6 @@ class PaymentModule extends Model
     // 단말기, 매출미달차감금 정산일인 것만
     public function scopeTerminalSettle($query, $level)
     {
-        $settle_s_day   = (int)date('d', strtotime(request()->s_dt));
-        $settle_e_day   = (int)date('d', strtotime(request()->e_dt));
         $settle_month   = date('Ym', strtotime(request()->e_dt));
         /*
             단말기 정산일이 정산일에 포함되는 것들 모두 조회
@@ -81,6 +79,8 @@ class PaymentModule extends Model
                         ->whereRaw("DATE_FORMAT(payment_modules.begin_dt, '%Y%m') <= ?", [$settle_month]);
                 });
             })
+            ->whereNull('payment_modules.va_id')
+            ->where('payment_modules.use_realtime_deposit', false)
             ->where('payment_modules.last_settle_month', '<', $settle_month)
             ->where('payment_modules.comm_settle_fee', '>', 0)
             ->where('payment_modules.comm_calc_level', $level)

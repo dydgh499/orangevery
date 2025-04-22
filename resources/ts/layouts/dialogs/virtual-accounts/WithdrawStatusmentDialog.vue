@@ -42,14 +42,14 @@ const current_date = ref<string>('')
 const logo_img = ref()
 const card = ref()
 
-// type 0=realtime, 1=collect, 2=deposit
+// type 0=virtal, 1=settle-merchandise, 2=settle-salesforces
 const show = async (id: number) => {
     try {
         const url = '/api/v1/manager/virtual-accounts/histories/withdraw-statement'
         const res = await axios.get(url, {
             params: {id : id}
         })
-        getLogo()
+        await getLogo()
         setCurrentDate()
         statement.value = res.data
         visible.value = true
@@ -58,6 +58,13 @@ const show = async (id: number) => {
         snackbar.value.show(e.response.data.message, 'error')
         const r = errorHandler(e)
     }
+}
+
+const settle = async (_statement: WithdrawStatement) => {
+    await getLogo()
+    setCurrentDate()
+    statement.value = _statement
+    visible.value = true
 }
 
 const setCurrentDate = () => {
@@ -108,7 +115,8 @@ const getLogo = async () => {
 }
 
 defineExpose({
-    show
+    show,
+    settle
 })
 </script>
 <template>

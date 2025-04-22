@@ -249,7 +249,6 @@ export const transactionHeader = (table_name: string) => {
             else
                 data['withdraw_status'] = ''
         }
-        //TODO: 이체결과        
         data['mcht_fee'] = (data['mcht_fee'] * 100).toFixed(3)
         data['hold_fee'] = (data['hold_fee'] * 100).toFixed(3)
         data['ps_fee'] = (data['ps_fee'] * 100).toFixed(3)

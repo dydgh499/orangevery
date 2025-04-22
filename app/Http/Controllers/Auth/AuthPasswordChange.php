@@ -54,17 +54,28 @@ class AuthPasswordChange
 
     static public function updateFirstPassword($result, $user_pw)
     {
+        $brand = BrandInfo::getBrandById($result['user']['brand_id']);
         if($result['user']['level'] === 10)
-            $orm = Merchandise::with(['onlinePays.payWindows', 'shoppingMall']);
+        {
+            $mcht_with  = ['onlinePays.payWindows'];
+            if($brand['pv_options']['paid']['use_shop'])
+                $mcht_with[] = 'shoppingMall';
+            if($brand['pv_options']['paid']['use_finance_van_deposit'])
+                $mcht_with[] = 'virtualAccounts';
+
+            $orm = Merchandise::with($mcht_with);
+        }
         else if($result['user']['level'] === 11)
             $orm = new Gmid;
         else if($result['user']['level'] < 35)
         {
-            $brand = BrandInfo::getBrandById($result['user']['brand_id']);
+            $sales_with = [];
             if($brand['pv_options']['paid']['brand_mode'] === 1)
-                $orm = Salesforce::with(['salesRecommenderCodes']);
-            else
-                $orm = new Salesforce;
+                $sales_with[] = 'salesRecommenderCodes';
+            if($brand['pv_options']['paid']['use_finance_van_deposit'])
+                $sales_with[] = 'virtualAccounts';
+            
+            $orm = Salesforce::with($sales_with);
         }
         else
         {

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { inputFormater } from '@/@core/utils/formatters';
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue';
-import { getUserLevel, user_info } from '@/plugins/axios';
 import { useRequestStore } from '@/views/request';
+import { VirtualAccount } from '../types';
 
 interface Props {
     is_skeleton: boolean,
+    virtual_account: VirtualAccount,
 }
 
 const props = defineProps<Props>()
@@ -21,7 +22,11 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 
 const getWithdrawAbleAmount = async() => {
-    const r = await get('/api/v1/quick-view/collect-withdraws/balance', {})
+    const r = await get('/api/v1/quick-view/withdraws/balance', {
+        params: {
+            va_id: props.virtual_account.id
+        }
+    })
     able_balance.value = (Number(r.data.profit) - r.data.withdraw_fee) || 0
 }
 
@@ -29,7 +34,8 @@ const requestWithdraw = async() => {
     if(able_balance.value >= amount.value) {
         if(amount.value) {
             if(await alert.value.show('정말 '+amount.value+'원을 출금하시겠습니까?')) {
-                const r = await post('/api/v1/quick-view/collect-withdraws', {
+                const r = await post('/api/v1/quick-view/withdraws/collect', {
+                    va_id: props.virtual_account.id,
                     withdraw_amount: amount.value,
                 })
                 if(r.status == 201)
@@ -44,31 +50,39 @@ const requestWithdraw = async() => {
 }
 
 watchEffect(() => {
-    if(getUserLevel() == 10 && user_info.value.use_collect_withdraw)
-        getWithdrawAbleAmount()
+    getWithdrawAbleAmount()
 })
 </script>
 <template>
-    <VCol class="d-flex justify-space-between small-font">
-        <div>
-            <div class="small-font">
-                <span class="text-primary">출금</span>가능 금액                    
-            </div>
-            <div style="font-weight: bold;">
+    <VCol>
+        <VRow no-gutters>
+            <VCol class="small-font">
+                <span class="text-primary">출금</span>가능 금액   
+            </VCol>
+            <VCol style="text-align: end;">
+                <VChip color="success">
+                    {{ props.virtual_account.account_name}}
+                </VChip>
+            </VCol>
+        </VRow>
+        <VRow no-gutters style="font-weight: bold;">
+            <VCol>
                 <SkeletonBox v-if="props.is_skeleton" :width="'8em'"/>
                 <b v-else>
-                    {{ able_balance.toLocaleString() }}
+                    {{ able_balance.toLocaleString() + " 원"}}
                 </b>
-                원
-            </div>
-        </div>
+            </VCol>
+        </VRow>
     </VCol>
-    <VCol style="padding-top: 0;" class="d-flex justify-space-between small-font">
-        <div>
-            <div class="small-font">
+    <VDivider/>
+    <VCol>
+        <VRow no-gutters>
+            <VCol class="small-font">
                 <span class="text-primary">출금</span>금액 입력
-            </div>
-            <div>
+            </VCol>
+        </VRow>
+        <VRow no-gutters style="font-weight: bold;">
+            <VCol>
                 <SkeletonBox v-if="props.is_skeleton" :width="'10em'" :height="'2em'"/>
                 <VTextField 
                     v-else
@@ -78,11 +92,13 @@ watchEffect(() => {
                     suffix="￦" 
                     placeholder="출금금액 입력"
                     style="min-width: 10em;"/>
-            </div>
-        </div>
-        <VBtn size="small" color="primary" type="button" @click="requestWithdraw()" style="margin-top: auto;">
-            출금하기
-        </VBtn>
+            </VCol>
+            <VCol style="text-align: end;">
+                <VBtn color="primary" type="button" @click="requestWithdraw()" style="margin-top: auto;">
+                    출금하기
+                </VBtn>
+            </VCol>
+        </VRow>
     </VCol>
 </template>
 <style scoped lang="scss">

@@ -94,8 +94,11 @@ class SalesSettleHistoryController extends Controller
     */
     public function index(IndexRequest $request)
     {
+        $brand = BrandInfo::getBrandById($request->user()->brand_id);
         $cols = ['salesforces.user_name', 'salesforces.sales_name', 'salesforces.level', 'settle_histories_salesforces.*'];
         $query = $this->commonQuery($request);
+        if($brand['pv_options']['paid']['use_finance_van_deposit'])
+            $query = $query->with(['deposits']);
         $data = $this->getIndexData($request, $query, 'settle_histories_salesforces.id', $cols, 'settle_histories_salesforces.created_at', false);
         return $this->response(0, $data);
     }

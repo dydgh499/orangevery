@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Manager\Settle;
 
+use App\Enums\HistoryType;
+
+use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
+
 use App\Models\Transaction;
 use App\Models\CancelDeposit;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Controllers\Manager\Transaction\SettleDateCalculator;
+use App\Http\Controllers\Manager\Transaction\TransactionAPI;
 
 use App\Http\Requests\Manager\Settle\CancelDepositRequest;
 use App\Http\Requests\Manager\IndexRequest;
@@ -24,10 +29,12 @@ class CancelDepositController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
     protected $deposits;
+    protected $target;
 
     public function __construct(CancelDeposit $deposits)
     {
         $this->deposits = $deposits;
+        $this->target = '수기입금';
     }
 
     /**
@@ -75,8 +82,26 @@ class CancelDepositController extends Controller
     {
         $data = $request->data();
         $data['settle_dt'] = $this->getSettleDateByTransId($data['trans_id'], $data['deposit_dt']);
-        $res = $this->deposits->create($data);
-        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
+        $cd_res = app(ActivityHistoryInterface::class)->add($this->target, $this->deposits, $data, 'trans_id');
+        if($cd_res)
+        {
+            $cancel_deposit_id = $cd_res->id;
+            if($request->va_id)
+            {
+                $res = TransactionAPI::createCancelDeposit([
+                    'id'    => $cancel_deposit_id,
+                    'va_id' => $request->va_id,
+                ]);
+                if($res['body']['result_cd'] === '0000')
+                    return $this->response(1, ['id' => $cancel_deposit_id]);
+                else
+                    return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);
+            }
+            else
+                return $this->response(1, ['id' => $cancel_deposit_id]);
+        }
+        else
+            return $this->response(990);
     }
 
     /**
@@ -113,10 +138,17 @@ class CancelDepositController extends Controller
      */
     public function update(CancelDepositRequest $request, int $id)
     {
-        $data = $request->data();
-        $data['settle_dt'] = $this->getSettleDateByTransId($data['trans_id'], $data['deposit_dt']);
-        $res  = $this->deposits->where('id', $id)->update($data);
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
+        if($request->va_id)
+            return $this->extendResponse(991, '정산지갑 사용 매출은 업데이트 할 수 없습니다.');
+        else
+        {
+            $query = $this->deposits->where('id', $id);
+            $data = $request->data();
+            $data['settle_dt'] = $this->getSettleDateByTransId($data['trans_id'], $data['deposit_dt']);
+            $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'trans_id');
+
+            return $this->response($res ? 1 : 990, ['id'=>$id]);    
+        }
     }
 
     /**
@@ -129,7 +161,13 @@ class CancelDepositController extends Controller
      */
     public function destroy($id)
     {
-        $res = $this->deposits->where('id', $id)->delete();
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
+        if($request->va_id)
+            return $this->extendResponse(991, '정산지갑 사용 매출은 삭제 할 수 없습니다.');
+        else
+        {
+            $query  = $this->deposits->where('id', $id);
+            $row    = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'trans_id', '', HistoryType::DELETE, false);
+            return $this->response(1, ['id' => $id]);    
+        }
     }
 }

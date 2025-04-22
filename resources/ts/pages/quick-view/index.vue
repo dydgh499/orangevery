@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import corp from '@/plugins/corp'
 import { isBrightFix } from '@/plugins/fixplus'
 import router from '@/router'
 import CardLayout from '@/views/quick-view/CardLayout.vue'
@@ -24,12 +23,9 @@ const errorHandler = <any>(inject('$errorHandler'))
 const my_level = getUserLevel()
 const payShow  = <any>(inject('payShow'))
 
-const isAbleCollectWithdraw = () => {
-    if(corp.pv_options.paid.use_collect_withdraw && isBrightFix() === false)
-        return getUserLevel() === 10 && user_info.value.use_collect_withdraw
-    else
-        return false
-}
+const getCollectVirtualAccounts = computed(() => {
+    return user_info.value.virtual_accounts.filter(obj => { return obj.withdraw_type === 0})
+})
 
 onMounted(() => {
     if(my_level) {
@@ -82,10 +78,10 @@ onMounted(() => {
                     </VCol>
                 </template>
             </CardLayout>
-            <template v-if="isAbleCollectWithdraw()">
-                <CardLayout :padding="true">
+            <template v-if="isBrightFix() === false">
+                <CardLayout :padding="true" v-for="virtual_account in getCollectVirtualAccounts" :key="virtual_account.id">
                     <template #content>
-                        <CollectWithdrawOverview :is_skeleton="is_skeleton"/>
+                        <CollectWithdrawOverview :is_skeleton="is_skeleton" :virtual_account="virtual_account"/>
                     </template>
                 </CardLayout>
             </template>

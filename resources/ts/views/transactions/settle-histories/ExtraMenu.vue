@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
-import { SettlesHistory } from '@/views/types'
+import { SettlesHistory, VirtualAccountWithdraw } from '@/views/types'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
 
@@ -16,8 +17,10 @@ const store = <any>(inject('store'))
 const financeDialog = <any>(inject('financeDialog'))
 const addDeductDialog = <any>(inject('addDeductDialog'))
 const withdrawStatusmentDialog = <any>(inject('withdrawStatusmentDialog'))
+const withdrawHistoriesDialog = <any>(inject('withdrawHistoriesDialog'))
 
 const { deposit, download, addDeduct, linkAccount } = settlementHistoryFunctionCollect(store)
+const { finance_vans } = useStore()
 
 const getDepositParams = async () => {
     const params:any = {
@@ -37,6 +40,51 @@ const getDepositParams = async () => {
 const getSuccessResultId = () => {
     const realtime = props.item.deposits?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
     return realtime ? realtime.id : 0
+}
+
+const getWithdrawStatement = () => {
+    const realtime = props.item.deposits?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
+    
+    if(realtime) {
+        const finance = finance_vans.find(obj => obj.id == realtime.fin_id)
+        return {
+            user_name: props.name,
+            acct_num: props.item.acct_num,
+            acct_bank_name: props.item.acct_bank_name,
+            trans_seq_num: realtime.trans_seq_num,
+            trans_amount: props.item.deposit_amount,
+            withdraw_bank_code: finance?.bank_code,
+            withdraw_corp_name: finance?.corp_name,
+            withdraw_acct_num: finance?.withdraw_acct_num,
+            created_at: realtime.created_at,
+        }
+    }
+    else
+        return {}
+}
+
+const getWithdrawHistories = () => {
+    const histories = []
+    if(props.item.deposits)
+    {
+        for(var i=0; i<props.item.deposits.length; i++)
+        {            
+            histories.push(<VirtualAccountWithdraw>{
+                id: props.item.deposits[i].id,
+                trans_amount: props.item.deposit_amount,
+                result_code: props.item.deposits[i].result_code,
+                request_type: props.item.deposits[i].request_type,
+                note: props.item.deposits[i].message,
+                trans_seq_num: props.item.deposits[i].trans_seq_num,
+                acct_num: props.item.acct_num,
+                acct_name: props.item.acct_name,
+                acct_bank_name: props.item.acct_bank_name,
+                acct_bank_code: props.item.acct_bank_code,
+                created_at: props.item.deposits[i].created_at,
+            })
+        }
+    }
+    return histories
 }
 
 </script>
@@ -63,12 +111,24 @@ const getSuccessResultId = () => {
                     </template>
                     <VListItemTitle>계좌정보 동기화</VListItemTitle>
                 </VListItem>
-                <VListItem value="saleslip" @click="withdrawStatusmentDialog.show(getSuccessResultId(), 2)"
+                <VListItem 
+                    value="withdraw-status"
+                    @click="withdrawStatusmentDialog.settle(getWithdrawStatement())"
                     v-if="getSuccessResultId() !== 0">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:receipt-2" />
                     </template>
                     <VListItemTitle>이체내역서</VListItemTitle>
+                </VListItem>
+                <VListItem 
+                    value="withdraw-histories" 
+                    @click="withdrawHistoriesDialog.show(getWithdrawHistories())"
+                    v-if="props.item.deposits && props.item.deposits?.length"
+                    >
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="tabler:history" />
+                    </template>
+                    <VListItemTitle>출금시도이력</VListItemTitle>
                 </VListItem>
                 <VListItem value="download" @click="download(props.item, props.is_mcht)" style="width: fit-content;">
                     <template #prepend>

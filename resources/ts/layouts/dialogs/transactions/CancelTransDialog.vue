@@ -42,6 +42,7 @@ const submit = async() => {
     if (is_valid.valid && await alert.value.show('정말 취소 매출을 생성하시겠습니까?')) {
         const params = {
             id: trans.value.id,
+            va_id:  trans.value.va_id,
             trx_id: trans.value.trx_id,
             trx_at: trans.value.trx_dttm,
             cxl_dt: trans.value.cxl_dt,

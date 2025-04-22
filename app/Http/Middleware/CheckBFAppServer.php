@@ -15,7 +15,6 @@ class CheckBFAppServer
      */
     public function handle(Request $request, Closure $next): Response
     {
-        #if($request->ip() === '139.150.83.168') //TODO: 139.150.83.168는 sign-in, pay-modules 2가지 앤드포인트만 사용
         return $next($request);
     }
 }

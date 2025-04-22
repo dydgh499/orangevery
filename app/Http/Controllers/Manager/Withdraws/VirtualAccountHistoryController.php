@@ -37,9 +37,28 @@ class VirtualAccountHistoryController extends Controller
 
     public function common($request)
     {
+        $search = $request->input('search', '');
+        $level  = (int)$request->input('level', 10);
         $query  = $this->virtual_account_histories
             ->join('virtual_accounts', 'virtual_account_histories.va_id', '=' ,'virtual_accounts.id');
         $query  = VirtualAccountController::getCommonQuery($query, $request);
+        if(Ablilty::isMerchandise($request) || $level === 10)
+        {
+            $query  = $query->where(function ($query) use ($search) {
+                    return $query->where('virtual_accounts.account_name', 'like', "%$search%")
+                        ->orWhere('virtual_account_histories.trx_id', 'like', "%$search%")
+                        ->orWhere('merchandises.mcht_name', 'like', "%$search%");
+                });
+        }
+        else
+        {
+            $query  = $query->where(function ($query) use ($search) {
+                    return $query->where('virtual_accounts.account_name', 'like', "%$search%")
+                        ->orWhere('virtual_account_histories.trx_id', 'like', "%$search%")
+                        ->orWhere('salesforces.sales_name', 'like', "%$search%");
+                });
+        }
+
         if($request->trans_type !== null)
             $query = $query->where('virtual_account_histories.trans_type', $request->trans_type);
         if($request->withdraw_status !== null)

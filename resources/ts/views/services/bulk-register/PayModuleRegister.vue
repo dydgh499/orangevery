@@ -62,7 +62,6 @@ const filterPgs = computed(() => {
     else
         return []
 })
-//TODO: 정산지갑 정보
 
 const use_types: Options[] = [
     { id: 0, title: '미사용'},

@@ -51,22 +51,14 @@ class VirtualAccountController extends Controller
         if(Ablilty::isMerchandise($request) || $level === 10)
         {
             $query  = $query->join('merchandises', 'virtual_accounts.user_id', '=', 'merchandises.id')
-                ->where('virtual_accounts.level', 10)
-                ->where(function ($query) use ($search) {
-                    return $query->where('virtual_accounts.account_name', 'like', "%$search%")
-                        ->orWhere('merchandises.mcht_name', 'like', "%$search%");
-                });
+                ->where('virtual_accounts.level', 10);
             $query = globalSalesFilter($query, $request, 'merchandises');
             $query = globalAuthFilter($query, $request, 'merchandises');
         }
         else
         {
             $query  = $query->join('salesforces', 'virtual_accounts.user_id', '=', 'salesforces.id')
-                ->where('virtual_accounts.level', '>', 10)
-                ->where(function ($query) use ($search) {
-                    return $query->where('virtual_accounts.account_name', 'like', "%$search%")
-                        ->orWhere('salesforces.sales_name', 'like', "%$search%");
-                });
+                ->where('virtual_accounts.level', '>', 10);
             $sales_filters = UnderSalesforce::getSelectedSalesFilter($request);
             if(count($sales_filters))
             {
@@ -91,9 +83,28 @@ class VirtualAccountController extends Controller
      */
     public function index(IndexRequest $request)
     {
+        $search = $request->input('search', '');
+        $level  = (int)$request->input('level', 10);
         $sp     = ($request->page - 1) * $request->page_size;
         $cols   = ['virtual_accounts.*'];
         $query  = self::getCommonQuery($this->virtual_accounts, $request);
+
+
+        if(Ablilty::isMerchandise($request) || $level === 10)
+        {
+            $query  = $query->where(function ($query) use ($search) {
+                    return $query->where('virtual_accounts.account_name', 'like', "%$search%")
+                        ->orWhere('merchandises.mcht_name', 'like', "%$search%");
+                });
+        }
+        else
+        {
+            $query  = $query-where(function ($query) use ($search) {
+                    return $query->where('virtual_accounts.account_name', 'like', "%$search%")
+                        ->orWhere('salesforces.sales_name', 'like', "%$search%");
+                });
+        }
+
         $cols[] = self::getUserNameCol($request);
         $res    = [
             'page'      => $request->page, 

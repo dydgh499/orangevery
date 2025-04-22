@@ -1,25 +1,28 @@
 <script setup lang="ts">
-import SettleHistoryBatchDialog from '@/layouts/dialogs/SettleHistoryBatchDialog.vue'
-import FinanceVanDialog from '@/layouts/dialogs/services/FinanceVanDialog.vue'
-import AddDeductDialog from '@/layouts/dialogs/transactions/AddDeductDialog.vue'
+import SettleHistoryBatchDialog from '@/layouts/dialogs/SettleHistoryBatchDialog.vue';
+import FinanceVanDialog from '@/layouts/dialogs/services/FinanceVanDialog.vue';
+import AddDeductDialog from '@/layouts/dialogs/transactions/AddDeductDialog.vue';
+import WithdrawHistoriesDialog from '@/layouts/dialogs/virtual-accounts/WithdrawHistoriesDialog.vue';
 import WithdrawStatusmentDialog from '@/layouts/dialogs/virtual-accounts/WithdrawStatusmentDialog.vue';
 
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { selectFunctionCollect } from '@/views/selected'
-import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
-import { getDepositsStatusColor } from '@/views/transactions/settle-histories/SettleHistory'
-import { deposit_statuses, useSearchStore } from '@/views/transactions/settle-histories/useMerchandiseStore'
-import { getUserLevel } from '@axios'
-import { DateFilters } from '@core/enums'
-import corp from '@corp'
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import { selectFunctionCollect } from '@/views/selected';
+import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue';
+import { getDepositsStatusColor } from '@/views/transactions/settle-histories/SettleHistory';
+import { deposit_statuses, useSearchStore } from '@/views/transactions/settle-histories/useMerchandiseStore';
+import { getUserLevel } from '@axios';
+import { DateFilters } from '@core/enums';
+import corp from '@corp';
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const totals = ref(<any[]>([]))
 const financeDialog = ref()
+
 const addDeductDialog = ref()
 const settleHistoryBatchDialog = ref()
+const withdrawHistoriesDialog = ref()
 const withdrawStatusmentDialog = ref()
 
 store.params.use_finance_van_deposit = Number(corp.pv_options.paid.use_finance_van_deposit)
@@ -29,6 +32,7 @@ provide('head', head)
 provide('exporter', exporter)
 provide('financeDialog', financeDialog)
 provide('addDeductDialog', addDeductDialog)
+provide('withdrawHistoriesDialog', withdrawHistoriesDialog)
 provide('withdrawStatusmentDialog', withdrawStatusmentDialog)
 
 const isNumberFormatCol = (_key: string) => {
@@ -52,11 +56,6 @@ onMounted(() => {
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="true"
                     :sales="true">
                     <template #pg_extra_field>
-                        <VCol cols="6" sm="3">
-                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.deposit_status" :items="deposit_statuses"
-                                label="입금 타입" item-title="title" item-value="id"
-                                @update:modelValue="[store.updateQueryString({ deposit_status: store.params.deposit_status })]" />
-                        </VCol>
                     </template>
                 </BaseIndexFilterCard>
             </template>
@@ -64,6 +63,15 @@ onMounted(() => {
                 <VBtn prepend-icon="carbon:batch-job" @click="settleHistoryBatchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
                     일괄작업
                 </VBtn>
+                <div :style="$vuetify.display.smAndDown ? 'margin-top: 1em' : ''">
+                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.deposit_status" :items="deposit_statuses"
+                        label="입금 타입" item-title="title" item-value="id"
+                        @update:modelValue="[store.updateQueryString({ deposit_status: store.params.deposit_status })]" 
+                        :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''"
+                    />
+                </div>
+
+
             </template>
             <template #headers>
                 <tr>
@@ -131,6 +139,7 @@ onMounted(() => {
         <FinanceVanDialog ref="financeDialog" />
         <AddDeductDialog ref="addDeductDialog" />
         <SettleHistoryBatchDialog ref="settleHistoryBatchDialog" :selected_idxs="selected" :store="store" :is_mcht="true"/>
+        <WithdrawHistoriesDialog ref="withdrawHistoriesDialog" />
         <WithdrawStatusmentDialog ref="withdrawStatusmentDialog" />
     </div>
 </template>
