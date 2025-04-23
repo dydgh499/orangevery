@@ -166,6 +166,7 @@ export const useSearchStore = defineStore('WalletHistoryStore', () => {
             'trans_amount': '거래금액',
             'trx_id': '거래번호',
             'created_at': '생성시간',
+            'updated_at': '업데이트시간',
         }
     }
     const getDepositHeader = () => {
