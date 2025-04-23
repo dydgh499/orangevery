@@ -75,6 +75,7 @@ class NotiSendHistoryController extends Controller
         
         $query = $query->where(function($query) use ($search) {
             return $query->where('merchandises.mcht_name', 'like', "%$search%")
+                ->orWhere('transactions.appr_num', 'like', "%$search%")
                 ->orWhere('transactions.mid', 'like', "%$search%")
                 ->orWhere('transactions.tid', 'like', "%$search%");
         });
