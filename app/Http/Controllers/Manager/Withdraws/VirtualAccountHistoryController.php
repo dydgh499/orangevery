@@ -32,7 +32,6 @@ class VirtualAccountHistoryController extends Controller
     public function __construct(VirtualAccountHistory $virtual_account_histories)
     {
         $this->virtual_account_histories = $virtual_account_histories;
-        $this->target   = '';
     }
 
     public function common($request)
@@ -176,7 +175,8 @@ class VirtualAccountHistoryController extends Controller
         $validated = $request->validate(['va_id' => 'required|integer']);
         $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/balance';
         $res = Comm::post($url, ['va_id' => $request->va_id]);
-        if($res['body']['result_cd'] === '0000') {
+        if($res['body']['result_cd'] === '0000') 
+        {
             return $this->response(0, [
                 'profit'        =>  $res['body']['temp']['withdraw_able_amount'],
                 'withdraw_fee'  =>  $res['body']['temp']['withdraw_fee'],
@@ -199,7 +199,7 @@ class VirtualAccountHistoryController extends Controller
         $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/collect';
         $res = Comm::post($url, [
             'va_id' => $request->va_id,
-            'withdraw_amount' => $withdraw_amount->va_id,
+            'withdraw_amount' => $request->withdraw_amount,
         ]);
         return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']); 
     }

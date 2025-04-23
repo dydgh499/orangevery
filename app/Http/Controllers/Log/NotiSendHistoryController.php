@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 class NotiSendHistoryController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
-    protected $noti_send_histories;
+    protected $noti_send_histories, $cols;
 
     public function __construct(NotiSendHistory $noti_send_histories)
     {

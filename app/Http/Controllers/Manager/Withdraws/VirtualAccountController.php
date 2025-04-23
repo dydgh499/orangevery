@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\DB;
 class VirtualAccountController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $virtual_accounts;
+    protected $virtual_accounts, $target;
 
     public function __construct(VirtualAccount $virtual_accounts)
     {
@@ -99,7 +99,7 @@ class VirtualAccountController extends Controller
         }
         else
         {
-            $query  = $query-where(function ($query) use ($search) {
+            $query  = $query->where(function ($query) use ($search) {
                     return $query->where('virtual_accounts.account_name', 'like', "%$search%")
                         ->orWhere('salesforces.sales_name', 'like', "%$search%");
                 });
@@ -153,7 +153,7 @@ class VirtualAccountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($request, $id)
     {
         if(Ablilty::isOperator($request))
         {
@@ -256,50 +256,5 @@ class VirtualAccountController extends Controller
         }
         $sales = $query->get($cols);
         return $this->response(0, ['mchts' => $mchts, 'sales' => $sales]);
-    }
-    
-
-    static public function syncVirtualAccount()
-    {
-        $pay_modules = PaymentModule::where('use_realtime_deposit', 1)
-            ->whereNotNull('fin_id')
-            ->where('is_delete', false)
-            ->get();
-        foreach($pay_modules as $pay_module)
-        {
-            DB::transaction(function () use($pay_module) {
-                $account_code = self::generateCode();
-                $data = [
-                    'account_name'  => $account_code,
-                    'account_code'  => $account_code,
-                    'fin_id'        => $pay_module->fin_id,
-                    'user_id'       => $pay_module->mcht_id,
-                    'brand_id'      => $pay_module->brand_id,
-                    'withdraw_limit_type'       => $pay_module->withdraw_limit_type,
-                    'withdraw_business_limit'   => $pay_module->withdraw_business_limit,
-                    'withdraw_holiday_limit'    => $pay_module->withdraw_holiday_limit,
-                    'level' => 10,
-                ];
-                if($pay_module->fin_trx_delay === -1)
-                {
-                    $data['withdraw_type'] = 0;
-                    $data['fin_trx_delay'] = 0;
-                }
-                else
-                {
-                    $data['withdraw_fee']  = $pay_module->settle_fee;
-                    $data['withdraw_type'] = 1;
-                    $data['fin_trx_delay'] = $pay_module->fin_trx_delay;
-                }
-                $res = VirtualAccount::create($data);
-                if($res)
-                {
-                    $pay_module->va_id = $res->id;
-                    $pay_module->settle_fee = 0;
-                    $pay_module->save();
-                }
-                echo $pay_module->id." \n";
-            });
-        }
     }
 }

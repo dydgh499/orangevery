@@ -102,6 +102,7 @@ watchEffect(() => {
     </VCol>
 </template>
 <style scoped lang="scss">
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 :deep(.v-input--density-compact .v-field--variant-plain, .v-input--density-compact .v-field--variant-underlined) {
   --v-input-control-height: 34px !important;
 }

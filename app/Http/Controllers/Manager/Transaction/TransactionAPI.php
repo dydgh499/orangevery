@@ -207,9 +207,9 @@ class TransactionAPI
             ->where('trx_at', '>=', '2025-04-01 00:00:00')
             ->orderBy('id', 'desc')
             ->get();
-
+        $i=0;
         $trans = json_decode(json_encode($db_trans), true);
-        [$data] = SettleAmountCalculator::setSettleAmount([$data]);
+        $trans = SettleAmountCalculator::setSettleAmount($trans);
         foreach($db_trans as $key => $tran)
         {
             

@@ -18,7 +18,7 @@ use App\Http\Requests\Manager\IndexRequest;
 class FailTransController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
-    protected $danger_transactions, $cols;
+    protected $fail_transactions, $cols;
 
     public function __construct(FailTransaction $fail_transactions)
     {

@@ -13,6 +13,7 @@ const orderBy = ref()
 const headers = [
     { title: '에러코드', key: 'code' },
     { title: '에러 메세지', key: 'message' },
+    { title: '재이체 여부', key: 'retry' },
 ]
 const show = (_errors: any) => {
     page.value = 1
@@ -30,11 +31,12 @@ defineExpose({
 });
 </script>
 <template>
-    <VDialog v-model="visible" max-width="500">
+    <VDialog v-model="visible" max-width="600">
         <DialogCloseBtn @click="visible = false" />
         <VCard title="">
             <VCardText class="d-flex flex-wrap py-4 gap-4">
                 <VCardTitle>출금 에러코드</VCardTitle>
+                <b>은행사에 따라서 중복되는 에러코드가 존재할 수 있습니다.</b>
                 <div class="app-user-search-filter d-flex flex-wrap gap-4" style="margin-left: auto;">
                     <div style="inline-size: 15rem;">
                         <AppTextField
@@ -56,6 +58,7 @@ defineExpose({
                     <template v-slot:items="props">
                         <td><b>{{ props.item.code }}</b></td>
                         <td>{{ props.item.message }}</td>
+                        <td>{{ props.item.retry }}</td>
                     </template>
                 </VDataTable>
             </VCardText>
@@ -63,6 +66,7 @@ defineExpose({
     </VDialog>
 </template>
 <style scoped>
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 :deep(.v-table__wrapper) {
   block-size: auto !important;
 }

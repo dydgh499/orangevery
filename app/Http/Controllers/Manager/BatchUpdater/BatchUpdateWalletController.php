@@ -26,7 +26,7 @@ use Illuminate\Http\Request;
 class BatchUpdateWalletController extends BatchUpdateController
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $virtual_accounts;
+    protected $virtual_accounts, $target;
 
     public function __construct(VirtualAccount $virtual_accounts)
     {
