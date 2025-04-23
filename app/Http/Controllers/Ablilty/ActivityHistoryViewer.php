@@ -205,6 +205,14 @@ class ActivityHistoryViewer
                 unset($history_detail['fin_id']);
             }
         }
+        else if($request->history_target === '매출')
+        {
+            unset($history_detail['dev_fee']);
+            unset($history_detail['dev_settle_id']);
+            unset($history_detail['dev_realtime_fee']);
+            unset($history_detail['dev_realtime_settle_amount']);
+
+        }
         return $history_detail;
     }
 
@@ -257,19 +265,20 @@ class ActivityHistoryViewer
             {
                 if(preg_match('/^sales[0-9]_/', $key))
                 {
-                    if(strpos($key, '_id') !== false)
-                        $key_name = $levels[str_replace('_id', '', $key)."_name"];
-                    else if(strpos($key, '_fee') !== false)
-                    {
-                        $key_name = $levels[str_replace('_fee', '', $key)."_name"]. " 수수료";
-                        $conv_history_detail[$key] = round($conv_history_detail[$key], 7);
-                    }
-                    else if(strpos($key, '_settlement') !== false)
+                    if(strpos($key, '_settlement') !== false)
                         $key_name = $levels[str_replace('_settlement', '', $key)."_name"]. " 정산금";
                     else if(strpos($key, '_settle_id') !== false)
                         $key_name = $levels[str_replace('_settle_id', '', $key)."_name"]. " 정산번호";
                     else if(strpos($key, '_settle_amount') !== false)
                         $key_name = $levels[str_replace('_settle_amount', '', $key)."_name"]. " 정산금";
+                    else if(strpos($key, '_id') !== false)
+                        $key_name = $levels[str_replace('_id', '', $key)."_name"];
+                    else if(strpos($key, '_fee') !== false)
+                    {
+                        $key_name = $levels[str_replace('_fee', '', $key)."_name"]. " 수수료";
+                        $conv_history_detail[$key] = round($conv_history_detail[$key], 7);
+                        //sales5_fee
+                    }                    
                     else
                         continue;
                     $history_detail[$key_name] = $conv_history_detail[$key];

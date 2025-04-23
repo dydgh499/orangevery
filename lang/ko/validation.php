@@ -374,6 +374,9 @@ return [
         'dev_settle_amount' => '개발사 이익금',
         'mcht_settle_amount' => '가맹점 정산금',
         'rep_mid' => '대표 MID',
+        'mcht_settle_id' => '가맹점 정산 ID',
+        'issuer_code' => '발급사 코드',
+        'acquirer_code' => '매입사 코드',
         // fee change history
         'bf_trx_fee' => '이전 수수료',
         'bf_hold_fee' => '이전 유보금 수수료',
