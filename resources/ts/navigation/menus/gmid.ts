@@ -9,8 +9,8 @@ export const getGmidMenu = () => {
                 { title: '가맹점 목록', to: 'merchandises'},
                 { title: '장비 관리', to: 'merchandises-terminals'},
                 { title: '결제모듈 관리', to: 'merchandises-pay-modules'},
-                { title: '노티 발송이력', to: 'merchandises-noti-send-histories'},
-                { title: '노티 목록', to: 'merchandises-noti-urls' }
+                { title: '거래통지 이력', to: 'merchandises-noti-send-histories'},
+                { title: '거래통지 목록', to: 'merchandises-noti-urls' }
             ]
         },
         { heading: 'Transaction' },

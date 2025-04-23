@@ -35,6 +35,7 @@ Route::middleware(['auth.update'])->group(function() {
                     Route::post('set-tid', [BatchUpdateTransactionController::class, 'setTid']);                
                     Route::post('salesforces/set-fee', [BatchUpdateTransactionController::class, 'salesFeeApply']);      
                     Route::post('merchandises/set-fee', [BatchUpdateTransactionController::class, 'mchtFeeApply']);  
+                    Route::post('merchandises/set-mcht', [BatchUpdateTransactionController::class, 'mchtApply']);  
                     Route::post('remove-deposit-fee', [BatchUpdateTransactionController::class, 'removeDepositFee']);
                 });
             });

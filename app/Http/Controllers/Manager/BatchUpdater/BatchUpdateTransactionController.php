@@ -32,6 +32,7 @@ use Carbon\Carbon;
 class BatchUpdateTransactionController extends BatchUpdateController
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
+    protected $transactions, $target;
 
     public function __construct(Transaction $transactions)
     {
@@ -200,4 +201,14 @@ class BatchUpdateTransactionController extends BatchUpdateController
         $db_trans = $this->feeApply($db_trans);
         return $this->batchResponse(count($db_trans), '매출');
     } 
+
+    public function mchtApply(Request $request)
+    {
+        $row = $this->getApplyRow($request, [
+            'mcht_id' => $request->mcht_id,
+            'pmod_id' => $request->pmod_id,
+            'module_type' => $request->module_type,
+        ]);
+        return $this->batchResponse($row, '매출');
+    }
 }

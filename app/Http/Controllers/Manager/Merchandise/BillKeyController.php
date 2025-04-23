@@ -33,13 +33,12 @@ use Illuminate\Http\Request;
 class BillKeyController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, EncryptDataTrait;
-    protected $bill_keys, $merchandises;
+    protected $bill_keys, $target;
 
     public function __construct(BillKey $bill_keys)
     {
         $this->bill_keys = $bill_keys;
         $this->target = '빌키';
-        $this->imgs = [];
     }
     
     public function defaultValidate($request, string $window_code)
@@ -62,7 +61,7 @@ class BillKeyController extends Controller
                 return [1999, '존재하지 않은 결제창 입니다.', null, null];
         }
         else
-            return [$result, $msg, null, null];
+            return [$result, '', null, null];
     }
 
     public function billKeyValidate($request, string $window_code, int $id)

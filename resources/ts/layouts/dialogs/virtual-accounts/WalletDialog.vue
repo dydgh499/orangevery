@@ -69,10 +69,12 @@ defineExpose({
     </VDialog>
 </template>
 <style scoped>
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 :deep(.v-row) {
   align-items: center;
 }
 
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 :deep(.v-table__wrapper) {
   block-size: auto !important;
 }

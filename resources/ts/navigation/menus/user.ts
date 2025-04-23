@@ -26,8 +26,8 @@ const getMchtChildMenu = () => {
         users.children.push({ title: '수수료율 변경이력', to: 'merchandises-fee-change-histories'})
     }
     if(corp.pv_options.paid.use_noti) {
-        users.children.push({ title: '노티 발송이력', to: 'merchandises-noti-send-histories'})
-        users.children.push({ title: '노티 목록', to: 'merchandises-noti-urls' })
+        users.children.push({ title: '거래통지 이력', to: 'merchandises-noti-send-histories'})
+        users.children.push({ title: '거래통지 목록', to: 'merchandises-noti-urls' })
     }
     if(getUserLevel() >= 35 && corp.use_different_settlement)
         users.children.push({ title: '하위사업자등록 결과', to: 'merchandises-sub-business-registrations'})
