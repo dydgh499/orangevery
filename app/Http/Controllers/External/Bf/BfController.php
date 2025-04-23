@@ -207,7 +207,7 @@ class BfController extends Controller
     public function handPay(HandPayRequest $request)
     {        
         $inst = new TransactionController(new Transaction);
-        return $inst->handPay($request);
+        return $inst->handPay($request->all());
     }
 
     /**
