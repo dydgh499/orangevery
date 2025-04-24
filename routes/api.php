@@ -87,7 +87,7 @@ Route::prefix('v1')->group(function() {
     Route::prefix('quick-view')->middleware(['auth:sanctum', 'log.route', 'auth.update'])->group(function() {
         Route::get('', [QuickViewController::class, 'index']);
         Route::get('withdraws/balance', [VirtualAccountHistoryController::class, 'withdrawsBalance']);
-        Route::get('withdraws/collect', [VirtualAccountHistoryController::class, 'collectWithdraw']);
+        Route::post('withdraws/collect', [VirtualAccountHistoryController::class, 'collectWithdraw']);
         Route::get('pay-modules/{id}/pay-window-renew', [PayWindowController::class, 'renew']);
         Route::post('pay-windows/{window_code}/extend', [PayWindowController::class, 'extend']);
     });
