@@ -139,10 +139,13 @@ class VirtualAccountHistoryController extends Controller
         $min    = $query->min('virtual_account_histories.id');
         if($min != NULL)
         {
-            $con_query = $query->where('virtual_account_histories.id', '>=', $min);
+            $con_query      = $query->where('virtual_account_histories.id', '>=', $min);
             $res['total']   = $query->count();
 
-            $con_query = $con_query->orderBy('virtual_account_histories.id', 'desc')->offset($sp)->limit($page_size);
+            $con_query = $con_query
+                ->orderBy('virtual_account_histories.id', 'desc')
+                ->offset($sp)
+                ->limit($page_size);
             $res['content'] = count($cols) ? $con_query->get($cols) : $con_query->get();
         }
         else

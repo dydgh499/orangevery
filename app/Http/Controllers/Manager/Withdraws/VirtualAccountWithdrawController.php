@@ -34,12 +34,12 @@ class VirtualAccountWithdrawController extends Controller
             DB::raw("SUM(IF(result_code = 'PV484', virtual_account_withdraws.trans_amount, 0)) AS withdraw_appr_cancel_amount"),
             DB::raw("SUM(IF(result_code = '-5', virtual_account_withdraws.trans_amount, 0)) AS withdraw_book_cancel_amount"),
 
-            DB::raw("SUM(IF(withdraw_status = 1, 1, 0)) AS withdraw_success_count"),
+            DB::raw("SUM(IF(result_code = '0000', 1, 0)) AS withdraw_success_count"),
             DB::raw("SUM(IF((result_code != 'PV484' AND result_code != '0000' AND result_code != '-5'), 1, 0)) AS withdraw_error_count"),
-            DB::raw("SUM(IF(withdraw_status = 3, 1, 0)) AS withdraw_appr_cancel_count"),
-            DB::raw("SUM(IF(withdraw_status = 4, 1, 0)) AS withdraw_book_cancel_count"),
+            DB::raw("SUM(IF(result_code = 'PV484', 1, 0)) AS withdraw_appr_cancel_count"),
+            DB::raw("SUM(IF(result_code = '-5', 1, 0)) AS withdraw_book_cancel_count"),
 
-            DB::raw("SUM(IF(withdraw_status = 1, virtual_account_histories.withdraw_fee, 0)) AS withdraw_fee_amount"),
+            DB::raw("SUM(IF(result_code = '0000' = 1, virtual_account_histories.withdraw_fee, 0)) AS withdraw_fee_amount"),
         ];
         $query = $this->common($request);
         if($request->has('s_dt'))
