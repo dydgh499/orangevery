@@ -61,7 +61,11 @@ class VirtualAccountHistoryController extends Controller
         if($request->trans_type !== null)
             $query = $query->where('virtual_account_histories.trans_type', $request->trans_type);
         if($request->withdraw_status !== null)
-            $query = $query->where('virtual_account_histories.withdraw_status', $request->withdraw_status);
+        {
+            $query = $query
+                ->where('virtual_account_histories.withdraw_status', $request->withdraw_status)
+                ->where('virtual_account_histories.trans_type', 1);
+        }
         return $query;
     }
     /**
