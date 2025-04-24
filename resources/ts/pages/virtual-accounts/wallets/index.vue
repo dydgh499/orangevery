@@ -34,7 +34,7 @@ const allWithdraw = async (item: VirtualAccount) => {
                 va_id: item.id,
                 withdraw_amount: item.balance,
                 fee_apply: 0,
-            })
+            }, true)
         }
     }
     else
