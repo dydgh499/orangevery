@@ -47,7 +47,9 @@ const allWithdraw = async (item: VirtualAccount) => {
         <BaseIndexView placeholder="상호, 계좌별칭 검색" :metas="[]" :add="false" add_name=""
             :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
-                <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
+                <BaseIndexFilterCard 
+                        v-if="getUserLevel() >= 13"
+                        :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                         :sales="true" :page="false">
                 </BaseIndexFilterCard>
             </template>
