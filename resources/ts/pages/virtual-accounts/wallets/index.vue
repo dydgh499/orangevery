@@ -5,6 +5,7 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import { StatusColorSetter } from '@/views/searcher';
 import { fin_trx_delays, withdraw_limit_types, withdraw_types } from '@/views/virtual-accounts/wallets/useStore';
 
+import { useRequestStore } from '@/views/request';
 import { selectFunctionCollect } from '@/views/selected';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import { VirtualAccount } from '@/views/types';
@@ -15,7 +16,7 @@ import { DateFilters } from '@core/enums';
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 
-const { get, post } = useRequestStore()
+const { post } = useRequestStore()
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { finance_vans } = useStore()
