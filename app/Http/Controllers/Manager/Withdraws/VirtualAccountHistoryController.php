@@ -73,10 +73,20 @@ class VirtualAccountHistoryController extends Controller
     {
         $cols = [
             DB::raw("SUM(IF(trans_type = 0 AND deposit_status = 1, trans_amount, 0)) AS deposit_amount"),
-            DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 1 OR withdraw_status = 0), trans_amount, 0)) AS withdraw_amount"),
-            DB::raw("SUM(IF(trans_type = 1, virtual_account_histories.withdraw_fee, 0)) AS withdraw_fee_amount"),
+            DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 0), trans_amount, 0)) AS withdraw_wait_amount"),
+            DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 1), trans_amount, 0)) AS withdraw_success_amount"),
+            DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 2), trans_amount, 0)) AS withdraw_error_amount"),
+            DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 3), trans_amount, 0)) AS withdraw_appr_cancel_amount"),
+            DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 4), trans_amount, 0)) AS withdraw_book_cancel_amount"),
+
             DB::raw("SUM(trans_type = 0) AS deposit_count"),
-            DB::raw("SUM(IF(trans_type = 1, 1, 0)) AS withdraw_count"),
+            DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 0), 1, 0)) AS withdraw_wait_count"),
+            DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 1), 1, 0)) AS withdraw_success_count"),
+            DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 2), 1, 0)) AS withdraw_error_count"),
+            DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 3), 1, 0)) AS withdraw_appr_cancel_count"),
+            DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 4), 1, 0)) AS withdraw_book_cancel_count"),
+
+            DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 1), virtual_account_histories.withdraw_fee, 0)) AS withdraw_fee_amount"),
         ];
         $query = $this->common($request);
         if($request->has('s_dt'))
@@ -193,13 +203,19 @@ class VirtualAccountHistoryController extends Controller
     {
         $validated = $request->validate([
             'va_id' => 'required|integer', 
-            'withdraw_amount' => 'required|integer'
+            'withdraw_amount' => 'required|integer',
         ]);
+        //전액출금시
+        if(Ablilty::isOperator($request))
+            $fee_apply = $request->input('fee_apply', 1);
+        else
+            $fee_apply = 1;
 
         $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/collect';
         $res = Comm::post($url, [
-            'va_id' => $request->va_id,
-            'withdraw_amount' => $request->withdraw_amount,
+            'va_id'             => $request->va_id,
+            'withdraw_amount'   => $request->withdraw_amount,
+            'fee_apply'         => $fee_apply,
         ]);
         return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']); 
     }
@@ -217,12 +233,13 @@ class VirtualAccountHistoryController extends Controller
         {
             $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/collect-custom';
             $res = Comm::post($url, [
-                'va_id' => $virtual_account->id,
+                'va_id'             => $virtual_account->id,
                 'withdraw_amount'   => $request->withdraw_amount,
                 'acct_num'          => $request->acct_num,
                 'acct_name'         => $request->acct_name,
-                'acct_bank_code' => $request->acct_bank_code,
-                'acct_bank_name' => $request->acct_bank_name,
+                'acct_bank_code'    => $request->acct_bank_code,
+                'acct_bank_name'    => $request->acct_bank_name,
+                'fee_apply'         => 1,
             ]);
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);     
         }

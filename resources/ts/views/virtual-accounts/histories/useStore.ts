@@ -69,22 +69,36 @@ export const withdrawInterface = () => {
     const snackbar = <any>(inject('snackbar'))
     const { post } = useRequestStore()
 
+    const existWithdraw = (transaction: Transaction) => {
+        if(transaction.withdraw_histories?.length) 
+            return transaction.withdraw_histories?.find(obj => obj.withdraw_schedule_time !== null) ? true : false
+        else
+            return false
+    }
+
+    const existDeposit = (transaction: Transaction) => {
+        if(transaction.withdraw_histories?.length) 
+            return transaction.withdraw_histories?.find(obj => obj.deposit_schedule_time !== null) ? true : false
+        else
+            return false
+    }
+
+
+    const getHistory = (transaction: Transaction, type: number) => {
+        if(type === 0)
+            return transaction.withdraw_histories?.find(obj => obj.withdraw_schedule_time !== null)
+        else
+            return transaction.withdraw_histories?.find(obj => obj.deposit_schedule_time !== null)
+    }
+
     const isReSettleAble = (transaction: Transaction) => {
-        if(transaction.withdraw_histories) 
+        if(transaction.withdraw_histories?.length) 
             return false
         else {
             if(transaction.use_realtime_deposit && transaction.va_id) {
                 if(transaction.mcht_settle_id === null)
                     return true
             }    
-        }
-        return false
-    }
-
-    const isCollectWithdraw = (transaction: Transaction) => {
-        if(transaction.use_realtime_deposit && transaction.va_id) {
-            if(transaction.mcht_settle_id)
-                return true
         }
         return false
     }
@@ -138,8 +152,10 @@ export const withdrawInterface = () => {
     }
 
     return {
+        getHistory,
+        existWithdraw,
+        existDeposit,
         isReSettleAble,
-        isCollectWithdraw,
         withdrawStatusColors,
         withdrawRetry,
         settleRetry,
@@ -203,41 +219,6 @@ export const useSearchStore = defineStore('WalletHistoryStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 
-    //입금완료, 입금대기, 출금완료, 출금실패 합계
-    const metas = ref([
-        {
-            icon: 'ph:hand-deposit-bold',
-            color: 'warning',
-            title: '입금 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-        {
-            icon: 'uil:money-withdraw',
-            color: 'privacy',
-            title: '출금 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-        {
-            icon: 'mingcute:transfer-fill',
-            color: 'success',
-            title: '입출금 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-        {
-            icon: 'tabler-currency-won',
-            color: 'default',
-            title: '출금수수료 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-    ])
 
     const exporter = async () => {
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
@@ -264,47 +245,10 @@ export const useSearchStore = defineStore('WalletHistoryStore', () => {
 
         head.exportToExcel(datas)
     }
-
-    const dataToChart = async() => {
-        if (store.getChartProcess() === false) {
-            const r = await store.getChartData()
-            const chart = {
-                deposit_amount: parseInt(r.data.deposit_amount || 0),
-                deposit_count: parseInt(r.data.deposit_count || 0),
-                withdraw_amount: parseInt(r.data.withdraw_amount || 0),
-                withdraw_count: parseInt(r.data.withdraw_count || 0),
-                withdraw_fee_amount: parseInt(r.data.withdraw_fee_amount || 0),
-                withdraw_fee_count: parseInt(r.data.withdraw_count || 0),
-                total_amount: 0,
-                total_count: 0,
-            }
-            chart.total_amount = chart.deposit_amount + chart.withdraw_amount
-            chart.total_count = chart.deposit_count + chart.withdraw_count
-
-            metas.value[0]['stats'] = chart.deposit_amount.toLocaleString() + ' ￦'
-            metas.value[0]['percentage'] = chart.deposit_amount ? 100 : 0
-            metas.value[0]['subtitle'] = chart.deposit_count.toLocaleString() + '건'
-    
-            metas.value[1]['stats'] = chart.withdraw_amount.toLocaleString() + ' ￦'
-            metas.value[1]['percentage'] = chart.withdraw_amount ? 100 : 0
-            metas.value[1]['subtitle'] = chart.withdraw_count.toLocaleString() + '건'
-
-            metas.value[2]['stats'] = chart.total_amount.toLocaleString() + ' ￦'
-            metas.value[2]['percentage'] = store.getPercentage(chart.total_amount, chart.deposit_amount)
-            metas.value[2]['subtitle'] = chart.total_count.toLocaleString() + '건'
-
-            metas.value[3]['stats'] = chart.withdraw_fee_amount.toLocaleString() + ' ￦'
-            metas.value[3]['percentage'] = store.getPercentage(chart.withdraw_fee_amount, chart.withdraw_amount)
-            metas.value[3]['subtitle'] = chart.withdraw_fee_count.toLocaleString() + '건'
-            console.log(metas.value)
-        }
-    }
     
     return {
         store,
         head,
         exporter,
-        metas,
-        dataToChart,
     }
 });

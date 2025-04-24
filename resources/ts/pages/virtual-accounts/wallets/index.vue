@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import WalletDialog from '@/layouts/dialogs/virtual-accounts/WalletDialog.vue';
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import { StatusColorSetter } from '@/views/searcher';
 import { fin_trx_delays, withdraw_limit_types, withdraw_types } from '@/views/virtual-accounts/wallets/useStore';
 
 import { selectFunctionCollect } from '@/views/selected';
 import { useStore } from '@/views/services/pay-gateways/useStore';
+import { VirtualAccount } from '@/views/types';
 import { useSearchStore } from '@/views/virtual-accounts/wallets/useStore';
 import { getUserLevel } from '@axios';
 import { DateFilters } from '@core/enums';
 
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+
+const { get, post } = useRequestStore()
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { finance_vans } = useStore()
@@ -20,12 +26,29 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
+const allWithdraw = async (item: VirtualAccount) => {
+    if(item.balance > 0) {
+        if(await alert.value.show(`정말 ${item.account_name} 지갑에서 전액출금 하시겠습니까?<br><b>출금금액:${item.balance.toLocaleString()}원</b><br><br>(출금수수료는 0원으로 출금됩니다)`)) {
+            const r = await post('/api/v1/quick-view/withdraws/collect', {
+                va_id: item.id,
+                withdraw_amount: item.balance,
+                fee_apply: 0,
+            })
+        }
+    }
+    else
+        snackbar.value.show('출금가능금액이 0원 이하입니다.', 'warning')
+}
+
 </script>
 <template>
     <div>
         <BaseIndexView placeholder="상호, 계좌별칭 검색" :metas="[]" :add="false" add_name=""
             :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
+                <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
+                        :sales="true" :page="false">
+                </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
                 <VSelect :menu-props="{ maxHeight: 400 }" 
@@ -129,7 +152,7 @@ provide('exporter', exporter)
                                     {{ item[_key] }}
                                 </span>
                                 <span v-else-if="_key === 'all_withdraw'">
-                                    <VBtn variant="tonal" size="small" @click="">
+                                    <VBtn variant="tonal" size="small" @click="allWithdraw(item)">
                                         전액출금
                                     </VBtn>
                                 </span>

@@ -26,7 +26,7 @@ const formatTime = <any>(inject('$formatTime'))
 const { isSalesCol } = settlementFunctionCollect(store)
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 const { notiSendResult, notiSendMessage } = notiSendHistoryInterface()
-const { isReSettleAble, isCollectWithdraw } = withdrawInterface()
+const { isReSettleAble, getHistory, existWithdraw, existDeposit } = withdrawInterface()
 
 </script>
 <template>
@@ -100,28 +100,38 @@ const { isReSettleAble, isCollectWithdraw } = withdrawInterface()
         </VChip>
     </span>
     <span v-else-if="_key === 'withdraw_status'">
-        <VChip :color="withdrawStatusColors(item['withdraw_histories'] ? item['withdraw_histories'].withdraw_status : 0)">
-            <span v-if="item['withdraw_histories'] && store.params.level === 10">
-                <span v-if="item['withdraw_histories'].withdraw_status === 0">
-                    {{ formatTime(new Date(item['withdraw_histories'].withdraw_schedule_time)) }}초 이체예정
+        <template v-if="existWithdraw(item)">
+            <VChip :color="withdrawStatusColors(getHistory(item, 0)?.withdraw_status || 0)">
+                <span v-if="store.params.level === 10">
+                    <span v-if="getHistory(item, 0)?.withdraw_status === 0">
+                        {{ formatTime(new Date(getHistory(item, 0)?.withdraw_schedule_time || 0)) }}초 이체예정
+                    </span>
+                    <span v-else>
+                        {{ withdrawStatusNames(getHistory(item, 0)?.withdraw_status || -1) }}
+                    </span>
                 </span>
                 <span v-else>
-                    {{ withdrawStatusNames(item['withdraw_histories'].withdraw_status) }}
+                    {{ 'N/A' }}
                 </span>
-            </span>
-            <span v-else-if="store.params.level !== 10">
-                {{ 'N/A' }}
-            </span>
-            <span v-else-if="isReSettleAble(props.item)">
-                {{ '지갑 정산하기 필요' }}
-            </span>
-            <span v-else-if="isCollectWithdraw(props.item)">
-                {{ '모아서 출금' }}
-            </span>            
-            <span v-else>
-                {{ 'N/A' }}
-            </span>
-        </VChip>
+            </VChip>
+        </template>
+        <template v-else-if="existDeposit(item)">
+            <VChip :color="withdrawStatusColors(getHistory(item, 1)?.withdraw_status || 0)">
+                <span v-if="existWithdraw(item) === false && existDeposit(item)">
+                    상계처리
+                </span>
+            </VChip>
+        </template>
+        <template v-else>
+            <VChip :color="'default'">
+                <span v-if="isReSettleAble(props.item)">
+                    {{ '지갑 정산하기 필요' }}
+                </span>
+                <span v-else>
+                    {{ 'N/A' }}
+                </span>
+            </VChip>
+        </template>
     </span>
     <span v-else-if="_key == 'extra_col'">
         <ExtraMenu :item="item" />

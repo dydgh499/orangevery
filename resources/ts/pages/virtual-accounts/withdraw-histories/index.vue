@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PVWithdrawErrorCodeDialog from '@/layouts/dialogs/virtual-accounts/PVWithdrawErrorCodeDialog.vue'
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { VirtualAccountWithdraw } from '@/views/types'
@@ -22,11 +23,98 @@ const getLogStyle = (item: VirtualAccountWithdraw) => {
     else
         return '';
 }
+const total = ref(<any>{
+    withdraw_success_amount: 0,
+    withdraw_error_amount: 0,
+    withdraw_appr_cancel_amount: 0,
+    withdraw_book_cancel_amount: 0,
+    withdraw_success_count: 0,
+    withdraw_error_count: 0,
+    withdraw_appr_cancel_count: 0,
+    withdraw_book_cancel_count: 0,
+    withdraw_fee_amount: 0,
+})
+onMounted(() => {
+    watchEffect(async () => {
+        if (store.getChartProcess() === false) {
+            const r = await store.getChartData()
+            total.value.withdraw_success_amount = Number(r.data.withdraw_success_amount)
+            total.value.withdraw_error_amount = Number(r.data.withdraw_error_amount)
+            total.value.withdraw_appr_cancel_amount = Number(r.data.withdraw_appr_cancel_amount)
+            total.value.withdraw_book_cancel_amount = Number(r.data.withdraw_book_cancel_amount)
+
+            total.value.withdraw_success_count = Number(r.data.withdraw_success_count)
+            total.value.withdraw_error_count = Number(r.data.withdraw_error_count)
+            total.value.withdraw_appr_cancel_count = Number(r.data.withdraw_appr_cancel_count)
+            total.value.withdraw_book_cancel_count = Number(r.data.withdraw_book_cancel_count)
+
+            total.value.withdraw_fee_amount = Number(r.data.withdraw_fee_amount)
+        }
+    })
+})
 </script>
 <template>
     <div>
         <BaseIndexView placeholder="상호, 지갑별칭, 거래번호, 계좌번호 검색" :metas="[]" :add="false" add_name="출금 상세이력" :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
+                <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
+                        :sales="true" :page="false">
+                        <template #pg_extra_field>
+                            <VCol cols="12" sm="6">
+                                <table class="total-table">
+                                    <tr>
+                                        <th>출금성공 합계</th>
+                                        <td class="text-primary">
+                                            <b>{{ total.withdraw_success_amount.toLocaleString() }}</b> &#8361;
+                                        </td>
+                                        <td>
+                                            ({{ total.withdraw_success_count.toLocaleString() }}건)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>출금 수수료 합계</th>
+                                        <td class="text-primary">
+                                            <span>{{ total.withdraw_fee_amount.toLocaleString() }}</span> &#8361;
+                                        </td>
+                                        <td>
+                                            ({{ total.withdraw_success_count.toLocaleString() }}건)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </VCol>
+                            <VCol cols="12" sm="6">
+                                <table class="total-table">
+                                    <tr>
+                                        <th>출금실패 합계</th>
+                                        <td class="text-error">
+                                            <span>{{ total.withdraw_error_amount.toLocaleString() }}</span> &#8361;
+                                        </td>
+                                        <td>
+                                            ({{ total.withdraw_error_count.toLocaleString() }}건)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>승인취소 합계</th>
+                                        <td class="text-error">
+                                            <span>{{ total.withdraw_appr_cancel_amount.toLocaleString() }}</span> &#8361;
+                                        </td>
+                                        <td>
+                                            ({{ total.withdraw_appr_cancel_count.toLocaleString() }}건)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>예약취소 합계</th>
+                                        <td class="text-error">
+                                            <span>{{ total.withdraw_book_cancel_amount.toLocaleString() }}</span> &#8361;
+                                        </td>
+                                        <td>
+                                            ({{ total.withdraw_book_cancel_count.toLocaleString() }}건)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </VCol>
+                        </template>
+                </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
                     <VSelect :menu-props="{ maxHeight: 400 }" 
@@ -131,3 +219,17 @@ const getLogStyle = (item: VirtualAccountWithdraw) => {
         <PVWithdrawErrorCodeDialog ref="pvErrorCodeDialog"/>        
     </div>
 </template>
+<style scoped>
+.total-table {
+  inline-size: 100%;
+}
+
+.total-table > tr > th {
+  padding-inline-end: 1em;
+  text-align: start;
+}
+
+.total-table > tr > td {
+  text-align: end;
+}
+</style>

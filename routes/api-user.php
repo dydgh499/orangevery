@@ -135,6 +135,7 @@ Route::middleware(['auth.update'])->group(function() {
         Route::get('histories/withdraw-statement', [VirtualAccountHistoryController::class, 'withdrawStatement']);
         Route::get('histories/chart', [VirtualAccountHistoryController::class, 'chart']);
         Route::get('histories', [VirtualAccountHistoryController::class, 'index']);
+        Route::get('withdraw-histories/chart', [VirtualAccountWithdrawController::class, 'chart']);
         Route::get('withdraw-histories', [VirtualAccountWithdrawController::class, 'index']);
         Route::get('wallets/all', [VirtualAccountController::class, 'all']);
         Route::apiResource('wallets', VirtualAccountController::class);

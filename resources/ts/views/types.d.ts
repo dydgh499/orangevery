@@ -648,7 +648,7 @@ export interface Transaction {
     use_realtime_deposit?: number,
     va_id: number | null,
     withdraw_status?: string,
-    withdraw_histories?: VirtualAccountHistory,
+    withdraw_histories?: VirtualAccountHistory[],
 
     profit?: number,
     trx_amount?: number,    
@@ -1233,6 +1233,7 @@ export interface VirtualAccountHistory {
     trans_amount: number,
     deposit_status: number,
     deposit_schedule_time: string,
+    withdraw_schedule_time: string,
     withdraw_status: number,
     withdraw_type: number,
     trx_id: string,

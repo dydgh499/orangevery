@@ -10,8 +10,11 @@ interface Props {
     terminal: boolean,
     cus_filter: boolean,
     sales: boolean,
+    page: boolean
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+    page: true
+})
 </script>
 <template>
     <AppCardActions action-collapsed title="검색 옵션">
@@ -30,7 +33,7 @@ const props = defineProps<Props>()
             <VCol cols="12" md="6">
                 <VCardText style="padding: 1em;">
                     <BaseIndexPGFilter :pg="props.pg" :ps="props.ps" :settle_type="props.settle_type" :terminal="props.terminal"
-                        :cus_filter="props.cus_filter">
+                        :cus_filter="props.cus_filter" :page="props.page">
                         <template #pg_extra_field>
                             <slot name="pg_extra_field"></slot>
                         </template>

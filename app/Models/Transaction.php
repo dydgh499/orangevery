@@ -139,8 +139,7 @@ class Transaction extends Model
     
     public function withdrawHistories()
     {
-        return $this->hasOne(VirtualAccountHistory::class, 'trx_id', 'trx_id')
-            ->where('trans_type', 1)
+        return $this->hasMany(VirtualAccountHistory::class, 'trx_id', 'trx_id')
             ->select();
     }
 

@@ -46,7 +46,6 @@ class VirtualAccountController extends Controller
 
     static public function getCommonQuery($query, $request)
     {
-        $search = $request->input('search', '');
         $level  = (int)$request->input('level', 10);
         if(Ablilty::isMerchandise($request) || $level === 10)
         {
@@ -69,7 +68,6 @@ class VirtualAccountController extends Controller
                     $query = $query->where('salesforces.id', '<=', $level);
                 }
             }
-        
         }
         return $query->where('virtual_accounts.brand_id', $request->user()->brand_id);
     }

@@ -2,6 +2,7 @@
 import WalletDialog from '@/layouts/dialogs/virtual-accounts/WalletDialog.vue';
 import WithdrawHistoriesDialog from '@/layouts/dialogs/virtual-accounts/WithdrawHistoriesDialog.vue';
 import WithdrawStatusmentDialog from '@/layouts/dialogs/virtual-accounts/WithdrawStatusmentDialog.vue';
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import { StatusColorSetter } from '@/views/searcher';
 import ExtraMenu from '@/views/virtual-accounts/histories/ExtraMenu.vue';
@@ -16,7 +17,25 @@ import {
 import { getUserLevel } from '@axios';
 import { DateFilters } from '@core/enums';
 
-const { store, head, exporter, metas, dataToChart } = useSearchStore()
+const { store, head, exporter } = useSearchStore()
+const total = ref(<any>{
+    deposit_amount: 0,
+    withdraw_wait_amount: 0,
+    withdraw_success_amount: 0,
+    withdraw_error_amount: 0,
+    withdraw_appr_cancel_amount: 0,
+    withdraw_book_cancel_amount: 0,
+    deposit_count: 0,
+    withdraw_wait_count: 0,
+    withdraw_success_count: 0,
+    withdraw_error_count: 0,
+    withdraw_appr_cancel_count: 0,
+    withdraw_book_cancel_count: 0,
+    withdraw_fee_amount: 0,
+    total_amount: 0,
+    total_count: 0,
+})
+
 store.params.level = 10
 
 const walletDlg = ref()
@@ -31,15 +50,121 @@ provide('withdrawStatusmentDialog', withdrawStatusmentDialog)
 
 onMounted(() => {
     watchEffect(async () => {
-        await dataToChart()
+        if (store.getChartProcess() === false) {
+            const r = await store.getChartData()
+            total.value.deposit_amount = Number(r.data.deposit_amount)
+            total.value.withdraw_wait_amount = Number(r.data.withdraw_wait_amount)
+            total.value.withdraw_success_amount = Number(r.data.withdraw_success_amount)
+            
+            total.value.withdraw_error_amount = Number(r.data.withdraw_error_amount)
+            total.value.withdraw_appr_cancel_amount = Number(r.data.withdraw_appr_cancel_amount)
+            total.value.withdraw_book_cancel_amount = Number(r.data.withdraw_book_cancel_amount)
+
+            total.value.deposit_count = Number(r.data.deposit_count)
+            total.value.withdraw_wait_count = Number(r.data.withdraw_wait_count)
+            total.value.withdraw_success_count = Number(r.data.withdraw_success_count)
+            total.value.withdraw_error_count = Number(r.data.withdraw_error_count)
+            total.value.withdraw_appr_cancel_count = Number(r.data.withdraw_appr_cancel_count)
+            total.value.withdraw_book_cancel_count = Number(r.data.withdraw_book_cancel_count)
+
+            total.value.withdraw_fee_amount = Number(r.data.withdraw_fee_amount)
+
+            total.value.total_amount = total.value.deposit_amount + total.value.withdraw_wait_amount + total.value.withdraw_success_amount
+            total.value.total_count = total.value.deposit_count + total.value.withdraw_wait_count + total.value.withdraw_success_count
+        }
     })
 })
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="상호, 지갑별칭, 거래번호 검색" :metas="metas" :add="false" add_name=""
+        <BaseIndexView placeholder="상호, 지갑별칭, 거래번호 검색" :metas="[]" :add="false" add_name=""
             :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
+                <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
+                        :sales="true" :page="false">
+                        <template #pg_extra_field>
+                            <VCol cols="12" sm="6">
+                                <table class="total-table">
+                                    <tr>
+                                        <th>입금 합계</th>
+                                        <td class="text-warning">
+                                            <b>{{ total.deposit_amount.toLocaleString() }}</b> &#8361;
+                                        </td>
+                                        <td>
+                                            ({{ total.deposit_count.toLocaleString() }}건)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>출금대기 합계</th>
+                                        <td class="text-primary">
+                                            <b>{{ total.withdraw_wait_amount.toLocaleString() }}</b> &#8361;
+                                        </td>
+                                        <td>
+                                            ({{ total.withdraw_wait_count.toLocaleString() }}건)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>출금성공 합계</th>
+                                        <td class="text-primary">
+                                            <b>{{ total.withdraw_success_amount.toLocaleString() }}</b> &#8361;
+                                        </td>
+                                        <td>
+                                            ({{ total.withdraw_success_count.toLocaleString() }}건)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>입출금 차액</th>
+                                        <td>
+                                            <b>{{ total.total_amount.toLocaleString() }}</b> &#8361;
+                                        </td>
+                                        <td>
+                                            ({{ total.total_count.toLocaleString() }}건)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </VCol>
+                            <VCol cols="12" sm="6">
+                                <table class="total-table">
+                                    <tr>
+                                        <th>출금실패 합계</th>
+                                        <td class="text-error">
+                                            <span>{{ total.withdraw_error_amount.toLocaleString() }}</span> &#8361;
+                                        </td>
+                                        <td>
+                                            ({{ total.withdraw_error_count.toLocaleString() }}건)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>승인취소 합계</th>
+                                        <td class="text-error">
+                                            <span>{{ total.withdraw_appr_cancel_amount.toLocaleString() }}</span> &#8361;
+                                        </td>
+                                        <td>
+                                            ({{ total.withdraw_appr_cancel_count.toLocaleString() }}건)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>예약취소 합계</th>
+                                        <td class="text-error">
+                                            <span>{{ total.withdraw_book_cancel_amount.toLocaleString() }}</span> &#8361;
+                                        </td>
+                                        <td>
+                                            ({{ total.withdraw_book_cancel_count.toLocaleString() }}건)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>출금 수수료 합계</th>
+                                        <td class="text-primary">
+                                            <span>{{ total.withdraw_fee_amount.toLocaleString() }}</span> &#8361;
+                                        </td>
+                                        <td>
+                                            ({{ total.withdraw_success_count.toLocaleString() }}건)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </VCol>
+                        </template>
+                </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
                 <VSelect :menu-props="{ maxHeight: 400 }" 
@@ -205,3 +330,17 @@ onMounted(() => {
         <WithdrawStatusmentDialog ref="withdrawStatusmentDialog" />
     </div>
 </template>
+<style scoped>
+.total-table {
+  inline-size: 100%;
+}
+
+.total-table > tr > th {
+  padding-inline-end: 1em;
+  text-align: start;
+}
+
+.total-table > tr > td {
+  text-align: end;
+}
+</style>

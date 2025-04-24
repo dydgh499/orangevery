@@ -8,8 +8,11 @@ interface Props {
     settle_type: boolean,
     terminal: boolean,
     cus_filter: boolean,
+    page: boolean
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+    page: true
+})
 const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
 const store = <any>(inject('store'))
 
@@ -51,7 +54,7 @@ const filterPgs = computed(() => {
                id="custom-filter" eager @update:modelValue="store.updateQueryString({custom_id: store.params.custom_id})" />
         </VCol>
         <slot name="pg_extra_field"></slot>
-        <VCol cols="6" sm="3">
+        <VCol cols="6" sm="3" v-if="props.page">
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                 :items="[10, 20, 30, 50, 100, 200]" label="조회 개수" id="page-size-filter" eager @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
         </VCol>
