@@ -34,6 +34,21 @@ class VirtualAccountHistoryController extends Controller
         $this->virtual_account_histories = $virtual_account_histories;
     }
 
+    public function dateFilter($request, $query)
+    {
+        if($request->has('s_dt'))
+        {
+            $s_dt = strlen($request->s_dt) === 10 ? date($request->s_dt." 00:00:00") : $request->s_dt;
+            $query = $query->where('virtual_account_histories.created_at', '>=', $s_dt);
+        }
+        if($request->has('e_dt'))
+        {
+            $e_dt = strlen($request->e_dt) === 10 ? date($request->e_dt." 23:59:59") : $request->e_dt;
+            $query = $query->where('virtual_account_histories.created_at', '<=', $e_dt);
+        } 
+        return $query;
+    }
+
     public function common($request)
     {
         $search = $request->input('search', '');
@@ -93,16 +108,7 @@ class VirtualAccountHistoryController extends Controller
             DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 1), virtual_account_histories.withdraw_fee, 0)) AS withdraw_fee_amount"),
         ];
         $query = $this->common($request);
-        if($request->has('s_dt'))
-        {
-            $s_dt = strlen($request->s_dt) === 10 ? date($request->s_dt." 00:00:00") : $request->s_dt;
-            $query = $query->where('virtual_account_histories.created_at', '>=', $s_dt);
-        }
-        if($request->has('e_dt'))
-        {
-            $e_dt = strlen($request->e_dt) === 10 ? date($request->e_dt." 23:59:59") : $request->e_dt;
-            $query = $query->where('virtual_account_histories.created_at', '<=', $e_dt);
-        }        
+        $query = $this->dateFilter($request, $query);
         $chart = $query->first($cols);
         return $this->response(0, $chart);
     }
@@ -116,15 +122,35 @@ class VirtualAccountHistoryController extends Controller
      */
     public function index(IndexRequest $request)
     {
+        $page       = $request->input('page');
+        $page_size  = $request->input('page_size');
+        $res        = ['page'=>$page, 'page_size'=>$page_size];
+
+        $sp = ($page - 1) * $page_size;
         $cols   = [
             'virtual_account_histories.*',
             'virtual_accounts.account_name',
             'virtual_accounts.account_code',
+            VirtualAccountController::getUserNameCol($request),
         ];
-        $cols[] = VirtualAccountController::getUserNameCol($request);
         $query = $this->common($request)->with(['withdraws']);
-        $data = $this->getIndexData($request, $query, 'virtual_account_histories.id', $cols, 'virtual_account_histories.created_at');
-        return $this->response(0, $data);
+        $query = $this->dateFilter($request, $query);
+
+        $min    = $query->min('virtual_account_histories.id');
+        if($min != NULL)
+        {
+            $con_query = $query->where('virtual_account_histories.id', '>=', $min);
+            $res['total']   = $query->count();
+
+            $con_query = $con_query->orderBy('virtual_account_histories.id', 'desc')->offset($sp)->limit($page_size);
+            $res['content'] = count($cols) ? $con_query->get($cols) : $con_query->get();
+        }
+        else
+        {
+            $res['total'] = 0;
+            $res['content'] = [];
+        }
+        return $this->response(0, $res);
     }
 
     public function cancelJob(Request $request)
