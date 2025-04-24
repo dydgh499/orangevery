@@ -18,7 +18,7 @@ export const useSearchStore = defineStore('WithdrawHistoryStore', () => {
             'result_code': '응답코드',
             'request_type': '요청타입',
             'note': '응답메세지',
-            'amount': '거래금액',
+            'trans_amount': '거래금액',
         }
     }
 

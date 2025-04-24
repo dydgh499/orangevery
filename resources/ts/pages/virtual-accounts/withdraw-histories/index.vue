@@ -116,9 +116,9 @@ const getLogStyle = (item: VirtualAccountWithdraw) => {
                                         #{{ item[_key] }}
                                     </VChip>
                                 </span>
-                                <span v-else-if="_key == 'trans_amount'">
+                                <b v-else-if="_key == 'trans_amount'">
                                     {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
-                                </span>
+                                </b>
                                 <span v-else>
                                     {{ item[_key] }}
                                 </span>

@@ -1,4 +1,4 @@
-import { axios } from '@/plugins/axios'
+import { axios, getUserLevel } from '@/plugins/axios'
 import corp from '@/plugins/corp'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
@@ -61,10 +61,13 @@ export const useSearchStore = defineStore('WalletStore', () => {
         }
     }
     const getEtcHeader = () => {
-        return {
+        let cols = {
             'created_at': '생성시간',    
             'updated_at': '업데이트시간',
         }
+        if(getUserLevel() >= 35)
+            cols['all_withdraw'] = '기타'
+        return cols
     }
 
     const headers: Record<string, string> = {

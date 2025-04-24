@@ -128,6 +128,11 @@ provide('exporter', exporter)
                                 <span v-else-if="_key === 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
                                     {{ item[_key] }}
                                 </span>
+                                <span v-else-if="_key === 'all_withdraw'">
+                                    <VBtn variant="tonal" size="small" @click="">
+                                        전액출금
+                                    </VBtn>
+                                </span>
                                 <span v-else>
                                     {{ item[_key] }}
                                 </span>
