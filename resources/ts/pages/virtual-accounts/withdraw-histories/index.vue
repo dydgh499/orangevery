@@ -28,10 +28,12 @@ const total = ref(<any>{
     withdraw_error_amount: 0,
     withdraw_appr_cancel_amount: 0,
     withdraw_book_cancel_amount: 0,
+
     withdraw_success_count: 0,
     withdraw_error_count: 0,
     withdraw_appr_cancel_count: 0,
     withdraw_book_cancel_count: 0,
+
     withdraw_fee_amount: 0,
 })
 onMounted(() => {

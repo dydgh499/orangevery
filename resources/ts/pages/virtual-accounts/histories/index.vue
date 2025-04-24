@@ -25,13 +25,16 @@ const total = ref(<any>{
     withdraw_error_amount: 0,
     withdraw_appr_cancel_amount: 0,
     withdraw_book_cancel_amount: 0,
+
     deposit_count: 0,
     withdraw_wait_count: 0,
     withdraw_success_count: 0,
     withdraw_error_count: 0,
     withdraw_appr_cancel_count: 0,
     withdraw_book_cancel_count: 0,
+
     withdraw_fee_amount: 0,
+    
     total_amount: 0,
     total_count: 0,
 })
@@ -88,37 +91,37 @@ onMounted(() => {
                                     <tr>
                                         <th>입금 합계</th>
                                         <td class="text-warning">
-                                            <b>{{ total.deposit_amount.toLocaleString() }}</b> &#8361;
+                                            <b>{{ total.deposit_amount }}</b> &#8361;
                                         </td>
                                         <td>
-                                            ({{ total.deposit_count.toLocaleString() }}건)
+                                            ({{ total.deposit_count }}건)
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>출금대기 합계</th>
                                         <td class="text-primary">
-                                            <b>{{ total.withdraw_wait_amount.toLocaleString() }}</b> &#8361;
+                                            <b>{{ total.withdraw_wait_amount }}</b> &#8361;
                                         </td>
                                         <td>
-                                            ({{ total.withdraw_wait_count.toLocaleString() }}건)
+                                            ({{ total.withdraw_wait_count }}건)
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>출금성공 합계</th>
                                         <td class="text-primary">
-                                            <b>{{ total.withdraw_success_amount.toLocaleString() }}</b> &#8361;
+                                            <b>{{ total.withdraw_success_amount }}</b> &#8361;
                                         </td>
                                         <td>
-                                            ({{ total.withdraw_success_count.toLocaleString() }}건)
+                                            ({{ total.withdraw_success_count }}건)
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>입출금 차액</th>
                                         <td>
-                                            <b>{{ total.total_amount.toLocaleString() }}</b> &#8361;
+                                            <b>{{ total.total_amount }}</b> &#8361;
                                         </td>
                                         <td>
-                                            ({{ total.total_count.toLocaleString() }}건)
+                                            ({{ total.total_count }}건)
                                         </td>
                                     </tr>
                                 </table>
@@ -128,37 +131,37 @@ onMounted(() => {
                                     <tr>
                                         <th>출금실패 합계</th>
                                         <td class="text-error">
-                                            <span>{{ total.withdraw_error_amount.toLocaleString() }}</span> &#8361;
+                                            <span>{{ total.withdraw_error_amount }}</span> &#8361;
                                         </td>
                                         <td>
-                                            ({{ total.withdraw_error_count.toLocaleString() }}건)
+                                            ({{ total.withdraw_error_count }}건)
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>승인취소 합계</th>
                                         <td class="text-error">
-                                            <span>{{ total.withdraw_appr_cancel_amount.toLocaleString() }}</span> &#8361;
+                                            <span>{{ total.withdraw_appr_cancel_amount }}</span> &#8361;
                                         </td>
                                         <td>
-                                            ({{ total.withdraw_appr_cancel_count.toLocaleString() }}건)
+                                            ({{ total.withdraw_appr_cancel_count }}건)
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>예약취소 합계</th>
                                         <td class="text-error">
-                                            <span>{{ total.withdraw_book_cancel_amount.toLocaleString() }}</span> &#8361;
+                                            <span>{{ total.withdraw_book_cancel_amount }}</span> &#8361;
                                         </td>
                                         <td>
-                                            ({{ total.withdraw_book_cancel_count.toLocaleString() }}건)
+                                            ({{ total.withdraw_book_cancel_count }}건)
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>출금 수수료 합계</th>
                                         <td class="text-primary">
-                                            <span>{{ total.withdraw_fee_amount.toLocaleString() }}</span> &#8361;
+                                            <span>{{ total.withdraw_fee_amount }}</span> &#8361;
                                         </td>
                                         <td>
-                                            ({{ total.withdraw_success_count.toLocaleString() }}건)
+                                            ({{ total.withdraw_success_count }}건)
                                         </td>
                                     </tr>
                                 </table>
@@ -251,7 +254,7 @@ onMounted(() => {
                                     </VChip>
                                 </span>
                                 <b v-else-if="_key === 'trans_amount'">
-                                    {{ item[_key].toLocaleString() }}
+                                    {{ item[_key] }}
                                 </b>
                                 <span v-else-if="_key === 'trans_type'">
                                     <VChip :color="transTypeColors(item['trans_type'])">
@@ -300,7 +303,7 @@ onMounted(() => {
                                 </span>
                                 <b v-else-if="_key === 'withdraw_amount'">
                                     <span v-if="item['trans_type']">
-                                        {{ ((item['trans_amount'] * -1) - item['withdraw_fee']).toLocaleString() }}
+                                        {{ ((item['trans_amount'] * -1) - item['withdraw_fee']) }}
                                     </span>
                                 </b>
                                 <span v-else-if="_key === 'withdraw_schedule_time'">
