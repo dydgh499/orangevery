@@ -56,7 +56,7 @@ onMounted(() => {
                             <span style="font-size: 0.9em;">님 안녕하세요 !</span>
                         </div>
                     </VCol>
-                    <VCol cols="12" style="text-align: center;">
+                    <VCol cols="12" style=" padding-right: 0;padding-left: 0;text-align: center;">
                         <VBtn variant="tonal" @click="router.push('/posts?type=0')" class="shortcut-button">
                             공지사항
                             <VIcon end icon="svg-spinners:bars-scale-middle" color="primary" />

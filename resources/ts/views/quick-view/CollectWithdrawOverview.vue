@@ -38,8 +38,6 @@ const requestWithdraw = async() => {
                     va_id: props.virtual_account.id,
                     withdraw_amount: amount.value,
                 })
-                if(r.status == 201)
-                    getWithdrawAbleAmount()
             }
         }
         else
@@ -55,9 +53,12 @@ watchEffect(() => {
 </script>
 <template>
     <VCol>
-        <VRow no-gutters>
+        <VRow no-gutters style="align-items: center;">
             <VCol class="small-font">
                 <span class="text-primary">출금</span>가능 금액   
+                <VBtn variant="text" color="secondary" size="small" icon @click="getWithdrawAbleAmount()">
+                    <VIcon icon="tabler:refresh" size="20" />
+                </VBtn>
             </VCol>
             <VCol style="text-align: end;">
                 <VChip color="success">
@@ -65,7 +66,7 @@ watchEffect(() => {
                 </VChip>
             </VCol>
         </VRow>
-        <VRow no-gutters style="font-weight: bold;">
+        <VRow no-gutters style=" align-items: center;font-weight: bold;">
             <VCol>
                 <SkeletonBox v-if="props.is_skeleton" :width="'8em'"/>
                 <b v-else>
@@ -76,12 +77,12 @@ watchEffect(() => {
     </VCol>
     <VDivider/>
     <VCol>
-        <VRow no-gutters>
+        <VRow no-gutters style="align-items: center;">
             <VCol class="small-font">
                 <span class="text-primary">출금</span>금액 입력
             </VCol>
         </VRow>
-        <VRow no-gutters style="font-weight: bold;">
+        <VRow no-gutters style=" align-items: center;font-weight: bold;">
             <VCol>
                 <SkeletonBox v-if="props.is_skeleton" :width="'10em'" :height="'2em'"/>
                 <VTextField 
