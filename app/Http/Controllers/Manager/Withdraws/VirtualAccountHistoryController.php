@@ -73,7 +73,7 @@ class VirtualAccountHistoryController extends Controller
     {
         $cols = [
             DB::raw("SUM(IF(trans_type = 0 AND deposit_status = 1, trans_amount, 0)) AS deposit_amount"),
-            DB::raw("SUM(IF(trans_type = 1 AND withdraw_status = 1, trans_amount, 0)) AS withdraw_amount"),
+            DB::raw("SUM(IF(trans_type = 1 AND (withdraw_status = 1 OR withdraw_status = 0), trans_amount, 0)) AS withdraw_amount"),
             DB::raw("SUM(IF(trans_type = 1, virtual_account_histories.withdraw_fee, 0)) AS withdraw_fee_amount"),
             DB::raw("SUM(trans_type = 0) AS deposit_count"),
             DB::raw("SUM(IF(trans_type = 1, 1, 0)) AS withdraw_count"),
