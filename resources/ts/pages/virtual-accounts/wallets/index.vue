@@ -77,93 +77,95 @@ const allWithdraw = async (item: VirtualAccount) => {
             <template #headers>
                 <tr>
                     <template v-for="(sub_header, index) in head.getSubHeaderComputed" :key="index">
-                        <th :colspan="head.getSubHeaderComputed.length - 1 == index ? sub_header.width + 1 : sub_header.width"
-                            class='list-square sub-headers' v-show="sub_header.width">
+                        <template v-if="store.params.level > 10 && sub_header.ko === '영업라인 정보'">
+                        </template>
+                        <th v-else
+                             class='list-square sub-headers' 
+                            :colspan="head.getSubHeaderComputed.length - 1 == index ? sub_header.width + 1 : sub_header.width"
+                            v-show="sub_header.width">
                             <span>{{ sub_header.ko }}</span>
                         </th>
                     </template>
                 </tr>
                 <tr>
-                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                        <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
-                            <VCheckbox v-model="all_selected" class="check-label" />
-                            <span>선택/취소</span>
-                        </div>
-                        <span v-else>
-                            {{ header.ko }}
-                        </span>
-                    </th>
+                    <template v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible">
+                        <template v-if="store.params.level > 10 && key.includes('sales')">
+                        </template>
+                        <th v-else
+                             class='list-square'>
+                            <span class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
+                                <VCheckbox v-model="all_selected" class="check-label" />
+                                <span>선택/취소</span>
+                            </span>
+                            <span v-else>
+                                {{ header.ko }}
+                            </span>
+                        </th>
+                    </template>
                 </tr>
             </template>
             <template #body>
                 <tr v-for="(item, index) in store.getItems" :key="index">
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                        <template v-if="head.getDepth(_header, 0) != 1">
-                            <td v-for="(__header, __key, __index) in _header" :key="__index"
-                                v-show="(__header?.visible as boolean)" class='list-square'>
-                                <span>
-                                    {{ item[_key][__key] }}
-                                </span>
-                            </td>
+                        <template v-if="store.params.level > 10 && _key.includes('sales')">
                         </template>
-                        <template v-else>
-                            <td v-show="_header.visible" class='list-square'>
-                                <span v-if="_key == `id`">
-                                    <div class='check-label-container'>
-                                        <VCheckbox 
-                                            v-if="getUserLevel() >= 35" 
-                                            v-model="selected" 
-                                            :value="item[_key]"
-                                            class="check-label" 
-                                        />
-                                        <span class="edit-link" @click="walletDlg.show(0 ,[item])">
-                                            #{{ item[_key] }}
-                                            <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
-                                                상세보기
-                                            </VTooltip>
-                                        </span>
-                                    </div>
-                                </span>
-                                <span v-else-if="_key === 'account_code'">
-                                    <VChip color="success">
-                                        {{ item[_key] }}
-                                    </VChip>
-                                </span>
-                                <b v-else-if="_key === 'balance'">
-                                    {{ item[_key].toLocaleString() }}
-                                </b>
-                                <span v-else-if="_key === 'fin_id'">
-                                    {{ finance_vans.find(obj => obj.id === item[_key])?.nick_name }}
-                                </span>
-                                <span v-else-if="_key === 'fin_trx_delay'">
-                                    {{ fin_trx_delays.find(obj => obj.id === item[_key])?.title }}
-                                </span>
-                                <span v-else-if="_key === 'withdraw_type'">
-                                    <VChip :color="StatusColorSetter().getSelectIdColor(item[_key])">
-                                        {{ withdraw_types.find(obj => obj.id === item[_key])?.title }}
-                                    </VChip>
-                                </span>
-                                <span v-else-if="_key === 'withdraw_limit_type'">
-                                    <VChip :color="StatusColorSetter().getSelectIdColor(item[_key] || 0)">
-                                        {{ withdraw_limit_types.find(obj => obj.id === item[_key])?.title }}
-                                    </VChip>
-                                </span>
-                                <span v-else-if="_key === 'withdraw_business_limit' || _key === 'withdraw_holiday_limit'">
-                                    {{ item[_key] }}만원
-                                </span>
-                                <span v-else-if="_key === 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
+                        <td v-else
+                            v-show="_header.visible" class='list-square'>
+                            <span v-if="_key == `id`">
+                                <div class='check-label-container'>
+                                    <VCheckbox 
+                                        v-if="getUserLevel() >= 35" 
+                                        v-model="selected" 
+                                        :value="item[_key]"
+                                        class="check-label" 
+                                    />
+                                    <span class="edit-link" @click="walletDlg.show(0 ,[item])">
+                                        #{{ item[_key] }}
+                                        <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                            상세보기
+                                        </VTooltip>
+                                    </span>
+                                </div>
+                            </span>
+                            <span v-else-if="_key === 'account_code'">
+                                <VChip color="success">
                                     {{ item[_key] }}
-                                </span>
-                                <span v-else-if="_key === 'all_withdraw'">
-                                    <VBtn variant="tonal" size="small" @click="allWithdraw(item)">
-                                        전액출금
-                                    </VBtn>
-                                </span>
-                                <span v-else>
-                                    {{ item[_key] }}
-                                </span>
-                            </td>
-                        </template>
+                                </VChip>
+                            </span>
+                            <b v-else-if="_key === 'balance'">
+                                {{ item[_key].toLocaleString() }}
+                            </b>
+                            <span v-else-if="_key === 'fin_id'">
+                                {{ finance_vans.find(obj => obj.id === item[_key])?.nick_name }}
+                            </span>
+                            <span v-else-if="_key === 'fin_trx_delay'">
+                                {{ fin_trx_delays.find(obj => obj.id === item[_key])?.title }}
+                            </span>
+                            <span v-else-if="_key === 'withdraw_type'">
+                                <VChip :color="StatusColorSetter().getSelectIdColor(item[_key])">
+                                    {{ withdraw_types.find(obj => obj.id === item[_key])?.title }}
+                                </VChip>
+                            </span>
+                            <span v-else-if="_key === 'withdraw_limit_type'">
+                                <VChip :color="StatusColorSetter().getSelectIdColor(item[_key] || 0)">
+                                    {{ withdraw_limit_types.find(obj => obj.id === item[_key])?.title }}
+                                </VChip>
+                            </span>
+                            <span v-else-if="_key === 'withdraw_business_limit' || _key === 'withdraw_holiday_limit'">
+                                {{ item[_key] }}만원
+                            </span>
+                            <span v-else-if="_key === 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
+                                {{ item[_key] }}
+                            </span>
+                            <span v-else-if="_key === 'all_withdraw'">
+                                <VBtn variant="tonal" size="small" @click="allWithdraw(item)">
+                                    전액출금
+                                </VBtn>
+                            </span>
+                            <span v-else>
+                                {{ item[_key] }}
+                            </span>
+                        </td>
                     </template>
                 </tr>
             </template>

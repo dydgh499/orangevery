@@ -12,6 +12,29 @@ export const transTypeNames = (type: number) => {
     return type ? '출금' : '입금'
 }
 
+export const depositTypeNames = (type: number) => {
+    if(type === 0)
+        return '승인'
+    else if(type === 1)
+        return '취소'
+    else if(type === 2)
+        return '통신비'
+    else if(type === 3)
+        return '취소입금'
+    else
+        return '알수없음'
+}
+export const depositTypeColors = (type: number) => {
+    if(type === 0)
+        return 'primary'
+    else if(type === 1)
+        return 'error'
+    else if(type === 2)
+        return 'warning'
+    else
+        return 'info'
+}
+
 export const depositStatusNames = (type: number) => {
     if(type === 0)
         return '대기'
@@ -187,8 +210,9 @@ export const useSearchStore = defineStore('WalletHistoryStore', () => {
     }
     const getDepositHeader = () => {
         return {
-            'settle_id': '정산번호',
+            'deposit_type': '입금타입',
             'deposit_status': '입금상태',
+            'settle_id': '정산번호',
             'deposit_schedule_time': '입금예정시간',
         }
     }
@@ -234,6 +258,7 @@ export const useSearchStore = defineStore('WalletHistoryStore', () => {
             }
             else {
                 // 입금
+                datas[i]['deposit_type']  = depositTypeNames(datas[i]['deposit_type']);
                 datas[i]['withdraw_fee']    = '';
                 datas[i]['withdraw_type']   = '';
                 datas[i]['withdraw_status'] = '';

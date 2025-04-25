@@ -35,9 +35,39 @@ export const useSearchStore = defineStore('WalletStore', () => {
     const store = Searcher('virtual-accounts/wallets')
     const head  = Header('virtual-accounts/wallets', '지갑 관리')
     const { finance_vans } = useStore()
-    const getOwnerHeader = () => {
+
+    const getNoHeader = () => {
         return {
             'id': 'NO.',
+        }
+    }
+
+    const getSalesHeader = () => {
+        const levels = corp.pv_options.auth.levels
+        const headers_4:Record<string, string> = {}
+        if (levels.sales5_use && getUserLevel() >= 30) {
+            headers_4['sales5_name'] = levels.sales5_name
+        }
+        if (levels.sales4_use && getUserLevel() >= 25) {
+            headers_4['sales4_name'] = levels.sales4_name
+        }
+        if (levels.sales3_use && getUserLevel() >= 20) {
+            headers_4['sales3_name'] = levels.sales3_name
+        }
+        if (levels.sales2_use && getUserLevel() >= 17) {
+            headers_4['sales2_name'] = levels.sales2_name
+        }
+        if (levels.sales1_use && getUserLevel() >= 15) {
+            headers_4['sales1_name'] = levels.sales1_name
+        }
+        if (levels.sales0_use && getUserLevel() >= 13) {
+            headers_4['sales0_name'] = levels.sales0_name
+        }
+        return headers_4
+    }
+
+    const getOwnerHeader = () => {
+        return {
             'user_name': '상호',
             'account_name': '계좌별칭',
             'account_code': '계좌코드',
@@ -71,12 +101,16 @@ export const useSearchStore = defineStore('WalletStore', () => {
     }
 
     const headers: Record<string, string> = {
+        ...getNoHeader(),
+        ...getSalesHeader(),
         ...getOwnerHeader(),
         ...geWalletHeader(),
         ...getLimitHeader(),
         ...getEtcHeader(),
     }
     const sub_headers: any = []
+    head.getSubHeaderCol('', getNoHeader(), sub_headers)
+    head.getSubHeaderCol('영업라인 정보', getSalesHeader(), sub_headers)
     head.getSubHeaderCol('소유자 정보', getOwnerHeader(), sub_headers)
     head.getSubHeaderCol('출금 정보', geWalletHeader(), sub_headers)
     head.getSubHeaderCol('제한 정보', getLimitHeader(), sub_headers)

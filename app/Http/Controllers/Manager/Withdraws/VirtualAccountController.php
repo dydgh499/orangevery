@@ -104,6 +104,17 @@ class VirtualAccountController extends Controller
         }
 
         $cols[] = self::getUserNameCol($request);
+        if($level === 10)
+        {
+            $cols = array_merge($cols, [
+                'merchandises.sales5_id',
+                'merchandises.sales4_id',
+                'merchandises.sales3_id',
+                'merchandises.sales2_id',
+                'merchandises.sales1_id',
+                'merchandises.sales0_id',    
+            ]);
+        }
         $res    = [
             'page'      => $request->page, 
             'page_size' => $request->page_size
@@ -115,6 +126,18 @@ class VirtualAccountController extends Controller
             ->offset($sp)
             ->limit($request->page_size)
             ->get($cols);
+
+        if($level === 10)
+        {
+            $sales_ids      = globalGetUniqueIdsBySalesIds($res['content']);
+            $salesforces    = globalGetSalesByIds($sales_ids);
+            $res['content'] = globalMappingSales($salesforces, $res['content']);    
+        }
+        $res['content'] = json_decode(json_encode($res['content']), true);
+        foreach($res['content'] as &$data)
+        {
+            $data = UnderSalesforce::setViewableSalesInfos($request, $data);
+        }
         return $this->response(0, $res);
     }
 

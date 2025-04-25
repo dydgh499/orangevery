@@ -92,7 +92,7 @@ const destory = async (id: number) => {
                                         </VBtn>
                                     </span>
                                     <span v-else-if="_key === 'apply_data'">
-                                        {{ replaceVariable(item[_key]) }}
+                                        {{ replaceVariable(item[_key], '') }}
                                     </span>
                                     <span v-else>
                                         {{ item[_key] }}

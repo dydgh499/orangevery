@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import TradeAmbassadorDialog from '@/layouts/dialogs/virtual-accounts/TradeAmbassadorDialog.vue';
 import WalletDialog from '@/layouts/dialogs/virtual-accounts/WalletDialog.vue';
 import WithdrawHistoriesDialog from '@/layouts/dialogs/virtual-accounts/WithdrawHistoriesDialog.vue';
 import WithdrawStatusmentDialog from '@/layouts/dialogs/virtual-accounts/WithdrawStatusmentDialog.vue';
+
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import { StatusColorSetter } from '@/views/searcher';
@@ -10,7 +12,10 @@ import { withdraw_types } from '@/views/virtual-accounts/wallets/useStore';
 
 import {
     depositStatusColors,
-    depositStatusNames, transTypeColors, transTypeNames, useSearchStore,
+    depositStatusNames,
+    depositTypeColors,
+    depositTypeNames,
+    transTypeColors, transTypeNames, useSearchStore,
     withdrawStatusColors,
     withdrawStatusNames
 } from '@/views/virtual-accounts/histories/useStore';
@@ -42,12 +47,15 @@ const total = ref(<any>{
 store.params.level = 10
 
 const walletDlg = ref()
+const tradeAmbassadorDialog = ref()
 const withdrawHistoriesDialog = ref()
 const withdrawStatusmentDialog = ref()
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+
+provide('tradeAmbassadorDialog', tradeAmbassadorDialog)
 provide('withdrawHistoriesDialog', withdrawHistoriesDialog)
 provide('withdrawStatusmentDialog', withdrawStatusmentDialog)
 
@@ -194,7 +202,20 @@ onMounted(() => {
                     item-title="title"
                     item-value="id" 
                     @update:modelValue="store.updateQueryString({trans_type: store.params.trans_type})"
-                    :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''"/>      
+                    :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''"/>
+                <VSelect :menu-props="{ maxHeight: 400 }" 
+                    v-model="store.params.deposit_type" 
+                    :items="[
+                        { id: null, title: '전체' }, { id: 0, title: '승인' }, 
+                        { id: 1, title: '취소' }, { id: 2, title: '통신비' },
+                        { id: 3, title: '취소입금' }, 
+                    ]" 
+                    label="입금 타입" 
+                    item-title="title"
+                    item-value="id" 
+                    @update:modelValue="store.updateQueryString({deposit_type: store.params.deposit_type})"
+                    :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''"/>     
+
                 <VSelect :menu-props="{ maxHeight: 400 }" 
                     v-model="store.params.withdraw_status" 
                     :items="[
@@ -275,6 +296,13 @@ onMounted(() => {
                                         {{ depositStatusNames(item[_key]) }}
                                     </VChip>
                                 </span>
+                                <span v-else-if="_key === 'deposit_type'">
+                                    <VChip 
+                                        v-if="item['trans_type'] === 0"
+                                        :color="depositTypeColors(item[_key])">
+                                        {{ depositTypeNames(item[_key]) }}
+                                    </VChip>
+                                </span>
                                 <span v-else-if="_key === 'deposit_schedule_time'">
                                     <span 
                                         v-if="item['trans_type'] === 0"
@@ -312,9 +340,7 @@ onMounted(() => {
                                     </span>
                                 </span>
                                 <span v-else-if="_key == 'withdraw_etc'">
-                                    <ExtraMenu 
-                                        v-if="item['trans_type']"
-                                        :item="item" />
+                                    <ExtraMenu :item="item" />
                                 </span>
                                 <span v-else-if="_key === 'updated_at'" :class="item[_key] !== item['created_at'] ? 'text-primary' : ''">
                                     {{ item[_key] }}
@@ -329,6 +355,7 @@ onMounted(() => {
             </template>
         </BaseIndexView>
         <WalletDialog ref="walletDlg"/>
+        <TradeAmbassadorDialog ref="tradeAmbassadorDialog" />
         <WithdrawHistoriesDialog ref="withdrawHistoriesDialog" />
         <WithdrawStatusmentDialog ref="withdrawStatusmentDialog" />
     </div>

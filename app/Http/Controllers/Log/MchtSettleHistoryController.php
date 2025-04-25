@@ -6,8 +6,6 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Log\SettleHistoryMerchandise;
 use App\Models\Merchandise;
 use App\Models\Transaction;
-use App\Models\Log\SettleHistoryMerchandiseDeposit;
-use App\Models\Merchandise\PaymentModule;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,9 +16,6 @@ use App\Http\Traits\Settle\SettleHistoryTrait;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Log\CreateSettleHistoryRequest;
 use App\Http\Requests\Manager\Log\BatchSettleHistoryRequest;
-use App\Http\Controllers\Ablilty\Ablilty;
-use App\Http\Controllers\Ablilty\AbnormalConnection;
-use App\Http\Controllers\Utils\Comm;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 
 /**
@@ -31,7 +26,7 @@ use App\Http\Controllers\Manager\Service\BrandInfo;
 class MchtSettleHistoryController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, SettleHistoryTrait;
-    protected $settle_mcht_hist;
+    protected $settle_mcht_hist, $base_noti_url;
     
     public function __construct(SettleHistoryMerchandise $settle_mcht_hist)
     {

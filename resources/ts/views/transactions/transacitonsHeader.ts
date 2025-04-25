@@ -51,14 +51,14 @@ export const transactionHeader = (table_name: string) => {
         const headers_1:Record<string, string> = {}
         headers_1['id'] = 'NO.'
         if(isFixplus() === false) {
-            headers_1['module_type'] = '거래 타입'
+            headers_1['module_type'] = '거래타입'
             if(table_name === 'transactions')
                 headers_1['note'] = '결제모듈 별칭'
         }
-        headers_1['trx_dttm'] = '거래 시간'
-        headers_1['cxl_dttm'] = '취소 시간'
+        headers_1['trx_dttm'] = '거래시간'
+        headers_1['cxl_dttm'] = '취소시간'
         headers_1['appr_num'] = '승인번호'
-        headers_1['amount'] = '거래 금액'
+        headers_1['amount'] = '거래금액'
         headers_1['installment'] = '할부'
         headers_1['acquirer'] = '매입사'
         headers_1['card_num'] = '카드번호'

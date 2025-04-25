@@ -133,6 +133,7 @@ Route::middleware(['auth.update'])->group(function() {
     
     Route::prefix('virtual-accounts')->group(function() {
         Route::get('histories/withdraw-statement', [VirtualAccountHistoryController::class, 'withdrawStatement']);
+        Route::get('histories/trade-ambassador', [VirtualAccountHistoryController::class, 'tradeAmbassador']);
         Route::get('histories/chart', [VirtualAccountHistoryController::class, 'chart']);
         Route::get('histories', [VirtualAccountHistoryController::class, 'index']);
         Route::get('withdraw-histories/chart', [VirtualAccountWithdrawController::class, 'chart']);

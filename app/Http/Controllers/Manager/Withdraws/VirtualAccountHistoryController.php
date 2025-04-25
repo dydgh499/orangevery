@@ -9,12 +9,15 @@ use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Requests\Manager\Settle\CollectWithdrawRequest;
 use App\Http\Requests\Manager\Settle\CollectWithdrawRequestV2;
 use App\Http\Controllers\Manager\Withdraws\VirtualAccountController;
+use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Controllers\Utils\Comm;
 
 use App\Models\Salesforce;
 use App\Models\Merchandise;
+use App\Models\Transaction;
 use App\Models\Withdraws\VirtualAccount;
 use App\Models\Withdraws\VirtualAccountHistory;
+use App\Models\Log\SettleHistoryMerchandise;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -81,6 +84,12 @@ class VirtualAccountHistoryController extends Controller
                 ->where('virtual_account_histories.withdraw_status', $request->withdraw_status)
                 ->where('virtual_account_histories.trans_type', 1);
         }
+        if($request->deposit_type !== null)
+        {
+            $query = $query
+                ->where('virtual_account_histories.deposit_type', $request->deposit_type)
+                ->where('virtual_account_histories.trans_type', 0);
+        }        
         return $query;
     }
     /**
@@ -316,5 +325,79 @@ class VirtualAccountHistoryController extends Controller
         }
         else
             return $this->extendResponse(2000, '이체정보가 존재하지 않습니다.');
+    }
+
+    /*
+    * 거래대사
+    */
+    public function tradeAmbassador(Request $request)
+    {
+        $validated = $request->validate([
+            'id'        => 'required|integer',
+            'level'     =>  'required|integer',
+            'trans_type'=> 'required|integer',
+            'settle_id' => 'nullable|integer',
+            'deposit_type'  => 'nullable|integer',
+            'trx_id'        => 'nullable|string',
+        ]);
+        $getTradeAmbassador = function ($request, $deposit_type, $trx_id, $settle_id) {
+            if((int)$deposit_type < 2 && $trx_id)
+            {
+                $trans = Transaction::join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
+                    ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
+                    ->where('transactions.trx_id', $trx_id)
+                    ->where('transactions.is_cancel', $deposit_type)
+                    ->first([
+                        'merchandises.mcht_name',
+                        'payment_modules.note',
+                        'transactions.*',
+                    ]);
+                $trans = json_decode(json_encode($trans), true);
+                $trans = UnderSalesforce::setViewableSalesInfos($request, $trans);
+            }
+            else
+                $trans = [];
+            $settle = SettleHistoryMerchandise::join('merchandises', 'settle_histories_merchandises.mcht_id', '=', 'merchandises.id')
+                ->where('settle_histories_merchandises.id', $settle_id)
+                ->first([
+                    'merchandises.mcht_name',
+                    'settle_histories_merchandises.*',
+                ]);
+
+            return [$trans, $settle];
+        };
+
+        if((int)$request->trans_type === 0)
+        {
+            [$trans, $settle] = $getTradeAmbassador($request, $request->deposit_type, $request->trx_id, $request->settle_id);
+            return $this->response(0, [
+                'trans'     => $trans,
+                'settle'    => $settle,
+            ]);
+        }
+        else
+        {
+            $history = $this->virtual_account_histories
+                ->where('trans_type', 0)
+                ->where('brand_id', $request->user()->brand_id)
+                ->where('cxl_seq', 0)
+                ->where('level', $request->level)
+                ->where('trx_id', $request->trx_id)
+                ->first();
+            if($history)
+                [$trans, $settle] = $getTradeAmbassador($request, $history->deposit_type, $history->trx_id, $history->settle_id);
+            else
+            {
+                $trans = [];
+                $settle = [];
+                $history = [];
+            }
+            return $this->response(0, [
+                'trans'     => $trans,
+                'settle'    => $settle,
+                'history'   => $history,
+            ]);
+        }
+
     }
 }

@@ -767,8 +767,16 @@ export interface SettlesHistory extends Bank {
     deduct_amount: number,
     deposit_amount: number,
     appr_amount: number,
+    appr_count: number,
     cxl_amount: number,
+    cxl_count: number,
+    trx_amount: number,
     total_amount: number,
+    
+    comm_settle_amount: number,
+    under_sales_amount: number,
+    cancel_deposit_amount: number,
+
     settle_dt: string,
     deposit_dt: string,
     deposit_status: Boolean,
@@ -1228,10 +1236,12 @@ export interface VirtualAccount {
 
 export interface VirtualAccountHistory {
     id: number,
+    level: number,
     settle_id: number,
     trans_type: number,
     trans_amount: number,
     deposit_status: number,
+    deposit_type: number,
     deposit_schedule_time: string,
     withdraw_schedule_time: string,
     withdraw_status: number,

@@ -10,6 +10,8 @@ interface Props {
 const props = defineProps<Props>()
 
 const store = <any>(inject('store'))
+    
+const tradeAmbassadorDialog = <any>(inject('tradeAmbassadorDialog'))
 const withdrawHistoriesDialog = <any>(inject('withdrawHistoriesDialog'))
 const withdrawStatusmentDialog = <any>(inject('withdrawStatusmentDialog'))
 
@@ -44,7 +46,7 @@ const retryDeposit = async () => {
                     <VListItemTitle>이체내역서</VListItemTitle>
                 </VListItem>
                 <VListItem 
-                    v-else-if="[2, 4].includes(props.item.withdraw_status) && getUserLevel() >= 35"
+                    v-else-if="props.item.trans_type === 1 && [2, 4].includes(props.item.withdraw_status) && getUserLevel() >= 35"
                     value="retry-realtime-deposit" 
                     class="retry-realtime-deposit"
                     @click="retryDeposit()">
@@ -54,7 +56,7 @@ const retryDeposit = async () => {
                     <VListItemTitle>재이체</VListItemTitle>
                 </VListItem>
                 <VListItem
-                    v-else-if="props.item.withdraw_status === 0 && getUserLevel() >= 35"
+                    v-else-if="props.item.trans_type === 1 && props.item.withdraw_status === 0 && getUserLevel() >= 35"
                     value="single-deposit-cancel-job" 
                     class="single-deposit-cancel-job" 
                     @click="cancelJobs([props.item.trx_id])">
@@ -64,12 +66,22 @@ const retryDeposit = async () => {
                     <VListItemTitle>이체예약취소</VListItemTitle>
                 </VListItem>
                 <VListItem 
+                    v-if="props.item.trans_type === 1"                
                     value="withdraw-histories" 
                     @click="withdrawHistoriesDialog.show(props.item['withdraws'])">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:history" />
                     </template>
                     <VListItemTitle>출금시도이력</VListItemTitle>
+                </VListItem>
+                <VListItem 
+                    v-if="props.item.trans_type === 0 || props.item.withdraw_status === 1 && props.item.withdraw_type === 1"
+                    value="trade-ambassador" 
+                    @click="tradeAmbassadorDialog.show(props.item)">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="tabler:history" />
+                    </template>
+                    <VListItemTitle>거래대사</VListItemTitle>
                 </VListItem>
             </VList>
         </VMenu>
