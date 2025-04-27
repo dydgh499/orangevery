@@ -12,6 +12,7 @@ const route = useRoute()
 const store = Searcher('posts')
 const { head } = useSearchStore()
 const { tabs } = useDynamicTabStore()
+const levels = corp.pv_options.auth.levels
 
 const exporter = async () => {
     const keys = Object.keys(head.flat_headers.value)
@@ -83,9 +84,16 @@ watchEffect(() => {
                             </span>
                             <span v-else-if="_key == 'writer'">
                                 <div>
-                                    <template v-if="item['level'] >= 35">                           
+                                    <template v-if="item['level'] >= 35">
                                         <VChip :color="store.getAllLevelColor(item['level'])">
                                             운영자
+                                        </VChip>
+                                    </template>
+                                    <template v-else-if="item['level'] === 30 && item['type'] !== 2">
+                                        <span style="margin: 0.1em;">{{ item[_key] }}</span>
+                                        <br>
+                                        <VChip :color="store.getAllLevelColor(item['level'])">
+                                            {{ levels.sales5_name }}
                                         </VChip>
                                     </template>
                                     <template v-else>

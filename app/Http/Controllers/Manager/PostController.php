@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Models\Post;
+use App\Models\Salesforce;
+use App\Models\Merchandise;
 use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Ablilty\Ablilty;
@@ -44,6 +46,68 @@ class PostController extends Controller
         return $replies;
     }
 
+    public function indexDetail($query, $request)
+    {
+        $coomonQuery = function($query, $request) {
+            return $query->orWhere(function($sub_query) use($request) {
+                return $sub_query->where('type', 2)->where('writer', $request->user()->user_name);
+            })->orWhere(function($sub_query) {
+                return $sub_query->where('level', '>=', 35);
+            });
+        };
+        if(Ablilty::isMerchandise($request))
+        {   // 가맹점이면      
+            $sales = Salesforce::where('id', $request->user()->sales5_id)->first();
+            $query = $query->where(function($query) use($request, $coomonQuery, $sales) {
+                // 자신 1:1 문의, 또는 운영사 게시글
+                $query = $coomonQuery($query, $request);
+                  if($sales)
+                  { // 또는 본사 게시글만
+                    $query = $query->orWhere(function($sub_query) use($sales) {                    
+                        $sub_query
+                            ->where('type', '!=', 2)
+                            ->where('level', 30)
+                            ->where('writer', $sales->user_name);
+                    });
+                  }
+                  return $query;
+            });
+        }
+        else if(Ablilty::isSalesforce($request))
+        {   // 영업라인이면
+            if($request->user()->level === 30)
+                $user_name = $request->user()->user_name;
+            else
+            {
+                $key    = 'sales'.globalLevelByIndex($request->user()->level).'_id';
+                $mcht   = Merchandise::where($key, $request->user()->id)->whereNotNull('sales5_id')->first();
+                if($mcht)
+                {
+                    $sales = Salesforce::where('id', $mcht->sales5_id)->first();
+                    $user_name = $sales ? $sales->user_name : null;
+                }
+                else
+                    $user_name = null;
+            }
+            $query = $query->where(function($query) use($request, $coomonQuery, $user_name) {
+                // 영업라인이면 자신문의와 운영사 게시글
+                $query = $coomonQuery($query, $request);
+                if($user_name)
+                {   // 윗라인 공지사항들
+                    $query = $query->orWhere(function($sub_query) use($user_name) {                    
+                        $sub_query
+                            ->where('type', '!=', 2)
+                            ->where('level', 30)
+                            ->where('writer', $user_name);
+                    });
+                }
+                return $query;
+            });
+
+        }
+        return $query;
+    }
+
     /**
      * 목록출력
      *
@@ -64,16 +128,8 @@ class PostController extends Controller
 
         if($request->type !== null)
             $query = $query->where('type', $request->type);
-        if(Ablilty::isOperator($request) === false)
-        {
-            $query = $query->where(function($q) use($request) {
-                $q->where('type', '!=', 2)
-                  ->orWhere(function($subQuery) use($request) {
-                      $subQuery->where('type', 2)
-                               ->where('writer', $request->user()->user_name);
-                  });
-            });
-        }
+
+        $query = $this->indexDetail($query, $request);
         $data = $this->getIndexData($request, $query, 'id', $this->posts->cols, 'updated_at');
         
         foreach($data['content'] as $content)

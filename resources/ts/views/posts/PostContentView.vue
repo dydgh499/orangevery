@@ -38,7 +38,15 @@ const props = defineProps<Props>()
         <VCol cols="12">
             <div style="float: inline-end;">
                 <span class="text-sm" style="margin-right: 1em;">
-                    작성자: <span class="text-primary">{{ props.post?.writer}}</span>
+                    작성자: 
+                    <span v-if="props.post.level < 35" class="text-primary">
+                        {{ props.post?.writer}}
+                    </span>
+                    <span v-else>
+                        <VChip color="info">
+                            운영자
+                        </VChip>
+                    </span>
                 </span>
                 <span class="text-sm">
                     활동 시간: <span class="text-primary">{{ props.post?.updated_at }}</span>
