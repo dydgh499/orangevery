@@ -34,7 +34,6 @@ class PaymentGatewayController extends Controller
         $this->pay_gateways = $pay_gateways;
         $this->pay_sections = $pay_sections;
         $this->target       = 'PG사';
-        $this->imgs = [];
     }
 
     /**
@@ -141,6 +140,10 @@ class PaymentGatewayController extends Controller
         $brand_id = $request->user()->brand_id;
         $grouped = Classification::where('brand_id', $brand_id)->where('is_delete', false)->get()->groupBy('type');
         $finance_vans = FinanceVan::where('brand_id', $brand_id)->where('is_delete', false)->get();
+        foreach($finance_vans as $finance_van)
+        {
+            $finance_van->makeHidden(['deposit_type', 'enc_key', 'iv', 'sub_key', 'api_key', 'corp_code', 'dev_fee', 'brand_id', 'min_balance_limit', 'created_at', 'updated_at']);
+        }
         $data = [
             'pay_gateways' => $this->pay_gateways->where('brand_id', $brand_id)->where('is_delete', false)->get(),
             'pay_sections' => $this->pay_sections->where('brand_id', $brand_id)->where('is_delete', false)->get(),

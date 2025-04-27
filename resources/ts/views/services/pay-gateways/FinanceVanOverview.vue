@@ -1,14 +1,24 @@
 <script lang="ts" setup>
-import { useRequestStore } from '@/views/request'
-import FinanceVanCard from '@/views/services/pay-gateways/FinanceVanCard.vue'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import type { FinanceVan } from '@/views/types'
+import { axios } from '@/plugins/axios';
+import { useRequestStore } from '@/views/request';
+import FinanceVanCard from '@/views/services/pay-gateways/FinanceVanCard.vue';
+import type { FinanceVan } from '@/views/types';
 
-const { finance_vans } = useStore()
 const { setNullRemove } = useRequestStore()
+const _finance_vans = ref(<FinanceVan[]>([]))
+
+const getAllFinanceVan = async () => {
+    const res = await axios.get(`/api/v1/manager/services/finance-vans`, {
+        params: {
+            page_size : 10,
+            page : 1,
+        }
+    })
+    _finance_vans.value = res.data
+}
 
 const addNewFinanceVan = () => {
-    finance_vans.push(<FinanceVan>({
+    _finance_vans.value.push(<FinanceVan>({
         id: 0,
         finance_company_num: null,
         is_agency_van: 0,
@@ -28,8 +38,11 @@ const addNewFinanceVan = () => {
         use_account_auth: 0,
     }))
 }
+onMounted(async () => {
+    await getAllFinanceVan()
+})
 watchEffect(() => {
-    setNullRemove(finance_vans)
+    setNullRemove(_finance_vans.value)
 })
 </script>
 <template>
@@ -42,6 +55,6 @@ watchEffect(() => {
         </VCol>
     </VCard>
     <VRow style="margin-top: 1em;">
-        <FinanceVanCard v-for="finance_van in finance_vans" :key="finance_van.id" :item="finance_van"/>
+        <FinanceVanCard v-for="finance_van in _finance_vans" :key="finance_van.id" :item="finance_van"/>
     </VRow>
 </template>

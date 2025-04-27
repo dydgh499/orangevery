@@ -33,7 +33,6 @@ class FinanceVanController extends Controller
     {
         $this->finance_vans = $finance_vans;
         $this->target = '금융 VAN';
-        $this->imgs = [];
     }
     
     /**
@@ -43,11 +42,11 @@ class FinanceVanController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query = $this->finance_vans
+        $finance_vans = $this->finance_vans
             ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false);
-        $data = $this->getIndexData($request, $query);
-        return $this->response(0, $data);
+            ->where('is_delete', false)
+            ->get();
+        return $this->response(0, $finance_vans);
     }
 
     /**

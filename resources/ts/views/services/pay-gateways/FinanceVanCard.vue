@@ -17,7 +17,7 @@ interface Props {
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
-    const activityHistoryTargetDialog = <any>(inject('activityHistoryTargetDialog'))
+const activityHistoryTargetDialog = <any>(inject('activityHistoryTargetDialog'))
 
 const { finance_companies, is_agency_vans } = useStore()
 const { update, remove } = useRequestStore()
