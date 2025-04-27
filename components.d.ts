@@ -97,11 +97,12 @@ declare module '@vue/runtime-core' {
     ShoppingMallDialog: typeof import('./resources/ts/layouts/dialogs/shopping-mall/ShoppingMallDialog.vue')['default']
     TheCustomizer: typeof import('./resources/ts/@core/components/TheCustomizer.vue')['default']
     ThemeSwitcher: typeof import('./resources/ts/@core/components/ThemeSwitcher.vue')['default']
+    TradeAmbassadorDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/TradeAmbassadorDialog.vue')['default']
     UnderAutoSettingDialog: typeof import('./resources/ts/layouts/dialogs/users/UnderAutoSettingDialog.vue')['default']
     VanWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/finance-vans-error-codes/VanWithdrawErrorCodeDialog.vue')['default']
     WalletDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/WalletDialog.vue')['default']
     WithdrawDetailDialog: typeof import('./resources/ts/layouts/dialogs/transactions/WithdrawDetailDialog.vue')['default']
     WithdrawHistoriesDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/WithdrawHistoriesDialog.vue')['default']
-    WithdrawStatusmentDialog: typeof import('./resources/ts/layouts/dialogs/transactions/WithdrawStatusmentDialog.vue')['default']
+    WithdrawStatusmentDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/WithdrawStatusmentDialog.vue')['default']
   }
 }

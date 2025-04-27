@@ -44,7 +44,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <BaseIndexView placeholder="게시글 검색" :metas="[]" :add="true" :add_name="getUserLevel() < 35 ? '1:1 문의' : '게시글'" :date_filter_type="DateFilters.NOT_USE">
+    <BaseIndexView placeholder="게시글 검색" :metas="[]" :add="true" :add_name="getUserLevel() < 30 ? '1:1 문의' : '게시글'" :date_filter_type="DateFilters.NOT_USE">
         <template #filter>
         </template>
         <template #index_extra_field>

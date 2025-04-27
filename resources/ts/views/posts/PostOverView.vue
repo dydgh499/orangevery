@@ -23,7 +23,7 @@ watchEffect(() => {
             <VCard>
                 <VCardItem>
                     <VCardTitle class="pb-5">게시글 작성</VCardTitle>
-                    <VRow v-if="getUserLevel() >= 35" style="align-items: center;">
+                    <VRow v-if="getUserLevel() >= 30" style="align-items: center;">
                         <VCol md="2">
                             작성타입
                         </VCol>
