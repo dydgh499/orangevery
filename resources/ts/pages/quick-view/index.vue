@@ -24,7 +24,10 @@ const my_level = getUserLevel()
 const payShow  = <any>(inject('payShow'))
 
 const getCollectVirtualAccounts = computed(() => {
-    return user_info.value.virtual_accounts.filter(obj => { return obj.withdraw_type === 0})
+    if(user_info.value.virtual_accounts)
+        return user_info.value.virtual_accounts.filter(obj => { return obj.withdraw_type === 0})
+    else
+        return []
 })
 
 onMounted(() => {
