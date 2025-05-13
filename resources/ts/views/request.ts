@@ -17,13 +17,11 @@ import { useCategoryStore } from './merchandises/shopping-mall/categories/useSto
 import type { Category, Merchandise } from '@/views/types'
 import { axios, getLevelByIndex } from '@axios'
 import corp from '@corp'
-import { useWalletFilterStore } from './virtual-accounts/wallets/useStore'
 
 export const useRequestStore = defineStore('requestStore', () => {
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
     const errorHandler = <any>(inject('$errorHandler'))
-    const { mcht_wallets, sales_wallets } = useWalletFilterStore()
     /*
     const { all_sales, mchts, sales } = useSalesFilterStore()
     const { isMchtBlackList } =  useMchtBlacklistStore()
@@ -94,10 +92,12 @@ export const useRequestStore = defineStore('requestStore', () => {
                 else if (back_url === '/virtual-accounts/wallets') {
                     params.id = res.data.id
                     params.account_code = res.data.account_code
+                    /*
                     if(params.level === 10)
                         mcht_wallets.push({...params})
                     else
                         sales_wallets.push({...params})
+                    */
                 }/*
                 else if (back_url === '/merchandises/shopping-mall/categories') {
                     categories.push({ ...params})

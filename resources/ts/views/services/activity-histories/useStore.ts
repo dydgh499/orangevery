@@ -3,7 +3,6 @@ import corp from '@/plugins/corp';
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import type { ActivityHistory, Options } from '@/views/types';
-import { fin_trx_delays, withdraw_limit_types, withdraw_types } from '@/views/virtual-accounts/wallets/useStore';
 import { useStore } from '../pay-gateways/useStore';
 
 export const historyLevels = () => {
@@ -84,10 +83,11 @@ export const replaceVariable = (history_detail: any, history_target:string) => {
         _replaceToName(pss, "구간", 'name')
         _replaceToName(terminals, "장비", 'name')
         _replaceToName(finance_vans, "금융벤 ID", 'nick_name')
+        /*
         _replaceToName(fin_trx_delays, "이체 딜레이", 'title')
         _replaceToName(withdraw_limit_types, "출금제한타입", 'title')
         _replaceToName(withdraw_types, "출금타입", 'title')
-        
+        */
 
 
 
