@@ -1,6 +1,5 @@
 import corp from '@/plugins/corp';
 import { Header } from '@/views/headers';
-import { useSalesFilterStore } from '@/views/salesforces/useStore';
 import { Searcher } from '@/views/searcher';
 import type { Options } from '@/views/types';
 import { useStore } from '../pay-gateways/useStore';
@@ -12,7 +11,6 @@ export const history_types = <Options[]>([
 ])
 
 export const replaceVariable = (history_detail: any) => {
-    const { mchts, all_sales } = useSalesFilterStore()
     const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
     const changeKeyName = () => {
         const keys = [
@@ -49,17 +47,9 @@ export const replaceVariable = (history_detail: any) => {
         }
         _replaceToName(pgs, "PG사", 'pg_name')
         _replaceToName(pss, "구간", 'name')
-        _replaceToName(mchts, "가맹점", 'mcht_name')
         _replaceToName(terminals, "장비", 'name')
         _replaceToName(settle_types, "정산일", 'name')    
         _replaceToName(finance_vans, "금융벤 ID", 'nick_name')
-
-        _replaceToName(all_sales[0], levels.sales0_name, 'sales_name')
-        _replaceToName(all_sales[1], levels.sales1_name, 'sales_name')
-        _replaceToName(all_sales[2], levels.sales2_name, 'sales_name')
-        _replaceToName(all_sales[3], levels.sales3_name, 'sales_name')
-        _replaceToName(all_sales[4], levels.sales4_name, 'sales_name')
-        _replaceToName(all_sales[5], levels.sales5_name, 'sales_name')
     }
     return changeKeyName()
 }
