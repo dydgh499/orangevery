@@ -22,6 +22,7 @@ use App\Http\Controllers\Manager\Service\FinanceVanController;
 use App\Http\Controllers\Manager\Service\PaymentGatewayController;
 use App\Http\Controllers\Manager\Service\PaymentSectionController;
 use App\Http\Controllers\Manager\Service\PopupController;
+use App\Http\Controllers\Manager\Service\CMSTransactionBookController;
 
 use App\Http\Controllers\Manager\OperatorController;
 
@@ -59,6 +60,7 @@ Route::middleware(['auth.update'])->group(function() {
                 Route::post('operators/{id}/2fa-qrcode/init', [OperatorController::class, 'init2FA']);  
                 Route::post('operators/{id}/2fa-qrcode/create-vertify', [OperatorController::class, 'vertify2FAQRLink']);
                 Route::post('cms-transactions/withdraw', [CMSTransactionController::class, 'withdraw']);
+                Route::post('bulk-cms-transactions/bulk-withdraw', [CMSTransactionController::class, 'bulkWithdraw']);
             });
         
             Route::apiResource('brands/before-brand-infos', BeforeBrandInfoController::class);
@@ -80,6 +82,8 @@ Route::middleware(['auth.update'])->group(function() {
             Route::apiResource('holidays', HolidayController::class);
             Route::apiResource('exception-work-times', ExceptionWorkTimeController::class);        
             Route::get('head-office-accounts', [HeadOfficeAccountController::class, 'index']);        
+            Route::get('cms-transaction-books', [CMSTransactionBookController::class, 'index']);
+            Route::delete('cms-transaction-books/{id}', [CMSTransactionBookController::class, 'destroy']);
             Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
             Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
             Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);

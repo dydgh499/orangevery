@@ -130,7 +130,7 @@ export const getViewType = () => {
     else if(level <= 30 && user_info.value.view_type === 0)
         return 'quick-view'
     else if(level > 10)
-        return 'dashboards-home'
+        return 'services-cms-transactions'
     else
         return ''
 }

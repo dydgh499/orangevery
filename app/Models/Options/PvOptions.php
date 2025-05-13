@@ -11,6 +11,7 @@
 
     class FreeOption extends initOption
     {
+        public $use_account_number_duplicate = true; // 계좌번호 중복검사 사용 여부
         public $use_search_date_detail = true;
         public $use_tid_duplicate = true;
         public $use_mid_duplicate = false;

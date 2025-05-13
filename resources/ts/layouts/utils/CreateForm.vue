@@ -22,7 +22,6 @@ const vForm = ref<VForm>()
 
 const { formRequest, remove, setOneObject } = useRequestStore()
 const store = useDynamicTabStore()
-const activityHistoryTargetDialog = <any>(inject('activityHistoryTargetDialog'))
 
 const disabledConditions = (index: number) => {
     const cond_1 = index == 2 && props.id == 0 && props.path == 'merchandises'
@@ -31,11 +30,6 @@ const disabledConditions = (index: number) => {
     return cond_1 || cond_2 || cond_3
 }
 
-const hideHistoryConditions = () => {
-    const cond_1 = props.path === 'posts' ? false : true
-    const cond_2 = props.path === 'complaints' ? false : true
-    return cond_1 && cond_2
-}
 
 const hideConditions = () => {
     const cond_1 = tab.value === 2 && props.path === 'merchandises' ? false : true
@@ -89,6 +83,7 @@ watchEffect(() => {
             store.titleUpdate(props.item.id, '영업라인', props.item.sales_name)
         else if(props.path === 'services/brands')
             store.titleUpdate(props.item.id, '운영사', props.item.name)
+        /*
         else if(props.path === 'posts') {
             if(store.postTitleUpdate(' 수정', props.item.type, props.item.id, `/${props.path}/edit/${props.item.id}`) === false)
                 store.postTitleUpdate(' 답변', props.item.type, props.item.id, `/${props.path}/reply?parent_id=${route.query.parent_id}`)
@@ -96,6 +91,7 @@ watchEffect(() => {
         else if(props.path === 'posts/view') {
             store.postTitleUpdate('', props.item.type, props.item.id, `/${props.path}/${props.item.id}`)
         }
+            */
     }
 })
 
@@ -126,14 +122,6 @@ onDeactivated(() => {
         <VCol>
             <div>
                 <div class="d-flex gap-4" style="justify-content: end;">
-                    <VBtn v-if="props.id && hideConditions() && hideHistoryConditions()"
-                        type="button" 
-                        color="secondary" 
-                        variant="tonal"
-                        @click="activityHistoryTargetDialog.show(props.id, HistoryTargetNames[props.path])">
-                        이력
-                        <VIcon end size="20" icon="tabler:history" />
-                    </VBtn>
                     <template v-if="hideConditions() && authHideConditions()">
                         <VBtn type="button" @click="formRequest('/'+props.path, props.item, vForm)">
                             {{ props.id == 0 ? "추가" : "수정" }}

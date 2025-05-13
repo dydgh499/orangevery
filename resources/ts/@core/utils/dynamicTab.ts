@@ -2,7 +2,7 @@ import { NavGroup, NavLink } from '@/@layouts/types';
 import navItems from '@/navigation/vertical';
 import { getUserLevel, user_info } from '@/plugins/axios';
 import router from '@/router';
-import { types } from '@/views/posts/useStore';
+// import { types } from '@/views/posts/useStore';
 import { RouteLocationNormalized } from "vue-router";
 
 interface Tab {
@@ -146,17 +146,6 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
         }
     }
 
-    const postTitleUpdate = (view_type:string, post_type:number, id: number, path: string) => {
-        const type = types.find(obj => obj.id === post_type)
-        if(type) {
-            const idx = tabs.findIndex(obj => obj.path === path)
-            if(idx !== -1) {
-                tabs[idx].title = type.title + `${view_type}(#${id})`    
-                return true
-            }
-        }
-        return false
-    }
 
     watchEffect(() => {
         if(getUserLevel() >= 10) {
@@ -179,7 +168,6 @@ export const useDynamicTabStore = defineStore('dynamicTabStore', () => {
         updateParams,
         getLastParams,
         titleUpdate,
-        postTitleUpdate,
         tab,
         tabs,
     }

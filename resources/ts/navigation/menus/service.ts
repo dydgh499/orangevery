@@ -17,30 +17,8 @@ const _getOperaterMenu = () => {
         })
     }
     operations.children.push({
-        title: 'PG사 관리',
+        title: '금융VAN 관리',
         to: 'services-pay-gateways',
-    })
-    operations.children.push({
-        title: '공휴일 관리',
-        to: 'services-holidays',
-    })
-    operations.children.push({
-        title: '대량 등록',
-        to: 'services-bulk-register',
-    })
-    /*
-        operations.children.push({
-            title: '이전 전산 연동',
-            to: 'services-computational-transfer',
-        })
-    */
-    operations.children.push({
-        title: '팝업 관리',
-        to: 'popups',
-    })
-    operations.children.push({
-        title: '예약변경 관리',
-        to: 'services-book-applies',
     })
     return operations
 }

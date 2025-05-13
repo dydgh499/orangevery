@@ -1,13 +1,17 @@
 <?php
 namespace App\Http\Traits;
+use App\Http\Traits\Util\HttpTrait;
 use App\Models\Operator;
 use App\Models\Salesforce;
 use App\Models\Merchandise;
+use App\Models\BankAccount;
 use Illuminate\Support\Facades\DB;
 use App\Models\Gmid;
 
 trait StoresTrait
 {
+    use HttpTrait;
+
     public function getPieces($datas, $peice_size=900)
     {
         $pieces = [];
@@ -100,5 +104,52 @@ trait StoresTrait
             ->pluck($col)
             ->toArray();
         }
+    }
+    
+    public function isExistBulkAccountNum($brand_id, $account_nums)
+    {
+        return BankAccount::where('brand_id', $brand_id)
+            ->whereIn('acct_num', $account_nums)
+            ->pluck('acct_num')
+            ->toArray();
+    }
+    
+    public function ownerCheckForBatch($data)
+    {
+        $url        = "https://npay.settlebank.co.kr/v1/api/auth/acnt/ownercheck1";
+        $mid        = "M2353522";
+        $cust_id    = "purple";
+        $key        = "ST2305101029388992286";
+        $sub_key    = "mWTl0GKBK55eAG3LeMnpNJKJ9oSl5175";
+
+        $params = [
+            'hdInfo'        => "SP_NA00_1.0",
+            'mchtId'        => $mid,
+            'mchtCustId'    => $cust_id,
+            'reqDt'         => date('Ymd'),
+            'reqTm'         => date('His'),
+            'bankCd'        => $data['acct_cd'],
+            'custAcntNo'    => $data['acct_num'],
+            'mchtCustNm'    => $data['acct_nm'],
+        ];
+        $params['pktHash']    = hash("sha256", $params['mchtId'].$params['mchtCustId'].$params['reqDt'].$params['reqTm'].$params['custAcntNo'].$key);
+        $params['mchtCustId'] = base64_encode(openssl_encrypt($params['mchtCustId'], "AES-256-ECB",  $sub_key , OPENSSL_RAW_DATA));
+        $params['custAcntNo'] = base64_encode(openssl_encrypt($params['custAcntNo'], "AES-256-ECB",  $sub_key , OPENSSL_RAW_DATA));
+        $params['mchtCustNm'] = base64_encode(openssl_encrypt($params['mchtCustNm'], "AES-256-ECB",  $sub_key , OPENSSL_RAW_DATA));
+
+        // 실제 API 호출 (post 함수는 적절히 구현되어 있다고 가정)
+        $result = $this->post($url, $params, ['Content-Type' => 'application/json']);
+        $body = $result['body'];
+
+        // 성공 코드: 0000, ST24
+        $success = ($body['outRsltCd'] === "0000" || $body['outRsltCd'] === "ST24");
+        $code = $success ? 100 : $body['outRsltCd'];
+        $msg  = $success ? "예금주 검증에 성공하였습니다." : $body['outRsltMsg'];
+
+        return [
+            'result' => $code,
+            'message' => $msg,
+            'data' => $body
+        ];
     }
 }

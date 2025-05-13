@@ -17,7 +17,6 @@ interface Props {
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
-const activityHistoryTargetDialog = <any>(inject('activityHistoryTargetDialog'))
 
 const { finance_companies, is_agency_vans } = useStore()
 const { update, remove } = useRequestStore()
@@ -174,7 +173,7 @@ onMounted(async () => {
                                         prepend-inner-icon="twemoji-spiral-notepad" maxlength="10"/>
                                 </template>
                             </CreateHalfVColV2>
-                            
+                            <!--
                             <CreateHalfVColV2 :mdl="5" :mdr="7">
                                 <template #l_name>
                                     카카오 인증
@@ -191,17 +190,9 @@ onMounted(async () => {
                                              color="primary" />
                                 </template>
                             </CreateHalfVColV2>
-
+-->
                             <VRow>
                                 <VCol class="pt-10" style="text-align: end;">
-                                    <VBtn v-if="props.item.id"
-                                        style="margin-left: auto;"
-                                        variant="tonal"
-                                        color="secondary" 
-                                        @click="activityHistoryTargetDialog.show(props.item.id, HistoryTargetNames['services/finance-vans'])">
-                                        이력
-                                        <VIcon end size="20" icon="tabler:history" />
-                                    </VBtn>                            
                                     <VBtn 
                                         style="margin-left: 1em;"
                                         @click="update('/services/finance-vans', props.item, vForm, false)">

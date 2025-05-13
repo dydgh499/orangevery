@@ -3,7 +3,6 @@ import AlertDialog from '@/layouts/dialogs/utils/AlertDialog.vue'
 import LoadingDialog from '@/layouts/dialogs/utils/LoadingDialog.vue'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import router from '@/router'
-import ShoppingMallHeader from '@/views/shop/ShoppingMallHeader.vue'
 import { useSkins } from '@core/composable/useSkins'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 // @layouts plugin
@@ -40,7 +39,6 @@ provide('loading', loading)
         <DefaultLayoutWithVerticalNav
             v-if="appContentLayoutNav === AppContentLayoutNav.Vertical && customer_link === false" v-bind="layoutAttrs" />
         <div v-else-if="router.currentRoute.value.path.includes('/shop/')" class="d-flex justify-center align-center custom-warpper">
-            <ShoppingMallHeader/>
             <RouterView v-slot="{ Component }">
                 <Transition :name="appRouteTransition" mode="out-in">
                     <Component :is="Component" />

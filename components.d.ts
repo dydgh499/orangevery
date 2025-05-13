@@ -82,7 +82,7 @@ declare module '@vue/runtime-core' {
     ProductOptionDialog: typeof import('./resources/ts/layouts/dialogs/shopping-mall/ProductOptionDialog.vue')['default']
     ProfileDialog: typeof import('./resources/ts/layouts/dialogs/users/ProfileDialog.vue')['default']
     PVErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/transactions/PVErrorCodeDialog.vue')['default']
-    PVWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/transactions/PVWithdrawErrorCodeDialog.vue')['default']
+    PVWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/PVWithdrawErrorCodeDialog.vue')['default']
     RealtimeHistoriesDialog: typeof import('./resources/ts/layouts/dialogs/transactions/RealtimeHistoriesDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -101,6 +101,6 @@ declare module '@vue/runtime-core' {
     VanWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/finance-vans-error-codes/VanWithdrawErrorCodeDialog.vue')['default']
     WalletDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/WalletDialog.vue')['default']
     WithdrawHistoriesDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/WithdrawHistoriesDialog.vue')['default']
-    WithdrawStatusmentDialog: typeof import('./resources/ts/layouts/dialogs/transactions/WithdrawStatusmentDialog.vue')['default']
+    WithdrawStatusmentDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/WithdrawStatusmentDialog.vue')['default']
   }
 }

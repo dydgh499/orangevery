@@ -8,6 +8,8 @@ use App\Http\Controllers\Manager\BatchUpdater\BatchUpdatePayModuleController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateNotiUrlController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateWalletController;
 use App\Http\Controllers\Manager\Merchandise\RegularCreditCardController;
+use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateBankAccountController;
+use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateWithdrawBookController;
 
 use App\Http\Controllers\Manager\Service\HolidayController;
 use App\Http\Controllers\Manager\Service\MchtBlacklistController;
@@ -92,8 +94,25 @@ Route::middleware(['auth.update'])->group(function() {
     Route::prefix('services/holidays/batch-updaters')->group(function() { 
         Route::post('register', [HolidayController::class, 'register']);
     });
+    
+    Route::prefix('services/holidays/batch-updaters')->group(function() { 
+        Route::post('register', [HolidayController::class, 'register']);
+    });
 
     Route::prefix('virtual-accounts/wallets/batch-updaters')->group(function() { 
         Route::post('register', [BatchUpdateWalletController::class, 'register']);
     });
+
+    Route::prefix('bank-accounts/batch-updaters')->group(function() { 
+        Route::post('register', [BatchUpdateBankAccountController::class, 'register']);
+    });
+    
+    Route::prefix('owner-check-test/batch-updaters')->group(function() { 
+        Route::post('register', [BatchUpdateBankAccountController::class, 'ownerCheckTest']);
+    });
+
+    Route::prefix('bulk-withdraws/batch-updaters')->group(function() { 
+        Route::post('register', [BatchUpdateWithdrawBookController::class, 'withdrawTest']);
+    });
+    
 });

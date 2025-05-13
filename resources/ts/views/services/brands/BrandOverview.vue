@@ -2,7 +2,6 @@
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import FileInput from '@/layouts/utils/FileInput.vue'
 import { getUserLevel } from '@/plugins/axios'
-import BeforeBrandInfoCard from '@/views/services/brands/before-brand-infos/BeforeBrandInfoCard.vue'
 import DifferentSettlementInfoCard from '@/views/services/brands/different-settlement-infos/DifferentSettlementInfoCard.vue'
 import { dev_settle_types } from '@/views/services/brands/useStore'
 import type { Brand } from '@/views/types'
@@ -260,15 +259,6 @@ const props = defineProps<Props>()
                         </VCol>
 
                     </VRow>
-                </VCardItem>
-            </VCard>
-            <VCard>
-                <VCardItem>
-                    <VCol cols="12">
-                        <VRow>
-                            <BeforeBrandInfoCard :item="props.item" />
-                        </VRow>
-                    </VCol>
                 </VCardItem>
             </VCard>
             <template v-if="props.item.use_different_settlement">

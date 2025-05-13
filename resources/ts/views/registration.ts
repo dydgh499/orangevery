@@ -87,7 +87,8 @@ export const Registration = () => {
         if (await alert.value.show('정말 '+name + ' ' + items.length + '개를 대량 등록하시겠습니까?')) {
             try {
                 const r = await axios.post('/api/v1/manager/' + path + '/batch-updaters/register', items)
-                snackbar.value.show('성공하였습니다.', 'success')
+                console.log('테스트', r.data)
+                snackbar.value.show(r.data.message, 'success')
                 result = true
 
                 if(name === '가맹점' && isFixplus()) {

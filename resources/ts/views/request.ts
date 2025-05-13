@@ -1,5 +1,6 @@
 import { autoInsertPaymentModule, isFixplus } from '@/plugins/fixplus'
 import router from '@/router'
+/*
 import { defaultItemInfo as complaintItemInit } from '@/views/complaints/useStore'
 import { defaultItemInfo as notiItemInit } from '@/views/merchandises/noti-urls/useStore'
 import { defaultItemInfo as pmodItemInit } from '@/views/merchandises/pay-modules/useStore'
@@ -8,24 +9,25 @@ import { defaultItemInfo as popupItemInit } from '@/views/popups/useStore'
 import { defaultItemInfo as postItemInit } from '@/views/posts/useStore'
 import { defaultItemInfo as salesItemInit } from '@/views/salesforces/useStore'
 import { defaultItemInfo as transItemInit } from '@/views/transactions/useStore'
-
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
+import { useCategoryStore } from './merchandises/shopping-mall/categories/useStore'
+*/
+
 import type { Category, Merchandise } from '@/views/types'
 import { axios, getLevelByIndex } from '@axios'
 import corp from '@corp'
-import { useCategoryStore } from './merchandises/shopping-mall/categories/useStore'
 import { useWalletFilterStore } from './virtual-accounts/wallets/useStore'
 
 export const useRequestStore = defineStore('requestStore', () => {
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
     const errorHandler = <any>(inject('$errorHandler'))
-    const { all_sales, mchts, sales } = useSalesFilterStore()
     const { mcht_wallets, sales_wallets } = useWalletFilterStore()
+    /*
+    const { all_sales, mchts, sales } = useSalesFilterStore()
     const { isMchtBlackList } =  useMchtBlacklistStore()
     const { categories } = useCategoryStore()
-
     const clear = (back_url: string) => {
         const path = ''
         const item = {}
@@ -48,6 +50,7 @@ export const useRequestStore = defineStore('requestStore', () => {
         else
             return {path, item}
     }
+*/
 
     const deleteTreatment = (back_url: string, is_redirect: boolean, params: any, res: any) => {
         if (res.status === 201) {
@@ -95,11 +98,11 @@ export const useRequestStore = defineStore('requestStore', () => {
                         mcht_wallets.push({...params})
                     else
                         sales_wallets.push({...params})
-                }
+                }/*
                 else if (back_url === '/merchandises/shopping-mall/categories') {
                     categories.push({ ...params})
                     categories.sort((a:Category, b:Category) => a.category_name.localeCompare(b.category_name))
-                }
+                }*/
                 if (is_redirect) {
                     const { path, item } = clear(back_url)
                     if(path !== '')
@@ -120,7 +123,7 @@ export const useRequestStore = defineStore('requestStore', () => {
                 else if (back_url === '/merchandises') 
                     setTimeout(function () { router.push('/merchandises/edit/' + res.data.id) }, 500)
                 else if (back_url === '/services/brands') 
-                    setTimeout(function () {  }, 500)
+                    setTimeout(function () { }, 500)
                 else
                     setTimeout(function () { router.replace(back_url) }, 1000)
             }
@@ -166,21 +169,11 @@ export const useRequestStore = defineStore('requestStore', () => {
         return { url, reqType }
     }
 
-    const customValidFormRequest = async(base_url: string, params: any) => {
-        if (Number(corp.pv_options.paid.use_mcht_blacklist) && base_url === '/merchandises') {
-            let [result, blacklist] = isMchtBlackList(params)
-            if(result)
-                return await alert.value.show('해당 가맹점은 아래이유로 인해 블랙리스트로 등록된 가맹점입니다. 그래도 진행하시겠습니까?<br><br><b style="color:red">'+blacklist?.block_reason+'</b>')
-            else
-                return true
-        }
-        return true
-    }
 
     const formRequest = async (base_url: string, params: any, vForm: any, is_redirect: boolean = true) => {
         const is_valid = await vForm.validate()
         const { url, reqType } = getBaseSendInfo(base_url, params.id)
-        if (is_valid.valid && await customValidFormRequest(base_url, params) && await alert.value.show('정말 ' + reqType + '하시겠습니까?')) {
+        if (is_valid.valid && await alert.value.show('정말 ' + reqType + '하시겠습니까?')) {
             const form_data = new FormData()
             getFormParams(form_data, params)
             const res = await request({

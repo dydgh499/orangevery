@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager\Service;
 
+use App\Models\BankAccount;
 use App\Models\Service\FinanceVan;
 use App\Models\Service\HeadOfficeAccount;
 use App\Models\Service\CMSTransaction;

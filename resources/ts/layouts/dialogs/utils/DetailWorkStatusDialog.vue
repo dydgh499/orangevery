@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { StatusColorSetter } from '@/views/searcher';
 import { getLevelColor } from '@/views/services/abnormal-connection-histories/useStore';
-import { history_types } from '@/views/services/activity-histories/useStore';
 import type { ActivityHistory } from '@/views/types';
 import { allLevels, axios } from '@axios';
 
@@ -65,12 +64,14 @@ defineExpose({
                             <td class='list-square'>
                                 {{ history.history_title }}
                             </td>
+                            <!--
                             <td class='list-square'>
                                 <VChip
                                     :color="StatusColorSetter().getSelectIdColor(history_types.find(obj => obj.id === history.history_type)?.id as number)">
                                     {{ history_types.find(obj => obj.id === history.history_type)?.title }}
                                 </VChip>
                             </td>
+                            -->
                             <td class='list-square'>
                                 {{ history.created_at }}
                             </td>

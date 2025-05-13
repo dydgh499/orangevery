@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import GmidDialog from '@/layouts/dialogs/users/GmidDialog.vue'
 import Google2FACreateDialog from '@/layouts/dialogs/users/Google2FACreateDialog.vue'
 import OperatorDialog from '@/layouts/dialogs/users/OperatorDialog.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
@@ -18,7 +17,6 @@ const all_levels = allLevels()
 
 const snackbar = <any>(inject('snackbar'))
 const imageDialog = ref()
-const gmidDialog = ref()
 const operatorDialog = ref()
 const google2FACreateDialog = ref()
 
@@ -39,8 +37,10 @@ const profile = () => {
         router.push(mytype.link)
     else if(mytype.id === 2)
         operatorDialog.value.show(user_info.value)
+    /*
     else if(mytype.id === 3)
         gmidDialog.value.show(user_info.value)
+        */
     else   
         snackbar.value.show(`${corp.pv_options.auth.levels.dev_name}는 프로필로 이동할 수 없습니다.`, 'warning')
 }
@@ -159,7 +159,6 @@ require_2fa.value = noticeOperator2FaStatus()
         <ImageDialog ref="imageDialog" :style="`inline-size:20em !important;`"/>
         <Google2FACreateDialog ref="google2FACreateDialog"/>
         <OperatorDialog ref="operatorDialog" />
-        <GmidDialog ref="gmidDialog" />
     </VBadge>
 </template>
 <style scoped>

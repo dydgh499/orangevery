@@ -12,10 +12,7 @@ import NavTokenableExpireTime from '@/layouts/components/NavTokenableExpireTime.
 import UserProfile from '@/layouts/components/UserProfile.vue'
 import { VerticalNavLayout } from '@layouts'
 
-import ActivityHistoryTargetDialog from '@/layouts/dialogs/histories/ActivityHistoryTargetDialog.vue'
-import SalesRecommenderCodeDialog from '@/layouts/dialogs/salesforces/SalesRecommenderCodeDialog.vue'
 import HolidayDlg from '@/layouts/dialogs/services/HolidayDlg.vue'
-import PayWindowShowDialog from '@/layouts/dialogs/transactions/PayWindowShowDialog.vue'
 import PasswordChangeNoticeDialog from '@/layouts/dialogs/users/PasswordChangeNoticeDialog.vue'
 import PhoneNum2FAVertifyDialog from '@/layouts/dialogs/users/PhoneNum2FAVertifyDialog.vue'
 import AlertDialog from '@/layouts/dialogs/utils/AlertDialog.vue'
@@ -39,16 +36,12 @@ const pwaSnackbar = ref()
 const holidayDlg = ref()
 const phoneNum2FAVertifyDialog = ref()
 const passwordChangeNoticeDialog = ref()
-const salesRecommenderCodeDialog = ref()
-const activityHistoryTargetDialog = ref()
 
 provide('popup', popup)
 provide('payShow', payShow)
 provide('holidayDlg', holidayDlg)
 provide('pwaSnackbar', pwaSnackbar)
 provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
-provide('salesRecommenderCodeDialog', salesRecommenderCodeDialog)
-provide('activityHistoryTargetDialog', activityHistoryTargetDialog)
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
@@ -134,14 +127,10 @@ onMounted(async () => {
         </RouterView>
 
         <Snackbar ref="snackbar" />
-        <SalesRecommenderCodeDialog ref="salesRecommenderCodeDialog"
-            :key="user_info.id"/>
-        <ActivityHistoryTargetDialog ref="activityHistoryTargetDialog"/>
         <PWASnackbar ref="pwaSnackbar"/>
         <AlertDialog ref="alert" />
         <LoadingDialog ref="loading" />
         <HolidayDlg ref="holidayDlg"/>
-        <PayWindowShowDialog ref="payShow"/>
         
         <PopupDialog ref="popup"/>
         <PhoneNum2FAVertifyDialog ref="phoneNum2FAVertifyDialog"/>

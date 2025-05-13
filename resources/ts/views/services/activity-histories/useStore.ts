@@ -1,11 +1,7 @@
 import { salesLevels } from '@/plugins/axios';
 import corp from '@/plugins/corp';
 import { Header } from '@/views/headers';
-import { cxl_types, installments, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels } from '@/views/merchandises/pay-modules/useStore';
-import { merchant_statuses, tax_category_types } from '@/views/merchandises/useStore';
-import { authLevels, settleCycles, settleDays, settleTaxTypes, useSalesFilterStore } from '@/views/salesforces/useStore';
 import { Searcher } from '@/views/searcher';
-import { pg_settle_types, round_types } from '@/views/services/pay-gateways/useStore';
 import type { ActivityHistory, Options } from '@/views/types';
 import { fin_trx_delays, withdraw_limit_types, withdraw_types } from '@/views/virtual-accounts/wallets/useStore';
 import { useStore } from '../pay-gateways/useStore';
@@ -49,7 +45,6 @@ export const replaceHistories = (histories: ActivityHistory[]) => {
 }
 
 export const replaceVariable = (history_detail: any, history_target:string) => {
-    const { mchts, all_sales } = useSalesFilterStore()
     const { pgs, pss, settle_types, terminals, finance_vans, pg_companies } = useStore()
     const changeKeyName = () => {
         const keys = [
@@ -87,38 +82,17 @@ export const replaceVariable = (history_detail: any, history_target:string) => {
 
         _replaceToName(pgs, "PG사", 'pg_name')
         _replaceToName(pss, "구간", 'name')
-        _replaceToName(mchts, "가맹점", 'mcht_name')
         _replaceToName(terminals, "장비", 'name')
         _replaceToName(finance_vans, "금융벤 ID", 'nick_name')
         _replaceToName(fin_trx_delays, "이체 딜레이", 'title')
         _replaceToName(withdraw_limit_types, "출금제한타입", 'title')
         _replaceToName(withdraw_types, "출금타입", 'title')
         
-        _replaceToName(cxl_types, "취소 타입", 'title')
-        _replaceToName(installments, "할부", 'title')
-        _replaceToName(pay_limit_types, "결제제한타입", 'title')
-        _replaceToName(pay_window_extend_hours, "결제창 연장시간", 'title')
-        _replaceToName(pay_window_secure_levels, "결제창 보안등급", 'title')
 
-        _replaceToName(merchant_statuses, "가맹점 상태", 'title')
-        _replaceToName(tax_category_types, "사업자 타입", 'title')
 
-        _replaceToName(settleCycles(), "정산 주기", 'title')
-        _replaceToName(settleDays(), "정산 요일", 'title')
-        _replaceToName(settleTaxTypes(), "정산 세율", 'title')
-        _replaceToName(authLevels(), "권한등급", 'title')
-        
-        _replaceToName(all_sales[0], levels.sales0_name, 'sales_name')
-        _replaceToName(all_sales[1], levels.sales1_name, 'sales_name')
-        _replaceToName(all_sales[2], levels.sales2_name, 'sales_name')
-        _replaceToName(all_sales[3], levels.sales3_name, 'sales_name')
-        _replaceToName(all_sales[4], levels.sales4_name, 'sales_name')
-        _replaceToName(all_sales[5], levels.sales5_name, 'sales_name')
 
         if(history_target === 'PG사')
         {
-            _replaceToName(pg_settle_types, "정산일", 'title')    
-            _replaceToName(round_types, "소수점 정산반식", 'title')    
             _replaceToName(pg_companies, "PG 타입", 'name')    
             
         }
