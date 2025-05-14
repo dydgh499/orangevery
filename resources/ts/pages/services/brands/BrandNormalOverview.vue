@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { dev_settle_types, isMaster, useSearchStore } from '@/views/services/brands/useStore'
+import { dev_settle_types, useSearchStore } from '@/views/services/brands/useStore'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter, boolToText, metas } = useSearchStore()
@@ -9,7 +9,6 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-store.params.page_size = isMaster() ? 200 : 1
 </script>
 <template>
     <BaseIndexView placeholder="서비스명" :metas="metas" :add="false" add_name="서비스" :date_filter_type="DateFilters.NOT_USE">
