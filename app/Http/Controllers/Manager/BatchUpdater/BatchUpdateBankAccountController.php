@@ -228,9 +228,9 @@ class BatchUpdateBankAccountController extends BatchUpdateController
             
             foreach ($filtered_datas as $data) {
                 $ownerCheckResult = $this->ownerCheckForBatch([
-                    'acct_cd' => $data['acct_bank_code'],
-                    'acct_num' => $data['acct_num'],
-                    'acct_nm' => $data['acct_name'],
+                    'acct_cd' => $data['acct_bank_code'], // 은행코드드
+                    'acct_num' => $data['acct_num'], // 계좌번호
+                    'acct_nm' => $data['acct_name'], // 예금주명
                 ]);
                 
                 if ($ownerCheckResult['result'] === 100) {

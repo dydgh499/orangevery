@@ -117,9 +117,9 @@ trait StoresTrait
     public function ownerCheckForBatch($data)
     {
         // 입력 데이터 검증 및 문자열 변환
-        $acct_cd = (string)$data['acct_cd'];
-        $acct_num = (string)$data['acct_num']; // 문자열로 확실히 변환
-        $acct_nm = $data['acct_name'];
+        $acct_cd = (string)$data['acct_cd']; // 은행코드
+        $acct_num = (string)$data['acct_num']; // 계좌번호
+        $acct_nm = $data['acct_nm']; // 예금주명
 
         $url        = "https://npay.settlebank.co.kr/v1/api/auth/acnt/ownercheck1";
         $mid        = "M2353522";
