@@ -116,6 +116,11 @@ trait StoresTrait
     
     public function ownerCheckForBatch($data)
     {
+        // 입력 데이터 검증 및 문자열 변환
+        $acct_cd = (string)$data['acct_cd'];
+        $acct_num = (string)$data['acct_num']; // 문자열로 확실히 변환
+        $acct_nm = $data['acct_name'];
+
         $url        = "https://npay.settlebank.co.kr/v1/api/auth/acnt/ownercheck1";
         $mid        = "M2353522";
         $cust_id    = "purple";
@@ -128,9 +133,9 @@ trait StoresTrait
             'mchtCustId'    => $cust_id,
             'reqDt'         => date('Ymd'),
             'reqTm'         => date('His'),
-            'bankCd'        => $data['acct_cd'],
-            'custAcntNo'    => $data['acct_num'],
-            'mchtCustNm'    => $data['acct_nm'],
+            'bankCd'        => $acct_cd,
+            'custAcntNo'    => $acct_num,
+            'mchtCustNm'    => $acct_nm,
         ];
         $params['pktHash']    = hash("sha256", $params['mchtId'].$params['mchtCustId'].$params['reqDt'].$params['reqTm'].$params['custAcntNo'].$key);
         $params['mchtCustId'] = base64_encode(openssl_encrypt($params['mchtCustId'], "AES-256-ECB",  $sub_key , OPENSSL_RAW_DATA));
