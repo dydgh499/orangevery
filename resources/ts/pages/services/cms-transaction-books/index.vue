@@ -38,23 +38,6 @@ if(getUserLevel() < 35) {
     user_info.value = {}
     location.href = '/'
 }
-
-onMounted(() => {
-    watchEffect(async () => {
-        if (store.getChartProcess() === false) {
-            const r = await store.getChartData()
-            total.value.deposit_amount = Number(r.data.deposit_amount)
-            total.value.withdraw_amount = Number(r.data.withdraw_amount)
-            total.value.total_realtime_withdraw_amount = Number(r.data.total_realtime_withdraw_amount)
-            total.value.total_collect_withdraw_amount = Number(r.data.total_collect_withdraw_amount)
-            total.value.total_payment_agency_withdraw_amount = Number(r.data.total_payment_agency_withdraw_amount)
-            total.value.total_withdraw_amount = total.value.withdraw_amount + total.value.total_realtime_withdraw_amount + total.value.total_collect_withdraw_amount + total.value.total_payment_agency_withdraw_amount
-            total.value.total_difference = total.value.deposit_amount + total.value.total_withdraw_amount
-        }
-    })
-    snackbar.value.show('거래모듈 및 입금정보는 2024-07-17부터 업데이트됩니다.', 'success')
-})
-
 </script>
 <template>
     <section>
@@ -109,9 +92,11 @@ onMounted(() => {
                                     <span v-if="_key == 'id'">
                                         #{{ item[_key] }}
                                     </span>
-                                    <b v-else-if="_key === 'amount'" :class="item['is_withdraw'] ? 'text-error' : 'text-primary'">
-                                        {{ item[_key].toLocaleString() }}
-                                    </b>
+                                    <span v-else-if="_key === 'result_code'">
+                                        <VChip :color="store.getSelectIdColor(realtimeResult(item[_key]))">
+                                            {{ realtimeMessage(item) }}
+                                        </VChip>
+                                    </span>
                                     <span v-else-if="_key === 'fin_id'">
                                         {{ (finance_vans.find(obj => obj.id == item[_key]))?.nick_name }}
                                     </span>
@@ -120,11 +105,9 @@ onMounted(() => {
                                             {{ item[_key] ? '출금' : '입금' }}
                                         </VChip>
                                     </span>
-                                    <span v-else-if="_key === 'result_code'">
-                                        <VChip :color="store.getSelectIdColor(realtimeResult(item[_key]))">
-                                            {{ realtimeMessage(item) }}
-                                        </VChip>
-                                    </span>
+                                    <b v-else-if="_key === 'amount'" :class="item['is_withdraw'] ? 'text-error' : 'text-primary'">
+                                        {{  item['is_withdraw'] ? '-' + item[_key].toLocaleString() : item[_key].toLocaleString() }}
+                                    </b>
                                     <span v-else-if="_key === 'withdraw_status'">
                                         <VChip :color="store.booleanTypeColor(!item[_key])" >
                                             {{ item[_key] ? '이체완료' : '이체예약' }}
@@ -132,7 +115,7 @@ onMounted(() => {
                                     </span>
                                     <span v-else-if="_key === 'note'" v-html="item[_key]" style="line-height: 2em;"></span>
                                     
-                                    <span v-else-if="_key === 'extra_col'">
+                                    <span v-else-if="_key === 'extra_col'" v-if="item['withdraw_status'] != 1">
                                         <VBtn size="small" type="button" color="error" @click="destory(item['id'])">
                                             삭제
                                             <VIcon size="22" icon="tabler-trash"/>

@@ -32,19 +32,20 @@ export const useSearchStore = defineStore('useCMSTransactionBookSearchStore', ()
         'is_withdraw': '거래타입', //출금, 입금
         'amount': '거래금액',
         'acct_num' : '계좌번호',
-        'acct_name' : '계좌명',
+        'acct_name' : '예금주명',
         'acct_bank_name' : '은행명',
         'acct_bank_code' : '은행코드',
         'withdraw_book_time': '이체예정시간',
         'withdraw_status': '예약상태',
         'note': '메모사항',
+        'created_at': '생성시간',
         'extra_col': '삭제하기',
     }
 
     head.sub_headers.value = [
         head.getSubHeaderFormat('거래정보', 'id', 'amount', 'string', 5),
         head.getSubHeaderFormat('출금정보', 'acct_num', 'acct_bank_code', 'string', 4),
-        head.getSubHeaderFormat('기타', 'withdraw_book_time', 'extra_col', 'string', 4),
+        head.getSubHeaderFormat('기타', 'withdraw_book_time', 'extra_col', 'string', 5),
     ]
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)

@@ -67,9 +67,11 @@ class Handler extends ExceptionHandler
         $this->renderable(function (QueryException $e, $request) {
             return $this->extendResponse(990, $e->getMessage());
         });
+        /*
         $this->renderable(function (ErrorException $e, $request) {
             return $this->extendResponse(990, $e->getMessage());
         });
+        */
         $this->renderable(function (ValidationException $e, $request) {
             $exceptions = $e->errors();
             if($request->is('*/batch-updaters*register'))
