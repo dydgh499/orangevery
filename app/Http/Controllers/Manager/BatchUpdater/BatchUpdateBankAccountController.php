@@ -289,9 +289,20 @@ class BatchUpdateBankAccountController extends BatchUpdateController
         $current = date('Y-m-d H:i:s');
         $brand_id = $request->user()->brand_id;
         $datas = $request->data();
+
+        $requestData = $request->all();
+        // data가 문자열인 경우 JSON으로 파싱
+        if (isset($requestData['data']) && is_string($requestData['data'])) {
+            $requestData['data'] = json_decode($requestData['data'], true);
+        }
         
-        $data = $request->all();
-        $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $data);
+        // 계좌번호를 문자열로 변환
+        foreach ($requestData['data'] as $key => $item) {
+            if (isset($item['acct_num'])) {
+                $requestData['data'][$key]['acct_num'] = (string)$item['acct_num'];
+            }
+        }
+        $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $requestData);
         if($res['body']['result'] === 100)
             return $this->response(1, ['message'=> $res['body']['message']]);
         else
