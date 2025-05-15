@@ -300,14 +300,6 @@ class BatchUpdateBankAccountController extends BatchUpdateController
         
         // API 호출
         $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $apiRequest);
-        
-        // 응답 처리
-        if (isset($res['body']['result']) && $res['body']['result'] === 100) {
-            return $this->response(1, ['message' => $res['body']['message']]);
-        } else {
-            $errorMessage = isset($res['body']['message']) ? $res['body']['message'] : '예금주 조회에 실패했습니다.';
-            $errorData = isset($res['body']['data']) ? $res['body']['data'] : null;
-            return $this->extendResponse(1999, $errorMessage, $errorData);
-        }
+        return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);    
     }
 }
