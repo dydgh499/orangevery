@@ -286,20 +286,43 @@ class BatchUpdateBankAccountController extends BatchUpdateController
     */
     public function ownerCheck(BulkBankAccountRequest $request)
     {
-        $current = date('Y-m-d H:i:s');
-        $brand_id = $request->user()->brand_id;
         $datas = $request->data();
         $firstAccount = $datas->first();
         
         // API 요청 데이터 구성
         $apiRequest = [
-            'acct_cd' => $firstAccount['acct_bank_code'],
-            'acct_num' => (string)$firstAccount['acct_num'], // 문자열로 확실히 변환
-            'acct_nm' => $firstAccount['acct_name']
+            'acct_cd' => $firstAccount['acct_bank_code'] ?? $firstAccount['acct_cd'] ?? '',
+            'acct_num' => (string)($firstAccount['acct_num'] ?? ''), // 문자열로 확실히 변환
+            'acct_nm' => $firstAccount['acct_name'] ?? $firstAccount['acct_nm'] ?? ''
         ];
         
-        // API 호출
-        $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $apiRequest);
-        return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);    
+    // API 호출
+    $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $apiRequest);
+    
+    // 응답 처리
+    try {
+        // 응답 구조가 다른 경우를 처리
+        if (isset($res['body']['result'])) {
+            // API 서버의 ownerCheck 응답 구조
+            if ($res['body']['result'] === 100) {
+                return $this->apiResponse(1, $res['body']['message']);
+            } else {
+                return $this->apiResponse(1999, $res['body']['message'], $res['body']['data'] ?? null);
+            }
+        } else if (isset($res['body']['result_cd']) && isset($res['body']['result_msg'])) {
+            // 기존 응답 구조
+            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
+        } else {
+            // 응답 구조 분석을 위한 로그 기록
+            \Log::error('Unexpected API response structure', ['response' => $res]);
+            return $this->apiResponse(1999, '예금주 조회 중 오류가 발생했습니다.');
+        }
+    } catch (\Exception $e) {
+        \Log::error('Exception in ownerCheck', [
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+            'response' => $res ?? null
+        ]);
+        return $this->apiResponse(1999, '예금주 조회 중 오류가 발생했습니다: ' . $e->getMessage());
     }
 }
