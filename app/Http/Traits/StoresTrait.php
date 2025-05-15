@@ -128,9 +128,9 @@ trait StoresTrait
             'mchtCustId'    => $cust_id,
             'reqDt'         => date('Ymd'),
             'reqTm'         => date('His'),
-            'bankCd'        => $data->acct_cd,
-            'custAcntNo'    => $data->acct_num,   // 계좌번호
-            'mchtCustNm'    => $data->acct_nm,    // 예금주명
+            'bankCd'        => $data['acct_cd'],
+            'custAcntNo'    => $data['acct_num'],   // 계좌번호
+            'mchtCustNm'    => $data['acct_nm'],    // 예금주명
         ];
         $params['pktHash']    = hash("sha256", $params['mchtId'].$params['mchtCustId'].$params['reqDt'].$params['reqTm'].$params['custAcntNo'].$key);
         $params['mchtCustId'] = base64_encode(openssl_encrypt($params['mchtCustId'], "AES-256-ECB",  $sub_key , OPENSSL_RAW_DATA));
