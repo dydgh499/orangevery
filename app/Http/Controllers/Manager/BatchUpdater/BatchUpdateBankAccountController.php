@@ -229,9 +229,9 @@ class BatchUpdateBankAccountController extends BatchUpdateController
             
             foreach ($filtered_datas as $data) {
                 $ownerCheckResult = $this->ownerCheckForBatch([
-                    'acct_cd' => $data['acct_bank_code'], // 은행코드드
-                    'acct_num' => $data['acct_num'], // 계좌번호
+                    'acct_cd' => $data['acct_bank_code'], // 은행코드
                     'acct_nm' => $data['acct_name'], // 예금주명
+                    'acct_num' => (string)$data['acct_num'], // 계좌번호
                 ]);
                 
                 if ($ownerCheckResult['result'] === 100) {
@@ -313,10 +313,10 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 // 기존 응답 구조
                 return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
             } else {
-                return $this->apiResponse(1999, '예금주 조회 중 오류가 발생했습니다.');
+                return $this->apiResponse(1999, '예금주 조회 중 오류가 발생했습니다.1');
             }
         } catch (\Exception $e) {
-            return $this->apiResponse(1999, '예금주 조회 중 오류가 발생했습니다: ' . $e->getMessage());
+            return $this->apiResponse(1999, '예금주 조회 중 오류가 발생했습니다2: ' . $e->getMessage());
         }
     }
 }

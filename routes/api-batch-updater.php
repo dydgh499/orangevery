@@ -110,16 +110,16 @@ Route::middleware(['auth.update'])->group(function() {
     Route::prefix('owner-check-test/batch-updaters')->group(function() { 
         Route::post('register', [BatchUpdateBankAccountController::class, 'ownerCheckTest']);
     });
+    */
 
     Route::prefix('owner-check-test/batch-updaters')->group(function() { 
         Route::post('register', [BatchUpdateBankAccountController::class, 'ownerCheckHardTest']);
     });
-    */
-
+/*
     Route::prefix('owner-check-test/batch-updaters')->group(function() { 
         Route::post('register', [BatchUpdateBankAccountController::class, 'ownerCheck']);
     });
-
+*/
     /*  
     Route::prefix('bulk-withdraws/batch-updaters')->group(function() { 
         Route::post('register', [BatchUpdateWithdrawBookController::class, 'withdrawTest']);
