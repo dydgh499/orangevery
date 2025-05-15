@@ -228,11 +228,13 @@ class BatchUpdateBankAccountController extends BatchUpdateController
             $failed_accounts = [];
             
             foreach ($filtered_datas as $data) {
-                $ownerCheckResult = $this->ownerCheckForBatch([
+                // 배열 데이터를 객체로 변환
+                $accountData = (object)[
                     'acct_cd' => $data['acct_bank_code'], // 은행코드
                     'acct_nm' => $data['acct_name'], // 예금주명
                     'acct_num' => (string)$data['acct_num'], // 계좌번호
-                ]);
+                ];
+                $ownerCheckResult = $this->ownerCheckForBatch($accountData);
                 
                 if ($ownerCheckResult['result'] === 100) {
                     $data['brand_id']   = $brand_id;
