@@ -14,6 +14,7 @@ use App\Http\Requests\Manager\BulkRegister\BulkBankAccountRequest;
 
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
+use App\Http\Controllers\Utils\Comm;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -277,5 +278,23 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 return $this->extendResponse(1, "총 {$count}개의 계좌번호가 검증 후 등록에 성공했습니다.", $ids);
             }
         }
+    }
+
+    
+    /*
+    * 예금주 조회
+    */
+    public function ownerCheck(BulkBankAccountRequest $request)
+    {
+        $current = date('Y-m-d H:i:s');
+        $brand_id = $request->user()->brand_id;
+        $datas = $request->data();
+        
+        $data = $request->all();
+        $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $data);
+        if($res['body']['result'] === 100)
+            return $this->response(1, ['message'=> $res['body']['message']]);
+        else
+            return $this->extendResponse(1999, $res['body']['message'], $res['body']['data']);
     }
 }
