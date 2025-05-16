@@ -324,7 +324,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 ];
 
                 // API 호출
-                $ownerCheckResult = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $apiRequest);
+                $ownerCheckResult = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $accountData);
                 
                 if ($ownerCheckResult['body']['result'] === 100) {
                     $data['brand_id']   = $brand_id;
