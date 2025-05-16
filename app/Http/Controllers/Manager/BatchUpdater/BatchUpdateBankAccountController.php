@@ -326,8 +326,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 // API 호출
                 $ownerCheckResult = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $accountData);
                 
-                $responseBody = json_decode($ownerCheckResult['body'], true);
-                if ($responseBody['result'] === 100) {
+                if ($ownerCheckResult['result'] === 100) {
                     $data['brand_id']   = $brand_id;
                     $data['created_at'] = $current;
                     $data['updated_at'] = $current;
@@ -336,7 +335,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 } else {
                     $failed_accounts[] = [
                         'acct_num' => $data['acct_num'],
-                        'message' => $responseBody['message']
+                        'message' => $ownerCheckResult['message']
                     ];
                 }
             }
