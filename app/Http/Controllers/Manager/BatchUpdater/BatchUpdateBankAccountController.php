@@ -326,7 +326,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 // API 호출
                 $ownerCheckResult = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $accountData);
                 
-                if ($ownerCheckResult['body']['result'] === 100) {
+                if ($ownerCheckResult['result'] === 100) {
                     $data['brand_id']   = $brand_id;
                     $data['created_at'] = $current;
                     $data['updated_at'] = $current;
@@ -335,7 +335,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 } else {
                     $failed_accounts[] = [
                         'acct_num' => $data['acct_num'],
-                        'message' => $ownerCheckResult['body']['message']
+                        'message' => $ownerCheckResult['message']
                     ];
                 }
             }
@@ -370,6 +370,5 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 return $this->extendResponse(1, "총 {$count}개의 계좌번호가 검증 후 등록에 성공했습니다.", $ids);
             }
         }
-        
     }
 }
