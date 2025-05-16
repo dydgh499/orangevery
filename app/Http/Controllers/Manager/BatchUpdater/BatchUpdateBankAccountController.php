@@ -15,7 +15,6 @@ use App\Http\Requests\Manager\BulkRegister\BulkBankAccountRequest;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 use App\Http\Controllers\Utils\Comm;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -327,8 +326,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 // API 호출
                 $ownerCheckResult = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $accountData);
                 
-                $responseBody = json_decode($ownerCheckResult['body'], true);
-                if ($responseBody['result'] === 100) {
+                if ($ownerCheckResult['result'] === 100) {
                     $data['brand_id']   = $brand_id;
                     $data['created_at'] = $current;
                     $data['updated_at'] = $current;
@@ -337,7 +335,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 } else {
                     $failed_accounts[] = [
                         'acct_num' => $data['acct_num'],
-                        'message' => $responseBody['message']
+                        'message' => $ownerCheckResult['message']
                     ];
                 }
             }
@@ -350,44 +348,27 @@ class BatchUpdateBankAccountController extends BatchUpdateController
             
             // 6. 모든 계좌가 검증에 성공했을 경우만 등록 처리
             $ids = app(ActivityHistoryInterface::class)->batchAdd($this->target, $this->account, array_values($success_accounts), 'acct_name', $current, $brand_id);
-            
-            // 디버깅을 위해 응답 확인
-            Log::debug('Owner check API response:', ['response' => $ownerCheckResult]);
 
-            // 응답 형식 확인 및 안전하게 처리
-            if (!empty($ownerCheckResult) && isset($ownerCheckResult['body'])) {
-                // 응답 형식에 따라 처리
-                if (is_string($ownerCheckResult['body'])) {
-                    // JSON 문자열인 경우 디코딩
-                    $responseBody = json_decode($ownerCheckResult['body'], true);
-                } elseif (is_array($ownerCheckResult['body'])) {
-                    // 이미 배열인 경우 그대로 사용
-                    $responseBody = $ownerCheckResult['body'];
-                } else {
-                    // 다른 형식인 경우 기본값 설정
-                    $responseBody = ['result' => 0, 'message' => '응답 형식 오류'];
+            // 7. 결과 메시지 생성 및 반환
+            $message = '';
+            if (count($exist_accounts)) {
+                $formattedAccounts = '';
+                foreach ($exist_accounts as $index => $account) {
+                    $formattedAccounts .= $account;
+                    // 마지막 항목이 아니면 콤마 추가
+                    if ($index < count($exist_accounts) - 1) {
+                        $formattedAccounts .= ',';
+                    }
                 }
-            } else {
-                // API 응답이 없는 경우 기본값 설정
-                $responseBody = ['result' => 0, 'message' => 'API 응답 없음'];
+                $message .= $formattedAccounts . '는 이미 존재하는 계좌번호입니다. ';
             }
-
-            // 이제 안전하게 배열 접근 가능
-            if (isset($responseBody['result']) && $responseBody['result'] === 100) {
-                $data['brand_id']   = $brand_id;
-                $data['created_at'] = $current;
-                $data['updated_at'] = $current;
-                $data['checked']    = 1;
-                $success_accounts[] = $data;
+            
+            if ($message) {
+                return $this->extendResponse(1, $message . '나머지는 정상 검증 후 등록 되었습니다.', $ids);
             } else {
-                $message = isset($responseBody['message']) ? $responseBody['message'] : '알 수 없는 오류';
-                $failed_accounts[] = [
-                    'acct_num' => $data['acct_num'],
-                    'message' => $message
-                ];
+                $count = count($ids);
+                return $this->extendResponse(1, "총 {$count}개의 계좌번호가 검증 후 등록에 성공했습니다.", $ids);
             }
         }
     }
 }
-
-
