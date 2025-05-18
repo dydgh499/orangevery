@@ -252,7 +252,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
             
             // 5. 하나라도 검증에 실패한 계좌가 있으면 모든 등록 취소
             if (!empty($failed_accounts)) {
-                $failed_account_nums = implode(', ', array_column($failed_accounts, 'acct_num'));
+                $failed_account_nums = implode(', ', array_column($failed_accounts, 'message'));
                 return $this->extendResponse(990, '예금주 검증에 실패한 계좌가 있어 모든 등록이 취소되었습니다: ' . $failed_account_nums, ['failed' => $failed_accounts]);
             }
             
@@ -342,7 +342,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
             
             // 5. 하나라도 검증에 실패한 계좌가 있으면 모든 등록 취소
             if (!empty($failed_accounts)) {
-                $failed_account_nums = implode(', ', array_column($failed_accounts, 'message'));
+                $failed_account_nums = implode(', ', array_column($failed_accounts, 'acct_num'));
                 return $this->extendResponse(990, '예금주 검증에 실패한 계좌가 있어 모든 등록이 취소되었습니다: ' . $failed_account_nums, ['failed' => $failed_accounts]);
             }
             
