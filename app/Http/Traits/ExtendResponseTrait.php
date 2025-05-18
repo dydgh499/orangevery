@@ -49,8 +49,8 @@ trait ExtendResponseTrait
         $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all(), 'url' => request()->url()];
         if($code == 990)
         {
-            $host = request()->getHost();
-            $msg  = ($host !== "localhost") ? "무언가 잘못되었습니다." : $msg;   
+            //$host = request()->getHost();
+            $msg  = $msg;    // ($host !== "localhost") ? "무언가 잘못되었습니다." :
             $http_code = 500; 
             Log::error($msg, $logs);
         }
