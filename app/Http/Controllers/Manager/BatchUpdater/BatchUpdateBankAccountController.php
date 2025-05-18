@@ -252,8 +252,16 @@ class BatchUpdateBankAccountController extends BatchUpdateController
             
             // 5. 하나라도 검증에 실패한 계좌가 있으면 모든 등록 취소
             if (!empty($failed_accounts)) {
-                $failed_account_nums = implode(', ', array_column($failed_accounts, 'message'));
-                return $this->extendResponse(990, '예금주 검증에 실패한 계좌가 있어 모든 등록이 취소되었습니다: ' . $failed_account_nums, ['failed' => $failed_accounts]);
+                // 계좌번호와 실패 이유를 함께 표시하는 배열 생성
+                $failed_details = [];
+                foreach ($failed_accounts as $failed) {
+                    $failed_details[] = $failed['acct_num'] . ' (' . $failed['message'] . ')';
+                }
+                
+                // 계좌번호와 실패 이유를 함께 문자열로 변환
+                $failed_details_str = implode(', ', $failed_details);
+                
+                return $this->extendResponse(990, '예금주 검증에 실패한 계좌가 있어 모든 등록이 취소되었습니다: ' . $failed_details_str, ['failed' => $failed_accounts]);
             }
             
             // 6. 모든 계좌가 검증에 성공했을 경우만 등록 처리
