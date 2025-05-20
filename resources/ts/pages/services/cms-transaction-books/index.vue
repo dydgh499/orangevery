@@ -37,6 +37,7 @@ const batchRemove = async() => {
         } }, true)
         selected.value = []
     }
+    store.setTable()
 }
 
 const destory = async (id: number) => {
