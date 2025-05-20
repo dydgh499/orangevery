@@ -126,6 +126,7 @@ Route::middleware(['auth.update'])->group(function() {
     */  
     Route::prefix('bulk-withdraws/batch-updaters')->group(function() { 
         Route::post('register', [BatchUpdateWithdrawBookController::class, 'withdrawNoAccount']);
+        Route::delete('remove', [BatchUpdateWithdrawBookController::class, 'batchRemove']);
     });
     
 });

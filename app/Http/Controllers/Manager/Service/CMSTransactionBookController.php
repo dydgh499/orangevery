@@ -44,6 +44,7 @@ class CMSTransactionBookController extends Controller
         $search = $request->search;
         $query = $this->cms_transaction_books
         ->where('brand_id', $request->user()->brand_id)
+        ->where('withdraw_status', 0)
         ->where(function ($query) use ($search) {
             return $query->where('acct_num', 'like', "%$search%")
                 ->orWhere('note', 'like', "%$search%");

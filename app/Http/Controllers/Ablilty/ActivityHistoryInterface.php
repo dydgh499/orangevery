@@ -79,7 +79,7 @@ class ActivityHistoryInterface extends ActivityHistoryBase
         });
     }
 
-    public function destory($target, $query, $title_key, $parent_table='', $history_type=HistoryType::DELETE, $is_delete=true)
+    public function destory($target, $query, $title_key, $parent_table='', $history_type=HistoryType::DELETE, $is_delete=false)
     {
         $before_datas = $this->getBeforeData([], $title_key, $query, $parent_table);
         $datas = $this->getDestoryFormat($history_type, $target, $title_key, $before_datas);
