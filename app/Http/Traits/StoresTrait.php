@@ -155,4 +155,3 @@ trait StoresTrait
         ];
     }
 }
-$ownerCheckResult['message'] === $data['acct_name']
