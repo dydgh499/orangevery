@@ -146,7 +146,7 @@ trait StoresTrait
         $mchtCustNm = openssl_decrypt($cipherRaw, "AES-256-ECB",  $sub_key, OPENSSL_RAW_DATA);
         $success = ($body['outRsltCd'] === "0000" || $body['outRsltCd'] === "ST24");
         $code = $success ? 100 : $body['outRsltCd'];
-        $msg  = $success ? "예금주 검증에 성공하였습니다. 예금주명은<br><b>'.$mchtCustNm.'</b><br>입니다." : $body['outRsltMsg'];
+        $msg  = $success ? $mchtCustNm : $body['outRsltMsg'];
 
         return [
             'result' => $code,
@@ -155,3 +155,4 @@ trait StoresTrait
         ];
     }
 }
+$ownerCheckResult['message'] === $data['acct_name']

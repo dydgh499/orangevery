@@ -237,11 +237,23 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 $ownerCheckResult = $this->ownerCheckForBatch($accountData);
                 
                 if ($ownerCheckResult['result'] === 100) {
-                    $data['brand_id']   = $brand_id;
-                    $data['created_at'] = $current;
-                    $data['updated_at'] = $current;
-                    $data['checked']    = 1;
-                    $success_accounts[] = $data;
+                    // 반환된 예금주명과 입력된 예금주명 비교 (공백 제거 후 비교)
+                    $verified_name = trim($ownerCheckResult['message']);
+                    $input_name = trim($data['acct_name']);
+                    
+                    if ($verified_name === $input_name) {
+                        $data['brand_id']   = $brand_id;
+                        $data['created_at'] = $current;
+                        $data['updated_at'] = $current;
+                        $data['checked']    = 1;
+                        $success_accounts[] = $data;
+                    } else {
+                        // 예금주명이 일치하지 않을 경우
+                        $failed_accounts[] = [
+                            'acct_num' => $data['acct_num'],
+                            'message' => "입력하신 예금주명({$input_name})과 실제 예금주명({$verified_name})이 일치하지 않습니다."
+                        ];
+                    }
                 } else {
                     $failed_accounts[] = [
                         'acct_num' => $data['acct_num'],
