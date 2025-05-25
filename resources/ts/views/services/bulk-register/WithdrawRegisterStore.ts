@@ -70,6 +70,6 @@ export const useRegisterStore = defineStore('WithdrawRegisterStore', () => {
     const headers = getHeaders()
 
     return {
-        headers, isPrimaryHeader
+        headers, isPrimaryHeader,
     }
 })
