@@ -45,5 +45,3 @@ export const useRegisterStore = defineStore('virtualAccountRegisterStore', () =>
         headers, isPrimaryHeader
     }
 })
-drwxr-xr-x 
-drwxrwxr-x 
