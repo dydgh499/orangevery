@@ -1,4 +1,3 @@
-import { bulkAutoInsertPaymentModuleFormat, isFixplus } from '@/plugins/fixplus';
 import { axios } from '@axios';
 import { Workbook } from 'exceljs';
 import * as XLSX from 'xlsx';
@@ -90,11 +89,6 @@ export const Registration = () => {
                 console.log('테스트', r.data)
                 snackbar.value.show(r.data.message, 'success')
                 result = true
-
-                if(name === '가맹점' && isFixplus()) {
-                    const pay_modules = bulkAutoInsertPaymentModuleFormat(r.data)
-                    await axios.post('/api/v1/manager/merchandises/pay-modules/batch-updaters/register', pay_modules)
-                }
             }
             catch (e: any) {
                 snackbar.value.show(e.response.data.message, 'error')
@@ -103,6 +97,7 @@ export const Registration = () => {
         }
         return result
     }
+    
     return {
         ExcelFormatV2,
         ExcelReaderV2,
