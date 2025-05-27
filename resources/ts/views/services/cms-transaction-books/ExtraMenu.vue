@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { transactionColors } from '@/@core/enums';
-import type { VirtualAccountHistory } from '@/views/types';
+import type { CmsTransactionBooks } from '@/views/types';
 import { withdrawInterface, withdrawStatusCode } from '@/views/services/cms-transaction-books/useStore';
 import { getUserLevel } from '@axios';
 
 interface Props {
-    item: VirtualAccountHistory,
+    item: CmsTransactionBooks,
 }
 
 const props = defineProps<Props>()
@@ -52,7 +52,7 @@ const isBookCancelAble = () => {
         <VMenu activator="parent" width="250">
             <VList>
                 <VListItem 
-                    v-if="props.item.trans_type === 1 && isRetryAble()"
+                    v-if="props.item.is_withdraw === 1 && isRetryAble()"
                     value="retry-realtime-deposit" 
                     class="retry-realtime-deposit"
                     @click="retryDeposit()">
@@ -62,17 +62,18 @@ const isBookCancelAble = () => {
                     <VListItemTitle>재이체</VListItemTitle>
                 </VListItem>
                 <VListItem
-                    v-else-if="props.item.trans_type === 1 && isBookCancelAble()"
+                    v-else-if="props.item.is_withdraw === 1 && isBookCancelAble()"
                     value="single-deposit-cancel-job" 
                     class="single-deposit-cancel-job" 
-                    @click="cancelJobs([props.item.trx_id])">
+                    @click="cancelJobs([props.item.id.toString()])">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="material-symbols:free-cancellation-outline" />
                     </template>
                     <VListItemTitle>이체예약취소</VListItemTitle>
                 </VListItem>
+                <!--
                 <VListItem 
-                    v-if="props.item.trans_type === 1"                
+                    v-if="props.item.is_withdraw === 1"                
                     value="withdraw-histories" 
                     @click="withdrawHistoriesDialog.show(props.item['withdraws'])">
                     <template #prepend>
@@ -80,6 +81,7 @@ const isBookCancelAble = () => {
                     </template>
                     <VListItemTitle>출금시도이력</VListItemTitle>
                 </VListItem>
+                -->
             </VList>
         </VMenu>
     </VBtn>

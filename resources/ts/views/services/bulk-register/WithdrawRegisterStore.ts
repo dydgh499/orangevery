@@ -1,6 +1,6 @@
 
 
-import { FinanceVan, VirtualAccount, Withdraw } from '@/views/types';
+import { FinanceVan, Withdraw } from '@/views/types';
 import { isEmpty } from '@core/utils'
 import { banks } from '@/views/users/useStore';
 import corp from '@corp'

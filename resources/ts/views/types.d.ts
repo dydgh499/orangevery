@@ -1298,3 +1298,19 @@ export interface Withdraw {
     note: string, // 출금 사유
     withdraw_book_time: string, // 출금 예약 시간
 }
+
+export interface CmsTransactionBooks {
+    id: number,
+    brand_id: number,
+    fin_id: number,
+    result_code: string,
+    is_withdraw: number,
+    amount: number | null,
+    acct_num: number, // 계좌번호
+    acct_name: string, // 예금주명
+    acct_bank_code: string, // 은행코드
+    acct_bank_name: string, // 입금 은행명
+    note: string, // 출금 사유
+    withdraw_book_time: string, // 출금 예약 시간
+    withdraw_status: number, // 상태
+}
