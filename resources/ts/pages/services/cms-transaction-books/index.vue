@@ -8,7 +8,7 @@ import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
 import { realtimeMessage, realtimeResult, useSearchStore, withdrawInterface } from '@/views/services/cms-transaction-books/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { DateFilters } from '@core/enums'
-import ExtraMenu from '@/views/services/cms-transaction-books/Extramenu.vue';
+import ExtraMenu from '@/views/services/cms-transaction-books/ExtraMenu.vue';
 
 const alert = <any>(inject('alert'))
 const { request, remove } = useRequestStore()
