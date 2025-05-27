@@ -1,5 +1,4 @@
-
-import { StatusColors } from '@/@core/enums'
+import { StatusColors, transactionColors } from '@/@core/enums'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -20,6 +19,23 @@ export const realtimeMessage = (item: any) => {
         return '결과 처리중'
     else
         return item.message
+}
+
+export const withdrawStatusCode = (history: VirtualAccountHistory) => {
+    if (history.withdraw_status === 0) {
+        const trans_at = (new Date(history.withdraw_schedule_time as string)).getTime() + 30000;
+        const offset_at = trans_at - new Date().getTime();
+        return offset_at < 0 ? transactionColors.Timeout : transactionColors.Book;
+    }
+
+    const statusMap: Record<number, number> = {
+        1: transactionColors.Success,
+        2: transactionColors.Error,
+        3: transactionColors.Cancel,
+        4: transactionColors.BookCancel,
+    };
+
+    return statusMap[history.withdraw_status] ?? transactionColors.NA;
 }
 
 export const withdrawInterface = () => {

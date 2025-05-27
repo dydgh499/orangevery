@@ -29,6 +29,19 @@ export const StatusColors = {
     DepositCancelJob : 9,
 } as const
 
+export const transactionColors = {
+    Book        : 0,
+    Cancel      : 1,
+    Success     : 2,
+    PartOffset  : 3,
+    AllOffset   : 4,
+    Error       : 5,
+    NA          : 6,
+    ReSettleAble : 7,
+    Timeout     : 8,
+    BookCancel  : 9,
+} as const
+
 export const DateFilters = {
     NOT_USE: null,
     DATE : 0,

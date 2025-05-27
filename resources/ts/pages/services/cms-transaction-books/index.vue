@@ -8,6 +8,7 @@ import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
 import { realtimeMessage, realtimeResult, useSearchStore, withdrawInterface } from '@/views/services/cms-transaction-books/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { DateFilters } from '@core/enums'
+import Extramenu from '@/views/services/cms-transaction-books/Extramenu.vue';
 
 const alert = <any>(inject('alert'))
 const { request, remove } = useRequestStore()
@@ -134,10 +135,13 @@ if(getUserLevel() < 35) {
                                     <span v-else-if="_key === 'note'" v-html="item[_key]" style="line-height: 2em;"></span>
                                     
                                     <span v-else-if="_key === 'extra_col'" v-if="item['withdraw_status'] != 1">
+                                        <Extramenu :item="item"/>
+                                        <!--
                                         <VBtn size="small" type="button" color="error" @click="cancelJobs([item['id']])">
                                             삭제
                                             <VIcon size="22" icon="tabler-trash"/>
                                         </VBtn>
+                                        -->
                                     </span>
                                     <span v-else>
                                         {{ item[_key] }}
