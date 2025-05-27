@@ -3,6 +3,7 @@ import { StatusColors } from '@/@core/enums'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useRequestStore } from '@/views/request'
 
 export const realtimeResult = (result_code: string) => {
     if(result_code === '0000')  //성공
@@ -19,6 +20,37 @@ export const realtimeMessage = (item: any) => {
         return '결과 처리중'
     else
         return item.message
+}
+
+export const withdrawInterface = () => {
+    const alert = <any>(inject('alert'))
+    const snackbar = <any>(inject('snackbar'))
+    const { post } = useRequestStore()
+
+    const cancelJobs = async (trx_ids: string[]) => {
+        if (await alert.value.show('정말 해당건의 출금예약을 취소처리 하시겠습니까?')) {
+            const res = await post('/api/v1/manager/cms-transaction-books/cancel-job', {
+                trx_ids: trx_ids
+            }, true)
+            snackbar.value.show(res.data.message, res.status === 201 ? 'success' : 'error')
+        }
+    }
+
+    const withdrawRetry = async (id: number) => {
+        if (await alert.value.show('정말 해당건을 재출금시도 하시겠습니까?')) {
+            const res = await post('/api/v1/manager/virtual-accounts/histories/retry-withdraw', {
+                id: id,
+            }, false)
+            snackbar.value.show(res.data.message, res.status === 201 ? 'success' : 'error')
+        }
+        else
+            return null
+    }
+
+    return {
+        withdrawRetry,
+        cancelJobs,
+    }
 }
 
 export const useSearchStore = defineStore('useCMSTransactionBookSearchStore', () => {

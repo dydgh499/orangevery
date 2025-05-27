@@ -5,7 +5,7 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { selectFunctionCollect } from '@/views/selected';
 import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
-import { realtimeMessage, realtimeResult, useSearchStore } from '@/views/services/cms-transaction-books/useStore'
+import { realtimeMessage, realtimeResult, useSearchStore, withdrawInterface } from '@/views/services/cms-transaction-books/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { DateFilters } from '@core/enums'
 
@@ -14,6 +14,7 @@ const { request, remove } = useRequestStore()
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { finance_vans } = useStore()
+const { cancelJobs } = withdrawInterface()
 const total = ref(<any>{
     deposit_amount: 0,
     withdraw_amount: 0,
@@ -133,7 +134,7 @@ if(getUserLevel() < 35) {
                                     <span v-else-if="_key === 'note'" v-html="item[_key]" style="line-height: 2em;"></span>
                                     
                                     <span v-else-if="_key === 'extra_col'" v-if="item['withdraw_status'] != 1">
-                                        <VBtn size="small" type="button" color="error" @click="destory(item['id'])">
+                                        <VBtn size="small" type="button" color="error" @click="cancelJobs([item['id']])">
                                             삭제
                                             <VIcon size="22" icon="tabler-trash"/>
                                         </VBtn>

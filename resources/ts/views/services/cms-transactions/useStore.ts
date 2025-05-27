@@ -23,6 +23,7 @@ export const realtimeMessage = (item: any) => {
         return item.message
 }
 
+
 export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => {
     const store = Searcher('services/cms-transactions')
     const head  = Header('services/cms-transactions', '가상계좌 입출금')

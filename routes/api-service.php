@@ -84,6 +84,7 @@ Route::middleware(['auth.update'])->group(function() {
             Route::get('head-office-accounts', [HeadOfficeAccountController::class, 'index']);        
             Route::get('cms-transaction-books', [CMSTransactionBookController::class, 'index']);
             Route::delete('cms-transaction-books/{id}', [CMSTransactionBookController::class, 'destroy']);
+            Route::post('cms-transaction-books/cancel-job', [CMSTransactionBookController::class, 'cancelJobTest']);
             Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
             Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
             Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);

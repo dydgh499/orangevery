@@ -130,12 +130,28 @@ const bulkWithdrawRequest = async () => {
     snackbar.value.show(error_message.value, 'error')
     return
   }
+   
+  const [hh, mm] = transferTime.value.split(':')
+  const totalItems = items.value.length
+  const perSecond = Math.ceil(totalItems / 60)
 
-  const withdrawBookTime = makeWithdrawBookTime(transferTime.value)
-  items.value = items.value.map(item => ({
-    ...item,
-    withdraw_book_time: withdrawBookTime
-  }))
+  let second = 0
+  let countInSecond = 0
+
+  items.value = items.value.map((item, idx) => {
+    if (countInSecond >= perSecond) {
+      second++
+      countInSecond = 0
+    }
+    if (second > 59) second = 59 // 59초를 넘지 않게
+    const ss = String(second).padStart(2, '0')
+    countInSecond++
+
+    return {
+      ...item,
+      withdraw_book_time: `${getToday()} ${hh}:${mm}:${ss}`
+    }
+  })
     await bulkRegister('출금요청', 'bulk-withdraws', items.value)
 }
 
