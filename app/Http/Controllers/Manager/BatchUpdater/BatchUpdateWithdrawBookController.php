@@ -42,7 +42,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
         $withdraw_count  = CMSTransactionBooks::where('brand_id', $brand_id)
                 ->where('is_withdraw', 1)
                 ->where('created_at', '>=', date('Y-m-d 00:00:00'))
-                ->lockForUpdate() // Lock 추가
+                //->lockForUpdate() // Lock 추가
                 ->count();
 
         $code = 3;
