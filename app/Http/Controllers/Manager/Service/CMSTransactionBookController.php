@@ -78,7 +78,7 @@ class CMSTransactionBookController extends Controller
     public function cancelJobTest(Request $request)
     {
         // 운영자 권한 체크
-        if (Ablilty::isOperator($request)) {
+        //if (Ablilty::isOperator($request)) {
             // id 값 유효성 검사 (필수)
             $validated = $request->validate(['id' => 'required|integer']);
             // 외부 API 호출 (id를 배열 형태로 전달)
@@ -87,7 +87,8 @@ class CMSTransactionBookController extends Controller
 
             // 외부 API 응답 반환
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
-        } else
+        /* } else
             return $this->response(951); // 권한 없음
+            */
     }
 }
