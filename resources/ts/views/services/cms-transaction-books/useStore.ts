@@ -43,10 +43,10 @@ export const withdrawInterface = () => {
     const snackbar = <any>(inject('snackbar'))
     const { post } = useRequestStore()
 
-    const cancelJobs = async (trx_ids: string[]) => {
+    const cancelJobs = async (id: string[]) => {
         if (await alert.value.show('정말 해당건의 출금예약을 취소처리 하시겠습니까?')) {
             const res = await post('/api/v1/manager/cms-transaction-books/cancel-job', {
-                trx_ids: trx_ids
+                id: id
             }, true)
             snackbar.value.show(res.data.message, res.status === 201 ? 'success' : 'error')
         }
