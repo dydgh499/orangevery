@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->integer('fin_id')->nullable()->comment('실시간 이체 ID');
             $table->string('result_code', 5)->nullable()->comment('응답코드');
-            $table->boolean('is_withdraw')->default(false)->comment('출금 여부');
+            $table->boolean('is_withdraw')->default(false)->comment('출금 여부(1=출금, 0=입금)');
             $table->integer('amount')->nullable()->comment('거래금액');
             $table->string('acct_num', 20)->nullable()->comment('계좌번호');
             $table->string('acct_name', 50)->nullable()->comment('계좌명');
