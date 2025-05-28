@@ -83,6 +83,7 @@ export const useSearchStore = defineStore('useCMSTransactionBookSearchStore', ()
         'acct_name' : '예금주명',
         'acct_bank_name' : '은행명',
         'acct_bank_code' : '은행코드',
+        'trans_seq_num': '거래번호',
         'withdraw_book_time': '이체예정시간',
         'withdraw_status': '예약상태',
         'note': '메모사항',
