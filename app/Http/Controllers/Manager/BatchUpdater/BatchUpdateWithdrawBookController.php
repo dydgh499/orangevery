@@ -6,7 +6,7 @@ use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateController;
 
 use App\Models\BankAccount;
 use App\Models\Service\FinanceVan;
-use App\Models\Service\CMSTransactionBook;
+use App\Models\Service\CMSTransactionBooks;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -31,10 +31,32 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $cms_transaction_books, $target;
 
-    public function __construct(CMSTransactionBook $cms_transaction_books)
+    public function __construct(CMSTransactionBooks $cms_transaction_books)
     {
         $this->cms_transaction_books = $cms_transaction_books;
         $this->target = '출금예약요청';
+    }
+
+    protected static function getTrxNum($brand_id)
+    {
+        $withdraw_count  = CMSTransactionBooks::where('brand_id', $brand_id)
+                ->where('is_withdraw', 1)
+                ->where('created_at', '>=', date('Y-m-d 00:00:00'))
+                ->lockForUpdate() // Lock 추가
+                ->count();
+
+        $code = 3;
+        $head = date("d").$brand_id;
+        return self::getTrxNumFormat($code, $head, $withdraw_count);
+    }
+
+    /**
+     * trans_seq_num 포맷팅 함수 추가
+     */
+    protected static function getTrxNumFormat($code, $head, $withdraw_count)
+    {
+        $body = str_pad($withdraw_count+1, 11 - strlen($head), "0", STR_PAD_LEFT);
+        return (int)$code.$head.$body;
     }
 
     /**
@@ -76,118 +98,6 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
         }
     }
     
-    /**
-     * 계좌 출금 예약 테스트(등록되지 않은 계좌 제외 출금 요청)
-     */
-    public function withdrawTest(BulkWithdrawBookRequest $request)
-    {
-        
-    $current = date('Y-m-d H:i:s');
-    $brand_id = $request->user()->brand_id;
-    $datas = $request->data();
-
-    if(!$request->user()->tokenCan(35)) {
-        return $this->response(951);
-    }
-
-    $results = [];
-    $success_count = 0;
-    $not_exist_accounts = [];
-
-    foreach($datas as $data) 
-    {
-        // $result 초기화
-        $result = [
-            'deposit_acct_num' => $data['deposit_acct_num'] ?? null,
-            'result_cd' => 100, // 기본 성공 코드
-            'result_msg' => ''
-        ];
-
-        // 1. 계좌번호 존재 여부 확인
-        $bankAccount = BankAccount::where('acct_num', $data['deposit_acct_num'])
-            ->where('brand_id', $brand_id)
-            ->first();
-
-        if(!$bankAccount) {
-            $result['result_cd'] = 952;
-            $result['result_msg'] = '존재하지 않는 계좌번호';
-            $results[] = $result;
-            $not_exist_accounts[] = $data['deposit_acct_num'];
-            continue;
-        }
-
-        // 2. 금융정보 유효성 검사
-        $finance = FinanceVan::where('id', $data['fin_id'])
-            ->where('brand_id', $brand_id)
-            ->first();
-
-        if(!$finance) {
-            $result['result_cd'] = 953;
-            $result['result_msg'] = '유효하지 않은 금융정보';
-            $results[] = $result;
-            continue;
-        }
-
-        // 3. 출금 요청 파라미터 구성
-        $params = [
-            'brand_id' => $brand_id,
-            'fin_id' => $data['fin_id'],
-            'is_withdraw' => '1',
-            'amount' => $data['withdraw_amount'],
-            'note' => $data['note'] ?? '',
-            'acct_num' => $bankAccount->acct_num,
-            'acct_name' => $bankAccount->acct_name,
-            'acct_bank_name' => $bankAccount->acct_bank_name,
-            'acct_bank_code' => $bankAccount->acct_bank_code,
-            'withdraw_book_time' => $data['withdraw_book_time'] ?? null,
-            'created_at' => $current,
-            'updated_at' => $current,
-        ];
-
-        // 4. 등록 처리
-        $ids = app(ActivityHistoryInterface::class)->batchAdd($this->target, $this->cms_transaction_books, [$params], 'fin_id',$current, $brand_id);
-
-        // [추가] 성공 결과 업데이트
-        $result['result_cd'] = 100;
-        $result['result_msg'] = '성공';
-        $results[] = $result;
-        $success_count++;
-    }
-
-    // 5. 최종 응답
-    $failed_count = count($datas) - $success_count;
-    $not_exist_accounts_str = '';
-    
-    if (!empty($not_exist_accounts)) {
-        $not_exist_accounts_str = " (존재하지 않는 계좌번호: " . implode(", ", $not_exist_accounts) . ")";
-    }
-    
-    $message = "총 " . count($datas) . "건 중 {$success_count}건 성공" . $not_exist_accounts_str;
-    return $this->extendResponse(1, $message, [
-        'total' => count($datas),
-        'success' => $success_count,
-        'failed' => $failed_count,
-        'details' => $results,
-        'not_exist_accounts' => $not_exist_accounts
-    ]);
-
-        // 6. 외부 API 호출
-        /*
-        try {
-            $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/operate-withdraw', $params
-            );
-            
-            $result['result_cd'] = $res['body']['result_cd'] ?? 9999;
-            $result['result_msg'] = $res['body']['result_msg'] ?? 'API 오류 발생';
-            
-            if($result['result_cd'] === 100) $success_count++;
-            
-        } catch (\Exception $e) {
-            $result['result_cd'] = 500;
-            $result['result_msg'] = '서버 오류: '.$e->getMessage();
-        }
-        */
-    }
 
     
     /**
@@ -254,6 +164,8 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                 ->where('brand_id', $brand_id)
                 ->first();
 
+            $trans_seq_num = self::getTrxNum($brand_id);
+
             $params = [
                 'brand_id' => $brand_id,
                 'fin_id' => $data['fin_id'],
@@ -265,6 +177,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                 'acct_bank_name' => $bankAccount->acct_bank_name,
                 'acct_bank_code' => $bankAccount->acct_bank_code,
                 'withdraw_book_time' => $data['withdraw_book_time'] ?? null,
+                'trans_seq_num' => $trans_seq_num,
                 'created_at' => $current,
                 'updated_at' => $current,
             ];

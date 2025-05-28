@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Manager\Service;
 use App\Models\BankAccount;
 use App\Models\Service\FinanceVan;
 use App\Models\Service\HeadOfficeAccount;
-use App\Models\Service\CMSTransactionBook;
+use App\Models\Service\CMSTransactionBooks;
 use App\Models\Log\SettleHistoryMerchandiseDeposit;
 use App\Models\Log\SettleHistorySalesforceDeposit;
 
@@ -32,7 +32,7 @@ class CMSTransactionBookController extends Controller
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $cms_transaction_books;
 
-    public function __construct(CMSTransactionBook $cms_transaction_books)
+    public function __construct(CMSTransactionBooks $cms_transaction_books)
     {
         $this->cms_transaction_books = $cms_transaction_books;
     }
@@ -67,7 +67,7 @@ class CMSTransactionBookController extends Controller
      */
     public function delete(int $id)
     {
-        $query = new CMSTransactionBook;
+        $query = new CMSTransactionBooks;
         $res = $query->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
@@ -78,17 +78,17 @@ class CMSTransactionBookController extends Controller
     public function cancelJobTest(Request $request)
     {
         // 운영자 권한 체크
-        //if (Ablilty::isOperator($request)) {
+        if (Ablilty::isOperator($request)) {
             // id 값 유효성 검사 (필수)
-            $validated = $request->validate(['id' => 'required|integer']);
+            $validated = $request->validate(['trx_ids' => 'required']);
             // 외부 API 호출 (id를 배열 형태로 전달)
             $url = env('NOTI_URL', 'http://localhost:81') . '/api/v2/realtimes/cancel-job-test';
-            $res = Comm::post($url, ['id' => [$request->id]]);
+            $res = Comm::post($url, ['trx_ids' => [$request->trx_ids]]);
 
             // 외부 API 응답 반환
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
-        /* } else
+        } else
             return $this->response(951); // 권한 없음
-            */
+            
     }
 }

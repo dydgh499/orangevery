@@ -1,5 +1,6 @@
 
 <script setup lang="ts">
+import HeadOfficeWithdrawDialog from '@/layouts/dialogs/services/HeadOfficeWithdrawDialog.vue'
 import { useRequestStore } from '@/views/request';
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
@@ -16,6 +17,7 @@ const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { finance_vans } = useStore()
 const { cancelJobs } = withdrawInterface()
+const headOfficeWithdrawDialog = ref()
 const total = ref(<any>{
     deposit_amount: 0,
     withdraw_amount: 0,
@@ -85,6 +87,10 @@ if(getUserLevel() < 35) {
                     일괄삭제
                     <VIcon size="18" icon="tabler-trash" />
                 </VBtn>
+                    <VBtn prepend-icon="carbon:batch-job" @click="headOfficeWithdrawDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small"
+                        :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
+                        지정계좌 이체
+                    </VBtn>
                 </template>
             <template #headers>
                 <tr>
@@ -152,6 +158,7 @@ if(getUserLevel() < 35) {
                     </template>
                 </template>
             </BaseIndexView>
+            <HeadOfficeWithdrawDialog ref="headOfficeWithdrawDialog"/>
         </div>
     </section>
 </template>

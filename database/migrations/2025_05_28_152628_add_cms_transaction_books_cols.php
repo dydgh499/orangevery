@@ -13,11 +13,11 @@ return new class extends Migration
     {
         
         Schema::table('cms_transaction_books', function (Blueprint $table) {
-            $table->string('trx_id', 50)->nullable()->comment('거래번호(출금 전용)');            
+            $table->string('trans_seq_num', 50)->nullable()->comment('거래번호(출금 전용)');            
         });
         
         Schema::table('cms_transaction_books', function (Blueprint $table) {
-            $table->unique(['brand_id', 'trx_id', 'is_withdraw'], 'duplicate_trx_id_unique_key');
+            $table->unique(['brand_id', 'trans_seq_num', 'is_withdraw'], 'duplicate_trx_id_unique_key');
         });
     }
 
@@ -27,7 +27,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('cms_transaction_books', function (Blueprint $table) {
-            $table->dropColumn('trx_id');
+            $table->dropColumn('trans_seq_num');
         });
     }
 };
