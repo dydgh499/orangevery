@@ -45,7 +45,7 @@ export const withdrawInterface = () => {
 
     const cancelJobs = async (id: string[]) => {
         if (await alert.value.show('정말 해당건의 출금예약을 취소처리 하시겠습니까?')) {
-            const res = await post('/api/v1/manager/cms-transaction-books/cancel-job', {
+            const res = await post('/api/v1/manager/services/cms-transaction-books/cancel-job', {
                 id: id
             }, true)
             snackbar.value.show(res.data.message, res.status === 201 ? 'success' : 'error')
