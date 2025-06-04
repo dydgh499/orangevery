@@ -166,11 +166,11 @@ onMounted(async () => {
                                     </BooleanRadio>
                                 </template>
                                 -->
-                                <template #r_name>
+                                <template #l_name>
                                     <BaseQuestionTooltip :location="'top'" text="별칭"
                                             :content="`사이트 내에서 관리될 별칭입니다.`" />
                                 </template>
-                                <template #r_input>
+                                <template #l_input>
                                     <VTextField v-model="props.item.nick_name" 
                                         prepend-inner-icon="twemoji-spiral-notepad" maxlength="10"/>
                                 </template>
