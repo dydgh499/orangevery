@@ -79,9 +79,7 @@ watchEffect(async () => {
                 <template #name>
                     <UsageTooltip />
                     <br><br>
-                    하단 컬럼들은 숫자로 매칭되는 값들입니다.
-                    <br>
-                    엑셀 작성시 <b class="important-text">입력하실 내용에 매칭되는 코드를 작성</b>해주세요.
+                    엑셀 작성시 <b class="important-text">주의사항을 숙지하신 후 작성</b>해주세요.
                     <br><br>
                     컬럼 우측의 <b>O표시는 필수 입력값, X표시는 옵션 입력값</b>을 의미합니다.
                 </template>
@@ -96,13 +94,12 @@ watchEffect(async () => {
                         <VRow>
                             <VCol md="6" cols="12">
                                 <VRow>
-                                    <VCol class="font-weight-bold" md="6">은행코드 검색</VCol>
+                                    <VCol class="font-weight-bold" md="6">입금 은행명 검색</VCol>
                                     <VCol md="6">
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank"
                                             :items="banks"
                                             label="은행 검색"
-                                            :hint="`은행 코드: ${bank ? bank.code : ''} `"
-                                            item-title="title" item-value="code" persistent-hint return-object
+                                            item-title="title" item-value="code"  return-object
                                         />
                                     </VCol>
                                 </VRow>
@@ -112,14 +109,14 @@ watchEffect(async () => {
                 </template>
                 <template #input>
                     <VCol>
-                        <b class="important-text">입금 계좌번호 입력시 주의사항</b>
+                        <b>입금 계좌번호 입력시 </b><b class="important-text">주의사항</b>
                         <br>
-                        <span>- 숫자만 입력(예:12345123451234)</span>
+                        <span>- 숫자만 입력 (예: 12345123451234)</span>
                     </VCol>
                     <VCol>
-                        <b>입력가능한 입금은행명 확인</b>
+                        <b>입금 은행명 입력시 </b><b class="important-text">주의사항</b>
                         <br>
-                        <span>- 은행코드 검색 목록에 있는 은행명과 동일하게 입력(예: 한국은행)</span>
+                        <span>- 입금 은행명 검색 목록에 있는 은행명과 동일하게 입력 (예: 한국은행)</span>
                     </VCol>
                 </template>
             </CreateHalfVCol>

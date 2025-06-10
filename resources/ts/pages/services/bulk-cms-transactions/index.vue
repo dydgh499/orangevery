@@ -8,7 +8,7 @@ import corp from '@corp'
 const tab = ref(0)
 const tabs = <Tab[]>([
     { icon: 'tabler-building-bank', title: '계좌등록' },
-    { icon: 'marketeq:wallet-money', title: '출금요청' },
+    { icon: 'marketeq:wallet-money', title: '출금예약' },
 ])
 </script>
 <template>

@@ -152,7 +152,7 @@ const bulkWithdrawRequest = async () => {
       withdraw_book_time: `${getToday()} ${hh}:${mm}:${ss}`
     }
   })
-    await bulkRegister('출금요청', 'bulk-withdraws', items.value)
+    await bulkRegister('출금예약', 'bulk-withdraws', items.value)
 }
 
 watchEffect(async () => {
@@ -169,9 +169,7 @@ watchEffect(async () => {
                 <template #name>
                     <UsageTooltip />
                     <br><br>
-                    하단 컬럼들은 숫자로 매칭되는 값들입니다.
-                    <br>
-                    엑셀 작성시 <b class="important-text">입력하실 내용에 매칭되는 코드를 작성</b>해주세요.
+                    엑셀 작성시 <b class="important-text">주의사항을 숙지하신 후 작성</b>해주세요.
                     <br><br>
                     컬럼 우측의 <b>O표시는 필수 입력값, X표시는 옵션 입력값</b>을 의미합니다.
                 </template>
@@ -186,7 +184,7 @@ watchEffect(async () => {
                         <VRow>
                             <VCol md="6" cols="12">
                                 <VRow>
-                                    <VCol class="font-weight-bold" md="6">이체모듈 타입</VCol>
+                                    <VCol class="font-weight-bold" md="6">이체모듈 타입 검색</VCol>
                                     <VCol md="6">
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="fin_id"
                                             :items="finance_vans"
@@ -200,41 +198,23 @@ watchEffect(async () => {
                                 </VRow>
                             </VCol>
                         </VRow>
-                        
-                        <VDivider style="margin: 1em 0;" />
-                        <h3 class="pt-3">입금 정보</h3>
-                        <VRow>
-                            <VCol md="6" cols="12">
-                                <VRow>
-                                    <VCol class="font-weight-bold" md="6">은행코드 검색</VCol>
-                                    <VCol md="6">
-                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank"
-                                            :items="banks"
-                                            label="은행 검색"
-                                            :hint="`은행 코드: ${bank ? bank.code : ''} `"
-                                            item-title="title" item-value="code" persistent-hint return-object
-                                        />
-                                    </VCol>
-                                </VRow>
-                            </VCol>
-                        </VRow>
                     </VCol>
                 </template>
                 <template #input>
                     <VCol>
-                        <b class="important-text">출금 금액 입력시 주의사항</b>
+                        <b>출금 금액 입력시 </b><b class="important-text">주의사항</b>
                         <br>
-                        <span>- 금액 전체를 숫자로 입력(예: 100만원=1000000)</span>
+                        <span>- 금액 전체를 숫자로 입력 (예: 100만원=1000000)</span>
                     </VCol>
                     <VCol>
-                        <b>입금 계좌번호 입력시 주의사항</b>
+                        <b>입금 계좌번호 입력시 </b><b class="important-text">주의사항</b>
                         <br>
-                        <span>- 숫자만 입력(예:12345123451234)</span>
+                        <span>- 숫자만 입력 (예: 12345123451234)</span>
                     </VCol>
                     <VCol>
-                        <b>입력가능한 입금은행명 확인</b>
+                        <b>이체모듈 타입 입력시 </b><b class="important-text">주의사항</b>
                         <br>
-                        <span>- 은행코드 검색 목록에 있는 은행명과 동일하게 입력(예: 한국은행)</span>
+                        <span>- 이체모듈타입 검색색에 있는 이체모듈타입 코드만 입력 (예: 3)</span>
                     </VCol>
                 </template>
             </CreateHalfVCol>
@@ -301,7 +281,7 @@ watchEffect(async () => {
                 v-model="transferTime" 
                 style="max-width: 10em;"
             />
-            <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('출금요청 포멧', headers)" style="margin-left: auto;">
+            <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('출금예약 포멧', headers)" style="margin-left: auto;">
                 양식 다운로드
                 <VIcon end icon="uiw-file-excel" />
             </VBtn>

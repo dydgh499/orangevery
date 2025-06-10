@@ -22,7 +22,7 @@ const props = defineProps<Props>()
                     <VCardTitle>대량출금 옵션</VCardTitle>
                     <CreateHalfVColV2 :mdl="8" :mdr="4">
                         <template #l_name>
-                            <BaseQuestionTooltip location="top" text="계좌번호 중복검사 사용" :content="`가상계좌 대량출금 탭의 출금요청시 계좌번호의 중복 입력을 검사합니다.`"/>
+                            <BaseQuestionTooltip location="top" text="계좌번호 중복검사 사용" :content="`가상계좌 대량출금 탭의 출금예약시 계좌번호의 중복 입력을 검사합니다.`"/>
                             </template>
                         <template #l_input>
                             <VSwitch hide-details v-model="props.item.free.use_account_number_duplicate" color="primary" />
