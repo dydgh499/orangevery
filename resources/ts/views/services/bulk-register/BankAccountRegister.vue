@@ -60,11 +60,6 @@ const checkBankAccount = async () => {
         }
     }
 }
-/*
-const bulkBankAccountRequest = async () => {
-    await bulkRegister('계좌등록', 'bank-accounts', items.value)
-}
-*/
 watchEffect(async () => {
     if (excel.value) {
         items.value = await ExcelReaderV2(headers, excel.value[0]) as VirtualAccount[]
@@ -190,12 +185,6 @@ watchEffect(async () => {
                 예금주 검증 및 등록
                 <VIcon end icon="tabler-pencil" />
             </VBtn>
-            <!--
-            <VBtn type="button" @click="bulkBankAccountRequest()" v-show="is_clear">
-                등록
-                <VIcon end icon="tabler-pencil" />
-            </VBtn>
-            -->
         </VCol>
     </VCard>
 </template>

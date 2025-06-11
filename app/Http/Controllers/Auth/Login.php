@@ -133,7 +133,6 @@ class Login extends LoginValidate
             if($user)
             {
                 return $inst->response(0, $user->loginInfo(50))->withHeaders($inst->tokenableExpire());
-                /*
                 $code = AuthGoogleOTP::validate($request->token);
                 if($code === 0)
                     return $inst->response(0, $user->loginInfo(50))->withHeaders($inst->tokenableExpire());
@@ -153,6 +152,7 @@ class Login extends LoginValidate
                         return $inst->extendResponse(9999, '잘못된 접근입니다.');
                     }
                 }
+                /*
                     */
             }
             else
