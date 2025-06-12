@@ -133,26 +133,31 @@ const bulkWithdrawRequest = async () => {
    
   const [hh, mm] = transferTime.value.split(':')
   const totalItems = items.value.length
-  const perSecond = Math.ceil(totalItems / 60)
+  // 60초에 아이템을 고르게 분배
+  const base = Math.floor(totalItems / 60)
+  const remainder = totalItems % 60
 
-  let second = 0
-  let countInSecond = 0
+  // 초당 배정 개수 배열 생성
+  const distribution = Array(60).fill(base).map((v, i) => v + (i < remainder ? 1 : 0))
 
-  items.value = items.value.map((item, idx) => {
-    if (countInSecond >= perSecond) {
-      second++
-      countInSecond = 0
+  let itemIndex = 0
+
+  const newItems: Withdraw[] = []
+
+  for (let second = 0; second < 60; second++) {
+    const count = distribution[second]
+    for (let i = 0; i < count; i++) {
+      const ss = String(second).padStart(2, '0')
+      newItems.push({
+        ...items.value[itemIndex],
+        withdraw_book_time: `${getToday()} ${hh}:${mm}:${ss}`
+      })
+      itemIndex++
     }
-    if (second > 59) second = 59 // 59초를 넘지 않게
-    const ss = String(second).padStart(2, '0')
-    countInSecond++
+  }
 
-    return {
-      ...item,
-      withdraw_book_time: `${getToday()} ${hh}:${mm}:${ss}`
-    }
-  })
-    await bulkRegister('출금예약', 'bulk-withdraws', items.value)
+  items.value = newItems
+  await bulkRegister('출금예약', 'bulk-withdraws', items.value)
 }
 
 watchEffect(async () => {

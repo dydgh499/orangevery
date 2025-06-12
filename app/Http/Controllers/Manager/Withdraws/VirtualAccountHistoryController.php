@@ -249,7 +249,7 @@ class VirtualAccountHistoryController extends Controller
         ]);
         //전액출금시
         if(Ablilty::isOperator($request))
-            $fee_apply = $request->input('fee_apply', 1);
+            $fee_apply = $request->input('fee_apply', 1); // fee_apply가 0일때 출금수수료가 0인데 fee_apply가 없으면 기본값으로 1들어감
         else
             $fee_apply = 1;
 
@@ -281,7 +281,7 @@ class VirtualAccountHistoryController extends Controller
                 'acct_name'         => $request->acct_name,
                 'acct_bank_code'    => $request->acct_bank_code,
                 'acct_bank_name'    => $request->acct_bank_name,
-                'fee_apply'         => 1,
+                'fee_apply'         => 1, // fee_apply가 0일때 출금수수료가 0인데 fee_apply가 없으면 기본값으로 1들어감
             ]);
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);     
         }
