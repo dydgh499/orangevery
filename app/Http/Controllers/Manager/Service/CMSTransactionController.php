@@ -156,11 +156,7 @@ class CMSTransactionController extends Controller
             'head_office_acct_id' => 'required|integer',
             'withdraw_amount' => 'required|integer',
             'note' => 'required|string',
-            'token' => 'required|string',
         ]);
-
-        if(AuthPhoneNum::validate($request->token) === 0)
-        {
             if($request->user()->tokenCan(35))
             {
                 $data = $request->all();
@@ -189,8 +185,5 @@ class CMSTransactionController extends Controller
             }
             else
                 return $this->response(951);
-        }
-        else
-            return $this->response(951);
     }
 }

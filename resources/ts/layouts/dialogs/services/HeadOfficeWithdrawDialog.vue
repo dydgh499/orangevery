@@ -61,19 +61,17 @@ const deposit = async () => {
     if(amount.value) {
         const phone_num = user_info.value.phone_num.replaceAll(' ', '').replaceAll('-', '')
 
-        if(token.value !== '') {
-            if(await alert.value.show('정말 '+amount.value+'원을 이체하시겠습니까?')) {
-                const params = {
-                    fin_id: fin_id.value,
-                    head_office_acct_id: head_office_acct_id.value,
-                    withdraw_amount: amount.value,
-                    note: note.value,
-                    token: token.value
-                }
-                const r = await post('/api/v1/manager/services/cms-transactions/withdraw', params, true)
-                if(r.status_code === 201) {
-                    updateFinanceVan(fin_id.value)
-                }
+        if(await alert.value.show('정말 '+amount.value+'원을 이체하시겠습니까?')) {
+            const params = {
+                fin_id: fin_id.value,
+                head_office_acct_id: head_office_acct_id.value,
+                withdraw_amount: amount.value,
+                note: note.value,
+                token: token.value
+            }
+            const r = await post('/api/v1/manager/services/cms-transactions/withdraw', params, true)
+            if(r.status_code === 201) {
+                updateFinanceVan(fin_id.value)
             }
         }
     }
