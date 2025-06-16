@@ -80,7 +80,7 @@ class CMSTransactionBookController extends Controller
         // 운영자 권한 체크
         if (Ablilty::isOperator($request)) {
             // id 값 유효성 검사 (필수)
-            $validated = $request->validate(['id' => 'required']);
+            $validated = $request->validate(['id.*' => 'required']);
             // 외부 API 호출 (id를 배열 형태로 전달)
             $url = env('NOTI_URL', 'http://localhost:81') . '/api/v2/realtimes/cancel-job-test';
             $res = Comm::post($url, ['id' => $request->id]);
