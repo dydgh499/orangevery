@@ -60,7 +60,6 @@ const depositAcctHint = () => {
 const deposit = async () => {
     if(amount.value) {
         const phone_num = user_info.value.phone_num.replaceAll(' ', '').replaceAll('-', '')
-        token.value = await passwordAuthDialog.value.show(phone_num)
 
         if(token.value !== '') {
             if(await alert.value.show('정말 '+amount.value+'원을 이체하시겠습니까?')) {
