@@ -83,12 +83,11 @@ class CMSTransactionBookController extends Controller
             $validated = $request->validate(['id' => 'required']);
             // 외부 API 호출 (id를 배열 형태로 전달)
             $url = env('NOTI_URL', 'http://localhost:81') . '/api/v2/realtimes/cancel-job-test';
-            $res = Comm::post($url, ['id' => [$request->id]]);
+            $res = Comm::post($url, ['id' => $request->id]);
 
             // 외부 API 응답 반환
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
         } else
             return $this->response(951); // 권한 없음
-            
     }
 }
