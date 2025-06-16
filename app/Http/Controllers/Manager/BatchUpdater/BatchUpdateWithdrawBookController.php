@@ -296,8 +296,15 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
             // 4. 외부 API 호출
             try {
                 $res = Comm::post(env('NOTI_URL', 'http://localhost:81') . '/api/v2/realtimes/operate-withdraw', $params);
-                $result_cd = $res['body']['result_cd'] ?? 9999;
-                $result_msg = $res['body']['result_msg'] ?? 'API 오류 발생';
+                // 응답 본문이 배열인지 확인
+                if (isset($res['body']) && is_array($res['body'])) {
+                    $result_cd = $res['body']['result_cd'] ?? 9999;
+                    $result_msg = $res['body']['result_msg'] ?? json_encode($res['body'], JSON_UNESCAPED_UNICODE);
+                } else {
+                    $result_cd = 9998;
+                    $result_msg = '예상치 못한 응답 구조: ' . json_encode($res, JSON_UNESCAPED_UNICODE);
+                }
+
                 if ($result_cd === 100) {
                     // 5. API 호출 성공 시 등록 처리
                     $ids = app(ActivityHistoryInterface::class)->batchAdd($this->target, $this->cms_transaction_books, [$params], 'fin_id', $current, $brand_id);
