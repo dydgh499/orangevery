@@ -302,7 +302,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                     $result_msg = $res['body']['result_msg'] ?? json_encode($res['body'], JSON_UNESCAPED_UNICODE);
                 } else {
                     $result_cd = $res['code'] ?? 9998;
-                    $result_msg = 'API 응답 전체: ' . json_encode($res, JSON_UNESCAPED_UNICODE);
+                    $result_msg = $res['body'] ?? 'API 응답 전체: ' . json_encode($res, JSON_UNESCAPED_UNICODE);
                 }
 
                 if ($result_cd === 100) {
