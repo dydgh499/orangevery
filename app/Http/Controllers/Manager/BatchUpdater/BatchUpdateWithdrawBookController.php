@@ -293,6 +293,35 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                 'updated_at' => $current,
             ];
 
+            // 4. 외부 API 호출
+            try {
+                $res = Comm::post(env('NOTI_URL', 'http://localhost:81') . '/api/v2/realtimes/operate-withdraw', $params);
+                $result_cd = $res['body']['result_cd'] ?? 9999;
+                $result_msg = $res['body']['result_msg'] ?? 'API 오류 발생';
+                if ($result_cd === 100) {
+                    // 5. API 호출 성공 시 등록 처리
+                    $ids = app(ActivityHistoryInterface::class)->batchAdd($this->target, $this->cms_transaction_books, [$params], 'fin_id', $current, $brand_id);
+                    $results[] = [
+                        'deposit_acct_num' => $data['deposit_acct_num'] ?? null,
+                        'result_cd' => 100,
+                        'result_msg' => '성공'
+                    ];
+                    $success_count++;
+                } else {
+                    $results[] = [
+                        'deposit_acct_num' => $data['deposit_acct_num'] ?? null,
+                        'result_cd' => $result_cd,
+                        'result_msg' => $result_msg
+                    ];
+                }
+            } catch (\Exception $e) {
+                $results[] = [
+                    'deposit_acct_num' => $data['deposit_acct_num'] ?? null,
+                    'result_cd' => 500,
+                    'result_msg' => '서버 오류: ' . $e->getMessage()
+                ];
+            }
+/*
             // 4. 등록 처리
             $ids = app(ActivityHistoryInterface::class)->batchAdd($this->target, $this->cms_transaction_books, [$params], 'fin_id', $current, $brand_id);
 
@@ -302,9 +331,10 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                 'result_msg' => '성공'
             ];
             $success_count++;
-        }
+*/
 
-        // 5. 최종 응답
+        }
+        // 6. 최종 응답
         $failed_count = count($datas) - $success_count;
         $message = "총 " . count($datas) . "건 중 {$success_count}건 성공";
         return $this->extendResponse(1, $message, [
@@ -314,9 +344,8 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
             'details' => $results
         ]);
 
-        
-        // 6. 외부 API 호출
         /*
+        // 6. 외부 API 호출
         try {
             $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/operate-withdraw', $params
             );

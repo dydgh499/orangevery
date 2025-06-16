@@ -152,8 +152,6 @@ class Login extends LoginValidate
                         return $inst->extendResponse(9999, '잘못된 접근입니다.');
                     }
                 }
-                /*
-                    */
             }
             else
                 return $inst->extendResponse(1000, '계정이 존재하지 않아요..! 😨');

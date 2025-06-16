@@ -105,9 +105,11 @@ class OperatorController extends Controller
                     return $this->extendResponse(954, $msg, []);
                 else
                 {
+                    /*
                     [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
                     if($result === AuthLoginCode::SUCCESS->value)
                     {
+                    */
                         $user = $this->saveImages($request, $user, $this->imgs);
                         $user['user_pw'] = Hash::make($request->input('user_pw').$current);
                         $user['created_at'] = $current;
@@ -118,9 +120,11 @@ class OperatorController extends Controller
                         }
                         else
                             return $this->response(990, []);
+                        /*
                     }
                     else
                         return $this->extendResponse($result, $msg, $datas);
+                    */
                 }
             }
         }

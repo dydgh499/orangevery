@@ -35,11 +35,13 @@ const isAbleModiy = () => {
 }
 
 const operatorUpdate = async() => {
+    /*
     const [result, token] = await headOfficeAuthValidate('휴대폰번호 인증이 필요합니다.<br>계속하시겠습니까?')
     if(result) {
         operator.value.token = token
+        */
         await formRequest('/services/operators', operator.value, vForm.value, false)
-    }
+    //}
 }
 
 const operatorDelete = async() => {
