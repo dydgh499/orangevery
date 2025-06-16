@@ -157,7 +157,7 @@ class CMSTransactionController extends Controller
             'withdraw_amount' => 'required|integer',
             'note' => 'required|string',
         ]);
-            if($request->user()->tokenCan(35))
+            if($request->user()->tokenCan(50))
             {
                 $data = $request->all();
                 // parameter 변조 방지
