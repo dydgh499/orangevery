@@ -87,12 +87,10 @@ if(getUserLevel() < 35) {
                     일괄삭제
                     <VIcon size="18" icon="tabler-trash" />
                 </VBtn>
-                <!--
                 <VBtn prepend-icon="carbon:batch-job" @click="headOfficeWithdrawDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small"
                     :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
                     지정계좌 이체
                 </VBtn>
-                -->
                 </template>
             <template #headers>
                 <tr>

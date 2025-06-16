@@ -58,10 +58,6 @@ const depositAcctHint = () => {
         return ``
 }
 const deposit = async () => {
-    if(user_info.value.phone_num === '' || user_info.value.phone_num === null) {
-        snackbar.value.show('로그인한 계정의 휴대폰번호가 등록되지 않았습니다.<br>인증 가능한 휴대폰번호 등록 후 사용가능합니다.', 'error')
-        return
-    }
     if(amount.value) {
         const phone_num = user_info.value.phone_num.replaceAll(' ', '').replaceAll('-', '')
         token.value = await passwordAuthDialog.value.show(phone_num)
