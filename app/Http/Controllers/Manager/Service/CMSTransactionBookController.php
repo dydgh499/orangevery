@@ -85,8 +85,10 @@ class CMSTransactionBookController extends Controller
             $url = env('NOTI_URL', 'http://localhost:81') . '/api/v2/realtimes/cancel-job-test';
             $res = Comm::post($url, ['id' => $request->id]);
 
-            // 외부 API 응답 반환
-            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
+            // ⛳ body를 배열로 변환
+            $body = json_decode($res['body'], true);
+
+            return $this->apiResponse($body['result_cd'], $body['result_msg']);
         } else
             return $this->response(951); // 권한 없음
     }

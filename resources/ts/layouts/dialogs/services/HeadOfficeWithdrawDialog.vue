@@ -115,10 +115,13 @@ defineExpose({
                                 </BaseQuestionTooltip>
                             </template>
                             <template #input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="head_office_acct_id"
+                                <VTextField 
+                                    v-model="head_office_acct_id" 
+                                    @input="formatAmount"
                                     variant="underlined"
-                                    :items="head_office_accounts" label="입금 계좌 선택" item-title="acct_num" item-value="id"
-                                    persistent-hint single-line  :hint="depositAcctHint()" />
+                                    placeholder="입금 계좌를 입력해주세요"
+                                    :rules="[requiredValidatorV2(amount, '입금계좌')]" 
+                                />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
@@ -126,7 +129,6 @@ defineExpose({
                             <template #input>
                                 <VTextField 
                                     v-model="amount_format" suffix="원" 
-                                    @input="formatAmount"
                                     variant="underlined"
                                     placeholder="출금금액을 입력해주세요"
                                     :rules="[requiredValidatorV2(amount, '출금금액')]" 
