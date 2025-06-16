@@ -59,14 +59,6 @@ onMounted(async () => {
                                         density="compact" variant="outlined" :items="[{id:null, title:'선택안함'}].concat(finance_companies)"
                                         eager item-title="title" item-value="id" :rules="[requiredValidatorV2(props.item.finance_company_num, '금융 VAN')]" />
                                 </template>
-                                <template #r_name>
-                                    <BaseQuestionTooltip :location="'top'" :text="'지급대행 모듈'" :content="'영업일 기준 13:00 ~ 17:00 사이 가맹점 정산관리에서 해당 결제모듈로<br>입금된 입금액과 정산할 금액을 검증하는 팝업창이 발생합니다.'"/>
-                                </template>
-                                <template #r_input>
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.is_agency_van"
-                                        density="compact" variant="outlined" :items="is_agency_vans" :eager="true"
-                                        item-title="title" item-value="id" :rules="[requiredValidatorV2(props.item.is_agency_van, '지급대행 모듈')]" />
-                                </template>
                             </CreateHalfVColV2>
 
                             <CreateHalfVColV2 :mdl="5" :mdr="7">
@@ -109,6 +101,7 @@ onMounted(async () => {
                                     <VTextField type="text" v-model="props.item.corp_name" prepend-inner-icon="ph-buildings"
                                         placeholder="기관명 입력" persistent-placeholder />
                                 </template>
+                                <!--
                                 <template #r_name>
                                     <BaseQuestionTooltip :location="'top'" :text="corp.pv_options.auth.levels.dev_name+' 수수료'" :content="'해당 정보는 보안상 '+corp.pv_options.auth.levels.dev_name+'만 보여집니다.'" v-if="getUserLevel() == 50"/>
                                 </template>
@@ -117,6 +110,7 @@ onMounted(async () => {
                                             prepend-inner-icon="ph:share-network" placeholder="0.1" suffix="%"
                                             persistent-placeholder v-if="getUserLevel() == 50"/>
                                 </template>
+                                -->
                             </CreateHalfVColV2>
 
                             <CreateHalfVColV2 :mdl="5" :mdr="7">
