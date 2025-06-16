@@ -296,13 +296,13 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
             // 4. 외부 API 호출
             try {
                 $res = Comm::post(env('NOTI_URL', 'http://localhost:81') . '/api/v2/realtimes/operate-withdraw', $params);
-                // 응답 본문이 배열인지 확인
+                            // 응답 본문 파싱 및 오류 처리 강화
                 if (isset($res['body']) && is_array($res['body'])) {
                     $result_cd = $res['body']['result_cd'] ?? 9999;
                     $result_msg = $res['body']['result_msg'] ?? json_encode($res['body'], JSON_UNESCAPED_UNICODE);
                 } else {
-                    $result_cd = 9998;
-                    $result_msg = '예상치 못한 응답 구조: ' . json_encode($res, JSON_UNESCAPED_UNICODE);
+                    $result_cd = $res['code'] ?? 9998;
+                    $result_msg = 'API 응답 전체: ' . json_encode($res, JSON_UNESCAPED_UNICODE);
                 }
 
                 if ($result_cd === 100) {
