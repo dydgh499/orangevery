@@ -198,7 +198,7 @@ class BillKeyController extends Controller
             $data['mid'] = $pay_module->mid;
             Log::info('test', $data);
             $service = new \App\Http\Controllers\V2\V2BillController();
-            $response = $service->handleBillKeyCreation(new \Illuminate\Http\Request($data));
+            $response = $service->handleBillKeyCreate(new \Illuminate\Http\Request($data));
 
             if ($response['success']) {
                 return $this->response(1, $response['result']);
