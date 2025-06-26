@@ -215,12 +215,7 @@ class PayValidate
             if($pmod_id !== '')
                 $query = $query->where('payment_modules.id', $pmod_id);
             return $query->first([
-                'payment_modules.*',/* 'payment_gateways.pg_type',
-                'merchandises.merchant_status', 'merchandises.use_collect_withdraw',
-                'merchandises.tax_category_type', 'merchandises.contact_num', 'merchandises.mcht_name',
-                'merchandises.specified_time_disable_limit',
-                'merchandises.single_payment_limit_s_tm', 'merchandises.single_payment_limit_e_tm',
-                'merchandises.use_regular_card',*/
+                'payment_modules.*'
             ]);
         }
     }

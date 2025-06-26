@@ -23,11 +23,11 @@ use App\Http\Controllers\Ablilty\PayWindowInterface;
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Option\BillPayValidate;
+use App\Http\Controllers\V2\V2BillController;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-
 /**
  * @group Bill Key API
  *
@@ -196,8 +196,9 @@ class BillKeyController extends Controller
             $data = $request->data();
             $data['mid'] = $pay_module->mid;
 
-            $service = new \App\Http\Controllers\V2\V2BillController();
-            $response = $service->handleBillKeyCreate(new \Illuminate\Http\Request($data));
+            $service = new V2BillController();
+            Log::info('test', $data);
+            $response = $service->handleBillKeyCreate($data);
 
             if ($response['success']) {
                 return $this->response(1, $response['result']);
