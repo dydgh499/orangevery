@@ -30,12 +30,12 @@ class V2RealtimeController extends Controller
 
     public function __construct()
     {
-        $this->db = DB::connection('onetest');
+        $this->db = DB::connection('onequeue');
     }
 
     static public function pushNotiUrl($ids, $type)
     {
-        $finance_vans = DB::connection('onetest')
+        $finance_vans = DB::connection('onequeue')
                 ->table('finance_vans')
                 ->whereIn('id', $ids)
                 ->get();

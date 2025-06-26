@@ -25,6 +25,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Option\BillPayValidate;
 
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -35,14 +36,14 @@ use Illuminate\Support\Facades\DB;
 class BillKeyController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, EncryptDataTrait;
-    protected $bill_keys, $target;
+    protected $bill_keys, $target, $db;
 
     public function __construct(BillKey $bill_keys)
     {
         $this->bill_keys = $bill_keys;
         $this->target = '빌키';
+        $this->db = DB::connection('onequeue');
     }
-    /*
     
     public function getBillInfo($request)
     {
@@ -55,6 +56,7 @@ class BillKeyController extends Controller
         return [$bill_key, $pmod];
     }
     
+    /*
     public function defaultValidate($request, string $window_code)
     {
         // TODO: token 인증 변경 필요

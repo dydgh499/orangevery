@@ -19,7 +19,7 @@ class SettleWithdrawValidate extends WithdrawValidate
     static public function getTrxNum($is_mcht, $settle)
     {
         [$history_table, $table, $history_key, $type] = SettleWithdrawValidate::init($is_mcht);
-        $withdraw_count = DB::connection('onetest')->table($table)
+        $withdraw_count = DB::connection('onequeue')->table($table)
             ->where($history_key, $settle->id)
             ->whereBetween('created_at', [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')])
             ->count();
@@ -44,7 +44,7 @@ class SettleWithdrawValidate extends WithdrawValidate
             'created_at'    => $datetime,
             'updated_at'    => $datetime,
         ];
-        return DB::connection('onetest')->table($table)->insertGetId($params);
+        return DB::connection('onequeue')->table($table)->insertGetId($params);
     }
 
     static public function updateWithdraw($last_id, $is_mcht, $code, $message, $trans_seq_num='')
@@ -56,7 +56,7 @@ class SettleWithdrawValidate extends WithdrawValidate
         ];
         if($trans_seq_num !== '')
             $params['trans_seq_num'] = $trans_seq_num;
-        return DB::connection('onetest')->table($table)->where('id', $last_id)->update($params);
+        return DB::connection('onequeue')->table($table)->where('id', $last_id)->update($params);
     }
 
 
@@ -66,12 +66,12 @@ class SettleWithdrawValidate extends WithdrawValidate
         $params = [
             'deposit_amount' => $settle->settle_amount,
         ];
-        DB::connection('onetest')->table($history_table)->where('id', $settle->id)->update($params);
+        DB::connection('onequeue')->table($history_table)->where('id', $settle->id)->update($params);
     }
 
     static public function getSettleHistories($table, $history_key, $history_id, $history_table)
     {
-        return DB::connection('onetest')->table($table)
+        return DB::connection('onequeue')->table($table)
                 ->join($history_table, "$history_table.id", '=', "$table.$history_key")
                 ->where($history_key, $history_id)
                 ->get();
