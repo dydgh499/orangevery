@@ -40,7 +40,7 @@ class BillKeyController extends Controller
         $this->bill_keys = $bill_keys;
         $this->target = '빌키';
     }
-    
+    /*
     public function defaultValidate($request, string $window_code)
     {
         // TODO: token 인증 변경 필요
@@ -62,6 +62,24 @@ class BillKeyController extends Controller
         }
         else
             return [$result, '', null, null];
+    }
+    */
+    
+    public function defaultValidate($request)
+    {
+        // TODO: token 인증 변경 필요
+        $result = 0;
+        // [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
+        if($result === 0)
+        {
+            $pay_module = PaymentModule::where('id', $request['pmod_id'])->first();
+            if($pay_module)
+                return [0, '', $pay_module];
+            else
+                return [1999, '결제모듈이 존재하지 않습니다.', null];
+        }
+        else
+            return [$result, '', null];
     }
 
     public function billKeyValidate($request, string $window_code, int $id)
@@ -142,9 +160,32 @@ class BillKeyController extends Controller
      *
      * 특정 휴대폰번호로 매핑된 빌키정보들을 조회합니다.<br><b>본인인증 작업이 전처리로 요구됩니다.</b>
      */
+    /*
     public function store(BillKeyCreateRequest $request, string $window_code)
     {
         [$result, $msg, $pay_window, $pay_module] = $this->defaultValidate($request, $window_code);
+        if($result === 0)
+        {
+            $data = $request->data();
+            $data['mid'] = $pay_module->mid;
+            $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key', $data, [
+                'Authorization' => $pay_module->pay_key
+            ]);
+            if($res['body']['result_cd'] === '0000')
+                return $this->response(1, $res['body']);
+            else
+                return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);    
+        }
+        else if($result === 951)
+            return $this->response(951);
+        else
+            return $this->extendResponse(1999, $msg);
+    }
+    */
+    
+    public function store(BillKeyCreateRequest $request/*, string $window_code*/)
+    {
+        [$result, $msg, $pay_module] = $this->defaultValidate($request/*, $window_code*/);
         if($result === 0)
         {
             $data = $request->data();

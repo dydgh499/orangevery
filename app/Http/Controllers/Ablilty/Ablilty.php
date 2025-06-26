@@ -120,7 +120,7 @@ class Ablilty
 
     static function isDevOffice($request)
     {
-        $master_ips = json_decode(env('MASTER_IPS'), true);
+        $master_ips = json_decode(env('MASTER_IPS'), true) ?? [];
         if(env('APP_ENV') === 'local')
             array_push($master_ips, '127.0.0.1');
         return in_array($request->ip(), $master_ips);

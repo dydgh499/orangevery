@@ -86,7 +86,6 @@ export const Registration = () => {
         if (await alert.value.show('정말 '+name + ' ' + items.length + '개를 대량 등록하시겠습니까?')) {
             try {
                 const r = await axios.post('/api/v1/manager/' + path + '/batch-updaters/register', items)
-                console.log('테스트', r.data)
                 snackbar.value.show(r.data.message, 'success')
                 result = true
             }
@@ -98,11 +97,41 @@ export const Registration = () => {
         return result
     }
     
+    const bulkPayment = async (name: string, items:any[]) => {
+        let result = false
+        if (await alert.value.show('정말 '+ items.length + '개의 '+ name +'을 하시겠습니까?')) {
+            for (let i = 0; i < items.length; i++) {
+                try {
+                    const item = { ...items[i] } // 원본 훼손 방지 복사
+                    const timestamp = Date.now().toString().substr(0, 13)
+                    const randomPart = (Math.floor(Math.random() * 100)).toString().padStart(2, '0')
+                    item.ord_num = `${randomPart}BP${timestamp}`
+                    item.installment = '00'
+
+                    console.log(`전송 데이터 [${i + 1}/${items.length}]`, item)
+                    const r = await axios.post('https://api.routeup.kr/api/v2/pay/bill-key/hand', item)
+                    console.log('응답 데이터', r.data)
+                    if (r.data.result_cd === '0000') {
+                        snackbar.value.show(`[${i + 1}] ${r.data.result_msg}`, 'success')
+                        result = true
+                    }
+                } catch (e: any) {
+                    result = false
+                    snackbar.value.show(`[${i + 1}] 오류: ${e.response.data.result_msg} (${e.response.data.result_cd})`, 'error')
+                    errorHandler(e)
+                    break
+                }
+            }
+        }
+        return result
+    }
+
     return {
         ExcelFormatV2,
         ExcelReaderV2,
         isEmpty,
         openFilePicker,
         bulkRegister,
+        bulkPayment,
     }
 }

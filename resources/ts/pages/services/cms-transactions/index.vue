@@ -1,6 +1,5 @@
 
 <script setup lang="ts">
-import HeadOfficeWithdrawDialog from '@/layouts/dialogs/services/HeadOfficeWithdrawDialog.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
@@ -11,7 +10,6 @@ import { DateFilters } from '@core/enums'
 
 const { store, head, exporter, metas } = useSearchStore()
 const { finance_vans } = useStore()
-const headOfficeWithdrawDialog = ref()
 const total = ref(<any>{
     deposit_amount: 0,
     withdraw_amount: 0,
@@ -122,12 +120,6 @@ onMounted(() => {
                     </BaseIndexFilterCard>
                 </template>
                 <template #index_extra_field>
-                    <!--
-                    <VBtn prepend-icon="carbon:batch-job" @click="headOfficeWithdrawDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small"
-                        :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
-                        지정계좌 이체
-                    </VBtn>
-                    -->
                 </template>
                 <template #headers>
                     <tr>
@@ -180,7 +172,6 @@ onMounted(() => {
                     </template>
                 </template>
             </BaseIndexView>
-            <HeadOfficeWithdrawDialog ref="headOfficeWithdrawDialog"/>
         </div>
     </section>
 </template>

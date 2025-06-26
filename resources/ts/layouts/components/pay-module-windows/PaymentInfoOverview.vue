@@ -1,0 +1,205 @@
+<script lang="ts" setup>
+import corp from '@/plugins/corp';
+import { useStore } from '@/views/services/pay-gateways/useStore';
+import type { PayModule } from '@/views/types';
+import { axios, getUserLevel, isAbleModiyV2 } from '@axios';
+
+interface Props {
+    item: PayModule,
+}
+
+const props = defineProps<Props>()
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+const errorHandler = <any>(inject('$errorHandler'))
+const midCreateDlg = <any>(inject('midCreateDlg'))
+const is_readonly_fin_trx_delay = ref(false)
+const occuerred_sale_load = ref(false)
+
+const { pgs } = useStore()
+
+const tidCreate = async() => {
+    if(await alert.value.show('정말 TID를 신규 발급하시겠습니까?')) {
+        try {
+            const pg_type = pgs.find(obj => obj.id === props.item.pg_id)?.pg_type
+            if(pg_type) {
+                const r = await axios.post('/api/v1/manager/merchandises/pay-modules/tid-create', { pg_type : pg_type })
+                props.item.tid = r.data.tid
+                snackbar.value.show('성공하였습니다.<br>저장하시려면 추가버튼을 눌러주세요.', 'success')
+            }
+            else
+                snackbar.value.show('PG사를 먼저 선택해주세요.', 'warning')
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            const r = errorHandler(e)
+        }
+    }
+}
+
+const midCreate = async() => {
+    const mid_code = await midCreateDlg.value.show()
+    if(mid_code) {
+        const r = await axios.post('/api/v1/manager/merchandises/pay-modules/mid-create', {mid_code: mid_code})    
+        if(r.status == 200)
+            props.item.mid = r.data.mid
+        else
+            snackbar.value.error(r.data.message, 'error')
+    }
+}
+
+const payKeyCreate = async() => {
+    if(await alert.value.show('정말 결제 KEY를 신규 발급하시겠습니까?<br><br><b>이전 결제 KEY는 더이상 사용할 수 없으니 주의하시기바랍니다.</b>')) {
+        try {
+            const r = await axios.post('/api/v1/manager/merchandises/pay-modules/pay-key-create', {id: props.item.id})
+            props.item.pay_key = r.data.pay_key
+            snackbar.value.show('결제 KEY가 업데이트 되었습니다.', 'success')
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            const r = errorHandler(e)
+        }
+    }
+}
+
+const signKeyCreate = async() => {
+    if(await alert.value.show('정말 서명 KEY를 신규 발급하시겠습니까?<br><br><b>이전 서명 KEY는 더이상 사용할 수 없으니 주의하시기바랍니다.</b>')) {
+        try {
+            const r = await axios.post('/api/v1/manager/merchandises/pay-modules/sign-key-create', {id: props.item.id})
+            props.item.sign_key = r.data.sign_key
+            snackbar.value.show('서명 KEY가 업데이트 되었습니다.', 'success')
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            const r = errorHandler(e)
+        }
+    }
+}
+
+const useCollectWithdrawTrxFinDelayValidate = () => {
+    if (isAbleModiyV2(props.item, 'merchandises/pay-modules') && props.item.use_realtime_deposit && props.item.id) {
+        axios.get('/api/v1/bf/occuerred-sale', {params: {
+            mcht_id: props.item.mcht_id,
+            pmod_id: props.item.id
+        }}).then( r => {
+            is_readonly_fin_trx_delay.value = r.data.exist
+            occuerred_sale_load.value = true
+        }).catch(e => {})
+    }
+}
+watchEffect(() => {
+    if(occuerred_sale_load.value === false)
+        useCollectWithdrawTrxFinDelayValidate()
+})
+
+</script>
+<template>
+    <VCardItem>
+        <VCardSubtitle style="display: flex; justify-content: space-between;">
+            <VChip variant="outlined">계약 및 결제 정보</VChip>
+        </VCardSubtitle>
+        <br>
+        <VRow v-if="isAbleModiyV2(props.item, 'services/pay-modules')">
+            <VCol md="6" cols="12">
+                <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
+                    placeholder="MID 입력" persistent-placeholder label="MID"
+                    maxlength="50"/>
+            </VCol>
+            <VCol md="6">
+                <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
+                    placeholder="TID 입력" persistent-placeholder label="TID"
+                    maxlength="50"/>
+            </VCol>
+        </VRow>
+        <VRow v-else>
+            <VCol md="5" cols="6">
+                <span class="font-weight-bold">MID</span>
+            </VCol>
+            <VCol md="7" cols="6">
+                {{ props.item.mid }}
+            </VCol>
+            <VCol md="5" cols="6">
+                <span class="font-weight-bold">TID</span>
+            </VCol>
+            <VCol md="7" cols="6">
+                {{ props.item.tid }}
+            </VCol>
+        </VRow>
+
+        <template v-if="corp.pv_options.paid.use_online_pay && props.item.id != 0 && props.item.module_type != 0">
+            <VRow v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
+                <VCol md="4" cols="4">
+                    <VBtn type="button" variant="tonal" @click="payKeyCreate()" size="small" color="info">
+                        {{ "결제 KEY 발급" }}                            
+                        <VTooltip activator="parent" location="top">
+                            해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.
+                        </VTooltip>
+                    </VBtn>
+                </VCol>
+                <VCol md="8" cols="8">
+                    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                        <VTextField type="text" v-model="props.item.pay_key" prepend-inner-icon="ic-baseline-vpn-key"
+                            label="결제 KEY" :disabled="true"/>
+                        <VTooltip activator="parent" location="top">
+                            더블클릭해서 결제 KEY를 복사하세요.
+                        </VTooltip>
+                    </div>
+                </VCol>
+            </VRow>
+            <VRow v-else>
+                <VCol md="5" cols="6">
+                    <span class="font-weight-bold">결제 KEY</span>    
+                </VCol>
+                <VCol md="7" cols="12">
+                    <span style="background-color: rgba(var(--v-theme-on-surface));">
+                        {{ props.item.pay_key }}
+                        <VTooltip activator="parent" location="top" v-if="props.item.pay_key">
+                            더블클릭또는 드래그하여 결제 KEY를 복사하세요.
+                        </VTooltip>
+                    </span>
+                </VCol>
+            </VRow>
+        </template>
+
+        <template v-if="corp.pv_options.paid.use_noti && props.item.id != 0">
+            <VRow v-if="isAbleModiyV2(props.item, 'merchandises/pay-modules')">
+                <VCol md="4" cols="4">
+                    <VBtn type="button" variant="tonal" @click="signKeyCreate()" size="small" color="info">
+                        {{ "서명 KEY 발급" }}
+                        <VTooltip activator="parent" location="top">
+                            노티발송시 데이터 위변조 방지 값으로 사용됩니다.
+                        </VTooltip>
+                    </VBtn>
+                </VCol>
+                <VCol md="8" cols="12">
+                    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                        <VTextField type="text" v-model="props.item.sign_key" prepend-inner-icon="ic-baseline-vpn-key"
+                            :disabled="true" label="서명 KEY"/>
+                        <VTooltip activator="parent" location="top" v-if="props.item.sign_key">
+                            더블클릭해서 서명 KEY를 복사하세요.
+                        </VTooltip>
+                    </div>
+                </VCol>
+            </VRow>
+            <VRow v-else>
+                <VCol md="5" cols="6">
+                    <span class="font-weight-bold">서명 KEY</span>    
+                </VCol>
+                <VCol md="7" cols="12">
+                    <span style="background-color: rgba(var(--v-theme-on-surface));">
+                        {{ props.item.sign_key }}
+                        <VTooltip activator="parent" location="top">
+                            더블클릭또는 드래그하여 서명 KEY를 복사하세요.
+                        </VTooltip>
+                    </span>
+                </VCol>
+            </VRow>
+        </template>
+    </VCardItem>
+    <slot name="edit"></slot>
+</template>
+<style scoped>
+:deep(.v-row) {
+  align-items: center;
+}
+</style>

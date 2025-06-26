@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager\Service;
 
+use App\Http\Controllers\Option\Withdraw\CMSTransactionBookInterface;
 
 use App\Models\BankAccount;
 use App\Models\Service\FinanceVan;
@@ -45,7 +46,6 @@ class CMSTransactionBookController extends Controller
         $search = $request->search;
         $query = $this->cms_transaction_books
         ->where('brand_id', $request->user()->brand_id)
-        ->where('withdraw_status', 0)
         ->where(function ($query) use ($search) {
             return $query->where('acct_num', 'like', "%$search%")
                 ->orWhere('note', 'like', "%$search%");
@@ -70,26 +70,5 @@ class CMSTransactionBookController extends Controller
         $query = new CMSTransactionBooks;
         $res = $query->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);
-    }
-
-    /**
-     * 단일삭제
-     */
-    public function cancelJobTest(Request $request)
-    {
-        // 운영자 권한 체크
-        if (Ablilty::isOperator($request)) {
-            // id 값 유효성 검사 (필수)
-            $validated = $request->validate(['id.*' => 'required']);
-            // 외부 API 호출 (id를 배열 형태로 전달)
-            $url = env('NOTI_URL', 'http://localhost:81') . '/api/v2/realtimes/cancel-job-test';
-            $res = Comm::post($url, ['id' => $request->id]);
-
-            // ⛳ body를 배열로 변환
-            $body = json_decode($res['body'], true);
-
-            return $this->apiResponse($body['result_cd'], $body['result_msg']);
-        } else
-            return $this->response(951); // 권한 없음
     }
 }

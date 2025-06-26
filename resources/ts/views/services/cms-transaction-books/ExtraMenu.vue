@@ -65,7 +65,7 @@ const isBookCancelAble = () => {
                     v-else-if="props.item.is_withdraw === 1 && isBookCancelAble()"
                     value="single-deposit-cancel-job" 
                     class="single-deposit-cancel-job" 
-                    @click="cancelJobs([props.item.id.toString()])">
+                    @click="cancelJobs([props.item.trans_seq_num])">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="material-symbols:free-cancellation-outline" />
                     </template>

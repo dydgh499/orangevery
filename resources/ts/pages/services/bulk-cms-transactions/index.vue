@@ -1,8 +1,8 @@
 
 <script setup lang="ts">
 import type { Tab } from '@/views/types'
-import WithdrawRegister from '@/views/services/bulk-register/WithdrawRegister.vue'
-import BankAccountRegister from '@/views/services/bulk-register/BankAccountRegister.vue'
+import WithdrawRegister from '@/views/services/bulk-cms-transactions/WithdrawRegister.vue'
+import BankAccountRegister from '@/views/services/bulk-cms-transactions/BankAccountRegister.vue'
 import corp from '@corp'
 
 const tab = ref(0)

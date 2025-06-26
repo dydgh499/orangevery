@@ -1,13 +1,15 @@
 
 <script setup lang="ts">
-import BrandOptionOverview from '@/views/services/brands/BrandOptionOverview.vue'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
+import BrandAuthOverview from '@/views/services/brands/BrandAuthOverview.vue'
+import BrandOptionOverview from '@/views/services/brands/BrandOptionOverview.vue'
 import BrandDesignOverview from '@/views/services/brands/BrandDesignOverview.vue'
 
 import corp from '@/plugins/corp'
 import BrandOverview from '@/views/services/brands/BrandOverview.vue'
 import { defaultItemInfo } from '@/views/services/brands/useStore'
 import type { Tab } from '@/views/types'
+import { getUserLevel } from '@axios'
 
 const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([
@@ -15,6 +17,10 @@ const tabs = <Tab[]>([
     { icon: 'tabler-color-filter', title: '테마디자인' },
     { icon: 'tabler-table-options', title: '추가옵션' },
 ])
+
+if(getUserLevel() == 50)
+    tabs.push({ icon: 'carbon:two-factor-authentication', title: '유료옵션' })
+
 </script>
 <template>
     <section>
@@ -28,6 +34,9 @@ const tabs = <Tab[]>([
                 </VWindowItem>
                 <VWindowItem>
                     <BrandOptionOverview :item="item.pv_options" :key="item.id"/>
+                </VWindowItem>
+                <VWindowItem>
+                    <BrandAuthOverview :item="item.pv_options"/>
                 </VWindowItem>
             </template>
         </CreateForm>

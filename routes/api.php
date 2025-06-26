@@ -37,8 +37,9 @@ Route::prefix('v1')->group(function() {
         Route::prefix('{window_code}')->group(function() {
             Route::post('auth', [PayWindowController::class, 'auth']);
             Route::post('bill-keys/{id}/pay', [BillKeyController::class, 'pay']);
-            Route::apiResource('bill-keys', BillKeyController::class); 
+            Route::apiResource('bill-keys', BillKeyController::class);
         });
+        Route::apiResource('bill-keys', BillKeyController::class);
         Route::get('{window_code}', [PayWindowController::class, 'window']);
     });
     Route::prefix('shopping-mall')->group(function() {

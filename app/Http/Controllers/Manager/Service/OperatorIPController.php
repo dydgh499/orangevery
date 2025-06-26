@@ -40,15 +40,17 @@ class OperatorIPController extends Controller
     {
         if($request->user()->level >= 40)
         {
+            /*
             [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
             if($result === AuthLoginCode::SUCCESS->value)
-            {
+            {*/
                 $query = $this->operator_ips->where('brand_id', $request->user()->brand_id);
                 $data  = $this->getIndexData($request, $query);
                 return $this->response(0, $data);        
-            }
+            /*}
             else
                 return $this->extendResponse($result, $msg, $datas);
+            */
         }
         else
             return $this->response(951);
@@ -62,10 +64,11 @@ class OperatorIPController extends Controller
     {
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-
+/*
         [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
         if($result === AuthLoginCode::SUCCESS->value)
         {
+        */
             $data = $request->data();
             $data['brand_id'] = $request->user()->brand_id;
     
@@ -76,10 +79,12 @@ class OperatorIPController extends Controller
     
             return $this->response($res ? 1 : 990, [
                 'id' => $res->id, 
-            ]);            
+            ]);        
+            /*
         }
         else
             return $this->extendResponse($result, $msg, $datas);
+        */    
     }
 
     /**

@@ -43,7 +43,6 @@ class PaymentModuleController extends Controller
     {
         $this->pay_modules = $pay_modules;
         $this->target = '결제모듈';
-        $this->imgs = [];
     }
 
     /**
@@ -62,15 +61,15 @@ class PaymentModuleController extends Controller
     {
         $search = $request->input('search', '');
         $query = $this->pay_modules
-            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            //->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
             ->where('payment_modules.brand_id', $request->user()->brand_id);
-
+/*
         $query = globalPGFilter($query, $request, 'payment_modules');
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
-
+*/
         if($is_all === false) 
-            $query = $query->where('merchandises.is_delete', false)->where('payment_modules.is_delete', false);
+            $query = $query->where('payment_modules.is_delete', false);
         if($request->has('mcht_id'))
             $query = $query->where('payment_modules.mcht_id', $request->mcht_id);
         if($request->has('module_type'))
@@ -81,8 +80,8 @@ class PaymentModuleController extends Controller
         return $query->where(function ($query) use ($search) {
             return $query->where('payment_modules.mid', 'like', "%$search%")
                 ->orWhere('payment_modules.tid', 'like', "%$search%")
-                ->orWhere('payment_modules.note', 'like', "%$search%")
-                ->orWhere('merchandises.mcht_name', 'like', "%$search%");
+                ->orWhere('payment_modules.note', 'like', "%$search%");
+                //->orWhere('merchandises.mcht_name', 'like', "%$search%");
         });
     }
 
@@ -96,8 +95,8 @@ class PaymentModuleController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $cols = ['payment_modules.*', 'merchandises.mcht_name'];
-        $cols = UnderSalesforce::getViewableSalesCols($request, $cols);
+        $cols = ['payment_modules.*'];
+        //$cols = UnderSalesforce::getViewableSalesCols($request, $cols);
 
         $query = $this->commonSelect($request);
         $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
@@ -277,7 +276,6 @@ class PaymentModuleController extends Controller
         }
         else
             return $this->response(1000);
-       
     }
 
     /**

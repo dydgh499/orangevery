@@ -9,7 +9,7 @@ import SalesforceRegister from '@/views/services/bulk-register/SalesforceRegiste
 import RegularCardRegister from '@/views/services/bulk-register/RegularCardRegister.vue'
 */
 import type { Tab } from '@/views/types'
-import WithdrawRegister from '@/views/services/bulk-register/WithdrawRegister.vue'
+import WithdrawRegister from '@/views/services/bulk-cms-transactions/WithdrawRegister.vue'
 import corp from '@corp'
 
 const tab = ref(0)

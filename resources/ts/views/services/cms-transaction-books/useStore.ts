@@ -43,10 +43,10 @@ export const withdrawInterface = () => {
     const snackbar = <any>(inject('snackbar'))
     const { post } = useRequestStore()
 
-    const cancelJobs = async (id: string[]) => {
+    const cancelJobs = async (trans_seq_num: string[]) => {
         if (await alert.value.show('정말 해당건의 출금예약을 취소처리 하시겠습니까?')) {
             const res = await post('/api/v1/manager/services/cms-transaction-books/cancel-job-test', {
-                id: id
+                trx_ids: trans_seq_num
             }, true)
             snackbar.value.show(res.data.message, res.status === 201 ? 'success' : 'error')
         }
@@ -75,7 +75,6 @@ export const useSearchStore = defineStore('useCMSTransactionBookSearchStore', ()
     const { finance_vans } = useStore()
     const headers: Record<string, string> = {
         'id' : 'NO.',
-        'result_code': '성공여부',
         'fin_id': '거래모듈',
         'is_withdraw': '거래타입', //출금, 입금
         'amount': '거래금액',
@@ -88,7 +87,7 @@ export const useSearchStore = defineStore('useCMSTransactionBookSearchStore', ()
         'withdraw_status': '예약상태',
         'note': '메모사항',
         'created_at': '생성시간',
-        'extra_col': '삭제하기',
+        'extra_col': '더보기',
     }
 
     head.sub_headers.value = [

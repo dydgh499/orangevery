@@ -81,12 +81,15 @@ class PayModuleRequest extends FormRequest
     public function rules()
     {
         $sub = [
+            /*
             'mcht_id' => 'required',
             'pg_id' => 'required',
             'ps_id' => 'required',
             'settle_fee' => 'required',
             'settle_type' => 'required',
+            */
             'module_type' => 'required',
+            /*
             'abnormal_trans_limit' => 'required',
             'pay_dupe_limit' => 'required',
             'pay_dupe_least' => 'required',
@@ -95,12 +98,15 @@ class PayModuleRequest extends FormRequest
             'pay_day_limit' => 'required',
             'pay_single_limit' => 'required',
             'installment' => 'required',
+            */
             'note' => 'required',
+            /*
             'is_old_auth' => 'required',
             'use_realtime_deposit' => 'required',
             'pay_window_secure_level' => 'required',
             'comm_settle_fee' => 'required|integer',
             'under_sales_amt' => 'nullable|integer',
+            */
         ];
         return $this->getRules($this->keys, $sub);
     }

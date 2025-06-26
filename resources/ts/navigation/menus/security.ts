@@ -1,5 +1,4 @@
 import { getUserLevel } from '@axios'
-import corp from '@corp'
 
 const _getSecurityMenu = () => {
     const securities:any = {

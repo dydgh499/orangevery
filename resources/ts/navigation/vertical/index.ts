@@ -11,6 +11,7 @@ import { getUserLevel } from '@axios'
 import { getOtherMenu } from '../menus/other'
 import { getSecurityMenu } from '../menus/security'
 import { getServiceMenu } from '../menus/service'
+import { getPaymentMenu } from '../menus/payment'
 
 const combinedNavItems = computed(() => {
     if(getUserLevel() === 11) {
@@ -21,6 +22,7 @@ const combinedNavItems = computed(() => {
     else {
         return [
             ...getServiceMenu(), 
+            ...getPaymentMenu(),
             ...getSecurityMenu(),
             ...getOtherMenu(),
         ] as VerticalNavItems;

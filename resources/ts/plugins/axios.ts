@@ -220,7 +220,7 @@ export const axios = axiosIns.create({
     'Accept': 'application/json',
     "Content-Type": "application/json",
   },
-  withCredentials: true
+  withCredentials: false
 })
 
 axios.interceptors.request.use((config:any) => {

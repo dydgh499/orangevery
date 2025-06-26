@@ -243,19 +243,21 @@ export interface PayWindow {
 
 export interface PayModule {
     id: number,
+    api_key: string,
+    sub_key: string,
+    module_type: number,
+    note: string,
+    mid: string,
+    tid: string,
     mcht_name? : string,
     mcht_id: number | null,
     pg_id: number | null,
     ps_id: number | null,
     settle_type: number | null,
     settle_fee: number,
+    cxl_type: number,
     terminal_id: number | null,
-    module_type: number,
-    api_key: string,
-    sub_key: string,
     p_mid: string,
-    mid: string,
-    tid: string,
     serial_num: string,
     comm_settle_fee: number,
     comm_settle_day: number,
@@ -282,9 +284,7 @@ export interface PayModule {
     contract_e_dt: date | null,
     pay_window_secure_level: number,
     pay_window_extend_hour: number,
-    note: string,
     filter_issuers: string[],
-    cxl_type: number,
     use_realtime_deposit: number,
     payment_term_min: number,
     pay_key?: string,
@@ -1313,4 +1313,17 @@ export interface CmsTransactionBooks {
     note: string, // 출금 사유
     withdraw_book_time: string, // 출금 예약 시간
     withdraw_status: number, // 상태
+    trans_seq_num: string,
+}
+
+export interface BulkPayment {
+    mid: string,
+    tid: string,
+
+    ord_num: string,
+    installment: string,
+    buyer_name: string,
+    buyer_phone: string,
+    item_name: string,
+    amount: number,
 }

@@ -165,19 +165,6 @@ class VirtualAccountHistoryController extends Controller
         return $this->response(0, $res);
     }
 
-    public function cancelJob(Request $request)
-    {
-        if(Ablilty::isOperator($request))
-        {
-            $validated = $request->validate(['trx_ids.*'=>'required']);
-            $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/cancel-job';
-            $res = Comm::post($url, ['trx_ids' => $request->trx_ids]);
-            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
-        }
-        else
-            return $this->response(951);
-    }
-
     public function retryWithdraw(Request $request)
     {
         if(Ablilty::isOperator($request))

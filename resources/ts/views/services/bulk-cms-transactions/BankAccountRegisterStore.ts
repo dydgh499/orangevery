@@ -19,7 +19,6 @@ export const validateItems = (item: VirtualAccount, i: number, acct_nums: any) =
         return [false, (i + 2) + '번째줄의 예금주는 필수로 입력해야합니다.']
     else {
         item.acct_bank_code = banks.find(bulk => bulk.title === item.acct_bank_name)?.code as string
-        console.log('확인', item.acct_bank_name)
         return [true, '']
     }
 }

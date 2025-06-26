@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { Registration } from '@/views/registration';
-import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue';
+import UsageTooltip from '@/views/services/bulk-cms-transactions/UsageTooltip.vue';
 import { axios } from '@axios';
-import { useRegisterStore, validateItems } from '@/views/services/bulk-register/BankAccountRegisterStore';
+import { useRegisterStore, validateItems } from '@/views/services/bulk-cms-transactions/BankAccountRegisterStore';
 import type { PayModule, FinanceVan, VirtualAccount } from '@/views/types';
 import { banks } from '@/views/users/useStore'
 import corp from '@corp';

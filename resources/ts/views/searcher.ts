@@ -10,6 +10,10 @@ export const StatusColorSetter = () => {
     const booleanTypeColor = (type: boolean | null) => {
         return Boolean(type) ? "default" : "success";
     };
+
+    const booleanErrorColor = (type: boolean | null) => {
+        return Boolean(type) ? "default" : "error";
+    };
     
     const getSelectIdColor = (id: number | undefined) => {
         if (id == StatusColors.Default)
@@ -42,6 +46,7 @@ export const StatusColorSetter = () => {
     }
     return {
         booleanTypeColor,
+        booleanErrorColor,
         getSelectIdColor,
         getAllLevelColor,
     }
@@ -97,6 +102,7 @@ export const Searcher = (path: string) => {
     } = chartSetter(base_url)
     const {
         booleanTypeColor,
+        booleanErrorColor,
         getSelectIdColor,
         getAllLevelColor,
     } = StatusColorSetter()
@@ -183,7 +189,7 @@ export const Searcher = (path: string) => {
         setTable, getItems, base_url, updateQueryString,
         items, params, pagenation, getChartProcess, setChartProcess,
         edit, getChartData, getPercentage,
-        get, booleanTypeColor, getSelectIdColor, getAllLevelColor, 
+        get, booleanTypeColor, booleanErrorColor, getSelectIdColor, getAllLevelColor, 
         getAllDataFormat,
         pagenationCouputed, getSkeleton, setSkeleton
     }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Manager\BrandController;
+use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
 use App\Http\Controllers\Manager\Service\BeforeBrandInfoController;
 use App\Http\Controllers\Manager\Service\ExceptionWorkTimeController;
 use App\Http\Controllers\Manager\Service\AbnormalConnectionController;
@@ -34,6 +35,8 @@ use App\Http\Controllers\Manager\BatchUpdater\ApplyBookController;
 use App\Http\Controllers\Manager\Withdraws\VirtualAccountController;
 use App\Http\Controllers\Manager\Withdraws\VirtualAccountHistoryController;
 use App\Http\Controllers\Manager\Withdraws\VirtualAccountWithdrawController;
+
+use App\Http\Controllers\V1\V1WithdrawBookController;
 
 Route::middleware(['auth.update'])->group(function() {
     Route::get('services/pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
@@ -84,12 +87,16 @@ Route::middleware(['auth.update'])->group(function() {
             Route::get('head-office-accounts', [HeadOfficeAccountController::class, 'index']);        
             Route::get('cms-transaction-books', [CMSTransactionBookController::class, 'index']);
             Route::delete('cms-transaction-books/{id}', [CMSTransactionBookController::class, 'destroy']);
-            Route::post('cms-transaction-books/cancel-job-test', [CMSTransactionBookController::class, 'cancelJobTest']);
             Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
             Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
             Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);
+            
+            Route::post('cms-transaction-books/cancel-job-test', [V1WithdrawBookController::class, 'cancelJob']);
+
             Route::get('book-applies', [ApplyBookController::class, 'index']);
             Route::delete('book-applies/{dest_type}/{id}', [ApplyBookController::class, 'destroy']);
+            
+            Route::apiResource('pay-modules', PaymentModuleController::class);
         });
 
         Route::post('virtual-accounts/histories/cancel-job', [VirtualAccountHistoryController::class, 'cancelJob']);
