@@ -36,25 +36,14 @@ use Illuminate\Support\Facades\DB;
 class BillKeyController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, EncryptDataTrait;
-    protected $bill_keys, $target, $db;
+    protected $bill_keys, $target;
 
     public function __construct(BillKey $bill_keys)
     {
         $this->bill_keys = $bill_keys;
         $this->target = '빌키';
-        $this->db = DB::connection('onequeue');
     }
     
-    public function getBillInfo($request)
-    {
-        $mid = $request->input('mid', '');
-        $tid = $request->input('tid', '');
-        $pmod_id = $request->input('pmod_id', '');
-        $bill_key = $request->input('bill_key', '');
-        $bill_key = BillPayValidate::getBillKey($mid, $tid, $pmod_id, $bill_key);
-        $pmod = BillPayValidate::getPayModule($this->db, $mid, $tid, $pmod_id);
-        return [$bill_key, $pmod];
-    }
     
     /*
     public function defaultValidate($request, string $window_code)
@@ -199,21 +188,24 @@ class BillKeyController extends Controller
     }
     */
     
-    public function store(BillKeyCreateRequest $request/*, string $window_code*/)
+    public function store(BillKeyCreateRequest $request)
     {
-        [$result, $msg, $pay_module] = $this->defaultValidate($request/*, $window_code*/);
+        [$result, $msg, $pay_module] = $this->defaultValidate($request);
         if($result === 0)
         {
             $data = $request->data();
             $data['mid'] = $pay_module->mid;
-            $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key', $data, [
-                'Authorization' => $pay_module->pay_key
-            ]);
-            if($res['body']['result_cd'] === '0000')
-                return $this->response(1, $res['body']);
-            else
-                return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);    
+
+            $service = new \App\Http\Controllers\V2\V2BillController();
+            $response = $service->handleBillKeyCreate(new \Illuminate\Http\Request($data));
+
+            if ($response['success']) {
+                return $this->response(1, $response['result']);
+            } else {
+                return $this->apiResponse($response['code'], $response['msg']);
+            }
         }
+
         else if($result === 951)
             return $this->response(951);
         else
