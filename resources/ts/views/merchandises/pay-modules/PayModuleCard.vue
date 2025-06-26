@@ -3,7 +3,7 @@
 import OptionInfoOverview from '@/layouts/components/pay-module-windows/OptionInfoOverview.vue'
 import PaymentInfoOverview from '@/layouts/components/pay-module-windows/PaymentInfoOverview.vue'
 import PaymentTypeOverview from '@/layouts/components/pay-module-windows/PaymentTypeOverview.vue'
-import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
+//import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
 
 import { useRequestStore } from '@/views/request'
 import type { PayModule } from '@/views/types'

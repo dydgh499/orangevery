@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue';
+//import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue';
 import CreateForm from '@/layouts/utils/CreateForm.vue';
 import PayModuleCard from '@/views/services/pay-modules/PayModuleCard.vue';
 import { defaultItemInfo } from '@/views/services/pay-modules/useStore';

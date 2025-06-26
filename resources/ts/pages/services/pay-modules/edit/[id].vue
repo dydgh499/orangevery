@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue';
+//import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue';
 import CreateForm from '@/layouts/utils/CreateForm.vue';
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue';
 import { defaultItemInfo } from '@/views/merchandises/pay-modules/useStore';
@@ -16,7 +16,9 @@ provide('midCreateDlg', midCreateDlg)
 </script>
 <template>
     <section>
+        <!--
         <MidCreateDialog ref="midCreateDlg" />
+        -->
         <CreateForm :id="Number(route.params.id)" :path="path" :tabs="tabs" :item="item">
             <template #view>
                 <VWindowItem>
