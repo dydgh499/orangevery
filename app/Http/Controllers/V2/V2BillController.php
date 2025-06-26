@@ -44,24 +44,20 @@ class V2BillController extends Controller
             {
                 $noti = BillPayValidate::getBillCreateFormat($pmod, $request);
                 [$code, $message, $pg_name] = BillPayValidate::createValidate($this->db, $pmod, $noti);
-                if($code !== '0000')
-                    return $this->apiErrorResponse($code, $message);
+                if ($code !== '0000')
+                    return ['success' => false, 'code' => $code, 'msg' => $message];
                 else
                 {
                     $pg = BillPayValidate::getPG($noti, $pmod, 1, $this->ver, $pg_name);
-                    if($pg)
-                        return $pg->billKeyCreate();
-                    else
-                        return $this->apiErrorResponse('PV405', '지원하지 않는 PG사입니다.');
-                }
-            }
+                    if ($pg)
+                return ['success' => true, 'result' => $pg->billKeyCreate()];
             else
-                return $this->apiErrorResponse('PV452', '빌키사용이 불가한 결제모듈입니다.');
+                return ['success' => false, 'code' => 'PV405', 'msg' => '지원하지 않는 PG사입니다.'];
         }
-        else
-            return $this->apiErrorResponse('PV406', '가맹점을 찾을 수 없습니다.');
 
+        return ['success' => false, 'code' => 'PV406', 'msg' => '가맹점을 찾을 수 없습니다.'];
     }
+}
 /*
     public function delete(BillDeleteRequest $request)
     {
