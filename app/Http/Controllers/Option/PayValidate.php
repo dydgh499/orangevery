@@ -198,7 +198,6 @@ class PayValidate
         $pay_key = request()->header('Authorization', request()->input('pay_key', ''));
 
         $query = $db->table('payment_modules')
-                //->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
                 ->join('payment_gateways', 'payment_modules.pg_id', '=', 'payment_gateways.id')
                 ->where('payment_modules.is_delete', false);
 
@@ -208,8 +207,8 @@ class PayValidate
         {
             if($mid !== '')
                 $query = $query->where('payment_modules.mid', $mid);
-            if($tid !== '')
-                $query = $query->where('payment_modules.tid', $tid);
+            /*if($tid !== '')
+                $query = $query->where('payment_modules.tid', $tid);*/
             if($pay_key !== '')
                 $query = $query->where('payment_modules.pay_key', $pay_key);
             if($pmod_id !== '')
