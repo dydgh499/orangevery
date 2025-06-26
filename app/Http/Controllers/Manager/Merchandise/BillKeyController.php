@@ -22,8 +22,10 @@ use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\PayWindowInterface;
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Option\BillPayValidate;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @group Bill Key API
@@ -33,13 +35,26 @@ use Illuminate\Http\Request;
 class BillKeyController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, EncryptDataTrait;
-    protected $bill_keys, $target;
+    protected $bill_keys, $target, $db;
 
     public function __construct(BillKey $bill_keys)
     {
         $this->bill_keys = $bill_keys;
         $this->target = '빌키';
+        $this->db = DB::connection('onequeue');
     }
+    
+    public function getBillInfo($request)
+    {
+        $mid = $request->input('mid', '');
+        $tid = $request->input('tid', '');
+        $pmod_id = $request->input('pmod_id', '');
+        $bill_key = $request->input('bill_key', '');
+        $bill_key = BillPayValidate::getBillKey($mid, $tid, $pmod_id, $bill_key);
+        $pmod = BillPayValidate::getPayModule($this->db, $mid, $tid, $pmod_id);
+        return [$bill_key, $pmod];
+    }
+    
     /*
     public function defaultValidate($request, string $window_code)
     {
