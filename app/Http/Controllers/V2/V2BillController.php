@@ -53,7 +53,6 @@ class V2BillController extends Controller
         
         [$billKey, $pmod] = $this->getBillInfo($request);
         
-        if ($pmod) {
             if ($pmod->module_type === 4) {
                 $noti = BillPayValidate::getBillCreateFormat($pmod, $request);
                 [$code, $message, $pg_name] = BillPayValidate::createValidate($this->db, $pmod, $noti);
@@ -69,9 +68,10 @@ class V2BillController extends Controller
             } else {
                 return ['success' => false, 'code' => 'PV452', 'msg' => '빌키사용이 불가한 결제모듈입니다.'];
             }
+        /*
+        if ($pmod) {
         }
         return ['success' => false, 'code' => 'PV406', 'msg' => '가맹점을 찾을 수 없습니다.'];
-        /*
         */
     }
 
