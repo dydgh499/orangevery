@@ -32,36 +32,38 @@ class V2BillController extends Controller
         $tid = $request->input('tid', '');
         $pmod_id = $request->input('pmod_id', '');
         $bill_key = $request->input('bill_key', '');
-        Log::info($mid);
         $bill_key = BillPayValidate::getBillKey($mid, $tid, $pmod_id, $bill_key);
         $pmod = BillPayValidate::getPayModule($this->db, $mid, $tid, $pmod_id);
+        Log::info($mid);
         return [$bill_key, $pmod];
     }
 
-    public function handleBillKeyCreate(Request $request)
+    public function handleBillKeyCreate(array $request)
     {
         // Log::info('billkey before', ['payload' => $request->all()]);
-        [$bill_key, $pmod] = $this->getBillInfo($request);
+        //[$bill_key, $pmod] = $this->getBillInfo($request);
         
-        if ($pmod->module_type === 4) {
-            $noti = BillPayValidate::getBillCreateFormat($pmod, $request);
-            [$code, $message, $pg_name] = BillPayValidate::createValidate($this->db, $pmod, $noti);
-            if ($code !== '0000') {
-                return ['success' => false, 'code' => $code, 'msg' => $message];
-            }
-            $pg = BillPayValidate::getPG($noti, $pmod, 1, $this->ver, $pg_name);
-            if ($pg) {
-                return ['success' => true, 'result' => $pg->billKeyCreate()];
-            } else {
-                return ['success' => false, 'code' => 'PV405', 'msg' => '지원하지 않는 PG사입니다.'];
-            }
-        } else {
-            return ['success' => false, 'code' => 'PV452', 'msg' => '빌키사용이 불가한 결제모듈입니다.'];
-        }
-        /*
+        [$billKey, $pmod] = $this->getBillInfo($request);
+        
         if ($pmod) {
+            if ($pmod->module_type === 4) {
+                $noti = BillPayValidate::getBillCreateFormat($pmod, $request);
+                [$code, $message, $pg_name] = BillPayValidate::createValidate($this->db, $pmod, $noti);
+                if ($code !== '0000') {
+                    return ['success' => false, 'code' => $code, 'msg' => $message];
+                }
+                $pg = BillPayValidate::getPG($noti, $pmod, 1, $this->ver, $pg_name);
+                if ($pg) {
+                    return ['success' => true, 'result' => $pg->billKeyCreate()];
+                } else {
+                    return ['success' => false, 'code' => 'PV405', 'msg' => '지원하지 않는 PG사입니다.'];
+                }
+            } else {
+                return ['success' => false, 'code' => 'PV452', 'msg' => '빌키사용이 불가한 결제모듈입니다.'];
+            }
         }
         return ['success' => false, 'code' => 'PV406', 'msg' => '가맹점을 찾을 수 없습니다.'];
+        /*
         */
     }
 

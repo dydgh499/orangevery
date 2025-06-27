@@ -195,13 +195,18 @@ class BillKeyController extends Controller
         [$result, $msg, $pay_module] = $this->defaultValidate($request);
         if($result === 0)
         {
+            $data = $request->validated();
+            $data['mid'] = $pay_module->mid;
+            $data['pmod_id'] = $pay_module->id;
+            /*
             $data = $request->data();
             $data['mid'] = $pay_module->mid;
+            */
             $data['pay_key'] = $pay_module->pay_key;
             Log::info('test', $data);
-            $reqForService = new HttpRequest([], $data);
+            //$reqForService = new HttpRequest([], $data);
             $service       = app(\App\Http\Controllers\V2\V2BillController::class);
-            $response = $service->handleBillKeyCreate($reqForService);
+            $response = $service->handleBillKeyCreate($data);
 
             if ($response['success']) {
                 return $this->response(1, $response['result']);
