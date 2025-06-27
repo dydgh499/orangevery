@@ -13,6 +13,7 @@ use App\Http\Requests\V2\BillPayRequest;
 
 use App\Http\Controllers\Option\BillPayValidate;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 class V2BillController extends Controller
 {
@@ -37,7 +38,7 @@ class V2BillController extends Controller
         return [$bill_key, $pmod];
     }
 
-    public function handleBillKeyCreate($request)
+    public function handleBillKeyCreate(Request $request)
     {
         Log::info('billkey before', $request->all());
         [$bill_key, $pmod] = $this->getBillInfo($request);
