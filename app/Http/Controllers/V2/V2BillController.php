@@ -32,7 +32,7 @@ class V2BillController extends Controller
         $tid = $request->input('tid', '');
         $pmod_id = $request->input('pmod_id', '');
         $bill_key = $request->input('bill_key', '');
-        Log::info('billkey before', $mid);
+        Log::info($mid);
         $bill_key = BillPayValidate::getBillKey($mid, $tid, $pmod_id, $bill_key);
         $pmod = BillPayValidate::getPayModule($this->db, $mid, $tid, $pmod_id);
         return [$bill_key, $pmod];
