@@ -27,6 +27,7 @@ use App\Http\Controllers\Option\BillPayValidate;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -198,8 +199,9 @@ class BillKeyController extends Controller
             $data['mid'] = $pay_module->mid;
             $data['pay_key'] = $pay_module->pay_key;
             Log::info('test', $data);
-            $service = new \App\Http\Controllers\V2\V2BillController();
-            $response = $service->handleBillKeyCreate(new \Illuminate\Http\Request($data));
+            $reqForService = new HttpRequest([], $data);
+            $service       = app(\App\Http\Controllers\V2\V2BillController::class);
+            $response = $service->handleBillKeyCreate($reqForService);
 
             if ($response['success']) {
                 return $this->response(1, $response['result']);
