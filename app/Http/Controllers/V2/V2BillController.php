@@ -38,7 +38,7 @@ class V2BillController extends Controller
 
     public function handleBillKeyCreate($request)
     {
-        Log::info('billkey before', $request);
+        //Log::info('billkey before', $request);
         [$bill_key, $pmod] = $this->getBillInfo($request);
         
         Log::info('billkey after', $pmod);
