@@ -198,13 +198,8 @@ class BillKeyController extends Controller
             $data = $request->validated();
             $data['mid'] = $pay_module->mid;
             $data['pmod_id'] = $pay_module->id;
-            /*
-            $data = $request->data();
-            $data['mid'] = $pay_module->mid;
-            */
             $data['pay_key'] = $pay_module->pay_key;
             Log::info('test', $data);
-            //$reqForService = new HttpRequest([], $data);
             $service       = app(\App\Http\Controllers\V2\V2BillController::class);
             $response = $service->handleBillKeyCreate($data);
 
@@ -214,7 +209,6 @@ class BillKeyController extends Controller
                 return $this->apiResponse($response['code'], $response['msg']);
             }
         }
-
         else if($result === 951)
             return $this->response(951);
         else

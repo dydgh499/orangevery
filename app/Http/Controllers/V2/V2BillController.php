@@ -14,6 +14,7 @@ use App\Http\Requests\V2\BillPayRequest;
 use App\Http\Controllers\Option\BillPayValidate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class V2BillController extends Controller
 {
@@ -26,15 +27,22 @@ class V2BillController extends Controller
         $this->db = DB::connection('onequeue');
     }
 
-    public function getBillInfo($request)
+    public function getBillInfo(array $request)
     {
+        
+        $mid     = Arr::get($request, 'mid', '');
+        $tid     = Arr::get($request, 'tid', '');
+        $pmod_id  = Arr::get($request, 'pmod_id', '');
+        $bill_key = Arr::get($request, 'bill_key', '');
+        /*
         $mid = $request->input('mid', '');
         $tid = $request->input('tid', '');
         $pmod_id = $request->input('pmod_id', '');
         $bill_key = $request->input('bill_key', '');
+        Log::info($mid);
+        */
         $bill_key = BillPayValidate::getBillKey($mid, $tid, $pmod_id, $bill_key);
         $pmod = BillPayValidate::getPayModule($this->db, $mid, $tid, $pmod_id);
-        Log::info($mid);
         return [$bill_key, $pmod];
     }
 
