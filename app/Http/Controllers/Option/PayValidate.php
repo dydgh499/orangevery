@@ -198,7 +198,7 @@ class PayValidate
         $pay_key = request()->header('Authorization', request()->input('pay_key', ''));
 
         $query = $db->table('payment_modules')
-                ->join('payment_gateways', 'payment_modules.pg_id', '=', 'payment_gateways.id')
+                /*->join('payment_gateways', 'payment_modules.pg_id', '=', 'payment_gateways.id')*/
                 ->where('payment_modules.is_delete', false);
 
         if($mid === "" && $tid === "" && $pmod_id === "" && $pay_key === "")
