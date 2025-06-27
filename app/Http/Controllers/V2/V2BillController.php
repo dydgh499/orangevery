@@ -12,6 +12,7 @@ use App\Http\Requests\V2\BillDeleteRequest;
 use App\Http\Requests\V2\BillPayRequest;
 
 use App\Http\Controllers\Option\BillPayValidate;
+use Illuminate\Support\Facades\Log;
 
 class V2BillController extends Controller
 {
@@ -37,7 +38,10 @@ class V2BillController extends Controller
 
     public function handleBillKeyCreate($request)
     {
+        Log::info('billkey before', $request);
         [$bill_key, $pmod] = $this->getBillInfo($request);
+        
+        Log::info('billkey after', $pmod);
         if ($pmod) {
             if ($pmod->module_type === 4) {
                 $noti = BillPayValidate::getBillCreateFormat($pmod, $request);
