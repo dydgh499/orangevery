@@ -31,6 +31,7 @@ class V2BillController extends Controller
         $tid = $request->input('tid', '');
         $pmod_id = $request->input('pmod_id', '');
         $bill_key = $request->input('bill_key', '');
+        Log::info('billkey before', $mid);
         $bill_key = BillPayValidate::getBillKey($mid, $tid, $pmod_id, $bill_key);
         $pmod = BillPayValidate::getPayModule($this->db, $mid, $tid, $pmod_id);
         return [$bill_key, $pmod];
@@ -38,10 +39,9 @@ class V2BillController extends Controller
 
     public function handleBillKeyCreate($request)
     {
-        //Log::info('billkey before', $request);
+        Log::info('billkey before', $request->all());
         [$bill_key, $pmod] = $this->getBillInfo($request);
         
-        Log::info('billkey after', $pmod);
         if ($pmod) {
             if ($pmod->module_type === 4) {
                 $noti = BillPayValidate::getBillCreateFormat($pmod, $request);
