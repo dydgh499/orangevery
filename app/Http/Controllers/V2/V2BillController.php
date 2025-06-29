@@ -24,7 +24,7 @@ class V2BillController extends Controller
     public function __construct()
     {
         $this->ver = 2;
-        $this->db = DB::connection('onequeue');
+        $this->db = DB::connection('onetest');
     }
 
     public function getBillInfo(array $request)

@@ -110,7 +110,7 @@ class PaymentTimeValidate
                 return false;
             else
             {
-                $disable_option = DB::connection('onequeue')
+                $disable_option = DB::connection('onetest')
                     ->table('specified_time_disable_payments')
                     ->where('mcht_id', $pmod->mcht_id)
                     ->where('disable_type', $disable_type)

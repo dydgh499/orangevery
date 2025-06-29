@@ -13,7 +13,7 @@ class Realtime
     public $db, $finance_van, $privacy, $deposit_type, $profit, $trsc_no, $withdraw_book_time;
     public function __construct($finance_van, $privacy, $deposit_type, $withdraw_book_time)
     {
-        $this->db   = DB::connection('onequeue');
+        $this->db   = DB::connection('onetest');
         $this->finance_van  = $finance_van;
         $this->privacy      = $privacy;
         $this->deposit_type = $deposit_type;

@@ -99,6 +99,16 @@ Route::middleware(['auth.update'])->group(function() {
             Route::apiResource('pay-modules', PaymentModuleController::class);
         });
 
+        Route::prefix('services')->group(function() {
+            Route::get('cms-transaction-books', [CMSTransactionBookController::class, 'index']);
+            Route::post('cms-transaction-books/cancel-job-test', [V1WithdrawBookController::class, 'cancelJob']);
+            Route::delete('cms-transaction-books/{id}', [CMSTransactionBookController::class, 'destroy']);
+
+            Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
+            Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
+            Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);
+        });
+        
         Route::post('virtual-accounts/histories/cancel-job', [VirtualAccountHistoryController::class, 'cancelJob']);
         Route::post('virtual-accounts/histories/retry-withdraw', [VirtualAccountHistoryController::class, 'retryWithdraw']);
         Route::post('virtual-accounts/histories/retry-settlement', [VirtualAccountHistoryController::class, 'retrySettlement']);
