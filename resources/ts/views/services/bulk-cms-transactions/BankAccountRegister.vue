@@ -43,7 +43,7 @@ const validate = async () => {
     error_message.value = ''
     const acct_nums = new Set()
     for (let i = 0; i < items.value.length; i++) {        
-        const results = validateItems(items.value[i], i, acct_nums)
+        const results = validateItems(items.value[i], i, acct_nums, finance_vans)
         is_clear.value = results[0] as boolean
         error_message.value = results[1] as string
 
