@@ -189,7 +189,7 @@ watchEffect(async () => {
             <CreateHalfVCol :mdl="8" :mdr="4">
                 <template #name>
                     <VCol>
-                        <h3 class="pt-3">입금 정보</h3>
+                        <h3 class="pt-3">입금 정보123</h3>
                         <VRow>
                             <VCol md="6" cols="12">
                                 <VRow>
