@@ -3,7 +3,7 @@ import { getUserLevel } from '@axios'
 const _getVirtualMenu = () => {
     const virtuals:any = {
         title: '가상계좌 관리',
-        icon: { icon: 'tabler:cash' },
+        icon: { icon: 'tabler:building-bank' },
         children: []
     }
     virtuals.children.push({
@@ -11,7 +11,7 @@ const _getVirtualMenu = () => {
         to: 'virtuals-bulk-cms-transactions',
     })
     virtuals.children.push({
-        title: '은행계좌 관리',
+        title: '등록계좌 관리',
         to: 'virtuals-bank-accounts',
     })
     virtuals.children.push({

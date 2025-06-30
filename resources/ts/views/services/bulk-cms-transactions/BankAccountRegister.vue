@@ -5,9 +5,11 @@ import UsageTooltip from '@/views/services/bulk-cms-transactions/UsageTooltip.vu
 import { axios } from '@axios';
 import { useRegisterStore, validateItems } from '@/views/services/bulk-cms-transactions/BankAccountRegisterStore';
 import type { PayModule, FinanceVan, VirtualAccount } from '@/views/types';
+import { useStore } from '@/views/services/pay-gateways/useStore';
 import { banks } from '@/views/users/useStore'
 import corp from '@corp';
 
+const { finance_vans } = useStore()
 const { headers, isPrimaryHeader } = useRegisterStore()
 
 const search = ref('')
@@ -27,6 +29,15 @@ const is_clear = ref<boolean>(false)
 const bank_clear = ref<boolean>(false)
 
 const bank = ref(banks[0])
+const fin_id = ref(null)
+
+const withdrawAcctHint = () => {
+    const finance_van = <FinanceVan>(finance_vans.find(obj => obj.id == fin_id.value))
+    if(finance_van)
+        return `이체모듈타입 코드: ${finance_van.id}, 은행코드: ${finance_van.bank_code}, 계좌번호: ${finance_van.withdraw_acct_num}`
+    else
+        return ``
+}
 
 const validate = async () => {
     error_message.value = ''
@@ -101,6 +112,25 @@ watchEffect(async () => {
                             </VCol>
                         </VRow>
                     </VCol>
+                    <VDivider style="margin: 1em 0;" />
+                    <h3 class="pt-3">출금 정보</h3>
+                    <VRow>
+                        <VCol md="6" cols="12">
+                            <VRow>
+                                <VCol class="font-weight-bold" md="6">이체모듈 타입 검색</VCol>
+                                <VCol md="6">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="fin_id"
+                                        :items="finance_vans"
+                                        label="출금 이체모듈타입 검색"
+                                        item-title="nick_name"
+                                        item-value="id"
+                                        persistent-hint single-line
+                                        :hint="withdrawAcctHint()"
+                                    />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
                 </template>
                 <template #input>
                     <VCol>

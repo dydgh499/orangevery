@@ -37,28 +37,10 @@ if(getUserLevel() < 35) {
     <section>
         <div>
             <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="[]" :add="false" add_name="입금계좌" :date_filter_type="DateFilters.DATE_RANGE">
-                <template #filter>
-                    <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
-                        :sales="false">
-                        <template #pg_extra_field>
-                            <VCol cols="6" sm="3" v-if="getUserLevel() >= 35">
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.is_withdraw" :items="[{ id: null, title: '전체' }, {id: 0, title:'입금'}, {id: 1, title:'출금'}]"
-                                    density="compact" variant="outlined" item-title="title" item-value="id" label="입출금 타입"
-                                    @update:modelValue="store.updateQueryString({is_withdraw: store.params.is_withdraw})"
-                                    :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''"
-                                    />
-                            </VCol>
-                            <VCol cols="6" sm="3">
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.fin_id" :items="[{ id: null, nick_name: '전체' }].concat(finance_vans)"
-                                    density="compact" variant="outlined" item-title="nick_name" item-value="id" label="거래모듈"
-                                    @update:modelValue="store.updateQueryString({fin_id: store.params.fin_id})"
-                                    :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''"
-                                />
-                            </VCol>
-                        </template>
-                    </BaseIndexFilterCard>
-                </template>
                 <template #index_extra_field>
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined" id="page-size-filter"
+                    :items="[10, 20, 30, 50, 100, 200]" label="조회 개수" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" 
+                    :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''"/>
                 </template>
             <template #headers>
                 <tr>
