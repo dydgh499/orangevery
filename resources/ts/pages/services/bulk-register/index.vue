@@ -7,9 +7,9 @@ import PayModuleRegister from '@/views/services/bulk-register/PayModuleRegister.
 import MerchandiseRegister from '@/views/services/bulk-register/MerchandiseRegister.vue'
 import SalesforceRegister from '@/views/services/bulk-register/SalesforceRegister.vue'
 import RegularCardRegister from '@/views/services/bulk-register/RegularCardRegister.vue'
+import WithdrawRegister from '@/views/services/bulk-cms-transactions/WithdrawRegister.vue'
 */
 import type { Tab } from '@/views/types'
-import WithdrawRegister from '@/views/services/bulk-cms-transactions/WithdrawRegister.vue'
 import corp from '@corp'
 
 const tab = ref(0)
@@ -68,12 +68,12 @@ if(corp.pv_options.paid.use_noti)
                         <RegularCardRegister/>
                     </Suspense>
                 </VWindowItem>
-                -->
                 <VWindowItem v-if="corp.pv_options.paid.use_realtime_deposit">
                     <Suspense>
                         <WithdrawRegister/>
                     </Suspense>
                 </VWindowItem>
+                -->
             </VWindow>
         </VForm>
     </section>
