@@ -1,21 +1,17 @@
-
 <script setup lang="ts">
-import { useRequestStore } from '@/views/request';
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { selectFunctionCollect } from '@/views/selected';
 import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
-import { realtimeMessage, realtimeResult, useSearchStore, withdrawInterface } from '@/views/virtuals/cms-transaction-books/useStore'
+import { useSearchStore } from '@/views/virtuals/bank-accounts/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { DateFilters } from '@core/enums'
-import ExtraMenu from '@/views/virtuals/cms-transaction-books/ExtraMenu.vue';
 
 const alert = <any>(inject('alert'))
-const { request, remove } = useRequestStore()
+
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { finance_vans } = useStore()
-const { cancelJobs } = withdrawInterface()
 const total = ref(<any>{
     deposit_amount: 0,
     withdraw_amount: 0,
@@ -31,17 +27,6 @@ provide('head', head)
 provide('exporter', exporter)
 const snackbar = <any>(inject('snackbar'))
 
-
-const batchRemove = async() => {
-    if (await alert.value.show(`정말 ${selected.value.length}개의 출금예약을 삭제하시겠습니까?`)) {
-        const r = await request({ url: `/api/v1/manager/bulk-withdraws/batch-updaters/remove`, method: 'delete', data: {
-            selected_idxs: selected.value
-        } }, true)
-        selected.value = []
-    }
-    store.setTable()
-}
-
 if(getUserLevel() < 35) {
     pay_token.value = ''
     user_info.value = {}
@@ -51,7 +36,7 @@ if(getUserLevel() < 35) {
 <template>
     <section>
         <div>
-            <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="[]" :add="false" add_name="" :date_filter_type="DateFilters.DATE_RANGE">
+            <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="[]" :add="false" add_name="입금계좌" :date_filter_type="DateFilters.DATE_RANGE">
                 <template #filter>
                     <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                         :sales="false">
@@ -74,11 +59,6 @@ if(getUserLevel() < 35) {
                     </BaseIndexFilterCard>
                 </template>
                 <template #index_extra_field>
-                <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small"
-                    :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''" item-title="title" item-value="id">
-                    일괄삭제
-                    <VIcon size="18" icon="tabler-trash" />
-                </VBtn>
                 </template>
             <template #headers>
                 <tr>
@@ -101,42 +81,16 @@ if(getUserLevel() < 35) {
                                     <span v-if="_key == 'id'">
                                     <div
                                         class='check-label-container'>
-                                        <VCheckbox v-if="item['withdraw_status'] !== 1" v-model="selected" :value="item[_key]" class="check-label" />
+                                        <VCheckbox v-model="selected" :value="item[_key]" class="check-label" />
                                         <span>#{{ item[_key] }}</span>
                                     </div>
                                     </span>
-                                    <span v-else-if="_key === 'result_code'">
-                                        <VChip :color="store.getSelectIdColor(realtimeResult(item[_key]))">
-                                            {{ realtimeMessage(item) }}
-                                        </VChip>
-                                    </span>
-                                    <span v-else-if="_key === 'fin_id'">
-                                        {{ (finance_vans.find(obj => obj.id == item[_key]))?.nick_name }}
-                                    </span>
-                                    <span v-else-if="_key === 'is_withdraw'">
-                                        <VChip :color="item[_key] ? 'error' : 'success'">
-                                            {{ item[_key] ? '출금' : '입금' }}
-                                        </VChip>
-                                    </span>
-                                    <b v-else-if="_key === 'amount'" :class="item['is_withdraw'] ? 'text-error' : 'text-primary'">
-                                        {{  item['is_withdraw'] ? '-' + item[_key].toLocaleString() : item[_key].toLocaleString() }}
-                                    </b>
-                                    <span v-else-if="_key === 'withdraw_status'">
-                                        <VChip :color="store.booleanErrorColor(!item[_key])" >
-                                            {{ item[_key] ? '이체예약취소' : '이체예약' }}
-                                        </VChip>
-                                    </span>
                                     <span v-else-if="_key === 'note'" v-html="item[_key]" style="line-height: 2em;"></span>
-                                    
+                                    <!--
                                     <span v-else-if="_key === 'extra_col'" v-if="item['withdraw_status'] != 1">
                                         <ExtraMenu :item="item"/>
-                                        <!--
-                                        <VBtn size="small" type="button" color="error" @click="cancelJobs([item['id']])">
-                                            삭제
-                                            <VIcon size="22" icon="tabler-trash"/>
-                                        </VBtn>
-                                        -->
                                     </span>
+                                    -->
                                     <span v-else>
                                         {{ item[_key] }}
                                     </span>

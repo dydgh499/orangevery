@@ -11,6 +11,10 @@ const _getVirtualMenu = () => {
         to: 'virtuals-bulk-cms-transactions',
     })
     virtuals.children.push({
+        title: '은행계좌 관리',
+        to: 'virtuals-bank-accounts',
+    })
+    virtuals.children.push({
         title: '가상계좌 출금예약 관리',
         to: 'virtuals-cms-transaction-books',
     })

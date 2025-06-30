@@ -14,6 +14,7 @@ use App\Http\Controllers\Manager\Service\IdentityAuthInfoController;
 use App\Http\Controllers\Manager\Service\MchtBlacklistController;
 use App\Http\Controllers\Manager\Service\HeadOfficeAccountController;
 use App\Http\Controllers\Manager\Service\CMSTransactionController;
+use App\Http\Controllers\Manager\Service\BankAccountController;
 
 use App\Http\Controllers\Manager\Service\ClassificationController;
 use App\Http\Controllers\Manager\Service\OperatorIPController;
@@ -99,7 +100,8 @@ Route::middleware(['auth.update'])->group(function() {
             Route::apiResource('pay-modules', PaymentModuleController::class);
         });
 
-        Route::prefix('services')->group(function() {
+        Route::prefix('virtuals')->group(function() {
+            Route::get('bank-accounts', [BankAccountController::class, 'index']);
             Route::get('cms-transaction-books', [CMSTransactionBookController::class, 'index']);
             Route::post('cms-transaction-books/cancel-job-test', [V1WithdrawBookController::class, 'cancelJob']);
             Route::delete('cms-transaction-books/{id}', [CMSTransactionBookController::class, 'destroy']);
@@ -108,7 +110,7 @@ Route::middleware(['auth.update'])->group(function() {
             Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
             Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);
         });
-        
+
         Route::post('virtual-accounts/histories/cancel-job', [VirtualAccountHistoryController::class, 'cancelJob']);
         Route::post('virtual-accounts/histories/retry-withdraw', [VirtualAccountHistoryController::class, 'retryWithdraw']);
         Route::post('virtual-accounts/histories/retry-settlement', [VirtualAccountHistoryController::class, 'retrySettlement']);
