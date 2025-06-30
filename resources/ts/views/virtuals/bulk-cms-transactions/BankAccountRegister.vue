@@ -4,10 +4,12 @@ import { Registration } from '@/views/registration';
 import UsageTooltip from '@/views/virtuals/bulk-cms-transactions/UsageTooltip.vue';
 import { axios } from '@axios';
 import { useRegisterStore, validateItems } from '@/views/virtuals/bulk-cms-transactions/BankAccountRegisterStore';
-import type { PayModule, FinanceVan, VirtualAccount } from '@/views/types';
+import type { Withdraw, FinanceVan, VirtualAccount } from '@/views/types';
+import { useStore } from '@/views/services/pay-gateways/useStore';
 import { banks } from '@/views/users/useStore'
 import corp from '@corp';
 
+const { finance_vans } = useStore()
 const { headers, isPrimaryHeader } = useRegisterStore()
 
 const search = ref('')
@@ -22,17 +24,77 @@ const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 
 const excel = ref()
-const items = ref<VirtualAccount[]>([])
+const transferTime = ref<string>('') // 이체 시간
+const items = ref<Withdraw[]>([])
 const is_clear = ref<boolean>(false)
 const bank_clear = ref<boolean>(false)
 
 const bank = ref(banks[0])
+const fin_id = ref(null)
+
+const getToday = () => {
+    const today = new Date()
+    const yyyy = today.getFullYear()
+    const mm = String(today.getMonth() + 1).padStart(2, '0')
+    const dd = String(today.getDate()).padStart(2, '0')
+    return `${yyyy}-${mm}-${dd}`
+}
+
+const isPastTime = (timeStr: string): boolean => {
+    if (!timeStr) return false
+    
+    const now = new Date()
+    const [hours, minutes] = timeStr.split(':').map(Number)
+    
+    // 현재 시간과 분 가져오기
+    const currentHours = now.getHours()
+    const currentMinutes = now.getMinutes()
+    
+    // 시간 비교
+    if (hours < currentHours) {
+        return true
+    }
+    
+    // 시간이 같을 경우 분 비교
+    if (hours === currentHours && minutes <= currentMinutes) {
+        return true
+    }
+    
+    return false
+}
+
+const validateTransferTime = (time: string): boolean => {
+    if (!time) return false
+    
+    // 형식 검사 (HH:MM 또는 HH:MM:SS)
+    const timeFormatRegex = /^([01]\d|2[0-3]):([0-5]\d)(:([0-5]\d))?$/
+    if (!timeFormatRegex.test(time)) {
+        error_message.value = '올바른 시간 형식(HH:MM 또는 HH:MM:SS)을 입력해주세요.'
+        return false
+    }
+    
+    // 과거 시간 검사
+    if (isPastTime(time)) {
+        error_message.value = '이체 시간은 현재 시각보다 미래여야 합니다.'
+        return false
+    }
+    
+    return true
+}
+
+const withdrawAcctHint = () => {
+    const finance_van = <FinanceVan>(finance_vans.find(obj => obj.id == fin_id.value))
+    if(finance_van)
+        return `이체모듈타입 코드: ${finance_van.id}, 은행코드: ${finance_van.bank_code}, 계좌번호: ${finance_van.withdraw_acct_num}`
+    else
+        return ``
+}
 
 const validate = async () => {
     error_message.value = ''
     const acct_nums = new Set()
     for (let i = 0; i < items.value.length; i++) {        
-        const results = validateItems(items.value[i], i, acct_nums)
+        const results = validateItems(items.value[i], i, acct_nums, finance_vans)
         is_clear.value = results[0] as boolean
         error_message.value = results[1] as string
 
@@ -53,16 +115,59 @@ const validate = async () => {
 const checkBankAccount = async () => {
     if(await alert.value.show('예금주 검증을 하시겠습니까?')) {
         try {
-            await bulkRegister('예금주 검증', 'owner-check-test', items.value) // owner-check-test
+            const r = await bulkRegister('예금주 검증', 'owner-check', items.value)
+            if(r)
+                bank_clear.value = true
         } catch (e:any) {
             snackbar.value.show(e.response.data.message, 'error')
             const r = errorHandler(e)
         }
     }
 }
+
+const bulkWithdrawRequest = async () => {
+  if (!transferTime.value) {
+    snackbar.value.show('이체 시간을 설정해주세요.', 'error')
+    return
+  }
+  
+  if (!validateTransferTime(transferTime.value)) {
+    snackbar.value.show(error_message.value, 'error')
+    return
+  }
+   
+  const [hh, mm] = transferTime.value.split(':')
+  const totalItems = items.value.length
+  // 60초에 아이템을 고르게 분배
+  const base = Math.floor(totalItems / 60)
+  const remainder = totalItems % 60
+
+  // 초당 배정 개수 배열 생성
+  const distribution = Array(60).fill(base).map((v, i) => v + (i < remainder ? 1 : 0))
+
+  let itemIndex = 0
+
+  const newItems: Withdraw[] = []
+
+  for (let second = 0; second < 60; second++) {
+    const count = distribution[second]
+    for (let i = 0; i < count; i++) {
+      const ss = String(second).padStart(2, '0')
+      newItems.push({
+        ...items.value[itemIndex],
+        withdraw_book_time: `${getToday()} ${hh}:${mm}:${ss}`
+      })
+      itemIndex++
+    }
+  }
+
+  items.value = newItems
+  await bulkRegister('출금예약', 'bulk-withdraws', items.value)
+}
+
 watchEffect(async () => {
     if (excel.value) {
-        items.value = await ExcelReaderV2(headers, excel.value[0]) as VirtualAccount[]
+        items.value = await ExcelReaderV2(headers, excel.value[0]) as Withdraw[]
         await validate()
     }
 })
@@ -85,6 +190,25 @@ watchEffect(async () => {
             <CreateHalfVCol :mdl="8" :mdr="4">
                 <template #name>
                     <VCol>
+                        <h3 class="pt-3">출금 정보</h3>
+                        <VRow>
+                            <VCol md="6" cols="12">
+                                <VRow>
+                                    <VCol class="font-weight-bold" md="6">이체모듈 타입 검색</VCol>
+                                    <VCol md="6">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="fin_id"
+                                            :items="finance_vans"
+                                            label="출금 이체모듈타입 검색"
+                                            item-title="nick_name"
+                                            item-value="id"
+                                            persistent-hint single-line
+                                            :hint="withdrawAcctHint()"
+                                        />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                        <VDivider style="margin: 1em 0;" />
                         <h3 class="pt-3">입금 정보</h3>
                         <VRow>
                             <VCol md="6" cols="12">
@@ -104,14 +228,24 @@ watchEffect(async () => {
                 </template>
                 <template #input>
                     <VCol>
-                        <b>입금 계좌번호 입력시 </b><b class="important-text">주의사항</b>
+                        <b>이체모듈 타입 입력시 </b><b class="important-text">주의사항</b>
                         <br>
-                        <span>- 숫자만 입력 (예: 12345123451234)</span>
+                        <span>- 이체모듈타입 검색 목록에 있는 이체모듈타입 코드만 입력 (예: 3)</span>
                     </VCol>
                     <VCol>
                         <b>입금 은행명 입력시 </b><b class="important-text">주의사항</b>
                         <br>
                         <span>- 입금 은행명 검색 목록에 있는 은행명과 동일하게 입력 (예: 한국은행)</span>
+                    </VCol>
+                    <VCol>
+                        <b>입금 계좌번호 입력시 </b><b class="important-text">주의사항</b>
+                        <br>
+                        <span>- 숫자만 입력 (예: 12345123451234)</span>
+                    </VCol>
+                    <VCol>
+                        <b>출금 금액 입력시 </b><b class="important-text">주의사항</b>
+                        <br>
+                        <span>- 금액 전체를 숫자로 입력 (예: 100만원=1000000)</span>
                     </VCol>
                 </template>
             </CreateHalfVCol>
@@ -171,18 +305,26 @@ watchEffect(async () => {
     </VRow>
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">
-            <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('계좌등록 포멧', headers)" style="margin-left: auto;">
+            <VTextField type="time" label="이체 시간 설정"
+                v-model="transferTime" 
+                style="max-width: 10em;"
+            />
+            <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('대량출금 포멧', headers)" style="margin-left: auto;">
                 양식 다운로드
                 <VIcon end icon="uiw-file-excel" />
             </VBtn>
-            <VFileInput id='bank-accounts-uploader' accept="xlsx/*" show-size v-model="excel" v-show="false">
+            <VFileInput id='bulk-withdraw-uploader' accept="xlsx/*" show-size v-model="excel" v-show="false">
             </VFileInput>
-            <VBtn type="button" @click="openFilePicker('bank-accounts-uploader')">
+            <VBtn type="button" @click="openFilePicker('bulk-withdraw-uploader')">
                 양식 업로드
                 <VIcon end icon="uiw-file-excel" />
             </VBtn>
-            <VBtn type="button" @click="checkBankAccount()" v-show="is_clear">
-                예금주 검증 및 등록
+            <VBtn v-if="bank_clear === false" type="button" @click="checkBankAccount()" v-show="is_clear">
+                예금주 검증
+                <VIcon end icon="tabler-pencil" />
+            </VBtn>
+            <VBtn v-if="bank_clear" type="button" @click="bulkWithdrawRequest()" v-show="is_clear">
+                출금 예약
                 <VIcon end icon="tabler-pencil" />
             </VBtn>
         </VCol>

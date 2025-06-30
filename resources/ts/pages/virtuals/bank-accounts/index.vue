@@ -4,11 +4,13 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { selectFunctionCollect } from '@/views/selected';
 import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
 import { useSearchStore } from '@/views/virtuals/bank-accounts/useStore'
+import { useRequestStore } from '@/views/request';
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { DateFilters } from '@core/enums'
 
 const alert = <any>(inject('alert'))
 
+const { request, remove } = useRequestStore()
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { finance_vans } = useStore()
@@ -27,6 +29,15 @@ provide('head', head)
 provide('exporter', exporter)
 const snackbar = <any>(inject('snackbar'))
 
+const batchRemove = async() => {
+    if (await alert.value.show(`정말 ${selected.value.length}개의 등록계좌를 삭제하시겠습니까?`)) {
+        const r = await request({ url: `/api/v1/manager/merchandises/bill-keys/batch-updaters/remove`, method: 'delete', data: {
+            selected_idxs: selected.value
+        } }, true)
+        selected.value = []
+    }
+}
+
 if(getUserLevel() < 35) {
     pay_token.value = ''
     user_info.value = {}
@@ -38,6 +49,11 @@ if(getUserLevel() < 35) {
         <div>
             <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="[]" :add="false" add_name="입금계좌" :date_filter_type="DateFilters.DATE_RANGE">
                 <template #index_extra_field>
+                <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small"
+                    :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''" item-title="title" item-value="id">
+                    일괄삭제
+                    <VIcon size="18" icon="tabler-trash" />
+                </VBtn>
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined" id="page-size-filter"
                     :items="[10, 20, 30, 50, 100, 200]" label="조회 개수" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" 
                     :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''"/>
@@ -66,6 +82,11 @@ if(getUserLevel() < 35) {
                                         <VCheckbox v-model="selected" :value="item[_key]" class="check-label" />
                                         <span>#{{ item[_key] }}</span>
                                     </div>
+                                    </span>
+                                    <span v-else-if="_key === 'checked'">
+                                        <VChip :color="item[_key] ? 'success' : 'error'">
+                                            {{ item[_key] ? '검증완료' : '미검증' }}
+                                        </VChip>
                                     </span>
                                     <span v-else-if="_key === 'note'" v-html="item[_key]" style="line-height: 2em;"></span>
                                     <!--

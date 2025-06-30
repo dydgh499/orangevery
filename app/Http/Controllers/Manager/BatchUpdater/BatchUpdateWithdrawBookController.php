@@ -130,13 +130,13 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
         {
             // $result 초기화
             $result = [
-                'deposit_acct_num' => $data['deposit_acct_num'] ?? null,
+                'acct_num' => $data['acct_num'] ?? null,
                 'result_cd' => 100, // 기본 성공 코드
                 'result_msg' => ''
             ];
 
             // 1. 계좌번호 존재 여부 확인
-            $bankAccount = BankAccount::where('acct_num', $data['deposit_acct_num'])
+            $bankAccount = BankAccount::where('acct_num', $data['acct_num'])
                 ->where('brand_id', $brand_id)
                 ->first();
 
@@ -144,7 +144,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                 $result['result_cd'] = 952;
                 $result['result_msg'] = '존재하지 않는 계좌번호';
                 $results[] = $result;
-                $not_exist_accounts[] = $data['deposit_acct_num'];
+                $not_exist_accounts[] = $data['acct_num'];
                 continue;
             }
 
@@ -221,12 +221,12 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
 
         // 1. 모든 계좌번호 존재 여부 먼저 확인
         foreach($datas as $data) {
-            $bankAccount = BankAccount::where('acct_num', $data['deposit_acct_num'])
+            $bankAccount = BankAccount::where('acct_num', $data['acct_num'])
                 ->where('brand_id', $brand_id)
                 ->first();
 
             if(!$bankAccount) {
-                $not_exist_accounts[] = $data['deposit_acct_num'];
+                $not_exist_accounts[] = $data['acct_num'];
             }
         }
 
@@ -256,7 +256,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
 
             if(!$finance) {
                 $results[] = [
-                    'deposit_acct_num' => $data['deposit_acct_num'] ?? null,
+                    'acct_num' => $data['acct_num'] ?? null,
                     'result_cd' => 953,
                     'result_msg' => '유효하지 않은 금융정보'
                 ];
@@ -264,7 +264,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
             }
 
             // 3. 출금 요청 파라미터 구성
-            $bankAccount = BankAccount::where('acct_num', $data['deposit_acct_num'])
+            $bankAccount = BankAccount::where('acct_num', $data['acct_num'])
                 ->where('brand_id', $brand_id)
                 ->first();
 
@@ -313,7 +313,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                             $brand_id                                 // 브랜드 ID
                         );
                         $results[] = [
-                            'deposit_acct_num' => $data['deposit_acct_num'] ?? null,
+                            'acct_num' => $data['acct_num'] ?? null,
                             'result_cd' => 100,
                             'result_msg' => '이체 예약 완료',
                             'job_id' => $job_id
@@ -322,21 +322,21 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                     } else {
                         // 금융밴 실패
                         $results[] = [
-                            'deposit_acct_num' => $data['deposit_acct_num'] ?? null,
+                            'acct_num' => $data['acct_num'] ?? null,
                             'result_cd' => 'PV406',
                             'result_msg' => '찾을 수 없는 타입입니다.'
                         ];
                     }
                 } else {
                     $results[] = [
-                        'deposit_acct_num' => $data['deposit_acct_num'] ?? null,
+                        'acct_num' => $data['acct_num'] ?? null,
                         'result_cd' => $code,
                         'result_msg' => '개인정보 또는 실시간 모듈 정보가 매칭되지 않았습니다.'
                     ];
                 }
             } catch (\Exception $e) {
                 $results[] = [
-                    'deposit_acct_num' => $data['deposit_acct_num'] ?? null,
+                    'acct_num' => $data['acct_num'] ?? null,
                     'result_cd' => 500,
                     'result_msg' => '서버 오류: ' . $e->getMessage()
                 ];
@@ -358,7 +358,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
         $ids = is_array($request->input('selected_idxs')) ? $request->input('selected_idxs') : [];
 
         Log::info('[batchRemove] 요청된 ID 목록', ['ids' => $ids]);
-     // 선택된 ID로 trans_seq_num 조회
+        // 선택된 ID로 trans_seq_num 조회
         $trx_nums = CMSTransactionBooks::whereIn('id', $ids)
         ->get()
         ->pluck('trans_seq_num')

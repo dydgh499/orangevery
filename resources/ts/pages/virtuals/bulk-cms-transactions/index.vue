@@ -1,14 +1,12 @@
 
 <script setup lang="ts">
 import type { Tab } from '@/views/types'
-import WithdrawRegister from '@/views/virtuals/bulk-cms-transactions/WithdrawRegister.vue'
 import BankAccountRegister from '@/views/virtuals/bulk-cms-transactions/BankAccountRegister.vue'
 import corp from '@corp'
 
 const tab = ref(0)
 const tabs = <Tab[]>([
-    { icon: 'tabler-building-bank', title: '계좌등록' },
-    { icon: 'marketeq:wallet-money', title: '출금예약' },
+    { icon: 'marketeq:wallet-money', title: '대량출금' },
 ])
 </script>
 <template>
@@ -24,11 +22,6 @@ const tabs = <Tab[]>([
                 <VWindowItem>
                     <Suspense>
                         <BankAccountRegister/>
-                    </Suspense>
-                </VWindowItem>
-                <VWindowItem>
-                    <Suspense>
-                        <WithdrawRegister/>
                     </Suspense>
                 </VWindowItem>
             </VWindow>

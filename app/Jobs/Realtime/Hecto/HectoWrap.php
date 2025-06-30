@@ -6,9 +6,9 @@ use App\Jobs\Realtime\Hecto\Hecto;
 class HectoWrap extends Hecto
 {
     public $trx_dt, $trx_tm;
-    public function __construct($finance_van, $privacy, $deposit_type)
+    public function __construct($finance_van, $privacy, $deposit_type, $withdraw_book_time)
     {
-        parent::__construct($finance_van, $privacy, $deposit_type);
+        parent::__construct($finance_van, $privacy, $deposit_type, $withdraw_book_time);
         if(isset($this->privacy['acct_bank_name']))
         {
             $this->privacy['acct_bank_code'] = $this->getBankCode($this->privacy['acct_bank_name']);

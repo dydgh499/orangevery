@@ -9,7 +9,7 @@ class BulkWithdrawBookRequest extends FormRequest
 {
     use FormRequestTrait;
     public $keys = [
-        'deposit_acct_num', // 입금 계좌번호
+        'acct_num', // 입금 계좌번호
         'note', // 출금 사유
         'withdraw_book_time', // 이체 예정 시각
     ];
@@ -32,7 +32,7 @@ class BulkWithdrawBookRequest extends FormRequest
         $sub = [
             '*' => 'required|array',
             '*.fin_id' => 'required',
-            '*.deposit_acct_num' => 'required', // 입금 계좌번호
+            '*.acct_num' => 'required', // 입금 계좌번호
             '*.withdraw_amount' => 'required', // 출금 금액
             '*.withdraw_book_time' => 'required', // 이체 예정 시각
             

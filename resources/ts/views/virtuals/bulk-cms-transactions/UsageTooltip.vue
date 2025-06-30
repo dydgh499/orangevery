@@ -24,12 +24,17 @@
                     액셀 등록을 진행합니다.
                     양식 업로드를 통해 정상적인 값으로 1차 검증이되면
                     <VBtn type="button" aria-readonly="" size="small">
-                        등록
+                        예금주 검증
                         <VIcon end icon="tabler-pencil" />
                     </VBtn>
                     버튼이 활성화 됩니다.
                     <br>
-                    계좌등록 -> 출금예약 순서로 하나씩 등록을 진행합니다.
+                    이후 예금주 검증이 완료되면
+                    <VBtn type="button" aria-readonly="" size="small">
+                        출금 예약
+                        <VIcon end icon="tabler-pencil" />
+                    </VBtn>
+                    버튼이 활성화 됩니다.
                 </div>
             </span>
         </VTooltip>

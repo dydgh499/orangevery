@@ -1289,6 +1289,11 @@ export interface Withdraw {
     withdraw_holiday_limit: number,
 
     withdraw_amount: number,
+    // VirtualAccount 에서 가져옴
+    acct_bank_name: string, // 입금 은행명 
+    acct_num: number, // 입금 계좌번호
+    acct_name: string, // 예금주명
+    acct_bank_code: string, // 은행코드
 
     deposit_acct_bank_name: string, // 입금 은행명
     deposit_acct_num: number, // 입금 계좌번호

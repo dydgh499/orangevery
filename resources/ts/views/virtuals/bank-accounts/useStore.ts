@@ -13,8 +13,8 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
         'acct_num': '계좌번호',
         'acct_name': '예금주명',
         'acct_bank_code': '은행코드',
-        'note': '메모',
         'checked' : '예금주 검증',
+        'note': '메모',
         'extra_col': '더보기',
     }
 

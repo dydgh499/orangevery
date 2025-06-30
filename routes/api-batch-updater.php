@@ -103,8 +103,8 @@ Route::middleware(['auth.update'])->group(function() {
         Route::post('register', [BatchUpdateWalletController::class, 'register']);
     });
 
-    Route::prefix('owner-check-test/batch-updaters')->group(function() { 
-        Route::post('register', [BatchUpdateBankAccountController::class, 'ownerCheckHardTest']);
+    Route::prefix('owner-check/batch-updaters')->group(function() { 
+        Route::post('register', [BatchUpdateBankAccountController::class, 'ownerCheckHard']);
     });
 
     Route::prefix('bulk-withdraws/batch-updaters')->group(function() { 

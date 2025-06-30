@@ -48,7 +48,7 @@ class FinanceVanUtil
         if($finance_van['finance_company_num'] === 1)
             $rt = new CooconWrap($finance_van, $privacy, $deposit_type, $withdraw_book_time);
         else if($finance_van['finance_company_num'] === 2)
-            $rt = new HectoWrap($finance_van, $privacy, $deposit_type);
+            $rt = new HectoWrap($finance_van, $privacy, $deposit_type, $withdraw_book_time);
         else
             return null;
         return $rt;
