@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Manager\BatchUpdater;
 
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateController;
 use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
-use App\Http\Controllers\Manager\BatchUpdater\MerchandiseFeeUpdater;
 
 use App\Models\Merchandise\PaymentModule;
 use App\Models\Merchandise\PaymentModuleColumnApplyBook;
