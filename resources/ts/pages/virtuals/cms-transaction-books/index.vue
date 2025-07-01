@@ -11,20 +11,10 @@ import { DateFilters } from '@core/enums'
 import ExtraMenu from '@/views/virtuals/cms-transaction-books/ExtraMenu.vue';
 
 const alert = <any>(inject('alert'))
-const { request, remove } = useRequestStore()
+const { request } = useRequestStore()
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { finance_vans } = useStore()
-const { cancelJobs } = withdrawInterface()
-const total = ref(<any>{
-    deposit_amount: 0,
-    withdraw_amount: 0,
-    total_realtime_withdraw_amount: 0,
-    total_collect_withdraw_amount: 0,
-    total_payment_agency_withdraw_amount: 0,
-    total_withdraw_amount: 0,
-    total_difference: 0,
-})
 
 provide('store', store)
 provide('head', head)
@@ -37,6 +27,7 @@ const batchRemove = async() => {
         const r = await request({ url: `/api/v1/manager/bulk-withdraws/batch-updaters/remove`, method: 'delete', data: {
             selected_idxs: selected.value
         } }, true)
+        
         selected.value = []
     }
     store.setTable()
@@ -130,12 +121,6 @@ if(getUserLevel() < 35) {
                                     
                                     <span v-else-if="_key === 'extra_col'" v-if="item['withdraw_status'] != 1">
                                         <ExtraMenu :item="item"/>
-                                        <!--
-                                        <VBtn size="small" type="button" color="error" @click="cancelJobs([item['id']])">
-                                            삭제
-                                            <VIcon size="22" icon="tabler-trash"/>
-                                        </VBtn>
-                                        -->
                                     </span>
                                     <span v-else>
                                         {{ item[_key] }}

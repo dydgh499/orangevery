@@ -26,19 +26,6 @@ class CMSTransactionBookInterface extends CMSTransactionValidate
         {
             $result_code = -5;
             $message     = '사용자가 이체 예약을 취소하였습니다.';
-            /*
-            foreach($histories as $history)
-            {
-                self::addWithdraw($history, 0, 6170, $result_code, $message, [
-                    'acct_num' => '',
-                    'acct_name'=> '',
-                    'acct_bank_name' => '',
-                    'acct_bank_code' => '',
-                    'acct_num' => '',
-                ], null);
-                self::updateHistory($history['id'], 4, $history['trans_amount']);
-            }
-                */
         }
     }
     

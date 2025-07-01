@@ -1276,29 +1276,12 @@ export interface VirtualAccountWithdraw {
 
 export interface Withdraw {
     id: number,
-    user_id: number,
-    balance: number,
-    account_code: string,
-    account_name: string,
     fin_id: number | null,
-    fin_trx_delay: number,
-    withdraw_type: number,
-    withdraw_fee: number,
-    withdraw_limit_type: number,
-    withdraw_business_limit: number,
-    withdraw_holiday_limit: number,
 
-    withdraw_amount: number,
-    // VirtualAccount 에서 가져옴
     acct_bank_name: string, // 입금 은행명 
     acct_num: number, // 입금 계좌번호
     acct_name: string, // 예금주명
     acct_bank_code: string, // 은행코드
-
-    deposit_acct_bank_name: string, // 입금 은행명
-    deposit_acct_num: number, // 입금 계좌번호
-    deposit_acct_name: string, // 예금주명
-    deposit_acct_bank_code: string, // 은행코드
     withdraw_amount: string, // 출금 금액
     note: string, // 출금 사유
     withdraw_book_time: string, // 출금 예약 시간
@@ -1331,4 +1314,16 @@ export interface BulkPayment {
     buyer_phone: string,
     item_name: string,
     amount: number,
+}
+
+export interface BankAccount {
+    id: number,
+    brand_id: number | null,
+
+    acct_bank_name: string, // 입금 은행명 
+    acct_num: number, // 입금 계좌번호
+    acct_name: string, // 예금주명
+    acct_bank_code: string, // 은행코드
+    checked: number, // 예금주 검증 여부
+    note: string, // 출금 사유
 }

@@ -2,7 +2,7 @@ import { getUserLevel } from '@axios'
 
 const _getVirtualMenu = () => {
     const virtuals:any = {
-        title: '가상계좌 관리',
+        title: '정산 관리',
         icon: { icon: 'tabler:building-bank' },
         children: []
     }

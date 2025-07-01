@@ -86,13 +86,9 @@ Route::middleware(['auth.update'])->group(function() {
             Route::apiResource('holidays', HolidayController::class);
             Route::apiResource('exception-work-times', ExceptionWorkTimeController::class);        
             Route::get('head-office-accounts', [HeadOfficeAccountController::class, 'index']);        
-            Route::get('cms-transaction-books', [CMSTransactionBookController::class, 'index']);
-            Route::delete('cms-transaction-books/{id}', [CMSTransactionBookController::class, 'destroy']);
             Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
             Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
             Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);
-            
-            Route::post('cms-transaction-books/cancel-job-test', [V1WithdrawBookController::class, 'cancelJob']);
 
             Route::get('book-applies', [ApplyBookController::class, 'index']);
             Route::delete('book-applies/{dest_type}/{id}', [ApplyBookController::class, 'destroy']);
@@ -102,9 +98,9 @@ Route::middleware(['auth.update'])->group(function() {
 
         Route::prefix('virtuals')->group(function() {
             Route::get('bank-accounts', [BankAccountController::class, 'index']);
+            Route::delete('bank-accounts/{id}', [BankAccountController::class, 'destroy']);
             Route::get('cms-transaction-books', [CMSTransactionBookController::class, 'index']);
-            Route::post('cms-transaction-books/cancel-job-test', [V1WithdrawBookController::class, 'cancelJob']);
-            Route::delete('cms-transaction-books/{id}', [CMSTransactionBookController::class, 'destroy']);
+            Route::post('cms-transaction-books/cancel-job', [V1WithdrawBookController::class, 'cancelJob']);
 
             Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
             Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);

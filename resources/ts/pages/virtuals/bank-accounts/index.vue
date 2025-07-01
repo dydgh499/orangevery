@@ -1,28 +1,17 @@
 <script setup lang="ts">
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { selectFunctionCollect } from '@/views/selected';
 import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
+import ExtraMenu from '@/views/virtuals/bank-accounts/ExtraMenu.vue'
 import { useSearchStore } from '@/views/virtuals/bank-accounts/useStore'
 import { useRequestStore } from '@/views/request';
-import { useStore } from '@/views/services/pay-gateways/useStore'
 import { DateFilters } from '@core/enums'
 
 const alert = <any>(inject('alert'))
 
-const { request, remove } = useRequestStore()
+const { request } = useRequestStore()
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { finance_vans } = useStore()
-const total = ref(<any>{
-    deposit_amount: 0,
-    withdraw_amount: 0,
-    total_realtime_withdraw_amount: 0,
-    total_collect_withdraw_amount: 0,
-    total_payment_agency_withdraw_amount: 0,
-    total_withdraw_amount: 0,
-    total_difference: 0,
-})
 
 provide('store', store)
 provide('head', head)
@@ -30,11 +19,14 @@ provide('exporter', exporter)
 const snackbar = <any>(inject('snackbar'))
 
 const batchRemove = async() => {
-    if (await alert.value.show(`정말 ${selected.value.length}개의 등록계좌를 삭제하시겠습니까?`)) {
-        const r = await request({ url: `/api/v1/manager/merchandises/bill-keys/batch-updaters/remove`, method: 'delete', data: {
+    if (await alert.value.show(`정말 ${selected.value.length}개의 입금계좌를 삭제하시겠습니까?`)) {
+        const r = await request({ url: `/api/v1/manager/bank-accounts/batch-updaters/remove`, method: 'delete', data: {
             selected_idxs: selected.value
         } }, true)
-        selected.value = []
+        if (r.data.code === 1) {
+            selected.value = []
+            store.setTable()
+        }
     }
 }
 
@@ -47,7 +39,7 @@ if(getUserLevel() < 35) {
 <template>
     <section>
         <div>
-            <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="[]" :add="false" add_name="입금계좌" :date_filter_type="DateFilters.DATE_RANGE">
+            <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="[]" :add="false" add_name="입금계좌" :date_filter_type="DateFilters.NOT_USE">
                 <template #index_extra_field>
                 <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small"
                     :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''" item-title="title" item-value="id">
@@ -89,11 +81,9 @@ if(getUserLevel() < 35) {
                                         </VChip>
                                     </span>
                                     <span v-else-if="_key === 'note'" v-html="item[_key]" style="line-height: 2em;"></span>
-                                    <!--
                                     <span v-else-if="_key === 'extra_col'" v-if="item['withdraw_status'] != 1">
                                         <ExtraMenu :item="item"/>
                                     </span>
-                                    -->
                                     <span v-else>
                                         {{ item[_key] }}
                                     </span>

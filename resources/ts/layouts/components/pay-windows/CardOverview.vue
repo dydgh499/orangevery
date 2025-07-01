@@ -51,6 +51,7 @@ onMounted(async () => {
         </VCol>
         <VCol md="8" cols="8">
           <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.hand_pay.pmod_id"
+            variant="underlined"
             :items="filterPayModule" prepend-inner-icon="ic-outline-send-to-mobile"
             label="결제모듈 별칭" item-title="note"
             :rules="[requiredValidatorV2(hand_pay.pmod_id, '결제모듈')]"

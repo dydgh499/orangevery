@@ -58,17 +58,4 @@ class CMSTransactionBookController extends Controller
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }
-
-    
-    /**
-     * 단일삭제
-     *
-     * @urlParam id integer required 유저 PK
-     */
-    public function delete(int $id)
-    {
-        $query = new CMSTransactionBooks;
-        $res = $query->where('id', $id)->delete();
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
-    }
 }

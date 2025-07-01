@@ -62,38 +62,7 @@ class RealtimeWrapper
             return $json;
     }
 
-    # 정산 이체
-    public function settleDeposit($settle, $is_mcht)
-    {
-        [$code, $message, $data] = $this->service->settleWithdrawSequence($is_mcht, $settle, $this->service->timeout_codes);
-        if($code === '0000')
-        {
-            $last_id = $this->service->addSettleWithdraw($is_mcht, $settle, '0050', '이체 처리중');
-            $json = $this->service->deposit();
-            $json = $this->afterTreatment($json);
-            if($json['RESP_CD'] === "0000")
-            {
-                $this->service->updatedSettleWithDraw($is_mcht, $last_id, $json['RESP_CD'], $json['RESP_MSG']);
-                $this->service->updateSettleInfo($is_mcht, $settle);
-            }
-        }
-        else if($code === 'PV482')
-        {
-            $json = $this->service->getDepositResult($data);
-            $this->service->addSettleWithdraw($is_mcht, $settle, $json['RESP_CD'], $json['RESP_MSG']);
-        }
-        else
-        {
-            $json = [
-                'RESP_CD' => $code,
-                'RESP_MSG' => $message
-            ];
-            $this->service->addSettleWithDraw($is_mcht, $settle, $code, $message);
-        }
-        return $json;
-    }
-
-    # 본사지정계좌 이체
+    # 예약된 시간에 이체
     public function operateWithdraw($withdraw_amount, $note)
     {
         [$code, $message] = $this->service->CMSTransactionSequence($withdraw_amount); // trx_num 가져오고 은행코드 맞는지 확인
@@ -103,7 +72,9 @@ class RealtimeWrapper
             $json = $this->deposit(); // finance_van의 잔액 확인해서 잔액이 충분하면 5 부족하면 0
             $json = $this->afterTreatment($json); // 결과코드 deposit에서 나온 응답코드로 변경
             [$result_code, $message] = $this->service->getWithdrawStatus($json); // 결과코드 0000 이면 이체완료 메세지 응답 아니면 아닌 결과 응답
+            Log::info("updateCMSTransaction 값", $last_id);
             $this->service->updateCMSTransaction($last_id, $result_code, $message); // 바로 위의 출금시도 응답코드, 결과 메세지 업데이트
+            $this->service->updateCMSTransactionBook($last_id, $result_code, $message);
         }
         else
         {

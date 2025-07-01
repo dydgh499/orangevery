@@ -67,47 +67,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
         $body = str_pad($withdraw_count+1, 11 - strlen($head), "0", STR_PAD_LEFT);
         return (int)$code.$head.$body;
     }
-
-    /**
-     * 대량등록
-     *
-     * 운영자 이상 가능
-     */
-    public function register(BulkWithdrawBookRequest $request)
-    {
-        $current = date('Y-m-d H:i:s');
-        $brand_id = $request->user()->brand_id;
-        $datas = $request->data();
-        if(count($datas) > 1000)
-            return $this->extendResponse(1000, '출금요청은 한번에 최대 1000개까지 등록할 수 있습니다.');
-
-        $withdraw = $datas->map(function ($data) use($current, $brand_id) {
-            $data['brand_id']   = $brand_id;
-            $data['created_at'] = $current;
-            $data['updated_at'] = $current;
-            return $data;
-        })->toArray();
-        
-        $ids = app(ActivityHistoryInterface::class)->batchAdd($this->target, $this->cms_transaction_books, $withdraw, 'account_name', $current, $brand_id);
-        return $this->response(1, $ids);
-    }
-
-    private function transactionBookBatch($request)
-    {
-        $apply_mode = $this->getBatchMode($request);
-        
-        if ($apply_mode === 3) {
-            $this->wrongTypeAccess();
-        } 
-        else if ($apply_mode === 1) {
-            return $this->cms_transaction_books->whereIn('cms_transaction_books.id', $request->selected_idxs);
-        } 
-        else {
-            $this->wrongTypeAccess();
-        }
-    }
     
-
     /**
      * 계좌 출금 예약 테스트(등록되지 않은 계좌 제외 출금 요청)
      */
@@ -285,6 +245,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                 'created_at' => $current,
                 'updated_at' => $current,
             ];
+            
             // 4. 외부 API 호출 대체 - 내부 로직 직접 호출
             try {
                 [$code, $finance_van, $privacy] = FinanceVanUtil::getThirdPartyInfo((object)$params, (object)$params);
@@ -353,6 +314,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
         ]);
     }
 
+
     public function batchRemove(Request $request)
     {
         $ids = is_array($request->input('selected_idxs')) ? $request->input('selected_idxs') : [];
@@ -376,8 +338,10 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
         ]);
     
         // 활동 이력 기록
-        $query = CMSTransactionBooks::whereIn('trans_seq_num', $success)->get();
+        /*
+        $query = CMSTransactionBooks::whereIn('trans_seq_num', $success);
         app(ActivityHistoryInterface::class)->destory($this->target, $query, 'id');
+        */
     
         $message = count($success) . "건 삭제 완료";
         if (count($fails) || count($not_founds)) {
@@ -390,18 +354,4 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
             'not_found' => $not_founds
         ]);
     }
-    
-    /**
-     * 일괄삭제
-     */
-    /*
-    public function batchRemove(Request $request)
-    {        
-        // 출금예약 내역 쿼리 가져오기
-        $query = $this->transactionBookBatch($request);
-        // 활동 기록 및 삭제 실행
-        $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'id');
-        return $this->extendResponse($row ? 1 : 990, $row ? $row.'개의 출금예약이 삭제되었습니다.' : '삭제된 출금예약 내역이 존재하지 않습니다.');
-    }
-    */
 }

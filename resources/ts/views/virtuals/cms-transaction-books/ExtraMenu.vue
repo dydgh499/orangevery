@@ -11,13 +11,11 @@ interface Props {
 const props = defineProps<Props>()
 
 const store = <any>(inject('store'))
-    
-const tradeAmbassadorDialog = <any>(inject('tradeAmbassadorDialog'))
+
 const withdrawHistoriesDialog = <any>(inject('withdrawHistoriesDialog'))
-const withdrawStatusmentDialog = <any>(inject('withdrawStatusmentDialog'))
 
 const { 
-    withdrawRetry, getSuccessResultId,
+    withdrawRetry,
     cancelJobs 
 } = withdrawInterface()
 
@@ -28,6 +26,13 @@ const retryDeposit = async () => {
             store.setChartProcess()
             store.setTable()
         }
+    }
+}
+
+const cancelWithdrawBook = async () => {
+    const r = await cancelJobs([props.item.trans_seq_num])
+    if(r.status == 201) {
+        store.setTable()
     }
 }
 
@@ -65,7 +70,7 @@ const isBookCancelAble = () => {
                     v-else-if="props.item.is_withdraw === 1 && isBookCancelAble()"
                     value="single-deposit-cancel-job" 
                     class="single-deposit-cancel-job" 
-                    @click="cancelJobs([props.item.trans_seq_num])">
+                    @click="cancelWithdrawBook()">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="material-symbols:free-cancellation-outline" />
                     </template>

@@ -45,11 +45,14 @@ export const withdrawInterface = () => {
 
     const cancelJobs = async (trans_seq_num: string[]) => {
         if (await alert.value.show('정말 해당건의 출금예약을 취소처리 하시겠습니까?')) {
-            const res = await post('/api/v1/manager/services/cms-transaction-books/cancel-job-test', {
-                trx_ids: trans_seq_num
+            const res = await post('/api/v1/manager/virtuals/cms-transaction-books/cancel-job', {
+                trx_id: trans_seq_num,
             }, true)
-            snackbar.value.show(res.data.message, res.status === 201 ? 'success' : 'error')
+            snackbar.value.show(res.data.result_msg, res.status === 201 ? 'success' : 'error')
+            return res
         }
+        else
+            return null
     }
 
     const withdrawRetry = async (id: number) => {
@@ -75,6 +78,7 @@ export const useSearchStore = defineStore('useCMSTransactionBookSearchStore', ()
     const { finance_vans } = useStore()
     const headers: Record<string, string> = {
         'id' : 'NO.',
+        'result_code': '응답코드',
         'fin_id': '거래모듈',
         'is_withdraw': '거래타입', //출금, 입금
         'amount': '거래금액',

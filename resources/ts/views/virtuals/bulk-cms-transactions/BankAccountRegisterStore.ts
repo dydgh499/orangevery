@@ -1,11 +1,11 @@
 
 
-import { FinanceVan, VirtualAccount } from '@/views/types';
+import { FinanceVan, Withdraw } from '@/views/types';
 import { isEmpty } from '@core/utils'
 import { banks } from '@/views/users/useStore';
 import corp from '@/plugins/corp';
 
-export const validateItems = (item: VirtualAccount, i: number, acct_nums: any, finance_vans:FinanceVan[]) => {
+export const validateItems = (item: Withdraw, i: number, acct_nums: any, finance_vans:FinanceVan[]) => {
     const finance_van = finance_vans.find(a => a.id === parseInt(item.fin_id))
     const acct_bank_name = banks.find(bulk => bulk.title === item.acct_bank_name)
     
