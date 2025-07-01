@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('danger_transactions', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-            $table->unsignedMediumInteger('mcht_id')->nullable()->comment('사용 가맹점 ID')->constrained('merchandises')->onDelete('SET NULL');
             $table->integer('trans_id')->comment('거래 ID');
             $table->tinyInteger('module_type')->default(0)->comment('거래타입');
             $table->tinyInteger('danger_type')->default(0)->comment('이상 거래 타입');

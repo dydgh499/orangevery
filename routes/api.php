@@ -3,20 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Message\MessageController;
-use App\Http\Controllers\Manager\Service\PaymentGatewayController;
-use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
 use App\Http\Controllers\Manager\Transaction\TransactionController;
-use App\Http\Controllers\Manager\Dashboard\DashboardController;
-use App\Http\Controllers\Manager\Service\MchtBlacklistController;
 use App\Http\Controllers\Manager\Service\CMSTransactionController;
 
-use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\QuickView\PayWindowController;
 use App\Http\Controllers\Manager\Merchandise\BillKeyController;
-use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ShopController;
-use App\Http\Controllers\Manager\Withdraws\VirtualAccountHistoryController;
 
-use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +22,6 @@ use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 */
 
 Route::prefix('v1')->group(function() {    
-    Route::get('services/mcht-blacklists/all', [MchtBlacklistController::class, 'all']);
     Route::get('pay/sales-slip/{ord_num}', [PayWindowController::class, 'salesSlip']);
     Route::prefix('pay')->group(function() {
         Route::middleware(['log.route'])->get('test', [PayWindowController::class, 'testWindow']);
@@ -40,12 +31,6 @@ Route::prefix('v1')->group(function() {
             Route::apiResource('bill-keys', BillKeyController::class);
         });
         Route::apiResource('bill-keys', BillKeyController::class);
-        Route::get('{window_code}', [PayWindowController::class, 'window']);
-    });
-    Route::prefix('shopping-mall')->group(function() {
-        Route::get('{shop_window}', [ShopController::class, 'index']);
-        Route::get('{shop_window}/{id}', [ShopController::class, 'show']);
-        Route::get('{shop_window}/{id}/{pay_window}', [ShopController::class, 'getProductCode']);
     });
     Route::post('transactions/hand-pay', [TransactionController::class, 'handPay']);
     Route::post('transactions/pay-cancel', [TransactionController::class, 'payCancel']);
@@ -71,25 +56,4 @@ Route::prefix('v1')->group(function() {
             Route::post('owner-check', [CMSTransactionController::class, 'ownerCheck']);
         });
     }); 
-
-    Route::prefix('manager')->middleware(['auth:sanctum', 'log.route'])->group(function() {
-        Route::post('computational-transfer/login', [BeforeSystemController::class, 'login']);
-        Route::post('computational-transfer/register', [BeforeSystemController::class, 'register']);
-        Route::prefix('dashsboards')->group(function() {
-            Route::get('monthly-transactions-analysis', [DashboardController::class, 'monthlyTranAnalysis']);
-            Route::get('upside-merchandises-analysis', [DashboardController::class, 'upSideMchtAnalysis']);
-            Route::get('upside-salesforces-analysis', [DashboardController::class, 'upSideSaleAnalysis']);
-            Route::get('recent-danger-histories', [DashboardController::class, 'getRecentDangerHistories']);
-            Route::get('recent-activity-histories', [DashboardController::class, 'getRecentOperatorHistories']);
-            Route::get('locked-users', [DashboardController::class, 'getLockedUsers']);            
-        });
-    });
-
-    Route::prefix('quick-view')->middleware(['auth:sanctum', 'log.route', 'auth.update'])->group(function() {
-        Route::get('', [QuickViewController::class, 'index']);
-        Route::get('withdraws/balance', [VirtualAccountHistoryController::class, 'withdrawsBalance']);
-        Route::post('withdraws/collect', [VirtualAccountHistoryController::class, 'collectWithdraw']);
-        Route::get('pay-modules/{id}/pay-window-renew', [PayWindowController::class, 'renew']);
-        Route::post('pay-windows/{window_code}/extend', [PayWindowController::class, 'extend']);
-    });
 });

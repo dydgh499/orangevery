@@ -36,16 +36,7 @@ class CreateBrandsTable extends Migration
             $table->string('phone_num')->nullable()->comment('휴대폰 번호');
             $table->string('fax_num')->nullable()->comment('팩스 번호');
             $table->string('pv_options', 3000)->default('[]')->comment('페이베리 옵션()');
-            $table->tinyInteger('deposit_day')->default(1)->comment('입금일');
-            $table->integer('deposit_amount')->default(0)->comment('입금액');
-            $table->datetime('last_dpst_at')->default('1970-01-01')->comment('마지막 입금일');
-            $table->tinyInteger('is_transfer')->default(0)->comment('전산 이전 여부');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
-            $table->boolean('use_different_settlement')->default(false)->comment('차액정산 사용여부');
-            $table->float('dev_fee', 6, 5)->default(0)->comment('개발사 수수료');
-            $table->tinyInteger('dev_settle_type')->default(0)->comment('수수료 계산 타입(0=본사 이익 대비 %, 1=거래금액 대비 %)');
-            $table->integer('extra_deposit_amount')->default(0)->comment('부가 입금 금액');
-            $table->integer('curr_deposit_amount')->default(0)->comment('현재 입금 금액(월단위)');
             $table->timestamps();
         });
     }

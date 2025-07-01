@@ -155,8 +155,6 @@ class ActivityHistoryViewer
 
         if($request->history_target === '영업라인')
         {
-            if(Ablilty::isMySalesforce($request, $request->target_id) === false)
-                $history_detail = $disableImages($history_detail);
             if(Ablilty::isOperator($request) === false)
             {
                 unset($history_detail['dns']);

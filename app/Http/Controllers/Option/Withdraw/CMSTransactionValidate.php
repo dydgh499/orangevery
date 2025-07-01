@@ -14,7 +14,7 @@ use App\Enums\RealtimeDepositCode;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 
-class CMSTransactionValidate extends CMSTransactionLimitValidate
+class CMSTransactionValidate
 {
     // 출금이력 거래번호 생성
     static public function getTrxNum($finance_van, $privacy, $withdraw_amount, $withdraw_book_time)
@@ -185,28 +185,5 @@ class CMSTransactionValidate extends CMSTransactionLimitValidate
                 return ['PV484', '취소된 입금건으로 이체하지 않았습니다.'];
         }
         return ['0000', ''];
-    }
-
-    // 결제타입 검증
-    static public function withdrawLimitTypeValidate($virtual_account)
-    {
-        if($virtual_account['withdraw_limit_type'])
-        {
-            if($virtual_account['withdraw_limit_type'] === 1 && self::isWeekend())
-                return false;
-            if($virtual_account['withdraw_limit_type'] === 2 && self::isHoliday($virtual_account['brand_id']))
-                return false;
-            if($virtual_account['withdraw_limit_type'] === 3 && (self::isWeekend() || self::isHoliday($virtual_account['brand_id'])))
-                return false;
-            else
-                return true;
-        }
-        else
-            return true;
-    }
-
-    static public function validate($acct_bank_code)
-    {   // 은행정보 검증
-        return self::acctBankCodeValidate($acct_bank_code);
     }
 }

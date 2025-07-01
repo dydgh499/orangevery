@@ -22,7 +22,6 @@ use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\PayWindowInterface;
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Option\BillPayValidate;
 
 use Illuminate\Http\Request;
 
@@ -47,7 +46,6 @@ class BillKeyController extends Controller
     }
     
     
-    /*
     public function defaultValidate($request, string $window_code)
     {
         // TODO: token 인증 변경 필요
@@ -69,24 +67,6 @@ class BillKeyController extends Controller
         }
         else
             return [$result, '', null, null];
-    }
-    */
-    
-    public function defaultValidate($request)
-    {
-        // TODO: token 인증 변경 필요
-        $result = 0;
-        // [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
-        if($result === 0)
-        {
-            $pay_module = PaymentModule::where('id', $request['pmod_id'])->first();
-            if($pay_module)
-                return [0, '', $pay_module];
-            else
-                return [1999, '결제모듈이 존재하지 않습니다.', null];
-        }
-        else
-            return [$result, '', null];
     }
 
     public function billKeyValidate($request, string $window_code, int $id)
@@ -167,7 +147,6 @@ class BillKeyController extends Controller
      *
      * 특정 휴대폰번호로 매핑된 빌키정보들을 조회합니다.<br><b>본인인증 작업이 전처리로 요구됩니다.</b>
      */
-    /*
     public function store(BillKeyCreateRequest $request, string $window_code)
     {
         [$result, $msg, $pay_window, $pay_module] = $this->defaultValidate($request, $window_code);
@@ -182,32 +161,6 @@ class BillKeyController extends Controller
                 return $this->response(1, $res['body']);
             else
                 return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);    
-        }
-        else if($result === 951)
-            return $this->response(951);
-        else
-            return $this->extendResponse(1999, $msg);
-    }
-    */
-    
-    public function store(BillKeyCreateRequest $request)
-    {
-        [$result, $msg, $pay_module] = $this->defaultValidate($request);
-        if($result === 0)
-        {
-            $data = $request->validated();
-            $data['mid'] = $pay_module->mid;
-            $data['pmod_id'] = $pay_module->id;
-            $data['pay_key'] = $pay_module->pay_key;
-            Log::info('test', $data);
-            $service       = app(\App\Http\Controllers\V2\V2BillController::class);
-            $response = $service->handleBillKeyCreate($data);
-
-            if ($response['success']) {
-                return $this->response(1, $response['result']);
-            } else {
-                return $this->apiResponse($response['code'], $response['msg']);
-            }
         }
         else if($result === 951)
             return $this->response(951);

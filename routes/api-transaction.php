@@ -6,26 +6,13 @@ use App\Http\Controllers\Manager\Transaction\TransactionController;
 use App\Http\Controllers\Manager\Transaction\TransactionSummaryController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateTransactionController;
 
-use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
-use App\Http\Controllers\Log\MchtSettleHistoryController;
-use App\Http\Controllers\Log\SalesSettleHistoryController;
 use App\Http\Controllers\Log\DangerTransController;
 use App\Http\Controllers\Log\FailTransController;
-
-use App\Http\Controllers\Manager\Settle\MerchandiseController as MchtSettleController;
-use App\Http\Controllers\Manager\Settle\SalesforceController as SalesSettleController;
-use App\Http\Controllers\Manager\Settle\RepMerchandiseController;
-use App\Http\Controllers\Manager\Settle\CancelDepositController;
-
-use App\Http\Controllers\Manager\Merchandise\ShoppingMall\ShopController;
-
 
 Route::middleware(['auth.update'])->group(function() {
     Route::prefix('transactions')->group(function() {          
         Route::middleware(['is.operate'])->group(function() {
             Route::middleware(['is.edit.able'])->group(function() {   
-                Route::post('settle/merchandises/representative-settle', [RepMerchandiseController::class, 'settlement']);
-
                 Route::prefix('batch-updaters')->group(function() {
                     Route::delete('remove', [BatchUpdateTransactionController::class, 'batchRemove']);
                     Route::post('change-settle-date', [BatchUpdateTransactionController::class, 'changeSettleDate']);
@@ -39,30 +26,6 @@ Route::middleware(['auth.update'])->group(function() {
                     Route::post('remove-deposit-fee', [BatchUpdateTransactionController::class, 'removeDepositFee']);
                 });
             });
-            Route::prefix('settle-histories')->group(function() {
-                Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
-                Route::get('difference/chart', [DifferenceSettlementHistoryController::class, 'chart']);
-                Route::post('difference/retry', [DifferenceSettlementHistoryController::class, 'retry']);
-
-                Route::middleware(['is.edit.able'])->group(function() {
-                    Route::post('merchandises/batch', [MchtSettleHistoryController::class, 'batch']);
-                    Route::post('merchandises/batch-link-account', [MchtSettleHistoryController::class, 'batchLinkAccount']);
-                    Route::post('merchandises/batch-offset-process', [MchtSettleHistoryController::class, 'batchOffsetProcess']);
-                    Route::post('merchandises/{id}/add-deduct', [MchtSettleHistoryController::class, 'addDeduct']);
-                    Route::post('merchandises/{id}/link-account', [MchtSettleHistoryController::class, 'linkAccount']);
-                    Route::post('merchandises/{id}/deposit', [MchtSettleHistoryController::class, 'setDeposit']);
-                    Route::post('merchandises/batch-deposit', [MchtSettleHistoryController::class, 'setBatchDeposit']);                        
-        
-                    Route::post('salesforces/batch', [SalesSettleHistoryController::class, 'batch']);
-                    Route::post('salesforces/batch-link-account', [SalesSettleHistoryController::class, 'batchLinkAccount']);
-                    Route::post('salesforces/batch-offset-process', [SalesSettleHistoryController::class, 'batchOffsetProcess']);
-                    Route::post('salesforces/{id}/add-deduct', [SalesSettleHistoryController::class, 'addDeduct']);
-                    Route::post('salesforces/{id}/link-account', [SalesSettleHistoryController::class, 'linkAccount']);
-                    Route::post('salesforces/{id}/deposit', [SalesSettleHistoryController::class, 'setDeposit']);
-                    Route::post('salesforces/batch-deposit', [SalesSettleHistoryController::class, 'setBatchDeposit']);
-                });
-            });
-            Route::post('settle/merchandises/deposit-validate', [MchtSettleController::class, 'depositValidate']);
         });
 
         Route::post('cancel', [TransactionController::class, 'cancel']);
@@ -72,36 +35,11 @@ Route::middleware(['auth.update'])->group(function() {
         Route::get('summary/chart', [TransactionSummaryController::class, 'chart']);
         Route::get('summary', [TransactionSummaryController::class, 'index']);
         Route::get('dangers', [DangerTransController::class, 'index']);
-        Route::get('orders', [ShopController::class, 'order']);
         
         Route::delete('dangers/{id}', [DangerTransController::class, 'destroy']);
         Route::post('dangers/{id}/checked', [DangerTransController::class, 'checked']);
         Route::post('dangers/batch-checked', [DangerTransController::class, 'batchChecked']);            
         
-        Route::prefix('settle')->group(function() {            
-            Route::prefix('merchandises')->group(function() {
-                #Route::get('/test', [MchtSettleController::class, 'test']);
-                Route::get('/', [MchtSettleController::class, 'index']);
-                Route::get('/chart', [MchtSettleController::class, 'chart']);
-                Route::post('/deduct', [MchtSettleController::class, 'deduct']);
-                Route::get('/part', [MchtSettleController::class, 'part']);
-                Route::get('/part/chart', [MchtSettleController::class, 'partChart']);
-                Route::apiResource('cancel-deposits', CancelDepositController::class);
-            });
-            Route::prefix('salesforces')->group(function() {
-                Route::get('/', [SalesSettleController::class, 'index']);
-                Route::get('/chart', [SalesSettleController::class, 'chart']);
-                Route::post('/deduct', [SalesSettleController::class, 'deduct']);
-                Route::get('/part', [SalesSettleController::class, 'part']);
-                Route::get('/part/chart', [SalesSettleController::class, 'partChart']);
-            });
-        });
-        Route::prefix('settle-histories')->group(function() {
-            Route::get('merchandises/chart', [MchtSettleHistoryController::class, 'chart']);
-            Route::get('salesforces/chart', [SalesSettleHistoryController::class, 'chart']);
-            Route::apiResource('merchandises', MchtSettleHistoryController::class);
-            Route::apiResource('salesforces', SalesSettleHistoryController::class);
-        });
     });
     Route::apiResource('transactions', TransactionController::class);
 });

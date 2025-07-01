@@ -1,12 +1,9 @@
 <?php
 namespace App\Http\Controllers\Option\Withdraw;
 
-use App\Http\Controllers\Option\Withdraw\CMSTransactionLimitValidate;
-
 use App\Models\Service\CMSTransactionBooks;
-use App\Models\Service\CMSTransaction;
 
-class CMSTransactionBookValidate extends CMSTransactionLimitValidate
+class CMSTransactionBookValidate
 {
     static public function updateWithdraw($last_id, $result_code, $message)
     {

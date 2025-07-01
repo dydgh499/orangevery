@@ -95,33 +95,6 @@ class ActivityHistoryContoller extends Controller
     public function target(Request $request, $target_id)
     {
         $request->validate(['history_target' => 'required']);
-        $sales_able_targets = ['가맹점', '영업라인', '영업라인 수수료율', '가맹점 수수료율' , '결제모듈', '노티 URL'];
-        $mcht_able_targets = ['가맹점', '가맹점 수수료율' , '결제모듈', '노티 URL'];
-        $gmid_able_targets = ['가맹점', '가맹점 수수료율' , '결제모듈', '노티 URL'];
-        //history_target 검증
-        if(Ablilty::isSalesforce($request) && in_array($request->history_target, $sales_able_targets) === false)
-            return $this->response(951);
-        if(Ablilty::isMerchandise($request) && in_array($request->history_target, $mcht_able_targets) === false)
-            return $this->response(951);
-        if(Ablilty::isGmid($request) && in_array($request->history_target, $gmid_able_targets) === false)
-            return $this->response(951);
-
-        $mcht_targets = ['가맹점', '가맹점 수수료율', '영업라인 수수료율'];
-        if((Ablilty::isSalesforce($request) || Ablilty::isGmid($request)) && in_array($request->history_target, $mcht_targets))
-        {   // 소속 가맹점 검증
-            if(Ablilty::isUnderMerchandise($request, $target_id) === false)
-                return $this->response(951);
-        }
-        if(Ablilty::isMerchandise($request) && in_array($request->history_target, $mcht_targets))
-        {   // 가맹점 본인 검증
-            if(Ablilty::isMyMerchandise($request, $target_id) === false)
-                return $this->response(951);
-        }
-        if(Ablilty::isSalesforce($request) && $request->history_target === '영업라인')
-        {   // 소속 영업라인 검증
-            if(Ablilty::isUnderSalesforce($request, $target_id) === false && Ablilty::isMySalesforce($request, $target_id) === false)
-                return $this->response(951);
-        }
             
         $content = ActivityHistoryViewer::getDetailSelect($request);
         foreach($content as $data)

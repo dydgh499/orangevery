@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('bill_key')->default('')->comment('BILL KEY');
             $table->string('ori_bill_key')->default('')->comment('결제 KEY');
             $table->timestamps();
+            $table->string('nick_name', 50)->nullable()->comment('별칭');
         });
     }
 

@@ -17,7 +17,6 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->tinyInteger('pg_type')->comment('PG사명(1,2,3,4,5 ...)');
-            $table->boolean('settle_type')->default(0)->comment('정산타입(0=주말포함, 1=주말제외)');
             $table->string('pg_name')->comment('PG사명');
             $table->string('rep_name')->comment('대표자명');
             $table->string('company_name')->comment('회사명');
@@ -26,6 +25,11 @@ return new class extends Migration
             $table->string('addr', 200)->nullable()->comment('사업지 주소');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
+            $table->string('p_mid', 10)->default('')->comment('PMID');
+            $table->string('mid', 10)->default('')->comment('mid');
+            $table->string('api_key', 100)->default('')->comment('api_key');
+            $table->string('sub_key', 100)->default('')->comment('sub_key');
+            $table->tinyInteger('round_type')->default(0)->comment('정산금 계산방식(0=반올림, 1=올림, 2=내림)');
         });
     }
 

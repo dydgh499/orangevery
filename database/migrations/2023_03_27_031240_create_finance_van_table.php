@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->tinyInteger('finance_company_num')->nullable()->comment('금융 VAN사 ID');
             $table->tinyInteger('balance_status')->default(5)->comment('잔고 상태(0=잔고없음, 5=충분함)');
-            $table->float('dev_fee', 6, 5)->default(0)->comment('개발사 수수료');
             $table->string('api_key', 50)->nullable()->comment('API_KEY');
             $table->string('sub_key', 80)->nullable()->comment('SUB KEY');            
             $table->string('enc_key', 80)->nullable()->comment('ENC KEY');
@@ -31,6 +30,8 @@ return new class extends Migration
             $table->string('withdraw_acct_num', 20)->nullable()->comment('출금 통장 번호');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
+            $table->boolean('is_agency_van')->default(false)->comment('지급대행 모듈 사용여부');
+            $table->boolean('deposit_type')->default(false)->comment('예금주 타입');
         });
     }
 

@@ -10,7 +10,6 @@ use App\Http\Traits\StoresTrait;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Manager\CodeGenerator\TidGenerator;
 use App\Http\Controllers\Manager\CodeGenerator\MidGenerator;
-use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Controllers\Manager\PaymentModule\VisiableSetter;
 
 use App\Http\Requests\Manager\Merchandise\PayModuleRequest;
@@ -96,7 +95,6 @@ class PaymentModuleController extends Controller
     public function index(IndexRequest $request)
     {
         $cols = ['payment_modules.*'];
-        //$cols = UnderSalesforce::getViewableSalesCols($request, $cols);
 
         $query = $this->commonSelect($request);
         $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
