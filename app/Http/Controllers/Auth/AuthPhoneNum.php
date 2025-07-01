@@ -3,7 +3,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Enums\AuthLoginCode;
 use App\Http\Traits\Models\EncryptDataTrait;
-use App\Models\Merchandise;
 use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
 
@@ -78,28 +77,7 @@ class AuthPhoneNum
                 return false;
             else
             {
-                $mcht = Merchandise::where('id', $mcht_id)->first();
-                if($mcht)
-                {
-                    if($mcht->phone_auth_limit_count)
-                    {
-                        [$time_type, $s_tm, $e_tm] = self::payDisableTimeType($mcht->phone_auth_limit_s_tm, $mcht->phone_auth_limit_e_tm);
-                        if($time_type > 0)
-                        {
-                            $end_time = $e_tm->diffInSeconds(Carbon::now());
-                            $try_count = self::countGet($mcht_id, $phone_num);                            
-                            self::countSet($mcht_id, $phone_num, $try_count, $end_time);
-
-                            if($mcht->phone_auth_limit_count < $try_count)
-                            {
-                                self::limitSet($mcht_id, $phone_num, $end_time);
-                                return false;
-                            }
-                            else
-                                return true;
-                        }
-                    }
-                }
+                return true;
             }
         }
         return true;

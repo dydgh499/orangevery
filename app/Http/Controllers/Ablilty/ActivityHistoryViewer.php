@@ -73,19 +73,6 @@ class ActivityHistoryViewer
         return self::commonSelect($query, $request);
     }
 
-    static public function salesforceSelect($request)
-    {
-        $search = $request->input('search', '');
-        $query  = Salesforce::join('activity_histories', 'salesforces.id', '=', 'activity_histories.user_id')
-            ->where('activity_histories.level', '>=', 13)
-            ->where('activity_histories.level', '<=', 30)
-            ->where('activity_histories.brand_id', $request->user()->brand_id);
-
-        if($search !== '')
-            $query = $query->where('salesforces.sales_name', 'like', "%$search%");
-        return self::commonSelect($query, $request);
-    }
-
     static public function getDetailSelect($request)
     {
         $activity_cols = [
@@ -101,21 +88,15 @@ class ActivityHistoryViewer
         $oper_cols = [
             "operators.nick_name",
         ];
-        $sales_cols = [
-            DB::raw("salesforces.sales_name as nick_name"),
-        ];
         if($request->level)
         {
             if((int)$request->level >= 35)
                 $query = self::operatorSelect($request)->orderBy('created_at')->get(array_merge($activity_cols, $oper_cols));
-            else
-                $query = self::salesforceSelect($request)->orderBy('created_at')->get(array_merge($activity_cols, $sales_cols));
         }
         else
         {
             $oper_query = self::operatorSelect($request)->select(array_merge($activity_cols, $oper_cols));
-            $sales_query = self::salesforceSelect($request)->select(array_merge($activity_cols, $sales_cols));
-            $query = $oper_query->unionAll($sales_query)->orderBy('created_at')->get();
+            $query = $oper_query->orderBy('created_at')->get();
         }
         return $query;
     }
@@ -134,13 +115,8 @@ class ActivityHistoryViewer
             "operators.nick_name",
             'operators.profile_img',
         ];
-        $sales_cols = [
-            DB::raw("salesforces.sales_name as nick_name"),
-            'salesforces.profile_img',
-        ];
         $oper_query = self::operatorSelect($request)->select(array_merge($activity_cols, $oper_cols));
-        $sales_query = self::salesforceSelect($request)->select(array_merge($activity_cols, $sales_cols));
-        return $oper_query->unionAll($sales_query)->orderBy('created_at', 'desc')->limit(20)->get();
+        return $oper_query->orderBy('created_at', 'desc')->limit(20)->get();
     }
 
     static private function authVisiable($request, $history_detail)
@@ -153,46 +129,7 @@ class ActivityHistoryViewer
             return $history_detail;
         };
 
-        if($request->history_target === '영업라인')
-        {
-            if(Ablilty::isOperator($request) === false)
-            {
-                unset($history_detail['dns']);
-                unset($history_detail['theme_css']);
-                unset($history_detail['logo_img']);
-                unset($history_detail['favicon_img']);
-                unset($history_detail['og_img']);
-                unset($history_detail['login_img']);
-                unset($history_detail['og_description']);
-                unset($history_detail['name']);
-            }
-            unset($history_detail['level']);
-        }
-        else if($request->history_target === '가맹점')
-        {
-            if(Ablilty::isSalesforce($request))
-            {
-                $history_detail = $disableImages($history_detail);
-                foreach([13,15,17,20,25,30] as $level)
-                {
-                    if($request->user()->tokenCan($level) === false)
-                    {
-                        $idx = globalLevelByIndex($level);
-                        $key = 'sales'.$idx;
-                        unset($history_detail[$key."_id"]);
-                        unset($history_detail[$key."_fee"]);
-                    }
-                }
-            }
-            if(Ablilty::isOperator($request) === false)
-            {
-                unset($history_detail['phone_auth_limit_s_tm']);
-                unset($history_detail['phone_auth_limit_e_tm']);
-                unset($history_detail['phone_auth_limit_count']);
-                unset($history_detail['use_saleslip_prov']);
-            }
-        }
-        else if($request->history_target === '결제모듈')
+        if($request->history_target === '결제모듈')
         {
             if(Ablilty::isOperator($request) === false)
             {
@@ -209,7 +146,6 @@ class ActivityHistoryViewer
             unset($history_detail['dev_settle_id']);
             unset($history_detail['dev_realtime_fee']);
             unset($history_detail['dev_realtime_settle_amount']);
-
         }
         return $history_detail;
     }
@@ -292,19 +228,6 @@ class ActivityHistoryViewer
 
     static public function userVisiable($request, $data)
     {
-        if(Ablilty::isSalesforce($request))
-        {
-            if($request->user()->level < $data->level)
-            {
-                $data->level = 0;
-                $data->nick_name = '상위';
-            }
-        }
-        if(Ablilty::isMerchandise($request))
-        {
-            $data->level = 0;
-            $data->nick_name = '상위';
-        }
         return $data;
     }
 }

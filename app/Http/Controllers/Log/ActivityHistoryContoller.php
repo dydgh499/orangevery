@@ -49,19 +49,11 @@ class ActivityHistoryContoller extends Controller
             'operators.profile_img',
             'operators.level',
         ]);
-        $sales_cols = array_merge(ActivityHistoryViewer::getSelectCols(), [
-            DB::raw("salesforces.sales_name as nick_name"),
-            'salesforces.profile_img',
-            'salesforces.level',
-        ]);
         $oper_query = ActivityHistoryViewer::operatorSelect($request)
                 ->groupBy('activity_histories.user_id')
                 ->select($oper_cols);
-        $sales_query = ActivityHistoryViewer::salesforceSelect($request)
-                ->groupBy('activity_histories.user_id')
-                ->select($sales_cols);
 
-        $query = $oper_query->unionAll($sales_query);
+        $query = $oper_query;
         $total = (clone $query)->get('user_id')->count();
         $content = $query
                     ->orderBy('activity_e_at', 'desc')

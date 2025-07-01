@@ -23,7 +23,6 @@ class FinanceRequest extends FormRequest
     ];
 
     public $integer_keys = [
-        'dev_fee',
         'is_agency_van',
         'min_balance_limit',
         'use_kakao_auth',
@@ -39,7 +38,6 @@ class FinanceRequest extends FormRequest
     {
         $sub = [
             'finance_company_num' => 'required',
-            'dev_fee' => 'required|numeric',
             'min_balance_limit'=>'required',
             'corp_name'=>'required',
             'nick_name'=>'required',
@@ -60,7 +58,6 @@ class FinanceRequest extends FormRequest
     public function data()
     {
         $data = array_merge($this->getParmasBaseKey(), $this->getParmasBaseKeyV2($this->integer_keys, 0));
-        $data['dev_fee'] = $data['dev_fee']/100;
         $data['brand_id'] = $this->user()->brand_id;        
         return $data;
     }

@@ -49,11 +49,7 @@ class LogRoute
         if(isset($user))
         {
             $logs['login']['user_name'] = $user->user_name;
-            if(Ablilty::isMerchandise($request))
-                $logs['login']['level'] = 10;
-            else if(Ablilty::isSalesforce($request))
-                $logs['login']['level'] = $user->level;
-            else if(Ablilty::isOperator($request))
+            if(Ablilty::isOperator($request))
                 $logs['login']['level'] = $user->level;
         }
         $logs['input'] = $request->all();

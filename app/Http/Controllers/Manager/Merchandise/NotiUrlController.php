@@ -66,7 +66,6 @@ class NotiUrlController extends Controller
                         ->orWhere('payment_modules.note', 'like', "%$search%");
                 });
                 
-        $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');        
         if($request->mcht_id)
             $query = $query->where('noti_urls.mcht_id', $request->mcht_id);

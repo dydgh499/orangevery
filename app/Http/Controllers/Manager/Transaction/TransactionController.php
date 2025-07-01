@@ -7,9 +7,7 @@ use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
-use App\Models\Salesforce;
 use App\Models\Transaction;
-use App\Models\Merchandise\NotiUrl;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
@@ -19,18 +17,12 @@ use App\Http\Requests\Manager\Transaction\HandPayRequest;
 use App\Http\Requests\Manager\Transaction\PayCancelRequest;
 
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
-use App\Http\Controllers\Manager\Transaction\NotiRetrySender;
-use App\Http\Controllers\Manager\Transaction\SettleDateCalculator;
-use App\Http\Controllers\Manager\Transaction\SettleAmountCalculator;
 use App\Http\Controllers\Manager\Transaction\TransactionFilter;
 use App\Http\Controllers\Manager\Transaction\TransactionAPI;
 
-use App\Http\Controllers\Utils\Comm;
 use App\Http\Controllers\Utils\ChartFormat;
 
 use App\Http\Controllers\Manager\Service\BrandInfo;
-use Carbon\Carbon;
-use App\Enums\DevSettleType;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -53,26 +45,12 @@ class TransactionController extends Controller
         $this->transactions = $transactions;
         $this->target = '매출';
         $this->cols = [
-            'merchandises.mcht_name', 'merchandises.user_name', 'merchandises.nick_name', 'merchandises.contact_num',
-            'merchandises.addr', 'merchandises.resident_num', 'merchandises.business_num', 'merchandises.tax_category_type',
-            'merchandises.use_saleslip_prov',
-            'merchandises.use_noti',
             'transactions.*',
             'payment_modules.note', 'payment_modules.use_realtime_deposit', 
             'payment_modules.cxl_type', 'payment_modules.va_id',
             DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
             DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
         ];
-    }
-
-    public function setTransactionData($level)
-    {
-        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($level);
-        if($target_settle_amount === 'dev_settle_amount')
-            $profit = DB::raw("($target_settle_amount + dev_realtime_settle_amount) AS profit");
-        else
-            $profit = "$target_settle_amount AS profit";
-        $this->cols[] = $profit;
     }
 
     /**
@@ -99,7 +77,6 @@ class TransactionController extends Controller
     public function index(IndexRequest $request)
     {
         $b_info = BrandInfo::getBrandById($request->user()->brand_id);
-        $this->setTransactionData($request->level);
 
         $with  = ['cancelDeposits'];
         $query = TransactionFilter::common($request);
@@ -112,18 +89,7 @@ class TransactionController extends Controller
         if(count($with))
             $query = $query->with($with);
         $data = TransactionFilter::pagenation($request, $query, $this->cols, 'transactions.trx_at', false);
-        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids);
-        $data['content'] = globalMappingSales($salesforces, $data['content']);
-        
-        foreach($data['content'] as $content)
-        {
-            $content = UnderSalesforce::setViewableSalesInfos($request, $content);
-            $content->append(['resident_num_front', 'resident_num_back']);
-            $content->setHidden(['resident_num']);
-        }
         $data = TransactionAPI::getNotiStatus($b_info, $data);        
-
 
         return $this->response(0, $data);
     }
@@ -153,15 +119,6 @@ class TransactionController extends Controller
         if($data)
         {
             $data->ps_fee = number_format($data->ps_fee * 100, 3);
-            $data->mcht_fee = number_format($data->mcht_fee * 100, 3);
-            $data->hold_fee = number_format($data->hold_fee * 100, 3);
-            $data->sales5_fee = number_format($data->sales5_fee * 100, 3);
-            $data->sales4_fee = number_format($data->sales4_fee * 100, 3);
-            $data->sales3_fee = number_format($data->sales3_fee * 100, 3);
-            $data->sales2_fee = number_format($data->sales2_fee * 100, 3);
-            $data->sales1_fee = number_format($data->sales1_fee * 100, 3);
-            $data->sales0_fee = number_format($data->sales0_fee * 100, 3);
-            $data->dev_fee    = number_format($data->dev_fee * 100, 3);
         }
         else
             return $this->response(1000);
@@ -182,8 +139,6 @@ class TransactionController extends Controller
             $query = $this->transactions->where('id', $id);
             $tran = $query->first();
             $data = $request->data();
-            $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], ($data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt']), $data['mcht_settle_type'], 1);
-            [$data] = SettleAmountCalculator::setSettleAmount([$data]);
 
             $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'trx_id');
             if($row)
@@ -259,25 +214,5 @@ class TransactionController extends Controller
             return $this->response(1, $res['body']);
         else
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);
-    }
-
-    /*
-     * 가맹점별 매출집계
-     */
-    public function mchtGroups(Request $request)
-    {
-        $cols = [
-            'merchandises.id', 'merchandises.mcht_name', 'merchandises.resident_num', 
-            'merchandises.business_num', 'merchandises.nick_name', 'merchandises.addr', 
-            'merchandises.sector', 'merchandises.custom_id',
-        ];
-        $cols = array_merge($cols, TransactionFilter::getTotalCols('mcht_settle_amount'));
-
-        $query = TransactionFilter::common($request);
-        $grouped = $query
-                ->groupBy('merchandises.id')
-                ->orderBy('merchandises.mcht_name')
-                ->get($cols);
-        return $grouped;
     }
 }

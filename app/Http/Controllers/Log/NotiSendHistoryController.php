@@ -70,7 +70,6 @@ class NotiSendHistoryController extends Controller
             ->where('noti_send_histories.is_delete', false);
 
         $query = globalPGFilter($query, $request, 'transactions');
-        $query = globalSalesFilter($query, $request, 'transactions');
         $query = globalAuthFilter($query, $request, 'transactions');
         
         $query = $query->where(function($query) use ($search) {

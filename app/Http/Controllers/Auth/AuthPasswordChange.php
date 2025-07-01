@@ -102,12 +102,6 @@ class AuthPasswordChange
                 $user->save();
                 $result['user'] = $user;
                 AuthAccountLock::initPasswordWrongCounter($result['user']);
-                if(Login::isMerchant($result))
-                    $result = Login::setMerchant($result);
-                else if(Login::isRecommenderSales($result))
-                    $result = Login::setRecommenderSales($result);
-                else if(Login::isGmid($result))
-                    $result = Login::setGmid($result);
             }
         }
         else

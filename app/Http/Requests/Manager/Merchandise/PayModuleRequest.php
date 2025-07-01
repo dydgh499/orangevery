@@ -67,13 +67,6 @@ class PayModuleRequest extends FormRequest
     {
         if(Ablilty::isOperator($this))
             return true;
-        else if(Ablilty::isSalesforce($this))
-        {
-            if($this->user()->brand_id === 30)
-                return true;
-            else
-                return Ablilty::salesAuthValidate($this, $this->id);
-        }
         else
             return false;
     }

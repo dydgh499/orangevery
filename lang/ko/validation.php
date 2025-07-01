@@ -300,7 +300,6 @@ return [
         //finance van
         'receive_phone' => '수신자 전화번호',
         'sender_phone' => '발신자 전화번호',
-        'dev_fee' => '개발사 수수료',
         'min_balance_limit' => '유보금미달알림 하한금',
         'corp_name' => '법인명',
         'corp_code' => '법인코드',

@@ -88,13 +88,6 @@ class Login extends LoginValidate
 
         if($result['user'])
         {
-            if(self::isMerchant($result))
-                $result = self::setMerchant($result);
-            else if(self::isRecommenderSales($result))
-                $result = self::setRecommenderSales($result);
-            else if(self::isGmid($result))
-                $result = self::setGmid($result);
-
             if(self::isLockAccount($result))
                 $result['result'] = AuthLoginCode::LOCK_ACCOUNT->value;
             else if(self::isCorrectPassword($result, $request->user_pw))

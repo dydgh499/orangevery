@@ -40,7 +40,6 @@ class FailTransController extends Controller
             ->where('merchandises.mcht_name', 'like', "%$search%");
 
         $query = globalPGFilter($query, $request, 'payment_modules');
-        $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
         return $query;
     }

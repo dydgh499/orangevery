@@ -5,18 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Service\Holiday;
-use App\Models\Salesforce;
 use App\Models\Merchandise;
 use App\Models\CancelDeposit;
 use App\Models\Log\NotiSendHistory;
-use App\Models\Withdraws\VirtualAccountHistory;
 
-use Illuminate\Support\Facades\Redis;
 use App\Http\Traits\Models\AttributeTrait;
-use Carbon\Carbon;
-
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Transaction extends Model
 {
@@ -24,24 +17,6 @@ class Transaction extends Model
     protected   $table      = 'transactions';
     protected   $primaryKey = 'id';
     protected   $appends    = ['trx_amount', 'hold_amount', 'trx_dttm', 'cxl_dttm', 'total_trx_amount'];
-    protected   $hidden     = [
-        'sales0', 'sales1', 'sales2', 'sales3', 'sales4', 'sales5',
-        'brand_settle_amount',
-        'dev_settle_amount',
-        'dev_settle_id',
-        'sales0_settle_amount',
-        'sales0_settle_id',
-        'sales1_settle_amount',
-        'sales1_settle_id',
-        'sales2_settle_amount',
-        'sales2_settle_id',
-        'sales3_settle_amount',
-        'sales3_settle_id',
-        'sales4_settle_amount',
-        'sales4_settle_id',
-        'sales5_settle_amount',
-        'sales5_settle_id',        
-    ];
     protected   $guarded    = [];
     protected   $feeFormatting = false;
 
@@ -49,34 +24,8 @@ class Transaction extends Model
     {
         $query = $query->where('transactions.brand_id', request()->user()->brand_id);
         $query = globalPGFilter($query, request(), 'transactions');
-        $query = globalSalesFilter($query, request(), 'transactions');
         $query = globalAuthFilter($query, request(), 'transactions');
         return $query;
-    }
-
-    static public function getHolidays($brand_id, $s_dt, $e_dt)
-    {
-        $key_name = "holidays-".$brand_id."-$s_dt-$e_dt";
-        $holidays = Redis::get($key_name);
-        if($holidays == null)
-        {
-            $rest_dts = Holiday::where('brand_id', $brand_id)
-                ->where("rest_dt", ">=", $s_dt)
-                ->where("rest_dt", "<=", $e_dt)
-                ->pluck('rest_dt')->all();
-            if($rest_dts)
-            {
-                Redis::set($key_name, json_encode($rest_dts), 'EX', 300);
-                $holidays = json_encode($rest_dts);
-            }
-            else
-                $holidays = "";
-        }
-
-        $holidays = str_replace("[", "", $holidays);
-        $holidays = str_replace("]", "", $holidays);
-        $holidays = str_replace('"', "", $holidays);
-        return $holidays;
     }
 
     // 정산 안한 것들 조회
@@ -135,12 +84,6 @@ class Transaction extends Model
             return round($this->amount * $this->hold_fee);
         else
             return 0;        
-    }
-    
-    public function withdrawHistories()
-    {
-        return $this->hasMany(VirtualAccountHistory::class, 'trx_id', 'trx_id')
-            ->select();
     }
 
     public function notiSendHistories()

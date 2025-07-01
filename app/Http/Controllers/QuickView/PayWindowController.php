@@ -6,7 +6,6 @@ use App\Models\Transaction;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Ablilty\PayWindowInterface;
-use App\Http\Controllers\Ablilty\ShoppingMallWindowInterface;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 
@@ -93,8 +92,7 @@ class PayWindowController extends Controller
             {
                 if($request->pc != null)
                     $pay_module['params'] = PayWindowInterface::getPayParamsCode($request->pc);
-                if($request->sw != null && $request->pi != null)
-                    $pay_module['params'] = ShoppingMallWindowInterface::getPayWindowProductInfo($request->sw, $request->pi);
+
                 return $this->response(0, $pay_module);
             }
             else
@@ -144,13 +142,6 @@ class PayWindowController extends Controller
                 ->where('transactions.ord_num', $ord_num)
                 ->where('transactions.is_cancel', $request->is_cancel)
                 ->first([
-                    'merchandises.use_saleslip_prov',
-                    'merchandises.tax_category_type',
-                    'merchandises.contact_num',
-                    'merchandises.mcht_name',
-                    'merchandises.business_num',
-                    'merchandises.nick_name',
-                    'merchandises.addr',
                     'transactions.*',
                 ]);
             if($data)

@@ -35,17 +35,6 @@ class EditAbleWorkTime
         }
     }
 
-    static private function isExceptionCustom()
-    {
-        // 브라이트픽스 총판 예외 : kim5150, 2024-09-09부터 적용
-        if(Ablilty::isSalesforce(request()) && request()->user()->id === 9393 && in_array(request()->ip(), ['58.225.69.144', '221.140.168.13']))
-            return true;
-        else if(Ablilty::isDevOffice(request()) && in_array(request()->user()->brand_id, [18, 35]))
-            return true;
-        else
-            return false;
-    }
-
     static private function isExceptionOperator()
     {
         $exception_times = self::get(request()->user()->brand_id);
@@ -70,8 +59,6 @@ class EditAbleWorkTime
             else if(request()->user()->brand_id === 30)
                 return true;
             else if(self::isExceptionOperator())
-                return true;
-            else if(self::isExceptionCustom())
                 return true;
             else
             {

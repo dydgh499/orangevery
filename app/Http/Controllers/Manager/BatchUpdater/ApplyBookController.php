@@ -86,15 +86,11 @@ class ApplyBookController extends Controller
             sleep(5);
 
         $apply_at = Carbon::now()->format('Y-m-d H:00:00');
-        $sales_result = self::updateApplyWaitDatas(new SalesforceColumnApplyBook, new Salesforce, 'sales_id', $apply_at);
-        $mcht_result = self::updateApplyWaitDatas(new MerchandiseColumnApplyBook, new Merchandise, 'mcht_id', $apply_at);
         $pmod_result = self::updateApplyWaitDatas(new PaymentModuleColumnApplyBook, new PaymentModule, 'pmod_id', $apply_at);
         $noti_result = self::updateApplyWaitDatas(new NotiUrlColumnApplyBook, new NotiUrl, 'noti_id', $apply_at);
 
         
         logging([
-            'salesforces'       => $sales_result,
-            'merchandises'      => $mcht_result,
             'payment_modules'   => $pmod_result,
             'noti_urls'         => $noti_result,
         ], 'apply-book-column-scheduler');
@@ -104,33 +100,7 @@ class ApplyBookController extends Controller
     {
         $search = $request->input('search', '');
         $dest_type = (int)$request->dest_type;
-        if($dest_type === 0)
-        {
-            $query = SalesforceColumnApplyBook::join('salesforces', 'salesforce_column_apply_books.sales_id', '=', 'salesforces.id')
-                ->where(function ($query) use ($search) {
-                    return $query->where('salesforces.sales_name', 'like', "%$search%")
-                        ->orWhere('salesforce_column_apply_books.apply_data', 'like', "%$search%");
-                });
-            $parent = 'salesforce_column_apply_books.';
-            $cols = [
-                $parent."*",
-                "salesforces.sales_name as dest_name"
-            ];
-        }
-        else if($dest_type === 1)
-        {
-            $query = MerchandiseColumnApplyBook::join('merchandises', 'merchandise_column_apply_books.mcht_id', '=', 'merchandises.id')
-                ->where(function ($query) use ($search) {
-                    return $query->where('merchandises.mcht_name', 'like', "%$search%")
-                        ->orWhere('merchandise_column_apply_books.apply_data', 'like', "%$search%");
-                });
-            $parent = 'merchandise_column_apply_books.';
-            $cols = [
-                $parent."*",
-                "merchandises.mcht_name as dest_name"
-            ];
-        }
-        else if($dest_type === 2)
+        if($dest_type === 2)
         {
             $query = PaymentModuleColumnApplyBook::join('payment_modules', 'payment_module_column_apply_books.pmod_id', '=', 'payment_modules.id')
                 ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
@@ -190,11 +160,7 @@ class ApplyBookController extends Controller
      */
     public function destroy(Request $request, string $dest_type, int $id)
     {
-        if($dest_type === 'salesforces')
-            $query = new SalesforceColumnApplyBook;
-        else if($dest_type === 'merchandises')
-            $query = new MerchandiseColumnApplyBook;
-        else if($dest_type === 'payment_modules')
+        if($dest_type === 'payment_modules')
             $query = new PaymentModuleColumnApplyBook;
         else if($dest_type === 'noti_urls')
             $query = new NotiUrlColumnApplyBook;

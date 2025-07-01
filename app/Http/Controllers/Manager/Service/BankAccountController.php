@@ -3,23 +3,12 @@
 namespace App\Http\Controllers\Manager\Service;
 
 use App\Models\BankAccount;
-use App\Models\Service\FinanceVan;
-use App\Models\Service\HeadOfficeAccount;
-use App\Models\Service\CMSTransaction;
-use App\Models\Log\SettleHistoryMerchandiseDeposit;
-use App\Models\Log\SettleHistorySalesforceDeposit;
-
 use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Auth\AuthPhoneNum;
-use App\Http\Controllers\Ablilty\Ablilty;
-use App\Http\Controllers\Utils\Comm;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 /**
  * @group CMS Transaciton API

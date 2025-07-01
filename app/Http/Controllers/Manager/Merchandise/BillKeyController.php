@@ -109,11 +109,6 @@ class BillKeyController extends Controller
                 return $query->where('bill_keys.card_num', 'like', "%".$search."%");
             });
         }
-        if(Ablilty::isMerchandise($request))
-            $query = $query->where('merchandises.id', $request->user()->id);
-        else if(Ablilty::isSalesforce($request))
-            return $this->response(951);
-        else
             $cols[] = 'payment_modules.pg_id';
 
         $data = $this->getIndexData($request, $query, 'bill_keys.id', $cols, 'bill_keys.created_at');

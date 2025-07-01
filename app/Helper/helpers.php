@@ -29,22 +29,7 @@
     function globalAuthFilter($query, $request, $parent_table='')
     {
         $table = $parent_table !== "" ? $parent_table."." : "";
-        if(Ablilty::isMerchandise($request))
-        {   // 가맹점
-            $col = $parent_table == 'merchandises' ? "id" : 'mcht_id';
-            $query = $query->where($table.$col,  $request->user()->id);
-        }
-        else if(Ablilty::isSalesforce($request))
-        {   // 영업자
-            $idx = globalLevelByIndex($request->user()->level);            
-            $query = $query->where($table."sales".$idx."_id",  $request->user()->id);
-        }
-        else if(Ablilty::isGmid($request))
-        {
-            $col = $parent_table === 'merchandises' ? "id" : 'mcht_id';
-            $query = $query->whereIn($table.$col, GmidInformation::getMchtIds($request->user()->g_mid));
-        }
-        else if(Ablilty::isOperator($request))
+        if(Ablilty::isOperator($request))
         {   // all
 
         }
@@ -62,56 +47,9 @@
             $query = $query->where($table.'ps_id', $request->ps_id);
         if($request->terminal_id)
             $query = $query->where($table.'terminal_id', $request->terminal_id);
-        if($request->settle_type !== null)
-            $query = $query->where($table.'settle_type', $request->settle_type);
-        if($request->mcht_settle_type !== null)
-            $query = $query->where($table.'mcht_settle_type', $request->mcht_settle_type);
         if($request->module_type !== null)
             $query = $query->where($table.'module_type', $request->module_type);
         return $query;
-    }
-
-    function globalSalesFilter($query, $request, $parent_table='')
-    {
-        $table = $parent_table != "" ? $parent_table."." : "";
-        if($request->sales0_id)
-            $query = $query->where($table.'sales0_id', $request->sales0_id);
-        if($request->sales1_id)
-            $query = $query->where($table.'sales1_id', $request->sales1_id);
-        if($request->sales2_id)
-            $query = $query->where($table.'sales2_id', $request->sales2_id);
-        if($request->sales3_id)
-            $query = $query->where($table.'sales3_id', $request->sales3_id);
-        if($request->sales4_id)
-            $query = $query->where($table.'sales4_id', $request->sales4_id);
-        if($request->sales5_id)
-            $query = $query->where($table.'sales5_id', $request->sales5_id);
-        if($request->custom_id)
-            $query = $query->where($table.'custom_id', $request->custom_id);
-
-        return $query;
-    }
-
-    function globalIndexByLevel($index)
-    {
-        switch($index)
-        {
-            case 0:
-                return 13;
-            case 1:
-                return 15;
-            case 2:
-                return 17;
-            case 3:
-                return 20;
-            case 4:
-                return 25;
-            case 5:
-                return 30;
-            default:
-                throw new Exception('알 수 없는 등급2');
-                return "UNKNOWUN";
-        }
     }
 
     function globalLevelByIndex($level)
@@ -140,66 +78,6 @@
                 throw new Exception('알 수 없는 등급3');
                 return "UNKNOWUN";
         }
-    }
-
-    function globalGetUniqueIdsBySalesIds($contents)
-    {
-        return collect($contents)->flatMap(function ($content) {
-            return [
-                $content->sales0_id, $content->sales1_id, $content->sales2_id,
-                $content->sales3_id, $content->sales4_id, $content->sales5_id,
-            ];
-        })->unique();
-    }
-
-    function globalGetSalesByIds($sales_ids, $is_all=true)
-    {
-        $globalGetIndexingByCollection = function($salesforces) {
-            $sales_index_by_ids = [];
-            foreach ($salesforces as $salesforce) {
-                $sales_index_by_ids[$salesforce->id] = $salesforce;
-            }
-            return $sales_index_by_ids;
-        };
-
-        $query = Salesforce::whereIn('id', $sales_ids);
-        if($is_all == false)
-            $query = $query->where('is_delete', false);
-        $salesforces = $query->get(['id', 'sales_name', 'settle_tax_type']);
-        return $globalGetIndexingByCollection($salesforces);
-    }
-
-    function globalMappingSales($sales_index_by_ids, $contents)
-    {
-        $mappingSalesInfo = function($content, $sales_index_by_ids, $sales_id, $idx) {
-            $sales = 'sales'.$idx;
-            if(isset($sales_index_by_ids[$sales_id]))
-            {
-                if(isset($sales_index_by_ids[$sales_id]))
-                {
-                    $content[$sales] = $sales_index_by_ids[$sales_id];
-                    $content[$sales."_name"] = $sales_index_by_ids[$sales_id]->sales_name;    
-                }
-                else
-                    $content[$sales."_name"] = '삭제된 영업자';
-            }
-            else
-            {
-                $content[$sales] = null;
-                $content[$sales."_name"] = '';
-            }
-            return $content;
-        };
-
-        foreach ($contents as $content) {
-            $content = $mappingSalesInfo($content, $sales_index_by_ids, $content->sales0_id, 0);
-            $content = $mappingSalesInfo($content, $sales_index_by_ids, $content->sales1_id, 1);
-            $content = $mappingSalesInfo($content, $sales_index_by_ids, $content->sales2_id, 2);
-            $content = $mappingSalesInfo($content, $sales_index_by_ids, $content->sales3_id, 3);
-            $content = $mappingSalesInfo($content, $sales_index_by_ids, $content->sales4_id, 4);
-            $content = $mappingSalesInfo($content, $sales_index_by_ids, $content->sales5_id, 5);
-        }
-        return $contents;
     }
 
     function logging($data, $msg='test')

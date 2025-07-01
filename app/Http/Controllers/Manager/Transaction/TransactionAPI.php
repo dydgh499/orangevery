@@ -8,9 +8,6 @@ use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 use App\Models\Transaction;
 use App\Models\Merchandise\NotiUrl;
 
-use App\Http\Controllers\Manager\Transaction\SettleDateCalculator;
-use App\Http\Controllers\Manager\Transaction\SettleAmountCalculator;
-
 use App\Http\Controllers\Utils\Comm;
 
 use Illuminate\Database\QueryException;
@@ -98,13 +95,11 @@ class TransactionAPI
             $data['is_cancel']  = 1;
             $data['cxl_seq']    = $cxl_seq; 
 
-            $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], $data['cxl_dt'], $data['mcht_settle_type'], $data['pg_settle_type']);
             $settle_ids = ['mcht_settle_id', 'sales0_settle_id', 'sales1_settle_id', 'sales2_settle_id', 'sales3_settle_id', 'sales4_settle_id', 'sales5_settle_id', 'dev_settle_id'];
             foreach($settle_ids as $settle_id)
             {
                 $data[$settle_id] = null;
             }
-            [$data] = SettleAmountCalculator::setSettleAmount([$data]);
             return [true, '', $data];
         }
     }
@@ -209,21 +204,11 @@ class TransactionAPI
             ->get();
         $i=0;
         $trans = json_decode(json_encode($db_trans), true);
-        $trans = SettleAmountCalculator::setSettleAmount($trans);
         foreach($db_trans as $key => $tran)
         {
             
             $fields = [
                 'brand_settle_amount',
-                'dev_realtime_settle_amount',
-                'dev_settle_amount',
-                'sales5_settle_amount',
-                'sales4_settle_amount',
-                'sales3_settle_amount',
-                'sales2_settle_amount',
-                'sales1_settle_amount',
-                'sales0_settle_amount',
-                'mcht_settle_amount',
             ];
 
             foreach ($fields as $field) 

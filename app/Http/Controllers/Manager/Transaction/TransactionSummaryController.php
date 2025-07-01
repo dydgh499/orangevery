@@ -59,25 +59,10 @@ class TransactionSummaryController extends Controller
             DB::raw("SUM(is_cancel = 0) AS total_appr_count"),
             DB::raw("SUM(is_cancel = 1) AS total_cxl_count"),
         ];
-        if((int)$request->level === 10)
-            $cols[] = 'merchandises.mcht_name as user_name';
 
         $query = TransactionFilter::common($request)->groupBy("transactions.$target_id");
         $data = TransactionFilter::pagenation($request, $query, $cols, "transactions.$target_id", true);
-
-        if((int)$request->level !== 10)
-        {
-            $sales_ids = $data['content']->pluck('user_id')->all();
-            $salesforces = globalGetSalesByIds($sales_ids);
-            foreach($data['content'] as $content)
-            {
-                $content->makeHidden(['total_trx_amount', 'trx_amount', 'trx_dttm', 'hold_amount', 'cxl_dttm']);
-                if(isset($salesforces[$content->user_id]))
-                    $content->user_name = $salesforces[$content->user_id]->sales_name;
-                else
-                    $content->user_name = '삭제된 영업자';
-            }
-        }
+        
         return $this->response(0, $data);
     }
 }

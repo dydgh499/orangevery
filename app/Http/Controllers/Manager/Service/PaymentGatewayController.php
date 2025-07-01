@@ -142,7 +142,7 @@ class PaymentGatewayController extends Controller
         $finance_vans = FinanceVan::where('brand_id', $brand_id)->where('is_delete', false)->get();
         foreach($finance_vans as $finance_van)
         {
-            $finance_van->makeHidden(['deposit_type', 'enc_key', 'iv', 'sub_key', 'api_key', 'corp_code', 'dev_fee', 'brand_id', 'min_balance_limit', 'created_at', 'updated_at']);
+            $finance_van->makeHidden(['deposit_type', 'enc_key', 'iv', 'sub_key', 'api_key', 'corp_code', 'brand_id', 'min_balance_limit', 'created_at', 'updated_at']);
         }
         $data = [
             'pay_gateways' => $this->pay_gateways->where('brand_id', $brand_id)->where('is_delete', false)->get(),

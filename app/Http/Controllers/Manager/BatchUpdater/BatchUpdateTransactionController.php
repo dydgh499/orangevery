@@ -4,26 +4,15 @@ namespace App\Http\Controllers\Manager\BatchUpdater;
 
 use App\Enums\HistoryType;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateController;
-use App\Http\Controllers\Manager\Transaction\TransactionController;
-use App\Http\Controllers\Manager\Transaction\TransactionFilter;
 
 use App\Models\Transaction;
 
-use App\Http\Controllers\Utils\Comm;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
-use App\Models\Brand;
-use App\Http\Controllers\Manager\Service\BrandInfo;
-use App\Http\Controllers\Manager\Transaction\SettleAmountCalculator;
-
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-
 /**
  * @group Transaction-Batch-Updater API
  *
@@ -66,39 +55,6 @@ class BatchUpdateTransactionController extends BatchUpdateController
         }
         else
             $this->wrongTypeAccess();
-    }
-
-    public function removeDepositFee(Request $request)
-    {
-        $this->transactions
-            ->whereIn('id', $request->selected_idxs)
-            ->update(['mcht_settle_fee' => 0]);
-
-        $db_trans = $this->transactions
-            ->whereIn('id', $request->selected_idxs)
-            ->get();
-
-        $trans = json_decode(json_encode($db_trans), true);
-        $trans = SettleAmountCalculator::setSettleAmount($trans);
-        $i=0;
-
-        foreach($db_trans as $tran)
-        {
-            $tran->mcht_settle_amount = $trans[$i]['mcht_settle_amount'];
-            $tran->save();
-            $i++;
-        }
-        return $this->response(0);
-    }
-
-    /*
-     * 정산일 변경
-     */
-    public function changeSettleDate(Request $request)
-    {
-        $settle_dt = Carbon::createFromFormat('Y-m-d', (string)$request->settle_dt)->format('Ymd');
-        $row = $this->getApplyRow($request, ['settle_dt' => $settle_dt]);
-        return $this->batchResponse($row, '매출');
     }
 
     /**
@@ -145,70 +101,5 @@ class BatchUpdateTransactionController extends BatchUpdateController
         $query = $this->transactionBatch($request);
         $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'id', '', HistoryType::DELETE, false);
         return $this->extendResponse($row ? 1: 990, $row ? $row.'개가 삭제되었습니다.' : '삭제된 매출이 존재하지 않습니다.');
-    }
-
-    public function feeApply($db_trans)
-    {
-        $trans = SettleAmountCalculator::setSettleAmount(json_decode(json_encode($db_trans), true));
-        foreach($db_trans as $key => $tran)
-        {
-            $fields = [
-                'brand_settle_amount',
-                'dev_realtime_settle_amount',
-                'dev_settle_amount',
-                'sales5_settle_amount',
-                'sales4_settle_amount',
-                'sales3_settle_amount',
-                'sales2_settle_amount',
-                'sales1_settle_amount',
-                'sales0_settle_amount',
-                'mcht_settle_amount',
-            ];
-
-            foreach ($fields as $field) 
-            {
-                $tran->{$field} = $trans[$key][$field];
-            }
-            $tran->save();
-        }
-        return $db_trans;
-    }
-
-    public function salesFeeApply(Request $request)
-    {
-        $db_trans = $this->transactionBatch($request)->get();
-        $idx  = globalLevelByIndex($request->level);
-
-        $sales_id_field = "sales{$idx}_id";
-        $sales_fee_field = "sales{$idx}_fee";
-        foreach($db_trans as $tran)
-        {
-            $tran->{$sales_id_field} = $request->sales_id;
-            $tran->{$sales_fee_field} = $request->sales_fee / 100;
-        }
-        $db_trans = $this->feeApply($db_trans);
-        return $this->batchResponse(count($db_trans), '매출');
-    }
-
-    public function mchtFeeApply(Request $request)
-    {
-        $db_trans = $this->transactionBatch($request)->get();
-        foreach($db_trans as $tran)
-        {
-            $tran->hold_fee = $request->hold_fee / 100;
-            $tran->mcht_fee = $request->mcht_fee / 100;
-        }
-        $db_trans = $this->feeApply($db_trans);
-        return $this->batchResponse(count($db_trans), '매출');
-    } 
-
-    public function mchtApply(Request $request)
-    {
-        $row = $this->getApplyRow($request, [
-            'mcht_id' => $request->mcht_id,
-            'pmod_id' => $request->pmod_id,
-            'module_type' => $request->module_type,
-        ]);
-        return $this->batchResponse($row, '매출');
     }
 }

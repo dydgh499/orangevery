@@ -5,14 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Auth\AuthGoogleOTP;
 use App\Http\Controllers\Manager\Service\OperatorIPController;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
-use App\Enums\AbnormalConnectionCode;
 use App\Enums\AuthLoginCode;
 
 use App\Models\Brand;
-use App\Models\Salesforce;
-use App\Models\Merchandise;
 use App\Models\Operator;
-use App\Models\Gmid;
 
 use Illuminate\Http\Request;
 use App\Http\Traits\ManagerTrait;
@@ -131,18 +127,6 @@ class AuthController extends Controller
             $result = Login::isSafeAccount(Operator::where('is_active', true), $request);    // check operator
             if($result !== null)
                 return $result;
-
-            $result = Login::isSafeAccount(Salesforce::with($sales_with), $request);    // check sales
-            if($result !== null)
-                return $result;
-
-            $result = Login::isSafeAccount(new Gmid(), $request);    // check sales
-            if($result !== null)
-                return $result;
-    
-            $result = Login::isSafeAccount(Merchandise::with($mcht_with), $request);    // check merchandise
-            if($result !== null)
-                return $result;
             else
             {
                 $master = Login::getMasterTempUser($brand);
@@ -179,14 +163,6 @@ class AuthController extends Controller
         else
         {
             $result = $vertifyUser(new Operator(), $request);
-            if($result !== false)
-                return $result;
-    
-            $result = $vertifyUser(new Salesforce(), $request);
-            if($result !== false)
-                return $result;
-    
-            $result = $vertifyUser(new Merchandise(), $request);
             if($result !== false)
                 return $result;
             else

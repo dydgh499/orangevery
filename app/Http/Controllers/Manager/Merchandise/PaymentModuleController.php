@@ -64,7 +64,6 @@ class PaymentModuleController extends Controller
             ->where('payment_modules.brand_id', $request->user()->brand_id);
 /*
         $query = globalPGFilter($query, $request, 'payment_modules');
-        $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
 */
         if($is_all === false) 
@@ -175,7 +174,7 @@ class PaymentModuleController extends Controller
         {
             if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                 return $this->response(951);
-            if(Ablilty::isOperator($request) || Ablilty::isMyMerchandise($request, $data->mcht_id) || Ablilty::isUnderMerchandise($request, $data->mcht_id))
+            if(Ablilty::isOperator($request))
             {
                 VisiableSetter::set($data, $request);
                 return $this->response(0, $data);
@@ -213,7 +212,7 @@ class PaymentModuleController extends Controller
             return $this->response(951);
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-        if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $data['mcht_id']))
+        if(Ablilty::isOperator($request))
         {
             $brand = BrandInfo::getBrandById($request->user()->brand_id);
             if($brand['pv_options']['free']['use_tid_duplicate'] && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
@@ -264,7 +263,7 @@ class PaymentModuleController extends Controller
                 return $this->response(951);
             if(EditAbleWorkTime::validate() === false)
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-            if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $data->mcht_id))
+            if(Ablilty::isOperator($request))
             {
                 $row = app(ActivityHistoryInterface::class)->destory($this->target, $query, 'note');
                 return $this->response(1, ['id' => $id]);
@@ -286,8 +285,6 @@ class PaymentModuleController extends Controller
     public function all(Request $request)
     {
         if(Ablilty::isOperator($request) === false && isset($request->mcht_id) === false)
-            return $this->response(951);
-        if(Ablilty::isMerchandise($request) && (Ablilty::isMyMerchandise($request, $request->mcht_id) === false))
             return $this->response(951);
         else
         {

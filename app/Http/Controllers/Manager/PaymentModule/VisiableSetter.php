@@ -56,10 +56,6 @@ class VisiableSetter
 
     static function set($payment_module, $request)
     {
-        if(Ablilty::isMerchandise($request))
-            $payment_module->makeHidden(self::hiddenSensitiveInfo());
-        else if(Ablilty::isSalesforce($request) && $request->user()->auth_level === 0)
-            $payment_module->makeHidden(self::hiddenSensitiveInfo());
         return $payment_module;
     }
 }

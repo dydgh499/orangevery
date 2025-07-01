@@ -5,8 +5,6 @@ use App\Enums\AuthLoginCode;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
-use App\Http\Controllers\Ablilty\PayWindowInterface;
-use App\Http\Controllers\Ablilty\ShoppingMallWindowInterface;
 
 use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Auth\AuthGoogleOTP;
@@ -25,61 +23,6 @@ use Google2FA;
 class LoginValidate
 {
     use EncryptDataTrait;
-    static public function isMerchant($result) 
-    {
-        return isset($result['user']->mcht_name) ? true : false;
-    }
-
-    static public function setMerchant($result) 
-    {
-        $result['user']->level = 10;
-        if(self::merchantStatusValidate($result) === false)
-            $result['result'] = AuthLoginCode::INHIBITION_ACCOUNT->value;
-        else
-        {
-        	if(count($result['user']->shoppingMall) === 0)
-            {
-                $shop_info =[ShoppingMallWindowInterface::renew($result['user']->id)];
-                $result['user']->shoppingMall = $shop_info;
-                $result['user']->shopping_mall = $shop_info;
-            }
-            for ($i=0; $i <count($result['user']->onlinePays); $i++) 
-            {
-                if(isset($result['user']->onlinePays[$i]->payWindows) === false)
-                {
-                    [$code, $data] = PayWindowInterface::renew($result['user']->onlinePays[$i]->id);
-                    if($code === 1)
-                        $result['user']->onlinePays[$i]->payWindows = $data;
-                }
-            }
-        }
-        return $result;
-    }
-
-    static public function isRecommenderSales($result)
-    {
-        $brand = BrandInfo::getBrandById($result['user']->brand_id);        
-        return $brand['pv_options']['paid']['brand_mode'] === 1 && $result['user']->level === 13;
-    }
-
-    static public function setRecommenderSales($result)
-    {
-        $brand = BrandInfo::getBrandById($result['user']->brand_id);
-        $result['user']->parent_total_fee = SalesforceFeeTable::totalFee($result['user']->parent_id);
-        $result['user']->p2p_pay_fee      = PaymentSection::p2pFee($brand['pv_options']['p2p']['ps_id']);
-        return $result;
-    }
-
-    static public function isGmid($result)
-    {
-        return isset($result['user']->g_mid) ? true : false;
-    }
-
-    static public function setGmid($result)
-    {
-        $result['user']->level = 11;
-        return $result;
-    }
 
     static public function isLockAccount($result) 
     {

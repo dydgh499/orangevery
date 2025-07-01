@@ -24,7 +24,6 @@ class BrandRequest extends FormRequest
         'deposit_day',
         'deposit_amount',
         'extra_deposit_amount',
-        'dev_fee',
         'dev_settle_type',
         'note',
         'use_different_settlement',
@@ -80,7 +79,6 @@ class BrandRequest extends FormRequest
             'business_num'  => 'string|required',
             'deposit_day'   => 'required',
             'deposit_amount' => 'required',
-            'dev_fee' => 'required|numeric',
             'extra_deposit_amount'=> 'required|numeric',
             'dev_settle_type'=> 'required|numeric',
         ];
@@ -117,7 +115,6 @@ class BrandRequest extends FormRequest
         $data = array_merge($this->getParmasBaseKey(), $this->getParamsBaseFile($this->image_keys));
         $data['pv_options'] = json_encode($this->pv_options); 
         $data['theme_css']  = json_encode($this->theme_css);
-        $data['dev_fee']    = $this->dev_fee/100;
         if($this->has('login_img'))
             $data['login_img'] = $this->login_img;
 

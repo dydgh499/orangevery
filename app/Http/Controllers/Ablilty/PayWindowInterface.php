@@ -137,14 +137,6 @@ class PayWindowInterface implements GeneratorInterface
                     'payment_modules.module_type',
                     'payment_modules.pay_window_secure_level',
 
-                    'merchandises.use_saleslip_prov',
-                    'merchandises.tax_category_type',
-                    'merchandises.mcht_name',
-                    'merchandises.contact_num',
-                    'merchandises.business_num',
-                    'merchandises.nick_name',
-                    'merchandises.addr',
-
                     'payment_windows.holding_able_at',
                     'payment_windows.window_code',
                 ]);

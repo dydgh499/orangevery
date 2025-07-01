@@ -1,43 +1,10 @@
 <?php
 namespace App\Http\Controllers\Ablilty;
 
-use App\Models\Salesforce;
-use App\Http\Controllers\Manager\Gmid\GmidInformation;
-use App\Http\Controllers\Manager\Service\BrandInfo;
-use App\Http\Controllers\Manager\Salesforce\SalesforceOverlap;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
-use App\Models\Merchandise;
-use Carbon\Carbon;
 
 class Ablilty
 {
-    static function isMyMerchandise($request, int $id)
-    {
-        return self::isMerchandise($request) && $request->user()->id === (int)$id;
-    }
-    
-    static function isMerchandise($request)
-    {
-        $cond_1 = $request->user()->tokenCan(10) === true;
-        $cond_2 = $request->user()->tokenCan(11) === false;
-        return $cond_1 && $cond_2;
-    }
-
-    static function salesAuthValidate($request, $id)
-    {
-        if($id === 0 && $request->user()->auth_level >= 1)
-            return true;
-        else if($id !== 0 && $request->user()->auth_level == 2)
-            return true;
-        else
-            return false;
-    }
-
-    static function isMySalesforce($request, int $id)
-    {
-        return self::isSalesforce($request) && $request->user()->id === $id;
-    }
-
     static function isSalesforce($request)
     {
         $cond_1 = $request->user()->tokenCan(13) === true;
@@ -45,63 +12,6 @@ class Ablilty
         return $cond_1 && $cond_2;
     }
 
-    static function isUnderSalesforce($request, $id)
-    {
-        if($request->user()->brand_id === 30 && self::isSalesforce($request))
-            return true;
-        else
-        {
-            $brand = BrandInfo::getBrandById($request->user()->brand_id);
-            if($brand['pv_options']['paid']['sales_parent_structure'])
-            {
-                if(self::isSalesforce($request))
-                {
-                    $sales = Salesforce::where('id', $request->user()->id)->with(['childs'])->first();
-                    $sales_ids = SalesforceOverlap::getAllChildIds([$sales->id], $sales->childs);    
-                    return in_array($id, json_decode(json_encode($sales_ids), true));
-                }
-                else
-                    return false;
-            }
-            else
-                return self::isSalesforce($request);
-        }
-    }
-
-    static function isUnderMerchandise($request, $id)
-    {
-        if(self::isSalesforce($request))
-        {
-            if($request->user()->brand_id === 30)
-                return true;
-            else
-            {
-                $sales_filter = [
-                    'id'    => 'sales'.globalLevelByIndex($request->user()->level).'_id',
-                    'value' => $request->user()->id,
-                ];
-                $mcht_ids = Merchandise::where($sales_filter['id'], $sales_filter['value'])->pluck('id')->all();
-                return in_array($id, $mcht_ids);        
-            }
-        }
-        else if(self::isGmid($request))
-            return in_array($id, GmidInformation::getMchtIds($request->user()->g_mid));
-        else
-            return false;
-    }
-
-    static function isGmid($request)
-    {
-        $cond_1 = $request->user()->tokenCan(11) == true;
-        $cond_2 = $request->user()->tokenCan(13) == false;
-        return $cond_1 && $cond_2;
-    }
-
-    static function isMyGmid($request, int $id)
-    {
-        return self::isGmid($request) && $request->user()->id === $id;
-    }
-    
     static function isOperator($request)
     {
         return $request->user()->tokenCan(35);

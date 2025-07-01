@@ -10,6 +10,7 @@ use App\Jobs\Realtime\RealtimeWrapper;
 
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+
 class BookWithdraw implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;

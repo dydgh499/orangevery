@@ -55,7 +55,7 @@ class AuthGoogleOTP
     static public function getQrcodeUrl($request)
     {
         $user = $request->user();
-        $level = Ablilty::isMerchandise($request) ? 10 : $user->level;
+        $level = $user->level;
         $brand = BrandInfo::getBrandById($user->brand_id);  
         $secret_key = self::setTempSecretKey($user);
         if (empty($secret_key)) {

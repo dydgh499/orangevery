@@ -95,7 +95,6 @@ class DangerTransController extends Controller
             ->where('danger_transactions.brand_id', $request->user()->brand_id);
             
         $query = globalPGFilter($query, $request, 'transactions');
-        $query = globalSalesFilter($query, $request, 'transactions');
         $query = globalAuthFilter($query, $request, 'transactions');
 
         if($search != '')

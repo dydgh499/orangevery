@@ -3,7 +3,6 @@ namespace App\Http\Controllers\Manager\Transaction;
 
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
-use App\Models\Withdraws\VirtualAccountHistory;
 
 class TransactionFilter
 {
@@ -71,8 +70,6 @@ class TransactionFilter
             $query = $query->where('transactions.is_cancel', true);
         if($request->mcht_settle_id)
             $query = $query->where('transactions.mcht_settle_id', $request->mcht_settle_id);
-        if($request->only_realtime_fail)
-            $query->whereIn('transactions.trx_id', VirtualAccountHistory::failIds($request, $request->user()->brand_id));
         
         if($request->no_settlement)
         {
@@ -97,7 +94,6 @@ class TransactionFilter
         $min   = $query->min('id');
 
         $query  = Transaction::join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
-            ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
             ->where('transactions.brand_id', $request->user()->brand_id);
         $query = self::date($request, $query);
         if($min)
@@ -111,9 +107,6 @@ class TransactionFilter
                     ->orWhere('transactions.tid', 'like', "%$search%")
                     ->orWhere('transactions.appr_num', 'like', "%$search%")
                     ->orWhere('transactions.buyer_phone', 'like', "%$search%")
-                    ->orWhere('merchandises.mcht_name', 'like', "%$search%")
-                    ->orWhere('merchandises.resident_num', 'like', "%$search%")
-                    ->orWhere('merchandises.business_num', 'like', "%$search%")
                     ->orWhere('payment_modules.note', 'like', "%$search%")
                     ->orWhere('transactions.trx_id', $search);
             });

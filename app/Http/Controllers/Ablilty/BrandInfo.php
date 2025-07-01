@@ -33,7 +33,6 @@ class BrandInfo
                     'bsin_lic_img',
                     'pvcy_rep_name',
                     'note',
-                    'dev_fee',
                     'deposit_day',
                     'deposit_amount',
                     'extra_deposit_amount',
