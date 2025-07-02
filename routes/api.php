@@ -26,9 +26,6 @@ Route::prefix('v1')->group(function() {
             Route::post('bill-keys/{id}/pay', [BillKeyController::class, 'pay']);
             Route::apiResource('bill-keys', BillKeyController::class);
         });
-        Route::post('transactions/hand-pay', [TransactionController::class, 'handPay']);
-        Route::post('transactions/pay-cancel', [TransactionController::class, 'payCancel']);
-
         Route::prefix('bonaejas')->group(function() {
             Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
             Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);

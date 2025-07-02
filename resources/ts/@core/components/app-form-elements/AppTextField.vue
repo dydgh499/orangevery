@@ -24,7 +24,7 @@ const label = computed(() => useAttrs().label as string | undefined)
         ...$attrs,
         class: null,
         label: label,
-        variant: 'outlined',
+        variant: 'underlined',
         id: elementId,
       }"
     >

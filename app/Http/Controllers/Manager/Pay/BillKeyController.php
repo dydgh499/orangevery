@@ -17,7 +17,7 @@ use App\Http\Requests\Manager\Pay\BillKeyPayRequest;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
-use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
+use App\Http\Controllers\Manager\Transaction\TransactionAPI;
 
 use App\Http\Controllers\Utils\Comm;
 use App\Http\Controllers\Controller;
@@ -81,9 +81,7 @@ class BillKeyController extends Controller
             if($pay_module)
             {
                 $data['mid'] = $pay_module->mid;
-                $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key', $data, [
-                    'Authorization' => $pay_module->api_key
-                ]);
+                $res = TransactionAPI::billCreate($data, $pay_module->api_key);
                 if($res['body']['result_cd'] === '0000')
                     return $this->response(1, $res['body']);
                 else
@@ -146,13 +144,12 @@ class BillKeyController extends Controller
             else
             {
                 $data = [
-                    'mid' => $pay_module->mid,
-                    'ord_num' => $request->ord_num,
-                    'bill_key' => $bill_key->bill_key,
+                    'pmod_id'   => $pay_module->id,
+                    'mid'       => $pay_module->mid,
+                    'ord_num'   => $request->ord_num,
+                    'bill_key'  => $bill_key->bill_key,
                 ];
-                $res = Comm::destroy(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key', $data, [
-                    'Authorization' => $pay_module->api_key
-                ]);
+                $res = TransactionAPI::billRemove($data, $pay_module->api_key);
                 if($res['body']['result_cd'] === '0000')
                     return $this->response(1, $res['body']);
                 else
@@ -180,9 +177,7 @@ class BillKeyController extends Controller
                 'pmod_id'   => $bill_key->pmod_id,
                 'bill_key'  => $bill_key->bill_key,
             ]);
-            $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key/hand', $data, [
-                'Authorization' => $pay_module->api_key
-            ]);
+            $res = TransactionAPI::billPay($data, $pay_module->api_key);
             if($res['body']['result_cd'] === '0000')
                 return $this->response(1, $res['body']);
             else

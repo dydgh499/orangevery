@@ -113,7 +113,6 @@
                 ],
                 'amount'    => $chart ? $chart->appr_amount + $chart->cxl_amount : 0,
                 'count'     => $chart ? $chart->appr_count + $chart->cxl_count : 0,
-                'profit'    => $chart ? (int)$chart->profit : 0,
             ];
         }
     }

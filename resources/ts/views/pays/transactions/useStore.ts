@@ -1,6 +1,16 @@
 
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
+import { Options } from '@/views/types'
+
+export const installments = <Options[]>([
+    { id: 0, title: "일시불" }, { id: 2, title: "2개월" },
+    { id: 3, title: "3개월" }, { id: 4, title: "4개월" },
+    { id: 5, title: "5개월" }, { id: 6, title: "6개월" },
+    { id: 7, title: "7개월" }, { id: 8, title: "8개월" },
+    { id: 9, title: "9개월" }, { id: 10, title: "10개월" },
+    { id: 11, title: "11개월" }, { id: 12, title: "12개월" },
+])
 
 export const useSearchStore = defineStore('useTransactionSearchStore', () => {
     const store = Searcher('pays/transactions')

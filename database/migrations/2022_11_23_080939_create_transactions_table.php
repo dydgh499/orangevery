@@ -28,8 +28,8 @@ class CreateTransactionsTable extends Migration
             $table->integer('amount')->comment('거래 금액');
             $table->tinyInteger('module_type')->comment('모듈 타입(0=장비, 1=수기, 2=인증, 3=간편, 4=빌링)');
             $table->string('ord_num', 100)->default('')->comment('주문번호');
-            $table->string('mid', 100)->index()->default('')->comment('MID');
-            $table->string('tid', 100)->index()->default('')->comment('TID');
+            $table->string('mid', 100)->default('')->comment('MID');
+            $table->string('tid', 100)->default('')->comment('TID');
             $table->string('trx_id', 100)->default('')->comment('거래번호');
             $table->string('ori_trx_id', 100)->nullable()->comment('원거래번호');
             $table->string('card_num', 20)->comment('거래 카드번호');
@@ -37,15 +37,19 @@ class CreateTransactionsTable extends Migration
             $table->string('acquirer', 20)->nullable()->comment('매입사');
             $table->string('appr_num', 9)->comment('승인번호');
             $table->tinyInteger('installment')->default(0)->comment('할부');
+            $table->timestamps();
+            # 여기 밑에 다 삭제 250703
             $table->string('buyer_name', 50)->nullable()->comment('구매자명');
             $table->string('buyer_phone', 20)->nullable()->comment('구매자 휴대폰번호');
             $table->string('item_name', 100)->nullable()->comment('상품명');
             $table->string('issuer_code', 3)->nullable()->comment('발급사 코드');
             $table->string('acquirer_code', 3)->nullable()->comment('매입사 코드');
-            $table->timestamps();
         });
         Schema::table('transactions', function (Blueprint $table) {
             $table->unique(['cxl_seq', 'appr_num', 'trx_id'], 'duplicate_unique_key');
+        });
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->index(['brand_id', 'trx_at'], 'trx_at_index_key');
         });
     }
 
