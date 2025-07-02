@@ -1,14 +1,10 @@
 <script lang="ts" setup>
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVColV2 from '@/layouts/utils/CreateHalfVColV2.vue'
-import { getUserLevel } from '@/plugins/axios'
 import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { FinanceVan } from '@/views/types'
 import { banks } from '@/views/users/useStore'
-import { HistoryTargetNames } from '@core/enums'
-import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
 import { VForm } from 'vuetify/components'
 
@@ -18,7 +14,7 @@ interface Props {
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 
-const { finance_companies, is_agency_vans } = useStore()
+const { finance_companies } = useStore()
 const { update, remove } = useRequestStore()
 
 const bank = ref(<any>({ code: null, title: '선택안함' }))
@@ -101,16 +97,6 @@ onMounted(async () => {
                                     <VTextField type="text" v-model="props.item.corp_name" prepend-inner-icon="ph-buildings"
                                         placeholder="기관명 입력" persistent-placeholder />
                                 </template>
-                                <!--
-                                <template #r_name>
-                                    <BaseQuestionTooltip :location="'top'" :text="corp.pv_options.auth.levels.dev_name+' 수수료'" :content="'해당 정보는 보안상 '+corp.pv_options.auth.levels.dev_name+'만 보여집니다.'" v-if="getUserLevel() == 50"/>
-                                </template>
-                                <template #r_input>
-                                    <VTextField type="text" v-model="props.item.dev_fee"
-                                            prepend-inner-icon="ph:share-network" placeholder="0.1" suffix="%"
-                                            persistent-placeholder v-if="getUserLevel() == 50"/>
-                                </template>
-                                -->
                             </CreateHalfVColV2>
 
                             <CreateHalfVColV2 :mdl="5" :mdr="7">
@@ -138,28 +124,11 @@ onMounted(async () => {
                                         persistent-placeholder />
                                 </template>
                                 <template #r_name>
-                                    <BaseQuestionTooltip :location="'top'" text="유보금미달알림 하한금"
-                                            :content="`보유금액이 지정 하한금 미만으로 떨어지면 수신자 번호에 알림문자가 발송됩니다.<br>ex)<br>[${props.item.nick_name}] 실시간 이체 잔액이 부족하오니 충전부탁드립니다.<br><br>(현재: 9,870,000원)`" />
                                 </template>
                                 <template #r_input>
-                                    <VTextField type="number" v-model="props.item.min_balance_limit"
-                                            prepend-inner-icon="tabler-currency-won" placeholder="유보금미달 알림금"
-                                            persistent-placeholder suffix="만원" />
                                 </template>
                             </CreateHalfVColV2>
                             <CreateHalfVColV2 :mdl="5" :mdr="7">
-                                <!--
-                                <template #l_name>
-                                    <BaseQuestionTooltip :location="'top'" text="입금자 타입"
-                                            :content="`별칭 선택일 경우 해당 금융 VAN의 별칭으로 입금되며<br>예금주 선택일 경우 각 대상의 예금주(가맹점, 영업라인)으로 입금됩니다.`" />
-                                </template>
-                                <template #l_input>
-                                    <BooleanRadio :radio="props.item.deposit_type" @update:radio="props.item.deposit_type = $event">
-                                        <template #true>예금주</template>
-                                        <template #false>별칭</template>
-                                    </BooleanRadio>
-                                </template>
-                                -->
                                 <template #l_name>
                                     <BaseQuestionTooltip :location="'top'" text="별칭"
                                             :content="`사이트 내에서 관리될 별칭입니다.`" />
@@ -169,24 +138,6 @@ onMounted(async () => {
                                         prepend-inner-icon="twemoji-spiral-notepad" maxlength="10"/>
                                 </template>
                             </CreateHalfVColV2>
-                            <!--
-                            <CreateHalfVColV2 :mdl="5" :mdr="7">
-                                <template #l_name>
-                                    카카오 인증
-                                </template>
-                                <template #l_input>
-                                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="props.item.use_kakao_auth"
-                                            color="primary" />
-                                </template>
-                                <template #r_name>
-                                    1원 인증
-                                </template>
-                                <template #r_input>
-                                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="props.item.use_account_auth"
-                                             color="primary" />
-                                </template>
-                            </CreateHalfVColV2>
--->
                             <VRow>
                                 <VCol class="pt-10" style="text-align: end;">
                                     <VBtn 

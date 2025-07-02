@@ -2,7 +2,6 @@
 import { getUserLevel, isAbleUnlockMcht } from '@/plugins/axios'
 import { BasePropertie } from '@/views/types'
 import { axios } from '@axios'
-import corp from '@corp'
 import { operatorActionAuthStore } from '../services/operators/useStore'
 import { getUserTypeName } from './useStore'
 interface Props {
@@ -55,7 +54,6 @@ const unlockAccount = async () => {
             snackbar.value.show(e.response.data.message, 'error')
             const r = errorHandler(e)
         }
-
     }
 }
 
@@ -99,12 +97,6 @@ const init2FA = async () => {
                         <VIcon size="24" class="me-3" icon="tabler:infinity-off" />
                     </template>
                     <VListItemTitle>2FA 초기화</VListItemTitle>
-                </VListItem>
-                <VListItem value="initPayVerfication" @click="emits('init:pay_verfication', props.item.id)" v-if="corp.pv_options.paid.use_pay_verification_mobile && props.type === 0 && getUserLevel() >= 35">
-                    <template #prepend>
-                        <VIcon size="24" class="me-3" icon="tabler-device-mobile" />
-                    </template>
-                    <VListItemTitle>휴대폰인증회수 초기화</VListItemTitle>
                 </VListItem>
             </VList>
         </VMenu>

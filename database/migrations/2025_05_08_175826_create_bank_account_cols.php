@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('acct_name', 50)->nullable()->comment('예금주명');
             $table->string('acct_bank_code', 3)->nullable()->comment('은행코드');      
             $table->string('note', 100)->nullable()->default('')->comment('메모사항');
-            $table->boolean('checked')->default(false)->comment('검증 여부(0=실패, 1=성공)');
+            $table->boolean('is_checked')->default(false)->comment('검증 여부(0=실패, 1=성공)');
             $table->timestamps();
         });
     }

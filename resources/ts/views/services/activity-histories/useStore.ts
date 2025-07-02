@@ -1,4 +1,3 @@
-import { salesLevels } from '@/plugins/axios';
 import corp from '@/plugins/corp';
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
@@ -6,8 +5,7 @@ import type { ActivityHistory, Options } from '@/views/types';
 import { useStore } from '../pay-gateways/useStore';
 
 export const historyLevels = () => {
-    const sales = salesLevels()
-    sales.unshift(<Options>({id: 10, title: '가맹점'}))
+    const sales = []
     sales.push(<Options>({id: 35, title: '운영사'}))
     sales.push(<Options>({id: 40, title: '운영사'}))
     return sales
@@ -23,55 +21,17 @@ export const replaceHistories = (histories: ActivityHistory[]) => {
     for (let i = 0; i < histories.length; i++) {
         histories[i].before_history_detail = replaceVariable(histories[i].before_history_detail, histories[i].history_target)
         histories[i].after_history_detail = replaceVariable(histories[i].after_history_detail, histories[i].history_target)
-        if(histories[i].history_target === '구분 정보') {
-            if(histories[i].before_history_detail['타입'] === 0) {
-                delete histories[i].after_history_detail['타입']
-                delete histories[i].before_history_detail['타입']
-                histories[i].after_history_detail['구분 타입'] = '장비'
-                histories[i].before_history_detail['구분 타입'] = '장비'
-            }
-            else if(histories[i].before_history_detail['타입'] === 1) {
-                delete histories[i].after_history_detail['타입']
-                delete histories[i].before_history_detail['타입']
-                histories[i].after_history_detail['구분 타입'] = '커스텀 필터'
-                histories[i].before_history_detail['구분 타입'] = '커스텀 필터'
-            }
-        }
-        else if(corp.pv_options.paid.use_issuer_filter && histories[i].history_target === '결제모듈')
-            histories[i].before_history_detail['카드사 필터'] = JSON.stringify(histories[i].before_history_detail['카드사 필터'])
     }
     return histories
 }
 
 export const replaceVariable = (history_detail: any, history_target:string) => {
-    const { pgs, pss, settle_types, terminals, finance_vans, pg_companies } = useStore()
+    const { pgs, pss, finance_vans, pg_companies } = useStore()
     const changeKeyName = () => {
-        const keys = [
-            'sales0_id','sales1_id','sales2_id','sales3_id','sales4_id','sales5_id',    
-            'sales0_fee','sales1_fee','sales2_fee','sales3_fee','sales4_fee','sales5_fee',
-            'sales0_settle_amount','sales1_settle_amount','sales2_settle_amount',
-            'sales3_settle_amount','sales4_settle_amount','sales5_settle_amount',
-        ]
-        keys.forEach((key) => {
-            if("validation.attributes." + key in history_detail) {
-                const level = key.slice(0, 6)
-                let key_name = corp.pv_options.auth.levels[level+'_name']
-                if(key.includes('fee')) {
-                    key_name += ' 수수료';
-                    history_detail['validation.attributes.'+key] *= 100
-                }
-                else if(key.includes('_settle_amount')) {
-                    key_name += ' 정산금';
-                }
-                history_detail[key_name] =  history_detail['validation.attributes.'+key]
-                delete history_detail['validation.attributes.'+key]
-            }
-        })
         replaceIdtoName()
         return history_detail
     }
     const replaceIdtoName = () => {
-        const levels = corp.pv_options.auth.levels
         const _replaceToName = (lists: any[], key: string, name: string) => {
             if(key in history_detail) {
                 const value = lists.find(obj => obj.id == history_detail[key])
@@ -80,24 +40,10 @@ export const replaceVariable = (history_detail: any, history_target:string) => {
         }
 
         _replaceToName(pgs, "PG사", 'pg_name')
-        _replaceToName(pss, "구간", 'name')
-        _replaceToName(terminals, "장비", 'name')
         _replaceToName(finance_vans, "금융벤 ID", 'nick_name')
-        /*
-        _replaceToName(fin_trx_delays, "이체 딜레이", 'title')
-        _replaceToName(withdraw_limit_types, "출금제한타입", 'title')
-        _replaceToName(withdraw_types, "출금타입", 'title')
-        */
-
-
 
         if(history_target === 'PG사')
-        {
-            _replaceToName(pg_companies, "PG 타입", 'name')    
-            
-        }
-        else
-            _replaceToName(settle_types, "정산일", 'name')        
+            _replaceToName(pg_companies, "PG 타입", 'name')       
     }
     return changeKeyName()
 }

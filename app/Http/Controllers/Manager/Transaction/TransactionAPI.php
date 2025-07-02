@@ -20,50 +20,6 @@ use Illuminate\Support\Facades\DB;
  */
 class TransactionAPI
 {
-    static public function getNotiStatus($b_info, $data)
-    {
-         // -1 = 해당사항 없음,   0 = 발송대기 상태 ,   1 = 발송성공
-         if($b_info['pv_options']['paid']['use_noti'])
-         {
-             $existCorrectNotiUrl = function($noti_urls, $content) {
-                 foreach($noti_urls as $noti_url)
-                 {
-                     if($noti_url['mcht_id'] === $content['mcht_id'])
-                     {   //취소인데 취소타입
-                         $cxl_send_type  = ($content['is_cancel']        && $noti_url['send_type'] === 2);
-                         //승인인데 승인타입
-                         $appr_send_type = ($content['is_cancel'] === 0  && $noti_url['send_type'] === 1);
-                         //전체 발송
-                         $all_send_type  = $noti_url['pmod_id'] === -1;
-                         if($all_send_type || $cxl_send_type || $appr_send_type)
-                             return true;
-                     }
-                 }
-                 return false;
-             };
- 
-             $mcht_ids = array_unique($data['content']->pluck('mcht_id')->all());
-             $noti_urls = NotiUrl::whereIn('mcht_id', $mcht_ids)
-                 ->where('is_delete', false)
-                 ->where('noti_status', true)
-                 ->get()->toArray();
- 
-             foreach($data['content'] as $content)
-             {
-                 if($content['use_noti'])
-                 {
-                     if($existCorrectNotiUrl($noti_urls, $content))
-                         $content['noti_status'] = count($content['notiSendHistories']) ? 1 : 0;
-                     else
-                         $content['noti_status'] = -1;
-                 }
-                 else
-                     $content['noti_status'] = -1;
-             }
-         }
-         return $data;
-    }
-
     static private function getCancelTransData($request, $trans)
     {
         $cxl_dt = $request->cxl_dt;
@@ -104,35 +60,6 @@ class TransactionAPI
         }
     }
 
-    static private function setVirtualAccountHistory($request, $trans, $trans_id)
-    {
-        if($trans->mcht_settle_type === -1 && $request->va_id)
-        {   // 실시간 일때
-            $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/retry-settlement';
-            $res = Comm::post($url, [
-                'id'        => $trans_id,
-                'va_id'     => $request->va_id,
-                'user_id'   => $trans->mcht_id,
-                'level'     => 10,
-            ]);
-            return $res;
-        }
-        else
-        {
-            return [
-                'body' => [
-                    'result_cd'     => '0000',
-                    'result_msg'    => '성공하였습니다.',
-                ]
-            ];
-        }
-    }
-
-    static public function createCancelDeposit($data)
-    {        
-        return Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/cancel-deposit-settlement', $data);
-    }
-
     // 취소매출 생성
     static public function createCancel($request)
     {
@@ -147,9 +74,7 @@ class TransactionAPI
                     $add_res = app(ActivityHistoryInterface::class)->add('매출', new Transaction, $data, 'trx_id');
                     if($add_res)
                     {
-                        $res = self::setVirtualAccountHistory($request, $trans, $add_res->id);
-                        $code = $res['body']['result_cd'] === '0000' ? true : false;
-                        return [$code, $res['body']['result_msg'], []];
+                        return ['0000', '성공', []];
                     }
                     else
                         return [false, '시스템 에러입니다.', []];
@@ -175,7 +100,7 @@ class TransactionAPI
     {
         return Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/cancel', $data);
     }
-
+    
     // 수기결제
     static public function handPay($data)
     {

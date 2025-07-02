@@ -12,17 +12,14 @@ import NavTokenableExpireTime from '@/layouts/components/NavTokenableExpireTime.
 import UserProfile from '@/layouts/components/UserProfile.vue'
 import { VerticalNavLayout } from '@layouts'
 
-import HolidayDlg from '@/layouts/dialogs/services/HolidayDlg.vue'
 import PasswordChangeNoticeDialog from '@/layouts/dialogs/users/PasswordChangeNoticeDialog.vue'
 import PhoneNum2FAVertifyDialog from '@/layouts/dialogs/users/PhoneNum2FAVertifyDialog.vue'
 import AlertDialog from '@/layouts/dialogs/utils/AlertDialog.vue'
 import LoadingDialog from '@/layouts/dialogs/utils/LoadingDialog.vue'
-import PopupDialog from '@/layouts/dialogs/utils/PopupDialog.vue'
 
 import PWASnackbar from '@/layouts/snackbars/PWASnackbar.vue'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 
-import corp from '@/plugins/corp'
 import { axios, getUserLevel, getUserMutual, user_info } from '@axios'
 
 const alert = <any>(inject('alert'))
@@ -30,14 +27,12 @@ const snackbar = <any>(inject('snackbar'))
 const loading = <any>(inject('loading'))
 const errorHandler = <any>(inject('$errorHandler'))
 
-const popup = ref()
 const payShow = ref()
 const pwaSnackbar = ref()
 const holidayDlg = ref()
 const phoneNum2FAVertifyDialog = ref()
 const passwordChangeNoticeDialog = ref()
 
-provide('popup', popup)
 provide('payShow', payShow)
 provide('holidayDlg', holidayDlg)
 provide('pwaSnackbar', pwaSnackbar)
@@ -63,35 +58,16 @@ const passwordChangeWarningValidate = () => {
 const fa2RequireNotification = () => {
     if(getUserLevel() >= 35 && getUserLevel() < 50) {
         if(user_info.value.is_2fa_use === false) {
-            if(corp.pv_options.paid.use_head_office_withdraw)
-                alert.value.show('휴대폰 인증대신 구글 OTP 인증으로 전환하세요.')
-            else
-            {
-                let message = '2FA 인증을 활성화하여 계정의 보안등급을 높일 수 있습니다.<br>안전한 운영을 위해 <b>우측 상단 프로필에서 2차인증</b>을 설정해주세요.'
-                if(getUserLevel() >= 40)
-                    message += `<br><br><h4 class='text-error'>※ 본사등급의 경우 필수적으로 2FA 인증을 활성화 할 것을 권고합니다. ※</h4>`
-                alert.value.show(message)
-            }
+            let message = '2FA 인증을 활성화하여 계정의 보안등급을 높일 수 있습니다.<br>안전한 운영을 위해 <b>우측 상단 프로필에서 2차인증</b>을 설정해주세요.'
+            if(getUserLevel() >= 40)
+                message += `<br><br><h4 class='text-error'>※ 본사등급의 경우 필수적으로 2FA 인증을 활성화 할 것을 권고합니다. ※</h4>`
+            alert.value.show(message)
         }
     }
 }
 
 onMounted(async () => {
     await nextTick()
-    axios.get('/api/v1/manager/popups/currently', {
-        params: {
-            page_size : 10,
-            page : 1,
-        }
-    })
-    .then(r => { 
-        if(r.data.content.length)
-            popup.value.show(r.data.content)
-    })
-    .catch(e => { 
-        console.log(e) 
-        const r = errorHandler(e)
-    })
     passwordChangeWarningValidate()
     fa2RequireNotification()    
 })
@@ -130,9 +106,7 @@ onMounted(async () => {
         <PWASnackbar ref="pwaSnackbar"/>
         <AlertDialog ref="alert" />
         <LoadingDialog ref="loading" />
-        <HolidayDlg ref="holidayDlg"/>
         
-        <PopupDialog ref="popup"/>
         <PhoneNum2FAVertifyDialog ref="phoneNum2FAVertifyDialog"/>
         <PasswordChangeNoticeDialog ref="passwordChangeNoticeDialog"/>
 

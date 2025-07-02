@@ -5,7 +5,7 @@ use App\Http\Controllers\Ablilty\Ablilty;
 use App\Models\Operator;
 use App\Models\Salesforce;
 use App\Models\Log\ActivityHistory;
-use App\Models\Options\PvOptions;
+use App\Models\Options\OvOptions;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use Illuminate\Support\Facades\DB;
 
@@ -153,34 +153,34 @@ class ActivityHistoryViewer
     static public function paidOptionVisiable($request, $history_detail)
     {
         $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
-        $pv_options = new PvOptions(json_encode($brand['pv_options']));
+        $ov_options = new OvOptions(json_encode($brand['ov_options']));
         if(strlen($history_detail))
         {
             $conv_history_detail = json_decode($history_detail, true);
             
-            if($pv_options->paid->use_issuer_filter === false)
+            if($ov_options->paid->use_issuer_filter === false)
                 unset($conv_history_detail['filter_issuers']);
 
-            if($pv_options->paid->use_regular_card === false)
+            if($ov_options->paid->use_regular_card === false)
                 unset($conv_history_detail['use_regular_card']);
 
-            if($pv_options->paid->use_noti === false)
+            if($ov_options->paid->use_noti === false)
                 unset($conv_history_detail['use_noti']);
 
             if(isset($conv_history_detail['brand_id']))
                 unset($conv_history_detail['brand_id']);
 
-            if($pv_options->paid->use_multiple_hand_pay === false)
+            if($ov_options->paid->use_multiple_hand_pay === false)
                 unset($conv_history_detail['use_multiple_hand_pay']);    
-            if($pv_options->paid->use_pay_verification_mobile === false)
+            if($ov_options->paid->use_pay_verification_mobile === false)
                 unset($conv_history_detail['use_pay_verification_mobile']);
 
-            if($pv_options->paid->use_noti === false)
+            if($ov_options->paid->use_noti === false)
                 unset($conv_history_detail['use_noti']);
             
-            if($pv_options->paid->use_pmid === false)
+            if($ov_options->paid->use_pmid === false)
                 unset($conv_history_detail['p_mid']);
-            if($pv_options->paid->use_specified_limit === false)
+            if($ov_options->paid->use_specified_limit === false)
             {
                 unset($conv_history_detail['phone_auth_limit_s_tm']);
                 unset($conv_history_detail['phone_auth_limit_e_tm']);
@@ -193,7 +193,7 @@ class ActivityHistoryViewer
             unset($conv_history_detail['user_pw']);
             $conv_history_detail = self::authVisiable($request, $conv_history_detail);
 
-            $levels = $pv_options->auth->levels;
+            $levels = $ov_options->auth->levels;
             $history_detail = [];
             foreach($conv_history_detail as $key => $value)
             {

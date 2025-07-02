@@ -3,7 +3,6 @@
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
-import corp from '@/plugins/corp'
 import { realtimeMessage, realtimeResult, useSearchStore } from '@/views/virtuals/cms-transactions/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { DateFilters } from '@core/enums'
@@ -54,7 +53,7 @@ onMounted(() => {
             <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.SETTLE_RANGE">
                 <template #filter>
                     <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
-                        :sales="false">
+                        :sales="false" :page="true">
                         <template #sales_extra_field>
                             <VCol cols="12" sm="4">
                                 <table class="total-table">
@@ -77,18 +76,6 @@ onMounted(() => {
                                     <tr>
                                         <th>수기출금</th>
                                         <td class="text-error"><span>{{ total.withdraw_amount.toLocaleString() }}</span> &#8361;</td>
-                                    </tr>
-                                    <tr v-if="corp.pv_options.paid.use_realtime_deposit">
-                                        <th>즉시출금</th>
-                                        <td class="text-error"><span>{{ total.total_realtime_withdraw_amount.toLocaleString() }}</span> &#8361;</td>
-                                    </tr>
-                                    <tr v-if="corp.pv_options.paid.use_collect_withdraw">
-                                        <th>모아서출금</th>
-                                        <td class="text-error"><span>{{ total.total_collect_withdraw_amount.toLocaleString() }}</span> &#8361;</td>
-                                    </tr>
-                                    <tr v-if="corp.pv_options.paid.use_finance_van_deposit">
-                                        <th>지급대행</th>
-                                        <td class="text-error"><span>{{ total.total_payment_agency_withdraw_amount.toLocaleString() }}</span> &#8361;</td>
                                     </tr>
                                 </table>
                             </VCol>

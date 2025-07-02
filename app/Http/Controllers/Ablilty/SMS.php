@@ -16,7 +16,7 @@ class SMS
         $brand = BrandInfo::getBrandById($brand_id);
         if($brand)
         {
-            $bonaeja = $brand['pv_options']['free']['bonaeja'];
+            $bonaeja = $brand['ov_options']['free']['bonaeja'];
             $params = [
                 'user_id'   => $bonaeja['user_id'],
                 'api_key'   => $bonaeja['api_key'],
@@ -39,7 +39,7 @@ class SMS
         $brand = BrandInfo::getBrandById($brand_id);
         if($brand)
         {
-            $bonaeja = $brand['pv_options']['free']['bonaeja'];
+            $bonaeja = $brand['ov_options']['free']['bonaeja'];
             [$result, $send_able_amount] = self::getSendAbleAmount($brand_id);
             if($result)
             {
@@ -57,7 +57,7 @@ class SMS
         $brand = BrandInfo::getBrandById($brand_id);
         if($brand)
         {
-            $bonaeja = $brand['pv_options']['free']['bonaeja'];
+            $bonaeja = $brand['ov_options']['free']['bonaeja'];
             if($bonaeja['user_id'] && $bonaeja['api_key'] && $bonaeja['sender_phone'])
             {
                 $phone_num = str_replace("-", '', $phone_num);

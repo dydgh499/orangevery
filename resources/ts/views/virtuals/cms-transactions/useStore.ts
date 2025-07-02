@@ -3,8 +3,6 @@ import { StatusColors } from '@/@core/enums'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import type { HeadOffceAccount } from '@/views/types'
-import { axios } from '@axios'
 
 export const realtimeResult = (result_code: string) => {
     if(result_code === '0000')  //성공
@@ -74,15 +72,3 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
     }
 })
 
-export const useHeadOfficeAccountStore = defineStore('useHeadOfficeAccountStore', () => {
-    const head_office_accounts = ref(<HeadOffceAccount[]>([]))
-
-    const getHeadOfficeAccount = async() => {
-        const r = await axios.get('/api/v1/manager/services/head-office-accounts')
-        Object.assign(head_office_accounts.value, r.data.content)
-    }
-    onMounted(async () => { 
-        await getHeadOfficeAccount() 
-    })
-    return {head_office_accounts}
-})

@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Ablilty;
 
 use App\Models\Brand;
 use Illuminate\Support\Facades\Redis;
-use App\Models\Options\PvOptions;
+use App\Models\Options\OvOptions;
 
 class BrandInfo
 {
@@ -53,8 +53,8 @@ class BrandInfo
         else
         {
             $default = json_decode($brand, true);
-            $str_pv_options = json_encode($default['pv_options']);
-            $default['pv_options'] = json_decode(json_encode(new PvOptions($str_pv_options)), true);
+            $str_pv_options = json_encode($default['ov_options']);
+            $default['ov_options'] = json_decode(json_encode(new OvOptions($str_pv_options)), true);
             return $default;
         }
     }

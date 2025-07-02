@@ -1,16 +1,12 @@
 <?php
 namespace App\Http\Controllers\Manager\Merchandise;
 
-use App\Models\Transaction;
 use App\Models\Merchandise\PaymentModule;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
 use App\Http\Controllers\Manager\Service\BrandInfo;
-use App\Http\Controllers\Manager\CodeGenerator\TidGenerator;
-use App\Http\Controllers\Manager\CodeGenerator\MidGenerator;
-use App\Http\Controllers\Manager\PaymentModule\VisiableSetter;
 
 use App\Http\Requests\Manager\Merchandise\PayModuleRequest;
 use App\Http\Requests\Manager\IndexRequest;
@@ -18,10 +14,6 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Utils\ChartFormat;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
@@ -60,26 +52,14 @@ class PaymentModuleController extends Controller
     {
         $search = $request->input('search', '');
         $query = $this->pay_modules
-            //->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
             ->where('payment_modules.brand_id', $request->user()->brand_id);
-/*
-        $query = globalPGFilter($query, $request, 'payment_modules');
-        $query = globalAuthFilter($query, $request, 'merchandises');
-*/
         if($is_all === false) 
             $query = $query->where('payment_modules.is_delete', false);
-        if($request->has('mcht_id'))
-            $query = $query->where('payment_modules.mcht_id', $request->mcht_id);
-        if($request->has('module_type'))
-            $query = $query->where('payment_modules.module_type', $request->module_type);
-        if($request->un_use)
-            $query = $query->notUseLastMonth($request->user()->brand_id);
 
         return $query->where(function ($query) use ($search) {
             return $query->where('payment_modules.mid', 'like', "%$search%")
                 ->orWhere('payment_modules.tid', 'like', "%$search%")
                 ->orWhere('payment_modules.note', 'like', "%$search%");
-                //->orWhere('merchandises.mcht_name', 'like', "%$search%");
         });
     }
 
@@ -97,10 +77,7 @@ class PaymentModuleController extends Controller
 
         $query = $this->commonSelect($request);
         $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
-        foreach($data['content'] as $content) 
-        {
-            VisiableSetter::set($content, $request);
-        }
+        
         return $this->response(0, $data);
     }
 
@@ -124,36 +101,14 @@ class PaymentModuleController extends Controller
         $data = $request->data();
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-        if($brand['pv_options']['free']['use_tid_duplicate'] && $data['tid'] !== '' && $isDuplicateId($data['brand_id'], 'tid', $data['tid']))
+        if($data['tid'] !== '' && $isDuplicateId($data['brand_id'], 'tid', $data['tid']))
             return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['tid'=>$data['tid']]);
-        if($brand['pv_options']['free']['use_mid_duplicate'] && $data['mid'] !== '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
+        if($data['mid'] !== '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
             return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid'=>$data['mid']]);
-        if($data['pay_window_secure_level'] >= 3)
-        {
-            if($brand['pv_options']['free']['bonaeja']['user_id'] === '')
-                return $this->extendResponse(1999, '문자발송 플랫폼과 연동되어있지 않아 결제창 보안등급을 설정 할 수 없습니다.<br>계약 이후 사용 가능합니다.');
-        }
-        if($data['module_type'] == 0 && $data['serial_num'] != '')
-        {
-            $res = $this->pay_modules
-                ->where('brand_id', $request->user()->brand_id)
-                ->where('serial_num', $data['serial_num'])
-                ->where('module_type', 0)
-                ->where('is_delete', false)
-                ->exists();
-            if($res)
-                return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
-        }
-        $res = app(ActivityHistoryInterface::class)->add($this->target, $this->pay_modules, $data, 'note');
+
+            $res = app(ActivityHistoryInterface::class)->add($this->target, $this->pay_modules, $data, 'note');
         if($res)
         {
-            if($data['module_type'] != 0)
-            {
-                $this->pay_modules->where('id', $res->id)->update([
-                    'pay_key' => $this->getNewPayKey($res->id),
-                    'sign_key' => $this->getNewPayKey($res->id)
-                ]);
-            }
             return $this->response(1, ['id' => $res->id, 'mcht_id' => $data['mcht_id']]);
         }
         else
@@ -176,7 +131,6 @@ class PaymentModuleController extends Controller
                 return $this->response(951);
             if(Ablilty::isOperator($request))
             {
-                VisiableSetter::set($data, $request);
                 return $this->response(0, $data);
             }
             else
@@ -215,27 +169,11 @@ class PaymentModuleController extends Controller
         if(Ablilty::isOperator($request))
         {
             $brand = BrandInfo::getBrandById($request->user()->brand_id);
-            if($brand['pv_options']['free']['use_tid_duplicate'] && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
+            if($brand['ov_options']['free']['use_tid_duplicate'] && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
                 return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid' => $data['tid']]);
-            if($brand['pv_options']['free']['use_mid_duplicate'] && $data['mid'] != '' && $isDuplicateId($data['brand_id'], $id, 'mid', $data['mid']))
+            if($brand['ov_options']['free']['use_mid_duplicate'] && $data['mid'] != '' && $isDuplicateId($data['brand_id'], $id, 'mid', $data['mid']))
                 return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid' => $data['mid']]);
-            if($data['pay_window_secure_level'] >= 3)
-            {
-                $brand = BrandInfo::getBrandById($request->user()->brand_id);
-                if($brand['pv_options']['free']['bonaeja']['user_id'] === '')
-                    return $this->extendResponse(1999, '문자발송 플랫폼과 연동되어있지 않아 결제창 보안등급을 설정 할 수 없습니다.<br>계약 이후 사용 가능합니다.');
-            }
-            if($data['module_type'] == 0 && $data['serial_num'] != '')
-            {
-                $res = $this->pay_modules
-                    ->where('brand_id', $request->user()->brand_id)
-                    ->where('serial_num', $data['serial_num'])
-                    ->where('id', '!=', $id)
-                    ->where('is_delete', false)
-                    ->exists();
-                if($res)
-                    return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
-            }
+            
             $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'note');
             if($row)
                 return $this->response(1, ['id' => $id, 'mcht_id' => $data['mcht_id']]);
@@ -296,85 +234,8 @@ class PaymentModuleController extends Controller
             $query = $this->commonSelect($request);
             $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
             
-            foreach($data['content'] as $content) 
-            {
-                VisiableSetter::set($content, $request);
-            }
             return $this->response(0, $data);    
         }
     }
     
-    /**
-     * TID 발급
-     */
-    public function tidCreate(Request $request)
-    {
-        $tid = TidGenerator::create($request->pg_type);
-        return $this->response(0, ['tid'=>$tid]);    
-    }
-    
-    /**
-     * MID 발급
-     */
-    public function midCreate(Request $request)
-    {
-        $mid = MidGenerator::create($request->mid_code);
-        return $this->response(0, ['mid'=>$mid]);    
-    }
-
-    /**
-     * MID 대량발급
-     */
-    public function midBulkCreate(Request $request)
-    {
-        $new_mids = MidGenerator::bulkCreate($request->mid_code, $request->pay_mod_count);        
-        return $this->response(0, ['new_mids'=>$new_mids]);    
-    }
-
-    /**
-     * TID 대량발급
-     */
-    public function tidBulkCreate(Request $request)
-    {
-        $new_pg_tids = [];
-        for ($i=0; $i <count($request->groups); $i++) 
-        {
-            $new_tids = TidGenerator::bulkCreate($request->groups[$i]['pg_type'], $request->groups[$i]['count']);
-            $new_pg_tids[] = [
-                'pg_id'     => $request->groups[$i]['pg_id'],
-                'new_tids' => $new_tids,
-            ];
-        }
-        return $this->response(0, $new_pg_tids);    
-    }
-
-    
-    public function getNewPayKey($id)
-    {
-        return $id.Str::random(64 - strlen((string)$id));
-    }
-
-    /**
-     * PAY KEY 발급
-     */
-    public function payKeyCreate(Request $request)
-    {
-        $pay_key = $this->getNewPayKey($request->id);
-        $res = $this->pay_modules
-            ->where('id', $request->id)
-            ->update(['pay_key' => $pay_key]);
-        return $this->response(0, ['pay_key'=>$pay_key]);    
-    }
-
-    /**
-     * 서명 KEY 발급
-     */
-    public function signKeyCreate(Request $request)
-    {
-        $sign_key = $this->getNewPayKey($request->id);
-        $res = $this->pay_modules
-            ->where('id', $request->id)
-            ->update(['sign_key' => $sign_key]);
-        return $this->response(0, ['sign_key' => $sign_key]);    
-    }
 }

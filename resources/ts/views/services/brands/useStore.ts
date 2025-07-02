@@ -1,25 +1,7 @@
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
-import type { AuthOption, Brand, FreeOption, Options, P2pAppOption, PaidOption, ThemeCSS } from '@/views/types';
+import type { AuthOption, Brand, FreeOption, PaidOption, ThemeCSS } from '@/views/types';
 import { getUserLevel } from '@axios';
-import corp from '@corp';
-
-export const dev_settle_types = <Options[]>([
-    {id:0, title:'적용안함'},
-    {id:1, title:'본사이익 대비 방식'},
-    {id:2, title:'전체매출 대비 방식'},
-    {id:3, title:'수수료 차감 방식'},
-])
-
-export const identity_auth_types = <Options[]>([
-    {id:0, title:'보내자(SMS)'},
-    {id:1, title:'전자계약(싸인오케이)'},
-])
-
-export const fee_input_modes = <any[]>([
-    {id:false, title:'원가 베이스'},
-    {id:true, title:'정산율 베이스'},
-]);
 
 export const useSearchStore = defineStore('brandSearchStore', () => {
     const store = Searcher('services/brands')
@@ -29,11 +11,6 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
     }
     if (getUserLevel() >= 50) {
         headers['note'] = '비고'
-        headers['last_dpst_at'] = '마지막 입금일'
-        headers['deposit_day'] = '입금일'
-        headers['deposit_amount'] = '입금액'
-        headers['extra_deposit_amount'] = '부가입금액'
-        headers['curr_deposit_amount'] = '현재입금액(월)'
     }
     headers['dns'] = 'DNS'
     headers['logo_img'] = 'LOGO'
@@ -43,8 +20,6 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
     headers['phone_num'] = '연락처'
 
     if (getUserLevel() >= 50) {
-        headers['dev_fee'] = corp.pv_options.auth.levels.dev_name+' 수수료'
-        headers['dev_settle_type'] = corp.pv_options.auth.levels.dev_name+' 수수료 정산타입'
         headers['created_at'] = '생성시간'
         headers['updated_at'] = '업데이트시간'
         headers['extra_col'] = '더보기'
@@ -88,16 +63,7 @@ export const defaultItemInfo = () => {
 
     const freeOption = () => {
         return <FreeOption>({
-            use_search_date_detail: true,
-            sales_slip: {
-                merchandise: {
-                    company_name: '',
-                    rep_name: '',
-                    phone_num: '',
-                    business_num: '',
-                    addr: ''
-                }
-            },
+            use_account_number_duplicate: 0,
             bonaeja: {
                 user_id: '',
                 api_key: '',
@@ -105,100 +71,15 @@ export const defaultItemInfo = () => {
                 receive_phone: '',
                 min_balance_limit: 0
             },
-            default: {
-                installment: 0,
-                abnormal_trans_limit: 0,
-            },
-            use_tid_duplicate: false,
-            use_mid_duplicate: false,
-            use_fix_table_view: true,
-            use_fee_detail_view: false,
-            only_mcht_fee_profit: false,
-            fix_table_size: 749,
-            resident_num_masking: false,
-            pay_module_detail_view: false,
-            secure: {
-                mcht_id_level: 2,
-                mcht_pw_level: 2,
-                account_lock_limit: 7,
-                sales_id_level: 0,
-                sales_pw_level: 0,
-                login_only_operate: 0,
-            }
         })
     }
 
     const paidOption = () => {
-        return <PaidOption>({
-            use_acct_verification: false,
-            use_hand_pay_sms: false,
-            use_realtime_deposit: false,
-            use_issuer_filter: false,
-            use_dup_pay_validation: false,
-            use_online_pay: false,
-            use_tid_create: false,
-            use_mid_create: false,
-            use_pay_verification_mobile: false,
-            use_regular_card: false,
-            use_noti: false,
-            use_head_office_withdraw: false,
-            use_collect_withdraw_scheduler: false,
-            use_finance_van_deposit: false,
-            use_pmid: false,
-            use_multiple_hand_pay: false,
-            use_mcht_blacklist: false,
-            use_part_cancel: false,
-            sales_parent_structure: false,
-            use_specified_limit: false,
-            use_syslink: false,
-            use_product: false,
-            use_cancel_all_allow: false,
-            use_bill_key: false,
-            use_shop: false,
-            fee_input_mode: false,
-            brand_mode: 0,
-            use_sales_dns: false,
-        })
+        return <PaidOption>({})
     }
 
     const authOption = () => {
-        return <AuthOption>({
-            levels: {
-                dev_use: false,
-                dev_name: '개발사',
-                sales5_use: false,
-                sales5_name: '지사',
-                sales4_use: true,
-                sales4_name: '영업라인',
-                sales3_use: true,
-                sales3_name: '지사',
-                sales2_use: true,
-                sales2_name: '총판',
-                sales1_use: true,
-                sales1_name: '대리점',
-                sales0_use: true,
-                sales0_name: '하위대리점'
-            },
-            visibles: {
-                abnormal_trans_sales: true,
-            }
-        })
-    }
-
-    const p2pAppOption = () => {
-        return <P2pAppOption>({
-            pg_id: null,
-            ps_id: null,
-            fin_id: null,
-            module_type: 2,
-            is_old_auth: 0,
-            ci_validate: 0,
-            account_validate: 0,
-            pay_single_limit: 200,
-            pay_day_limit: 500,
-            pay_month_limit: 5000,
-            pay_year_limit: 2000,
-        })
+        return <AuthOption>({})
     }
 
     const item = reactive<Brand>({
@@ -220,16 +101,12 @@ export const defaultItemInfo = () => {
         business_num: '',
         phone_num: '',
         fax_num: '',
-        last_dpst_at: null,
         updated_at: null,
         created_at: null,
-        deposit_day: 1,
-        deposit_amount: 1000000,
-        pv_options: {
+        ov_options: {
             free: reactive<FreeOption>(freeOption()),
             paid: reactive<PaidOption>(paidOption()),
             auth: reactive<AuthOption>(authOption()),
-            p2p: reactive<P2pAppOption>(p2pAppOption()),
         },
         theme_css: reactive<ThemeCSS>({
             main_color: '#5E35B1',
@@ -242,17 +119,7 @@ export const defaultItemInfo = () => {
         og_file: undefined,
         id_file: undefined,
         login_file: undefined,
-        is_transfer: 0,
-        login_img: null,
-        dev_fee: 0,
-        dev_settle_type: 0,
-        extra_deposit_amount: 0,
-        curr_deposit_amount: 0,
-        use_different_settlement: 0,
-        before_brand_infos: [],
-        different_settlement_infos: [],
-        operator_ips: [],
-        identity_auth_infos: []
+        login_img: '',
     })
 
     return {

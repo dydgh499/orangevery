@@ -66,22 +66,6 @@ class AuthPhoneNum
         $count_key_name = "phone-auth-limit-count-".$mcht_id.":".$phone_num;
         Redis::set($count_key_name, $try_count, 'EX', $end_time); 
     }
-    
-    // 휴대폰 인증허용회수 검증
-    static public function limitValidate($brand, $phone_num, $mcht_id)
-    {
-        if($brand['pv_options']['paid']['use_pay_verification_mobile'])
-        {
-            $is_over = self::limitGet($mcht_id, $phone_num);
-            if($is_over)
-                return false;
-            else
-            {
-                return true;
-            }
-        }
-        return true;
-    }
 
     static private function payDisableTimeType($s_tm, $e_tm)
     {
@@ -114,14 +98,5 @@ class AuthPhoneNum
             }
         }
         return [0, '', ''];
-    }
-
-    static public function clearValidate($brand, $phone_num, $mcht_id)
-    {
-        if($brand['pv_options']['paid']['use_pay_verification_mobile'])
-        {
-            self::limitSet($mcht_id, $phone_num, 1);
-            self::countSet($mcht_id, $phone_num, 0, 1);
-        }
     }
 }

@@ -2,8 +2,6 @@
 import { DateSetter } from '@/views/searcher'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { DateFilters } from '@core/enums'
-import corp from '@corp'
-import { ko } from 'date-fns/locale'
 
 interface Props {
     placeholder: string,
@@ -95,32 +93,22 @@ init(store)
                     style="align-items: center; justify-content: space-around;"
                     class="compact-density">
                     <VCol :cols="12">
-                        <VueDatePicker 
-                            v-if="corp.pv_options.free.use_search_date_detail"
-                            v-model="range_date" :enable-seconds="enable" :text-input="format"
-                            locale="ko" :format-locale="ko" range multi-calendars :dark="theme === 'dark'"
-                            autocomplete="on" utc :format="getRangeFormat" :teleport="true"
-                            select-text="Search"
-                            :enable-time-picker="time_picker"
-                            @update:modelValue="[dateChanged(store)]" />
-                        <template v-else>
-                            <div style="display: flex;justify-content: space-between;">
-                                <AppDateTimePicker 
-                                    v-model="range_date[0]" 
-                                    prepend-inner-icon="ic-baseline-calendar-today" 
-                                    label="시작일 입력" 
-                                    @update:modelValue="[dateChanged(store)]"
-                                    style="flex-grow: 1; margin-right: 0.25em;"
-                                />
-                                <AppDateTimePicker 
-                                    v-model="range_date[1]" 
-                                    prepend-inner-icon="ic-baseline-calendar-today" 
-                                    label="종료일 입력" 
-                                    @update:modelValue="[dateChanged(store)]"
-                                    style="flex-grow: 1; margin-left: 0.25em;"
-                                />
-                            </div>
-                        </template>
+                        <div style="display: flex;justify-content: space-between;">
+                            <AppDateTimePicker 
+                                v-model="range_date[0]" 
+                                prepend-inner-icon="ic-baseline-calendar-today" 
+                                label="시작일 입력" 
+                                @update:modelValue="[dateChanged(store)]"
+                                style="flex-grow: 1; margin-right: 0.25em;"
+                            />
+                            <AppDateTimePicker 
+                                v-model="range_date[1]" 
+                                prepend-inner-icon="ic-baseline-calendar-today" 
+                                label="종료일 입력" 
+                                @update:modelValue="[dateChanged(store)]"
+                                style="flex-grow: 1; margin-left: 0.25em;"
+                            />
+                        </div>
                     </VCol>
                     <VCol cols="12" v-if="useDateSelecter" >
                         <VSelect 
@@ -190,32 +178,20 @@ init(store)
                     <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
                         <template
                             v-if="props.date_filter_type == DateFilters.DATE_RANGE || props.date_filter_type == DateFilters.SETTLE_RANGE">
-                            <template v-if="corp.pv_options.free.use_search_date_detail">
-                                <div class="d-inline-flex">
-                                    <VueDatePicker v-model="range_date" :enable-seconds="enable" :text-input="format"
-                                        locale="ko" :format-locale="ko" range multi-calendars :dark="theme === 'dark'"
-                                        autocomplete="on" utc :format="getRangeFormat" :teleport="true"
-                                        input-class-name="search-input" select-text="Search"
-                                        :enable-time-picker="time_picker"
-                                        @update:modelValue="[dateChanged(store)]" />
-                                </div>
-                            </template>
-                            <template v-else>
-                                <AppDateTimePicker 
-                                    v-model="range_date[0]" 
-                                    prepend-inner-icon="ic-baseline-calendar-today" 
-                                    label="시작일 입력" 
-                                    @update:modelValue="[dateChanged(store)]"
-                                    style="min-width: 11em;"
-                                />
-                                <AppDateTimePicker 
-                                    v-model="range_date[1]" 
-                                    prepend-inner-icon="ic-baseline-calendar-today" 
-                                    label="종료일 입력" 
-                                    @update:modelValue="[dateChanged(store)]"
-                                    style="min-width: 11em;"
-                                />
-                            </template>
+                            <AppDateTimePicker 
+                                v-model="range_date[0]" 
+                                prepend-inner-icon="ic-baseline-calendar-today" 
+                                label="시작일 입력" 
+                                @update:modelValue="[dateChanged(store)]"
+                                style="min-width: 11em;"
+                            />
+                            <AppDateTimePicker 
+                                v-model="range_date[1]" 
+                                prepend-inner-icon="ic-baseline-calendar-today" 
+                                label="종료일 입력" 
+                                @update:modelValue="[dateChanged(store)]"
+                                style="min-width: 11em;"
+                            />
                         </template>
                         <template v-else-if="props.date_filter_type == DateFilters.DATE">
                             <AppDateTimePicker 

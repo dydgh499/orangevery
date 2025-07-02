@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Manager\Service;
 use App\Models\Service\FinanceVan;
 use App\Models\Service\PaymentGateway;
 use App\Models\Service\PaymentSection;
-use App\Models\Service\Classification;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\Service\PayGatewayRequest;
@@ -138,7 +137,6 @@ class PaymentGatewayController extends Controller
     public function detail(Request $request)
     {
         $brand_id = $request->user()->brand_id;
-        $grouped = Classification::where('brand_id', $brand_id)->where('is_delete', false)->get()->groupBy('type');
         $finance_vans = FinanceVan::where('brand_id', $brand_id)->where('is_delete', false)->get();
         foreach($finance_vans as $finance_van)
         {
@@ -147,8 +145,6 @@ class PaymentGatewayController extends Controller
         $data = [
             'pay_gateways' => $this->pay_gateways->where('brand_id', $brand_id)->where('is_delete', false)->get(),
             'pay_sections' => $this->pay_sections->where('brand_id', $brand_id)->where('is_delete', false)->get(),
-            'terminals'    => isset($grouped[0]) ? $grouped[0] : [],
-            'custom_filters' => isset($grouped[1]) ? $grouped[1] : [],
             'finance_vans'  => isset($finance_vans) ? $finance_vans : [],
         ];
         return $this->response(0, $data);

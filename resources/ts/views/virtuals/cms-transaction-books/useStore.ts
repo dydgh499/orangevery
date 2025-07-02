@@ -1,27 +1,11 @@
-import { StatusColors, transactionColors } from '@/@core/enums'
+import { transactionColors } from '@/@core/enums'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useRequestStore } from '@/views/request'
+import { CmsTransactionBooks } from '@/views/types'
 
-export const realtimeResult = (result_code: string) => {
-    if(result_code === '0000')  //성공
-        return StatusColors.Success
-    else if(result_code === '0050')
-        return StatusColors.Processing
-    else
-        return StatusColors.Error
-}
-export const realtimeMessage = (item: any) => {
-    if(item.result_code === '0000')  //성공
-        return '성공'
-    else if(item.result_code === '0050')
-        return '결과 처리중'
-    else
-        return item.message
-}
-
-export const withdrawStatusCode = (history: VirtualAccountHistory) => {
+export const withdrawStatusCode = (history: CmsTransactionBooks) => {
     if (history.withdraw_status === 0) {
         const trans_at = (new Date(history.withdraw_schedule_time as string)).getTime() + 30000;
         const offset_at = trans_at - new Date().getTime();
@@ -55,19 +39,7 @@ export const withdrawInterface = () => {
             return null
     }
 
-    const withdrawRetry = async (id: number) => {
-        if (await alert.value.show('정말 해당건을 재출금시도 하시겠습니까?')) {
-            const res = await post('/api/v1/manager/virtual-accounts/histories/retry-withdraw', {
-                id: id,
-            }, false)
-            snackbar.value.show(res.data.message, res.status === 201 ? 'success' : 'error')
-        }
-        else
-            return null
-    }
-
     return {
-        withdrawRetry,
         cancelJobs,
     }
 }

@@ -42,7 +42,7 @@ class MessageController extends Controller
         $brand = BrandInfo::getBrandById($request->user()->brand_id);
         if($brand)
         {
-            $bonaeja = $brand['pv_options']['free']['bonaeja'];
+            $bonaeja = $brand['ov_options']['free']['bonaeja'];
             $params = [
                 'user_id'   => $bonaeja['user_id'],
                 'api_key'   => $bonaeja['api_key'],
@@ -68,7 +68,7 @@ class MessageController extends Controller
         $brand = BrandInfo::getBrandById($request->user()->brand_id);
         if($brand)
         {
-            $bonaeja = $brand['pv_options']['free']['bonaeja'];
+            $bonaeja = $brand['ov_options']['free']['bonaeja'];
             $params = [
                 'user_id'   => $bonaeja['user_id'],
                 'api_key'   => $bonaeja['api_key'],
@@ -86,7 +86,7 @@ class MessageController extends Controller
         $brand = BrandInfo::getBrandById($brand_id);
         if($brand)
         {
-            $bonaeja = $brand['pv_options']['free']['bonaeja'];
+            $bonaeja = $brand['ov_options']['free']['bonaeja'];
             
             if($bonaeja['user_id'])
             {
@@ -133,7 +133,7 @@ class MessageController extends Controller
         $brand = BrandInfo::getBrandById($brand_id);
         if($brand)
         {
-            if($mcht_id === -1 || AuthPhoneNum::limitValidate($brand, $phone_num, $mcht_id))
+            if($mcht_id === -1)
             {
                 $rand = random_int(100000, 999999);
                 $message = "인증번호 [$rand]을(를) 입력해주세요";
@@ -250,17 +250,6 @@ class MessageController extends Controller
     }
 
     /**
-     * 휴대폰 인증회수 초기화
-    */
-    public function payVerficationInit(Request $request)
-    {
-        $validated = $request->validate(['phone_num'=>'required', 'mcht_id'=>'required']);
-        $brand = BrandInfo::getBrandById($request->user()->brand_id);
-        AuthPhoneNum::clearValidate($brand, $request->mcht_id, $request->phone_num);
-        return $this->response(0);
-    }
-
-    /**
      * 본사 휴대폰번호 인증 검증
     */
     static public function operatorPhoneValidate($request)
@@ -270,7 +259,7 @@ class MessageController extends Controller
         $data   = [];
         
         $brand = BrandInfo::getBrandById($request->user()->brand_id);
-        if($brand['pv_options']['free']['bonaeja']['user_id'] !== '')
+        if($brand['ov_options']['free']['bonaeja']['user_id'] !== '')
         {
             $result = AuthPhoneNum::validate((string)$request->token);
             if($result === AuthLoginCode::REQUIRE_PHONE_AUTH->value)

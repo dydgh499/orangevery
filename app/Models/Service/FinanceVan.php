@@ -14,10 +14,4 @@ class FinanceVan extends Model
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
 
-    protected function devFee() : Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) =>  round($value * 100, 3),
-        );
-    }
 }

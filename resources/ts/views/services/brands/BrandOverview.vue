@@ -1,9 +1,8 @@
 <script lang="ts" setup>
+import CreateHalfVColV2 from '@/layouts/utils/CreateHalfVColV2.vue';
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import FileInput from '@/layouts/utils/FileInput.vue'
 import { getUserLevel } from '@/plugins/axios'
-import DifferentSettlementInfoCard from '@/views/services/brands/different-settlement-infos/DifferentSettlementInfoCard.vue'
-import { dev_settle_types } from '@/views/services/brands/useStore'
 import type { Brand } from '@/views/types'
 import { requiredValidatorV2 } from '@validators'
 
@@ -14,7 +13,7 @@ const props = defineProps<Props>()
 
 </script>
 <template>
-    <VRow>
+    <VRow class="match-height">
         <!-- 👉 운영정보 -->
         <VCol cols="12" md="6">
             <VCard>
@@ -100,108 +99,10 @@ const props = defineProps<Props>()
                             </VRow>
                         </VCol>
                     </VRow>
-                </VCardItem>
-            </VCard>
-            <br>
-            <VCard v-if="getUserLevel() === 50">
-                <VCardItem>
-                    <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="개발사 정보"
-                            :content="props.item.pv_options.auth.levels.dev_name + '만 확인 가능한 정보입니다.'"></BaseQuestionTooltip>
-                    </VCardTitle>
-                    <VRow class="pt-3">
-                        <VCol :md="6" :cols="12">
+                    <VRow>
+                        <VCol :md="12" :cols="12" v-if="getUserLevel() === 50">
                             <VRow no-gutters>
-                                <VCol>
-                                    <label>{{ props.item.pv_options.auth.levels.dev_name }} 사용여부</label>
-                                </VCol>
-                                <VCol md="8">
-                                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="props.item.pv_options.auth.levels.dev_use"
-                                        color="primary" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol :md=6>
-                            <VRow no-gutters>
-                                <VCol>
-                                    <label>입금일</label>
-                                </VCol>
-                                <VCol md="8">
-                                    <VTextField prepend-inner-icon="tabler-calendar" v-model="props.item.deposit_day"
-                                        type="number" :rules="[requiredValidatorV2(props.item.deposit_day, '입금일')]" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                    <VRow class="pt-3">
-                        <VCol :md="6" :cols="12">
-                            <VRow no-gutters>
-                                <VCol>
-                                    <label>개발사 명칭설정</label>
-                                </VCol>
-                                <VCol md="8">
-                                    <VTextField v-model="props.item.pv_options.auth.levels.dev_name"
-                                        prepend-inner-icon="ph:share-network" placeholder="개발사 등급 명칭을 입력해주세요"
-                                        persistent-placeholder />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol :md=6>
-                            <VRow no-gutters>
-                                <VCol>
-                                    <label>입금액</label>
-                                </VCol>
-                                <VCol md="8">
-                                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.deposit_amount"
-                                        type="number" :rules="[requiredValidatorV2(props.item.deposit_amount, '입금액')]" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                    <VRow class="pt-3">
-                        <VCol :md="6" :cols="12">
-                            <VRow no-gutters>
-                                <VCol>
-                                    <label>{{ props.item.pv_options.auth.levels.dev_name }} 수수료</label>
-                                </VCol>
-                                <VCol md="8">
-                                    <VTextField v-model="props.item.dev_fee" type="number"
-                                        suffix="%" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol :md=6>
-                            <VRow no-gutters>
-                                <VCol>
-                                    <label>부가 입금액</label>
-                                </VCol>
-                                <VCol md="8">
-                                    <VTextField prepend-inner-icon="tabler-currency-won"
-                                        v-model="props.item.extra_deposit_amount" type="number" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                    <VRow class="pt-3">
-                        <VCol :md="6" :cols="12">
-                            <VRow no-gutters>
-                                <VCol>
-                                    <label>수수료 정산 타입</label>
-                                </VCol>
-                                <VCol md="8">
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.dev_settle_type"
-                                        :items="dev_settle_types" prepend-inner-icon="ph-buildings" label="수수료 정산 타입 선택"
-                                        item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(props.item.dev_settle_type, '수수료 정산 타입')]" />
-
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol :md=6>
-                            <VRow no-gutters>
-                                <VCol>
-                                    <label>메모사항</label>
-                                </VCol>
-                                <VCol md="8">
+                                <VCol md="12">
                                     <VTextarea v-model="props.item.note" counter label="메모사항"
                                         variant="filled"
                                         prepend-inner-icon="twemoji-spiral-notepad" maxlength="250" auto-grow/>
@@ -249,30 +150,19 @@ const props = defineProps<Props>()
                                     @update:path="props.item.bsin_lic_img = $event" />
                             </VRow>
                         </VCol>
-                        <VCol cols="12" md="6" v-if="props.item.pv_options.paid.brand_mode === 1">
-                            <VRow no-gutters>
-                                <FileInput :label="`인감 업로드`"
-                                    :preview="props.item.seal_img ? props.item.seal_img : '/utils/icons/img-preview.svg'"
-                                    @update:file="props.item.seal_file = $event" 
-                                    @update:path="props.item.seal_img = $event" />
-                            </VRow>
-                        </VCol>
-
                     </VRow>
+                    <br>
+                    <VCardTitle class="mt-5 mb-5">옵션</VCardTitle>
+                        <CreateHalfVColV2 :mdl="8" :mdr="4">
+                            <template #l_name>
+                                <BaseQuestionTooltip location="top" text="계좌번호 중복검사 사용" :content="`가상계좌 대량출금 탭의 출금예약시 계좌번호의 중복 입력을 검사합니다.`"/>
+                                </template>
+                            <template #l_input>
+                                <VSwitch hide-details v-model="props.item.ov_options.free.use_account_number_duplicate" color="primary" />
+                            </template>
+                        </CreateHalfVColV2>
                 </VCardItem>
             </VCard>
-            <template v-if="props.item.use_different_settlement">
-                <br>
-                <VCard>
-                    <VCardItem>
-                        <VCol cols="12">
-                            <VRow>
-                                <DifferentSettlementInfoCard :item="props.item" />
-                            </VRow>
-                        </VCol>
-                    </VCardItem>
-                </VCard>
-            </template>
         </VCol>
         <!-- 👉 submit -->
     </VRow>

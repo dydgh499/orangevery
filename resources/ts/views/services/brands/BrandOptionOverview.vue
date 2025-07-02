@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CreateHalfVColV2 from '@/layouts/utils/CreateHalfVColV2.vue';
-import type { AuthOption, FreeOption, P2pAppOption, PaidOption } from '@/views/types';
+import type { AuthOption, FreeOption, PaidOption } from '@/views/types';
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 
 interface Props {
@@ -8,7 +8,6 @@ interface Props {
         free: FreeOption,
         paid: PaidOption,
         auth: AuthOption,
-        p2p: P2pAppOption,
     },
 }
 const props = defineProps<Props>()

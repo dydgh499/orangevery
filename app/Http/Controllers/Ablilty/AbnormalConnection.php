@@ -64,8 +64,8 @@ class AbnormalConnection
             unset($data['user_pw']);
         if(strpos(request()->url(), 'v1/manager/services/brands/') !== false)
         {
-            if(isset($data['pv_options']))
-                unset($data['pv_options']);
+            if(isset($data['ov_options']))
+                unset($data['ov_options']);
             if(isset($data['deposit_day']))
                 unset($data['deposit_day']);
             if(isset($data['deposit_amount']))

@@ -18,18 +18,12 @@ const _getPaymentMenu = () => {
         title: '대량결제',
         to: 'services-bulk-payments',
     })
-    /*
-    payments.children.push({
-        title: '결제 요청이력',
-        to: 'services-payments-histories',
-    })
-    */
     return payments
 }
 
 export const getPaymentMenu = () => {
     const menu = <any[]>[]
-    if (corp.pv_options.paid.use_bill_key) {
+    if (corp.ov_options.paid.use_pay_module) {
         menu.push(_getPaymentMenu())
     }
     return menu

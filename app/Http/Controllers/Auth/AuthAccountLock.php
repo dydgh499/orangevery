@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Manager\Service\BrandInfo;
 use Illuminate\Support\Facades\Redis;
 
 class AuthAccountLock
@@ -18,8 +17,7 @@ class AuthAccountLock
         $count = self::getPasswordWrongCounter($user) + 1;
         Redis::set($key_name, $count);
 
-        $brand = BrandInfo::getBrandById($user->brand_id);   
-        return $brand['pv_options']['free']['secure']['account_lock_limit'] - $count;
+        return 5 - $count;
     }
 
     static public function initPasswordWrongCounter($user)

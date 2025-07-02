@@ -2,7 +2,6 @@ import router from '@/router';
 import { useRequestStore } from '@/views/request';
 import type { Pagenation } from '@/views/types';
 import { DateFilters, StatusColors } from '@core/enums';
-import corp from '@corp';
 import { cloneDeep } from 'lodash';
 
 
@@ -203,7 +202,7 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
     const route = useRoute()
 
     const getDateFormat = (date: Date) => {
-        if (corp.pv_options.free.use_search_date_detail && props.date_filter_type == DateFilters.DATE_RANGE)
+        if (props.date_filter_type == DateFilters.DATE_RANGE)
             return formatDate(date) + " " + formatTime(date)
         else
             return formatDate(date)

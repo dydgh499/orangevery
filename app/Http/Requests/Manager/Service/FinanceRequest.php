@@ -19,14 +19,9 @@ class FinanceRequest extends FormRequest
         'bank_code',
         'nick_name',
         'withdraw_acct_num',
-        'deposit_type',
     ];
 
     public $integer_keys = [
-        'is_agency_van',
-        'min_balance_limit',
-        'use_kakao_auth',
-        'use_account_auth',
     ];
 
     public function authorize()
@@ -38,7 +33,6 @@ class FinanceRequest extends FormRequest
     {
         $sub = [
             'finance_company_num' => 'required',
-            'min_balance_limit'=>'required',
             'corp_name'=>'required',
             'nick_name'=>'required',
         ];

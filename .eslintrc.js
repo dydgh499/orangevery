@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   env: {
     browser: true,
     es2021: true,
@@ -26,11 +27,14 @@ module.exports = {
   ],
   ignorePatterns: ['resources/ts/@iconify/*.js', 'node_modules', 'dist', '*.d.ts'],
   rules: {
+    'antfu/top-level-function': 0,
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
 
     // indentation (Already present in TypeScript)
-    'indent': ['error', 4],
+
+    indent: ['error', 4],
+    '@typescript-eslint/indent': ['error', 4], // TS
 
     // Enforce trailing comma (Already present in TypeScript)
     'comma-dangle': ['error', 'always-multiline'],
@@ -164,6 +168,29 @@ module.exports = {
     'valid-appcardcode-code-prop': 'error',
     'valid-appcardcode-demo-sfc': 'error',
   },
+  overrides: [
+    {
+      files: ['*.{js,jsx,ts,tsx,vue}'],
+      rules: {
+        'antfu/top-level-function': 0,
+        'no-trailing-spaces': 'off',
+        'padding-line-between-statements': 'off',
+        'newline-before-return': 'off',
+        '@typescript-eslint/no-use-before-define': 'off',
+        '@typescript-eslint/quotes': 'off',
+        'valid-appcardcode-code-prop': 'off',
+        'valid-appcardcode-demo-sfc': 'off',
+        'vue/max-attributes-per-line': 'off',
+        'vue/padding-line-between-blocks': 'off',
+        'vue/html-indent': 'off',
+        'no-unneeded-ternary': 'off',
+        'curly': 'off',
+        'prefer-template': 'off',
+        indent: ['error', 4],
+        '@typescript-eslint/indent': ['error', 4], // TS
+      },
+    },
+  ],
   settings: {
     'import/resolver': {
       node: {

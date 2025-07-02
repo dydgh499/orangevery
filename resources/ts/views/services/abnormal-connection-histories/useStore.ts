@@ -1,7 +1,7 @@
 import { Header } from '@/views/headers';
 import { Searcher, StatusColorSetter } from '@/views/searcher';
 import type { Options } from '@/views/types';
-import { allLevels, getLevelByIndex } from '@axios';
+import { allLevels } from '@axios';
 
 export const connection_types = <Options[]>([
     {id:0, title:'등록되지 않은 IP에서 운영자계정 로그인시도'},
@@ -21,7 +21,7 @@ export const getLevelColor = (level: number) => {
     else if(level === 40)
         return 'primary'
     else 
-        return StatusColorSetter().getSelectIdColor(getLevelByIndex(level))
+        return StatusColorSetter().getSelectIdColor(35)
 }
 
 export const useSearchStore = defineStore('abnormalConnectionHistoSearchStore', () => {

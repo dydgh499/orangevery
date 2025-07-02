@@ -8,22 +8,11 @@ import type { Notification } from '@layouts/types'
 
 const errorHandler = <any>(inject('$errorHandler'))
 const notifications = ref(<Notification[]>[])
-const collectWithdrawDangerDialog = ref()
 const detailWorkStatusDialog = ref()
 const secureReportDialog = ref()
-const is_login = ref(false)
+const is_login = ref(true)
 
 provide('detailWorkStatusDialog', detailWorkStatusDialog)
-
-
-axios.get('/api/v1/manager/posts/recent')
-    .then(r => {
-        notifications.value = r.data.content as Notification[]
-        is_login.value = true
-    })
-    .catch(e => {
-        const r = errorHandler(e)
-    })
 </script>
 
 <template>

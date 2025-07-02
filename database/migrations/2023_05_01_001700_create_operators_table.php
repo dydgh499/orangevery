@@ -27,9 +27,8 @@ return new class extends Migration
             $table->timestamp('locked_at')->nullable()->comment('계정잠금 시간');
             $table->timestamp('password_change_at')->nullable()->comment('마지막 패스워드 변경시간');
             $table->timestamps();
-            $table->string('google_2fa_secret_key', 255)->nullable()->comment('2FA secret Key');
             $table->boolean('is_active')->default(true)->comment('활성화 여부');
-            $table->boolean('is_notice_realtime_warning')->default(false)->comment('실시간 경고사항 알림');
+            $table->string('google_2fa_secret_key', 255)->nullable()->comment('2FA secret Key');
         });
     }
 

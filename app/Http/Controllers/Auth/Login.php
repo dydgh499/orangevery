@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 use App\Enums\AuthLoginCode;
 use App\Http\Traits\ExtendResponseTrait;
 
-use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Controllers\Auth\AuthPasswordChange;
@@ -26,8 +25,7 @@ class Login extends LoginValidate
                 'last_login_at' => date('Y-m-d H:i:s'),
                 'last_login_ip' => request()->ip(),
             ];
-            if($result['user']->level >= 13)
-                app(ActivityHistoryInterface::class)->login($result['user'], $after_data);
+            app(ActivityHistoryInterface::class)->login($result['user'], $after_data);
 
             AuthAccountLock::initPasswordWrongCounter($result['user']);
             $after_data['last_login_ip'] = (new Login)->aes256_encode($after_data['last_login_ip']);
@@ -125,7 +123,6 @@ class Login extends LoginValidate
             $user = $query->first();
             if($user)
             {
-                return $inst->response(0, $user->loginInfo(50))->withHeaders($inst->tokenableExpire());
                 $code = AuthGoogleOTP::validate($request->token);
                 if($code === 0)
                     return $inst->response(0, $user->loginInfo(50))->withHeaders($inst->tokenableExpire());

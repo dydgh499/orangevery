@@ -15,19 +15,17 @@ import { getPaymentMenu } from '../menus/payment'
 import { getVirtualMenu } from '../menus/virtual'
 
 const combinedNavItems = computed(() => {
-    if(getUserLevel() === 11) {
-        return [
-            ...getOtherMenu(),
-        ] as VerticalNavItems
-    }
-    else {
+    if(getUserLevel() >= 35) {
         return [
             ...getServiceMenu(),
             ...getPaymentMenu(),
             ...getVirtualMenu(),
             ...getSecurityMenu(),
             ...getOtherMenu(),
-        ] as VerticalNavItems;
+        ] as VerticalNavItems
+    }
+    else {
+        return [] as VerticalNavItems;
     }
 });
 

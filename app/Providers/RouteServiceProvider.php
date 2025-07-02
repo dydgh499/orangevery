@@ -27,16 +27,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $apis = ['bf', 'samw'];
         $this->configureRateLimiting();
-        $this->routes(function () use($apis) {
-            foreach($apis as $api) {
-                Route::middleware(['api', 'log.route'])
-                    ->prefix("api/v1/$api")
-                    ->namespace($this->namespace)
-                    ->group(base_path("routes/external-api/$api.php"));
-            }
-
+        $this->routes(function () {
             Route::middleware(['api', 'log.route', 'auth:sanctum', 'is.browser'])
                 ->prefix('api/v1/manager')
                 ->namespace($this->namespace)
@@ -47,7 +39,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api-transaction.php'));
 
-            Route::middleware(['api', 'log.route', 'auth:sanctum', 'is.browser', 'is.operate', 'is.edit.able'])
+            Route::middleware(['api', 'log.route', 'auth:sanctum', 'is.browser', 'is.edit.able'])
                 ->prefix('api/v1/manager')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api-batch-updater.php'));

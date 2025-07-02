@@ -82,146 +82,9 @@ export interface BasePropertie {
 }
 export interface UserPropertie extends BasePropertie, Bank, Contract {
     addr: string,
-    resident_num: string,
     business_num: string,
     business_type: number,
-    corp_registration_num: string,
     note: string,
-
-    resident_num_front: string,
-    resident_num_back: string,
-    use_syslink?: boolean,
-    syslink?: any,
-    virtual_accounts?: VirtualAccount[],
-}
-
-export interface MerchandisePropertie {
-    dev_fee: float,
-    sales5_id: number | null,
-    sales4_id: number | null,
-    sales3_id: number | null,
-    sales2_id: number | null,
-    sales1_id: number | null,
-    sales0_id: number | null,
-    sales5_fee: float,
-    sales4_fee: float,
-    sales3_fee: float,
-    sales2_fee: float,
-    sales1_fee: float,
-    sales0_fee: float,
-    sales5_name?: string | null,
-    sales4_name?: string | null,
-    sales3_name?: string | null,
-    sales2_name?: string | null,
-    sales1_name?: string | null,
-    sales0_name?: string | null,
-    mcht_name: string,
-    sector: string,
-    trx_fee: float,
-    hold_fee: float,
-    // option
-    merchant_status: number,
-    tax_category_type: number,
-    custom_id: number | null,
-    use_saleslip_prov: number,
-    use_noti: number,
-    use_regular_card: number,
-    withdraw_fee: number,
-    settle_hold_s_dt: string,
-    settle_hold_reason: string,
-
-    website_url: string,
-    email: string,
-}
-
-export interface SalesforcePropertie {
-    sales_name: string,
-    sales_sub_name: string,
-    settle_tax_type: number,
-    settle_cycle: number,
-    settle_day: number | null,
-    level: number,
-    view_type: number,
-    email: string,
-}
-
-export interface GMID extends BasePropertie {
-    g_mid : string,
-}
-
-export interface RegularCreditCard {
-    id: number,
-    mcht_id: number,
-    mcht_name?: string,
-    yymm?: string,
-    card_num: string,
-    note: string,
-}
-
-export interface Product {
-    id: number,
-    mcht_id: number,
-    product_name: string,
-}
-
-export interface Merchandise extends MerchandisePropertie, UserPropertie {    
-    mcht_sub_name: string,
-    contact_num: string,
-    regular_credit_cards?: RegularCreditCard[],
-    use_multiple_hand_pay: number,
-    phone_auth_limit_s_tm?: string,
-    phone_auth_limit_e_tm?: string,
-    phone_auth_limit_count?: number,
-    single_payment_limit_s_tm?: string,
-    single_payment_limit_e_tm?: string,
-    specified_time_disable_limit?: number,
-    specified_time_disable_limit_payments?: SpecifiedTimeDisablePayment[],
-    products?: Product[],
-    //
-    tid?: string,
-    tid_auto_issue?: number,
-    g_mid: string,
-}
-
-export interface SalesFilter {
-    id: number | null,
-    sales_name: string,
-}    
-
-export interface Salesforce extends SalesforcePropertie, UserPropertie, IdentityDesign {
-    parent_id?: number,
-    sales_fee?: number,
-    mcht_batch_fee?: number,
-    auth_level: number,
-    is_able_unlock_mcht: number,
-    is_able_under_modify: number,
-    withdraw_business_limit: number,
-    withdraw_holiday_limit: number,
-    mcht_pg_id: number,
-    mcht_ps_id: number,
-    resale_withdraw_fee: number,
-    resale_settle_fee: number,
-    p2p_pay_fee?: number,
-    parent_total_fee?: number,
-    under_auto_settings?: UnderAutoSetting[],
-    sales_recommender_codes?: SalesRecommenderCode[],
-    childs?: Salesforce[],
-}
-
-
-export interface UnderAutoSetting {
-    id: number,
-    sales_id: number,
-    sales_fee: number,
-    note: string,
-}
-
-export interface SalesRecommenderCode {
-    id: number,
-    sales_id: number,
-    mcht_fee: number,
-    sales_fee: number,
-    recommend_code: string,
 }
 
 export interface Operator extends BasePropertie {
@@ -234,13 +97,6 @@ export interface Operator extends BasePropertie {
     is_active: number,
 }
 
-export interface PayWindow {
-    pmod_id: number,
-    pin_code: string,
-    window_code: string,
-    holding_able_at: string,
-}
-
 export interface PayModule {
     id: number,
     api_key: string,
@@ -249,52 +105,9 @@ export interface PayModule {
     note: string,
     mid: string,
     tid: string,
-    mcht_name? : string,
-    mcht_id: number | null,
     pg_id: number | null,
     ps_id: number | null,
-    settle_type: number | null,
-    settle_fee: number,
-    cxl_type: number,
-    terminal_id: number | null,
-    p_mid: string,
-    serial_num: string,
-    comm_settle_fee: number,
-    comm_settle_day: number,
-    comm_settle_type: number,
-    comm_calc_level: number,
-    under_sales_amt: number,
-    under_sales_type: number,
-    under_sales_limit: number,
-    begin_dt: date | null,
-    ship_out_dt: date | null,
-    ship_out_stat: number | null,
-    is_old_auth: number,    
-    installment: number,
-    pay_dupe_limit:number,
-    abnormal_trans_limit: number,
-    pay_dupe_least: number,
-    pay_year_limit: number,
-    pay_month_limit: number,
-    pay_day_limit: number,
-    pay_single_limit: number,
-    pay_disable_s_tm: string,
-    pay_disable_e_tm: string,
-    contract_s_dt: date | null,
-    contract_e_dt: date | null,
-    pay_window_secure_level: number,
-    pay_window_extend_hour: number,
-    filter_issuers: string[],
-    use_realtime_deposit: number,
-    payment_term_min: number,
-    pay_key?: string,
-    sign_key?: string,
-    pay_window?: PayWindow | null,
-    is_different_settlement: number,
-    pay_limit_type: number,
-    va_id: number | null,
-    // TODO: remove
-    last_settle_month: number,
+    is_old_auth: number,
 }
 
 export interface PayGateway {
@@ -306,12 +119,6 @@ export interface PayGateway {
     business_num: string,
     phone_num: string,
     addr: string,
-    settle_type: number,
-    round_type: number,
-    p_mid: string,
-    mid: string,
-    api_key: string,
-    sub_key: string,
 }
 
 export interface PaySection {
@@ -322,32 +129,20 @@ export interface PaySection {
     is_delete: boolean,
 }
 
-export interface Classification {
-    id: number | null,
-    name: string,
-    type: number,
-}
-
 export interface FinanceVan {
     id: number,
     finance_company_num: number | null,
-    is_agency_van: number,
     api_key: string,
     sub_key: string,
     enc_key: string,
     iv: string,
     nick_name: string,
 
-    dev_fee: number,
     corp_code: string,
     corp_name: string,
     bank_code: string,
     withdraw_acct_num: string,
 
-    min_balance_limit: number,
-    deposit_type: number,
-    use_kakao_auth: number,
-    use_account_auth: number,
     balance_status?: number,
     balance?: number,
 }
@@ -361,20 +156,7 @@ interface BrandBaseInfo {
 }
 
 interface FreeOption {
-    use_account_number_duplicate: boolean,
-
-    use_search_date_detail: boolean,
-    use_tid_duplicate: boolean,
-    use_mid_duplicate: boolean,
-    use_fix_table_view: boolean,
-    use_fee_detail_view: boolean,
-    only_mcht_fee_profit: boolean,
-    fix_table_size: number,
-    resident_num_masking: boolean,
-    pay_module_detail_view: boolean,
-    sales_slip: {
-        merchandise: BrandBaseInfo
-    },
+    use_account_number_duplicate: number,
     bonaeja: {
         user_id: string,
         api_key: string,
@@ -383,86 +165,11 @@ interface FreeOption {
         min_balance_limit: number,
         is_use?: boolean,
     },
-    default: {
-        installment: number,
-        abnormal_trans_limit: number,
-    },
-    secure: {
-        mcht_id_level: number,
-        mcht_pw_level: number,
-        account_lock_limit: number,
-        sales_id_level: number,
-        sales_pw_level: number,
-        login_only_operate: number,
-    }
 }
 interface PaidOption {
-    use_acct_verification: boolean, // 예금주 검증
-    use_hand_pay_sms: boolean, // 수기결제 SMS
-    use_realtime_deposit: boolean,  // 실시간 결제모듈
-    use_issuer_filter: boolean, // 카드사 필터링
-    use_dup_pay_validation: boolean,    // 중복결제 검증 사용 여부
-    use_online_pay: boolean,    // 통합 API KEY
-    use_tid_create: boolean,    // TID 생성버튼
-    use_mid_create: boolean,    // MID 생성버튼
-    use_pmid: boolean,
-    use_pay_verification_mobile: boolean, //휴대폰 인증 
-    use_regular_card: boolean,
-    use_collect_withdraw: number,
-    use_collect_withdraw_scheduler: boolean, // 모아서 출금 스케줄링
-    use_head_office_withdraw: boolean,
-    use_noti: boolean,
-    use_finance_van_deposit: boolean, //금융 VAN 송금
-    use_multiple_hand_pay: boolean, // 다중 수기결제
-    use_mcht_blacklist: boolean, // 가맹점 블랙리스트
-    use_part_cancel: boolean, // 부분취소 사용여부
-    sales_parent_structure: boolean, // 영업라인 종속구조
-    use_specified_limit: boolean,   // 지정시간 제한
-    use_syslink: boolean,
-    use_product: boolean,   // 수기단말기 상품선택
-    use_cancel_all_allow: boolean,
-    use_bill_key: boolean,  // 빌키 사용 여부
-    use_shop: boolean, // 쇼핑몰 사용여부
-    fee_input_mode: boolean,  // 수수료구조 타입
-    brand_mode: number, // 브랜드 모드
-    use_sales_dns: boolean, // 영업라인 DNS 사용여부
+    use_pay_module: number,
 }
 interface AuthOption {
-    levels: {
-        dev_use:boolean,
-        dev_name:string,
-        sales5_use:boolean,
-        sales5_name:string,
-        sales4_use:boolean,
-        sales4_name:string,
-        sales3_use:boolean,
-        sales3_name:string,
-        sales2_use:boolean,
-        sales2_name:string,
-        sales1_use:boolean,
-        sales1_name:string,
-        sales0_use:boolean,
-        sales0_name:string,
-        [key: string]: string|boolean,
-    },
-    visibles: {
-        abnormal_trans_sales: boolean,
-    }
-}
-
-interface P2pAppOption {
-    pg_id: number | null,
-    ps_id: number | null,
-    fin_id: number | null,
-    module_type: number,
-    is_old_auth: number,
-    ci_validate: number,
-    account_validate: number,
-
-    pay_single_limit: number,
-    pay_day_limit: number,
-    pay_month_limit: number,
-    pay_year_limit: number,
 }
 
 interface ThemeCSS {
@@ -488,12 +195,7 @@ export interface IdentityDesign {
 
 export interface Brand extends Contract, IdentityDesign {
     id: number,
-    // 운영 이미지
-    seal_img: string,
 
-    seal_file: File | undefined,
-    
-    // 운영 정보
     note: string,
     company_name: string,
     ceo_name: string,
@@ -502,41 +204,13 @@ export interface Brand extends Contract, IdentityDesign {
     business_num: string,
     phone_num: string,
     fax_num: string,
-    pv_options: {
+    ov_options: {
         free: FreeOption,
         paid: PaidOption,
         auth: AuthOption,
-        p2p: P2pAppOption,
     },
-    is_transfer: number,
-    deposit_day: number,
-    deposit_amount: number,
-    dev_fee: number,
-    dev_settle_type: number,
-    extra_deposit_amount: number,
-    curr_deposit_amount: number,
-    last_dpst_at: datetime,
-    use_different_settlement: number,
-    before_brand_infos: BeforeBrandInfo[],
-    different_settlement_infos: DifferentSettlementInfo[],
-    identity_auth_infos: IdentityAuthInfo[],
-    operator_ips: OperatorIp[],
     updated_at: datetime,
     created_at: datetime,
-}
-
-export interface BeforeBrandInfo extends BrandBaseInfo {
-    id: number,
-    apply_s_dt: string,
-    apply_e_dt: string,
-}
-
-export interface DifferentSettlementInfo {
-    id: number,
-    pg_type: number,
-    rep_mid: string,
-    sftp_id: string,
-    sftp_password: string,
 }
 
 export interface OperatorIp {
@@ -546,57 +220,8 @@ export interface OperatorIp {
     token?: string,
 }
 
-export interface DeductionHeader {
-    deduction: {
-        input?: string;
-        amount?: string;
-    };
-    cancel_deposit?: {
-        amount?: string;
-    }
-};
-
 export interface Transaction {
     id: number,
-    mcht_id: number | null,
-
-    dev_settle_type: number,
-    dev_realtime_fee: float
-    dev_fee: float,
-    sales5_name?: string,
-    sales5_id: number | null,
-    sales5_fee: float,
-    sales5_settle_id: number | null,
-    
-    sales4_name?: string,
-    sales4_id: number | null,
-    sales4_fee: float,
-    sales4_settle_id: number | null,
-
-    sales3_name?: string,
-    sales3_id: number | null,
-    sales3_fee: float,
-    sales3_settle_id: number | null,
-
-    sales2_name?: string,
-    sales2_id: number | null,
-    sales2_fee: float,
-    sales2_settle_id: number | null,
-
-    sales1_name?: string,
-    sales1_id: number | null,
-    sales1_fee: float,
-    sales1_settle_id: number | null,
-
-    sales0_name?: string,
-    sales0_id: number | null,
-    sales0_fee: float,
-    sales0_settle_id: number | null,
-
-    custom_id: number | string | null,
-    mcht_name?: string,
-    mcht_fee: float,
-    hold_fee: float,
     mid: string,
     tid: string,
     //    
@@ -604,20 +229,8 @@ export interface Transaction {
     pg_id: number | string | null,
     pmod_id: number | string | null,
     ps_id: number | string | null,
-    terminal_id: number | string | null,
     //
     ps_fee: Float,
-    mcht_settle_type: number | null,
-    mcht_settle_fee: number, 
-    mcht_settle_id: number | null,
-    mcht_settle_amount: number,
-    //
-    trx_dt: string | null,
-    trx_tm: string | null,
-    cxl_dt: string | null,
-    cxl_tm: string | null,
-    trx_dttm?: string,
-    cxl_dttm?: string,
     is_cancel: number,
     amount: number,
     ord_num: string,
@@ -637,216 +250,8 @@ export interface Transaction {
     //
     addr?: string,
     nick_name?: string,
-    resident_num?: string,
-    business_num?: string,
     
-    use_noti?: number,
-    noti_status?: number,
-    noti_send_histories?: NotiSendHistory[],
-
-    cancel_deposits?: CancelDeposit[],
-    cxl_type?: number,
-
-    use_realtime_deposit?: number,
-    va_id: number | null,
-    withdraw_status?: string,
-    withdraw_histories?: VirtualAccountHistory[],
-
-    profit?: number,
-    trx_amount?: number,    
-    pg_settle_type: number,
     created_at?: string,
-}
-
-export interface SalesSlip extends Transaction {
-    result_cd?: string,
-    result_msg?: string,
-    contact_num?: string,
-    use_saleslip_prov: number,
-    tax_category_type: number,
-}
-
-export interface Danger {
-    id: number,
-    mcht_name: number,
-    module_type: number | string,
-    item_name: string,
-    amount: number,
-    ord_num: string,
-    trx_id: string,
-    ori_trx_id: string,
-    mid: string,
-    tid: string,
-    pg_id: number | string,
-    ps_id: number | string,
-    issuer: string,
-    acquirer: string,
-    card_num: string,
-    trx_dttm: string,
-    terminal_id: number | string
-    installment: number | string,
-    danger_type: number | string,
-    is_checked: boolean | string,
-    created_at: datetime,
-    updated_at:datetime,
-}
-export interface FailTransaction {
-    id: number,
-    mcht_name: string,
-    pg_id: number | string,
-    ps_id: number | string,
-    module_type: number | string,
-    trx_dttm: string,
-    amount: number,
-    resuld_cd: string,
-    result_msg: string,
-}
-
-export interface TotalSettle {
-    count: number,
-    amount: number,
-    trx_amount: number,
-    hold_amount: number,
-    settle_fee: number,
-    total_trx_amount: number,
-    profit: number,
-}
-export interface Settle extends TotalSettle, Bank {
-    id: number,
-    level: number,
-    user_name: string,
-    mcht_name?: string,
-    sales_name?: string,
-    appr: TotalSettle,
-    cxl: TotalSettle,
-    total: TotalSettle,
-    deduction: {
-        amount: number,
-    },
-    settle: {
-        amount:number,       // 정산금액
-        deposit:number,      // 입금금액
-        transfer: number,    // 이체금액
-        withdraw_fee?: number   // 지급이체 수수료
-        cancel_deposit_amount?: number,
-    },
-    terminal: {
-        amount: number,
-        under_sales_amount: number,
-        settle_pay_module_idxs: number[],
-    },
-    sector: string,
-    rep_name: string,
-    phone_num: string,
-    resident_num: string,
-    business_num: string,
-    addr: string,
-    use_collect_withdraw: number,    
-    cancel_deposit_idxs: number[],
-    settle_transaction_idxs: number[],
-    settle_hold_s_dt?: string,
-    settle_hold_reason?: string,
-}
-
-export interface SettlesHistoryDeposit {
-    id: number,
-    fin_id: number,
-    trans_seq_num: string,
-    request_type: number,
-    result_code: string,
-    message: string,
-    created_at: string,
-}
-
-export interface SettlesHistory extends Bank {
-    id: number,
-    mcht_id: number
-    mcht_name: string,    
-    sales_id: number,
-    level: number,
-    user_name: string,
-    settle_amount: number,
-    deduct_amount: number,
-    deposit_amount: number,
-    appr_amount: number,
-    appr_count: number,
-    cxl_amount: number,
-    cxl_count: number,
-    trx_amount: number,
-    total_amount: number,
-    
-    comm_settle_amount: number,
-    under_sales_amount: number,
-    cancel_deposit_amount: number,
-
-    settle_dt: string,
-    deposit_dt: string,
-    deposit_status: Boolean,
-    deposits?: SettlesHistoryDeposit[],
-}
-export interface Post {
-    id: number,
-    title: string,
-    level: number,
-    content: string,
-    type:number,
-    writer: string,
-    replies?: object[],
-    parent_id: number | null,
-    is_reply: number,
-    updated_at: string,
-}
-
-export interface Complaint {
-    id: number,
-    mcht_id: number | null,
-    mcht_name: string | null,
-    tid: string,
-    cust_name: string,
-    appr_dt: string | null,
-    appr_num: string,
-    phone_num: string,
-    hand_cust_name: string,
-    hand_phone_num: string,
-    issuer: string | null,
-    pg_id: number | null,
-    pg_name: string | null,
-    type: number | null,
-    entry_path: string,
-    is_deposit: number,
-    complaint_status: number,
-    note: string,
-}
-
-export interface FeeChangeHistory {
-    id: number,
-    mcht_id: number,
-    bf_trx_fee: float,
-    aft_trx_fee: float,
-    created_at: string,
-    change_status: boolean,
-}
-
-export interface MchtFeeChangeHistory extends FeeChangeHistory {
-    bf_hold_fee: float,
-    aft_hold_fee: float,    
-}
-
-
-export interface SalesFeeChangeHistory extends FeeChangeHistory {
-    bf_sales_id: number,
-    aft_sales_id: number,
-    level: number,
-}
-
-export interface NotiSendHistory {
-    id: number,
-    trans_id: number,
-    http_code: number,
-    retry_count: number,
-    message: string,
-    send_url: string,
-    created_at: datetime,
 }
 
 export interface UserPayInfo {    
@@ -884,75 +289,10 @@ export interface AuthPay extends BasePayInfo {
 
 export interface BillPay extends BasePayInfo {}
 
-export interface MultipleHandPay extends HandPay {
-    status_color?: string,
-    status_icon?: string,
-}
-//----------------------------
-export interface MchtRecentTransaction {
-    appr_amount: number,
-    appr_count: number,
-    cxl_amount: number,
-    cxl_count: number,
-    profit: number,
-    day?: string,
-    mcht_name?: string,
-}
-export interface MchtRecentTransactions {
-    monthly : {
-        [key: string]: MchtRecentTransaction        
-    },
-    daily : MchtRecentTransaction[],
-    mchts : MchtRecentTransaction[],
-}
-
-export interface TransWeekChart {
-    [key: string]: TransChart
-}
 // --------------------------
 interface Series {
     name: string,
     data: number[]
-}
-
-export interface TransChartData {
-    amount: number
-    count: number
-    hold_amount: number
-    profit: number
-    settle_fee: number
-    total_trx_amount: number
-    trx_amount: number
-    profit_rate?: number
-    amount_rate?: number
-    week?: TransWeekChart
-}
-
-export interface TransChart extends TransChartData {
-    appr: TransChartData
-    cxl: TransChartData
-    modules: {
-        terminal_count: number
-        hand_count: number
-        auth_count: number
-        simple_count: number
-    }
-    [key: string]: TransChart; // Index signature
-}
-
-export interface MonthlyTransChart {
-    [key: string]: TransChart
-}
-export interface UpSideChartData {
-    add_rate: number,
-    del_rate: number,
-}
-export interface UpSideChart {
-    total: number,
-    cur_increase_rate: number,
-    graph:{
-        [key: string]: UpSideChartData
-    }
 }
 
 export interface LockedUser {
@@ -962,17 +302,6 @@ export interface LockedUser {
     nick_name: string,
     phone_num: string,
     locked_at: string,
-}
-
-export interface NotiUrl {
-    id: number,
-    mcht_id: number | null,
-    pmod_id: number | null,
-    mcht_name?: string,
-    send_url: string,
-    noti_status: number,
-    send_type: number,
-    note: string,
 }
 
 export interface ActivityHistory {
@@ -987,93 +316,6 @@ export interface ActivityHistory {
     before_history_detail: any,
     after_history_detail: any,
     created_at: string,
-}
-
-export interface NotiFormat {
-    send_url: string,
-    mid: string,
-    tid: string,
-    trx_id: string,
-    amount: number,
-    ord_num: string,
-    appr_num: string,
-    item_name: string,
-    buyer_name: string,
-    buyer_phone: string,
-    acquirer: string,
-    issuer: string,
-    card_num: string,
-    installment: string,
-    trx_dttm: string,
-    cxl_dttm: string,
-    is_cancel: boolean,
-    temp: string,
-}
-
-export interface HeadOffceAccount extends Bank {
-    id: number,
-}
-
-export interface CancelDeposit {
-    id: number,
-    trans_id: number,
-    mcht_name?: string,
-    va_id?: number,
-    deposit_amount: number,
-    deposit_history: string,
-    deposit_dt: string,
-    created_at: string,
-    updated_at: string,
-}
-
-export interface Popup {
-    id: number,
-    user_name: string,
-    profile_img: string,
-    popup_title: string,
-    popup_content: string,
-    open_s_dt: string,
-    open_e_dt: string,
-    open_range?: string,
-    visible?: boolean,
-    is_hide?: boolean,
-}
-
-export interface MchtBlacklist {
-    id: number,    
-    mcht_name: string,
-    nick_name: string,
-    phone_num: string,
-    business_num: string,
-    resident_num: string,
-    addr: string,
-    card_num: string,
-    block_reason: string,
-}
-
-export interface Holiday {
-    id: number,
-    rest_name: string,
-    rest_dt: string,
-    rest_type: number,
-}
-
-export interface SubBusinessRegistration {
-    id: number,
-    business_num: string,
-    pg_type: number,
-    registration_msg: number,
-    registration_type: number,
-    registration_code: number,
-    card_company_name: number,
-}
-
-export interface SpecifiedTimeDisablePayment {
-    id: number,
-    mcht_id: number,
-    disable_s_tm: string | null,
-    disable_e_tm: string | null,
-    disable_type: number,
 }
 
 export interface AbnormalConnectionHistory {
@@ -1107,173 +349,6 @@ export interface BillKey {
     card_num?: string,
 }
 
-// ++ 241209
-
-export interface UserDocument {
-    id : number,
-    user_type: number,
-    business_num : string,
-    passbook_img : string,
-    id_img : string,
-    contract_img : string,
-    bsin_lic_img : string,
-    corp_docs_img : string,
-    aml_docs_img  : string,
-    other_docs_img  : string,
-    
-    passbook_file? : File | undefined,
-    id_file? : File | undefined,
-    contract_file? : File | undefined,
-    bsin_lic_file? : File | undefined,
-    corp_docs_file? : File | undefined,
-    aml_docs_file?  : File | undefined,
-    other_docs_file?  : File | undefined,
-}
-
-export interface AuthInfo {
-    id: number,
-    nick_name: string,
-    phone_num: string,
-    mcht_id?: number,
-    sales_id?: number,
-    oper_id?: number,
-    user_type?: number,
-}
-
-
-export interface OperatorAbliltyGroup {
-    id: number,
-    group_name: string,
-    level: number,
-    ablilty: Ablilty[],
-    is_active: number,
-}
-
-export interface DefaultAblilty {
-    use: number,
-    create: number,
-    read: number,
-    update: number,
-    delete: number,
-    all: number,
-}
-export interface Ablilty extends DefaultAblilty{
-    ablilty_id: number,
-    ablilty_name: string,
-}
-
-export interface Category {
-    id: number,
-    mcht_id: number,
-    category_name: string,
-    products?: Product[],
-}
-
-export interface Product {
-    id: number,
-    pmod_id: number,
-    category_id: number,
-    product_name: string,
-    product_amount: number,
-    product_img: string,
-    product_file? : File | undefined,
-    content: string,
-    product_option_groups? : ProductOptionGroup[],
-}
-
-export interface ProductOptionGroup {
-    id: number,
-    product_id: number,
-    group_name: string,
-    is_able_count: number,
-    is_able_duplicate: number,
-    product_options: ProductOption[],
-}
-
-export interface ProductOption {
-    id: number,
-    group_id: number,
-    option_name: string,
-    option_price: number,
-}
-
-export interface OptionGroup {
-    group_id?: number,
-    option_id: number,
-    option_name: string,
-    option_price: number,
-    count: number,
-}
-
-export interface Order {
-    groups: OptionGroup[],
-    total_amount: number,
-    addr: string,
-    detail_addr: string,
-}
-
-export interface IdentityAuthInfo {
-    id: number,
-    identitiy_auth_type: number,
-    corp_code: string,
-    api_key: string,
-    sub_key: string,
-    enc_key: string,
-}
-
-export interface VirtualAccount {
-    id: number,
-    user_id: number,
-    balance: number,
-    account_code: string,
-    account_name: string,
-    fin_id: number | null,
-    fin_trx_delay: number,
-    withdraw_type: number,
-    withdraw_fee: number,
-    withdraw_limit_type: number,
-    withdraw_business_limit: number,
-    withdraw_holiday_limit: number,
-
-    withdraw_amount: number,
-
-    acct_bank_name: string, // 입금 은행명
-    acct_num: number, // 입금 계좌번호
-    acct_name: string, // 예금주명
-    acct_bank_code: string, // 은행코드
-}
-
-export interface VirtualAccountHistory {
-    id: number,
-    level: number,
-    settle_id: number,
-    trans_type: number,
-    trans_amount: number,
-    deposit_status: number,
-    deposit_type: number,
-    deposit_schedule_time: string,
-    withdraw_schedule_time: string,
-    withdraw_status: number,
-    withdraw_type: number,
-    trx_id: string,
-    withdraws: VirtualAccountWithdraw[],
-}
-
-export interface VirtualAccountWithdraw {
-    id: number,
-    va_history_id: number
-    trans_amount: number,
-    result_code: string,
-    request_type: number,
-    note: string,
-    trans_seq_num: string,
-    acct_num: string,
-    acct_name: string,
-    acct_bank_name: string,
-    acct_bank_code: string,
-    created_at: string,
-}
-
 export interface Withdraw {
     id: number,
     fin_id: number | null,
@@ -1302,6 +377,7 @@ export interface CmsTransactionBooks {
     withdraw_book_time: string, // 출금 예약 시간
     withdraw_status: number, // 상태
     trans_seq_num: string,
+    withdraw_schedule_time: string,
 }
 
 export interface BulkPayment {
@@ -1326,4 +402,17 @@ export interface BankAccount {
     acct_bank_code: string, // 은행코드
     checked: number, // 예금주 검증 여부
     note: string, // 출금 사유
+}
+
+export interface Popup {
+    id: number,
+    user_name: string,
+    profile_img: string,
+    popup_title: string,
+    popup_content: string,
+    open_s_dt: string,
+    open_e_dt: string,
+    open_range?: string,
+    visible?: boolean,
+    is_hide?: boolean,
 }

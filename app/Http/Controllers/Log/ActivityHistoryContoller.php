@@ -3,19 +3,13 @@
 namespace App\Http\Controllers\Log;
 
 use App\Models\Log\ActivityHistory;
-use App\Models\Operator;
-use App\Models\Salesforce;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
-use App\Http\Controllers\Manager\Service\BrandInfo;
-use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\ActivityHistoryViewer;
 
-use Illuminate\Support\Facades\DB;
-use App\Models\Options\PvOptions;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Models\EncryptDataTrait;
 use Illuminate\Http\Request;
@@ -52,18 +46,25 @@ class ActivityHistoryContoller extends Controller
         $oper_query = ActivityHistoryViewer::operatorSelect($request)
                 ->groupBy('activity_histories.user_id')
                 ->select($oper_cols);
-
         $query = $oper_query;
-        $total = (clone $query)->get('user_id')->count();
-        $content = $query
-                    ->orderBy('activity_e_at', 'desc')
-                    ->offset($s_page)
-                    ->limit($page_size)
-                    ->get();
+        if ((clone $query)->count()) 
+        {
+            $total = (clone $query)->get('user_id')->count();
+            $content = $query
+                ->orderBy('activity_e_at', 'desc')
+                ->offset($s_page)
+                ->limit($page_size)
+                ->get();
+        }
+        else
+        {
+            $total = 0;
+            $content = [];
+        }
         $data = [
-            'total' => $total,
-            'content' => $content,
-        ];
+                'total' => $total,
+                'content' => $content,
+            ];
         return $this->response(0, $data);
     }
 

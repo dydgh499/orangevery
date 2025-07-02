@@ -84,10 +84,10 @@ class BrandController extends Controller
 
         $data   = $this->getIndexData($request, $query);
         foreach ($data['content'] as $content) {
-            $content->free = $content->pv_options->free;
-            $content->paid = $content->pv_options->paid;
-            $content->auth = $content->pv_options->auth;
-            $content->makeHidden(['pv_options']);
+            $content->free = $content->ov_options->free;
+            $content->paid = $content->ov_options->paid;
+            $content->auth = $content->ov_options->auth;
+            $content->makeHidden(['ov_options']);
         }
         return $this->response(0, $data);
     }
@@ -116,9 +116,7 @@ class BrandController extends Controller
             return $this->response(951);
         else
         {
-            $data = $this->brands->where('id', $id)
-                ->with(['beforeBrandInfos', 'differentSettlementInfos', 'identityAuthInfos'])
-                ->first();
+            $data = $this->brands->where('id', $id)->first();
 
             return $this->response($data ? 0 : 1000, $data);
         }

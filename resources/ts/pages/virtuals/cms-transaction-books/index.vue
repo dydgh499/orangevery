@@ -5,7 +5,8 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { selectFunctionCollect } from '@/views/selected';
 import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
-import { realtimeMessage, realtimeResult, useSearchStore, withdrawInterface } from '@/views/virtuals/cms-transaction-books/useStore'
+import { useSearchStore } from '@/views/virtuals/cms-transaction-books/useStore'
+import { realtimeMessage, realtimeResult } from '@/views/virtuals/cms-transactions/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { DateFilters } from '@core/enums'
 import ExtraMenu from '@/views/virtuals/cms-transaction-books/ExtraMenu.vue';
@@ -45,7 +46,7 @@ if(getUserLevel() < 35) {
             <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="[]" :add="false" add_name="" :date_filter_type="DateFilters.DATE_RANGE">
                 <template #filter>
                     <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
-                        :sales="false">
+                        :sales="false" :page="true">
                         <template #pg_extra_field>
                             <VCol cols="6" sm="3" v-if="getUserLevel() >= 35">
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.is_withdraw" :items="[{ id: null, title: '전체' }, {id: 0, title:'입금'}, {id: 1, title:'출금'}]"

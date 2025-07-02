@@ -1,12 +1,10 @@
 
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
-import { useStore } from '@/views/services/pay-gateways/useStore'
 
 export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => {
     const store = Searcher('virtuals/bank-accounts')
     const head = Header('virtuals/bank-accounts', '은행계좌 관리')
-    const { finance_vans } = useStore()
     const headers: Record<string, string> = {
         'id' : 'NO.',
         'acct_bank_name': '은행명',
@@ -31,9 +29,6 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         let datas = r.data.content;
         for (let i = 0; i < datas.length; i++) {
-            datas[i]['fin_id'] = (finance_vans.find(obj => obj.id == datas[i]['fin_id']))?.nick_name
-            datas[i]['is_withdraw'] = datas[i]['is_withdraw'] ? '출금' : '입금'
-            datas[i]['result_code'] = realtimeMessage(datas[i])
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         head.exportToExcel(datas)

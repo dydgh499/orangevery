@@ -1,4 +1,4 @@
-export const timerV1 = (init_time: number)  => {
+export const timerV1 = (init_time: number) => {
     const countdown_time = ref(init_time)
     let countdown_timer = <any>(null)
 
@@ -16,7 +16,6 @@ export const timerV1 = (init_time: number)  => {
         startTimer()
     }
 
-
     const updateRemainingTime = () => {
         if (countdown_time.value === 0)
             clearInterval(countdown_timer)
@@ -28,7 +27,7 @@ export const timerV1 = (init_time: number)  => {
         if (countdown_time.value > 0) {
             const min = parseInt((countdown_time.value / 60).toString())
             const sec = countdown_time.value % 60
-            return `${min}:${sec < 10 ? '0' + sec : sec}`
+            return `${min}:${sec < 10 ? `0${sec}` : sec}`
         }
         else {
             return `0:00`
@@ -65,10 +64,10 @@ export const timerV2 = (init_time: string) => {
         const expire = new Date(expire_time.value)
         const now = new Date()
         const diff = expire.getTime() - now.getTime()
-        if(!Number.isNaN(diff))
+        if (!Number.isNaN(diff))
         {
-            if(diff < 0)
-                remaining_time.value = "00:00:00";
+            if (diff < 0)
+                remaining_time.value = "00:00:00"
             else {
                 const hours = Math.floor(diff / (1000 * 60 * 60))
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
@@ -84,14 +83,14 @@ export const timerV2 = (init_time: string) => {
     }
 
     const getRemainTimeColor = computed(() => {
-        const expire = new Date(expire_time.value);
-        const now = new Date();
-        const diff = expire.getTime() - now.getTime();
-        if(diff < 0)
+        const expire = new Date(expire_time.value)
+        const now = new Date()
+        const diff = expire.getTime() - now.getTime()
+        if (diff < 0)
             return 'text-error'
         else {
             const minutes = Math.floor(diff / (1000 * 60))
-            if(minutes < 5)
+            if (minutes < 5)
                 return 'text-error'
             else
                 return 'text-primary'

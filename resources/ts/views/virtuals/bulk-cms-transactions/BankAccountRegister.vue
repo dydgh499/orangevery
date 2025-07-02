@@ -2,12 +2,10 @@
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { Registration } from '@/views/registration';
 import UsageTooltip from '@/views/virtuals/bulk-cms-transactions/UsageTooltip.vue';
-import { axios } from '@axios';
 import { useRegisterStore, validateItems } from '@/views/virtuals/bulk-cms-transactions/BankAccountRegisterStore';
-import type { Withdraw, FinanceVan, VirtualAccount } from '@/views/types';
+import type { Withdraw, FinanceVan } from '@/views/types';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import { banks } from '@/views/users/useStore'
-import corp from '@corp';
 
 const { finance_vans } = useStore()
 const { headers, isPrimaryHeader } = useRegisterStore()
@@ -278,7 +276,7 @@ watchEffect(async () => {
                     <VDataTable v-model:items-per-page="item_per_page" v-model:page="page"                     
                         :items-length="items.length" :items="items" :headers="headers" class="text-no-wrap"
                         no-data-text="양식 업로드후 등록 버튼을 클릭해주세요."
-                        item-value="title" :height="corp.pv_options.free.fix_table_size"
+                        item-value="title" :height="749"
                         :search="search">
                         <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
                             <tr>

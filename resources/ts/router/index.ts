@@ -4,7 +4,6 @@ import { canNavigate } from '@layouts/plugins/casl';
 import { setupLayouts } from 'virtual:generated-layouts';
 import { createRouter, createWebHistory } from 'vue-router';
 import routes from '~pages';
-import { isBrightFix } from '../plugins/fixplus';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,10 +13,7 @@ const router = createRouter({
             redirect: to => {
                 const isLoggedIn = pay_token.value != ''
                 if (isLoggedIn) {
-                    if(getUserLevel() === 11 || (isBrightFix() && getUserLevel() > 10))
-                        return { name: 'transactions-summary', query: to.query }
-                    else
-                        return { name: getViewType(), query: to.query }
+                    return { name: getViewType(), query: to.query }
                 }
                 else
                     return { name: 'login', query: to.query }
@@ -27,20 +23,6 @@ const router = createRouter({
             path: '/services/brands',
             redirect: to => { return `/services/brands/edit/${corp.id}` }
         },
-        {
-            path: '/merchandises/terminals/edit/:id',
-            redirect: to => { return `/merchandises/pay-modules/edit/${to.params.id}` }
-        },
-        {
-            path: '/merchandises/terminals/create',
-            redirect: to => { return `/merchandises/pay-modules/create` }
-        },
-        {
-            path: '/dashboards/home',
-            redirect: to => {                
-                return { name: getViewType(), query: to.query }
-            }
-        },
         ...setupLayouts(routes),
     ],
 })
@@ -48,18 +30,16 @@ const router = createRouter({
 router.beforeEach(to => {
     const isLoggedIn = pay_token.value != ''
     axios.defaults.headers.common['Authorization'] = `Bearer ${pay_token.value}`
-    if(to.path.startsWith('/pay/') === false && to.path.startsWith('/shop/') === false) {
-        if (canNavigate(to)) {
-            if (to.meta.redirectIfLoggedIn && isLoggedIn)
-                return '/'
-        }
-        else {
-            if (isLoggedIn)
-                return { name: 'not-authorized' }
-            else
-                return { name: 'login', query: { to: to.name !== 'index' ? to.fullPath : undefined } }
-        }    
+    if (canNavigate(to)) {
+        if (to.meta.redirectIfLoggedIn && isLoggedIn)
+            return '/'
     }
+    else {
+        if (isLoggedIn)
+            return { name: 'not-authorized' }
+        else
+            return { name: 'login', query: { to: to.name !== 'index' ? to.fullPath : undefined } }
+    }    
 })
 router.onError((error, to) => {
     if (error.message.includes('Failed to fetch dynamically imported module')) {

@@ -15,15 +15,9 @@ class PayGatewayRequest extends FormRequest
         'business_num',
         'phone_num',
         'addr',
-        'p_mid',
-        'mid',
-        'api_key',
-        'sub_key',
     ];
     public $integer_keys = [
         'pg_type',
-        'settle_type',
-        'round_type',
     ];
 
     public function authorize()

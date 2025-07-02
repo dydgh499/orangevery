@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Manager\Service;
 use App\Models\Brand;
 use App\Models\Salesforce;
 use Illuminate\Support\Facades\Redis;
-use App\Models\Options\PvOptions;
+use App\Models\Options\OvOptions;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 
 class BrandInfo
@@ -16,64 +16,17 @@ class BrandInfo
             'id_img',
             'contract_img',
             'bsin_lic_img',
-            'seal_img',
-            'pvcy_rep_name',
             'note',
-            'deposit_day',
-            'deposit_amount',
-            'extra_deposit_amount',
-            'curr_deposit_amount',
-            'last_dpst_at',
-            'is_transfer',
-            'p2p_app_dns',
             'is_delete',
             'created_at',
             'updated_at'
         ]);
     }
 
-    static function getSalesByDns($dns)
-    {
-        $key_name = "brand-info-sales-$dns";
-        $sales = Redis::get($key_name);
-        if($sales === null || env('APP_ENV', 'local') === 'local')
-        {
-            $sales = Salesforce::where('dns', $dns)->first();
-            if($sales)
-            {
-                $brand = self::getBrandById($sales->brand_id);
-                if($brand)
-                {
-                    $brand['name']    = $sales->name;
-                    $brand['dns']     = $sales->dns;
-                    $brand['logo_img']    = $sales->logo_img;
-                    $brand['favicon_img'] = $sales->favicon_img;
-                    $brand['og_img']      = $sales->og_img;
-                    $brand['login_img']   = $sales->login_img;
-                    $brand['og_description']    = $sales->og_description;
-                    $brand['theme_css']         = json_decode(json_encode($sales->theme_css), true);
-                    Redis::set($key_name, json_encode($brand), 'EX', 600);
-                    return $brand;    
-                }
-            }
-            return [];    
-        }
-        else
-        {
-            $default = json_decode($sales, true);
-            $str_pv_options = json_encode($default['pv_options']);
-            $default['pv_options'] = json_decode(json_encode(new PvOptions($str_pv_options)), true);
-            return $default;
-        }
-    }
 
     static function getBrandByDNS($dns)
     {
-        $brand = self::getBrand($dns, 'dns', $dns);
-        if(count($brand) === 0)
-            return self::getSalesByDns($dns);
-        else
-            return $brand;
+        return self::getBrand($dns, 'dns', $dns);
     }
 
     static function getBrandById($brand_id)
@@ -87,7 +40,7 @@ class BrandInfo
         $brand = Redis::get($key_name);
         if($brand === null || env('APP_ENV', 'local') === 'local')
         {
-            $brand = Brand::where($key, $value)->with(['beforeBrandInfos'])->first();
+            $brand = Brand::where($key, $value)->first();
             if($brand)
             {
                 self::hiddenInfo($brand);
@@ -100,8 +53,8 @@ class BrandInfo
         else
         {
             $default = json_decode($brand, true);
-            $str_pv_options = json_encode($default['pv_options']);
-            $default['pv_options'] = json_decode(json_encode(new PvOptions($str_pv_options)), true);
+            $str_pv_options = json_encode($default['ov_options']);
+            $default['ov_options'] = json_decode(json_encode(new OvOptions($str_pv_options)), true);
             return $default;
         }
     }

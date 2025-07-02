@@ -5,10 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Merchandise;
-use App\Models\CancelDeposit;
-use App\Models\Log\NotiSendHistory;
-
 use App\Http\Traits\Models\AttributeTrait;
 
 class Transaction extends Model
@@ -16,7 +12,7 @@ class Transaction extends Model
     use HasFactory, AttributeTrait;
     protected   $table      = 'transactions';
     protected   $primaryKey = 'id';
-    protected   $appends    = ['trx_amount', 'hold_amount', 'trx_dttm', 'cxl_dttm', 'total_trx_amount'];
+    protected   $appends    = [];
     protected   $guarded    = [];
     protected   $feeFormatting = false;
 
@@ -26,120 +22,5 @@ class Transaction extends Model
         $query = globalPGFilter($query, request(), 'transactions');
         $query = globalAuthFilter($query, request(), 'transactions');
         return $query;
-    }
-
-    // 정산 안한 것들 조회
-    public function scopeNoSettlement($query, $target)
-    {
-        if(request()->is_base_trx)
-        {
-            $s_dt = strlen(request()->s_dt) === 10 ? date(request()->s_dt." 00:00:00") : request()->s_dt;
-            $e_dt = strlen(request()->e_dt) === 10 ? date(request()->e_dt." 23:59:59") : request()->e_dt;
-            $trx_dt = 'transactions.trx_at';
-        }
-        else
-        {
-            $s_dt = str_replace('-', '', request()->s_dt);
-            $e_dt = str_replace('-', '', request()->e_dt);
-            $trx_dt = 'transactions.settle_dt';
-        }
-        
-        return $query->whereNull($target)
-            ->globalFilter()
-            ->whereRaw("$trx_dt >= ?", [$s_dt]) 
-            ->whereRaw("$trx_dt <= ?", [$e_dt]);
-    }
-
-    public function getTrxAmountAttribute()
-    {   //거래 수수료(거래수수료 + 유보금 + 건별 수수료)
-        if(request()->level)
-        {
-            [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(request()->level);
-            if((int)request()->level === 10)
-                return $this->amount - $this[$target_settle_amount] - $this->mcht_settle_fee;
-            else
-                return $this->amount - $this[$target_settle_amount];    
-        }
-        else
-            return 0;
-    }
-
-    public function getTotalTrxAmountAttribute()
-    {
-        if(request()->level)
-        {
-            [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(request()->level);
-            if((int)request()->level === 50)
-                return $this->amount - $this[$target_settle_amount] - $this->dev_realtime_settle_amount;
-            else
-                return $this->amount - $this[$target_settle_amount];
-        }
-        else
-            return 0;
-    }
-
-    public function getHoldAmountAttribute()
-    {   //유보금
-        if(request()->level == 10)
-            return round($this->amount * $this->hold_fee);
-        else
-            return 0;        
-    }
-
-    public function notiSendHistories()
-    {
-        return $this->hasMany(NotiSendHistory::class, 'trans_id')
-            ->orderby('id', 'desc')
-            ->select();
-    }
-
-    public function cancelDeposits()
-    {   // is delete 없음
-        return $this->hasMany(CancelDeposit::class, 'trans_id')
-            ->orderby('id', 'desc')
-            ->select();
-    }
-
-    public function mcht()
-    {
-        return $this->belongsTo(Merchandise::class, 'mcht_id')->select([
-            'id', 'mcht_name', 'user_name', 'nick_name',
-            'addr', 'resident_num', 'business_num', 
-            'use_saleslip_prov',
-        ]);
-    }
-    // trans
-    public function getTrxDttmAttribute()
-    {
-        return $this->trx_dt." ".$this->trx_tm;
-    }
-    
-    public function getCxlDttmAttribute()
-    {
-        return $this->cxl_dt." ".$this->cxl_tm;
-    }
-    
-    public function getResidentNumFrontAttribute()
-    {
-        $resident_num_front = '';
-        if ($this->resident_num) {
-            $resident_num = str_replace('-', '', $this->resident_num);            
-            if (strlen($resident_num) >= 6)
-                $resident_num_front = substr($resident_num, 0, 6);
-            else
-                $resident_num_front = $resident_num;
-        }
-        return $resident_num_front;
-    }
-
-    public function getResidentNumBackAttribute()
-    {
-        $resident_num_back = '';
-        if ($this->resident_num) {
-            $resident_num = str_replace('-', '', $this->resident_num);
-            if (strlen($resident_num) > 6)
-                $resident_num_back = substr($resident_num, 6);
-        }
-        return $resident_num_back;
     }
 }

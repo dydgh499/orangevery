@@ -108,9 +108,7 @@ export const Registration = () => {
                     item.ord_num = `${randomPart}BP${timestamp}`
                     item.installment = '00'
 
-                    console.log(`전송 데이터 [${i + 1}/${items.length}]`, item)
                     const r = await axios.post('https://api.routeup.kr/api/v2/pay/bill-key/hand', item)
-                    console.log('응답 데이터', r.data)
                     if (r.data.result_cd === '0000') {
                         snackbar.value.show(`[${i + 1}] ${r.data.result_msg}`, 'success')
                         result = true

@@ -1,6 +1,5 @@
-import { getUserLevel, user_info } from '@/plugins/axios'
-import corp from '@corp'
-import { lengthValidator, passwordValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators'
+
+import { lengthValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators'
 import { Options, UserPropertie } from '../types'
 
 export const banks = [
@@ -99,29 +98,11 @@ export const getUserTypeName = (type: number) => {
 }
 
 export const getUserIdValidate = (user_type: number, user_name: string) => {
-    if(user_type === 0 || user_type === 1) {
-        let id_level = user_type === 0 ? 'mcht_id_level' : 'sales_id_level';
-        if(corp.pv_options.free.secure[id_level] === 0)
-            return [requiredValidatorV2(user_name, '아이디')]
-        else if(corp.pv_options.free.secure[id_level] === 1)
-            return [requiredValidatorV2(user_name, '아이디'), lengthValidator(user_name, 8)]
-    }
-    else
-        return [requiredValidatorV2(user_name, '아이디'), lengthValidator(user_name, 8)]
+    return [requiredValidatorV2(user_name, '아이디'), lengthValidator(user_name, 8)]
 }
 
 export const getUserPasswordValidate = (user_type: number, password: string) => {
-    if(user_type === 0 || user_type === 1) {
-        let pw_level = user_type === 0 ? 'mcht_pw_level' : 'sales_pw_level';
-        if(corp.pv_options.free.secure[pw_level] === 0)
-            return [requiredValidatorV2(password, '패스워드')]
-        else if(corp.pv_options.free.secure[pw_level] === 1)
-            return [requiredValidatorV2(password, '패스워드'), lengthValidator(password, 8)]
-        else if(corp.pv_options.free.secure[pw_level] === 2)
-            return [requiredValidatorV2(password, '패스워드'), passwordValidator]
-    }
-    else
-        return [requiredValidatorV2(password, '새 패스워드'), passwordValidatorV2]
+    return [requiredValidatorV2(password, '새 패스워드'), passwordValidatorV2]
 }
 
 export const getOnlyNumber = (value: string) => {
@@ -129,24 +110,5 @@ export const getOnlyNumber = (value: string) => {
 }
 
 export const getRegidentNum = (item: UserPropertie, is_mcht: boolean) => {
-    const brandMode2Method = () => {
-        if(getUserLevel() >= 30) 
-            return `${item.resident_num_front} - ${item.resident_num_back}`
-        else {
-            if(is_mcht && getUserLevel() === 10 && item.id === user_info.value.id)
-                return `${item.resident_num_front} - ${item.resident_num_back}`
-            else if(is_mcht === false && getUserLevel() > 10 && item.id === user_info.value.id)
-                return `${item.resident_num_front} - ${item.resident_num_back}`
-            else
-                return `${item.resident_num_front} - *******`
-        }
-    }
-    if(corp.pv_options.free.resident_num_masking) {
-        if(corp.pv_options.paid.brand_mode === 2) 
-            return brandMode2Method()
-        else
-            return `${item.resident_num_front} - *******`
-    }
-    else
-        return `${item.resident_num_front} - ${item.resident_num_back}`
+    return `${item.resident_num_front} - *******`
 }

@@ -14,7 +14,6 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
 
 use App\Enums\HistoryType;
-use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Requests\Manager\IndexRequest;
 
 use Illuminate\Support\Facades\DB;
@@ -100,8 +99,6 @@ class AbnormalConnectionController extends Controller
         // 시간대별 가맹점 작업 현황
         $work_status_s_at = Carbon::now()->subDay(1)->format('Y-m-d 12:00:00');
         $work_status_by_timezone = $this->registrationByTimePeriod(new PaymentModule, $request, 0)
-            ->unionAll($this->registrationByTimePeriod(new Merchandise, $request, 1))
-            ->unionAll($this->registrationByTimePeriod(new Salesforce, $request, 2))
             ->unionAll($this->registrationByTimePeriod(new Operator, $request, 3))
             ->get();
 
@@ -162,7 +159,7 @@ class AbnormalConnectionController extends Controller
             ->whereIn('activity_histories.history_type', $activity_types)
             ->where('activity_histories.created_at', '>=', $s_dt)
             ->where('activity_histories.created_at', '<=', $e_dt)
-            ->where('activity_histories.history_target', ['가맹점', '결제모듈', '영업라인', '운영자'])
+            ->where('activity_histories.history_target', ['결제모듈', '운영자'])
             ->orderby('activity_histories.created_at', 'desc')
             ->get([
                 'operators.profile_img',
@@ -199,10 +196,7 @@ class AbnormalConnectionController extends Controller
                 ]);
         };
         $ip = $this->aes256_encode($request->connection_ip);
-        $last_logins = $_findLastLogin(new Merchandise, $request, $ip, 1)
-            ->unionAll($_findLastLogin(new Salesforce, $request, $ip, 2))
-            ->unionAll($_findLastLogin(new Operator, $request, $ip, 3))
-            ->get();
+        $last_logins = $_findLastLogin(new Operator, $request, $ip, 3)->get();
         return $this->response(0, $last_logins);
     }
 }

@@ -81,15 +81,9 @@ class TransactionController extends Controller
         $with  = ['cancelDeposits'];
         $query = TransactionFilter::common($request);
 
-        if($b_info['pv_options']['paid']['use_noti'])
-            $with[] = 'notiSendHistories';
-        if($b_info['pv_options']['paid']['use_realtime_deposit'])
-            $with[] = 'withdrawHistories';
-
         if(count($with))
             $query = $query->with($with);
         $data = TransactionFilter::pagenation($request, $query, $this->cols, 'transactions.trx_at', false);
-        $data = TransactionAPI::getNotiStatus($b_info, $data);        
 
         return $this->response(0, $data);
     }

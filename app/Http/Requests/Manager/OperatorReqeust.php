@@ -20,7 +20,6 @@ class OperatorReqeust extends FormRequest
     ];
     
     public $integer_keys = [
-        'is_notice_realtime_warning',
         'is_active',
     ];
 

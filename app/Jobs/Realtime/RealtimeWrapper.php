@@ -2,8 +2,6 @@
 namespace App\Jobs\Realtime;
 use App\Http\Controllers\Utils\FinanceVanUtil;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Option\Withdraw\Notification\Notification;
-use App\Http\Controllers\Option\Withdraw\CMSTransactionValidate;
 
 class RealtimeWrapper
 {

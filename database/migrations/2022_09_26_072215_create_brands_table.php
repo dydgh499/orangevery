@@ -35,7 +35,7 @@ class CreateBrandsTable extends Migration
             $table->string('business_num')->nullable()->comment('사업자등록번호');
             $table->string('phone_num')->nullable()->comment('휴대폰 번호');
             $table->string('fax_num')->nullable()->comment('팩스 번호');
-            $table->string('pv_options', 3000)->default('[]')->comment('페이베리 옵션()');
+            $table->string('ov_options', 3000)->default('[]')->comment('오렌지베리 옵션()');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });

@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('sub_key', 80)->nullable()->comment('SUB KEY');            
             $table->string('enc_key', 80)->nullable()->comment('ENC KEY');
             $table->string('iv', 80)->nullable()->comment('IV');
-            $table->integer('min_balance_limit')->default(0)->comment('최소 알림금액(단위:만원)');
             $table->string('corp_code', 50)->nullable()->comment('법인 코드');
             $table->string('corp_name', 50)->nullable()->comment('법인 명');
             $table->string('bank_code', 3)->nullable()->comment('은행 코드');
@@ -30,8 +29,6 @@ return new class extends Migration
             $table->string('withdraw_acct_num', 20)->nullable()->comment('출금 통장 번호');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
-            $table->boolean('is_agency_van')->default(false)->comment('지급대행 모듈 사용여부');
-            $table->boolean('deposit_type')->default(false)->comment('예금주 타입');
         });
     }
 

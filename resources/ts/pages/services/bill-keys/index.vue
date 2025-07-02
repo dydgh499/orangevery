@@ -4,14 +4,12 @@ import BillKeySelectDialog from '@/layouts/dialogs/pay-modules/BillKeySelectDial
 import { useSearchStore } from '@/views/services/bill-keys/useStore';
 import { useRequestStore } from '@/views/request';
 import { selectFunctionCollect } from '@/views/selected';
-import { useStore } from '@/views/services/pay-gateways/useStore';
 import { DateFilters } from '@core/enums';
 
 const alert = <any>(inject('alert'))
 const { request, remove } = useRequestStore()
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 const billKeySelectDialog = ref()
 
 provide('store', store)

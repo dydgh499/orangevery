@@ -1,25 +1,12 @@
 import { getUserLevel } from '@/plugins/axios'
 import { useRequestStore } from '@/views/request'
-import type { Classification, FinanceVan, Options, PayGateway, PaySection } from '@/views/types'
-
-export const pg_settle_types = <Options[]>([
-    {id:0, title:'매일정산'},
-    {id:1, title:'영업일만 정산'},
-])
-
-export const round_types = <Options[]>([
-    {id:0, title:'반올림'},
-    {id:1, title:'올림'},
-    {id:2, title:'내림'},
-])
+import type { FinanceVan, Options, PayGateway, PaySection } from '@/views/types'
 
 export const useStore = defineStore('payGatewayStore', () => {
     const { get, post } = useRequestStore()
     const snackbar = <any>(inject('snackbar'))
     const pgs = ref<PayGateway[]>([])
     const pss = ref<PaySection[]>([])
-    const terminals   = ref<Classification[]>([])
-    const cus_filters = ref<Classification[]>([])
     const finance_vans = ref<FinanceVan[]>([])
     const pg_companies = [
         {id:1, name:'페이투스', rep_name:'서동균', company_name:'(주)페이투스', business_num:'810-81-00347', phone_num:'02-465-8800', addr:'서울특별시 금천구 가산디지털1로 168, C동 7층 701B호(가산동, 우림라이온스밸리)'},
@@ -74,42 +61,15 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:6, title:'네스트페이'},
     ])
     
-    const is_agency_vans = <Options[]>([
-        {id:0, title:'미사용'},
-        {id:1, title:'사용'},
-    ])
-
-    const settle_types = [
-        {id:-1, name:'실시간'}, //{id:0, name:'D+0'},
-        {id:0, name:'D+1'}, {id:1, name:'D+2'},
-        {id:2, name:'D+3'}, {id:3, name:'D+4'},
-        {id:4, name:'D+5'}, {id:5, name:'D+6'},
-        {id:6, name:'D+7'}, {id:7, name:'D+8'},
-        {id:8, name:'D+9'}, {id:9, name:'D+10'},
-        {id:10, name:'D+11'}, {id:11, name:'D+12'},
-        {id:12, name:'D+13'}, {id:13, name:'D+14'},
-        {id:14, name:'D+15'}, {id:15, name:'D+16'},
-        {id:16, name:'D+17'}, {id:17, name:'D+18'},
-        {id:18, name:'D+19'}, {id:19, name:'D+20'},
-        {id:20, name:'D+21'}, {id:21, name:'D+22'},
-        {id:22, name:'D+23'}, {id:23, name:'D+24'},
-        {id:24, name:'D+25'}, {id:25, name:'D+26'},
-        {id:26, name:'D+27'}, {id:27, name:'D+28'},
-        {id:28, name:'D+29'}, {id:29, name:'D+30'},
-    ]
     onMounted(async () => {
         try {
             const r = await get('/api/v1/manager/services/pay-gateways/detail')
             Object.assign(pgs.value, r.data.pay_gateways.sort((a:PayGateway, b:PayGateway) => a.pg_name.localeCompare(b.pg_name)))
             Object.assign(pss.value, r.data.pay_sections.sort((a:PaySection, b:PaySection) => a.name.localeCompare(b.name)))
-            Object.assign(terminals.value, r.data.terminals.sort((a:Classification, b:Classification) => a.name.localeCompare(b.name)))
-            Object.assign(cus_filters.value, r.data.custom_filters.sort((a:Classification, b:Classification) => a.name.localeCompare(b.name)))
             Object.assign(finance_vans.value, r.data.finance_vans.sort((a:FinanceVan, b:FinanceVan) => a.nick_name.localeCompare(b.nick_name)))
             getFianaceVansBalance()
         }
         catch(e) {
-            // 가맹점 수기결제시 필요
-            //errorHandler(e)
         }
     })
 
@@ -135,8 +95,7 @@ export const useStore = defineStore('payGatewayStore', () => {
     const getFianaceVansBalance = async () => {
         if(getUserLevel() >= 35) {
             for (let i = 0; i < finance_vans.value.length; i++)  {
-                if(!finance_vans.value[i].use_kakao_auth && !finance_vans.value[i].use_account_auth)
-                    getFinanceVan(finance_vans.value[i])
+                getFinanceVan(finance_vans.value[i])
             }    
         }
     }
@@ -168,8 +127,8 @@ export const useStore = defineStore('payGatewayStore', () => {
         return ps_id
     }
     return {
-        pgs, pss, terminals, settle_types, cus_filters, finance_vans, 
-        pg_companies, finance_companies, is_agency_vans,
+        pgs, pss, finance_vans, 
+        pg_companies, finance_companies,
         psFilter, setFee, 
         updateFinanceVan, getFianaceVansBalance,
     }

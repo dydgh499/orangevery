@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('issuer')->default('')->comment('발급카드사');
             $table->string('bill_key')->default('')->comment('BILL KEY');
             $table->string('ori_bill_key')->default('')->comment('결제 KEY');
-            $table->timestamps();
             $table->string('nick_name', 50)->nullable()->comment('별칭');
+            $table->string('card_num', 255)->default('')->comment('카드번호');
+            $table->timestamps();
         });
     }
 

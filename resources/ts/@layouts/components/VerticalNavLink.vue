@@ -11,7 +11,6 @@ defineProps<{
 }>()
 
 const payShow  = <any>(inject('payShow'))
-const salesRecommenderCodeDialog  = <any>(inject('salesRecommenderCodeDialog'))
 const { width: windowWidth } = useWindowSize()
 const { isVerticalNavMini, dynamicI18nProps } = useLayouts()
 const hideTitleAndBadge = isVerticalNavMini(windowWidth)
@@ -24,8 +23,6 @@ const TapFunctionNavi = (item: NavLink) => {
         window.open(window.location.origin + `/shop/${item.params.window_code}`, '_blank', "toolbar=no,scrollbars=no,resizable=no,status=no,menubar=no,width=1000, height=1200")
     else if(item.class === `install()`)
         pwaSnackbar.value.show()
-    else if(item.class === `recommandCode()`)
-        salesRecommenderCodeDialog.value.show(user_info.value)
 }
 </script>
 

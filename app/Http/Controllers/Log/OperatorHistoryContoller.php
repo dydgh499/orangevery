@@ -10,7 +10,7 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
 use Illuminate\Support\Facades\DB;
-use App\Models\Options\PvOptions;
+use App\Models\Options\OvOptions;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Models\EncryptDataTrait;
 use Illuminate\Http\Request;
@@ -27,7 +27,7 @@ class OperatorHistoryContoller extends Controller
 
     public function __construct(OperatorHistory $operator_histories)
     {
-        // 가맹점, 결제모듈, 영업라인, 구분정보, 수수료율, 매출, 금융 VAN
+        // 결제모듈, 매출, 금융 VAN
         $this->operator_histories = $operator_histories;
     }
     
@@ -106,7 +106,7 @@ class OperatorHistoryContoller extends Controller
             ->where('operator_histories.oper_id', $id)
             ->get([
                 'operator_histories.*', 'operators.nick_name', 
-                'brands.pv_options', 'brands.use_different_settlement'
+                'brands.ov_options', 'brands.use_different_settlement'
             ]);
 
         foreach($content as $data)
@@ -150,9 +150,9 @@ class OperatorHistoryContoller extends Controller
         if(strlen($history_detail))
         {
             $conv_history_detail = json_decode($history_detail, true);
-            $pv_options = new PvOptions($data->pv_options);
+            $ov_options = new OvOptions($data->ov_options);
             
-            if($pv_options->paid->use_issuer_filter === false)
+            if($ov_options->paid->use_issuer_filter === false)
                 unset($conv_history_detail['filter_issuers']);
             unset($conv_history_detail['pay_disable_s_tm']);
             unset($conv_history_detail['pay_disable_e_tm']);
@@ -160,29 +160,29 @@ class OperatorHistoryContoller extends Controller
             unset($conv_history_detail['pay_month_limit']);   
             unset($conv_history_detail['pay_day_limit']);
             unset($conv_history_detail['pay_single_limit']);
-            if($pv_options->paid->use_regular_card === false)
+            if($ov_options->paid->use_regular_card === false)
                 unset($conv_history_detail['use_regular_card']);
-            if($pv_options->paid->use_collect_withdraw === false)
+            if($ov_options->paid->use_collect_withdraw === false)
             {
                 unset($conv_history_detail['use_collect_withdraw']);  
                 unset($conv_history_detail['collect_withdraw_fee']);
             }
-            if($pv_options->paid->use_noti === false)
+            if($ov_options->paid->use_noti === false)
                 unset($conv_history_detail['use_noti']);
             if(isset($conv_history_detail['brand_id']))
                 unset($conv_history_detail['brand_id']);
 
-            if($pv_options->paid->use_multiple_hand_pay === false)
+            if($ov_options->paid->use_multiple_hand_pay === false)
                 unset($conv_history_detail['use_multiple_hand_pay']);    
-            if($pv_options->paid->use_pay_verification_mobile === false)
+            if($ov_options->paid->use_pay_verification_mobile === false)
                 unset($conv_history_detail['use_pay_verification_mobile']);
 
-            if($pv_options->paid->use_noti === false)
+            if($ov_options->paid->use_noti === false)
                 unset($conv_history_detail['use_noti']);
             
-            if($pv_options->paid->use_pmid === false)
+            if($ov_options->paid->use_pmid === false)
                 unset($conv_history_detail['p_mid']);
-            if($pv_options->paid->use_specified_limit === false)
+            if($ov_options->paid->use_specified_limit === false)
             {
                 unset($conv_history_detail['phone_auth_limit_s_tm']);
                 unset($conv_history_detail['phone_auth_limit_e_tm']);

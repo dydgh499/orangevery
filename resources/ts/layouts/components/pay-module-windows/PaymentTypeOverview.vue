@@ -17,20 +17,6 @@ const snackbar = <any>(inject('snackbar'))
 
 const { pgs, pss, psFilter, setFee } = useStore()
 
-const setPGKeyInfo = () => {
-    if(props.item.pg_id) {
-        const pg = pgs.find(obj => obj.id === props.item.pg_id)
-        if(pg) {
-            props.item.mid = pg.mid
-            props.item.api_key = pg.api_key 
-            props.item.sub_key = pg.sub_key
-            props.item.p_mid = pg.p_mid
-            snackbar.value.show('결제 정보들이 세팅되었습니다.', 'success')
-        }
-    }
-    else
-        snackbar.value.show('PG사를 먼저 선택해주세요.', 'warning')
-}
 const onModuleTypeChange = () => {
     props.item.note = module_types.find(obj => obj.id === props.item.module_type)?.title || ''
 }
@@ -43,28 +29,6 @@ const filterPgs = computed(() => {
 </script>
 <template>
     <VCardItem>
-        <!--
-        <VCardSubtitle>
-            <VChip variant="outlined">소유 가맹점 정보</VChip>                
-        </VCardSubtitle>
-        <br>
-        <VRow v-if="props.able_mcht_chanage && getUserLevel() >= 35">
-            <VCol md="6" cols="6">소유 가맹점</VCol>
-            <VCol md="6">
-                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id" :items="mchts"
-                        prepend-inner-icon="tabler-building-store" label="가맹점 선택" item-title="mcht_name" item-value="id"
-                        single-line :rules="[requiredValidatorV2(props.item.mcht_id, '가맹점')]" :eager="true" />
-            </VCol>
-        </VRow>
-        <VRow v-else>
-            <VCol md="5" cols="6">
-                <span class="font-weight-bold">소유 가맹점</span>
-            </VCol>
-            <VCol md="7">
-                {{ mchts.find(obj => obj.id === props.item.mcht_id)?.mcht_name }}
-            </VCol>
-        </VRow>
-        -->
         <VCardSubtitle>
             <VChip variant="outlined">결제모듈 정보</VChip>
         </VCardSubtitle>

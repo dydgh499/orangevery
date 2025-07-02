@@ -57,14 +57,13 @@ class AuthController extends Controller
         if($brand)
         {
             $brand['color'] = $brand['theme_css']['main_color'];
-            $use_bonaeja = $brand['pv_options']['free']['bonaeja']['user_id'] !== '' ? true : false;
-            $brand['pv_options']['free']['bonaeja'] = [];
-            $brand['pv_options']['free']['bonaeja']['min_balance_limit'] = 0;
-            $brand['pv_options']['free']['bonaeja'] = [
-                'min_balance_limit' => $brand['pv_options']['free']['bonaeja']['min_balance_limit'],
+            $use_bonaeja = $brand['ov_options']['free']['bonaeja']['user_id'] !== '' ? true : false;
+            $brand['ov_options']['free']['bonaeja'] = [];
+            $brand['ov_options']['free']['bonaeja']['min_balance_limit'] = 0;
+            $brand['ov_options']['free']['bonaeja'] = [
+                'min_balance_limit' => $brand['ov_options']['free']['bonaeja']['min_balance_limit'],
                 'is_use' => $use_bonaeja,
             ];
-            unset($brand['pv_options']['p2p']);
             return response(view('application', ['json' => $brand, 'ip'=>$request->ip()]))
                 ->withCookie('XSRF-TOKEN', csrf_token());
         }
@@ -73,29 +72,6 @@ class AuthController extends Controller
             AbnormalConnection::tryParameterModulationApproach();
             return $this->extendResponse(9999, '잘못된 접근입니다.');            
         }
-    }
-    
-    /*
-    * 패스워드 변경(초기화)
-    */
-    public function resetPassword(Request $request)
-    {
-        $request->validate(['token' => 'required', 'user_pw' => 'required', 'level'=>'required|integer']);
-
-        $result = AuthPasswordChange::getTokenContent($request->token);
-        if($result['result'] === AuthLoginCode::SUCCESS->value)
-        {
-            $result = AuthPasswordChange::updateFirstPassword($result, $request->user_pw);
-            if($result['result'] === AuthLoginCode::SUCCESS->value)
-            {
-                $info = $result['user']->loginInfo($result['user']->level);
-                return $this->response(0, $info)->withHeaders($this->tokenableExpire());
-            }
-            else
-                return $this->extendResponse($result['result'], $result['msg'], []);
-        }
-        else
-            return $this->extendResponse($result['result'], $result['msg'], []);
     }
 
     /**
@@ -112,18 +88,6 @@ class AuthController extends Controller
         }
         else
         {
-            $mcht_with  = ['onlinePays.payWindows'];
-            $sales_with = [];            
-            if($brand['pv_options']['paid']['use_shop'])
-                $mcht_with[] = 'shoppingMall';
-            if($brand['pv_options']['paid']['use_finance_van_deposit'])
-                $mcht_with[] = 'virtualAccounts';
-
-            if($brand['pv_options']['paid']['brand_mode'] === 1)
-                $sales_with[] = 'salesRecommenderCodes';
-            if($brand['pv_options']['paid']['use_finance_van_deposit'])
-                $sales_with[] = 'virtualAccounts';
-
             $result = Login::isSafeAccount(Operator::where('is_active', true), $request);    // check operator
             if($result !== null)
                 return $result;

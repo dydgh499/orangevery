@@ -21,21 +21,15 @@ const addNewFinanceVan = () => {
     _finance_vans.value.push(<FinanceVan>({
         id: 0,
         finance_company_num: null,
-        is_agency_van: 0,
-        dev_fee: 0,
         bank_code: '000',
         api_key: '',
         sub_key: '',
         enc_key: '',
         iv: '',
-        min_balance_limit: 0,
         corp_code: '',
         corp_name: '',
         nick_name: '별칭입력',
         withdraw_acct_num: '',
-        deposit_type: 0,
-        use_kakao_auth: 0,
-        use_account_auth: 0,
     }))
 }
 onMounted(async () => {

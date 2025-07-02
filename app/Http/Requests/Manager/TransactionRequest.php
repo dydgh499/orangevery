@@ -25,12 +25,8 @@ class TransactionRequest extends FormRequest
         'cxl_seq',
         'is_cancel',
         'amount',
-        'pg_settle_type',
-        'round_type',
     ];
     public $nullable_keys = [
-        'custom_id', 
-        'terminal_id',
     ];
     public function authorize()
     {

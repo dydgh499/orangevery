@@ -37,12 +37,8 @@ const profile = () => {
         router.push(mytype.link)
     else if(mytype.id === 2)
         operatorDialog.value.show(user_info.value)
-    /*
-    else if(mytype.id === 3)
-        gmidDialog.value.show(user_info.value)
-        */
     else   
-        snackbar.value.show(`${corp.pv_options.auth.levels.dev_name}는 프로필로 이동할 수 없습니다.`, 'warning')
+        snackbar.value.show(`개발사는 프로필로 이동할 수 없습니다.`, 'warning')
 }
 
 const logout = async () => {
@@ -59,7 +55,7 @@ const showAvatar = (preview: string) => {
 
 const show2FAAuthDialog = async () => {
     if(mytype.id === 3)
-        snackbar.value.show(`${corp.pv_options.auth.levels.dev_name}는 설정할 수 없습니다.`, 'warning')
+        snackbar.value.show(`개발사는 설정할 수 없습니다.`, 'warning')
     else if(getUserLevel() >= 35 && user_info.value.is_2fa_use) {
         const [result, token] = await headOfficeAuthValidate('운영자 등급부터 재설정시 본사등급의 휴대폰번호 인증이 필요합니다.<br>계속하시겠습니까?')
         if(result)

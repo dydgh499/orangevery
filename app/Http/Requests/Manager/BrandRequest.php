@@ -4,7 +4,7 @@ namespace App\Http\Requests\Manager;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
-use App\Models\Options\PvOptions;
+use App\Models\Options\OvOptions;
 use App\Models\Options\ThemeCSS;
 
 
@@ -21,12 +21,7 @@ class BrandRequest extends FormRequest
         'fax_num',
         'company_name',
         'business_num',
-        'deposit_day',
-        'deposit_amount',
-        'extra_deposit_amount',
-        'dev_settle_type',
         'note',
-        'use_different_settlement',
     ];
     public $file_keys = [   
         'logo_file',         
@@ -36,7 +31,6 @@ class BrandRequest extends FormRequest
         'bsin_lic_file',
         'id_file',
         'og_file',
-        'seal_file',
     ];
     public $image_keys = [
         'logo_img',         
@@ -46,7 +40,6 @@ class BrandRequest extends FormRequest
         'bsin_lic_img',
         'id_img',
         'og_img',
-        'seal_img',
     ];
     public function authorize()
     {
@@ -71,16 +64,12 @@ class BrandRequest extends FormRequest
             'id_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
             'og_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp',
             'login_file'     => 'file|mimes:jpg,bmp,png,jpeg,webp',
-            'pv_options'    => 'required',
+            'ov_options'    => 'required',
             'ceo_name'        => 'string|required',
             'company_name'    => 'string|required',
             'phone_num'     => 'string|required',
             'addr'          => 'string|required',
             'business_num'  => 'string|required',
-            'deposit_day'   => 'required',
-            'deposit_amount' => 'required',
-            'extra_deposit_amount'=> 'required|numeric',
-            'dev_settle_type'=> 'required|numeric',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -92,8 +81,7 @@ class BrandRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $this->merge(['pv_options' => $this->convertToBoolean($this->input('pv_options'))]);
-        $this->merge(['use_different_settlement' => $this->convertToBoolean($this->input('use_different_settlement'), false)]);
+        $this->merge(['ov_options' => $this->convertToBoolean($this->input('ov_options'))]);
     }
 
     public function bodyParameters()
@@ -113,7 +101,7 @@ class BrandRequest extends FormRequest
     public function data()
     {
         $data = array_merge($this->getParmasBaseKey(), $this->getParamsBaseFile($this->image_keys));
-        $data['pv_options'] = json_encode($this->pv_options); 
+        $data['ov_options'] = json_encode($this->ov_options); 
         $data['theme_css']  = json_encode($this->theme_css);
         if($this->has('login_img'))
             $data['login_img'] = $this->login_img;

@@ -13,7 +13,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
     page: true
 })
-const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
+const { pgs, pss, psFilter } = useStore()
 const store = <any>(inject('store'))
 
 const filterPgs = computed(() => {
@@ -37,21 +37,6 @@ const filterPgs = computed(() => {
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.ps_id"
                 :items="[{ id: null, name: '전체' }].concat(filterPgs)" label="구간 필터" item-title="name" item-value="id"
                id="ps-filter" eager @update:modelValue="store.updateQueryString({ps_id: store.params.ps_id})"  />
-        </VCol>
-        <VCol cols="6" sm="3" v-if="props.settle_type">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_type"
-                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산일 필터" item-title="name" item-value="id"
-               id="settle_types-filter" eager @update:modelValue="store.updateQueryString({settle_type: store.params.settle_type})" />
-        </VCol>
-        <VCol cols="6" sm="3" v-if="props.terminal">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.terminal_id"
-                :items="[{ id: null, name: '전체' }].concat(terminals)" label="장비 필터" item-title="name" item-value="id"
-               id="terminal-filter" eager @update:modelValue="store.updateQueryString({terminal_id: store.params.terminal_id})"  />
-        </VCol>
-        <VCol cols="6" sm="3" v-if="props.cus_filter && getUserLevel() > 30">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.custom_id"
-                :items="[{ id: null, name: '전체' }].concat(cus_filters)" label="커스텀 필터" item-title="name" item-value="id"
-               id="custom-filter" eager @update:modelValue="store.updateQueryString({custom_id: store.params.custom_id})" />
         </VCol>
         <slot name="pg_extra_field"></slot>
         <VCol cols="6" sm="3" v-if="props.page">

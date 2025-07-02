@@ -2,15 +2,10 @@
 
 namespace App\Models\Merchandise;
 
-use App\Models\Transaction;
-use App\Models\Service\Classification;
-use App\Models\Merchandise\PayWindow;
 use App\Http\Traits\Models\AttributeTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class PaymentModule extends Model
 {
@@ -20,95 +15,6 @@ class PaymentModule extends Model
     protected   $guarded    = [];
     protected   $hidden     = [];
     
-    public function payWindows()
-    {
-        return $this->hasOne(PayWindow::class, 'pmod_id')->select();
-    }
-
-    public function classifications()
-    {
-        return $this->belongsTo(Classification::class, 'terminal_id')
-            ->where('is_delete', false)
-            ->select(['id', 'name']);
-    }
-
-    public function payLimitAmount()
-    {
-        return $this->hasMany(Transaction::class, 'pmod_id')
-            ->where('trx_dt', '>=', Carbon::now()->subYear()->toDateString())
-            ->selectRaw('
-                pmod_id,
-                SUM(CASE WHEN trx_dt = CURDATE() THEN amount ELSE 0 END) as pay_day_amount,
-                SUM(CASE WHEN MONTH(trx_dt) = MONTH(CURRENT_DATE()) AND YEAR(trx_dt) = YEAR(CURRENT_DATE()) THEN amount ELSE 0 END) as pay_month_amount,
-                SUM(CASE WHEN YEAR(trx_dt) = YEAR(CURRENT_DATE()) THEN amount ELSE 0 END) as pay_year_amount
-            ')
-            ->groupBy('pmod_id'); 
-    }
-
-    // 단말기, 매출미달차감금 정산일인 것만
-    public function scopeTerminalSettle($query, $level)
-    {
-        $settle_month   = date('Ym', strtotime(request()->e_dt));
-        /*
-            단말기 정산일이 정산일에 포함되는 것들 모두 조회
-
-            추가정산일: 조회일 보다 낮아야함
-            추가정산액 부가대상: 각 레벨            
-            추가정산 적용월: comm_settle_type
-            payment_modules.begin_dt
-            개통일: 조회일 보다 낮아야함
-            마지막정산일: 조회월 보다 낮아야함
-            통신비: 0원 이상이어야함
-        */
-        return $query->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-            ->where('merchandises.brand_id', request()->user()->brand_id)
-            ->where(function ($query) {
-                return $query->orWhere(function($query) {
-                    $settle_month = Carbon::parse(request()->e_dt)->subMonthNoOverflow(0)->format('Ym');
-                    return $query->where('payment_modules.comm_settle_type', 0)
-                        ->whereRaw("DATE_FORMAT(payment_modules.begin_dt, '%Y%m') <= ?", [$settle_month]);
-                })
-                ->orWhere(function($query) {
-                    $settle_month = Carbon::parse(request()->e_dt)->subMonthNoOverflow(1)->format('Ym');
-                    return $query->where('payment_modules.comm_settle_type', 1)
-                        ->whereRaw("DATE_FORMAT(payment_modules.begin_dt, '%Y%m') <= ?", [$settle_month]);
-                })
-                ->orWhere(function($query) {
-                    $settle_month = Carbon::parse(request()->e_dt)->subMonthNoOverflow(2)->format('Ym');
-                    return $query->where('payment_modules.comm_settle_type', 2)
-                        ->whereRaw("DATE_FORMAT(payment_modules.begin_dt, '%Y%m') <= ?", [$settle_month]);
-                });
-            })
-            ->whereNull('payment_modules.va_id')
-            ->where('payment_modules.use_realtime_deposit', false)
-            ->where('payment_modules.last_settle_month', '<', $settle_month)
-            ->where('payment_modules.comm_settle_fee', '>', 0)
-            ->where('payment_modules.comm_calc_level', $level)
-            ->where('payment_modules.is_delete', false)
-            ->where('merchandises.is_delete', false);
-    }
-
-    public function scopeByTargetIds($query, $target_id)
-    {
-        return $query->distinct()
-            ->groupby("merchandises.$target_id")
-            ->pluck("merchandises.$target_id")
-            ->all();
-    }
-
-    public function scopeNotUseLastMonth($query, $brand_id)
-    {
-        $s_dt = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d 00:00:00');
-        $e_dt = Carbon::now()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d 23:59:59');
-
-        $trans_pmod_ids = Transaction::where('brand_id', $brand_id)
-            ->where('trx_at', '>=', $s_dt)
-            ->where('trx_at', '<=', $e_dt)
-            ->where('is_cancel', false)
-            ->distinct()->pluck('pmod_id')->all();
-        return $query->whereNotIn('payment_modules.id', $trans_pmod_ids);
-
-    }
 
     protected function beginDt(): Attribute
     {

@@ -10,58 +10,22 @@ class PayModuleRequest extends FormRequest
 {
     use FormRequestTrait;
     public $keys = [
-        'mcht_id',
         'pg_id',
         'ps_id',
-        'settle_fee',
-        'settle_type',
         'module_type',
         'api_key',
         'sub_key',
         'mid',
-        'p_mid',
         'tid',
-        'cxl_type',
-        'serial_num',
-        'comm_settle_fee',
-        'comm_settle_type',
-        'comm_calc_level',
-        'abnormal_trans_limit',
-        'pay_dupe_limit',
-        'pay_dupe_least',
-        'pay_year_limit',
-        'pay_month_limit',
-        'pay_day_limit',
-        'pay_single_limit',
         'installment',
         'note',
     ];
     public $boolean_keys = [
         'is_old_auth',
-        'use_realtime_deposit',
     ];
-    public $nullable_keys = [
-        'contract_s_dt',
-        'contract_e_dt',
-        'begin_dt',
-        'ship_out_dt',
-        'va_id',
-        'pay_disable_s_tm',
-        'pay_disable_e_tm',
-    ];
+    public $nullable_keys = [];
     
-    public $integer_keys = [
-        'under_sales_type',
-        'under_sales_limit',
-        'under_sales_amt',
-        'terminal_id',
-        'ship_out_stat',
-        'comm_settle_day',
-        'payment_term_min',
-        'pay_window_secure_level',
-        'pay_window_extend_hour',
-        'pay_limit_type',
-    ];
+    public $integer_keys = [];
 
     public function authorize()
     {
@@ -74,32 +38,11 @@ class PayModuleRequest extends FormRequest
     public function rules()
     {
         $sub = [
-            /*
-            'mcht_id' => 'required',
             'pg_id' => 'required',
             'ps_id' => 'required',
-            'settle_fee' => 'required',
-            'settle_type' => 'required',
-            */
+            'mid' => 'required',
             'module_type' => 'required',
-            /*
-            'abnormal_trans_limit' => 'required',
-            'pay_dupe_limit' => 'required',
-            'pay_dupe_least' => 'required',
-            'pay_year_limit' => 'required',
-            'pay_month_limit' => 'required',
-            'pay_day_limit' => 'required',
-            'pay_single_limit' => 'required',
-            'installment' => 'required',
-            */
             'note' => 'required',
-            /*
-            'is_old_auth' => 'required',
-            'use_realtime_deposit' => 'required',
-            'pay_window_secure_level' => 'required',
-            'comm_settle_fee' => 'required|integer',
-            'under_sales_amt' => 'nullable|integer',
-            */
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -121,7 +64,6 @@ class PayModuleRequest extends FormRequest
         $data   = array_merge($data_1, $data_2);
         $data['note'] = $data['note'] == null ? '' : $data['note'];
         $data['brand_id'] = $this->user()->brand_id;
-        $data['filter_issuers'] = json_encode($this->filter_issuers);
         return $data;
     }
 }

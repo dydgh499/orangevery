@@ -1,28 +1,11 @@
 <?php
     use Illuminate\Support\Facades\Log;
-    use Illuminate\Support\Facades\Http;
-    use Illuminate\Http\Client\ConnectionException;
-    use App\Models\Brand;
-    use App\Models\Salesforce;
-    use Carbon\Carbon;
-    use Illuminate\Support\Facades\DB;
-    use App\Models\Options\PvOptions;
     use App\Http\Controllers\Ablilty\Ablilty;
     use App\Http\Controllers\Ablilty\AbnormalConnection;
-    use App\Http\Controllers\Manager\Gmid\GmidInformation;
 
     function getPGType($pg_type)
     {
-        $pgs = [
-            'paytus', 'koneps', 'aynil', 'welcome', 'hecto', 'lumen',
-            'payletter', 'wholebic', 'korpay', 'kppay', 'thepayone', 'ezpg',
-            'secta9ine', 'kiwoom', 'wizzpay', 'nestpay', 'e2u','addone',
-            'saminching','wgp', 'brightfixC3', 'danal', 'baumpns', 
-            'passgo', 'buddypay', 'withpay', 'fixpay', 'galaxiamoneytree',
-            'bkwinners', 'welcome1', 'toss', 'payup', 'wayup', 'nicepay', 
-            'bonacamp', 'onoffkorea', 'ksnet', 'buddypayWZE', 'seedpayment',
-            'weroute', 'ezpgWZE',
-        ];
+        $pgs = ['routeup'];
         return $pgs[$pg_type-1];
     }
 
@@ -50,34 +33,6 @@
         if($request->module_type !== null)
             $query = $query->where($table.'module_type', $request->module_type);
         return $query;
-    }
-
-    function globalLevelByIndex($level)
-    {
-        switch($level)
-        {
-            case 10:
-                return -1;
-            case 13:
-                return 0;
-            case 15:
-                return 1;
-            case 17:
-                return 2;
-            case 20:
-                return 3;
-            case 25:
-                return 4;
-            case 30:
-                return 5;
-            case 40:
-                return 6;
-            case 50;
-                return 6;
-            default:
-                throw new Exception('알 수 없는 등급3');
-                return "UNKNOWUN";
-        }
     }
 
     function logging($data, $msg='test')

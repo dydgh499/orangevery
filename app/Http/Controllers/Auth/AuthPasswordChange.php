@@ -1,16 +1,8 @@
 <?php
 namespace App\Http\Controllers\Auth;
 
-use App\Models\Salesforce;
-use App\Models\Merchandise;
-use App\Models\Gmid;
-
-use App\Http\Controllers\Auth\Login;
-use Illuminate\Support\Facades\Redis;
-use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Traits\Models\EncryptDataTrait;
 use App\Enums\AuthLoginCode;
-use App\Http\Controllers\Manager\Service\BrandInfo;
 
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
@@ -51,67 +43,6 @@ class AuthPasswordChange
         }
         return $result;
     }
-
-    static public function updateFirstPassword($result, $user_pw)
-    {
-        $brand = BrandInfo::getBrandById($result['user']['brand_id']);
-        if($result['user']['level'] === 10)
-        {
-            $mcht_with  = ['onlinePays.payWindows'];
-            if($brand['pv_options']['paid']['use_shop'])
-                $mcht_with[] = 'shoppingMall';
-            if($brand['pv_options']['paid']['use_finance_van_deposit'])
-                $mcht_with[] = 'virtualAccounts';
-
-            $orm = Merchandise::with($mcht_with);
-        }
-        else if($result['user']['level'] === 11)
-            $orm = new Gmid;
-        else if($result['user']['level'] < 35)
-        {
-            $sales_with = [];
-            if($brand['pv_options']['paid']['brand_mode'] === 1)
-                $sales_with[] = 'salesRecommenderCodes';
-            if($brand['pv_options']['paid']['use_finance_van_deposit'])
-                $sales_with[] = 'virtualAccounts';
-            
-            $orm = Salesforce::with($sales_with);
-        }
-        else
-        {
-            $orm = null;
-            critical('만약 이구문이 실행이되면 token 암호화가 뚫린 것');
-        }
-        $user = $orm
-            ->where('brand_id', $result['user']['brand_id'])
-            ->where('user_name', $result['user']['user_name'])
-            ->where('is_delete', false)
-            ->first();
-
-        if($user)
-        {
-            if(self::HashCheck($user, $user_pw))
-            {
-                $result['result'] = AuthLoginCode::NOT_ALLOW_FIRST_PASSWORD->value;
-                $result['msg']    = '초기 패스워드로 업데이트할 수 없습니다.';
-            }
-            else
-            {
-                $user->user_pw = Hash::make($user_pw.$user->created_at);
-                $user->password_change_at = date('Y-m-d H:i:s');
-                $user->save();
-                $result['user'] = $user;
-                AuthAccountLock::initPasswordWrongCounter($result['user']);
-            }
-        }
-        else
-        {
-            $result['result'] = AuthLoginCode::WRONG_ACCESS->value;
-            $result['msg'] = '잘못된 접근입니다.';
-        }
-        return $result;
-    }
-
 
     static public function HashCheck($user, $_user_pw)
     {

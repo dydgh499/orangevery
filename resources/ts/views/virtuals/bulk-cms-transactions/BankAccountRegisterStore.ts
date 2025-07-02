@@ -17,7 +17,7 @@ export const validateItems = (item: Withdraw, i: number, acct_nums: any, finance
         return [false, (i + 2) + '번째줄의 입금 은행명이 이상합니다.']
     else if (isEmpty(item.acct_num)) 
         return [false, (i + 2) + '번째줄의 입금 계좌번호는 필수로 입력해야합니다.']
-    else if (corp.pv_options.free.use_account_number_duplicate && acct_nums.has(item.acct_num))
+    else if (corp.ov_options.free.use_account_number_duplicate && acct_nums.has(item.acct_num))
         return [false, (i + 2) + '번째줄의 입금 계좌번호가 중복됩니다.('+item.acct_num+")"]
     else if (isEmpty(item.acct_name)) 
         return [false, (i + 2) + '번째줄의 예금주는 필수로 입력해야합니다.']

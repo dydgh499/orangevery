@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cxl_types, installments, module_types, pay_limit_types, pay_window_extend_hours, pay_window_secure_levels, useSearchStore, withdraw_limit_types } from '@/views/services/pay-modules/useStore'
+import { installments, module_types, useSearchStore } from '@/views/services/pay-modules/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 
@@ -8,35 +8,15 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 
 import { getUserLevel, isAbleModiyV2 } from '@axios'
 import { DateFilters } from '@core/enums'
-import corp from '@corp'
 
-const { pgs, pss, settle_types, terminals } = useStore()
-const { store, head, exporter, metas } = useSearchStore()
+const { pgs, pss, } = useStore()
+const { store, head, exporter, } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-onMounted(() => {
-    watchEffect(async () => {
-        /*
-        if (store.getChartProcess() === false && getUserLevel() > 10) {
-            const r = await store.getChartData()
-            if(r.status === 200) {
-                metas[0]['stats'] = r.data.this_month_add.toLocaleString()
-                metas[1]['stats'] = (r.data.this_month_del * -1).toLocaleString()
-                metas[2]['stats'] = r.data.this_week_add.toLocaleString()
-                metas[3]['stats'] = (r.data.this_week_del * -1).toLocaleString()
-                metas[0]['percentage'] = store.getPercentage(r.data.this_month_add, r.data.total)
-                metas[1]['percentage'] = store.getPercentage((r.data.this_month_del * -1), r.data.total)
-                metas[2]['percentage'] = store.getPercentage(r.data.this_week_add, r.data.total)
-                metas[3]['percentage'] = store.getPercentage((r.data.this_week_del * -1), r.data.total)
-            }
-        }
-        */
-    })
-})
 </script>
 <template>
     <div>
@@ -44,7 +24,7 @@ onMounted(() => {
             :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
-                    :sales="false">
+                    :sales="false" :page="true">
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
@@ -112,7 +92,7 @@ onMounted(() => {
                                     </VChip>
                                 </span>
                                 <span v-else-if="(_key as string).includes('_fee') && (_key as string).includes('_sales')">
-                                    <VChip v-if="item[`sales${(_key as string).replace(/\D/g, '')}_id`] && (corp.pv_options.free.use_fee_detail_view || item[_key])">
+                                    <VChip v-if="item[`sales${(_key as string).replace(/\D/g, '')}_id`] && item[_key]">
                                         {{ (item[_key] * 100).toFixed(3) }} %
                                     </VChip>
                                 </span>
@@ -130,14 +110,8 @@ onMounted(() => {
                                 <span v-else-if="_key == 'ps_id'">
                                     {{ pss.find(ps => ps['id'] === item[_key])?.name }}
                                 </span>
-                                <span v-else-if="_key == 'settle_type'">
-                                    {{ settle_types.find(settle_type => settle_type['id'] === item[_key])?.name }}
-                                </span>
                                 <span v-else-if="_key == 'comm_settle_fee'">
                                     {{ Number(item[_key]).toLocaleString() }}
-                                </span>
-                                <span v-else-if="_key == 'terminal_id'">
-                                    {{ terminals.find(obj => obj.id === item[_key])?.name }}
                                 </span>
                                 <span v-else-if="_key == 'cxl_type'">
                                     <VChip

@@ -1,7 +1,7 @@
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import type { Operator, Options } from '@/views/types';
-// import { avatars } from '@/views/users/useStore';
+import { avatars } from '@/views/users/useStore'
 import { axios, getUserLevel, user_info } from '@axios';
 import corp from '@corp';
 
@@ -22,8 +22,6 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
         'phone_num' : '연락처',
         'is_2fa_use': '2FA 사용',
     }
-    if(corp.pv_options.paid.use_realtime_deposit || corp.pv_options.paid.use_finance_van_deposit)
-        headers['is_notice_realtime_warning'] = '송금 경고사항 알림'
     if(getUserLevel() >= 35) {
         headers['is_lock'] = '계정잠김여부'
         headers['locked_at'] = '계정잠금시간'
@@ -62,7 +60,7 @@ export const operatorActionAuthStore = defineStore('operatorActionAuthStore', ()
     const phoneNum2FAVertifyDialog = <any>inject('phoneNum2FAVertifyDialog')
 
     const headOfficeAuthValidate = async (message: string) => {  
-        if(corp.pv_options.free.bonaeja?.is_use) {
+        if(corp.ov_options.free.bonaeja?.is_use) {
             if(await alert.value.show(message)) {
                 // 휴대폰 인증 후 재설정
                 try {
@@ -100,7 +98,7 @@ export const defaultItemInfo = () => {
         user_pw: '',
         nick_name: '',
         phone_num: '',
-        //profile_img: avatars[Math.floor(Math.random() * avatars.length)],
+        profile_img: avatars[Math.floor(Math.random() * avatars.length)],
         created_at: null,
         updated_at: null,
         is_notice_realtime_warning: 0,

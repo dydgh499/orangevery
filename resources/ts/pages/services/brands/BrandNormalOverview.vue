@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { dev_settle_types, useSearchStore } from '@/views/services/brands/useStore'
+import { useSearchStore } from '@/views/services/brands/useStore'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter, boolToText, metas } = useSearchStore()
@@ -62,11 +62,6 @@ provide('exporter', exporter)
                             </span>
                             <span v-else-if="_key == `dev_fee`">
                                 {{ item[_key].toLocaleString() }}%
-                            </span>
-                            <span v-else-if="_key == 'dev_settle_type'">
-                                <VChip :color="store.booleanTypeColor(!item[_key])">
-                                    {{ dev_settle_types.find(obj => obj.id === item[_key])?.title }}
-                                </VChip>
                             </span>
                             <span v-else>
                                 {{ item[_key] }}

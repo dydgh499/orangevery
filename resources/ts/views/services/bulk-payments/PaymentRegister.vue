@@ -125,7 +125,7 @@ watchEffect(async () => {
                     <VDataTable v-model:items-per-page="item_per_page" v-model:page="page"                     
                         :items-length="items.length" :items="items" :headers="headers" class="text-no-wrap"
                         no-data-text="양식 업로드후 등록 버튼을 클릭해주세요."
-                        item-value="title" :height="corp.pv_options.free.fix_table_size"
+                        item-value="title" :height="749"
                         :search="search">
                         <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
                             <tr>

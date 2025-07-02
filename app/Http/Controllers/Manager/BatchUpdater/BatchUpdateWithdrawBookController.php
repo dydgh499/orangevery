@@ -14,11 +14,7 @@ use App\Http\Traits\StoresTrait;
 
 use App\Http\Requests\Manager\BulkRegister\BulkWithdrawBookRequest;
 
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Utils\Comm;
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
-use App\Http\Controllers\Manager\Service\CMSTransactionBookController;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\Option\Withdraw\CMSTransactionBookInterface;
 use Illuminate\Http\Request;
 
@@ -38,7 +34,7 @@ use Carbon\Carbon;
 class BatchUpdateWithdrawBookController extends BatchUpdateController
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $cms_transaction_books, $target;
+    protected $cms_transaction_books;
 
     public function __construct(CMSTransactionBooks $cms_transaction_books)
     {

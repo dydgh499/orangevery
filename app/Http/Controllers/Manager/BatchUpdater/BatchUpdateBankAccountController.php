@@ -12,10 +12,7 @@ use App\Http\Traits\StoresTrait;
 
 use App\Http\Requests\Manager\BulkRegister\BulkBankAccountRequest;
 
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
-use App\Http\Controllers\Utils\Comm;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 /**

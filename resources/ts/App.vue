@@ -25,14 +25,6 @@ syncConfigThemeWithVuetifyTheme()
     </VLocaleProvider>
 </template>
 <style>
-/*
-  transform: scale(0.8);
-.v-overlay > .v-autocomplete__content,
-.v-overlay > .v-select__content {
-  background-color: rgb(var(--v-theme-surface)) !important;
-  inset-inline-start: 0 !important;
-}
-*/
 .v-table__wrapper {
   overflow-y: auto !important;
 }

@@ -25,11 +25,6 @@ return new class extends Migration
             $table->string('addr', 200)->nullable()->comment('사업지 주소');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
-            $table->string('p_mid', 10)->default('')->comment('PMID');
-            $table->string('mid', 10)->default('')->comment('mid');
-            $table->string('api_key', 100)->default('')->comment('api_key');
-            $table->string('sub_key', 100)->default('')->comment('sub_key');
-            $table->tinyInteger('round_type')->default(0)->comment('정산금 계산방식(0=반올림, 1=올림, 2=내림)');
         });
     }
 

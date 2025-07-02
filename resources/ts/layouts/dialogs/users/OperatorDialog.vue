@@ -248,18 +248,6 @@ defineExpose({
                     </VRow>
                     <VRow v-else>
                         <VCol md="6" cols=12>
-                            <VRow style="align-items: center;" v-if="corp.pv_options.paid.use_finance_van_deposit || corp.pv_options.paid.use_head_office_withdraw">
-                                <VCol :md="6" cols="6">
-                                    <b>송금 경고사항 알림</b>
-                                </VCol>
-                                <VCol :md="6">
-                                    <VChip :color="operator.is_notice_realtime_warning ? 'success' : 'default'">
-                                        {{ operator.is_notice_realtime_warning ? 'ON' : 'OFF' }}
-                                    </VChip>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol md="6" cols=12>
                             <VRow style="align-items: center;">
                                 <VCol :md="6" cols="6">
                                     <b>활성화 여부</b>

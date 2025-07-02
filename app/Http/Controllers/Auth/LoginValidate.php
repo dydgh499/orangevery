@@ -8,15 +8,12 @@ use App\Http\Controllers\Ablilty\AbnormalConnection;
 
 use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Auth\AuthGoogleOTP;
-use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Controllers\Auth\AuthOperatorIP;
 use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 
 use App\Http\Traits\Models\EncryptDataTrait;
 use App\Models\Operator;
-use App\Models\Service\PaymentSection;
-use App\Models\Salesforce\SalesforceFeeTable;
 use Illuminate\Support\Facades\Hash;
 use Google2FA;
 
@@ -34,11 +31,6 @@ class LoginValidate
         return AuthPasswordChange::HashCheck($result['user'], $user_pw) ? true : false;
     }
 
-    static public function merchantStatusValidate($result)
-    {
-        return $result['user']->merchant_status === 2 ? false : true;
-    }
-
     static public function locationValidate($result, $ip)
     {
         if($result['user']->level >= 35 && AuthOperatorIP::valiate($result['user']->brand_id, $ip) === false)
@@ -48,37 +40,18 @@ class LoginValidate
     static public function secondAuthValidate($result, $request)
     {
         $brand = BrandInfo::getBrandById($result['user']->brand_id);
-        if($result['user']->level >= 35)
-        {
-            // 3FA
-            if(AuthOperatorIP::valiate($result['user']->brand_id, $request->ip()))
-            {   // 2FA
-                if($result['user']->google_2fa_secret_key)
-                    return AuthGoogleOTP::validate($request->token);
-                else if($brand['pv_options']['paid']['use_head_office_withdraw'])
-                    return AuthPhoneNum::validate($request->token);   // 휴대폰 인증
-                else
-                    return AuthLoginCode::SUCCESS->value;
-            }
-            else
-            {
-                AbnormalConnection::tryNoRegisterIP($result['user']);
-                return AuthLoginCode::NOT_FOUND->value;
-            }
+        // 3FA
+        if(AuthOperatorIP::valiate($result['user']->brand_id, $request->ip()))
+        {   // 2FA
+            if($result['user']->google_2fa_secret_key)
+                return AuthGoogleOTP::validate($request->token);
+            else 
+                return AuthPhoneNum::validate($request->token);   // 휴대폰 인증
         }
         else
         {
-            if($brand['pv_options']['free']['secure']['login_only_operate'])
-                return AuthLoginCode::NOT_FOUND->value;
-            if($result['user']->password_change_at === null && $request->is('*/v1/bf/sign-in') === false)
-                return AuthLoginCode::REQUIRE_PASSWORD_CHANGE->value;
-            else
-            {
-                if($result['user']->google_2fa_secret_key)
-                    return AuthGoogleOTP::validate($request->token);
-                else
-                    return AuthLoginCode::SUCCESS->value;
-            }
+            AbnormalConnection::tryNoRegisterIP($result['user']);
+            return AuthLoginCode::NOT_FOUND->value;
         }
     }
 

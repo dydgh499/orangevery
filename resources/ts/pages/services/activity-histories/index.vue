@@ -3,7 +3,7 @@ import ActivityHistoryDetailDialog from '@/layouts/dialogs/histories/ActivityHis
 import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { history_types, useSearchStore } from '@/views/services/activity-histories/useStore'
-import { allLevels, getLevelByIndex } from '@axios'
+import { allLevels } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
@@ -26,7 +26,7 @@ const getLevelColor = (level: number) => {
     else if(level === 40)
         return 'primary'
     else 
-        return store.getSelectIdColor(getLevelByIndex(level))
+        return store.getSelectIdColor(35)
 }
 
 </script>
