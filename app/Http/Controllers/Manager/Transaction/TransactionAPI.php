@@ -2,16 +2,7 @@
 
 namespace App\Http\Controllers\Manager\Transaction;
 
-use App\Http\Controllers\Ablilty\Ablilty;
-use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
-
-use App\Models\Transaction;
-use App\Models\Pay\NotiUrl;
-
 use App\Http\Controllers\Utils\Comm;
-
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\DB;
 
 /**
  * @group Transaction API
@@ -20,89 +11,38 @@ use Illuminate\Support\Facades\DB;
  */
 class TransactionAPI
 {
-    static private function getCancelTransData($request, $trans)
+    static public function getPrefixName($prefix_type)
     {
-        $cxl_dt = $request->cxl_dt;
-        $cxl_tm = $request->cxl_tm;
-        $ori_trx_id = $request->trx_id;
-        $amount     = $request->amount;
-        
-        $cxl_query  = Transaction::where('brand_id', $request->user()->brand_id)
-            ->where('trx_at', $request->trx_at)
-            ->where('ori_trx_id', $ori_trx_id)
-            ->where('is_cancel', 1);
-        $cxl_seq = (clone $cxl_query)->count() + 1;
-        $cancel  = (clone $cxl_query)->first([DB::raw("SUM(amount) AS cancel_amount")]);
-        $total_cancel_amount = ((int)$cancel->cancel_amount * -1) + $amount;
-        if($total_cancel_amount > $trans->amount)
-        {
-            $message = '부분취소 금액이 원거래 금액보다 높습니다.<br>(시도합계: '.number_format($total_cancel_amount).'원)<br>(원거래: '.number_format($trans->amount).'원)';
-            return [false, $message, []];
-        }
+        if($prefix_type === 1)
+            return "H";
+        else if($prefix_type === 4)
+            return "BP";
+        else if($prefix_type === 41)
+            return "BC";
+        else if($prefix_type === 42)
+            return "BD";
         else
-        {
-            $data = json_decode(json_encode($trans), true);
-            unset($data['id']);
-            $data['cxl_dt']     = $cxl_dt;
-            $data['cxl_tm']     = $cxl_tm;
-            $data['trx_at']     = $cxl_dt." ".$cxl_tm;
-            $data['ori_trx_id'] = $ori_trx_id;
-            $data['amount']     = $amount * -1;
-            $data['is_cancel']  = 1;
-            $data['cxl_seq']    = $cxl_seq; 
-
-            $settle_ids = ['mcht_settle_id', 'sales0_settle_id', 'sales1_settle_id', 'sales2_settle_id', 'sales3_settle_id', 'sales4_settle_id', 'sales5_settle_id', 'dev_settle_id'];
-            foreach($settle_ids as $settle_id)
-            {
-                $data[$settle_id] = null;
-            }
-            return [true, '', $data];
-        }
+            return null;
     }
 
-    // 취소매출 생성
-    static public function createCancel($request)
+    static public function createOrdNum($pmod_id, $prefix_type)
     {
-        $trans = DB::table('transactions')->where('id', $request->id)->first();
-        if($trans)
-        {
-            [$code, $message, $data] = self::getCancelTransData($request, $trans);
-            if($code)
-            {
-                try
-                {
-                    $add_res = app(ActivityHistoryInterface::class)->add('매출', new Transaction, $data, 'trx_id');
-                    if($add_res)
-                    {
-                        return ['0000', '성공', []];
-                    }
-                    else
-                        return [false, '시스템 에러입니다.', []];
-                }
-                catch(QueryException $ex)
-                {
-                    $message = $ex->getMessage();
-                    if(str_contains($message, 'Duplicate entry'))
-                        $message = '이미 같은 거래번호의 취소매출이 존재합니다.<br>해당 매출을 삭제하거나 거래번호를 수정한 후 다시 시도해주세요.';     
-                    
-                    return [false, $message, []];
-                }
-            }
-            else
-                return [false, $message, []];
-        }
+        $milisec = (string)(int)round(microtime(true) * 1000);
+        $prefix = self::getPrefixName($prefix_type);
+        if($prefix)
+            return $pmod_id.$prefix.$milisec;
         else
-            return [false, '거래데이터가 존재하지 않습니다.', []];
+            return null;
     }
 
-    // 결제취소 생성
+    // 결제취소
     static public function payCancel($data)
     {
         return Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/cancel', $data);
     }
     
     // 수기결제
-    static public function handPay($data)
+    static public function handPay($data, $pay_key)
     {
         $getYYMM = function($mmyy) {
             if(mb_strlen($mmyy, 'utf-8') == 4)
@@ -116,33 +56,37 @@ class TransactionAPI
         };
 
         $data['yymm'] = $getYYMM($data['yymm']); // mmyy to yymm
-        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/hand';
-        return Comm::post($url, $data);
+        $data['ord_num'] = self::createOrdNum($data['pmod_id'], 1);
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/hand';
+        return Comm::post($url, $data, [
+            'Authorization' => $pay_key
+        ]);
     }
-    
-    // 테스트
-    static public function test()
+        
+    static public function billPay($data, $pay_key)
     {
-        $db_trans = Transaction::where('is_cancel', 1)
-            ->where('trx_at', '>=', '2025-04-01 00:00:00')
-            ->orderBy('id', 'desc')
-            ->get();
-        $i=0;
-        $trans = json_decode(json_encode($db_trans), true);
-        foreach($db_trans as $key => $tran)
-        {
-            
-            $fields = [
-                'brand_settle_amount',
-            ];
+        $data['ord_num'] = self::createOrdNum($data['pmod_id'], 4);
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key/hand';
+        return Comm::post($url, $data, [
+            'Authorization' => $pay_key
+        ]);
+    }
 
-            foreach ($fields as $field) 
-            {
-                $tran->{$field} = $trans[$key][$field];
-            }
-            $tran->save();
-            $i++;
-            echo $i."\n";
-        }
+    static public function billCreate($data, $pay_key)
+    {
+        $data['ord_num'] = self::createOrdNum($data['pmod_id'], 41);
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key';
+        return Comm::post($url, $data, [
+            'Authorization' => $pay_key
+        ]);
+    }
+
+    static public function billRemove($data, $pay_key)
+    {
+        $data['ord_num'] = self::createOrdNum($data['pmod_id'], 42);
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key';
+        return Comm::destroy($url, $data, [
+            'Authorization' => $pay_key
+        ]);
     }
 }

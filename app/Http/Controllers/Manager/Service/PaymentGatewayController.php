@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Manager\Service;
 use App\Models\Service\FinanceVan;
 use App\Models\Service\PaymentGateway;
 use App\Models\Service\PaymentSection;
+use App\Models\Pay\PaymentModule;
+use App\Models\Pay\BillKey;
+
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\Service\PayGatewayRequest;
@@ -25,13 +28,12 @@ use Illuminate\Http\Request;
 class PaymentGatewayController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
-    protected $pay_gateways, $pay_sections;
+    protected $pay_gateways;
     protected $target;
 
-    public function __construct(PaymentGateway $pay_gateways, PaymentSection $pay_sections)
+    public function __construct(PaymentGateway $pay_gateways)
     {
         $this->pay_gateways = $pay_gateways;
-        $this->pay_sections = $pay_sections;
         $this->target       = '결제대행사';
     }
 
@@ -137,15 +139,26 @@ class PaymentGatewayController extends Controller
     public function detail(Request $request)
     {
         $brand_id = $request->user()->brand_id;
-        $finance_vans = FinanceVan::where('brand_id', $brand_id)->where('is_delete', false)->get();
-        foreach($finance_vans as $finance_van)
-        {
-            $finance_van->makeHidden(['deposit_type', 'enc_key', 'iv', 'sub_key', 'api_key', 'corp_code', 'brand_id', 'min_balance_limit', 'created_at', 'updated_at']);
-        }
+        $pay_gateways   = $this->pay_gateways->where('brand_id', $brand_id)->where('is_delete', false)->get();
+        $sections       = PaymentSection::where('brand_id', $brand_id)->where('is_delete', false)->get();
+        $finance_vans   = FinanceVan::where('brand_id', $brand_id)->where('is_delete', false)->get([
+            'id', 'finance_company_num', 'balance_status', 'nick_name'
+        ]);
+        $pay_modules    = PaymentModule::where('brand_id', $brand_id)->where('is_delete', false)->get(['id', 'note', 'module_type']);
+        $bill_keys      = BillKey::join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
+            ->where('payment_modules.brand_id', $brand_id)
+            ->where('payment_modules.is_delete', false)
+            ->get(
+                'bill_keys.pmod_id',
+                'bill_keys.id',
+                'bill_keys.nick_name',
+            );
         $data = [
-            'pay_gateways' => $this->pay_gateways->where('brand_id', $brand_id)->where('is_delete', false)->get(),
-            'pay_sections' => $this->pay_sections->where('brand_id', $brand_id)->where('is_delete', false)->get(),
-            'finance_vans'  => isset($finance_vans) ? $finance_vans : [],
+            'pay_gateways' => $pay_gateways,
+            'pay_sections' => $sections,
+            'finance_vans' => $finance_vans,
+            'pay_modules'  => $pay_modules,
+            'bill_keys'    => $bill_keys,
         ];
         return $this->response(0, $data);
     }

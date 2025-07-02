@@ -24,7 +24,7 @@ use App\Http\Controllers\Log\ActivityHistoryContoller;
 use App\Http\Controllers\V1\V1WithdrawBookController;
 
 Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(function() {
-    Route::get('services/pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
+    Route::get('services/detail', [PaymentGatewayController::class, 'detail']);
     Route::get('services/activity-histories/{target_id}/target', [ActivityHistoryContoller::class, 'target']); 
 
     Route::prefix('services')->group(function() {

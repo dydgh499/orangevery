@@ -387,18 +387,6 @@ export interface CmsTransactionBooks {
     withdraw_schedule_time: string,
 }
 
-export interface BulkPayment {
-    mid: string,
-    tid: string,
-    bill_key: string,
-    ord_num: string,
-    installment: string,
-    buyer_name: string,
-    buyer_phone: string,
-    item_name: string,
-    amount: number,
-}
-
 export interface BankAccount {
     id: number,
     brand_id: number | null,
@@ -422,4 +410,28 @@ export interface Popup {
     open_range?: string,
     visible?: boolean,
     is_hide?: boolean,
+}
+
+export interface Transaction {
+    id: number,
+    pmod_id: number,
+    pg_id: number,
+    ps_id: number,
+    ps_fee: number,
+    trx_at: string,
+    is_cancel: number,
+    cxl_seq: number,
+    amount: number,
+    module_type: number,
+    mid: string,
+    tid: string,
+    trx_id: string,
+    ori_trx_id: string,
+    issuer: string,
+    acquirer: string,
+    appr_num: string,
+    installment: string,
+    buyer_name: string,
+    buyer_phone: string,
+    item_name: string,
 }

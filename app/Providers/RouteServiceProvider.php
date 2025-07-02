@@ -34,11 +34,6 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api-service.php'));
 
-            Route::middleware(['api', 'log.route', 'auth:sanctum', 'is.browser'])
-                ->prefix('api/v1/manager')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/api-transaction.php'));
-
             Route::middleware(['api', 'log.route', 'auth:sanctum', 'is.browser', 'is.edit.able'])
                 ->prefix('api/v1/manager')
                 ->namespace($this->namespace)
@@ -47,7 +42,7 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware(['api', 'log.route', 'auth:sanctum', 'is.browser'])
                 ->prefix('api/v1/manager')
                 ->namespace($this->namespace)
-                ->group(base_path('routes/api-user.php'));
+                ->group(base_path('routes/api-pay.php'));
 
             Route::middleware(['api', 'is.browser'])
                 ->prefix('api')

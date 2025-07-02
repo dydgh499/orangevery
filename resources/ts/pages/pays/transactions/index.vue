@@ -3,90 +3,81 @@ import CancelPartDialog from '@/layouts/dialogs/transactions/CancelPartDialog.vu
 
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
-import { module_types } from '@/views/merchandises/pay-modules/useStore'
+import { module_types } from '@/views/services/options/useStore'
 import { selectFunctionCollect } from '@/views/selected'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import { useSearchStore } from '@/views/transactions/useStore'
+import { useStore } from '@/views/services/options/useStore'
+import { useSearchStore, installments } from '@/views/pays/transactions/useStore'
 
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
+import { Transaction } from '@/views/types'
+import { useRequestStore } from '@/views/request'
 
-const { store, head, exporter, metas, dataToChart, table } = useSearchStore()
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+const errorHandler = <any>(inject('$errorHandler'))
+
+const { post } = useRequestStore()
+const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { pgs, pss, cus_filters } = useStore()
-
+const { pgs, pss } = useStore()
 
 const cancelPart = ref()
+
+const getTdColor = (item: Transaction) => {
+    let style = item.is_cancel ? 'color:red;' : ''
+    return style
+}
+
+
+const payCanceled = async (item: Transaction) => {
+    const amount = await cancelPart.value.show(item.amount)
+    if (amount == 0)
+        return
+    else {
+        if (await alert.value.show('정말 PG사를 통해 결제를 취소하시겠습니까?')) {
+            const params = <any>({
+                pmod_id: item.pmod_id,
+                amount: item.amount,
+                trx_id: item.trx_id,
+                only: false,
+            })
+            try {
+                const r = await post('/api/v1/transactions/pay-cancel', params)
+                if (r.status === 201)
+                    snackbar.value.show('성공하였습니다.', 'success')
+                else
+                    snackbar.value.show(r.data.message, 'error')
+            }
+            catch (e: any) {
+                snackbar.value.show(e.response.data.message, 'error')
+                const r = errorHandler(e)
+            }
+        }
+    }
+
+}
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-provide('cancelPart', cancelPart)
-
-store.params.level = 10
-store.params.issuer = '전체'
-
-
-const getTdColor = (item: any) => {
-    let style = item['is_cancel'] ? 'color:red;' : ''
-    const cus_filter = cus_filters.find(obj => obj.id === item.custom_id)
-    if(cus_filter && (cus_filter.color !== '#000000' && cus_filter.color !== '#00000000'))
-        style += `background:${cus_filter.color};`
-    return style
-}
-
-onMounted(() => {
-    watchEffect(async () => {
-        await dataToChart()
-    })
-})
 </script>
 <template>
     <div>
-        <VRow>
-            <VCol v-for="meta in metas" :key="meta.title" cols="12" sm="6" :lg="3">
-                <VCard>
-                    <VCardText class="d-flex">
-                        <div v-if="store.getSkeleton()">
-                            <span v-html="meta.title"></span>
-                            <div class="d-flex align-center gap-2 my-1">
-                                <SkeletonBox :width="'3em'"/>
-                                <SkeletonBox :width="'5em'"/>
-                            </div>
-                        </div>
-                        <div v-else style="width: 100%;">
-                            <div style="display: flex;width: 100%; justify-content: space-between;">
-                                <span>
-                                    {{meta.title}}
-                                </span>
-                            </div>
-                            <div class="d-flex align-center gap-2 my-1">
-                                <h6 class="text-h6" v-html="meta.stats"></h6>
-                                <span v-if="meta.percentage"
-                                    :class="meta.percentage > 0 ? 'text-success' : 'text-error'">
-                                    ({{ meta.percentage }}%)
-                                </span>
-                            </div>
-                            <span v-html="meta.subtitle"></span>
-                        </div>
-                        <VAvatar rounded variant="tonal" :color="meta.color" :icon="meta.icon" style="margin-left: auto;"/>
-                    </VCardText>
-                </VCard>
-            </VCol>
-        </VRow>
-        <br>
-        <BaseIndexView placeholder="상호, MID, TID, 승인번호, 거래번호, 결제모듈 별칭, 주민번호, 사업자번호, 휴대폰 번호 검색" 
+        <BaseIndexView placeholder="승인번호, 결제모듈 별칭 검색" 
             :metas="[]"
             :add="false" add_name="매출" :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
-                <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
-                    :sales="false">
-                </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
+                <VSelect :menu-props="{ maxHeight: 400 }" 
+                    v-model="store.params.page_size" 
+                    :items="[10, 20, 30, 50, 100, 200]" 
+                    label="조회 개수" 
+                    @update:modelValue="store.updateQueryString({page_size: store.params.page_size})"
+                    :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''"/>              
             </template>
             <template #headers>
                 <tr>
@@ -150,6 +141,18 @@ onMounted(() => {
                             </span>
                             <span v-else-if="_key == 'amount'">
                                 {{ Number(item[_key]).toLocaleString() }}
+                            </span>
+                            <span v-else-if="_key == 'deposit_status'">
+                                <VChip :color="`success`">
+                                    {{ `성공` }}
+                                </VChip>
+                            </span>
+                            <span v-else-if="_key == 'extra_col'">
+                                <VBtn 
+                                    v-if="item['is_cancel'] === 0"
+                                    @click="payCanceled(item)" size="small">
+                                    승인취소
+                                </VBtn>
                             </span>
                             <span v-else>
                                 {{ item[_key] }}
