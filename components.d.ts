@@ -10,6 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ActivityHistoryDetailDialog: typeof import('./resources/ts/layouts/dialogs/histories/ActivityHistoryDetailDialog.vue')['default']
+    ActivityHistoryTargetDialog: typeof import('./resources/ts/layouts/dialogs/histories/ActivityHistoryTargetDialog.vue')['default']
     AlertDialog: typeof import('./resources/ts/layouts/dialogs/utils/AlertDialog.vue')['default']
     AppAutocomplete: typeof import('./resources/ts/@core/components/app-form-elements/AppAutocomplete.vue')['default']
     AppCardActions: typeof import('./resources/ts/@core/components/AppCardActions.vue')['default']
@@ -20,9 +21,6 @@ declare module '@vue/runtime-core' {
     AppStepper: typeof import('./resources/ts/@core/components/AppStepper.vue')['default']
     AppTextarea: typeof import('./resources/ts/@core/components/app-form-elements/AppTextarea.vue')['default']
     AppTextField: typeof import('./resources/ts/@core/components/app-form-elements/AppTextField.vue')['default']
-    BillKeyCreateDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/BillKeyCreateDialog.vue')['default']
-    BillKeyModifyDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/BillKeyModifyDialog.vue')['default']
-    BillKeySelectDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/BillKeySelectDialog.vue')['default']
     CustomCheckboxes: typeof import('./resources/ts/@core/components/app-form-elements/CustomCheckboxes.vue')['default']
     CustomCheckboxesWithIcon: typeof import('./resources/ts/@core/components/app-form-elements/CustomCheckboxesWithIcon.vue')['default']
     CustomCheckboxesWithImage: typeof import('./resources/ts/@core/components/app-form-elements/CustomCheckboxesWithImage.vue')['default']
