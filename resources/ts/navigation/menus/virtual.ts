@@ -7,6 +7,10 @@ const _getVirtualMenu = () => {
         children: []
     }
     virtuals.children.push({
+        title: '이체하기',
+        to: 'virtuals-bulk-cms-transactions',
+    })
+    virtuals.children.push({
         title: '등록계좌 현황',
         to: 'virtuals-bank-accounts',
     })
@@ -17,10 +21,6 @@ const _getVirtualMenu = () => {
     virtuals.children.push({
         title: '이체 상세이력',
         to: 'virtuals-cms-transactions',
-    })
-    virtuals.children.push({
-        title: '대량이체',
-        to: 'virtuals-bulk-cms-transactions',
     })
     return virtuals
 }

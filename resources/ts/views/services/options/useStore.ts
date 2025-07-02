@@ -1,6 +1,6 @@
 import { getUserLevel } from '@/plugins/axios'
 import { useRequestStore } from '@/views/request'
-import type { FinanceVan, Options, PayGateway, PaySection } from '@/views/types'
+import type { BillKey, FinanceVan, Options, PayGateway, PayModule, PaySection } from '@/views/types'
 
 export const module_types = <Options[]>([
     { id: 4, title: "빌키결제" }
@@ -11,7 +11,9 @@ export const useStore = defineStore('payGatewayStore', () => {
     const snackbar = <any>(inject('snackbar'))
     const pgs = ref<PayGateway[]>([])
     const pss = ref<PaySection[]>([])
-    const finance_vans = ref<FinanceVan[]>([])
+    const finance_vans  = ref<FinanceVan[]>([])
+    const pay_modules   = ref<PayModule[]>([])
+    const bill_keys     = ref<BillKey[]>([])
     const pg_companies = [
         {id:1, name:'위루트파이낸셜', rep_name:'길민홍', company_name:'위루트파이낸셜(주)', business_num:'456-81-01313', phone_num:'1811-7717', addr:'서울특별시 금천구 디지털로9길 99, 스타밸리 1013호'},
     ]
@@ -27,10 +29,12 @@ export const useStore = defineStore('payGatewayStore', () => {
     
     onMounted(async () => {
         try {
-            const r = await get('/api/v1/manager/services/pay-gateways/detail')
+            const r = await get('/api/v1/manager/services/detail')
             Object.assign(pgs.value, r.data.pay_gateways.sort((a:PayGateway, b:PayGateway) => a.pg_name.localeCompare(b.pg_name)))
             Object.assign(pss.value, r.data.pay_sections.sort((a:PaySection, b:PaySection) => a.name.localeCompare(b.name)))
             Object.assign(finance_vans.value, r.data.finance_vans.sort((a:FinanceVan, b:FinanceVan) => a.nick_name.localeCompare(b.nick_name)))
+            Object.assign(pay_modules.value, r.data.pay_modules.sort((a:FinanceVan, b:FinanceVan) => a.nick_name.localeCompare(b.nick_name)))
+            Object.assign(bill_keys.value, r.data.bill_keys.sort((a:FinanceVan, b:FinanceVan) => a.nick_name.localeCompare(b.nick_name)))
             getFianaceVansBalance()
         }
         catch(e) {
@@ -92,6 +96,7 @@ export const useStore = defineStore('payGatewayStore', () => {
     }
     return {
         pgs, pss, finance_vans, 
+        pay_modules, bill_keys, 
         pg_companies, finance_companies,
         psFilter, setFee, 
         updateFinanceVan, getFianaceVansBalance,
