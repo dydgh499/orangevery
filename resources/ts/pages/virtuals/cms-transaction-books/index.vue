@@ -30,7 +30,7 @@ const batchRemove = async() => {
         } }, true)
         
         selected.value = []
-    }
+    }//
     store.setTable()
 }
 
