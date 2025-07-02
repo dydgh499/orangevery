@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Manager\BrandController;
-use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
 use App\Http\Controllers\Manager\Service\ExceptionWorkTimeController;
 use App\Http\Controllers\Manager\Service\AbnormalConnectionController;
 
@@ -60,8 +59,6 @@ Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(functio
         Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
         Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
         Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);
-        
-        Route::apiResource('pay-modules', PaymentModuleController::class);
     });
 
     Route::prefix('virtuals')->group(function() {

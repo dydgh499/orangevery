@@ -10,7 +10,7 @@ const _getOtherMenu = () => {
 
 export const getOtherMenu = () => {
     const menu = <any[]>[
-        { heading: 'Service' },
+        { heading: 'ETC' },
         ..._getOtherMenu(),
     ]
     return menu

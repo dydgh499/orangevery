@@ -17,8 +17,8 @@ const _getOperaterMenu = () => {
         })
     }
     operations.children.push({
-        title: '금융VAN 관리',
-        to: 'services-pay-gateways',
+        title: '설정 관리',
+        to: 'services-options',
     })
     return operations
 }

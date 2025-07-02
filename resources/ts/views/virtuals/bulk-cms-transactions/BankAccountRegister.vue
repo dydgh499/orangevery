@@ -4,7 +4,7 @@ import { Registration } from '@/views/registration';
 import UsageTooltip from '@/views/virtuals/bulk-cms-transactions/UsageTooltip.vue';
 import { useRegisterStore, validateItems } from '@/views/virtuals/bulk-cms-transactions/BankAccountRegisterStore';
 import type { Withdraw, FinanceVan } from '@/views/types';
-import { useStore } from '@/views/services/pay-gateways/useStore';
+import { useStore } from '@/views/services/options/useStore';
 import { banks } from '@/views/users/useStore'
 
 const { finance_vans } = useStore()

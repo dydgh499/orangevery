@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 /**
  * @group Payment Gateway API
  *
- * PG사 API 입니다. 본사 이상권한이 요구됩니다.
+ * 결제대행사 API 입니다. 본사 이상권한이 요구됩니다.
  */
 class PaymentGatewayController extends Controller
 {
@@ -32,7 +32,7 @@ class PaymentGatewayController extends Controller
     {
         $this->pay_gateways = $pay_gateways;
         $this->pay_sections = $pay_sections;
-        $this->target       = 'PG사';
+        $this->target       = '결제대행사';
     }
 
     /**
@@ -43,10 +43,10 @@ class PaymentGatewayController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query = $this->pay_gateways
+        $data = $this->pay_gateways
             ->where('is_delete', false)
-            ->where('brand_id', $request->user()->brand_id);
-        $data = $this->getIndexData($request, $query);
+            ->where('brand_id', $request->user()->brand_id)
+            ->get();
         return $this->response(0, $data);
     }
 
@@ -73,7 +73,7 @@ class PaymentGatewayController extends Controller
      *
      * 가맹점 이상 가능
      *
-     * @urlParam id integer required PG사 id
+     * @urlParam id integer required 결제대행사 id
      */
     public function show(Request $request, int $id)
     {
@@ -94,7 +94,7 @@ class PaymentGatewayController extends Controller
      *
      * 가맹점 이상 가능
      *
-     * @urlParam id integer required PG사 id
+     * @urlParam id integer required 결제대행사 id
      */
     public function update(PayGatewayRequest $request, int $id)
     {
@@ -115,7 +115,7 @@ class PaymentGatewayController extends Controller
     /**
      * 단일삭제
      *
-     * @urlParam id integer required PG사 id
+     * @urlParam id integer required 결제대행사 id
      */
     public function destroy(Request $request, int $id)
     {

@@ -2,25 +2,25 @@ import { getUserLevel } from '@axios'
 
 const _getVirtualMenu = () => {
     const virtuals:any = {
-        title: '정산 관리',
+        title: '이체 관리',
         icon: { icon: 'tabler:building-bank' },
         children: []
     }
     virtuals.children.push({
-        title: '가상계좌 대량출금',
-        to: 'virtuals-bulk-cms-transactions',
-    })
-    virtuals.children.push({
-        title: '등록계좌 관리',
+        title: '등록계좌 현황',
         to: 'virtuals-bank-accounts',
     })
     virtuals.children.push({
-        title: '가상계좌 출금예약 관리',
+        title: '이체 예약현황',
         to: 'virtuals-cms-transaction-books',
     })
     virtuals.children.push({
-        title: '가상계좌 출금이력',
+        title: '이체 상세이력',
         to: 'virtuals-cms-transactions',
+    })
+    virtuals.children.push({
+        title: '대량이체',
+        to: 'virtuals-bulk-cms-transactions',
     })
     return virtuals
 }

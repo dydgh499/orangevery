@@ -17,7 +17,7 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->unsignedInteger('pg_id')->nullable()->comment('PG FK')->constrained('payment_gateways')->onDelete('SET NULL');
-            $table->string('name')->default('')->comment('구간명');
+            $table->string('name')->default('')->comment('수수료율 명칭');
             $table->float('trx_fee', 6, 5)->comment('거래 수수료');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();

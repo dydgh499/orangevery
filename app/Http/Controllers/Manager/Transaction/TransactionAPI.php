@@ -6,7 +6,7 @@ use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
 use App\Models\Transaction;
-use App\Models\Merchandise\NotiUrl;
+use App\Models\Pay\NotiUrl;
 
 use App\Http\Controllers\Utils\Comm;
 

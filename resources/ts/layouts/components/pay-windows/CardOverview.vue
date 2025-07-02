@@ -3,7 +3,7 @@ import { inputFormater } from '@/@core/utils/formatters';
 import CreditCard from '@/layouts/components/CreditCard.vue';
 import { HandPay } from '@/views/types';
 import { lengthValidatorV2, requiredValidatorV2 } from '@validators';
-import { getAllPayModules } from '@/views/services/pay-modules/useStore'
+import { getAllPayModules } from '@/views/pays/pay-modules/useStore'
 import type { PayModule } from '@/views/types';
 
 interface Props {

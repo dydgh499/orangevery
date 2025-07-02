@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useStore } from '@/views/services/pay-gateways/useStore';
+import { useStore } from '@/views/services/options/useStore';
 import { getUserLevel } from '@axios';
 
 interface Props {
@@ -31,11 +31,11 @@ const filterPgs = computed(() => {
     <VRow>
         <VCol cols="6" sm="3" v-if="props.pg && getUserLevel() > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.pg_id" :items="[{ id: null, pg_name: '전체' }].concat(pgs)"
-                label="PG사 선택" item-title="pg_name" item-value="id" @update:modelValue="[store.updateQueryString({pg_id: store.params.pg_id})]"/>
+                label="결제대행사 선택" item-title="pg_name" item-value="id" @update:modelValue="[store.updateQueryString({pg_id: store.params.pg_id})]"/>
         </VCol>
         <VCol cols="6" sm="3" v-if="props.ps && getUserLevel() > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.ps_id"
-                :items="[{ id: null, name: '전체' }].concat(filterPgs)" label="구간 필터" item-title="name" item-value="id"
+                :items="[{ id: null, name: '전체' }].concat(filterPgs)" label="수수료율 필터" item-title="name" item-value="id"
                id="ps-filter" eager @update:modelValue="store.updateQueryString({ps_id: store.params.ps_id})"  />
         </VCol>
         <slot name="pg_extra_field"></slot>

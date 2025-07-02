@@ -4,7 +4,7 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
 import { realtimeMessage, realtimeResult, useSearchStore } from '@/views/virtuals/cms-transactions/useStore'
-import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useStore } from '@/views/services/options/useStore'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter, metas } = useSearchStore()

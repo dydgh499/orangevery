@@ -80,19 +80,9 @@ export const avatars = [
     '/utils/avatars/25.svg',
 ]
 
-export const business_types = <Options[]>([
-    {id:0, title:'개인사업자'}, {id:1, title:'법인사업자'}, {id:2, title:'비사업자'}
-])
-
 export const getUserTypeName = (type: number) => {
-    if(type === 0)
-        return ['가맹점', 'merchandises']
-    else if(type === 1)
-        return ['영업자', 'salesforces']
-    else if(type === 2)
+    if(type === 2)
         return ['운영자', 'services/operators']
-    else if(type === 3)
-        return ['GMID', 'gmids']
     else
         return ['', '']
 }

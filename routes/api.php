@@ -6,7 +6,7 @@ use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Manager\Transaction\TransactionController;
 use App\Http\Controllers\Manager\Service\CMSTransactionController;
 
-use App\Http\Controllers\Manager\Merchandise\BillKeyController;
+use App\Http\Controllers\Manager\Pay\BillKeyController;
 
 
 /*
@@ -32,9 +32,6 @@ Route::prefix('v1')->group(function() {
         Route::prefix('bonaejas')->group(function() {
             Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
             Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);
-            Route::middleware(['auth:sanctum', 'log.route', 'auth.update'])->group(function () {
-                Route::middleware(['is.operate', 'is.edit.able'])->post('mobile-code-head-office-issuence', [MessageController::class, 'headOfficeMobileCodeIssuence']);
-            });
         });
         
     });

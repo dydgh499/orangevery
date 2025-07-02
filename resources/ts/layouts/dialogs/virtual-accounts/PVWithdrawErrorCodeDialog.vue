@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import corp from '@/plugins/corp'
-import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useStore } from '@/views/services/options/useStore'
 import { getUserLevel } from '@axios'
 import { coocon_error_codes } from './finance-vans-error-codes/coocon'
 import { dozn_error_codes } from './finance-vans-error-codes/dozn'

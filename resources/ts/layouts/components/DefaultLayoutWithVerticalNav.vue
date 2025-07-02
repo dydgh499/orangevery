@@ -12,6 +12,7 @@ import NavTokenableExpireTime from '@/layouts/components/NavTokenableExpireTime.
 import UserProfile from '@/layouts/components/UserProfile.vue'
 import { VerticalNavLayout } from '@layouts'
 
+import ActivityHistoryTargetDialog from '@/layouts/dialogs/histories/ActivityHistoryTargetDialog.vue'
 import PasswordChangeNoticeDialog from '@/layouts/dialogs/users/PasswordChangeNoticeDialog.vue'
 import PhoneNum2FAVertifyDialog from '@/layouts/dialogs/users/PhoneNum2FAVertifyDialog.vue'
 import AlertDialog from '@/layouts/dialogs/utils/AlertDialog.vue'
@@ -26,17 +27,15 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const loading = <any>(inject('loading'))
 const errorHandler = <any>(inject('$errorHandler'))
+const activityHistoryTargetDialog = ref()
 
-const payShow = ref()
 const pwaSnackbar = ref()
-const holidayDlg = ref()
 const phoneNum2FAVertifyDialog = ref()
 const passwordChangeNoticeDialog = ref()
 
-provide('payShow', payShow)
-provide('holidayDlg', holidayDlg)
 provide('pwaSnackbar', pwaSnackbar)
 provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
+provide('activityHistoryTargetDialog', activityHistoryTargetDialog)
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
@@ -109,6 +108,7 @@ onMounted(async () => {
         
         <PhoneNum2FAVertifyDialog ref="phoneNum2FAVertifyDialog"/>
         <PasswordChangeNoticeDialog ref="passwordChangeNoticeDialog"/>
+        <ActivityHistoryTargetDialog ref="activityHistoryTargetDialog"/>
 
         <template #footer>
             <Footer/>

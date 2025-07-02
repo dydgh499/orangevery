@@ -2,7 +2,7 @@
 import { StatusColors } from '@/@core/enums'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
-import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useStore } from '@/views/services/options/useStore'
 
 export const realtimeResult = (result_code: string) => {
     if(result_code === '0000')  //성공
