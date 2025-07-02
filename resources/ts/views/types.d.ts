@@ -342,11 +342,18 @@ export interface ExceptionWorkTime {
 
 export interface BillKey {
     id: number,
-    pmod_id: number,
+    pmod_id: number | null,
     buyer_name: string,
     buyer_phone: string,
     issuer: string,
-    card_num?: string,
+    nick_name: string,
+    card_num: string,
+}
+
+export interface BillKeyCreate extends BillKey {
+    yymm: string,
+    auth_num: string,
+    card_pw: string,
 }
 
 export interface Withdraw {
@@ -383,7 +390,7 @@ export interface CmsTransactionBooks {
 export interface BulkPayment {
     mid: string,
     tid: string,
-
+    bill_key: string,
     ord_num: string,
     installment: string,
     buyer_name: string,

@@ -35,13 +35,11 @@ const isAbleModiy = () => {
 }
 
 const operatorUpdate = async() => {
-    /*
     const [result, token] = await headOfficeAuthValidate('휴대폰번호 인증이 필요합니다.<br>계속하시겠습니까?')
     if(result) {
         operator.value.token = token
-        */
         await formRequest('/services/operators', operator.value, vForm.value, false)
-    //}
+    }
 }
 
 const operatorDelete = async() => {
@@ -90,6 +88,7 @@ defineExpose({
                                     <VTextField v-model="operator.user_name" prepend-inner-icon="tabler-mail"
                                         placeholder="ID로 사용됩니다." persistent-placeholder
                                         :rules="[requiredValidatorV2(operator.user_name, '아이디'), lengthValidator(operator.user_name, 8)]"
+                                        variant="underlined"
                                         maxlength="30"/>
                                 </VCol>
                             </VRow>
@@ -115,6 +114,7 @@ defineExpose({
                                 <VCol :md="7" cols="6">
                                     <VTextField v-model="operator.user_pw" counter prepend-inner-icon="tabler-lock"
                                         :rules="[requiredValidatorV2(operator.user_pw, '패스워드'), passwordValidatorV2]"
+                                        variant="underlined"
                                         :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
                                         :type="is_show ? 'text' : 'password'"
                                         placeholder="소문자,대문자,특수문자로 이루어진 10자 이상 문자열" persistent-placeholder
@@ -130,6 +130,7 @@ defineExpose({
                                 <VCol :md="5" cols="6">* 성명</VCol>
                                 <VCol :md="7">
                                     <VTextField v-model="operator.nick_name" prepend-inner-icon="tabler-user"
+                                        variant="underlined"
                                         placeholder="사용자명으로 사용됩니다."
                                         :rules="[requiredValidatorV2(operator.nick_name, '성명')]"
                                         persistent-placeholder />
@@ -152,6 +153,7 @@ defineExpose({
                                         v-model="phone_num_format" 
                                         @input="formatPhoneNum"
                                         prepend-inner-icon="tabler-device-mobile" placeholder="010-0000-0000"
+                                        variant="underlined"
                                         :rules="[requiredValidatorV2(operator.phone_num, '휴대폰번호')]"
                                         :disabled="(operator.id !== 0 && getUserLevel() !== 40) || (operator.id !== 0 && getUserLevel() === 40 && operator.level === 40)"
                                         persistent-placeholder/>
@@ -200,12 +202,21 @@ defineExpose({
                                         v-model="operator.level"
                                         :items="operator_levels" 
                                         prepend-inner-icon="tabler-adjustments-up"
+                                        variant="underlined"
                                         label="등급 선택" 
                                         item-title="title" item-value="id" 
                                         single-line
                                         :rules="[requiredValidatorV2(operator.level, '등급')]" 
                                         :disabled="operator.id != 0"
                                      />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol md="6" cols=12>
+                            <VRow style="align-items: center;float: inline-end;">
+                                <VCol>
+                                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="operator.is_active" label="활성화 여부"
+                                        color="success" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -228,44 +239,10 @@ defineExpose({
                             </VRow>
                         </VCol>
                     </VRow>
-                    <VRow v-if="isAbleModiy()">
-                        <VCol md="6" cols=12>
-                            <VRow style="align-items: center;float: inline-end;">
-                                <VCol>
-                                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="operator.is_notice_realtime_warning" label="송금 경고사항 알림"
-                                        color="warning" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol md="6" cols=12>
-                            <VRow style="align-items: center;float: inline-end;">
-                                <VCol>
-                                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="operator.is_active" label="활성화 여부"
-                                        color="success" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                    <VRow v-else>
-                        <VCol md="6" cols=12>
-                            <VRow style="align-items: center;">
-                                <VCol :md="6" cols="6">
-                                    <b>활성화 여부</b>
-                                </VCol>
-                                <VCol :md="6">
-                                    <VChip :color="operator.is_active ? 'success' : 'default'">
-                                        {{ operator.is_active ? '활성화' : '비활성화' }}
-                                    </VChip>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
                 </VForm>
-                <template v-if="isAbleModiy()">
-                    <br>
-                    <VDivider />
-                    <br>
-                </template>
+                <br>
+                <VDivider />
+                <br>
                 <VRow v-if="isAbleModiy()">
                     <VCol cols="12" class="d-flex gap-4">
                         <VBtn type="button" style="margin-left: auto;" @click="operatorUpdate()">

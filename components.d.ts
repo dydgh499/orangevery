@@ -21,6 +21,7 @@ declare module '@vue/runtime-core' {
     AppTextarea: typeof import('./resources/ts/@core/components/app-form-elements/AppTextarea.vue')['default']
     AppTextField: typeof import('./resources/ts/@core/components/app-form-elements/AppTextField.vue')['default']
     BillKeyCreateDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/BillKeyCreateDialog.vue')['default']
+    BillKeyModifyDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/BillKeyModifyDialog.vue')['default']
     BillKeySelectDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/BillKeySelectDialog.vue')['default']
     CustomCheckboxes: typeof import('./resources/ts/@core/components/app-form-elements/CustomCheckboxes.vue')['default']
     CustomCheckboxesWithIcon: typeof import('./resources/ts/@core/components/app-form-elements/CustomCheckboxesWithIcon.vue')['default']

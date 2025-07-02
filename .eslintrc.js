@@ -186,6 +186,7 @@ module.exports = {
         'no-unneeded-ternary': 'off',
         'curly': 'off',
         'prefer-template': 'off',
+        'ts-plugin': 'off',
         indent: ['error', 4],
         '@typescript-eslint/indent': ['error', 4], // TS
       },

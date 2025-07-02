@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Message;
 
 use App\Models\Brand;
 use App\Models\Operator;
-use App\Models\Merchandise;
+use App\Models\Pay;
 
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
@@ -206,47 +206,11 @@ class MessageController extends Controller
                     AbnormalConnection::tryParameterModulationApproach();
                     return $this->extendResponse(9999, '잘못된 접근입니다.');   
                 }
-                else
-                    AuthPhoneNum::clearValidate($brand, $request->mcht_id, $phone_num);
             }
             return $this->response(0,  ['token' => $this->aes256_encode($token)]);
         }
         else
             return $this->extendResponse(1000, __('auth.failed_token'), []);
-    }
-
-    /**
-     * 본사등급 휴대폰번호 인증 요청
-    */
-    public function headOfficeMobileCodeIssuence(Request $request)
-    {
-        $validated = $request->validate(['user_name'=>'required|string']);
-
-        $query = Operator::where('brand_id', $request->user()->brand_id)->where('is_delete', false);
-        $head_office_query = (clone $query)->where('level', 40);
-        if($request->user()->level === 40)
-            $head_office = $head_office_query->where('id', $request->user()->id)->first();
-        else
-            $head_office = $head_office_query->first();
-        
-        $employee = (clone $query)->where('user_name', $request->user_name)->first();
-
-        if(Ablilty::isBrandCheck($request, $employee->brand_id) === false)
-            return $this->response(951);
-        else
-        {
-            [$code, $msg] = $this->mobileCodeSend($head_office->brand_id, $head_office->phone_num, -1);
-            if($code === 0)
-            {
-                $msg = $head_office->nick_name.'님에게 인증번호를 보냈습니다.<br>발송된 인증번호를 전달받아 입력해주세요.';
-                return $this->extendResponse($code, $msg, [
-                    'phone_num' => $head_office->phone_num,
-                    'nick_name' => $head_office->nick_name
-                ]);
-            }
-            else
-                return $this->extendResponse($code, $msg);
-        }
     }
 
     /**

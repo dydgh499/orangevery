@@ -2,7 +2,7 @@ import corp from '@/plugins/corp';
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import type { ActivityHistory, Options } from '@/views/types';
-import { useStore } from '../pay-gateways/useStore';
+import { useStore } from '../options/useStore';
 
 export const historyLevels = () => {
     const sales = []
@@ -39,10 +39,10 @@ export const replaceVariable = (history_detail: any, history_target:string) => {
             }
         }
 
-        _replaceToName(pgs, "PG사", 'pg_name')
+        _replaceToName(pgs, "결제대행사", 'pg_name')
         _replaceToName(finance_vans, "금융벤 ID", 'nick_name')
 
-        if(history_target === 'PG사')
+        if(history_target === '결제대행사')
             _replaceToName(pg_companies, "PG 타입", 'name')       
     }
     return changeKeyName()

@@ -179,8 +179,8 @@ return [
         'password_confirmation' => '비밀번호 확인',
 
         //payment_modules
-        'pg_id' => 'PG사',
-        'ps_id' => '구간',
+        'pg_id' => '결제대행사',
+        'ps_id' => '수수료율',
         'module_type' => '결제모듈 타입',
         'is_old_auth' => '비인증/구인증 여부',
         'installment' => '할부',
@@ -195,7 +195,7 @@ return [
         'issuer' => '발급사',
         'type' => '타입',
         'api_key' => 'API KEY',
-        'sub_key' => 'SUB KEY(License)',
+        'sub_key' => 'SUB KEY',
         'mid' => 'MID',
 
         'fin_id' => '금융벤 ID',
@@ -211,7 +211,7 @@ return [
         'finance_company_num' => '금융 VAN 타입',
         // payment_gateways
         'pg_type' => 'PG 타입',
-        'pg_name' => 'PG사 별칭',
+        'pg_name' => '결제대행사 별칭',
         'rep_name'=> '대표자명',
         'id' => '고유번호',
         // pay
@@ -237,7 +237,7 @@ return [
         'work_e_at' => '작업종료 시간',
         // transactions
         'cxl_seq' => '취소 회차',
-        'ps_fee' => '구간 수수료',
+        'ps_fee' => '수수료율',
         'acquirer' => '매입사',
         'ori_trx_id' => '원거래번호',
         'trx_at' => '거래시간',

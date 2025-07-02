@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Redis;
 class BrandController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
-    protected $brand;
+    protected $brands;
     protected $imgs;
 
     public function __construct(Brand $brands)
@@ -34,31 +34,26 @@ class BrandController extends Controller
         $this->brands = $brands;
         $this->imgs = [
             'params'    => [
-                'logo_file', 'favicon_file', 'passbook_file', 'seal_file',
+                'logo_file', 'favicon_file', 'passbook_file',
                 'contract_file', 'id_file', 'og_file', 'bsin_lic_file',
                 'login_file',
             ],
             'cols'  => [
-                'logo_img', 'favicon_img', 'passbook_img', 'seal_img',
+                'logo_img', 'favicon_img', 'passbook_img',
                 'contract_img', 'id_img', 'og_img', 'bsin_lic_img',
                 'login_img',
             ],
             'folders'   => [
-                'logos', 'favicons', 'passbooks', 'seals',
+                'logos', 'favicons', 'passbooks',
                 'contracts', 'ids', 'ogs', 'e-ids',
                 'logins',
             ],
             'sizes'     => [
-                96, 32, 500, 100,
+                96, 32, 500,
                 500, 500, 1200, 500,
                 2000,
             ],
         ];
-    }
-
-    private function isMainBrand($brand_id)
-    {
-        return $brand_id == env('MAIN_BRAND_ID', 1) ? true : false;
     }
     
     /**
@@ -72,18 +67,15 @@ class BrandController extends Controller
     {
         $search     = $request->input('search', '');
         $brand_id   = $request->user()->brand_id;
-
-        if($this->isMainBrand($request->user()->brand_id) && Ablilty::isDevLogin($request))
-            $query = $this->brands;
-        else
-            $query = $this->brands->where('id', $brand_id);
+        $query = $this->brands->where('id', $brand_id);
 
         $query  = $query
             ->where('is_delete', false)
             ->where('name', 'like', "%$search%");
 
         $data   = $this->getIndexData($request, $query);
-        foreach ($data['content'] as $content) {
+        foreach ($data['content'] as $content) 
+        {
             $content->free = $content->ov_options->free;
             $content->paid = $content->ov_options->paid;
             $content->auth = $content->ov_options->auth;

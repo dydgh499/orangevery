@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Manager\Service;
 
 use App\Models\Service\AbnormalConnectionHistory;
-use App\Models\Merchandise\PaymentModule;
-use App\Models\Merchandise;
+use App\Models\Pay\PaymentModule;
+use App\Models\Pay;
 use App\Models\Salesforce;
 use App\Models\Operator;
 use App\Models\Log\ActivityHistory;

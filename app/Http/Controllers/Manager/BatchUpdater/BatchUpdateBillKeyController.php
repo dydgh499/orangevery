@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Manager\BatchUpdater;
 
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateController;
 
-use App\Models\Merchandise\BillKey;
+use App\Models\Pay\BillKey;
 use App\Http\Controllers\Utils\Comm;
 
 use App\Http\Traits\ManagerTrait;
@@ -61,7 +61,7 @@ class BatchUpdateBillKeyController extends BatchUpdateController
         $bill_keys = (clone $query)
             ->join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
             ->get([
-                'payment_modules.id', 'payment_modules.mid', 'payment_modules.pay_key',
+                'payment_modules.id', 'payment_modules.mid', 'payment_modules.api_key',
                 'bill_keys.bill_key', 'bill_keys.id as bill_id'
             ]);
 
@@ -75,7 +75,7 @@ class BatchUpdateBillKeyController extends BatchUpdateController
                 'bill_key'  => $bill_key->bill_key,
             ];
             $res = Comm::destroy(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key', $data, [
-                'Authorization' => $bill_key->pay_key
+                'Authorization' => $bill_key->api_key
             ]);
             $success[] = $bill_key->bill_id;
         }

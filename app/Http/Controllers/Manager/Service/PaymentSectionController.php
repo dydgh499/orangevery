@@ -18,19 +18,19 @@ use Illuminate\Http\Request;
 /**
  * @group Payment Section API
  *
- * PG사 구간 API입니다.
+ * 결제대행사 수수료율 API입니다.
  */
 class PaymentSectionController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
     protected $pay_sections;
-    protected $target;
+    protected $target, $imgs;
 
     public function __construct(PaymentSection $pay_sections)
     {
         $this->pay_sections = $pay_sections;
-        $this->target       = '구간';
-        $this->imgs = [];
+        $this->target       = '수수료율';
+        $this->imgs         = [];
     }
 
     /**
@@ -40,10 +40,10 @@ class PaymentSectionController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query = $this->pay_sections
+        $data = $this->pay_sections
                 ->where('brand_id', $request->user()->brand_id)
-                ->where('is_delete', false);
-        $data = $this->getIndexData($request, $query);
+                ->where('is_delete', false)
+                ->get();
         return $this->response(0, $data);
     }
 

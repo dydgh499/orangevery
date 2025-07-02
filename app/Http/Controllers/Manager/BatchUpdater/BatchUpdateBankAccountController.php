@@ -23,7 +23,7 @@ use Illuminate\Http\Request;
 class BatchUpdateBankAccountController extends BatchUpdateController
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $account, $target;
+    protected $account;
 
     public function __construct(BankAccount $account)
     {

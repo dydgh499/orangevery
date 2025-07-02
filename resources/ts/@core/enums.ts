@@ -65,17 +65,11 @@ export const PayParamTypes = {
 } as const
 
 export const HistoryTargetNames = {
-    'gmids': 'GMID',
-    'salesforces': '영업라인',
-    'salesforces/fee-change-histories': '영업라인 수수료율',
-    'merchandises': '가맹점',
-    'merchandises/pay-modules': '결제모듈',
-    'merchandises/noti-urls': '노티 URL',
-    'merchandises/fee-change-histories': '가맹점 수수료율',
-    'services/pay-gateways': 'PG사',
-    'services/pay-sections': '구간',
-    'services/classifications': '구분 정보',
-    'services/finance-vans': '금융 VAN',
+    'pays/pay-modules': '결제모듈',
+    'pays/bill-keys': '빌키',
+    'services/finance-vans': '이체모듈',
+    'services/pay-gateways': '결제대행사',
+    'services/pay-sections': '수수료율',
     'services/brands': '운영사',
     'transactions': '매출',
 } as const

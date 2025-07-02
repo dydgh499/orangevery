@@ -121,32 +121,6 @@ class ActivityHistoryViewer
 
     static private function authVisiable($request, $history_detail)
     {
-        $disableImages = function($history_detail) {
-            unset($history_detail['contract_img']);
-            unset($history_detail['id_img']);
-            unset($history_detail['passbook_img']);
-            unset($history_detail['bsin_lic_img']);
-            return $history_detail;
-        };
-
-        if($request->history_target === '결제모듈')
-        {
-            if(Ablilty::isOperator($request) === false)
-            {
-                unset($history_detail['api_key']);
-                unset($history_detail['sub_key']);
-                unset($history_detail['pg_id']);
-                unset($history_detail['ps_id']);
-                unset($history_detail['fin_id']);
-            }
-        }
-        else if($request->history_target === '매출')
-        {
-            unset($history_detail['dev_fee']);
-            unset($history_detail['dev_settle_id']);
-            unset($history_detail['dev_realtime_fee']);
-            unset($history_detail['dev_realtime_settle_amount']);
-        }
         return $history_detail;
     }
 
@@ -156,69 +130,14 @@ class ActivityHistoryViewer
         $ov_options = new OvOptions(json_encode($brand['ov_options']));
         if(strlen($history_detail))
         {
-            $conv_history_detail = json_decode($history_detail, true);
-            
-            if($ov_options->paid->use_issuer_filter === false)
-                unset($conv_history_detail['filter_issuers']);
-
-            if($ov_options->paid->use_regular_card === false)
-                unset($conv_history_detail['use_regular_card']);
-
-            if($ov_options->paid->use_noti === false)
-                unset($conv_history_detail['use_noti']);
-
-            if(isset($conv_history_detail['brand_id']))
-                unset($conv_history_detail['brand_id']);
-
-            if($ov_options->paid->use_multiple_hand_pay === false)
-                unset($conv_history_detail['use_multiple_hand_pay']);    
-            if($ov_options->paid->use_pay_verification_mobile === false)
-                unset($conv_history_detail['use_pay_verification_mobile']);
-
-            if($ov_options->paid->use_noti === false)
-                unset($conv_history_detail['use_noti']);
-            
-            if($ov_options->paid->use_pmid === false)
-                unset($conv_history_detail['p_mid']);
-            if($ov_options->paid->use_specified_limit === false)
-            {
-                unset($conv_history_detail['phone_auth_limit_s_tm']);
-                unset($conv_history_detail['phone_auth_limit_e_tm']);
-                unset($conv_history_detail['phone_auth_limit_count']);
-                unset($conv_history_detail['single_payment_limit_s_tm']);
-                unset($conv_history_detail['single_payment_limit_e_tm']);
-                unset($conv_history_detail['specified_time_disable_limit']);
-            }
-
+            $conv_history_detail = json_decode($history_detail, true);            
             unset($conv_history_detail['user_pw']);
             $conv_history_detail = self::authVisiable($request, $conv_history_detail);
 
-            $levels = $ov_options->auth->levels;
             $history_detail = [];
             foreach($conv_history_detail as $key => $value)
-            {
-                if(preg_match('/^sales[0-9]_/', $key))
-                {
-                    if(strpos($key, '_settlement') !== false)
-                        $key_name = $levels[str_replace('_settlement', '', $key)."_name"]. " 정산금";
-                    else if(strpos($key, '_settle_id') !== false)
-                        $key_name = $levels[str_replace('_settle_id', '', $key)."_name"]. " 정산번호";
-                    else if(strpos($key, '_settle_amount') !== false)
-                        $key_name = $levels[str_replace('_settle_amount', '', $key)."_name"]. " 정산금";
-                    else if(strpos($key, '_id') !== false)
-                        $key_name = $levels[str_replace('_id', '', $key)."_name"];
-                    else if(strpos($key, '_fee') !== false)
-                    {
-                        $key_name = $levels[str_replace('_fee', '', $key)."_name"]. " 수수료";
-                        $conv_history_detail[$key] = round($conv_history_detail[$key], 7);
-                        //sales5_fee
-                    }                    
-                    else
-                        continue;
-                    $history_detail[$key_name] = $conv_history_detail[$key];
-                }
-                else
-                    $history_detail[__('validation.attributes.'.$key)] = $conv_history_detail[$key];
+            {                
+                $history_detail[__('validation.attributes.'.$key)] = $conv_history_detail[$key];
             }
             return $history_detail;
         }

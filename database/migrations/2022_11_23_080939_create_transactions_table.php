@@ -18,9 +18,9 @@ class CreateTransactionsTable extends Migration
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
 
             $table->integer('pmod_id')->default(0)->comment('pay module ID');
-            $table->integer('pg_id')->default(0)->comment('PG사 id');
-            $table->integer('ps_id')->default(0)->comment('PG사 구간 id');
-            $table->float('ps_fee', 6, 5)->default(0)->comment('PG사 구간 수수료');
+            $table->integer('pg_id')->default(0)->comment('결제대행사 id');
+            $table->integer('ps_id')->default(0)->comment('결제대행사 수수료율 id');
+            $table->float('ps_fee', 6, 5)->default(0)->comment('결제대행사 수수료율 수수료');
             
             $table->timestamp('trx_at')->index()->nullable()->comment('거래발생시간(취소, 승인)');
             $table->boolean('is_cancel')->default(false)->comment('취소 여부');
