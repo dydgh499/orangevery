@@ -20,7 +20,7 @@ const _getPaymentMenu = () => {
 
 export const getPaymentMenu = () => {
     const menu = <any[]>[]
-    if (corp.ov_options.paid.use_pay_module) {
+    if (corp.ov_options.paid.yn_delivery_mode) {
         menu.push({ heading: 'Service' })
         menu.push(_getPaymentMenu())
     }

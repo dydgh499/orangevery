@@ -26,10 +26,10 @@ const props = defineProps<Props>()
                         <VRow>
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
-                                    결제모듈 사용여부
+                                    배달대행전산 사용여부
                                 </template>
                                 <template #input>
-                                    <VSwitch hide-details v-model="props.item.paid.use_pay_module" color="primary" />
+                                    <VSwitch hide-details v-model="props.item.paid.yn_delivery_mode" color="primary" />
                                 </template> 
                             </CreateHalfVCol>
                         </VRow>
