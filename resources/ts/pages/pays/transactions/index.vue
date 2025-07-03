@@ -73,7 +73,7 @@ provide('exporter', exporter)
             </template>
             <template #index_extra_field>
                 <VSelect :menu-props="{ maxHeight: 400 }" 
-                    v-model="store.params.page_size" 
+                    v-model="store.params.page_size"
                     :items="[10, 20, 30, 50, 100, 200]" 
                     label="조회 개수" 
                     @update:modelValue="store.updateQueryString({page_size: store.params.page_size})"

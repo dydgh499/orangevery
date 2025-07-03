@@ -55,12 +55,6 @@ export const useSearchStore = defineStore('useTransactionSearchStore', () => {
             'acquirer' : '매입사',         
         }
     }
-    
-    const getDepositCols = () => {
-        return {
-            'deposit_status': '이체상태',
-        }        
-    }
 
     const geETcCols = () => {
         return {
@@ -72,7 +66,6 @@ export const useSearchStore = defineStore('useTransactionSearchStore', () => {
     const headers1:any = getPaymentModuleCols()
     const headers2:any = getTransactionCols()
     const headers3:any = getCardCols()
-    const headers4:any = getDepositCols()
     const headers5:any = geETcCols()
 
     const headers: Record<string, string> = {
@@ -80,7 +73,6 @@ export const useSearchStore = defineStore('useTransactionSearchStore', () => {
         ...headers1,
         ...headers2,
         ...headers3,
-        ...headers4,
         ...headers5,
     }
 
@@ -89,7 +81,6 @@ export const useSearchStore = defineStore('useTransactionSearchStore', () => {
     head.getSubHeaderCol('결제모듈 정보', headers1, sub_headers)
     head.getSubHeaderCol('결제 정보', headers2, sub_headers)
     head.getSubHeaderCol('결제 수단', headers3, sub_headers)
-    head.getSubHeaderCol('이체 정보', headers4, sub_headers)
     head.getSubHeaderCol('더보기', headers5, sub_headers)
 
     head.sub_headers.value = sub_headers
