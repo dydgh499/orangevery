@@ -16,6 +16,8 @@ use App\Http\Traits\StoresTrait;
 use App\Http\Requests\Manager\BulkRegister\BulkWithdrawBookRequest;
 
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
+use App\Models\Service\CMSTransactionHistories;
+
 /**
  * @group Withdraw-Batch-Book-Updater API
  *
@@ -24,10 +26,11 @@ use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 class BatchUpdateWithdrawBookController extends BatchUpdateController
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $cms_transactions;
+    protected $cms_transactions, $cms_transaction_histories;
 
-    public function __construct(CMSTransaction $cms_transactions)
+    public function __construct(CMSTransaction $cms_transactions, CMSTransactionHistories $cms_transaction_histories)
     {
+        $this->cms_transaction_histories = $cms_transaction_histories;
         $this->cms_transactions = $cms_transactions;
         $this->target = '이체 예약현황';
     }
@@ -137,7 +140,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
             // ✅ 예약 이력 기록
             app(ActivityHistoryInterface::class)->batchAdd(
                 $this->target,         // 또는 context에 맞는 target 문자열
-                $this->cms_transactions,             // 실제 예약 관련된 테이블명 또는 키
+                $this->cms_transaction_histories,         // 실제 예약 관련된 테이블명 또는 키
                 [$params],                                // 예약에 사용된 파라미터
                 'fin_id',                                 // 기준 컬럼명
                 $current,                                 // 등록 시간

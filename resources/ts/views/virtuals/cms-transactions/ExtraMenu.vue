@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { transactionColors } from '@/@core/enums';
 import type { CmsTransactionHistory } from '@/views/types';
 import { withdrawInterface } from '@/views/virtuals/cms-transactions/useStore';
-import { getUserLevel } from '@axios';
 
 interface Props {
     item: CmsTransactionHistory,
@@ -11,7 +9,6 @@ interface Props {
 const props = defineProps<Props>()
 
 const store = <any>(inject('store'))
-const withdrawHistoriesDialog = <any>(inject('withdrawHistoriesDialog'))
 
 const { 
     cancelJobs 
@@ -30,15 +27,6 @@ const cancelWithdrawBook = async () => {
         <VIcon size="22" icon="tabler-dots-vertical" />
         <VMenu activator="parent" width="250">
             <VList>
-                <VListItem 
-                    v-if="props.item.withdraw_status !== 0"                    
-                    value="withdraw-histories"            
-                    @click="withdrawHistoriesDialog.show(props.item)">
-                    <template #prepend>
-                        <VIcon size="24" class="me-3" icon="tabler:history" />
-                    </template>
-                    <VListItemTitle>출금시도이력</VListItemTitle>
-                </VListItem>
                 <VListItem
                     v-if="props.item.withdraw_status === 0"
                     value="single-deposit-cancel-job" 
