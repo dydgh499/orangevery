@@ -165,7 +165,7 @@ provide('exporter', exporter)
                             </span>
                             <span v-else-if="_key == 'extra_col'">
                                 <VBtn 
-                                    v-if="item['is_cancel'] === 0 && [1,3,7].includes(item['trx_status'])"
+                                    v-if="item['is_cancel'] === 0 && [1,7].includes(item['trx_status'])"
                                     @click="payCanceled(item)" size="small">
                                     승인취소
                                 </VBtn>
