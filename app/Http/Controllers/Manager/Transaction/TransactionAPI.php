@@ -37,9 +37,11 @@ class TransactionAPI extends TransactionTest
     }
 
     // 결제취소
-    static public function payCancel($data)
+    static public function payCancel($data, $pay_key)
     {
-        return Comm::post(env('PAY_URL', 'http://localhost:81').'/api/v2/online/pay/cancel', $data);
+        return Comm::post(env('PAY_URL', 'http://localhost:81').'/api/v2/pay/cancel', $data, [
+            'Authorization' => $pay_key
+        ]);
     }
     
     // 수기결제

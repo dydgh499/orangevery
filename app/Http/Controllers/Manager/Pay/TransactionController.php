@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
+use App\Models\Pay\PaymentModule;
 use App\Http\Requests\Manager\TransactionRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Transaction\HandPayRequest;
@@ -123,7 +124,8 @@ class TransactionController extends Controller
      */
     public function handPay(HandPayRequest $request)
     {
-        $res = TransactionAPI::handPay($request->all(), '');
+        $pay_module = PaymentModule::where('id', $request->pmod_id)->first();
+        $res = TransactionAPI::handPay($request->all(), $pay_module->api_key);
         if($res['body']['result_cd'] === '0000')
             return $this->response(1, $res['body']);
         else
@@ -136,7 +138,8 @@ class TransactionController extends Controller
      */
     public function payCancel(PayCancelRequest $request)
     {
-        $res = TransactionAPI::payCancel($request->all());
+        $pay_module = PaymentModule::where('id', $request->pmod_id)->first();
+        $res = TransactionAPI::payCancel($request->all(), $pay_module->api_key);
         if($res['body']['result_cd'] === '0000')
             return $this->response(1, $res['body']);
         else
