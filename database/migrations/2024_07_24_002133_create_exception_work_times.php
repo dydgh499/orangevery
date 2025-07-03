@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('exception_work_times', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->unsignedInteger('oper_id')->nullable()->comment('운영자 FK')->constrained('operators')->onDelete('SET NULL');
             $table->timestamp('work_s_at')->nullable()->comment('작업시작시간');

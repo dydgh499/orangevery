@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bill_keys', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->unsignedInteger('pmod_id')->nullable()->comment('결제모듈 ID')->constrained('payment_modules')->onDelete('SET NULL');
             $table->integer('oper_id')->nullable()->comment('운영자 ID');
             $table->string('buyer_name')->nullable()->comment('구매자명');
