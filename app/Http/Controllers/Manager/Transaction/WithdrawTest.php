@@ -18,4 +18,13 @@ class WithdrawTest
             'result_msg'=> '성공',
         ];
     }
+    
+    static public function getTestownerCheckResult($data)
+    {
+        return [
+            'result'    => "0000", 
+            'message'   => '정상입니다.', 
+            'data'      => [],
+        ];
+    }
 }

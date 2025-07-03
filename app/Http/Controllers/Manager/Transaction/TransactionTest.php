@@ -73,13 +73,4 @@ class TransactionTest
             'ord_num'    => $data['ord_num'],
         ];
     }
-    
-    static public function getTestownerCheckResult($data)
-    {
-        return [
-            'result'    => "0000", 
-            'message'   => '정상입니다.', 
-            'data'      => [],
-        ];
-    }
 }

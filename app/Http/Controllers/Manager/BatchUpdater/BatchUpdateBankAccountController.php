@@ -13,7 +13,7 @@ use App\Http\Traits\StoresTrait;
 
 use App\Http\Requests\Manager\BulkRegister\BulkBankAccountRequest;
 use App\Http\Requests\Manager\BulkRegister\BulkOwnerCheckRequest;
-use App\Http\Controllers\Manager\Transaction\TransactionAPI;
+use App\Http\Controllers\Manager\Transaction\WithdrawAPI;
 
 
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
@@ -82,7 +82,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 if($data)
                 {
                     $params = $this->getBankAccountParams($data);
-                    $res = TransactionAPI::ownerCheck($params);
+                    $res = WithdrawAPI::ownerCheck($params);
                     if($res['body']['result'] === "0000")
                         $news[] = $params;
                     else
