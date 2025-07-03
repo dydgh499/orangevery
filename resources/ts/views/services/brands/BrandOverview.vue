@@ -152,6 +152,36 @@ const props = defineProps<Props>()
                         </VCol>
                     </VRow>
                     <br>
+                    <VCardTitle>
+                        <BaseQuestionTooltip :location="'top'" text="문자 발송정보" content="전산내 문자발송 서비스에 사용됩니다." />
+                    </VCardTitle>
+                    <CreateHalfVColV2 :mdl="5" :mdr="7" class="pt-5">
+                        <template #l_name>회원 ID</template>
+                        <template #l_input>
+                                <VTextField prepend-inner-icon="tabler-user" v-model="props.item.ov_options.free.bonaeja.user_id"
+                                    variant="underlined"
+                                    placeholder="대표자명을 입력해주세요." type="text" />
+                        </template>
+                        <template #r_name>API KEY</template>
+                        <template #r_input>
+                            <VTextField prepend-inner-icon="ic-baseline-vpn-key"
+                                v-model="props.item.ov_options.free.bonaeja.api_key" placeholder="API KEY를 입력해주세요."
+                                variant="underlined"
+                                type="text" />
+                        </template>
+                    </CreateHalfVColV2>
+                    <CreateHalfVColV2 :mdl="5" :mdr="7">
+                        <template #l_name>발신자번호</template>
+                        <template #l_input>
+                                <VTextField prepend-inner-icon="tabler-device-mobile"
+                                    v-model="props.item.ov_options.free.bonaeja.sender_phone" placeholder="연락처를 입력해주세요."
+                                    variant="underlined"
+                                    type="text" />
+                        </template>
+                        <template #r_name></template>
+                        <template #r_input>
+                        </template>
+                    </CreateHalfVColV2>
                     <VCardTitle class="mt-5 mb-5">옵션</VCardTitle>
                         <CreateHalfVColV2 :mdl="8" :mdr="4">
                             <template #l_name>

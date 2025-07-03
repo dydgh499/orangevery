@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import CreateForm from '@/layouts/utils/CreateForm.vue'
-import BrandAuthOverview from '@/views/services/brands/BrandAuthOverview.vue'
+import BrandOptionOverview from '@/views/services/brands/BrandOptionOverview.vue'
 import BrandDesignOverview from '@/views/services/brands/BrandDesignOverview.vue'
 
 import corp from '@/plugins/corp'
@@ -29,7 +29,7 @@ const id = ref<number>(0)
                     <BrandDesignOverview :item="item" />
                 </VWindowItem>
                 <VWindowItem>
-                    <BrandAuthOverview :item="item.ov_options"/>
+                    <BrandOptionOverview :item="item.ov_options"/>
                 </VWindowItem>
             </template>
         </CreateForm>
