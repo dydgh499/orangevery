@@ -25,4 +25,21 @@ class WithdrawAPI extends WithdrawTest
         else
             return Comm::post($url, $data);
     }
+    
+
+    static public function ownerCheck($data)
+    {
+        $url = env('WITHDRAW_URL', 'http://localhost:81').'/api/v2/owner-check';
+        if(Ablilty::isAppLocal())
+        {
+            return [
+                'code' => 200,
+                'body' => self::getTestownerCheckResult($data)
+            ];
+        }
+        else
+        {
+            return Comm::post($url, $data, []);
+        }
+    }
 }
