@@ -3,10 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Message\MessageController;
-use App\Http\Controllers\Manager\Transaction\TransactionController;
+use App\Http\Controllers\External\DeliveryAgencyController;
 use App\Http\Controllers\Manager\Service\CMSTransactionController;
 
-use App\Http\Controllers\Manager\Pay\BillKeyController;
 
 
 /*
@@ -22,18 +21,13 @@ use App\Http\Controllers\Manager\Pay\BillKeyController;
 
 Route::prefix('v1')->group(function() {    
     Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(function() {
-        Route::prefix('pay')->group(function() {
-            Route::post('bill-keys/{id}/pay', [BillKeyController::class, 'pay']);
-            Route::apiResource('bill-keys', BillKeyController::class);
-        });
         Route::prefix('bonaejas')->group(function() {
             Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
             Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);
-        });
-        
+        });        
     });
 
-    Route::prefix('auth')->middleware(['log.route'])->group(function() {
+    Route::prefix('auth')->group(function() {
         Route::post('sign-in', [AuthController::class, 'signin']);
         Route::post('sign-up', [AuthController::class, 'signUp']);
         Route::post('2fa-qrcode/vertify', [AuthController::class, 'vertify2FA']);  
@@ -43,4 +37,11 @@ Route::prefix('v1')->group(function() {
             Route::post('owner-check', [CMSTransactionController::class, 'ownerCheck']);
         });
     }); 
+
+    Route::middleware(['auth.delivery'])->group(function() {
+        Route::prefix('delivery-agency')->group(function() {
+            Route::post('sign-check', [DeliveryAgencyController::class, 'signCheck']);
+            Route::post('sign-up', [DeliveryAgencyController::class, 'signUp']);
+        });
+    });
 });
