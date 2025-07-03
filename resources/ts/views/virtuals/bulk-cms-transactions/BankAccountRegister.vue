@@ -254,8 +254,12 @@ watchEffect(async () => {
         <!-- 👉 개인정보 -->
         <VCol cols="12">
             <VCard>
-                <VCardText class="d-flex flex-wrap py-4 gap-4">
+                <VCardText class="d-flex flex-wrap py-4 gap-4 align-center">
                     <h3>1차 검증 테이블</h3>
+                    <VTextField type="time" label="이체 시간 설정"
+                        v-model="transferTime" 
+                        style="max-width: 10em;"
+                    />
                     <div class="app-user-search-filter d-flex flex-wrap gap-4" style="margin-left: auto;">
                         <b v-if="error_message !== '' && is_clear === false" style="display: inline-flex; align-items: center;">
                             <span class="text-error">
@@ -303,10 +307,6 @@ watchEffect(async () => {
     </VRow>
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">
-            <VTextField type="time" label="이체 시간 설정"
-                v-model="transferTime" 
-                style="max-width: 10em;"
-            />
             <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('대량출금 포멧', headers)" style="margin-left: auto;">
                 양식 다운로드
                 <VIcon end icon="uiw-file-excel" />

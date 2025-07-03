@@ -137,16 +137,21 @@ trait StoresTrait
         $params['custAcntNo'] = base64_encode(openssl_encrypt($params['custAcntNo'], "AES-256-ECB",  $sub_key , OPENSSL_RAW_DATA));
         $params['mchtCustNm'] = base64_encode(openssl_encrypt($params['mchtCustNm'], "AES-256-ECB",  $sub_key , OPENSSL_RAW_DATA));
 
-        // 실제 API 호출 (post 함수는 적절히 구현되어 있다고 가정)
+        // 실제 API 호출
         $result = $this->post($url, $params, ['Content-Type' => 'application/json']);
         $body = $result['body'];
 
-        // 성공 코드: 0000, ST24
-        $cipherRaw  = base64_decode($body['mchtCustNm']);
-        $mchtCustNm = openssl_decrypt($cipherRaw, "AES-256-ECB",  $sub_key, OPENSSL_RAW_DATA);
         $success = ($body['outRsltCd'] === "0000" || $body['outRsltCd'] === "ST24");
-        $code = $success ? 100 : $body['outRsltCd'];
-        $msg  = $success ? $mchtCustNm : $body['outRsltMsg'];
+        
+        if ($success) {
+            $cipherRaw  = base64_decode($body['mchtCustNm']);
+            $mchtCustNm = openssl_decrypt($cipherRaw, "AES-256-ECB",  $sub_key, OPENSSL_RAW_DATA);
+            $code = 100;
+            $msg  = $mchtCustNm;               // 예금주명 반환
+        } else {
+            $code = $body['outRsltCd'] ?? 'ERR';
+            $msg  = $body['outRsltMsg'] ?? '응답 파싱 실패';
+        }
 
         return [
             'result' => $code,

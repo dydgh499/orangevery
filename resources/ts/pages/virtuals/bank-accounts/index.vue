@@ -76,8 +76,8 @@ if(getUserLevel() < 35) {
                                     </div>
                                     </span>
                                     <span v-else-if="_key === 'checked'">
-                                        <VChip :color="item[_key] ? 'success' : 'error'">
-                                            {{ item[_key] ? '검증완료' : '미검증' }}
+                                        <VChip :color="item[_key] ? 'error' : 'success'">
+                                            {{ item[_key] ? '미검증' : '검증완료' }}
                                         </VChip>
                                     </span>
                                     <span v-else-if="_key === 'note'" v-html="item[_key]" style="line-height: 2em;"></span>

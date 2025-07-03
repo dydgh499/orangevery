@@ -53,7 +53,6 @@ class RealtimeWrapper
         $json = $this->service->getBalance();
         if($json['RESP_CD'] === "0000")
         {
-            $this->service->balanceValidate($json['WDRW_CAN_AMT']);
             return $this->service->deposit();
         }
         else
@@ -70,9 +69,7 @@ class RealtimeWrapper
             $json = $this->deposit(); // finance_van의 잔액 확인해서 잔액이 충분하면 5 부족하면 0
             $json = $this->afterTreatment($json); // 결과코드 deposit에서 나온 응답코드로 변경
             [$result_code, $message] = $this->service->getWithdrawStatus($json); // 결과코드 0000 이면 이체완료 메세지 응답 아니면 아닌 결과 응답
-            Log::info("updateCMSTransaction 값", $last_id);
             $this->service->updateCMSTransaction($last_id, $result_code, $message); // 바로 위의 출금시도 응답코드, 결과 메세지 업데이트
-            $this->service->updateCMSTransactionBook($last_id, $result_code, $message);
         }
         else
         {

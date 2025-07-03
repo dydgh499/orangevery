@@ -8,7 +8,7 @@ use App\Http\Controllers\Manager\BatchUpdater\BatchTransactionController;
 
 Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(function() {
     Route::prefix('owner-check/batch-updaters')->group(function() { 
-        Route::post('register', [BatchUpdateBankAccountController::class, 'ownerCheckHard']);
+        Route::post('register', [BatchUpdateBankAccountController::class, 'register']);
     });
     
     Route::prefix('bank-accounts/batch-updaters')->group(function() { 
@@ -16,7 +16,7 @@ Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(functio
     });
 
     Route::prefix('bulk-withdraws/batch-updaters')->group(function() { 
-        Route::post('register', [BatchUpdateWithdrawBookController::class, 'withdrawNoAccount']);
+        Route::post('register', [BatchUpdateWithdrawBookController::class, 'register']);
         Route::delete('remove', [BatchUpdateWithdrawBookController::class, 'batchRemove']);
     });
     Route::prefix('pays/transactions/batch-updaters')->group(function() { 
