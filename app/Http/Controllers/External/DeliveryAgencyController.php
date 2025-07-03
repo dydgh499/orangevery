@@ -50,6 +50,7 @@
             return PaymentSection::create([
                 'brand_id'  => $brand['id'],
                 'oper_id'   => $oper->id,
+                'pg_id'     => env("DELIVERY_PG_ID"),
                 'name'      => '수수료율',
                 'trx_fee'   => $request->trx_fee,
             ]);
