@@ -10,12 +10,12 @@
         return $pgs[$pg_type-1];
     }
 
-    function brandFilter($query, $request, $parent_table='')
+    function brandFilter($query, $request, $_table='')
     {
-        $table = $parent_table !== "" ? $parent_table."." : "";
+        $table = $_table !== "" ? $_table."." : "";
         $query = $query->where($table.'brand_id', $request->user()->brand_id);
         if(BrandInfo::isDeliveryBrand() && Ablilty::isEmployee($request))
-            $query = $request->where($table.'oper_id', $request->user()->id);
+            $query = $query->where($table.'oper_id', $request->user()->id);
         return $query;
     }
 

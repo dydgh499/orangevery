@@ -10,11 +10,11 @@ const _getSecurityMenu = () => {
         title: '활동이력',
         to: 'services-activity-histories',
     })
-    securities.children.push({
-        title: '이상접속 이력',
-        to: 'services-abnormal-connection-histories',
-    })
     if (getUserLevel() >= 40) {
+        securities.children.push({
+            title: '이상접속 이력',
+            to: 'services-abnormal-connection-histories',
+        })
         securities.children.push({
             title: '예외 작업시간 관리',
             to: 'services-exception-work-times',

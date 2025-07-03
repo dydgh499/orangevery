@@ -15,13 +15,9 @@ use App\Http\Controllers\Manager\Service\OperatorIPController;
 use App\Http\Controllers\Manager\Service\FinanceVanController;
 use App\Http\Controllers\Manager\Service\PaymentGatewayController;
 use App\Http\Controllers\Manager\Service\PaymentSectionController;
-use App\Http\Controllers\Manager\Service\CMSTransactionBookController;
 
 use App\Http\Controllers\Manager\OperatorController;
-
 use App\Http\Controllers\Log\ActivityHistoryContoller;
-
-use App\Http\Controllers\V1\V1WithdrawBookController;
 
 Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(function() {
     Route::get('services/detail', [PaymentGatewayController::class, 'detail']);
