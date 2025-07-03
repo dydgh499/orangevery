@@ -68,4 +68,17 @@ class CMSTransactionValidate
         }
         return ['0000', ''];
     }
+    
+    static public function validate($acct_bank_code)
+    {   // 은행정보 검증
+        return self::acctBankCodeValidate($acct_bank_code);
+    }
+    
+    static public function acctBankCodeValidate($acct_bank_code)
+    {
+        if($acct_bank_code === null)
+            return ['PV485', '은행코드를 매칭할 수 없습니다.'];
+        else
+            return ['0000', ''];
+    }
 }

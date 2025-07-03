@@ -13,6 +13,7 @@ use App\Http\Traits\StoresTrait;
 use App\Http\Requests\Manager\BulkRegister\BulkBankAccountRequest;
 
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
+use App\Http\Controllers\Utils\Comm;
 use Illuminate\Http\Request;
 
 /**
@@ -37,7 +38,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
      * 운영자 이상 가능
      * 한 개의 계좌라도 예금주 검증 실패 시 전체 등록 취소
      */
-    public function ownerCheckHard(BulkBankAccountRequest $request)
+    public function register(BulkBankAccountRequest $request)
     {
         $current = date('Y-m-d H:i:s');
         $brand_id = $request->user()->brand_id;
@@ -73,31 +74,14 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                     'acct_nm' => $data['acct_name'], // 예금주명
                     'acct_num' => (string)$data['acct_num'], // 계좌번호
                 ];
-                $ownerCheckResult = $this->ownerCheckForBatch($accountData);
-                
-                if ($ownerCheckResult['result'] === 100) {
-                    // 반환된 예금주명과 입력된 예금주명 비교 (공백 제거 후 비교)
-                    $verified_name = trim($ownerCheckResult['message']);
-                    $input_name = trim($data['acct_name']);
-                    
-                    if ($verified_name === $input_name) {
-                        $data['brand_id']   = $brand_id;
-                        $data['created_at'] = $current;
-                        $data['updated_at'] = $current;
-                        $data['checked']    = 1;
-                        $success_accounts[] = $data;
-                    } else {
-                        // 예금주명이 일치하지 않을 경우
-                        $failed_accounts[] = [
-                            'acct_num' => $data['acct_num'],
-                            'message' => "입력하신 예금주명({$input_name})과 실제 예금주명({$verified_name})이 일치하지 않습니다."
-                        ];
-                    }
-                } else {
+                $ownerCheckResult = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', json_encode($accountData, JSON_UNESCAPED_UNICODE));
+                // 예금주 조회 실패인 경우 실패 계좌와 메세지
+                if ($ownerCheckResult['body']['result'] !== 100) {
                     $failed_accounts[] = [
                         'acct_num' => $data['acct_num'],
-                        'message' => $ownerCheckResult['message']
+                        'message' => $ownerCheckResult['body']['message']
                     ];
+                } else {
                 }
             }
             
@@ -153,7 +137,6 @@ class BatchUpdateBankAccountController extends BatchUpdateController
             }
         }
     }
-    
     /**
      * 일괄삭제
      */
