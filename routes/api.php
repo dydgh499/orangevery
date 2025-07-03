@@ -18,21 +18,22 @@ use App\Http\Controllers\Manager\Service\CMSTransactionController;
 */
 
 Route::prefix('v1')->group(function() {    
-    Route::prefix('bonaejas')->group(function() {
-            Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
-            Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);
-        });        
-    });
-    Route::prefix('auth')->group(function() {
-        Route::post('sign-in', [AuthController::class, 'signin']);
-        Route::post('sign-up', [AuthController::class, 'signUp']);
-        Route::post('2fa-qrcode/vertify', [AuthController::class, 'vertify2FA']);  
+    Route::middleware(['is.browser'])->group(function () {
+        Route::prefix('bonaejas')->group(function() {
+                Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
+                Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);
+            });        
+        Route::prefix('auth')->group(function() {
+            Route::post('sign-in', [AuthController::class, 'signin']);
+            Route::post('sign-up', [AuthController::class, 'signUp']);
+            Route::post('2fa-qrcode/vertify', [AuthController::class, 'vertify2FA']);  
 
-        Route::middleware(['auth:sanctum'])->group(function() {
-            Route::post('sign-out', [AuthController::class, 'signout']);
-            Route::post('owner-check', [CMSTransactionController::class, 'ownerCheck']);
-        });
-    }); 
+            Route::middleware(['auth:sanctum'])->group(function() {
+                Route::post('sign-out', [AuthController::class, 'signout']);
+                Route::post('owner-check', [CMSTransactionController::class, 'ownerCheck']);
+            });
+        }); 
+    });
 
     Route::middleware(['auth.delivery'])->group(function() {
         Route::prefix('delivery-agency')->group(function() {
