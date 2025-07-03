@@ -40,10 +40,18 @@ class SettlementJob implements ShouldQueue
                     'amount'        => $transaction['amount'],
                     'installment'   => 0,
                 ], $transaction['pay_key']);
-                if($res['body']['result_cd'] === '0000')
-                    $success[] = array_merge($res['body'], $transaction);
+                if($res['code'] === 200)
+                {
+                    if($res['body']['result_cd'] === '0000')
+                        $success[] = array_merge($res['body'], $transaction);
+                    else
+                        $fails[] = array_merge(['message' => $res['body']['result_msg']], $transaction);
+                }
                 else
-                    $fails[] = array_merge(['message' => $res['body']['result_msg']], $transaction);
+                {
+                    $message = isset($res['body']['result_msg']) ? $res['body']['result_msg'] : '결제 처리 에러';
+                    $fails[] = array_merge(['message' => $message], $transaction);
+                }
             }
             catch(\Exception $ex)
             {
@@ -99,10 +107,19 @@ class SettlementJob implements ShouldQueue
                     'acct_bank_code'    => $transaction['acct_bank_code'],
                     'withdraw_amount'   => $transaction['amount'], 
                 ]);
-                if($res['body']['result_cd'] === '0000')
-                    $successes[] = array_merge($res['body'], $transaction);
+
+                if($res['code'] === 201)
+                {
+                    if($res['body']['result_cd'] === '0000')
+                        $success[] = array_merge($res['body'], $transaction);
+                    else
+                        $fails[] = array_merge(['message' => $res['body']['result_msg']], $transaction);
+                }
                 else
-                    $fails[] = array_merge(['message' => $res['body']['result_msg']], $transaction);
+                {
+                    $message = isset($res['body']['result_msg']) ? $res['body']['result_msg'] : '이체 처리 에러';
+                    $fails[] = array_merge(['message' => $message], $transaction);
+                }
             }
             catch(\Exception $ex)
             {
