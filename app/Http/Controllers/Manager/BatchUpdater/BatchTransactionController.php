@@ -69,9 +69,11 @@ class BatchTransactionController extends BatchUpdateController
         $datas = $request->data();
         $bill_ids = $datas->pluck('bill_id')->all();
         $query = Billkey::join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
+            ->join('payment_sections', 'payment_modules.ps_id', '=', 'payment_sections.id')
             ->whereIn('bill_keys.id', $bill_ids);
         $payment_modules = brandFilter($query, $request, 'payment_modules')->get([
-            'payment_modules.*', 'bill_keys.id as bill_id', 'bill_keys.bill_key'
+            'payment_modules.*', 'payment_sections.trx_fee as ps_fee',
+            'bill_keys.id as bill_id', 'bill_keys.bill_key'
         ]);
         if($payment_modules)
         {
