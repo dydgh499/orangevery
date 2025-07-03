@@ -1,5 +1,5 @@
 import corp from '@/plugins/corp';
-import { axios, getUserLevel, getViewType, pay_token } from '@axios';
+import { axios, pay_token } from '@axios';
 import { canNavigate } from '@layouts/plugins/casl';
 import { setupLayouts } from 'virtual:generated-layouts';
 import { createRouter, createWebHistory } from 'vue-router';
@@ -13,7 +13,7 @@ const router = createRouter({
             redirect: to => {
                 const isLoggedIn = pay_token.value != ''
                 if (isLoggedIn) {
-                    return { name: getViewType(), query: to.query }
+                    return { name: 'virtuals-bank-accounts', query: to.query }
                 }
                 else
                     return { name: 'login', query: to.query }

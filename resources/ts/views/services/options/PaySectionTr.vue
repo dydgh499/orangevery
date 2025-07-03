@@ -23,6 +23,7 @@ const { update, remove } = useRequestStore()
                 <VCol cols="12">
                     <VRow no-gutters>
                         <VTextField v-model="props.item.name" prepend-inner-icon="mdi-vector-intersection"
+                            variant="underlined"
                             placeholder="수수료율 명칭 입력" persistent-placeholder :rules="[requiredValidatorV2(props.item.name, '명칭')]"
                             style="display: inline-block; min-width: 10em;" />
                     </VRow>
@@ -34,6 +35,7 @@ const { update, remove } = useRequestStore()
                 <VCol cols="12">
                     <VRow no-gutters>
                         <VTextField v-model="props.item.trx_fee" prepend-inner-icon="tabler-percentage"
+                            variant="underlined"
                             placeholder="수수료율 입력" persistent-placeholder :rules="[requiredValidatorV2(props.item.trx_fee, '수수료율')]"
                             style="display: inline-block; min-width: 10em;" />
                     </VRow>

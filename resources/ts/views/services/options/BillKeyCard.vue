@@ -119,9 +119,13 @@ watchEffect(() => {
                                         {{ `(${props.item.issuer}) ${props.item.card_num}` }}
                                     </b>
                                 </template>
-                                <template #r_name>비밀번호</template>
+                                <template #r_name>
+                                    <span v-if="props.item.id === 0">비밀번호</span>
+                                </template>
                                 <template #r_input>
-                                    <div style="display: inline-flex; align-items: center;">
+                                    <div 
+                                        v-if="props.item.id === 0"
+                                        style="display: inline-flex; align-items: center;">
                                         <VTextField
                                         v-model="props.item.card_pw"
                                         type="password"
