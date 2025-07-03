@@ -20,7 +20,7 @@ const _getVirtualMenu = () => {
 export const getVirtualMenu = () => {
     const menu = <any[]>[]
     // TODO: 백앤드단 권한 설정 필요
-    if (Boolean(corp.ov_options.paid.yn_delivery_mode)) {
+    if (corp.ov_options.paid.yn_delivery_mode === false) {
         menu.push(_getVirtualMenu())
     }
     return menu

@@ -167,7 +167,7 @@ interface FreeOption {
     },
 }
 interface PaidOption {
-    yn_delivery_mode: number,
+    yn_delivery_mode: boolean,
 }
 interface AuthOption {
 }

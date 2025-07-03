@@ -26,6 +26,10 @@ const {
     formatYYmm,
 } = inputFormater()
 
+phone_num_format.value = props.item.buyer_phone
+card_num_format.value = props.item.buyer_phone
+yymm_format.value = props.item.yymm
+
 phone_num.value = props.item.buyer_phone
 card_num.value = props.item.card_num
 yymm.value = props.item.yymm
