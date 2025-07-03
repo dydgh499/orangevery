@@ -152,7 +152,7 @@ class TransactionController extends Controller
                 $cxl_trans = $ord_trans->replicate();
                 $cxl_trans->trx_id      = $res['body']['trx_id'];
                 $cxl_trans->ori_trx_id  = $res['body']['ori_trx_id'];
-                $cxl_trans->trx_at      = $res['body']['trx_at'];
+                $cxl_trans->trx_at      = $res['body']['cxl_dttm'];
                 $cxl_trans->is_cancel   =  1;
                 $cxl_trans->amount   =  $cxl_trans->amount * -1;
                 $cxl_trans->save();
