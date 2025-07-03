@@ -1,4 +1,4 @@
-<?
+<?php
     namespace App\Http\Controllers\External;
 
     use App\Models\Operator;
