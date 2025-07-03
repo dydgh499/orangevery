@@ -9,7 +9,7 @@ import type { Notification } from '@layouts/types'
 const errorHandler = <any>(inject('$errorHandler'))
 const notifications = ref(<Notification[]>[])
 const detailWorkStatusDialog = ref()
-const secureReportDialog = ref()
+const secureReportDialog = ref(false)
 const is_login = ref(true)
 
 provide('detailWorkStatusDialog', detailWorkStatusDialog)
