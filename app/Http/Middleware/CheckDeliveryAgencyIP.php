@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 
-class CheckDevelopOfficeIP
+class CheckDeliveryAgencyIP
 {
     /**
      * Handle an incoming request.

@@ -6,7 +6,6 @@ use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\External\DeliveryAgencyController;
 use App\Http\Controllers\Manager\Service\CMSTransactionController;
 
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
