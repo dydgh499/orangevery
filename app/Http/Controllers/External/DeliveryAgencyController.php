@@ -109,9 +109,9 @@ class DeliveryAgencyController
                 ->where('user_name', $request->user_name)
                 ->exists();
             if($is_signed)
-                return $this->extendResponse(9999, '이미 가입된 회원입니다.');  
-            else
                 return $this->response(0); 
+            else
+                return $this->extendResponse(9999, '가입되지 않은 회원입니다.');  
         }
         else
             return $this->extendResponse(9999, '대상 전산이 아닙니다.');  
