@@ -30,12 +30,12 @@ class CreateTransactionsTable extends Migration
             $table->string('ord_num', 100)->default('')->comment('주문번호');
             $table->string('mid', 100)->default('')->comment('MID');
             $table->string('tid', 100)->default('')->comment('TID');
-            $table->string('trx_id', 100)->default('')->comment('거래번호');
+            $table->string('trx_id', 100)->nullable()->comment('거래번호');
             $table->string('ori_trx_id', 100)->nullable()->comment('원거래번호');
-            $table->string('card_num', 20)->comment('거래 카드번호');
+            $table->string('card_num', 20)->nullable()->comment('거래 카드번호');
             $table->string('issuer', 20)->nullable()->comment('발급사');
             $table->string('acquirer', 20)->nullable()->comment('매입사');
-            $table->string('appr_num', 9)->comment('승인번호');
+            $table->string('appr_num', 9)->nullable()->comment('승인번호');
             $table->tinyInteger('installment')->default(0)->comment('할부');
             $table->tinyInteger('trx_status')->default()->comment('거래상태 (입금대기=0, 1=결제성공, 3=결제실패, 5=정산성공, 7=정산실패)');
             $table->integer('cms_id')->nullable()->comment('이체예약 ID');
