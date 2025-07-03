@@ -139,10 +139,27 @@ class TransactionController extends Controller
     public function payCancel(PayCancelRequest $request)
     {
         $pay_module = PaymentModule::where('id', $request->pmod_id)->first();
-        $res = TransactionAPI::payCancel($request->all(), $pay_module->api_key);
-        if($res['body']['result_cd'] === '0000')
-            return $this->response(1, $res['body']);
+        $ord_trans = $this->transactions->where('trx_id', $request->trx_id)->first();
+        if (!$pay_module) 
+            return $this->apiResponse('9999', '결제모듈이 존재하지 않습니다.');
+        if (!$ord_trans)
+            return $this->apiResponse('9999', '원거래가 존재하지 않습니다.');
         else
-            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);
+        {
+            $res = TransactionAPI::payCancel($request->all(), $pay_module->api_key);
+            if($res['body']['result_cd'] === '0000')
+            {
+                $cxl_trans = $ord_trans->replicate();
+                $cxl_trans->trx_id      = $res['body']['trx_id'];
+                $cxl_trans->ori_trx_id  = $res['body']['ori_trx_id'];
+                $cxl_trans->trx_at      = $res['body']['trx_at'];
+                $cxl_trans->is_cancel   =  1;
+                $cxl_trans->amount   =  $cxl_trans->amount * -1;
+                $cxl_trans->save();
+                return $this->response(1, $res['body']);
+            }
+            else
+                return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);
+        }
     }
 }

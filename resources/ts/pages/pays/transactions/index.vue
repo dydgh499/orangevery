@@ -148,19 +148,24 @@ provide('exporter', exporter)
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'trx_status'">
-                                <VChip :color="trxStatuses.find(obj => obj.id === item[_key])?.color">
-                                    {{ trxStatuses.find(obj => obj.id === item[_key])?.title }}
-                                </VChip>
-                                <template  v-if="[3,7].includes(item[_key])">
-                                    <br>
-                                    <code>
-                                        {{ item['message'] }}
-                                    </code>
+                                <template v-if="item['is_cancel'] === 0">
+                                    <VChip :color="trxStatuses.find(obj => obj.id === item[_key])?.color">
+                                        {{ trxStatuses.find(obj => obj.id === item[_key])?.title }}
+                                    </VChip>
+                                    <template v-if="[3,7].includes(item[_key])">
+                                        <br>
+                                        <code>
+                                            {{ item['message'] }}
+                                        </code>
+                                    </template>
                                 </template>
+                                <span v-else>
+                                    -
+                                </span>
                             </span>
                             <span v-else-if="_key == 'extra_col'">
                                 <VBtn 
-                                    v-if="item['is_cancel'] === 0 && [1,3].includes(item['trx_status'])"
+                                    v-if="item['is_cancel'] === 0 && [1,3,7].includes(item['trx_status'])"
                                     @click="payCanceled(item)" size="small">
                                     승인취소
                                 </VBtn>
