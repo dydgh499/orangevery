@@ -79,9 +79,9 @@ class BatchTransactionController extends BatchUpdateController
         ]);
         if($payment_modules)
         {
-            $payment_modules->makeVisible(['bill_key']);
-            $payment_modules = $payment_modules->toArray();
-
+            $payment_modules = $payment_modules->map(function ($item) {
+                return $item->makeVisible(['bill_key'])->toArray();
+            })->all();
             for($i=0; $i<count($datas); $i++)
             {
                 $idx = array_search($datas[$i]['bill_id'], array_column($payment_modules, 'bill_id'));
