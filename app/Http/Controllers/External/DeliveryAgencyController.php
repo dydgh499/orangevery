@@ -10,6 +10,7 @@
     use App\Http\Traits\ExtendResponseTrait;
 
     use App\Http\Controllers\Auth\AuthPasswordChange;
+    use App\Http\Controllers\Auth\AuthOperatorIP;
 
     use App\Http\Requests\External\SignUpRequest;
     use App\Http\Requests\External\SignCheckRequest;
@@ -89,6 +90,7 @@
                         // 수수료율 연동      
                         $pay_section = $this->createPsFee($request, $brand, $operator);
                         $this->createPaymentModule($request, $brand, $operator, $pay_section);
+                        AuthOperatorIP::init($brand['id']);
                         return $this->response(1);
                     }
                     else
