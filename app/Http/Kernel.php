@@ -59,7 +59,7 @@ class Kernel extends HttpKernel
         'auth.docs' => \App\Http\Middleware\DocAuthenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.update' => \App\Http\Middleware\UpdateTokenTimestamp::class,
-        'auth.delivery' => \App\Http\Middleware\CheckDevelopOfficeIP::class,
+        'auth.delivery' => \App\Http\Middleware\CheckDeliveryAgencyIP::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
