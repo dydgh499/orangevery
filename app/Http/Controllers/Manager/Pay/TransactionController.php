@@ -92,12 +92,7 @@ class TransactionController extends Controller
      */
     public function show(Request $request, int $id)
     {
-        $data = $this->transactions->where('id', $id)->first();
-        if($data)
-            $data->ps_fee = number_format($data->ps_fee * 100, 3);
-        else
-            return $this->response(1000);
-        return $data ? $this->response(0, $data) : $this->response(1000);
+        return $this->extendResponse(951, '사용중지기능');
     }
 
     /**

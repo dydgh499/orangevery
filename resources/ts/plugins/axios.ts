@@ -17,8 +17,8 @@ export const getUserType = () => {
 export const allLevels = () => {
     const sales = []
     if(getUserLevel() >= 35) {
-        sales.push(<Options>({id: 35, title: '직원'}))
-        sales.push(<Options>({id: 40, title: '본사'}))
+        sales.push(<Options>({id: 35, title: '에이전시'}))
+        sales.push(<Options>({id: 40, title: '운영사'}))
     }
     return sales
 }
