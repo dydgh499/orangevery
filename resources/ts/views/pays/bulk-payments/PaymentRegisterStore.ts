@@ -4,6 +4,7 @@ import { useStore } from '@/views/services/options/useStore'
 import { isEmpty } from '@core/utils'
 import { banks } from '@/views/users/useStore'
 
+
 export const validateItems = (item: any, i: number) => {    
     const { bill_keys } = useStore()
     if (isEmpty(item.bill_id))
@@ -16,12 +17,12 @@ export const validateItems = (item: any, i: number) => {
         return [false, (i + 2) + '번째 예금주는 필수로 입력해야합니다.']
     else if (isEmpty(item.amount)) 
         return [false, (i + 2) + '번째 결제금액은 필수로 입력해야합니다.']
-    else if (banks.find(bank => bank.title === item.acct_bank_name) == null) 
+    else if (banks.find(bank => bank.code === item.acct_bank_code) == null) 
         return [false, (i + 2) + '번째줄의 은행코드가 이상합니다.']
     else if(Number(item.amount) < 0)
         return [false, (i + 2) + '번째 결제금액이 이상합니다.']
     else {
-        let bill_key = bill_keys.find(obj => obj.nick_name === item.bill_id)
+        let bill_key = bill_keys.find(obj => obj.nick_name === String(item.bill_id))
         if(bill_key) {
             item.bill_id = bill_key.id
             return [true, '']

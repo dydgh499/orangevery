@@ -32,8 +32,9 @@ class ExceptionWorkTimeController extends Controller
     public function index(Request $request)
     {
         $query  = $this->work_times
-            ->join('operators', 'exception_work_times.oper_id', '=', 'operators.id')
-            ->where('exception_work_times.brand_id', $request->user()->brand_id);
+            ->join('operators', 'exception_work_times.oper_id', '=', 'operators.id');
+        $query = brandFilter($query, $request, 'exception_work_times');
+
         $data = $this->getIndexData($request, $query, 'exception_work_times.id', [
             'exception_work_times.*', 'operators.user_name', 'operators.nick_name'
         ], 'exception_work_times.created_at');
@@ -54,7 +55,9 @@ class ExceptionWorkTimeController extends Controller
             [$result, $msg, $datas] = MessageController::operatorPhoneValidate($request);
             if($result === AuthLoginCode::SUCCESS->value)
             {
-                $res = $this->work_times->create($request->data());
+                $data = $request->data();
+                $data['oper_id'] = $request->user()->id;
+                $res = $this->work_times->create($data);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
             }
             else

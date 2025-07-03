@@ -5,13 +5,12 @@ use App\Models\Pay\PaymentModule;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
+use App\Http\Controllers\Ablilty\BrandInfo;
 
-use App\Http\Controllers\Manager\Service\BrandInfo;
 
 use App\Http\Requests\Manager\Pay\PayModuleRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
-use App\Http\Controllers\Utils\ChartFormat;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Ablilty\Ablilty;
@@ -46,11 +45,9 @@ class PaymentModuleController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $data = $this->pay_modules
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
-            ->get();        
-        return $this->response(0, $data);
+        $query = $this->pay_modules->where('is_delete', false);
+        $query = brandFilter($query, $request);
+        return $this->response(0, $query->get());
     }
 
     /**
@@ -70,6 +67,7 @@ class PaymentModuleController extends Controller
                 ->exists();
         };
         $data = $request->data();
+        $data['oper_id'] = $request->user()->id;
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($data['tid'] !== '' && $isDuplicateId($data['brand_id'], 'tid', $data['tid']))

@@ -19,7 +19,7 @@ use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Auth\AuthPasswordChange;
 
 use App\Http\Requests\Manager\LoginRequest;
-use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\BrandInfo;
 use App\Http\Controllers\Auth\Login;
 
 use Illuminate\Support\Facades\Hash;

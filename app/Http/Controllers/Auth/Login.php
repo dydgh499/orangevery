@@ -10,7 +10,7 @@ use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Controllers\Auth\LoginValidate;
 
 use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\BrandInfo;
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
 class Login extends LoginValidate

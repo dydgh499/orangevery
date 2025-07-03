@@ -13,6 +13,7 @@ Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(functio
     
     Route::prefix('bank-accounts/batch-updaters')->group(function() { 
         Route::delete('remove', [BatchUpdateBankAccountController::class, 'batchRemove']);
+        Route::post('owner-check', [BatchUpdateBankAccountController::class, 'ownerCheck']);
     });
 
     Route::prefix('bulk-withdraws/batch-updaters')->group(function() { 

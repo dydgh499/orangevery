@@ -1,11 +1,13 @@
 import router from '@/router'
 import { axios } from '@axios'
+import { useStore } from './services/options/useStore'
 
 export const useRequestStore = defineStore('requestStore', () => {
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
     const errorHandler = <any>(inject('$errorHandler'))
-
+    const { pss, pgs, bill_keys, pay_modules, finance_vans} = useStore()
+    
     const deleteTreatment = (back_url: string, is_redirect: boolean, params: any, res: any) => {
         if (res.status === 201) {
             if (is_redirect)
@@ -18,6 +20,16 @@ export const useRequestStore = defineStore('requestStore', () => {
         if (res.status === 201) {
             if(params.id == 0) {
                 params.id = res.data.id
+                if(back_url === 'services/pay-gateways')
+                    pgs.push({ ...params})
+                else if(back_url === 'services/pay-sections')
+                    pss.push({ ...params})
+                else if(back_url === 'services/finance-vans')
+                    finance_vans.push({ ...params})
+                else if(back_url === 'pays/bill-keys')
+                    bill_keys.push({ ...params})
+                else if(back_url === 'pays/pay-modules')
+                    pay_modules.push({ ...params})
             }
             if (is_redirect) {
                 if (back_url === '/services/brands') 

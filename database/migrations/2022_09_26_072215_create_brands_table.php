@@ -17,7 +17,7 @@ class CreateBrandsTable extends Migration
         Schema::create('brands', function (Blueprint $table) {
             $table->unsignedSmallInteger('id', true);
             $table->string('dns')->unique();
-            $table->string('name');
+            $table->string('name')->nullable()->comment('운영사 명');
             $table->string('theme_css')->nullable();    // json으로 저장
             $table->string('logo_img')->nullable()->comment('로고 이미지');
             $table->string('favicon_img', 150)->nullable()->comment('파비콘 이미지');

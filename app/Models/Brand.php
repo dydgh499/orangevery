@@ -31,10 +31,4 @@ class Brand extends Model
             get: fn ($value) => new ThemeCSS($value),
         );
     }
-
-    public function operatorIps()
-    {
-        return $this->hasMany(OperatorIP::class, 'brand_id')
-            ->select();
-    }
 }

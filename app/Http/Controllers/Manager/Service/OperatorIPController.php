@@ -70,7 +70,8 @@ class OperatorIPController extends Controller
         {
         */
             $data = $request->data();
-            $data['brand_id'] = $request->user()->brand_id;
+            $data['oper_id']    = $request->user()->id;
+            $data['brand_id']   = $request->user()->brand_id;
     
             $res = $this->operator_ips->create($data);
             $ips = $this->operator_ips->where('brand_id', $data['brand_id'])

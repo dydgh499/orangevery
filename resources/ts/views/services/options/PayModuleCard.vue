@@ -80,7 +80,7 @@ const filterPgs = computed(() => {
                                         :items="pgs"
                                         variant="underlined"
                                         prepend-inner-icon="ph-buildings" 
-                                        label="원천사 선택" item-title="pg_name" item-value="id"
+                                        label="결제대행사 선택" item-title="pg_name" item-value="id"
                                         :rules="[requiredValidatorV2(item.pg_id, '결제대행사')]" />    
                                 </template>
                                 <template #r_name>수수료율</template>

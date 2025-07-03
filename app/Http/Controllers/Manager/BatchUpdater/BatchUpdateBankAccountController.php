@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager\BatchUpdater;
 
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateController;
+use App\Http\Controllers\Utils\Bank;
 
 use App\Models\BankAccount;
 
@@ -11,6 +12,9 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
 use App\Http\Requests\Manager\BulkRegister\BulkBankAccountRequest;
+use App\Http\Requests\Manager\BulkRegister\BulkOwnerCheckRequest;
+use App\Http\Controllers\Manager\Transaction\TransactionAPI;
+
 
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 use App\Http\Controllers\Utils\Comm;
@@ -32,6 +36,81 @@ class BatchUpdateBankAccountController extends BatchUpdateController
         $this->target = '계좌등록';
     }
     
+    
+    public function getBankAccountParams($data)
+    {
+        return [
+            'acct_name' => $data['acct_name'],
+            'acct_num' => $data['acct_num'],
+            'acct_bank_code' => $data['acct_bank_code'],
+            'acct_bank_name' => Bank::getBankName($data['acct_bank_code']),
+        ];
+    }
+
+    public function addBankAccountObjects($request, $datas)
+    {
+        $current = date('Y-m-d H:i:s');
+        $datas = $datas->map(function ($data) use($current, $request) {
+            $data['brand_id']   = $request->user()->brand_id;
+            $data['oper_id']    = $request->user()->id;
+            $data['created_at'] = $current;
+            $data['updated_at'] = $current;
+            return $data;
+        })->toArray();
+        return app(ActivityHistoryInterface::class)->batchAdd($this->target, $this->account, $datas, 'acct_num', $current, $request->user()->brand_id);
+    }
+
+    public function getNewAccounts(BulkOwnerCheckRequest $request)
+    {
+        $news  = [];
+        $error = null;
+        $datas = $request->data();
+        
+        $unkonwn_bank_accounts  = $datas->pluck('acct_num')->all();
+        $exist_bank_accounts    = brandFilter(new BankAccount, $request)
+            ->whereIn('acct_num', $datas->pluck('acct_num')->all())
+            ->pluck('acct_num')
+            ->all();
+
+        foreach($unkonwn_bank_accounts as $unkonwn_bank_account)
+        {
+            if($error)
+                break;
+            if(in_array($unkonwn_bank_account, $exist_bank_accounts) === false)
+            {
+                $data = $datas->firstWhere('acct_num', $unkonwn_bank_account);
+                if($data)
+                {
+                    $params = $this->getBankAccountParams($data);
+                    $res = TransactionAPI::ownerCheck($params);
+                    if($res['body']['result'] === "0000")
+                        $news[] = $params;
+                    else
+                        $error = $res;
+                }
+                else
+                    error($unkonwn_bank_account, '존재하지 않는 계좌');
+            }
+        }
+        return [$news, $error];
+    }
+
+    /**
+     * 예금주 검증
+     *
+     * 운영자 이상 가능
+     */
+    public function ownerCheck(BulkOwnerCheckRequest $request)
+    {
+        [$news, $error] = $this->getNewAccounts($request);
+        $ids = $this->addBankAccountObjects($request, collect($news));
+        if($error)
+            return $this->response(1000, $error['body']['message']);
+        else
+            return $this->response(1, $ids);
+    }
+
+
     /**
      * 대량등록 예금주 검증 및 중복 검사 후 자동 등록
      * 

@@ -5,13 +5,6 @@ use App\Http\Controllers\Ablilty\AbnormalConnection;
 
 class Ablilty
 {
-    static function isSalesforce($request)
-    {
-        $cond_1 = $request->user()->tokenCan(13) === true;
-        $cond_2 = $request->user()->tokenCan(35) === false;
-        return $cond_1 && $cond_2;
-    }
-
     static function isOperator($request)
     {
         return $request->user()->tokenCan(35);
@@ -22,9 +15,24 @@ class Ablilty
         return self::isOperator($request) && $request->user()->id === $id;
     }
 
+    static function isEmployee($request)
+    {
+        return self::isOperator($request) && $request->user()->tokenCan(40) === false;
+    }
+
     static function isDevLogin($request)
     {
         return $request->user()->tokenCan(50) && self::isDevOffice($request);
+    }
+    
+    static function isAppLocal()
+    {
+        return env('APP_ENV') === 'local';
+    }
+
+    static function isAppStage()
+    {
+        return env('APP_ENV') === 'stage';
     }
 
     static function isDevOffice($request)

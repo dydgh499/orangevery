@@ -3,6 +3,7 @@ import { axios } from '@/plugins/axios';
 import { useRequestStore } from '@/views/request';
 import PayGatewayCard from '@/views/services/options/PayGatewayCard.vue';
 import { PayGateway } from '@/views/types';
+import { useStore } from './useStore';
 
 const { setNullRemove } = useRequestStore()
 const items = ref(<PayGateway[]>([]))

@@ -3,6 +3,7 @@ import { axios } from '@/plugins/axios';
 import { useRequestStore } from '@/views/request';
 import PayModuleCard from '@/views/services/options/PayModuleCard.vue';
 import { PayModule } from '@/views/types';
+import { getDeliveryModeInfo } from './useStore';
 
 const { setNullRemove } = useRequestStore()
 const pay_modules = ref(<PayModule[]>([]))
@@ -26,7 +27,7 @@ const addNewItem = () => {
         note: '빌키결제',
         mid: '',
         tid: '',
-        pg_id: null,
+        pg_id: getDeliveryModeInfo().pg_id,
         ps_id: null,
         is_old_auth: 0
     })

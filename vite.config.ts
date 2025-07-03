@@ -86,7 +86,6 @@ export default defineConfig({
         'process.env': {
             ERROR_PREFIX: process.env.ERROR_PREFIX,
             APP_URL: process.env.APP_URL,
-            NOTI_URL: process.env.NOTI_URL,
         },
     },
     resolve: {

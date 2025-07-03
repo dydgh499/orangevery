@@ -45,11 +45,9 @@ class PaymentGatewayController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $data = $this->pay_gateways
-            ->where('is_delete', false)
-            ->where('brand_id', $request->user()->brand_id)
-            ->get();
-        return $this->response(0, $data);
+        $query = $this->pay_gateways->where('is_delete', false);
+        $query = brandFilter($query, $request);
+        return $this->response(0, $query->get());
     }
 
     /**
@@ -60,6 +58,7 @@ class PaymentGatewayController extends Controller
     public function store(PayGatewayRequest $request)
     {
         $data   = $request->data();
+        $data['oper_id'] = $request->user()->id;
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
@@ -138,21 +137,20 @@ class PaymentGatewayController extends Controller
      */
     public function detail(Request $request)
     {
-        $brand_id = $request->user()->brand_id;
-        $pay_gateways   = $this->pay_gateways->where('brand_id', $brand_id)->where('is_delete', false)->get();
-        $sections       = PaymentSection::where('brand_id', $brand_id)->where('is_delete', false)->get();
-        $finance_vans   = FinanceVan::where('brand_id', $brand_id)->where('is_delete', false)->get([
+        $bill_query = BillKey::join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
+            ->where('payment_modules.is_delete', false);
+        $finance_vans   = FinanceVan::where('is_delete', false)->delivery()->get([
             'id', 'finance_company_num', 'balance_status', 'nick_name'
         ]);
-        $pay_modules    = PaymentModule::where('brand_id', $brand_id)->where('is_delete', false)->get(['id', 'note', 'module_type']);
-        $bill_keys      = BillKey::join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
-            ->where('payment_modules.brand_id', $brand_id)
-            ->where('payment_modules.is_delete', false)
-            ->get(
+        $pay_gateways   = brandFilter($this->pay_gateways->where('is_delete', false), $request)->get();
+        $sections       = brandFilter(PaymentSection::where('is_delete', false), $request)->get();
+        $pay_modules    = brandFilter(PaymentModule::where('is_delete', false), $request)->get(['id', 'note', 'module_type']);
+        $bill_keys      = brandFilter($bill_query, $request)->get([
                 'bill_keys.pmod_id',
                 'bill_keys.id',
                 'bill_keys.nick_name',
-            );
+                'bill_keys.card_num',
+        ]);
         $data = [
             'pay_gateways' => $pay_gateways,
             'pay_sections' => $sections,

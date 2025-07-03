@@ -49,8 +49,8 @@ class TransactionFilter
     static public function common($request)
     {
         $search = $request->input('search', '');
-        $query  = Transaction::join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
-            ->where('transactions.brand_id', $request->user()->brand_id);
+        $query  = Transaction::join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id');
+        $query = brandFilter($query, $request, 'transactions');
         $query = self::date($request, $query);
         $min   = (clone $query)->min('transactions.id');
         if($min)
