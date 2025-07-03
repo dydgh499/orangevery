@@ -40,10 +40,10 @@ class BatchUpdateBankAccountController extends BatchUpdateController
     public function getBankAccountParams($data)
     {
         return [
-            'acct_name' => $data['acct_name'],
-            'acct_num' => $data['acct_num'],
-            'acct_bank_code' => $data['acct_bank_code'],
-            'acct_bank_name' => Bank::getBankName($data['acct_bank_code']),
+            'acct_name'         => $data['acct_name'],
+            'acct_num'          => $data['acct_num'],
+            'acct_bank_code'    => $data['acct_bank_code'],
+            'acct_bank_name'    => Bank::getBankName($data['acct_bank_code']),
         ];
     }
 
@@ -60,7 +60,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
         return app(ActivityHistoryInterface::class)->batchAdd($this->target, $this->account, $datas, 'acct_num', $current, $request->user()->brand_id);
     }
 
-    public function getNewAccounts(BulkOwnerCheckRequest $request)
+    public function getNewAccounts($request)
     {
         $news  = [];
         $error = null;

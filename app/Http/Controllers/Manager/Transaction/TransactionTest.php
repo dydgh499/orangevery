@@ -21,22 +21,24 @@ class TransactionTest
             'amount'    => 5000,
             'ord_num'   => $data['ord_num'],
             'appr_num'  => "12341234",
-            'item_name' => '배달비',
             'pg_id'     => "123",
             'trx_id'    => $data['ord_num'],
             'acquirer'  => '기업',
             'issuer'    => '기업',
             'card_num'  => "1234******123434",
             'installment' => "00",
-            'buyer_name'  => '홍길동',
-            'buyer_phone' => "010000012312",
-            'trx_dttm'  => date("Y-m-d H:i:s"),
+            'trx_at'    => date("Y-m-d H:i:s"),
             'method'    => '빌키',
             'is_cancel' => 0,
             'temp'      => "",
         ];
+        /* TODO:: 제거
+            'buyer_name'  => '홍길동',
+            'buyer_phone' => "010000012312",
+            'item_name' => '배달비',
+        */
     }
-
+    
     static public function getTestBillCreateResult($data)
     {
         $params = [
@@ -54,7 +56,6 @@ class TransactionTest
             'oper_id'   => request()->user()->id,
             'buyer_name' => request()->user()->nick_name,
             'buyer_phone' => request()->user()->phone_num,
-            'buyer_name' => request()->user()->nick_name,
             'issuer'    => $params['issuer'],
             'card_num'  => $data['card_num'],
             'bill_key'  => $params['bill_key'],
