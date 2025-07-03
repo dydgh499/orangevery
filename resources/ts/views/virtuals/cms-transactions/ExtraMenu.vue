@@ -1,31 +1,27 @@
 <script setup lang="ts">
 import { transactionColors } from '@/@core/enums';
-import type { CmsTransactionBooks } from '@/views/types';
-import { withdrawInterface, withdrawStatusCode } from '@/views/virtuals/cms-transaction-books/useStore';
+import type { CmsTransactionHistory } from '@/views/types';
+import { withdrawInterface } from '@/views/virtuals/cms-transactions/useStore';
 import { getUserLevel } from '@axios';
 
 interface Props {
-    item: CmsTransactionBooks,
+    item: CmsTransactionHistory,
 }
 
 const props = defineProps<Props>()
 
 const store = <any>(inject('store'))
+const withdrawHistoriesDialog = <any>(inject('withdrawHistoriesDialog'))
 
 const { 
     cancelJobs 
 } = withdrawInterface()
 
 const cancelWithdrawBook = async () => {
-    const r = await cancelJobs([props.item.trans_seq_num])
+    const r = await cancelJobs([props.item.id])
     if(r.status == 201) {
         store.setTable()
     }
-}
-
-const isBookCancelAble = () => {
-    const code = withdrawStatusCode(props.item)
-    return code === transactionColors.Book && getUserLevel() >= 35
 }
 
 </script>
@@ -34,8 +30,17 @@ const isBookCancelAble = () => {
         <VIcon size="22" icon="tabler-dots-vertical" />
         <VMenu activator="parent" width="250">
             <VList>
+                <VListItem 
+                    v-if="props.item.withdraw_status !== 0"                    
+                    value="withdraw-histories"            
+                    @click="withdrawHistoriesDialog.show(props.item)">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="tabler:history" />
+                    </template>
+                    <VListItemTitle>출금시도이력</VListItemTitle>
+                </VListItem>
                 <VListItem
-                    v-if="props.item.is_withdraw === 1 && isBookCancelAble()"
+                    v-if="props.item.withdraw_status === 0"
                     value="single-deposit-cancel-job" 
                     class="single-deposit-cancel-job" 
                     @click="cancelWithdrawBook()">

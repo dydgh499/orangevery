@@ -21,9 +21,7 @@ declare module '@vue/runtime-core' {
     AppStepper: typeof import('./resources/ts/@core/components/AppStepper.vue')['default']
     AppTextarea: typeof import('./resources/ts/@core/components/app-form-elements/AppTextarea.vue')['default']
     AppTextField: typeof import('./resources/ts/@core/components/app-form-elements/AppTextField.vue')['default']
-    BillKeyCreateDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/BillKeyCreateDialog.vue')['default']
-    BillKeyModifyDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/BillKeyModifyDialog.vue')['default']
-    BillKeySelectDialog: typeof import('./resources/ts/layouts/dialogs/pay-modules/BillKeySelectDialog.vue')['default']
+    BankAccountDialog: typeof import('./resources/ts/layouts/dialogs/bulks/BankAccountDialog.vue')['default']
     CancelPartDialog: typeof import('./resources/ts/layouts/dialogs/transactions/CancelPartDialog.vue')['default']
     CustomCheckboxes: typeof import('./resources/ts/@core/components/app-form-elements/CustomCheckboxes.vue')['default']
     CustomCheckboxesWithIcon: typeof import('./resources/ts/@core/components/app-form-elements/CustomCheckboxesWithIcon.vue')['default']
@@ -63,5 +61,6 @@ declare module '@vue/runtime-core' {
     TheCustomizer: typeof import('./resources/ts/@core/components/TheCustomizer.vue')['default']
     ThemeSwitcher: typeof import('./resources/ts/@core/components/ThemeSwitcher.vue')['default']
     VanWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/finance-vans-error-codes/VanWithdrawErrorCodeDialog.vue')['default']
+    WithdrawHistoriesDialog: typeof import('./resources/ts/layouts/dialogs/cms-transactions/WithdrawHistoriesDialog.vue')['default']
   }
 }

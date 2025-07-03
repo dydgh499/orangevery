@@ -7,7 +7,7 @@ use App\Http\Controllers\Utils\Comm;
 
 use App\Models\BankAccount;
 use App\Models\Service\FinanceVan;
-use App\Models\Service\CMSTransactionBooks;
+use App\Models\Service\CMSTransaction;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -16,17 +16,6 @@ use App\Http\Traits\StoresTrait;
 use App\Http\Requests\Manager\BulkRegister\BulkWithdrawBookRequest;
 
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
-use App\Http\Controllers\Option\Withdraw\CMSTransactionBookInterface;
-use Illuminate\Http\Request;
-
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Redis;
-use App\Http\Controllers\Utils\FinanceVanUtil;
-use App\Jobs\Realtime\RealtimeWrapper;
-use App\Jobs\BookWithdraw;
-use Carbon\Carbon;
-
 /**
  * @group Withdraw-Batch-Book-Updater API
  *
@@ -35,18 +24,17 @@ use Carbon\Carbon;
 class BatchUpdateWithdrawBookController extends BatchUpdateController
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $cms_transaction_books;
+    protected $cms_transactions;
 
-    public function __construct(CMSTransactionBooks $cms_transaction_books)
+    public function __construct(CMSTransaction $cms_transactions)
     {
-        $this->cms_transaction_books = $cms_transaction_books;
-        $this->target = '출금예약요청';
+        $this->cms_transactions = $cms_transactions;
+        $this->target = '이체 예약현황';
     }
 
     protected static function getTrxNum($brand_id)
     {
-        $withdraw_count  = CMSTransactionBooks::where('brand_id', $brand_id)
-                ->where('is_withdraw', 1)
+        $withdraw_count  = CMSTransaction::where('brand_id', $brand_id)
                 ->where('created_at', '>=', date('Y-m-d 00:00:00'))
                 ->count();
 
@@ -135,9 +123,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
             $params = [
                 'brand_id' => $brand_id,
                 'fin_id' => $data['fin_id'],
-                'is_withdraw' => '1',
                 'amount' => $data['withdraw_amount'],
-                'note' => $data['note'] ?? '',
                 'acct_num' => $bankAccount->acct_num,
                 'acct_name' => $bankAccount->acct_name,
                 'acct_bank_name' => $bankAccount->acct_bank_name,
@@ -148,53 +134,33 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                 'updated_at' => $current,
             ];
             
+            // ✅ 예약 이력 기록
+            app(ActivityHistoryInterface::class)->batchAdd(
+                $this->target,         // 또는 context에 맞는 target 문자열
+                $this->cms_transactions,             // 실제 예약 관련된 테이블명 또는 키
+                [$params],                                // 예약에 사용된 파라미터
+                'fin_id',                                 // 기준 컬럼명
+                $current,                                 // 등록 시간
+                $brand_id                                 // 브랜드 ID
+            );
+            
             // 4. 외부 API 호출 대체 - 내부 로직 직접 호출
             try {
-                [$code, $finance_van, $privacy] = FinanceVanUtil::getThirdPartyInfo((object)$params, (object)$params);
-                if ($code === '0000') {
-                    $rt = new RealtimeWrapper($finance_van, $privacy, 4, $params['withdraw_book_time']);
+                $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/book-withdraw', $params);
 
-                    if ($rt->service) {
-                        // ✅ 예약 시간 처리
-                        $delay = Carbon::parse($params['withdraw_book_time']);
-                        $job = new BookWithdraw($finance_van, $privacy, $params['amount'], $params['note'], $params['withdraw_book_time']);
-                        $job_id = Bus::dispatch($job->onConnection('redis')->onQueue('realtime')->delay($delay));
-    
-                        // ✅ Redis에 job_id 저장 (예약 취소/추적용)
-                        $diff_seconds = Carbon::now()->diffInSeconds($delay);
-                        if ($diff_seconds > 0) {
-                            Redis::set("book-withdraw-" . $params['trans_seq_num'], $job_id, 'EX', $diff_seconds);
-                        }
-                            
-                        // ✅ 예약 이력 기록
-                        app(ActivityHistoryInterface::class)->batchAdd(
-                            $this->target,         // 또는 context에 맞는 target 문자열
-                            $this->cms_transaction_books,             // 실제 예약 관련된 테이블명 또는 키
-                            [$params],                                // 예약에 사용된 파라미터
-                            'fin_id',                                 // 기준 컬럼명
-                            $current,                                 // 등록 시간
-                            $brand_id                                 // 브랜드 ID
-                        );
-                        $results[] = [
-                            'acct_num' => $data['acct_num'] ?? null,
-                            'result_cd' => 100,
-                            'result_msg' => '이체 예약 완료',
-                            'job_id' => $job_id
-                        ];
-                        $success_count++;
-                    } else {
-                        // 금융밴 실패
-                        $results[] = [
-                            'acct_num' => $data['acct_num'] ?? null,
-                            'result_cd' => 'PV406',
-                            'result_msg' => '찾을 수 없는 타입입니다.'
-                        ];
-                    }
-                } else {
+                if($res['body']['result_cd'] === '0000')
+                {
                     $results[] = [
                         'acct_num' => $data['acct_num'] ?? null,
-                        'result_cd' => $code,
-                        'result_msg' => '개인정보 또는 실시간 모듈 정보가 매칭되지 않았습니다.'
+                        'result_cd' => 100,
+                        'result_msg' => '이체 예약 완료',
+                    ];
+                    $success_count++;
+                }else {
+                    $results[] = [
+                        'acct_num' => $data['acct_num'] ?? null,
+                        'result_cd' => $res['body']['result_cd'],
+                        'result_msg' => $res['body']['result_msg']
                     ];
                 }
             } catch (\Exception $e) {
@@ -213,47 +179,6 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
             'success' => $success_count,
             'failed' => $failed_count,
             'details' => $results
-        ]);
-    }
-
-
-    public function batchRemove(Request $request)
-    {
-        $ids = is_array($request->input('selected_idxs')) ? $request->input('selected_idxs') : [];
-
-        Log::info('[batchRemove] 요청된 ID 목록', ['ids' => $ids]);
-        // 선택된 ID로 trans_seq_num 조회
-        $trx_nums = CMSTransactionBooks::whereIn('id', $ids)
-        ->get()
-        ->pluck('trans_seq_num')
-        ->values()
-        ->toArray();
-
-        Log::info('[batchRemove] 추출된 trans_seq_num 목록', ['trx_nums' => $trx_nums]);
-        // 실제 큐에서 예약된 job 삭제
-        [$success, $fails, $not_founds] = CMSTransactionBookInterface::cancelJobs($trx_nums);
-        
-        Log::info('[batchRemove] 취소 결과', [
-            'success' => $success,
-            'fails' => $fails,
-            'not_found' => $not_founds
-        ]);
-    
-        // 활동 이력 기록
-        /*
-        $query = CMSTransactionBooks::whereIn('trans_seq_num', $success);
-        app(ActivityHistoryInterface::class)->destory($this->target, $query, 'id');
-        */
-    
-        $message = count($success) . "건 삭제 완료";
-        if (count($fails) || count($not_founds)) {
-            $message .= ". 일부 실패/미발견 항목 존재";
-        }
-    
-        return $this->extendResponse(1, $message, [
-            'success' => $success,
-            'fails' => $fails,
-            'not_found' => $not_founds
         ]);
     }
 }

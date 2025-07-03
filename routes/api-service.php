@@ -41,7 +41,6 @@ Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(functio
             Route::post('operators/{id}/2fa-qrcode', [OperatorController::class, 'create2FAQRLink']);  
             Route::post('operators/{id}/2fa-qrcode/init', [OperatorController::class, 'init2FA']);  
             Route::post('operators/{id}/2fa-qrcode/create-vertify', [OperatorController::class, 'vertify2FAQRLink']);
-            Route::post('cms-transactions/withdraw', [CMSTransactionController::class, 'withdraw']);
         });
     
         
@@ -56,7 +55,7 @@ Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(functio
         Route::apiResource('pay-sections', PaymentSectionController::class);
         Route::apiResource('finance-vans', FinanceVanController::class);
         Route::apiResource('exception-work-times', ExceptionWorkTimeController::class);        
-        Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
+        //Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
         Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
         Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);
     });
@@ -64,10 +63,11 @@ Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(functio
     Route::prefix('virtuals')->group(function() {
         Route::get('bank-accounts', [BankAccountController::class, 'index']);
         Route::delete('bank-accounts/{id}', [BankAccountController::class, 'destroy']);
-        Route::get('cms-transaction-books', [CMSTransactionBookController::class, 'index']);
-        Route::post('cms-transaction-books/cancel-job', [V1WithdrawBookController::class, 'cancelJob']);
 
         Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
+        Route::post('cms-transactions/cancel-job', [CMSTransactionController::class, 'cancelJob']);
+
+        Route::get('cms-transaction-histories', [CMSTransactionController::class, 'index']);
         Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
         Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);
     });

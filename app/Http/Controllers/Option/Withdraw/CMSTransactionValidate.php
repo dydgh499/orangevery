@@ -11,26 +11,24 @@ class CMSTransactionValidate
     // 출금이력 거래번호 생성
     static public function getTrxNum($finance_van, $privacy, $withdraw_amount, $withdraw_book_time)
     {
-        $existing = CMSTransactionBooks::where('brand_id', $finance_van['brand_id'])
+        $existing = CMSTransaction::where('brand_id', $finance_van['brand_id'])
         ->where('fin_id', $finance_van['id'])
         ->where('acct_num', $privacy['acct_num'])
         ->where('withdraw_book_time', $withdraw_book_time)
         ->where('amount', $withdraw_amount)
-        ->where('is_withdraw', 1)
         ->orderBy('id', 'desc') // 최신값 우선
         ->value('trans_seq_num');
 
         return $existing;
     }
 
-    static public function addWithdraw($finance_van, $code, $message, $note, $is_withdraw, $profit, $trsc_no, $privacy)
+    static public function addWithdraw($finance_van, $code, $message, $note, $profit, $trsc_no, $privacy)
     {
-        $profit = $is_withdraw ? $profit * -1 : $profit;
+        $profit = $profit * -1;
         $params = [
             'brand_id'  => $finance_van['brand_id'],
             'fin_id'    => $finance_van['id'],
             'result_code' => $code,
-            'is_withdraw' => $is_withdraw,
             'trx_at'        => date("Y-m-d H:i:s"),
             'trans_seq_num' => $trsc_no,
             'amount'  => $profit,

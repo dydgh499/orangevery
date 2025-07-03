@@ -14,7 +14,11 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
         'extra_col': '더보기',
     }
 
-    head.sub_headers.value = []
+    head.sub_headers.value = [
+        head.getSubHeaderFormat('거래정보', 'id', 'trans_seq_num', 'string', 7),
+        head.getSubHeaderFormat('출금정보', 'acct_num', 'acct_bank_code', 'string', 4),
+        head.getSubHeaderFormat('기타', 'note', 'note', 'string', 1),
+    ]
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 

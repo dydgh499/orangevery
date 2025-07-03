@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Manager\Service;
 
-use App\Models\Service\FinanceVan;
 use App\Models\Service\CMSTransaction;
 
 use App\Http\Traits\StoresTrait;
@@ -33,16 +32,11 @@ class CMSTransactionController extends Controller
     {
         $search = $request->input('search', '');
         $query = $this->cms_transactions->where('brand_id', $request->user()->brand_id)
-            ->where('trx_at', '>=', $request->s_dt.' 00:00:00')
-            ->where('trx_at', '<=', $request->e_dt.' 23:59:59')
+            ->where('withdraw_book_time', '>=', $request->s_dt.' 00:00:00')
+            ->where('withdraw_book_time', '<=', $request->e_dt.' 23:59:59')
             ->where(function ($query) use ($search) {
-                return $query->where('acct_num', 'like', "%$search%")
-                    ->orWhere('note', 'like', "%$search%");
+                return $query->where('acct_num', 'like', "%$search%");
             });
-        if($request->fin_id !== null)
-            $query = $query->where('fin_id', $request->fin_id);
-        if($request->is_withdraw !== null)
-            $query = $query->where('is_withdraw', $request->is_withdraw);
 
         return $query;
     }
@@ -50,12 +44,10 @@ class CMSTransactionController extends Controller
     public function chart(Request $request)
     {
         $data = $this->commonSelect($request)
-            ->where('result_code', '0000')
+            ->where('withdraw_status', 1)
             ->first([
-                DB::raw("SUM(IF(is_withdraw = 0, amount, 0)) AS deposit_amount"),
-                DB::raw("SUM(IF(is_withdraw = 1, amount, 0)) AS withdraw_amount"),
-                DB::raw("SUM(is_withdraw = 0) AS total_deposit_count"),
-                DB::raw("SUM(is_withdraw = 1) AS total_withdraw_count"),
+                DB::raw("SUM(IF(withdraw_status = 1, amount, 0)) AS withdraw_amount"),
+                DB::raw("SUM(withdraw_status = 1) AS total_withdraw_count"),
             ]);
 
         return $this->response(0, $data);
@@ -64,7 +56,7 @@ class CMSTransactionController extends Controller
     public function index(Request $request)
     {
         $query = $this->commonSelect($request);
-        $data = $this->getIndexData($request, $query, 'trx_at', [], 'trx_at', false);
+        $data = $this->getIndexData($request, $query, 'withdraw_book_time', [], 'withdraw_book_time', false);
         return $this->response(0, $data);
     }
 
@@ -100,5 +92,17 @@ class CMSTransactionController extends Controller
             else
                 return $this->apiResponse($res['code'], $res['body'], []);
         }
+    }
+    
+
+    /**
+     * 예약 이체 취소
+     */
+    public function cancelJob(Request $request)
+    {
+        $validated = $request->validate(['ids.*'=>'required']);
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/cancel-book-withdraw-job';
+        $res = Comm::post($url, ['ids' => $request->ids]);
+        return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
     }
 }
