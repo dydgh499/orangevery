@@ -92,7 +92,7 @@ class SettlementJob implements ShouldQueue
             try
             {
                 $res = WithdrawAPI::withdraw([
-                    'fin_id'            => env("DELIEVERY_FIN_ID", null), 
+                    'fin_id'            => env("DELIVERY_FIN_ID", null), 
                     'acct_bank_name'    => $transaction['acct_bank_name'], 
                     'acct_num'          => $transaction['acct_num'], 
                     'acct_name'         => $transaction['acct_name'], 
