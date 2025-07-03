@@ -151,6 +151,12 @@ provide('exporter', exporter)
                                 <VChip :color="trxStatuses.find(obj => obj.id === item[_key])?.color">
                                     {{ trxStatuses.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
+                                <template  v-if="[3,7].includes(item[_key])">
+                                    <br>
+                                    <code>
+                                        {{ item['message'] }}
+                                    </code>
+                                </template>
                             </span>
                             <span v-else-if="_key == 'extra_col'">
                                 <VBtn 
