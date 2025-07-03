@@ -18,12 +18,12 @@ class Transaction extends Model
 
     public function cmsTransaction()
     {
-        return $this->belongsTo(CMSTransaction::class, 'cms_id')->select();
+        return $this->belongsToMany(CMSTransaction::class, 'cms_id')->select();
     }
 
     public function cancel()
     {
-        return $this->belongsTo(Transaction::class, 'trx_id', 'ori_trx_id')
+        return $this->belongsToMany(Transaction::class, 'trx_id', 'ori_trx_id')
             ->select();
     }
 }
