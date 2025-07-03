@@ -18,15 +18,11 @@ use App\Http\Controllers\Manager\Service\CMSTransactionController;
 */
 
 Route::prefix('v1')->group(function() {    
-    Route::middleware(['is.browser'])->group(function () {
-        Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(function() {
-            Route::prefix('bonaejas')->group(function() {
-                Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
-                Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);
-            });        
-        });
+    Route::prefix('bonaejas')->group(function() {
+            Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
+            Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);
+        });        
     });
-
     Route::prefix('auth')->group(function() {
         Route::post('sign-in', [AuthController::class, 'signin']);
         Route::post('sign-up', [AuthController::class, 'signUp']);
