@@ -2,12 +2,8 @@ import type { Options } from '@/views/types';
 import corp from '@corp';
 import axiosIns from 'axios';
 
-export const getUserMutual = () => {
-    return user_info.value.user_name
-}
-
 export const getUserType = () => {
-    if (getUserLevel() <= 45) 
+    if (getUserLevel() <= 40) 
         return {id:2, link:''}
     else
         return {id:4, link:''}
@@ -30,13 +26,6 @@ export const getUserLevel = () => {
     return 0
 }
 
-export const getViewType = () => {
-    const level = getUserLevel()
-    if(level >= 35)
-        return 'virtuals-bank-accounts'
-    else
-        return ''
-}
 // -----------------------
 export const isAbleUnlockMcht = () => {
     return getUserLevel() >= 35 || (getUserLevel() > 11 && user_info.is_able_unlock_mcht)

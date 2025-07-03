@@ -61,5 +61,6 @@ declare module '@vue/runtime-core' {
     TheCustomizer: typeof import('./resources/ts/@core/components/TheCustomizer.vue')['default']
     ThemeSwitcher: typeof import('./resources/ts/@core/components/ThemeSwitcher.vue')['default']
     VanWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/finance-vans-error-codes/VanWithdrawErrorCodeDialog.vue')['default']
+    WithdrawHistoriesDialog: typeof import('./resources/ts/layouts/dialogs/cms-transactions/WithdrawHistoriesDialog.vue')['default']
   }
 }
