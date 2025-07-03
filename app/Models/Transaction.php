@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Service\cmsTransaction;
+use App\Models\Service\CMSTransaction;
 
 use App\Http\Traits\Models\AttributeTrait;
 

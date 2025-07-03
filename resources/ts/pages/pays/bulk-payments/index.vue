@@ -50,8 +50,7 @@ const validate = async () => {
 }
 
 const register = async () => {
-    if(await bulkRegister('정산건', 'pays/transactions', items.value, true))
-        location.reload()
+    await bulkRegister('정산건', 'pays/transactions', items.value, true)
 
 }
 
