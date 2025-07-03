@@ -16,7 +16,7 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-
+            $table->integer('oper_id')->nullable()->comment('운영자 ID');
             $table->integer('pmod_id')->default(0)->comment('pay module ID');
             $table->integer('pg_id')->default(0)->comment('결제대행사 id');
             $table->integer('ps_id')->default(0)->comment('결제대행사 수수료율 id');
@@ -37,13 +37,9 @@ class CreateTransactionsTable extends Migration
             $table->string('acquirer', 20)->nullable()->comment('매입사');
             $table->string('appr_num', 9)->comment('승인번호');
             $table->tinyInteger('installment')->default(0)->comment('할부');
+            $table->tinyInteger('trx_status')->default()->comment('거래상태 (입금대기=0, 1=결제성공, 3=결제실패, 5=정산성공, 7=정산실패)');
+            $table->integer('cms_id')->nullable()->comment('이체예약 ID');
             $table->timestamps();
-            # 여기 밑에 다 삭제 250703
-            $table->string('buyer_name', 50)->nullable()->comment('구매자명');
-            $table->string('buyer_phone', 20)->nullable()->comment('구매자 휴대폰번호');
-            $table->string('item_name', 100)->nullable()->comment('상품명');
-            $table->string('issuer_code', 3)->nullable()->comment('발급사 코드');
-            $table->string('acquirer_code', 3)->nullable()->comment('매입사 코드');
         });
         Schema::table('transactions', function (Blueprint $table) {
             $table->unique(['cxl_seq', 'appr_num', 'trx_id'], 'duplicate_unique_key');
