@@ -141,7 +141,7 @@ watchEffect(async () => {
                     <VIcon end icon="uiw-file-excel" />
                 </VBtn>
                 <VBtn type="button" @click="register()" v-if="is_clear">
-                    등록
+                    정산하기
                     <VIcon end icon="tabler-pencil" />
                 </VBtn>
             </VCol>

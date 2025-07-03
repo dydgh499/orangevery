@@ -20,4 +20,10 @@ class Transaction extends Model
     {
         return $this->belongsTo(CMSTransaction::class, 'cms_id')->select();
     }
+
+    public function cancel()
+    {
+        return $this->belongsTo(Transaction::class, 'trx_id', 'ori_trx_id')
+            ->select();
+    }
 }
