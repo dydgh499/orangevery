@@ -31,4 +31,10 @@ class AuthOperatorIP
             return $ips;
         }
     }
+
+    static public function init($brand_id)
+    {
+        $key_name = "operator-ip-".$brand_id;
+        Redis::set($key_name, null, 'EX', 1);
+    }
 }
