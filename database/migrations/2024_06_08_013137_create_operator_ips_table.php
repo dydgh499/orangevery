@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('operator_ips', function (Blueprint $table) {
             $table->id();
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->integer('oper_id')->nullable()->comment('운영자 ID');
             $table->string('enable_ip', 100)->nullable()->comment('허용 IP');
             $table->timestamps();
         });

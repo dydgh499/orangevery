@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('payment_modules', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->integer('oper_id')->nullable()->comment('운영자 ID');
             $table->integer('pg_id')->nullable()->comment('결제대행사 id');
             $table->integer('ps_id')->nullable()->comment('결제대행사 수수료율 id');
             $table->tinyInteger('module_type')->default(0)->comment('모듈 타입(0=장비, 1=수기, 2=인증, 3=간편, 4=빌링)');

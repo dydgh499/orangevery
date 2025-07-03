@@ -14,25 +14,17 @@ return new class extends Migration
         Schema::create('cms_transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-            $table->integer('fin_id')->nullable()->comment('실시간 이체 ID');
-            $table->string('result_code', 5)->nullable()->comment('응답코드');
-            $table->boolean('is_withdraw')->default(false)->comment('출금 여부');
-            $table->timestamp('trx_at')->index()->nullable()->comment('거래발생시간(취소, 승인)');
-            $table->string('trans_seq_num', 50)->index()->nullable()->comment('거래번호');
+            $table->integer('oper_id')->nullable()->comment('운영자 ID');
             $table->integer('amount')->nullable()->comment('거래금액');
             $table->string('acct_num', 20)->nullable()->comment('계좌번호');
             $table->string('acct_name', 50)->nullable()->comment('계좌명');
             $table->string('acct_bank_name', 30)->nullable()->comment('은행명');
             $table->string('acct_bank_code', 3)->nullable()->comment('은행코드');
-            $table->string('note', 255)->nullable()->default('')->comment('메모사항');
-            $table->string('message', 100)->nullable()->default('')->comment('출금결과메세지');
+            $table->timestamp('withdraw_book_time')->nullable()->comment('예약시간');
+            $table->boolean('withdraw_status')->default(false)->comment('이체예약(0=대기, 1=완료, 2=실패)');
             $table->timestamps();
 
-        });
-        
-        Schema::table('cms_transactions', function (Blueprint $table) {
-            $table->unique(['brand_id', 'trans_seq_num', 'amount'], 'duplicate_unique_key');
-        });
+        });        
     }
 
 

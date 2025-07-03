@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('payment_sections', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->integer('oper_id')->nullable()->comment('운영자 ID');
             $table->unsignedInteger('pg_id')->nullable()->comment('PG FK')->constrained('payment_gateways')->onDelete('SET NULL');
             $table->string('name')->default('')->comment('수수료율 명칭');
             $table->float('trx_fee', 6, 5)->comment('거래 수수료');

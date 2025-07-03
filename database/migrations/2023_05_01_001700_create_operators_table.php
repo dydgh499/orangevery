@@ -26,9 +26,11 @@ return new class extends Migration
             $table->boolean('is_lock')->default(0)->comment('계정잠금 여부');
             $table->timestamp('locked_at')->nullable()->comment('계정잠금 시간');
             $table->timestamp('password_change_at')->nullable()->comment('마지막 패스워드 변경시간');
-            $table->timestamps();
             $table->boolean('is_active')->default(true)->comment('활성화 여부');
             $table->string('google_2fa_secret_key', 255)->nullable()->comment('2FA secret Key');
+            $table->timestamp('last_login_at')->nullable()->comment('마지막 로그인시간');
+            $table->string('last_login_ip', 100)->nullable()->comment('마지막 로그인 IP');
+            $table->timestamps();
         });
     }
 

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('bill_keys', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('pmod_id')->nullable()->comment('결제모듈 ID')->constrained('payment_modules')->onDelete('SET NULL');
+            $table->integer('oper_id')->nullable()->comment('운영자 ID');
             $table->string('buyer_name')->nullable()->comment('구매자명');
             $table->string('buyer_phone')->nullable()->comment('구매자 휴대폰번호');
             $table->string('issuer')->default('')->comment('발급카드사');

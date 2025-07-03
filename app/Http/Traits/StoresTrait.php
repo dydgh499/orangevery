@@ -52,12 +52,8 @@ trait StoresTrait
                 ->where('user_name', $user_name)
                 ->select('user_name');
         };
-        $mcht = $checkExist(new Merchandise, $brand_id, $user_name);
-        $sale = $checkExist(new Salesforce, $brand_id, $user_name);
         $oper = $checkExist(new Operator, $brand_id, $user_name);
-        $gmid = $checkExist(new Gmid, $brand_id, $user_name);
-
-        return $mcht->unionAll($sale)->unionAll($oper)->unionAll($gmid)->exists();
+        return $oper->exists();
     }
 
     public function isExistBulkUserName($brand_id, $user_names)
@@ -69,41 +65,8 @@ trait StoresTrait
                     ->select('user_name');
         };
         
-        $mcht = $checkExist(new Merchandise, $brand_id, $user_names);
-        $sale = $checkExist(new Salesforce, $brand_id, $user_names);
         $oper = $checkExist(new Operator, $brand_id, $user_names);
-        $gmid = $checkExist(new Gmid, $brand_id, $user_names);
-
-        return $mcht->unionAll($sale)->unionAll($oper)->unionAll($gmid)->pluck('user_name')->toArray();
-    }
-
-    public function isExistMutual($orm, $brand_id, $col, $mutual)
-    {
-        if($brand_id === 30)
-            return false;
-        else
-        {
-            return $orm
-            ->where('brand_id', $brand_id)
-            ->where('is_delete', false)
-            ->where($col, $mutual)
-            ->exists();
-        }
-    }
-
-    public function isExistBulkMutual($orm, $brand_id, $col, $mutuals)
-    {
-        if($brand_id === 30)
-            return [];
-        else
-        {
-            return $orm
-            ->where('brand_id', $brand_id)
-            ->where('is_delete', false)
-            ->whereIn($col, $mutuals)
-            ->pluck($col)
-            ->toArray();
-        }
+        return $oper->pluck('user_name')->toArray();
     }
     
     public function isExistBulkAccountNum($brand_id, $account_nums)

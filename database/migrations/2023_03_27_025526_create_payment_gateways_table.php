@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('payment_gateways', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->integer('oper_id')->nullable()->comment('운영자 ID');
             $table->tinyInteger('pg_type')->comment('결제대행사명(1,2,3,4,5 ...)');
             $table->string('pg_name')->comment('결제대행사명');
             $table->string('rep_name')->comment('대표자명');
