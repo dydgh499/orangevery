@@ -2,7 +2,9 @@
 import { StatusColors } from '@/@core/enums'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
+import { useRequestStore } from '@/views/request';
 import { useStore } from '@/views/services/options/useStore'
+import { CmsTransactionHistory, Options } from '@/views/types'
 
 export const realtimeResult = (result_code: string) => {
     if(result_code === '0000')  //성공
@@ -20,7 +22,36 @@ export const realtimeMessage = (item: any) => {
     else
         return item.message
 }
+export const withdraw_status = <Options[]>([
+    {id:0, title:'대기'},
+    {id:1, title:'완료'},
+    {id:2, title:'실패'},
+])
 
+export const withdrawInterface = () => {
+    const alert = <any>(inject('alert'))
+    const snackbar = <any>(inject('snackbar'))
+    const { post } = useRequestStore()
+
+    const getSuccessResultId = (histories: CmsTransactionHistory[]) => {
+        const realtime = histories.find(obj => obj.result_code === '0000')
+        return realtime ? realtime.id : 0
+    }
+
+    const cancelJobs = async (ids: any) => {
+        if (await alert.value.show('정말 해당건의 출금예약을 취소처리 하시겠습니까?')) {
+            const res = await post('/api/v1/manager/virtuals/cms-transactions/cancel-job', {
+                ids: ids
+            }, true)
+            snackbar.value.show(res.data.message, res.status === 201 ? 'success' : 'error')
+        }
+    }
+
+    return {
+        getSuccessResultId,
+        cancelJobs,
+    }
+}
 
 export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => {
     const store = Searcher('virtuals/cms-transactions')
@@ -28,17 +59,14 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
     const { finance_vans } = useStore()
     const headers: Record<string, string> = {
         'id' : 'NO.',
-        'result_code': '성공여부',
-        'fin_id': '거래모듈',
-        'is_withdraw': '거래타입',
-        'trx_at': '거래시간',
         'amount': '거래금액',
-        'trans_seq_num': '거래번호',
         'acct_num' : '계좌번호',
         'acct_name' : '계좌명',
         'acct_bank_name' : '은행명',
         'acct_bank_code' : '은행코드',
-        'note': '메모사항',
+        'withdraw_book_time' : '예약시간',
+        'withdraw_status' : '이체상태',
+        'extra_cols' : '더보기',
     }
 
     head.sub_headers.value = [
@@ -55,7 +83,6 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
         let datas = r.data.content;
         for (let i = 0; i < datas.length; i++) {
             datas[i]['fin_id'] = (finance_vans.find(obj => obj.id == datas[i]['fin_id']))?.nick_name
-            datas[i]['is_withdraw'] = datas[i]['is_withdraw'] ? '출금' : '입금'
             datas[i]['result_code'] = realtimeMessage(datas[i])
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }

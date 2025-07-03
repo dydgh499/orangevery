@@ -306,6 +306,7 @@ export interface LockedUser {
 
 export interface ActivityHistory {
     id: number,
+    user_id: number,
     level: number,
     target_id: number,
     nick_name: string,
@@ -365,26 +366,31 @@ export interface Withdraw {
     acct_name: string, // 예금주명
     acct_bank_code: string, // 은행코드
     withdraw_amount: string, // 출금 금액
-    note: string, // 출금 사유
     withdraw_book_time: string, // 출금 예약 시간
 }
 
-export interface CmsTransactionBooks {
+export interface CmsTransaction {
     id: number,
     brand_id: number,
-    fin_id: number,
-    result_code: string,
-    is_withdraw: number,
     amount: number | null,
     acct_num: number, // 계좌번호
     acct_name: string, // 예금주명
     acct_bank_code: string, // 은행코드
     acct_bank_name: string, // 입금 은행명
-    note: string, // 출금 사유
     withdraw_book_time: string, // 출금 예약 시간
     withdraw_status: number, // 상태
+}
+
+export interface CmsTransactionHistory extends CmsTransaction {
+    id: number,
+    brand_id: number,
+    ct_id: number,
+    fin_id: number,
+    message: string,
+    result_code: string,
+    amount: number,
     trans_seq_num: string,
-    withdraw_schedule_time: string,
+    created_at: string,
 }
 
 export interface BankAccount {
@@ -395,8 +401,6 @@ export interface BankAccount {
     acct_num: number, // 입금 계좌번호
     acct_name: string, // 예금주명
     acct_bank_code: string, // 은행코드
-    checked: number, // 예금주 검증 여부
-    note: string, // 출금 사유
 }
 
 export interface Popup {

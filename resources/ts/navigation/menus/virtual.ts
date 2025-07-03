@@ -12,10 +12,6 @@ const _getVirtualMenu = () => {
     })
     virtuals.children.push({
         title: '이체 예약현황',
-        to: 'virtuals-cms-transaction-books',
-    })
-    virtuals.children.push({
-        title: '이체 상세이력',
         to: 'virtuals-cms-transactions',
     })
     return virtuals
