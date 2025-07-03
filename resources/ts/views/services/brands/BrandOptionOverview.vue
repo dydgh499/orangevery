@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import CreateHalfVColV2 from '@/layouts/utils/CreateHalfVColV2.vue';
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import type { AuthOption, FreeOption, PaidOption } from '@/views/types';
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-
+import { getUserLevel } from '@axios';
 interface Props {
     item: {
         free: FreeOption,
@@ -11,24 +11,31 @@ interface Props {
     },
 }
 const props = defineProps<Props>()
-
 </script>
+
 <template>
-    <VRow class="match-height">
-        <VCol cols="12" :md="6">
+    <VRow class="match-height" v-if="getUserLevel() === 50">
+        <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>대량출금 옵션</VCardTitle>
-                    <CreateHalfVColV2 :mdl="8" :mdr="4">
-                        <template #l_name>
-                            <BaseQuestionTooltip location="top" text="계좌번호 중복검사 사용" :content="`가상계좌 대량출금 탭의 출금예약시 계좌번호의 중복 입력을 검사합니다.`"/>
-                            </template>
-                        <template #l_input>
-                            <VSwitch hide-details v-model="props.item.free.use_account_number_duplicate" color="primary" />
-                        </template>
-                    </CreateHalfVColV2>
+                    <VCardTitle>
+                        <BaseQuestionTooltip location="top" text="브랜드 옵션(유료)"
+                            :content="`개발사만 확인 가능한 정보입니다.`"/>
+                    </VCardTitle>
+                    <VCol>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>
+                                    배달대행전산 사용여부
+                                </template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.yn_delivery_mode" color="primary" />
+                                </template> 
+                            </CreateHalfVCol>
+                        </VRow>
+                    </VCol>
                 </VCardItem>
             </VCard>
         </VCol>
-    </VRow>
+  </VRow>
 </template>
