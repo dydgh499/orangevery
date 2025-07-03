@@ -147,14 +147,13 @@ class PaymentGatewayController extends Controller
             ->get();
         $pay_modules    = brandFilter(PaymentModule::where('is_delete', false), $request)
             ->get(['id', 'note', 'module_type']);
-        $bill_keys      = brandFilter($bill_query, $request)
+        $bill_keys      = brandFilter($bill_query, $request, 'payment_modules')
             ->get([
                 'bill_keys.pmod_id',
                 'bill_keys.id',
                 'bill_keys.nick_name',
                 'bill_keys.card_num',
         ]);
-
         $query = $this->pay_gateways->where('is_delete', false)
                 ->where('brand_id', $request->user()->brand_id);
         if(BrandInfo::isDeliveryBrand() && Ablilty::isEmployee($request))
@@ -164,7 +163,7 @@ class PaymentGatewayController extends Controller
                     ->orWhere('id', 1);
             });
         }
-        $pay_gateways   = $query->get();
+        $pay_gateways = $query->get();
 
         $data = [
             'pay_gateways' => $pay_gateways,
