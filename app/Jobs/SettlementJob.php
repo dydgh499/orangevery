@@ -47,7 +47,7 @@ class SettlementJob implements ShouldQueue
             }
             catch(\Exception $ex)
             {
-                error($ex->getMessage(), $transaction);
+                error($transaction, 'settlement-job-batchPay'.$ex->getMessage());
                 $fails[] = array_merge(['message' => '내부 처리 에러'], $transaction);
             }
         }
@@ -106,7 +106,7 @@ class SettlementJob implements ShouldQueue
             }
             catch(\Exception $ex)
             {
-                error($ex->getMessage(), $transaction);
+                error($transaction, 'settlement-job-batchPay'.$ex->getMessage());
                 $fails[] = array_merge(['message' => '내부 처리 에러'], $transaction);
             }
         }
@@ -135,7 +135,7 @@ class SettlementJob implements ShouldQueue
 
     public function handle()
     {
-        logging($this->transactions, 'SettlementJob - start');
+        logging($this->transactions, 'settlement-job-start');
         [$pay_success, $pay_fails]          = $this->batchPay();
         [$deposit_success, $deposit_fails]  = $this->batchDeposit($pay_success);
     }
