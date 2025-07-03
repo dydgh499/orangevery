@@ -67,7 +67,7 @@ class BatchTransactionController extends BatchUpdateController
         $transactions   = [];
         $keys           = [];
         $datas = $request->data();
-        $bill_ids = $datas->pluck('bill_id')->all();
+        $bill_ids = $datas->pluck('bill_id')->unique()->all();
         $query = Billkey::join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
             ->join('payment_sections', 'payment_modules.ps_id', '=', 'payment_sections.id')
             ->whereIn('bill_keys.id', $bill_ids);
@@ -78,6 +78,7 @@ class BatchTransactionController extends BatchUpdateController
         if($payment_modules)
         {
             $payment_modules = $payment_modules->toArray();
+            logging($payment_modules);
             for($i=0; $i<count($datas); $i++)
             {
                 $idx = array_search($datas[$i]['bill_id'], array_column($payment_modules, 'bill_id'));
