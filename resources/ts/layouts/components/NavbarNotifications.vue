@@ -10,7 +10,7 @@ const detailWorkStatusDialog = ref()
 //const secureReportDialog = ref(false)
 const is_login = ref(true)
 
-// provide('detailWorkStatusDialog', detailWorkStatusDialog)
+provide('detailWorkStatusDialog', detailWorkStatusDialog)
 </script>
 
 <template>
