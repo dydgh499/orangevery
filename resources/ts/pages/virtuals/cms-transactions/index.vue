@@ -8,7 +8,6 @@ import { realtimeMessage, realtimeResult, withdraw_status } from '@/views/virtua
 import { useStore } from '@/views/services/options/useStore'
 import { DateFilters } from '@core/enums'
 import ExtraMenu from '@/views/virtuals/cms-transactions/ExtraMenu.vue';
-import WithdrawHistoriesDialog from '@/layouts/dialogs/cms-transactions/WithdrawHistoriesDialog.vue'
 
 const { store, head, exporter } = useSearchStore()
 const { finance_vans } = useStore()
@@ -20,11 +19,9 @@ const total = ref(<any>{
     total_withdraw_amount: 0,
 })
 
-const withdrawHistoriesDialog = ref()
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
-provide('withdrawHistoriesDialog', withdrawHistoriesDialog)
 const snackbar = <any>(inject('snackbar'))
 
 if(getUserLevel() < 35) {
@@ -140,7 +137,6 @@ onMounted(() => {
                     </template>
                 </template>
             </BaseIndexView>
-        <WithdrawHistoriesDialog ref="withdrawHistoriesDialog" />
         </div>
     </section>
 </template>
