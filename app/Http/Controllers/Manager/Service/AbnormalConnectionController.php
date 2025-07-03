@@ -4,14 +4,16 @@ namespace App\Http\Controllers\Manager\Service;
 
 use App\Models\Service\AbnormalConnectionHistory;
 use App\Models\Pay\PaymentModule;
-use App\Models\Pay;
-use App\Models\Salesforce;
+
+
 use App\Models\Operator;
 use App\Models\Log\ActivityHistory;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
+use App\Http\Controllers\Ablilty\BrandInfo;
+use App\Http\Controllers\Ablilty\Ablilty;
 
 use App\Enums\HistoryType;
 use App\Http\Requests\Manager\IndexRequest;
@@ -38,10 +40,13 @@ class AbnormalConnectionController extends Controller
 
     public function index(IndexRequest $request)
     {
-        $search = $request->search;
-        $query = $this->abnormal_connections
-            ->where('brand_id', $request->user()->brand_id)
-            ->where(function ($query) use ($search) {
+        $search = $request->input('search', '');
+        $query = $this->abnormal_connections;
+        if(BrandInfo::isDeliveryBrand() && Ablilty::isEmployee($request))
+            $query = $query->where('user_id', $request->user()->id);
+        else
+            $query = $query->where('brand_id', $request->user()->brand_id);
+        $query = $query->where(function ($query) use ($search) {
                 return $query->where('request_ip', 'like', "%$search%")
                     ->orWhere('target_key', 'like', "%$search%")
                     ->orWhere('target_value', 'like', "%$search%");

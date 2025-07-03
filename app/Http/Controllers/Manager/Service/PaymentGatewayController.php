@@ -14,6 +14,7 @@ use App\Http\Requests\Manager\Service\PayGatewayRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\BrandInfo;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
 
@@ -139,18 +140,32 @@ class PaymentGatewayController extends Controller
     {
         $bill_query = BillKey::join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
             ->where('payment_modules.is_delete', false);
-        $finance_vans   = FinanceVan::where('is_delete', false)->delivery()->get([
+        $finance_vans = FinanceVan::where('is_delete', false)->delivery()->get([
             'id', 'finance_company_num', 'balance_status', 'nick_name'
         ]);
-        $pay_gateways   = brandFilter($this->pay_gateways->where('is_delete', false), $request)->get();
-        $sections       = brandFilter(PaymentSection::where('is_delete', false), $request)->get();
-        $pay_modules    = brandFilter(PaymentModule::where('is_delete', false), $request)->get(['id', 'note', 'module_type']);
-        $bill_keys      = brandFilter($bill_query, $request)->get([
+        $sections       = brandFilter(PaymentSection::where('is_delete', false), $request)
+            ->get();
+        $pay_modules    = brandFilter(PaymentModule::where('is_delete', false), $request)
+            ->get(['id', 'note', 'module_type']);
+        $bill_keys      = brandFilter($bill_query, $request)
+            ->get([
                 'bill_keys.pmod_id',
                 'bill_keys.id',
                 'bill_keys.nick_name',
                 'bill_keys.card_num',
         ]);
+
+        $query = $this->pay_gateways->where('is_delete', false)
+                ->where('brand_id', $request->user()->brand_id);
+        if(BrandInfo::isDeliveryBrand() && Ablilty::isEmployee($request))
+        {
+            $query = $query->where(function ($query) use ($request) {
+                return $query->where('oper_id', $request->user()->id)
+                    ->orWhere('id', 1);
+            });
+        }
+        $pay_gateways   = $query->get();
+
         $data = [
             'pay_gateways' => $pay_gateways,
             'pay_sections' => $sections,
