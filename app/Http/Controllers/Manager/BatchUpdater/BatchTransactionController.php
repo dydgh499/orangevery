@@ -72,13 +72,16 @@ class BatchTransactionController extends BatchUpdateController
             ->join('payment_sections', 'payment_modules.ps_id', '=', 'payment_sections.id')
             ->whereIn('bill_keys.id', $bill_ids);
         $payment_modules = brandFilter($query, $request, 'payment_modules')->get([
-            'payment_modules.*', 'payment_sections.trx_fee as ps_fee',
-            'bill_keys.id as bill_id', 'bill_keys.bill_key'
+            'payment_modules.*', 
+            'payment_sections.trx_fee as ps_fee',
+            'bill_keys.id as bill_id', 
+            'bill_keys.bill_key',
         ]);
         if($payment_modules)
         {
-            $payment_modules = $payment_modules->toArray();
-            logging($payment_modules);
+            $payment_modules = $payment_modules->map(function ($item) {
+                return $item->makeVisible(['bill_key'])->toArray();
+            })->all();
             for($i=0; $i<count($datas); $i++)
             {
                 $idx = array_search($datas[$i]['bill_id'], array_column($payment_modules, 'bill_id'));
