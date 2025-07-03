@@ -41,7 +41,7 @@ export const useSearchStore = defineStore('useTransactionSearchStore', () => {
         return {
             'trx_status': '거래상태',
             'trx_at': '거래시간',
-            'is_cancel': '거래타입',
+            'is_cancel': '승인/취소',
             'amount': '거래금액',
             'installment': '할부',
             'appr_num': '승인번호',

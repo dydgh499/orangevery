@@ -44,7 +44,7 @@ const payCanceled = async (item: Transaction) => {
                 only: false,
             })
             try {
-                const r = await post('/api/v1/pays/transactions/pay-cancel', params)
+                const r = await post('/api/v1/manager/pays/transactions/pay-cancel', params)
                 if (r.status === 201)
                     snackbar.value.show('성공하였습니다.', 'success')
                 else
@@ -142,6 +142,11 @@ provide('exporter', exporter)
                             <span v-else-if="_key == 'amount'">
                                 {{ Number(item[_key]).toLocaleString() }}
                             </span>
+                            <span v-else-if="_key == 'is_cancel'">
+                                <VChip :color="item[_key] ? 'error' : 'success'">
+                                    {{ item[_key] ? '취소' : '승인' }}
+                                </VChip>
+                            </span>
                             <span v-else-if="_key == 'trx_status'">
                                 <VChip :color="trxStatuses.find(obj => obj.id === item[_key])?.color">
                                     {{ trxStatuses.find(obj => obj.id === item[_key])?.title }}
@@ -149,7 +154,7 @@ provide('exporter', exporter)
                             </span>
                             <span v-else-if="_key == 'extra_col'">
                                 <VBtn 
-                                    v-if="item['is_cancel'] === 0"
+                                    v-if="item['is_cancel'] === 0 && [1,3].includes(item['trx_status'])"
                                     @click="payCanceled(item)" size="small">
                                     승인취소
                                 </VBtn>
