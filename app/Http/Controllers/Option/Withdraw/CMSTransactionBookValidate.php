@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Option\Withdraw;
 
-use App\Models\Service\CMSTransactionBooks;
+use App\Models\Service\CMSTransaction;
 
 class CMSTransactionBookValidate
 {
@@ -11,7 +11,7 @@ class CMSTransactionBookValidate
             'result_code'=> $result_code,
             //'message' => $message,
         ];
-        return CMSTransactionBooks::where('id', $last_id)->update($params);
+        return CMSTransaction::where('id', $last_id)->update($params);
     }
 
 }

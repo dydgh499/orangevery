@@ -13,7 +13,6 @@ class BulkBankAccountRequest extends FormRequest
         'acct_num', // 입금 계좌번호
         'acct_name', // 예금주
         'acct_bank_code', // 은행코드
-        'note', // 출금 사유
     ];
     public function bodyParameters()
     {
