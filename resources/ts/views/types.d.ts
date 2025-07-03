@@ -167,7 +167,7 @@ interface FreeOption {
     },
 }
 interface PaidOption {
-    use_pay_module: number,
+    yn_delivery_mode: number,
 }
 interface AuthOption {
 }
