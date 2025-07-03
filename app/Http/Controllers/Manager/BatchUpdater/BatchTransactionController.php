@@ -139,7 +139,7 @@ class BatchTransactionController extends BatchUpdateController
         [$news, $error] = app(BatchUpdateBankAccountController::class)->getNewAccounts($request);
         $ids            = app(BatchUpdateBankAccountController::class)->addBankAccountObjects($request, collect($news));
         if($error)
-            return $this->response(1000, $error['body']['message']);
+            return $this->response(9999, $error['body']['message']);
         else
         {
             [$result, $message, $datas, $keys] = $this->getNewTransactions($request);
@@ -152,10 +152,10 @@ class BatchTransactionController extends BatchUpdateController
                 if($job_id)
                     return $this->response(1);
                 else
-                    return $this->response(1000, '결제/이체 예약에 실패하였습니다.');
+                    return $this->response(9999, '결제/이체 예약에 실패하였습니다.');
             }
             else
-                return $this->response(1000, $message);
+                return $this->response(9999, $message);
         }
     }
 }
