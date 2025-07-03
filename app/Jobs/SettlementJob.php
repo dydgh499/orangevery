@@ -84,7 +84,7 @@ class SettlementJob implements ShouldQueue
     // 6. 이체 진행
     public function batchDeposit($pay_success)
     {
-        $success = [];
+        $successes = [];
         $fails   = [];
 
         foreach($pay_success as $transaction)
@@ -100,7 +100,7 @@ class SettlementJob implements ShouldQueue
                     'withdraw_amount'   => $transaction['withdraw_amount'], 
                 ]);
                 if($res['body']['result_cd'] === '0000')
-                    $success[] = array_merge($res['body'], $transaction);
+                    $successes[] = array_merge($res['body'], $transaction);
                 else
                     $fails[] = array_merge(['message' => $res['body']['result_msg']], $transaction);
             }
@@ -110,14 +110,20 @@ class SettlementJob implements ShouldQueue
                 $fails[] = array_merge(['message' => '내부 처리 에러'], $transaction);
             }
         }
-        $this->batchDepositUpdate($success, $fails);
-        return [$success, $fails];
+        $this->batchDepositUpdate($successes, $fails);
+        return [$successes, $fails];
     }
 
     // 7. 이체 상태 업데이트
-    public function batchDepositUpdate($success, $fails)
+    public function batchDepositUpdate($successes, $fails)
     {
-        Transaction::whereIn('id', array_column($success, 'id'))->update(['trx_status' => 5]);
+        foreach($successes as $success)
+        {
+            Transaction::where('id', $success['id'])->update([
+                'trx_status'    => 5,
+                'cms_id'        => $success['cms_id'],
+            ]);
+        }
         foreach($fails as $fail)
         {
             Transaction::where('id', $fail['id'])->update([
