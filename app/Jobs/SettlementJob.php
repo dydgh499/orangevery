@@ -97,7 +97,7 @@ class SettlementJob implements ShouldQueue
                     'acct_num'          => $transaction['acct_num'], 
                     'acct_name'         => $transaction['acct_name'], 
                     'acct_bank_code'    => $transaction['acct_bank_code'],
-                    'withdraw_amount'   => $transaction['withdraw_amount'], 
+                    'withdraw_amount'   => $transaction['amount'], 
                 ]);
                 if($res['body']['result_cd'] === '0000')
                     $successes[] = array_merge($res['body'], $transaction);
