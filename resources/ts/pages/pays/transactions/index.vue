@@ -26,7 +26,7 @@ const { pgs, pss } = useStore()
 const cancelPart = ref()
 
 const getTdColor = (item: Transaction) => {
-    let style = item.is_cancel ? 'color:red;' : ''
+    let style = item.is_cancel ? 'bg-error' : ''
     return style
 }
 
@@ -107,7 +107,7 @@ provide('exporter', exporter)
                 <template v-for="(item, index) in store.getItems" :key="item['id']">
                     <tr>
                         <template v-for="(_header, _key, _index) in head.headers" :key="_key">
-                            <td v-if="_header.visible" :style="getTdColor(item)" class='list-square'>
+                            <td v-if="_header.visible" :class='`list-square ${getTdColor(item)}`'>
                                 <span v-if="_key == 'id'">
                                     <div class='check-label-container'>
                                         <template v-if="getUserLevel() >= 35">
@@ -179,7 +179,7 @@ provide('exporter', exporter)
                     </tr>
                     <tr v-for="(_item, _index) in item.cancel">
                         <template v-for="(_header, _key, _index) in head.headers" :key="_key">
-                            <td v-if="_header.visible" :style="getTdColor(_item)" class='list-square'>
+                            <td v-if="_header.visible" :class='`list-square ${getTdColor(item)}`'>
                                 <span v-if="_key == 'amount'">
                                     {{ Number(_item[_key]).toLocaleString() }}
                                 </span>
