@@ -33,7 +33,7 @@ export const getUserLevel = () => {
 export const getViewType = () => {
     const level = getUserLevel()
     if(level >= 35)
-        return 'virtuals-cms-transactions'
+        return 'virtuals-bank-accounts'
     else
         return ''
 }
