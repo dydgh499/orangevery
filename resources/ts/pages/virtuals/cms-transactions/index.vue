@@ -51,7 +51,7 @@ onMounted(() => {
 <template>
     <section>
         <div>
-            <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.SETTLE_RANGE">
+            <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="[]" :add="false" add_name="" :date_filter_type="DateFilters.SETTLE_RANGE">
                 <template #filter>
                     <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                         :sales="false" :page="true">
