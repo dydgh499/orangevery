@@ -50,8 +50,8 @@ const validate = async () => {
 }
 
 const register = async () => {
-    await bulkRegister('정산건', 'pays/transactions', items.value, true)
-
+    if(await bulkRegister('정산건', 'pays/transactions', items.value, true))
+        items.value = []
 }
 
 watchEffect(async () => {
