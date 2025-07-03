@@ -16,7 +16,6 @@ Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(functio
         Route::apiResource('pay-modules', PaymentModuleController::class);
 
         Route::prefix('transactions')->group(function() {
-            Route::post('cancel', [TransactionController::class, 'cancel']);
             Route::get('chart', [TransactionController::class, 'chart']);         
             Route::post('hand-pay', [TransactionController::class, 'handPay']);
             Route::post('pay-cancel', [TransactionController::class, 'payCancel']);
