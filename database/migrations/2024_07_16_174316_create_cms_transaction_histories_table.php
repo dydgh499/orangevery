@@ -22,10 +22,6 @@ return new class extends Migration
             $table->string('trans_seq_num', 50)->nullable()->comment('거래번호');
             $table->timestamps();
         });
-
-        Schema::table('cms_transaction_histories', function (Blueprint $table) {
-            $table->unique(['brand_id', 'trans_seq_num', 'amount'], 'duplicate_unique_key');
-        });
     }
 
 
