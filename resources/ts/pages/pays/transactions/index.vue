@@ -104,78 +104,99 @@ provide('exporter', exporter)
                 </tr>
             </template>
             <template #body>
-                <tr v-for="(item, index) in store.getItems" :key="item['id']">
-                    <template v-for="(_header, _key, _index) in head.headers" :key="_key">
-                        <td v-if="_header.visible" :style="getTdColor(item)" class='list-square'>
-                            <span v-if="_key == 'id'">
-                                <div class='check-label-container'>
-                                    <template v-if="getUserLevel() >= 35">
-                                        <VCheckbox v-model="selected" :value="item[_key]"
-                                            class="check-label" />
-                                            <span class="edit-link" @click="store.edit(item['id'])">
-                                                #{{ item[_key]}}
-                                                <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
-                                                    상세보기
-                                                </VTooltip>
-                                            </span>
+                <template v-for="(item, index) in store.getItems" :key="item['id']">
+                    <tr>
+                        <template v-for="(_header, _key, _index) in head.headers" :key="_key">
+                            <td v-if="_header.visible" :style="getTdColor(item)" class='list-square'>
+                                <span v-if="_key == 'id'">
+                                    <div class='check-label-container'>
+                                        <template v-if="getUserLevel() >= 35">
+                                            <VCheckbox v-model="selected" :value="item[_key]"
+                                                class="check-label" />
+                                                <span class="edit-link" @click="store.edit(item['id'])">
+                                                    #{{ item[_key]}}
+                                                    <VTooltip activator="parent" location="top" transition="scale-transition" v-if="$vuetify.display.smAndDown === false">
+                                                        상세보기
+                                                    </VTooltip>
+                                                </span>
+                                        </template>
+                                        <span v-else>
+                                            #{{ item[_key]}}
+                                        </span>
+                                    </div>
+                                </span>
+                                <span v-else-if="_key == 'module_type'">
+                                    <VChip
+                                        :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
+                                        {{ module_types.find(obj => obj.id === item[_key])?.title }}
+                                    </VChip>
+                                </span>
+                                <span v-else-if="_key == 'installment'">
+                                    {{ installments.find(inst => inst['id'] === item[_key])?.title }}
+                                </span>
+                                <span v-else-if="_key == 'pg_id'">
+                                    {{ pgs.find(pg => pg['id'] === item[_key])?.pg_name }}
+                                </span>
+                                <span v-else-if="_key == 'ps_id'">
+                                    {{ pss.find(ps => ps['id'] === item[_key])?.name }}
+                                </span>
+                                <span v-else-if="_key == 'amount'">
+                                    {{ Number(item[_key]).toLocaleString() }}
+                                </span>
+                                <span v-else-if="_key == 'is_cancel'">
+                                    <VChip :color="item[_key] ? 'error' : 'success'">
+                                        {{ item[_key] ? '취소' : '승인' }}
+                                    </VChip>
+                                </span>
+                                <span v-else-if="_key == 'trx_status'">
+                                    <template v-if="item['is_cancel'] === 0">
+                                        <VChip :color="trxStatuses.find(obj => obj.id === item[_key])?.color">
+                                            {{ trxStatuses.find(obj => obj.id === item[_key])?.title }}
+                                        </VChip>
+                                        <template v-if="[3,7].includes(item[_key])">
+                                            <br>
+                                            <code>
+                                                {{ item['message'] }}
+                                            </code>
+                                        </template>
                                     </template>
                                     <span v-else>
-                                        #{{ item[_key]}}
+                                        -
                                     </span>
-                                </div>
-                            </span>
-                            <span v-else-if="_key == 'module_type'">
-                                <VChip
-                                    :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
-                                    {{ module_types.find(obj => obj.id === item[_key])?.title }}
-                                </VChip>
-                            </span>
-                            <span v-else-if="_key == 'installment'">
-                                {{ installments.find(inst => inst['id'] === item[_key])?.title }}
-                            </span>
-                            <span v-else-if="_key == 'pg_id'">
-                                {{ pgs.find(pg => pg['id'] === item[_key])?.pg_name }}
-                            </span>
-                            <span v-else-if="_key == 'ps_id'">
-                                {{ pss.find(ps => ps['id'] === item[_key])?.name }}
-                            </span>
-                            <span v-else-if="_key == 'amount'">
-                                {{ Number(item[_key]).toLocaleString() }}
-                            </span>
-                            <span v-else-if="_key == 'is_cancel'">
-                                <VChip :color="item[_key] ? 'error' : 'success'">
-                                    {{ item[_key] ? '취소' : '승인' }}
-                                </VChip>
-                            </span>
-                            <span v-else-if="_key == 'trx_status'">
-                                <template v-if="item['is_cancel'] === 0">
-                                    <VChip :color="trxStatuses.find(obj => obj.id === item[_key])?.color">
-                                        {{ trxStatuses.find(obj => obj.id === item[_key])?.title }}
-                                    </VChip>
-                                    <template v-if="[3,7].includes(item[_key])">
-                                        <br>
-                                        <code>
-                                            {{ item['message'] }}
-                                        </code>
-                                    </template>
-                                </template>
-                                <span v-else>
-                                    -
                                 </span>
-                            </span>
-                            <span v-else-if="_key == 'extra_col'">
-                                <VBtn 
-                                    v-if="item['is_cancel'] === 0 && [1,7].includes(item['trx_status'])"
-                                    @click="payCanceled(item)" size="small">
-                                    승인취소
-                                </VBtn>
-                            </span>
-                            <span v-else>
-                                {{ item[_key] }}
-                            </span>
-                        </td>
-                    </template>
-                </tr>
+                                <span v-else-if="_key == 'extra_col'">
+                                    <VBtn 
+                                        v-if="item['is_cancel'] === 0 && [1,7].includes(item['trx_status'])"
+                                        @click="payCanceled(item)" size="small">
+                                        승인취소
+                                    </VBtn>
+                                </span>
+                                <span v-else>
+                                    {{ item[_key] }}
+                                </span>
+                            </td>
+                        </template>
+                    </tr>
+                    <tr v-for="(_item, _index) in item.cancel">
+                        <template v-for="(_header, _key, _index) in head.headers" :key="_key">
+                            <td v-if="_header.visible" :style="getTdColor(_item)" class='list-square'>
+                                <span v-if="_key == 'amount'">
+                                    {{ Number(_item[_key]).toLocaleString() }}
+                                </span>
+                                <span v-else-if="_key == 'is_cancel'">
+                                    <VChip :color="_item[_key] ? 'error' : 'success'">
+                                        {{ _item[_key] ? '취소' : '승인' }}
+                                    </VChip>
+                                </span>
+                                <span v-else-if="_key == 'trx_at'">
+                                    {{ _item[_key] }}
+                                </span>
+                                <span v-else>
+                                </span>
+                            </td>
+                        </template>
+                    </tr>
+                </template>
             </template>
         </BaseIndexView>
         <CancelPartDialog ref="cancelPart" />

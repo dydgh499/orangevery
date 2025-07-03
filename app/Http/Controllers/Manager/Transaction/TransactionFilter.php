@@ -38,7 +38,7 @@ class TransactionFilter
             $res['total'] = $_query->count();
 
         $res['content'] = $_query->orderBy($order_by, 'desc')
-            ->with(['cmsTransaction'])
+            ->with(['cmsTransaction', 'cancel'])
             ->offset($sp)
             ->limit($page_size)
             ->get($cols);
