@@ -75,12 +75,6 @@ if(getUserLevel() < 35) {
                                         <span>#{{ item[_key] }}</span>
                                     </div>
                                     </span>
-                                    <span v-else-if="_key === 'checked'">
-                                        <VChip :color="item[_key] ? 'error' : 'success'">
-                                            {{ item[_key] ? '미검증' : '검증완료' }}
-                                        </VChip>
-                                    </span>
-                                    <span v-else-if="_key === 'note'" v-html="item[_key]" style="line-height: 2em;"></span>
                                     <span v-else-if="_key === 'extra_col'" v-if="item['withdraw_status'] != 1">
                                         <ExtraMenu :item="item"/>
                                     </span>

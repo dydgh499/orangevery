@@ -1,11 +1,22 @@
 <?php
     use Illuminate\Support\Facades\Log;
     use App\Http\Controllers\Ablilty\AbnormalConnection;
+    use App\Http\Controllers\Ablilty\BrandInfo;
+    use App\Http\Controllers\Ablilty\Ablilty;
 
     function getPGType($pg_type)
     {
         $pgs = ['routeup'];
         return $pgs[$pg_type-1];
+    }
+
+    function brandFilter($query, $request, $parent_table='')
+    {
+        $table = $parent_table !== "" ? $parent_table."." : "";
+        $query = $query->where($table.'brand_id', $request->user()->brand_id);
+        if(BrandInfo::isDeliveryBrand() && Ablilty::isEmployee($request))
+            $query = $request->where($table.'oper_id', $request->user()->id);
+        return $query;
     }
 
     function logging($data, $msg='test')

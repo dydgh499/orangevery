@@ -10,7 +10,7 @@ use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Auth\AuthGoogleOTP;
 use App\Http\Controllers\Auth\AuthOperatorIP;
 use App\Http\Controllers\Auth\AuthPasswordChange;
-use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\BrandInfo;
 
 use App\Http\Traits\Models\EncryptDataTrait;
 use App\Models\Operator;

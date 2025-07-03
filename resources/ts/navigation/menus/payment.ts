@@ -20,8 +20,13 @@ const _getPaymentMenu = () => {
 
 export const getPaymentMenu = () => {
     const menu = <any[]>[]
+    menu.push({ heading: 'Service' })
+    menu.push({
+        title: '검증완료 계좌목록',
+        icon: { icon: 'carbon:account' },
+        to: 'virtuals-bank-accounts',
+    })
     if (corp.ov_options.paid.yn_delivery_mode) {
-        menu.push({ heading: 'Service' })
         menu.push(_getPaymentMenu())
     }
     return menu

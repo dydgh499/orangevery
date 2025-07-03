@@ -225,7 +225,7 @@ watchEffect(() => {
                     <tfoot v-show="Boolean(props.item.id == 0)">
                         <tr>
                             <td colspan="4" class="text-center">
-                                결제대행사를 추가하신 후에 상세수수료율 테이블을 추가할 수 있습니다.
+                                결제대행사를 추가하신 후에 수수료율 테이블을 추가할 수 있습니다.
                             </td>
                         </tr>
                     </tfoot>

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { banks } from '@/views/users/useStore'
 import { useStore } from '@/views/services/options/useStore'
-import { BillKey } from '@/views/types'
+import { FinanceVan } from '@/views/types'
 
 const visible = ref(false)
-const { bill_keys } = useStore()
+const { finance_vans } = useStore()
 const tab = ref(0)
 const tabs = [
     {
@@ -17,7 +17,7 @@ const tabs = [
     }
 ]
 const bank = ref(banks[0])
-const bill_key = ref(<BillKey><unknown>({ nick_name: null, card_num: '' }))
+const finance_van = ref(<FinanceVan><unknown>({ nick_name: null, card_num: '' }))
 const show = () => {
     visible.value = true
 }
@@ -29,7 +29,7 @@ defineExpose({ show })
 <template>
     <VDialog v-model="visible" persistent class="v-dialog-sm">
         <DialogCloseBtn @click="onCancel" />
-        <VCard title="정산하기 페이지 안내">
+        <VCard title="이체하기 페이지 안내">
             <VTabs v-model="tab" class="mt-2 w-100">
                 <VTab v-for="(t, index) in tabs" :key="index" grow>
                     <VIcon :size="18" :icon="t.icon" class="me-1" />
@@ -42,7 +42,7 @@ defineExpose({ show })
                     <!-- 탭 1: 페이지 설명 -->
                     <VWindowItem>
                         <div class="text-base font-medium mb-4">
-                            <strong>여러 건의 결제 및 이체를 자동으로 처리하는 페이지입니다.</strong>
+                            <strong>여러 건의 이체를 자동으로 처리하는 페이지입니다.</strong>
                             <br />아래 순서에 따라 실행됩니다.
                         </div>
 
@@ -78,18 +78,17 @@ defineExpose({ show })
 
                         <VDivider class="my-4" />
 
-                        <h3 class="text-md font-semibold mb-2">2. 정산 실행</h3>
+                        <h3 class="text-md font-semibold mb-2">2. 이체 실행</h3>
                         <div class="ml-4 leading-loose">
                             <p>
                                 <b>정산하기</b> 버튼을 누르면, 업로드된 엑셀을 기반으로 아래 과정이 자동으로 처리돼요:
                             </p>
                             <ol class="ml-4 list-decimal">
                                 <li><b>예금주 검증</b>: 엑셀의 계좌 정보로 예금주 검증</li>
-                                <li><b>결제</b>: 엑셀의 결제 정보로 자동 결제</li>
                                 <li><b>이체</b>: 결제 완료 후 계좌로 자동 이체</li>
                                 <li style="margin-top: 1em;"><b>예금주 검증 실패시</b> <span class="text-error">다음시퀀스 미진행</span></li>
                                 <li><b>예약 방식</b>으로 순차 진행</li>
-                                <li><b>정산 현황 페이지</b>에서 실시간 확인 가능</li>
+                                <li><b>이체 현황</b>에서 실시간 확인 가능</li>
                             </ol>
                         </div>
                     </VWindowItem>
@@ -107,22 +106,22 @@ defineExpose({ show })
                                 <b>●</b>: 필수 입력값 / <b>○</b>: 선택 입력값
                             </p>
                             <p>
-                                <b>결제 금액</b>: 숫자만 입력
+                                <b>출금 금액</b>: 숫자만 입력
                             </p>
                             <p>
                                 <b>입금 계좌번호</b>: 숫자만 입력
                             </p>
                             <p>
                                 <div style="display: flex; align-items: center; height: 3em;">
-                                    <b>빌키 카드별칭</b>: 
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bill_key"
-                                        :items="bill_keys"
+                                    <b>이체모듈 타입</b>: 
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="finance_van"
+                                        :items="finance_vans"
                                         item-title="nick_name" 
-                                        item-value="card_num" 
+                                        item-value="id" 
                                         variant="underlined"
                                         return-object
                                         persistent-hint
-                                        :hint="`카드번호: ${bill_key ? bill_key.card_num : ''} `"
+                                        :hint="`코드: ${finance_van ? finance_van.id : ''} `"
                                         style="max-width: 15em; margin-left: 1em;"
                                     />
                                 </div>                                
@@ -147,9 +146,8 @@ defineExpose({ show })
                         <h3 class="text-md font-semibold mb-2">2. 입력 예시</h3>
                         <div class="ml-4 leading-loose">
                             <ul class="ml-3">
-                                <li><b>결제 금액</b>: <code>1000000</code></li>
+                                <li><b>출금 금액</b>: <code>1000000</code></li>
                                 <li><b>입금 계좌번호</b>: <code>12345123451234</code></li>
-                                <li><b>빌키 카드별칭</b>: <code>삼성카드</code></li>
                                 <li><b>입금 은행코드</b>: <code>003</code></li>
                             </ul>
                         </div>

@@ -40,11 +40,9 @@ class PaymentSectionController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $data = $this->pay_sections
-                ->where('brand_id', $request->user()->brand_id)
-                ->where('is_delete', false)
-                ->get();
-        return $this->response(0, $data);
+        $query = $this->pay_sections->where('is_delete', false);
+        $query = brandFilter($query, $request);
+        return $this->response(0, $query->get());
     }
 
     /**
@@ -59,6 +57,7 @@ class PaymentSectionController extends Controller
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $data = $request->data();
+        $data['oper_id'] = $request->user()->id;
         $res = app(ActivityHistoryInterface::class)->add($this->target, $this->pay_sections, $data, 'name');
         if($res)
             return $this->response(1, ['id'=>$res->id]);

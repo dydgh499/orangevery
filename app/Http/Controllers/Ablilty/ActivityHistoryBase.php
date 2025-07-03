@@ -5,7 +5,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\StoresTrait;
 
 use App\Enums\HistoryType;
-use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\BrandInfo;
 
 class ActivityHistoryBase
 {

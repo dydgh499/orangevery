@@ -1,4 +1,4 @@
-import { getUserLevel } from '@axios'
+import corp from '@corp'
 
 const _getVirtualMenu = () => {
     const virtuals:any = {
@@ -9,10 +9,6 @@ const _getVirtualMenu = () => {
     virtuals.children.push({
         title: '이체하기',
         to: 'virtuals-bulk-cms-transactions',
-    })
-    virtuals.children.push({
-        title: '등록계좌 현황',
-        to: 'virtuals-bank-accounts',
     })
     virtuals.children.push({
         title: '이체 예약현황',
@@ -27,7 +23,8 @@ const _getVirtualMenu = () => {
 
 export const getVirtualMenu = () => {
     const menu = <any[]>[]
-    if (getUserLevel() >= 35) {
+    // TODO: 백앤드단 권한 설정 필요
+    if (Boolean(corp.ov_options.paid.yn_delivery_mode)) {
         menu.push(_getVirtualMenu())
     }
     return menu

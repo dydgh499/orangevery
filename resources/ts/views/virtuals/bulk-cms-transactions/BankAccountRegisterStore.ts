@@ -1,20 +1,48 @@
 
 
-import { FinanceVan, Withdraw } from '@/views/types';
 import { isEmpty } from '@core/utils'
 import { banks } from '@/views/users/useStore';
 import corp from '@/plugins/corp';
+import { useStore } from '@/views/services/options/useStore';
+import { axios } from '@axios'
 
-export const validateItems = (item: Withdraw, i: number, acct_nums: any, finance_vans:FinanceVan[]) => {
+export const ownerCheck = async (items: any[]): Promise<[boolean, string]> => {
+    const chunkSize = 5;    // 5개 단위
+    const batchSize = 3;    // 3개 병렬 요청
+
+    const chunks: any[][] = [];
+    for (let i = 0; i < items.length; i += chunkSize) {
+        chunks.push(items.slice(i, i + chunkSize));
+    }
+
+    for (let i = 0; i < chunks.length; i += batchSize) {
+        const batch = chunks.slice(i, i + batchSize);
+
+        const results = await Promise.allSettled(
+            batch.map(chunk =>
+                axios.post('/api/v1/manager/bank-accounts/batch-updaters/owner-check', chunk)
+            )
+        );
+
+        for (const result of results) {
+            if (result.status === 'rejected') {
+                const err = result.reason;
+                const message = err?.response?.data?.message || err.message || 'Unknown error';
+                console.error("❌ 요청 실패:", message);
+                return [false, message];
+            }
+        }
+    }
+
+    return [true, ''];
+};
+
+export const validateItems = (item: any, i: number, acct_nums: any) => {
+    const { finance_vans } = useStore()
     const finance_van = finance_vans.find(a => a.id === parseInt(item.fin_id))
-    const acct_bank_name = banks.find(bulk => bulk.title === item.acct_bank_name)
     
     if (finance_van === null || finance_van === undefined) 
         return [false, (i + 2) + '번째 이체모듈 타입이 이상합니다.']
-    else if (isEmpty(item.acct_bank_name)) 
-        return [false, (i + 2) + '번째줄의 입금 은행명은 필수로 입력해야합니다.']
-    else if (acct_bank_name === null) 
-        return [false, (i + 2) + '번째줄의 입금 은행명이 이상합니다.']
     else if (isEmpty(item.acct_num)) 
         return [false, (i + 2) + '번째줄의 입금 계좌번호는 필수로 입력해야합니다.']
     else if (corp.ov_options.free.use_account_number_duplicate && acct_nums.has(item.acct_num))
@@ -32,24 +60,16 @@ export const validateItems = (item: Withdraw, i: number, acct_nums: any, finance
 export const useRegisterStore = defineStore('virtualAccountRegisterStore', () => {
     const getHeaders = () => {
         return [
-            {title: '이체모듈 타입(O)', key: 'fin_id'},
-            {title: '입금 은행명(O)', key: 'acct_bank_name'},
-            {title: '입금 계좌번호(O)', key: 'acct_num'},
-            {title: '예금주(O)', key: 'acct_name'},
-            {title: '출금 금액(O)', key: 'withdraw_amount'},
-            {title: '출금 사유(X)', key: 'note'},
+            { title: '이체모듈 타입(O)', key: 'fin_id'},
+            { title: '입금 은행코드(O)', key: 'acct_bank_code'},
+            { title: '입금 계좌번호(O)', key: 'acct_num'},
+            { title: '예금주(O)', key: 'acct_name'},
+            { title: '출금금액(O)', key: 'withdraw_amount'},
         ]
-    }
-    
-    const isPrimaryHeader = (key: string) => {
-        const keys = [
-            'acct_num',
-        ]
-        return keys.includes(key)
     }
     const headers = getHeaders()
 
     return {
-        headers, isPrimaryHeader
+        headers
     }
 })

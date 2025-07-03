@@ -11,7 +11,7 @@ use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Message\MessageController;
-use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\BrandInfo;
 
 use App\Models\Service\OperatorIP;
 use App\Http\Traits\StoresTrait;
@@ -66,12 +66,13 @@ class OperatorController extends Controller
     {
         $search = $request->search;
         $query = $this->operators
-            ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
             ->where(function ($query) use ($search) {
                 return $query->where('user_name', 'like', "%$search%")
                     ->orWhere('nick_name', 'like', "%$search%");
             });
+        $query = brandFilter($query, $request);
+
         if($request->is_lock)
             $query = $query->where('is_lock', 1);
         if($request->user()->level < 40)

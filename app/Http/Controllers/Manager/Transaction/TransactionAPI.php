@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Manager\Transaction;
 
 use App\Http\Controllers\Utils\Comm;
+use App\Http\Controllers\Ablilty\Ablilty;
 
 /**
  * @group Transaction API
  *
  * 거래 API 입니다.
  */
-class TransactionAPI
+class TransactionAPI extends TransactionTest
 {
     static public function getPrefixName($prefix_type)
     {
@@ -38,7 +39,7 @@ class TransactionAPI
     // 결제취소
     static public function payCancel($data)
     {
-        return Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/cancel', $data);
+        return Comm::post(env('PAY_URL', 'http://localhost:81').'/api/v2/online/pay/cancel', $data);
     }
     
     // 수기결제
@@ -57,36 +58,96 @@ class TransactionAPI
 
         $data['yymm'] = $getYYMM($data['yymm']); // mmyy to yymm
         $data['ord_num'] = self::createOrdNum($data['pmod_id'], 1);
-        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/hand';
-        return Comm::post($url, $data, [
-            'Authorization' => $pay_key
-        ]);
+        $url = env('PAY_URL', 'http://localhost:81').'/api/v2/pay/hand';
+
+        if(Ablilty::isAppLocal())
+        {
+            return [
+                'code' => 200,
+                'body' => self::getTestPayResult($data)
+            ];
+        }
+        else
+        {
+            return Comm::post($url, $data, [
+                'Authorization' => $pay_key
+            ]);
+        }
     }
         
     static public function billPay($data, $pay_key)
     {
         $data['ord_num'] = self::createOrdNum($data['pmod_id'], 4);
-        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key/hand';
-        return Comm::post($url, $data, [
-            'Authorization' => $pay_key
-        ]);
+        $url = env('PAY_URL', 'http://localhost:81').'/api/v2/pay/bill-key/hand';
+
+        if(Ablilty::isAppLocal())
+        {
+            return [
+                'code' => 200,
+                'body' => self::getTestPayResult($data)
+            ];
+        }
+        else
+        {
+            return Comm::post($url, $data, [
+                'Authorization' => $pay_key
+            ]);
+        }
     }
 
     static public function billCreate($data, $pay_key)
     {
         $data['ord_num'] = self::createOrdNum($data['pmod_id'], 41);
-        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key';
-        return Comm::post($url, $data, [
-            'Authorization' => $pay_key
-        ]);
+        $url = env('PAY_URL', 'http://localhost:81').'/api/v2/pay/bill-key';
+
+        if(Ablilty::isAppLocal())
+        {
+            return [
+                'code' => 200,
+                'body' => self::getTestBillCreateResult($data)
+            ];
+        }
+        else
+        {
+            return Comm::post($url, $data, [
+                'Authorization' => $pay_key
+            ]);
+        }
     }
 
     static public function billRemove($data, $pay_key)
     {
         $data['ord_num'] = self::createOrdNum($data['pmod_id'], 42);
-        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key';
-        return Comm::destroy($url, $data, [
-            'Authorization' => $pay_key
-        ]);
+        $url = env('PAY_URL', 'http://localhost:81').'/api/v2/pay/bill-key';
+
+        if(Ablilty::isAppLocal())
+        {
+            return [
+                'code' => 200,
+                'body' => self::getTestBillDeleteResult($data)
+            ];
+        }
+        else
+        {
+            return Comm::post($url, $data, [
+                'Authorization' => $pay_key
+            ]);
+        }
+    }
+
+    static public function ownerCheck($data)
+    {
+        $url = env('PAY_URL', 'http://localhost:81').'/api/v2/owner-check';
+        if(Ablilty::isAppLocal())
+        {
+            return [
+                'code' => 200,
+                'body' => self::getTestownerCheckResult($data)
+            ];
+        }
+        else
+        {
+            return Comm::post($url, $data, []);
+        }
     }
 }

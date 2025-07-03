@@ -1,6 +1,21 @@
-import { getUserLevel } from '@/plugins/axios'
+import { axios, getUserLevel } from '@/plugins/axios'
+import corp from '@/plugins/corp';
 import { useRequestStore } from '@/views/request'
 import type { BillKey, FinanceVan, Options, PayGateway, PayModule, PaySection } from '@/views/types'
+
+export const getDeliveryModeInfo = () => {
+    const { pgs } = useStore()
+    if(corp.id === 1) {
+        return {
+            pg_id: pgs.find(obj => obj.pg_type === 1)?.id || null
+        }
+    }
+    else {
+        return {
+            pg_id: null
+        }        
+    }
+}
 
 export const module_types = <Options[]>([
     { id: 4, title: "빌키결제" }
@@ -14,22 +29,21 @@ export const useStore = defineStore('payGatewayStore', () => {
     const finance_vans  = ref<FinanceVan[]>([])
     const pay_modules   = ref<PayModule[]>([])
     const bill_keys     = ref<BillKey[]>([])
-    const pg_companies = [
-        {id:1, name:'위루트파이낸셜', rep_name:'길민홍', company_name:'위루트파이낸셜(주)', business_num:'456-81-01313', phone_num:'1811-7717', addr:'서울특별시 금천구 디지털로9길 99, 스타밸리 1013호'},
-    ]
 
+    const pg_companies = [
+        {id:1, name:'루트업', rep_name:'길민홍', company_name:'루트업', business_num:'456-81-01313', phone_num:'1811-7717', addr:'서울특별시 금천구 디지털로9길 99, 스타밸리 1013호'},
+    ]
     const finance_companies = <Options[]>([
         {id:1, title:'쿠콘'},
         {id:2, title:'헥토파이낸셜'},
         {id:3, title:'웰컴페이먼츠'},
         {id:4, title:'더즌'},
         {id:5, title:'하이픈'},
-        {id:6, title:'네스트페이'},
     ])
     
     onMounted(async () => {
         try {
-            const r = await get('/api/v1/manager/services/detail')
+            const r = await axios.get('/api/v1/manager/services/detail', {})
             Object.assign(pgs.value, r.data.pay_gateways.sort((a:PayGateway, b:PayGateway) => a.pg_name.localeCompare(b.pg_name)))
             Object.assign(pss.value, r.data.pay_sections.sort((a:PaySection, b:PaySection) => a.name.localeCompare(b.name)))
             Object.assign(finance_vans.value, r.data.finance_vans.sort((a:FinanceVan, b:FinanceVan) => a.nick_name.localeCompare(b.nick_name)))
@@ -38,6 +52,7 @@ export const useStore = defineStore('payGatewayStore', () => {
             getFianaceVansBalance()
         }
         catch(e) {
+            console.error(e)
         }
     })
 

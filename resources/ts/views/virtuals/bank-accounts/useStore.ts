@@ -11,16 +11,10 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
         'acct_num': '계좌번호',
         'acct_name': '예금주명',
         'acct_bank_code': '은행코드',
-        'checked' : '예금주 검증',
-        'note': '메모',
         'extra_col': '더보기',
     }
 
-    head.sub_headers.value = [
-        head.getSubHeaderFormat('거래정보', 'id', 'trans_seq_num', 'string', 7),
-        head.getSubHeaderFormat('출금정보', 'acct_num', 'acct_bank_code', 'string', 4),
-        head.getSubHeaderFormat('기타', 'note', 'note', 'string', 1),
-    ]
+    head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 

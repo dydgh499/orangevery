@@ -13,7 +13,7 @@ use App\Enums\AuthLoginCode;
 use App\Http\Controllers\Ablilty\SMS;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
-use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\BrandInfo;
 use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Utils\Comm;
 

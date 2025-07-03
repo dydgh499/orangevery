@@ -42,11 +42,9 @@ class FinanceVanController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $finance_vans = $this->finance_vans
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
-            ->get();
-        return $this->response(0, $finance_vans);
+        $query = $this->finance_vans->where('is_delete', false);
+        $query = brandFilter($query, $request);
+        return $this->response(0, $query->get());
     }
 
     /**

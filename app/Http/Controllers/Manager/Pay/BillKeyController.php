@@ -56,11 +56,10 @@ class BillKeyController extends Controller
     */
     public function index(IndexRequest $request)
     {
-        $data = $this->bill_keys
-            ->join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id')
-            ->where('payment_modules.brand_id', $request->user()->brand_id)
-            ->get(['bill_keys.*']);
-        return $this->response(0, $data);
+        $query = $this->bill_keys
+            ->join('payment_modules', 'bill_keys.pmod_id', '=', 'payment_modules.id');
+        $query = brandFilter($query, $request, 'payment_modules');
+        return $this->response(0, $query->get(['bill_keys.*']));
     }
 
     /**
@@ -77,6 +76,7 @@ class BillKeyController extends Controller
         else
         {
             $data = $request->data();
+            $data['oper_id'] = $request->user()->id;
             $pay_module = PaymentModule::where('id', $data['pmod_id'])->first();
             if($pay_module)
             {

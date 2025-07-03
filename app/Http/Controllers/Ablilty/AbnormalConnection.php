@@ -5,7 +5,7 @@ use App\Models\Service\AbnormalConnectionHistory;
 use App\Http\Controllers\Ablilty\IPInfo;
 use App\Http\Controllers\Auth\AuthOperatorIP;
 use App\Enums\AbnormalConnectionCode;
-use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\BrandInfo;
 use Carbon\Carbon;
 
 class AbnormalConnection

@@ -128,3 +128,46 @@ export const amountValidator = (value: number, name:string, amount: number) => {
 export const maxAmountValidator = (value: number, name:string, amount: number) => {
     return value <= amount || checkDirectObject(name)+` ${amount.toLocaleString()}원 이하여야합니다.` 
 }
+
+export const timeValidator = (time: string, name:string) => {
+    const isPastTime = (timeStr: string): boolean => {
+        if (!timeStr) 
+            return false
+        
+        const now = new Date()
+        const [hours, minutes] = timeStr.split(':').map(Number)
+        
+        // 현재 시간과 분 가져오기
+        const currentHours = now.getHours()
+        const currentMinutes = now.getMinutes()
+        
+        // 시간 비교
+        if (hours < currentHours) {
+            return true
+        }
+        
+        // 시간이 같을 경우 분 비교
+        if (hours === currentHours && minutes <= currentMinutes) {
+            return true
+        }
+        
+        return false
+    }
+
+    if (!time) 
+        return name + '이 존재하지 않습니다.'
+    
+    // 형식 검사 (HH:MM 또는 HH:MM:SS)
+    const timeFormatRegex = /^([01]\d|2[0-3]):([0-5]\d)(:([0-5]\d))?$/
+    if (!timeFormatRegex.test(time)) {
+        return '올바른 시간 형식(HH:MM 또는 HH:MM:SS)을 입력해주세요.'
+    }
+    
+    // 과거 시간 검사
+    if (isPastTime(time)) {
+        return name + '은 현재 시각보다 미래여야 합니다.'
+    }
+    
+    return true
+}
+

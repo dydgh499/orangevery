@@ -6,6 +6,7 @@ import type { BillKeyCreate, PayModule } from '@/views/types'
 import { requiredValidatorV2, lengthValidatorV2 } from '@validators'
 import { HistoryTargetNames } from '@core/enums'
 import { VForm } from 'vuetify/components'
+import { useStore } from './useStore'
 
 interface Props {
     item: BillKeyCreate,
@@ -29,18 +30,18 @@ phone_num.value = props.item.buyer_phone
 card_num.value = props.item.card_num
 yymm.value = props.item.yymm
 
-const pay_modules = ref<PayModule[]>([])
+const { pay_modules } = useStore()
 const { update, remove } = useRequestStore()
 
 const filterPayModule = computed(() => {
-    return pay_modules.value.filter(item => {
+    return pay_modules.filter(item => {
         return item.module_type === 4
     })
 })
 
 watchEffect(() => {
     props.item.buyer_phone = phone_num.value
-    props.item.yymm = yymm.value
+    props.item.card_num = card_num.value
     props.item.yymm = yymm.value
 })
 </script>

@@ -6,7 +6,7 @@ use App\Models\Operator;
 use App\Models\Salesforce;
 use App\Models\Log\ActivityHistory;
 use App\Models\Options\OvOptions;
-use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Ablilty\BrandInfo;
 use Illuminate\Support\Facades\DB;
 
 class ActivityHistoryViewer

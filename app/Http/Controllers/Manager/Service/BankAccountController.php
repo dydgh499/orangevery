@@ -31,13 +31,10 @@ class BankAccountController extends Controller
     public function index(IndexRequest $request)
     {
         $search = $request->search;
-        $query = $this->bank_accounts
-        ->where('brand_id', $request->user()->brand_id)
-        ->where(function ($query) use ($search) {
-            return $query->where('acct_num', 'like', "%$search%")
-                ->orWhere('note', 'like', "%$search%");
+        $query = brandFilter($this->bank_accounts, $request);
+        $query = $query->where(function ($query) use ($search) {
+            return $query->where('acct_num', 'like', "%$search%");
         });
-        
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }
