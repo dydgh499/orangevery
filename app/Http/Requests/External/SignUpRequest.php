@@ -24,7 +24,7 @@ class SignUpRequest extends FormRequest
 
     public $integer_keys = [
         // 수수료율 정보
-        'ps_fee',
+        'trx_fee',
     ];
     public function authorize()
     {
@@ -47,7 +47,7 @@ class SignUpRequest extends FormRequest
             'mid'           => 'string|required',
             'tid'           => 'string|required',
             'pay_key'       => 'string|required',
-            'ps_fee'        => 'numeric|required',
+            'trx_fee'       => 'numeric|required',
         ];
         return $this->getRules($this->keys, $sub);
     }
