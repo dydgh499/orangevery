@@ -66,7 +66,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
         $error = null;
         $datas = $request->data();
         
-        $unkonwn_bank_accounts  = $datas->pluck('acct_num')->all();
+        $unkonwn_bank_accounts  = $datas->pluck('acct_num')->unique()->all();
         $exist_bank_accounts    = brandFilter(new BankAccount, $request)
             ->whereIn('acct_num', $datas->pluck('acct_num')->all())
             ->pluck('acct_num')

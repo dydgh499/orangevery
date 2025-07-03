@@ -29,7 +29,7 @@ class WithdrawAPI extends WithdrawTest
 
     static public function ownerCheck($data)
     {
-        $url = env('WITHDRAW_URL', 'http://localhost:81').'/api/v2/owner-check';
+        $url = env('WITHDRAW_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check';
         if(Ablilty::isAppLocal())
         {
             return [
