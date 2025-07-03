@@ -83,7 +83,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 {
                     $params = $this->getBankAccountParams($data);
                     $res = WithdrawAPI::ownerCheck($params);
-                    if($res['body']['result'] === "0000")
+                    if($res['body']['result'] === 100)
                         $news[] = $params;
                     else
                         $error = $res;
@@ -105,7 +105,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
         [$news, $error] = $this->getNewAccounts($request);
         $ids = $this->addBankAccountObjects($request, collect($news));
         if($error)
-            return $this->response(1000, $error['body']['message']);
+            return $this->response(9999, $error['body']['message']);
         else
             return $this->response(1, $ids);
     }

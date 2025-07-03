@@ -54,7 +54,7 @@ class MessageController extends Controller
             ];
             $res = Comm::post("https://api.bonaeja.com/api/msg/v1/list", $params);
             if($res['code'] == 500)
-                return $this->extendResponse(1000, '통신 과정에서 에러가 발생했습니다.');
+                return $this->extendResponse(9999, '통신 과정에서 에러가 발생했습니다.');
             else
                 return $this->response(0, $res['body']['data']);
         }
@@ -75,7 +75,7 @@ class MessageController extends Controller
             ];
             $res = Comm::post("https://api.bonaeja.com/api/msg/v1/remain", $params);
             if($res['code'] == 500)
-                return $this->extendResponse(1000, '통신 과정에서 에러가 발생했습니다.');
+                return $this->extendResponse(9999, '통신 과정에서 에러가 발생했습니다.');
             else
                 return $this->response(0, $res['body']);
         }
