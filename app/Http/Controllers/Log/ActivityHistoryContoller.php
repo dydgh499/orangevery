@@ -12,6 +12,8 @@ use App\Http\Controllers\Ablilty\ActivityHistoryViewer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Models\EncryptDataTrait;
+use App\Http\Controllers\Ablilty\BrandInfo;
+use App\Http\Controllers\Ablilty\Ablilty;
 use Illuminate\Http\Request;
 
 /**
@@ -43,9 +45,10 @@ class ActivityHistoryContoller extends Controller
             'operators.profile_img',
             'operators.level',
         ]);
-        $oper_query = ActivityHistoryViewer::operatorSelect($request)
-                ->groupBy('activity_histories.user_id')
-                ->select($oper_cols);
+        $oper_query = ActivityHistoryViewer::operatorSelect($request);
+        if(BrandInfo::isDeliveryBrand() && Ablilty::isEmployee($request))
+            $oper_query = $oper_query->where('activity_histories.oper_id', $request->user()->id);
+        $oper_query = $oper_query->groupBy('activity_histories.user_id')->select($oper_cols);
         $query = $oper_query;
         if ((clone $query)->count()) 
         {

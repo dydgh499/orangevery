@@ -25,12 +25,6 @@ const { pgs, pss } = useStore()
 
 const cancelPart = ref()
 
-const getTdColor = (item: Transaction) => {
-    let style = item.is_cancel ? 'bg-error' : ''
-    return style
-}
-
-
 const payCanceled = async (item: Transaction) => {
     const amount = await cancelPart.value.show(item.amount)
     if (amount == 0)
@@ -107,7 +101,7 @@ provide('exporter', exporter)
                 <template v-for="(item, index) in store.getItems" :key="item['id']">
                     <tr>
                         <template v-for="(_header, _key, _index) in head.headers" :key="_key">
-                            <td v-if="_header.visible" :class='`list-square ${getTdColor(item)}`'>
+                            <td v-if="_header.visible" :class='`list-square`'>
                                 <span v-if="_key == 'id'">
                                     <div class='check-label-container'>
                                         <template v-if="getUserLevel() >= 35">
@@ -177,9 +171,9 @@ provide('exporter', exporter)
                             </td>
                         </template>
                     </tr>
-                    <tr v-for="(_item, _index) in item.cancel">
+                    <tr v-for="(_item, _index) in item.cancel" :style="'background: rgb(var(--v-theme-error), var(--v-activated-opacity))'">
                         <template v-for="(_header, _key, _index) in head.headers" :key="_key">
-                            <td v-if="_header.visible" :class='`list-square ${getTdColor(item)}`'>
+                            <td v-if="_header.visible" :class='`list-square`'>
                                 <span v-if="_key == 'amount'">
                                     {{ Number(_item[_key]).toLocaleString() }}
                                 </span>
