@@ -149,11 +149,13 @@ class TransactionController extends Controller
             $res = TransactionAPI::payCancel($request->all(), $pay_module->api_key);
             if($res['body']['result_cd'] === '0000')
             {
+                $cxl_seq = $this->transactions->where('trx_id', $request->res['body']['ori_trx_id'])->count() + 1;
                 $cxl_trans = $ord_trans->replicate();
                 $cxl_trans->trx_id      = $res['body']['trx_id'];
                 $cxl_trans->ori_trx_id  = $res['body']['ori_trx_id'];
                 $cxl_trans->trx_at      = $res['body']['cxl_dttm'];
                 $cxl_trans->is_cancel   =  1;
+                $cxl_trans->cxl_seq     =  $cxl_seq;
                 $cxl_trans->amount   =  $cxl_trans->amount * -1;
                 $cxl_trans->save();
                 return $this->response(1, $res['body']);
