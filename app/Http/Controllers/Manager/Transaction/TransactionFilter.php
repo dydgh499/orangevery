@@ -50,7 +50,8 @@ class TransactionFilter
     static public function common($request)
     {
         $search = $request->input('search', '');
-        $query  = Transaction::join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id');
+        $query  = Transaction::join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
+            ->where('transactions.is_cancel', 0);
         $query = brandFilter($query, $request, 'transactions');
         $query = self::date($request, $query);
         $min   = (clone $query)->min('transactions.id');
