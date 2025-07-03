@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
             $table->unsignedInteger('bill_id')->nullable()->comment('빌키 ID');
-            $table->string('pay_message')->nullable()->comment('결제 메세지');
+            $table->string('message')->nullable()->comment('결제 메세지');
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
             $table->dropColumn('bill_id');
-            $table->dropColumn('pay_message');
+            $table->dropColumn('message');
         });
     }
 };
