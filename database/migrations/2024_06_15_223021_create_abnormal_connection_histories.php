@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('abnormal_connection_histories', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->tinyInteger('connection_type')->comment('접속 타입');
             $table->string('action')->default('')->comment('조치사항');

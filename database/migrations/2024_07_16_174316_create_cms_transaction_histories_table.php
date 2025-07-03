@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cms_transaction_histories', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->integer('ct_id')->nullable()->comment('이체 ID');
             $table->integer('fin_id')->nullable()->comment('실시간 이체 ID');
