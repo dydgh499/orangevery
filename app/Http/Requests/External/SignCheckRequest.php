@@ -8,15 +8,16 @@ use App\Http\Traits\FormRequestTrait;
 class SignCheckRequest extends FormRequest
 {
     use FormRequestTrait;
+
     public $keys = [
         // 운영자 정보
         'user_name',
     ];
-
     public $integer_keys = [];
+
     public function authorize()
     {
-        return $this->user()->tokenCan(40) ? true : false;
+        return true;
     }
 
     /**
