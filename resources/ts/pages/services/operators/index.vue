@@ -29,12 +29,10 @@ const showAvatar = (preview: string) => {
     imageDialog.value.show(preview)
 }
 const showOperatorIPDialog = async () => {
-    /*
     const [result, token] = await headOfficeAuthValidate('접속 허용 IP를 확인하기 위해 휴대폰번호 인증이 필요합니다.<br>계속하시겠습니까?')
     if(result) {
-    */
-        operatorIPDialog.value.show()//token
-    //}
+        operatorIPDialog.value.show(token)
+    }
 }
 
 </script>

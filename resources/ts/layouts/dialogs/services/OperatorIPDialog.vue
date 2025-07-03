@@ -10,13 +10,13 @@ const operator_ips = ref(<OperatorIp[]>([]))
 const visible = ref(false)
 const token = ref('')
 
-const show = async (/*_token: string*/) => {
-    //token.value = _token
+const show = async (_token: string) => {
+    token.value = _token
     const r = await axios.get('/api/v1/manager/services/operator-ips', {
         params: {
             page: 1,
             page_size: 999,
-            //token: token.value,
+            token: token.value,
         }
     })
     operator_ips.value = r.data.content
