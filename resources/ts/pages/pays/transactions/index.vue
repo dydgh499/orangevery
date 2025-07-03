@@ -6,7 +6,7 @@ import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 import { module_types } from '@/views/services/options/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/options/useStore'
-import { useSearchStore, installments } from '@/views/pays/transactions/useStore'
+import { useSearchStore, installments, trxStatuses } from '@/views/pays/transactions/useStore'
 
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
@@ -142,9 +142,9 @@ provide('exporter', exporter)
                             <span v-else-if="_key == 'amount'">
                                 {{ Number(item[_key]).toLocaleString() }}
                             </span>
-                            <span v-else-if="_key == 'deposit_status'">
-                                <VChip :color="`success`">
-                                    {{ `성공` }}
+                            <span v-else-if="_key == 'trx_status'">
+                                <VChip :color="trxStatuses.find(obj => obj.id === item[_key])?.color">
+                                    {{ trxStatuses.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'extra_col'">

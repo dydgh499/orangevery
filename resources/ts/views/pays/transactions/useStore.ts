@@ -12,6 +12,12 @@ export const installments = <Options[]>([
     { id: 11, title: "11개월" }, { id: 12, title: "12개월" },
 ])
 
+export const trxStatuses = <any[]>([
+    { id: 0, title: "예약대기", color: 'default' }, { id: 1, title: "결제성공", color: 'info' },
+    { id: 3, title: "결제실패", color: 'warning' }, { id: 5, title: "이체성공", color: 'success' },
+    { id: 7, title: "이체실패", color: 'error' }, 
+])
+
 export const useSearchStore = defineStore('useTransactionSearchStore', () => {
     const store = Searcher('pays/transactions')
     const head = Header('pays/transactions', '거래내역')
