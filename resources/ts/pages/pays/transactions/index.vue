@@ -44,7 +44,7 @@ const payCanceled = async (item: Transaction) => {
                 only: false,
             })
             try {
-                const r = await post('/api/v1/transactions/pay-cancel', params)
+                const r = await post('/api/v1/pays/transactions/pay-cancel', params)
                 if (r.status === 201)
                     snackbar.value.show('성공하였습니다.', 'success')
                 else
