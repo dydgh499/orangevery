@@ -138,7 +138,7 @@ class SettlementJob implements ShouldQueue
         {
             Transaction::where('id', $success['id'])->update([
                 'trx_status'    => 5,
-                'cms_id'        => $success['cms_id'],
+                'cms_id'        => $success['temp']['cms_id'],
             ]);
         }
         foreach($fails as $fail)

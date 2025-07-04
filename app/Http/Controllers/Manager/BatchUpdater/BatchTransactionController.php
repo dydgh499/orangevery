@@ -146,7 +146,7 @@ class BatchTransactionController extends BatchUpdateController
         [$news, $error] = app(BatchUpdateBankAccountController::class)->getNewAccounts($request);
         $ids            = app(BatchUpdateBankAccountController::class)->addBankAccountObjects($request, collect($news));
         if($error)
-            return $this->response(9999, $error['body']['message']);
+            return $this->extendResponse(9999, $error['body']['message']);
         else
         {
             [$result, $message, $datas, $keys] = $this->getNewTransactions($request);
