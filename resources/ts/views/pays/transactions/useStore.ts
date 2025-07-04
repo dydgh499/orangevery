@@ -1,4 +1,5 @@
 
+import { getUserLevel } from '@/plugins/axios'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { Options } from '@/views/types'
@@ -57,9 +58,13 @@ export const useSearchStore = defineStore('useTransactionSearchStore', () => {
     }
 
     const geETcCols = () => {
-        return {
-            'extra_col': '추가작업',
-        }        
+        if(getUserLevel() >= 40) {
+            return {
+                'extra_col': '추가작업',
+            }        
+        }
+        else
+            return {}
     }
 
     const headers0:any = getIdCols()

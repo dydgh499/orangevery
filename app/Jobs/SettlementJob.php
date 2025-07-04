@@ -123,7 +123,7 @@ class SettlementJob implements ShouldQueue
             }
             catch(\Exception $ex)
             {
-                error($transaction, 'settlement-job-batchPay'.$ex->getMessage());
+                error($transaction, 'settlement-job-batch-deposit'.$ex->getMessage());
                 $fails[] = array_merge(['message' => '내부 처리 에러'], $transaction);
             }
         }
