@@ -86,7 +86,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                     if($res['body']['result'] === 100)
                         $news[] = $params;
                     else
-                        $error = $res;
+                        $error = array_merge($res, ['acct_num' => $unkonwn_bank_account]);
                 }
                 else
                     error($unkonwn_bank_account, '존재하지 않는 계좌');
@@ -105,7 +105,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
         [$news, $error] = $this->getNewAccounts($request);
         $ids = $this->addBankAccountObjects($request, collect($news));
         if($error)
-            return $this->apiResponse("9999", $error['body']['message']);
+            return $this->apiResponse("9999", $error['body']['message']."(".$error['acct_num'].")");
         else
             return $this->apiResponse("0000", '성공하였습니다.', $ids);
     }
