@@ -127,7 +127,6 @@ class SettlementJob implements ShouldQueue
                 $fails[] = array_merge(['message' => '내부 처리 에러'], $transaction);
             }
         }
-        logging([$success, $fails]);
         $this->batchDepositUpdate($success, $fails);
         return [$success, $fails];
     }
