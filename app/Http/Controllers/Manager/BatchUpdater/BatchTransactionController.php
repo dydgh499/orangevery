@@ -159,10 +159,10 @@ class BatchTransactionController extends BatchUpdateController
                 if($job_id)
                     return $this->apiResponse("0000", '정산예약에 성공하였습니다. 정산현황 페이지를 확인해주세요.');
                 else
-                    return $this->apiResponse("9999", '결제/이체 예약에 실패하였습니다.');
+                    return $this->apiResponse("9998", '결제/이체 예약에 실패하였습니다.');
             }
             else
-                return $this->apiResponse("9999", $message);
+                return $this->apiResponse("9997", $message);
         }
     }
 }

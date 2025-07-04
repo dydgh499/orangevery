@@ -105,9 +105,9 @@ class BatchUpdateBankAccountController extends BatchUpdateController
         [$news, $error] = $this->getNewAccounts($request);
         $ids = $this->addBankAccountObjects($request, collect($news));
         if($error)
-            return $this->response(9999, $error['body']['message']);
+            return $this->apiResponse("9999", $error['body']['message']);
         else
-            return $this->response(1, $ids);
+            return $this->apiResponse("0000", '성공하였습니다.', $ids);
     }
 
 
@@ -124,7 +124,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
         $datas = $request->data();
         
         if(count($datas) > 100)
-            return $this->extendResponse(1000, '계좌등록은 한번에 최대 100개까지 등록할 수 있습니다.');
+            return $this->apiResponse(1000, '계좌등록은 한번에 최대 100개까지 등록할 수 있습니다.');
         else 
         {
             // 1. 이미 존재하는 계좌번호 조회
@@ -139,7 +139,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
             
             // 3. 등록할 데이터가 하나도 없으면 안내 메시지 반환
             if ($filtered_datas->isEmpty()) {
-                return $this->extendResponse(1, '모든 계좌번호가 이미 등록되어 있습니다.');
+                return $this->apiResponse(1, '모든 계좌번호가 이미 등록되어 있습니다.');
             }
             
             // 4. 예금주 검증 수행
