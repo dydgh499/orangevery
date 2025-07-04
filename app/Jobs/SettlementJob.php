@@ -70,7 +70,7 @@ class SettlementJob implements ShouldQueue
         {
             Transaction::where('id', $success['id'])->update([
                 'trx_status'    => 1,
-                'trx_at'        => $success['trx_at'],
+                'trx_at'        => $success['trx_dttm'],
                 'ord_num'       => $success['ord_num'],
                 'trx_id'        => $success['trx_id'],
                 'card_num'      => $success['card_num'],
