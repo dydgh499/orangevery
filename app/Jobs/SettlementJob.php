@@ -43,7 +43,7 @@ class SettlementJob implements ShouldQueue
                 if($res['code'] === 200)
                 {
                     if($res['body']['result_cd'] === '0000')
-                        $success[] = array_merge($res['body'], $transaction);
+                        $success[] = array_merge($transaction, $res['body']);
                     else
                         $fails[] = array_merge(['message' => $res['body']['result_msg']], $transaction);
                 }
@@ -111,7 +111,7 @@ class SettlementJob implements ShouldQueue
                 if($res['code'] === 201)
                 {
                     if($res['body']['result_cd'] === '0000')
-                        $success[] = array_merge($res['body'], $transaction);
+                        $success[] = array_merge($transaction, $res['body']);
                     else
                         $fails[] = array_merge(['message' => $res['body']['result_msg']], $transaction);
                 }
