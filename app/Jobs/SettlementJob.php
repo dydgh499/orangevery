@@ -111,7 +111,7 @@ class SettlementJob implements ShouldQueue
                 if($res['code'] === 201)
                 {
                     if($res['body']['result_cd'] === '0000')
-                        $success[] = array_merge($res['body'], $transaction);
+                        $successes[] = array_merge($res['body'], $transaction);
                     else
                         $fails[] = array_merge(['message' => $res['body']['result_msg']], $transaction);
                 }
@@ -136,7 +136,6 @@ class SettlementJob implements ShouldQueue
     {
         foreach($successes as $success)
         {
-            logging($success);
             Transaction::where('id', $success['id'])->update([
                 'trx_status'    => 5,
                 'cms_id'        => $success['temp']['cms_id'],
@@ -144,7 +143,6 @@ class SettlementJob implements ShouldQueue
         }
         foreach($fails as $fail)
         {
-            logging($fail);
             Transaction::where('id', $fail['id'])->update([
                 'trx_status'    => 7,
                 'message'       => $fail['message'],
