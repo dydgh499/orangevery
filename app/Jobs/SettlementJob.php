@@ -92,8 +92,8 @@ class SettlementJob implements ShouldQueue
     // 6. 이체 진행
     public function batchDeposit($pay_success)
     {
-        $successes = [];
-        $fails   = [];
+        $success    = [];
+        $fails      = [];
 
         foreach($pay_success as $transaction)
         {
@@ -111,7 +111,7 @@ class SettlementJob implements ShouldQueue
                 if($res['code'] === 201)
                 {
                     if($res['body']['result_cd'] === '0000')
-                        $successes[] = array_merge($res['body'], $transaction);
+                        $success[] = array_merge($res['body'], $transaction);
                     else
                         $fails[] = array_merge(['message' => $res['body']['result_msg']], $transaction);
                 }
@@ -127,8 +127,9 @@ class SettlementJob implements ShouldQueue
                 $fails[] = array_merge(['message' => '내부 처리 에러'], $transaction);
             }
         }
-        $this->batchDepositUpdate($successes, $fails);
-        return [$successes, $fails];
+        logging([$success, $fails]);
+        $this->batchDepositUpdate($success, $fails);
+        return [$success, $fails];
     }
 
     // 7. 이체 상태 업데이트
