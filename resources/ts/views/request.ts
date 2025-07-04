@@ -20,15 +20,15 @@ export const useRequestStore = defineStore('requestStore', () => {
         if (res.status === 201) {
             if(params.id == 0) {
                 params.id = res.data.id
-                if(back_url === 'services/pay-gateways')
+                if(back_url === '/services/pay-gateways')
                     pgs.push({ ...params})
-                else if(back_url === 'services/pay-sections')
+                else if(back_url === '/services/pay-sections')
                     pss.push({ ...params})
-                else if(back_url === 'services/finance-vans')
+                else if(back_url === '/services/finance-vans')
                     finance_vans.push({ ...params})
-                else if(back_url === 'pays/bill-keys')
+                else if(back_url === '/pays/bill-keys')
                     bill_keys.push({ ...params})
-                else if(back_url === 'pays/pay-modules')
+                else if(back_url === '/pays/pay-modules')
                     pay_modules.push({ ...params})
             }
             if (is_redirect) {
