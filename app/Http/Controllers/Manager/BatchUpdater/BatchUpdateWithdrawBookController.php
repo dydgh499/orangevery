@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager\BatchUpdater;
 
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateController;
+use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateBankAccountController;
 use App\Http\Controllers\Utils\Comm;
 
 use App\Models\BankAccount;
@@ -38,41 +39,14 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
     {
         $current = date('Y-m-d H:i:s');
         $brand_id = $request->user()->brand_id;
+        $oper_id = $request->user()->id;
         $withdraws = $request->data();
 
         if(!$request->user()->tokenCan(35)) {
             return $this->response(951);
         }
 
-        $not_exist_accounts = [];
-
-        // 1. 모든 계좌번호 존재 여부 먼저 확인
-        foreach($withdraws as $withdraw) {
-            $bankAccount = BankAccount::where('acct_num', $withdraw['acct_num'])
-                ->where('brand_id', $brand_id)
-                ->first();
-
-            if(!$bankAccount) {
-                $not_exist_accounts[] = $withdraw['acct_num'];
-            }
-        }
-
-        // 2. 하나라도 존재하지 않는 계좌가 있으면 등록 중단 및 반환
-        if (!empty($not_exist_accounts)) {
-            // 중복 제거
-            $not_exist_accounts = array_unique($not_exist_accounts);
-
-            $message = "등록되지 않은 계좌번호가 존재합니다: " . implode(", ", $not_exist_accounts);
-            return $this->extendResponse(990, $message, [
-                'not_exist_accounts' => $not_exist_accounts,
-                'success' => 0,
-                'failed' => count($withdraws)
-            ]);
-        }
-
-        // 3. 모든 계좌가 존재할 때만 등록 처리
         $results = [];
-        $fails      = [];
         $success_count = 0;
 
         foreach($withdraws as $withdraw) 
@@ -99,6 +73,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
             $params = [
                 'brand_id' => $brand_id,
                 'fin_id' => $withdraw['fin_id'],
+                'oper_id' => $oper_id,
                 'amount' => $withdraw['withdraw_amount'],
                 'acct_num' => $bankAccount->acct_num,
                 'acct_name' => $bankAccount->acct_name,
@@ -112,7 +87,6 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
             // 4. 외부 API 호출
             try {
                 $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/book-withdraw', $params);
-
                 if($res['code'] === 201)
                 {
                     if($res['body']['result_cd'] === '0000')
@@ -129,18 +103,15 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                             'result_cd' => $res['body']['result_cd'],
                             'result_msg' => $res['body']['result_msg']
                         ];
-                        $fails[] = array_merge(['message' => $res['body']['result_msg']], $withdraw);
                     }
                 }
                 else
                 {
                     $message = isset($res['body']['result_msg']) ? $res['body']['result_msg'] : '이체 예약 에러';
-                    $fails[] = array_merge(['message' => $message], $withdraw);
                 }
             } catch (\Exception $e)
             {
                 error($withdraw, 'book-withdraw-job-batch'.$e->getMessage()());
-                $fails[] = array_merge(['message' => '내부 처리 에러'], $withdraw);
                 $results[] = [
                     'acct_num' => $withdraw['acct_num'] ?? null,
                     'result_cd' => 500,

@@ -16,7 +16,7 @@ const {
 
 const cancelWithdrawBook = async () => {
     const r = await cancelJobs([props.item.id])
-    if(r.status == 201) {
+    if(r.status === 201) {
         store.setTable()
     }
 }
