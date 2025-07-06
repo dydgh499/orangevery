@@ -34,7 +34,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api-service.php'));
 
-            Route::middleware(['api', 'log.route', 'auth:sanctum', 'is.browser', 'is.edit.able'])
+            Route::middleware(['api', 'log.route', 'auth:sanctum', 'is.browser'])
                 ->prefix('api/v1/manager')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api-batch-updater.php'));

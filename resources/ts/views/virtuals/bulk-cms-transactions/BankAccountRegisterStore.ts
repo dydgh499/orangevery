@@ -42,7 +42,7 @@ export const validateItems = (item: any, i: number, acct_nums: any) => {
     const finance_van = finance_vans.find(a => a.id === parseInt(item.fin_id))
     
     if (finance_van === null || finance_van === undefined) 
-        return [false, (i + 2) + '번째 이체모듈 타입이 이상합니다.']
+        return [false, (i + 2) + '번째 이체모듈이 이상합니다.']
     else if (isEmpty(item.acct_bank_code)) 
         return [false, (i + 2) + '번째 입금 은행코드는 필수로 입력해야합니다.']
     else if (banks.find(bank => bank.code === item.acct_bank_code) == null) 
