@@ -60,19 +60,6 @@ class CMSTransactionController extends Controller
         return $this->response(0, $data);
     }
 
-    /*
-    * 예금주 조회
-    */
-    public function ownerCheck(Request $request)
-    {
-        $data = $request->all();
-        $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $data);
-        if($res['body']['result'] === 100)
-            return $this->response(1, ['message'=> $res['body']['message']]);
-        else
-            return $this->extendResponse(1999, $res['body']['message'], $res['body']['data']);
-    }
-
     /**
      * 잔액조회
      */

@@ -43,6 +43,10 @@ export const validateItems = (item: any, i: number, acct_nums: any) => {
     
     if (finance_van === null || finance_van === undefined) 
         return [false, (i + 2) + '번째 이체모듈 타입이 이상합니다.']
+    else if (isEmpty(item.acct_bank_code)) 
+        return [false, (i + 2) + '번째 입금 은행코드는 필수로 입력해야합니다.']
+    else if (banks.find(bank => bank.code === item.acct_bank_code) == null) 
+        return [false, (i + 2) + '번째줄의 은행코드가 이상합니다.']
     else if (isEmpty(item.acct_num)) 
         return [false, (i + 2) + '번째줄의 입금 계좌번호는 필수로 입력해야합니다.']
     else if (corp.ov_options.free.use_account_number_duplicate && acct_nums.has(item.acct_num))
@@ -52,7 +56,6 @@ export const validateItems = (item: any, i: number, acct_nums: any) => {
     else if (isEmpty(item.withdraw_amount)) 
         return [false, (i + 2) + '번째줄의 출금 금액은 필수로 입력해야합니다.']
     else {
-        item.acct_bank_code = banks.find(bulk => bulk.title === item.acct_bank_name)?.code as string
         return [true, '']
     }
 }

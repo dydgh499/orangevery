@@ -8,47 +8,6 @@ use App\Models\Transaction;
 
 class CMSTransactionValidate
 {
-    // 출금이력 거래번호 생성
-    static public function getTrxNum($finance_van, $privacy, $withdraw_amount, $withdraw_book_time)
-    {
-        $existing = CMSTransaction::where('brand_id', $finance_van['brand_id'])
-        ->where('fin_id', $finance_van['id'])
-        ->where('acct_num', $privacy['acct_num'])
-        ->where('withdraw_book_time', $withdraw_book_time)
-        ->where('amount', $withdraw_amount)
-        ->orderBy('id', 'desc') // 최신값 우선
-        ->value('trans_seq_num');
-
-        return $existing;
-    }
-
-    static public function addWithdraw($finance_van, $code, $message, $note, $profit, $trsc_no, $privacy)
-    {
-        $profit = $profit * -1;
-        $params = [
-            'brand_id'  => $finance_van['brand_id'],
-            'fin_id'    => $finance_van['id'],
-            'result_code' => $code,
-            'trx_at'        => date("Y-m-d H:i:s"),
-            'trans_seq_num' => $trsc_no,
-            'amount'  => $profit,
-            'message' => $message,
-            'note' => $note,
-        ];
-        $params = array_merge($params, $privacy);
-        $res = CMSTransaction::create($params);
-        return $res->id;
-    }
-
-    static public function updateWithdraw($last_id, $result_code, $message)
-    {
-        $params = [
-            'result_code'=> $result_code,
-            'message' => $message,
-        ];
-        return CMSTransaction::where('id', $last_id)->update($params);
-    }
-
     static public function cancelValidate($history)
     {
         return Transaction::where('ori_trx_id', $history['trx_id'])
