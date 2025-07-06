@@ -66,7 +66,7 @@ class CMSTransactionController extends Controller
     public function getBalance(Request $request)
     {
         $data = $request->all();
-        $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/get-balance', $data);
+        $res = Comm::post(env('WITHDRAW_URL', 'http://localhost:81').'/api/v2/realtimes/get-balance', $data);
         if(isset($res['body']['data']))
         {
             $res = $res['body']['data'];
@@ -88,7 +88,7 @@ class CMSTransactionController extends Controller
     public function cancelJob(Request $request)
     {
         $validated = $request->validate(['ids.*'=>'required']);
-        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/cancel-book-withdraw-job';
+        $url = env('WITHDRAW_URL', 'http://localhost:81').'/api/v2/realtimes/cancel-book-withdraw-job';
         $res = Comm::post($url, ['ids' => $request->ids]);
         return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
     }
