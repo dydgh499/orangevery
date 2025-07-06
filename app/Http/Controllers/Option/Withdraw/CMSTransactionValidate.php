@@ -1,9 +1,6 @@
 <?php
 namespace App\Http\Controllers\Option\Withdraw;
 
-use App\Models\Service\CMSTransactionBooks;
-use App\Models\Service\CMSTransaction;
-
 use App\Models\Transaction;
 
 class CMSTransactionValidate
