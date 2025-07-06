@@ -30,7 +30,6 @@ Route::prefix('v1')->group(function() {
 
             Route::middleware(['auth:sanctum'])->group(function() {
                 Route::post('sign-out', [AuthController::class, 'signout']);
-                Route::post('owner-check', [CMSTransactionController::class, 'ownerCheck']);
             });
         }); 
     });

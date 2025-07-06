@@ -1,11 +1,3 @@
-/*
-import { getGmidMenu } from '../menus/gmid'
-import { getHomeMenu } from '../menus/home'
-import { getPayWindowMenu } from '../menus/pay-windows'
-import { getSettlementMenu } from '../menus/settlement'
-import { getTransactionMenu } from '../menus/transactions'
-import { getUserMenu } from '../menus/user'
-*/
 import type { VerticalNavItems } from '@/@layouts/types'
 import { getUserLevel } from '@axios'
 import { getOtherMenu } from '../menus/other'
