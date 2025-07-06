@@ -15,9 +15,6 @@ use App\Http\Traits\StoresTrait;
 
 use App\Http\Requests\Manager\BulkRegister\BulkWithdrawBookRequest;
 
-use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
-use App\Models\Service\CMSTransactionHistories;
-
 /**
  * @group Withdraw-Batch-Book-Updater API
  *
@@ -26,11 +23,10 @@ use App\Models\Service\CMSTransactionHistories;
 class BatchUpdateWithdrawBookController extends BatchUpdateController
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $cms_transactions, $cms_transaction_histories;
+    protected $cms_transactions;
 
-    public function __construct(CMSTransaction $cms_transactions, CMSTransactionHistories $cms_transaction_histories)
+    public function __construct(CMSTransaction $cms_transactions)
     {
-        $this->cms_transaction_histories = $cms_transaction_histories;
         $this->cms_transactions = $cms_transactions;
         $this->target = '이체 예약현황';
     }

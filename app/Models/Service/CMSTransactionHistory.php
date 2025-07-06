@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Traits\Models\AttributeTrait;
 
-class CMSTransactionHistories extends Model
+class CMSTransactionHistory extends Model
 {
     use HasFactory, AttributeTrait;
     protected   $table        = 'cms_transaction_histories';
