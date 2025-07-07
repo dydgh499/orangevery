@@ -37,7 +37,6 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
         $datas = $request->data();
         $rows = collect($datas);
         $now = now();
-        $brand_id  = $request->user()->brand_id;
         $finances = brandFilter(new FinanceVan, $request)
             ->whereIn('id', $rows->pluck('fin_id'))
             ->pluck('id')->all();
