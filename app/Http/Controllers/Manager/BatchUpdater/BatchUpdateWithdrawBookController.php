@@ -81,7 +81,8 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
         // 외부 API 호출
         try
             {
-            $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/book-withdraw',$params);
+            $res = Comm::post(env('WITHDRAW_URL', 'http://localhost:81').'/api/v2/realtimes/book-withdraw',$params);
+            
                 if ($res['code'] === 201)
                 {
                     if ($res['body']['result_cd'] === '0000') {

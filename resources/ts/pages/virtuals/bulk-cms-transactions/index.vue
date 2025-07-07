@@ -95,7 +95,8 @@ const register = async () => {
         }
         else {
             items.value = getWithdarwBookTime()
-            if(await bulkRegister('출금예약', 'bulk-withdraws', items.value)) // 10.96초
+            const r =await bulkRegister('출금예약', 'bulk-withdraws', items.value) // 10.96초
+            if(r)
                 setTimeout(function () { location.reload() }, 1000)
             /*
             const results = await bulkBookWithdraw(items.value) //11.31초
