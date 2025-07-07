@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\External\DeliveryAgencyController;
-use App\Http\Controllers\Manager\Service\CMSTransactionController;
 
 /*
 |--------------------------------------------------------------------------

@@ -51,7 +51,6 @@ Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(functio
         Route::apiResource('pay-sections', PaymentSectionController::class);
         Route::apiResource('finance-vans', FinanceVanController::class);
         Route::apiResource('exception-work-times', ExceptionWorkTimeController::class);        
-        Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
         Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);
     });
 
@@ -62,8 +61,6 @@ Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(functio
         Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
         Route::post('cms-transactions/cancel-job', [CMSTransactionController::class, 'cancelJob']);
 
-        Route::get('cms-transaction-histories', [CMSTransactionController::class, 'index']);
-        Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
         Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);
     });
 });

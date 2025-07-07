@@ -13,7 +13,6 @@ const orderBy = ref()
 const headers = [
     { title: '에러코드', key: 'code' },
     { title: '에러 메세지', key: 'message' },
-    { title: '재이체 여부', key: 'retry' },
 ]
 const show = (_errors: any) => {
     page.value = 1
@@ -58,7 +57,6 @@ defineExpose({
                     <template v-slot:items="props">
                         <td><b>{{ props.item.code }}</b></td>
                         <td>{{ props.item.message }}</td>
-                        <td>{{ props.item.retry }}</td>
                     </template>
                 </VDataTable>
             </VCardText>

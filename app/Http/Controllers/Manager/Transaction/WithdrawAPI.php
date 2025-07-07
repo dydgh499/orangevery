@@ -42,20 +42,4 @@ class WithdrawAPI extends WithdrawTest
             return Comm::post($url, $data, []);
         }
     }
-    
-    static public function bookWithdraw($data)
-    {
-        $url = env('WITHDRAW_URL', 'http://localhost:81').'/api/v2/realtimes/book-withdraw';
-        if(Ablilty::isAppLocal())
-        {
-            return [
-                'code' => 200,
-                'body' => self::getTestWithdrawResult($data)
-            ];
-        }
-        else
-        {
-            return Comm::post($url, $data, []);
-        }
-    }
 }

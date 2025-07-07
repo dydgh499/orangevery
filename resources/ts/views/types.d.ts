@@ -379,6 +379,7 @@ export interface CmsTransaction {
     acct_bank_name: string, // 입금 은행명
     withdraw_book_time: string, // 출금 예약 시간
     withdraw_status: number, // 상태
+    withdraws: CmsTransactionHistory[],
 }
 
 export interface CmsTransactionHistory extends CmsTransaction {
@@ -388,7 +389,6 @@ export interface CmsTransactionHistory extends CmsTransaction {
     fin_id: number,
     message: string,
     result_code: string,
-    amount: number,
     trans_seq_num: string,
     created_at: string,
 }

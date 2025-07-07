@@ -39,7 +39,7 @@ if(getUserLevel() < 35) {
 <template>
     <section>
         <div>
-            <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="[]" :add="false" add_name="입금계좌" :date_filter_type="DateFilters.NOT_USE">
+            <BaseIndexView placeholder="계좌번호 검색" :metas="[]" :add="false" add_name="입금계좌" :date_filter_type="DateFilters.NOT_USE">
                 <template #index_extra_field>
                 <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small"
                     :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''" item-title="title" item-value="id">
