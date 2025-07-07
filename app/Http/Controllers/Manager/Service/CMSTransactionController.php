@@ -37,6 +37,9 @@ class CMSTransactionController extends Controller
             ->where(function ($query) use ($search) {
                 return $query->where('acct_num', 'like', "%$search%");
             });
+        if($request->withdraw_status !== null)
+        $query = $query->where('withdraw_status', $request->withdraw_status);
+
 
         return $query;
     }

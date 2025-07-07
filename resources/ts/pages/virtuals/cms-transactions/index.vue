@@ -2,14 +2,19 @@
 <script setup lang="ts">
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { selectFunctionCollect } from '@/views/selected';
 import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
 import { useSearchStore } from '@/views/virtuals/cms-transactions/useStore'
 import { realtimeMessage, realtimeResult, withdraw_status } from '@/views/virtuals/cms-transactions/useStore'
 import { useStore } from '@/views/services/options/useStore'
+import { useRequestStore } from '@/views/request';
 import { DateFilters } from '@core/enums'
 import ExtraMenu from '@/views/virtuals/cms-transactions/ExtraMenu.vue';
 
+const alert = <any>(inject('alert'))
+const { post } = useRequestStore()
 const { store, head, exporter } = useSearchStore()
+const { selected, all_selected } = selectFunctionCollect(store)
 const { finance_vans } = useStore()
 const total = ref(<any>{
     withdraw_amount: 0,
@@ -23,6 +28,18 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 const snackbar = <any>(inject('snackbar'))
+
+const batchRemove = async() => {
+    if (await alert.value.show(`정말 ${selected.value.length}개의 예약이체를 취소하시겠습니까?`)) {
+        const r = await post(`/api/v1/manager/virtuals/cms-transactions/cancel-job`, {
+            ids: selected.value
+        }, true)
+        if (r.status === 201) {
+            selected.value = []
+            store.setTable()
+        }
+    }
+}
 
 if(getUserLevel() < 35) {
     pay_token.value = ''
@@ -79,23 +96,31 @@ onMounted(() => {
                             </VCol>
                         </template>
                         <template #pg_extra_field>
+                            <VCol cols="6" sm="3">
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.withdraw_status" :items="[{ id: null, title: '전체' }, {id: 0, title:'대기'}, {id: 1, title:'완료'}, {id: 2, title:'실패'}]"
+                                    density="compact" variant="outlined" item-title="title" item-value="id" label="이체 상태"
+                                    @update:modelValue="store.updateQueryString({withdraw_status: store.params.withdraw_status})"
+                                    :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''"
+                                    />
+                            </VCol>
                         </template>
                     </BaseIndexFilterCard>
                 </template>
                 <template #index_extra_field>
+                    <VBtn v-if="store.params.withdraw_status === 0" type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small"
+                    :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''" item-title="title" item-value="id">
+                    일괄삭제
+                    <VIcon size="18" icon="tabler-trash" />
+                </VBtn>
                 </template>
                 <template #headers>
                     <tr>
-                        <template v-for="(sub_header, index) in head.getSubHeaderComputed" :key="index">
-                            <th :colspan="head.getSubHeaderComputed.length - 1 == index ? sub_header.width + 1 : sub_header.width"
-                                class='list-square sub-headers' v-show="sub_header.width">
-                                <span>{{ sub_header.ko }}</span>
-                            </th>
-                        </template>
-                    </tr>
-                    <tr>
                         <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                            <span>
+                            <div class='check-label-container' v-if="key == 'id'">
+                                <VCheckbox v-model="all_selected" class="check-label" />
+                                <span>선택/취소</span>
+                            </div>
+                            <span v-else>
                                 {{ header.ko }}
                             </span>
                         </th>
@@ -107,7 +132,11 @@ onMounted(() => {
                             <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                                 <td v-show="_header.visible" :class="_key == 'title' ? 'list-square title' : 'list-square'">
                                     <span v-if="_key == 'id'">
-                                        #{{ item[_key] }}
+                                        <div
+                                            class='check-label-container'>
+                                            <VCheckbox v-model="selected" :value="item[_key]" class="check-label" />
+                                            <span>#{{ item[_key] }}</span>
+                                        </div>
                                     </span>
                                     <span v-else-if="_key === 'result_code'">
                                         <VChip :color="store.getSelectIdColor(realtimeResult(item[_key]))">
