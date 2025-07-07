@@ -74,7 +74,7 @@ class BatchUpdateBillKeyController extends BatchUpdateController
                 'ord_num'   => $bill_key->bill_id."BD".date("YmdHis"),
                 'bill_key'  => $bill_key->bill_key,
             ];
-            $res = Comm::destroy(env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/bill-key', $data, [
+            $res = Comm::destroy(env('WITHDRAW_URL', 'http://localhost:81').'/api/v2/pay/bill-key', $data, [
                 'Authorization' => $bill_key->api_key
             ]);
             $success[] = $bill_key->bill_id;
