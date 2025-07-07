@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import type { CmsTransactionHistory } from '@/views/types';
+import type { CmsTransaction } from '@/views/types';
 import { withdrawInterface } from '@/views/virtuals/cms-transactions/useStore';
 
 interface Props {
-    item: CmsTransactionHistory,
+    item: CmsTransaction,
 }
 
 const props = defineProps<Props>()
 
 const store = <any>(inject('store'))
+const withdrawHistoriesDialog = <any>(inject('withdrawHistoriesDialog'))
 
 const { 
     cancelJobs 
@@ -36,6 +37,15 @@ const cancelWithdrawBook = async () => {
                         <VIcon size="24" class="me-3" icon="material-symbols:free-cancellation-outline" />
                     </template>
                     <VListItemTitle>이체예약취소</VListItemTitle>
+                </VListItem>
+                <VListItem 
+                    v-if="props.item.withdraw_status !== 0"                
+                    value="withdraw-histories" 
+                    @click="withdrawHistoriesDialog.show(props.item['withdraws'])">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="tabler:history" />
+                    </template>
+                    <VListItemTitle>출금시도이력</VListItemTitle>
                 </VListItem>
             </VList>
         </VMenu>

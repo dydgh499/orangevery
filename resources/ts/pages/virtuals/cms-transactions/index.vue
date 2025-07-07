@@ -9,6 +9,8 @@ import { realtimeMessage, realtimeResult, withdraw_status } from '@/views/virtua
 import { useStore } from '@/views/services/options/useStore'
 import { useRequestStore } from '@/views/request';
 import { DateFilters } from '@core/enums'
+import WithdrawHistoriesDialog from '@/layouts/dialogs/cms-transactions/WithdrawHistoriesDialog.vue';
+import PVWithdrawErrorCodeDialog from '@/layouts/dialogs/cms-transactions/PVWithdrawErrorCodeDialog.vue'
 import ExtraMenu from '@/views/virtuals/cms-transactions/ExtraMenu.vue';
 
 const alert = <any>(inject('alert'))
@@ -16,6 +18,7 @@ const { post } = useRequestStore()
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { finance_vans } = useStore()
+const pvErrorCodeDialog = ref()
 const total = ref(<any>{
     withdraw_amount: 0,
     total_realtime_withdraw_amount: 0,
@@ -23,10 +26,12 @@ const total = ref(<any>{
     total_payment_agency_withdraw_amount: 0,
     total_withdraw_amount: 0,
 })
+const withdrawHistoriesDialog = ref()
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+provide('withdrawHistoriesDialog', withdrawHistoriesDialog)
 const snackbar = <any>(inject('snackbar'))
 
 const batchRemove = async() => {
@@ -65,7 +70,7 @@ onMounted(() => {
 <template>
     <section>
         <div>
-            <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="[]" :add="false" add_name="" :date_filter_type="DateFilters.SETTLE_RANGE">
+            <BaseIndexView placeholder="계좌번호 검색" :metas="[]" :add="false" add_name="" :date_filter_type="DateFilters.SETTLE_RANGE">
                 <template #filter>
                     <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                         :sales="false" :page="true">
@@ -109,9 +114,13 @@ onMounted(() => {
                 <template #index_extra_field>
                     <VBtn v-if="store.params.withdraw_status === 0" type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small"
                     :style="$vuetify.display.smAndDown ? 'margin: 0.5em;' : ''" item-title="title" item-value="id">
-                    일괄삭제
-                    <VIcon size="18" icon="tabler-trash" />
-                </VBtn>
+                        일괄삭제
+                        <VIcon size="18" icon="tabler-trash" />
+                    </VBtn>
+                    <VBtn prepend-icon="line-md:emoji-frown-twotone" @click="pvErrorCodeDialog.show()" color="error" size="small"
+                        :style="$vuetify.display.smAndDown ? 'margin: 0.25em;' : ''">
+                        출금 에러코드 정의
+                    </VBtn>
                 </template>
                 <template #headers>
                     <tr>
@@ -166,6 +175,8 @@ onMounted(() => {
                     </template>
                 </template>
             </BaseIndexView>
+            <WithdrawHistoriesDialog ref="withdrawHistoriesDialog" />
+        <PVWithdrawErrorCodeDialog ref="pvErrorCodeDialog"/>   
         </div>
     </section>
 </template>
