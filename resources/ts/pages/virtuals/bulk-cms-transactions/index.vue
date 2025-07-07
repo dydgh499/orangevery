@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { Registration } from '@/views/registration';
 import { useStore } from '@/views/services/options/useStore'
-import { useRegisterStore, validateItems, ownerCheck, bulkBookWithdraw } from '@/views/virtuals/bulk-cms-transactions/BankAccountRegisterStore';
+import { useRegisterStore, validateItems, ownerCheck } from '@/views/virtuals/bulk-cms-transactions/BankAccountRegisterStore';
 import BankAccountDialog from '@/layouts/dialogs/bulks/BankAccountDialog.vue'
 import { banks } from '@/views/users/useStore'
 import { timeValidator } from '@/@core/utils/validators';
@@ -98,13 +98,6 @@ const register = async () => {
             const r =await bulkRegister('출금예약', 'bulk-withdraws', items.value) // 10.96초
             if(r)
                 setTimeout(function () { location.reload() }, 1000)
-            /*
-            const results = await bulkBookWithdraw(items.value) //11.31초
-            if(results[0]) {
-                snackbar.value.show('이체 예약에 성공했습니다.', 'success')
-                setTimeout(function () { location.reload() }, 1000)
-            }
-            */
         }
     }
 

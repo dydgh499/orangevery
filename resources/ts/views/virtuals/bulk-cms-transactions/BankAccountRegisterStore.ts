@@ -20,38 +20,7 @@ export const ownerCheck = async (items: any[]): Promise<[boolean, string]> => {
 
         const results = await Promise.allSettled(
             batch.map(chunk =>
-                axios.post('/api/v1/manager/bank-accounts/batch-updaters/owner-check', chunk)
-            )
-        );
-
-        for (const result of results) {
-            if (result.status === 'rejected') {
-                const err = result.reason;
-                const message = err?.response?.data?.message || err.message || 'Unknown error';
-                console.error("❌ 요청 실패:", message);
-                return [false, message];
-            }
-        }
-    }
-
-    return [true, ''];
-};
-
-export const bulkBookWithdraw = async (items: any[]): Promise<[boolean, string]> => {
-    const chunkSize = 5;    // 5개 단위
-    const batchSize = 3;    // 3개 병렬 요청
-
-    const chunks: any[][] = [];
-    for (let i = 0; i < items.length; i += chunkSize) {
-        chunks.push(items.slice(i, i + chunkSize));
-    }
-
-    for (let i = 0; i < chunks.length; i += batchSize) {
-        const batch = chunks.slice(i, i + batchSize);
-
-        const results = await Promise.allSettled(
-            batch.map(chunk =>
-                axios.post('/api/v1/manager/bulk-withdraws/batch-updaters/register', chunk)
+                axios.post('/api/v1/manager/bank-accounts/batch-updaters/register', chunk)
             )
         );
 
