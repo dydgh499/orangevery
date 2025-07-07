@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Manager\BatchUpdater;
 
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateController;
-use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateBankAccountController;
-use App\Http\Controllers\Utils\Comm;
+use App\Http\Controllers\Manager\Transaction\WithdrawAPI;
+use App\Http\Controllers\Utils\Bank;
 
 use App\Models\BankAccount;
 use App\Models\Service\FinanceVan;
@@ -32,97 +32,108 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
         $this->target = '이체 예약현황';
     }
 
+    public function bookWithdraw($request)
+    {
+        $datas = $request->data();
+        $rows = collect($datas);
+        $now = now();
+        $brand_id  = $request->user()->brand_id;
+        $finances = brandFilter(new FinanceVan, $request)
+            ->whereIn('id', $rows->pluck('fin_id'))
+            ->pluck('id')->all();
+        $accounts = brandFilter(new BankAccount, $request)
+            ->whereIn('acct_num', $rows->pluck('acct_num'))
+            ->get();
+        $account_valid = $accounts->pluck('acct_num')->all();
+        
+        $success = [];
+        $fails = [];
+        foreach ($rows as $row) 
+        {
+            if (in_array($row['fin_id'], $finances))
+            {
+                if (in_array($row['acct_num'], $account_valid))
+                {
+                    try
+                    {
+                        $account = $accounts->firstWhere('acct_num', $row['acct_num']);
+                        $params = array_merge($this->getBankParams($account), $this->getBookWithdrawParams($row, $request, $now));
+                        $res = WithdrawAPI::bookWithdraw($params);
+                        if ($res['code'] === 201)
+                        {
+                            if ($res['body']['result_cd'] === '0000')
+                            {
+                                $success[] = array_merge(['acct_num' => $row['acct_num']], $res['body']);
+                            }
+                            else
+                            {
+                                $fails[] = array_merge(['acct_num' => $row['acct_num']], $res['body']);
+                            }
+                        }
+                        else
+                        {
+                            $message = isset($res['body']['result_msg']) ? $res['body']['result_msg'] : '이체 예약 에러';
+                            $fails[] = array_merge(['acct_num' => $row['acct_num']], ['message' => $message]);
+                        }
+                    }
+                    catch (\Exception $e)
+                    {
+                        error($row, 'book-withdraw-job-batch'.$e->getMessage());
+                        $fails[] = array_merge(['acct_num' => $row['acct_num']], ['message' => '이체 예약 내부 처리 에러']);
+                    }
+                }
+                else
+                    $fails[] = ['acct_num' => $row['acct_num'], 'message' => '등록되지 않은 계좌'];
+            }
+            else
+                $fails[] = array_merge(['acct_num' => $row['acct_num']], ['message' => '유효하지 않은 금융정보']);
+        }
+        return [$success, $fails, $rows->count()];
+    }
+
+    public function getBookWithdrawParams($row, $request, $now)
+    {
+        return [
+                'brand_id'           => $request->user()->brand_id,
+                'fin_id'             => $row['fin_id'],
+                'oper_id'            => $request->user()->id,
+                'amount'             => $row['withdraw_amount'],
+                'withdraw_book_time' => $row['withdraw_book_time'],
+                'created_at'         => $now,
+                'updated_at'         => $now,
+        ];
+    }
+
+    public function getBankParams($account)
+    {
+        return [
+            'acct_name'         => $account['acct_name'],
+            'acct_num'          => $account['acct_num'],
+            'acct_bank_code'    => $account['acct_bank_code'],
+            'acct_bank_name'    => Bank::getBankName($account['acct_bank_code']),
+        ];
+    }
+
+    
     /**
      * 계좌 출금 예약 테스트(등록되지 않은 계좌 있을시 출금 예약 실패)
      */
     public function register(BulkWithdrawBookRequest $request)
     {
-        $now = now();
-        $brandId  = $request->user()->brand_id;
-        $operId   = $request->user()->id;
-        $rows     = collect($request->data());
-        $finances = FinanceVan::where('brand_id', $brandId)
-                    ->whereIn('id', $rows->pluck('fin_id'))
-                    ->get()->keyBy('id');
-
-        $accounts = BankAccount::where('brand_id', $brandId)
-                    ->whereIn('acct_num', $rows->pluck('acct_num'))
-                    ->get()->keyBy('acct_num');
-
-        $results  = [];
-        $success_count = 0;
-    foreach ($rows as $withdraw) {
-        // 금융사 유효성 확인
-        if (!$finances->has($withdraw['fin_id'])) {
-            $results[] = [
-                'acct_num'   => $withdraw['acct_num'] ?? null,
-                'result_cd'  => 953,
-                'result_msg' => '유효하지 않은 금융정보',
-            ];
-            continue;
+        [$success, $fails, $counts] = $this->bookWithdraw($request);
+        if($fails)
+        {
+            return $this->apiResponse("9999", '이체 예약에 실패했습니다.', [
+                'total' => $counts,
+                'fails' => $fails,
+            ]);
         }
-        $bankAccount = $accounts[$withdraw['acct_num']];
-
-        // 파라미터 구성
-        $params = [
-            'brand_id'            => $brandId,
-            'fin_id'              => $withdraw['fin_id'],
-            'oper_id'             => $operId,
-            'amount'              => $withdraw['withdraw_amount'],
-            'acct_num'            => $bankAccount->acct_num,
-            'acct_name'           => $bankAccount->acct_name,
-            'acct_bank_name'      => $bankAccount->acct_bank_name,
-            'acct_bank_code'      => $bankAccount->acct_bank_code,
-            'withdraw_book_time'  => $withdraw['withdraw_book_time'],
-            'created_at'          => $now,
-            'updated_at'          => $now,
-        ];
-
-        // 외부 API 호출
-        try
-            {
-            $res = Comm::post(env('WITHDRAW_URL', 'http://localhost:81').'/api/v2/realtimes/book-withdraw',$params);
-            
-                if ($res['code'] === 201)
-                {
-                    if ($res['body']['result_cd'] === '0000') {
-                        $results[] = [
-                            'acct_num'   => $withdraw['acct_num'],
-                            'result_cd'  => 100,
-                            'result_msg' => '이체 예약 완료',
-                        ];
-                        $success_count++;
-                    } else {
-                        $results[] = [
-                            'acct_num'   => $withdraw['acct_num'],
-                            'result_cd'  => $res['body']['result_cd'],
-                            'result_msg' => $res['body']['result_msg'],
-                        ];
-                    }
-                } else {
-                    $results[] = [
-                        'acct_num'   => $withdraw['acct_num'],
-                        'result_cd'  => 502,
-                        'result_msg' => $res['body']['result_msg'] ?? '이체 예약 에러',
-                    ];
-                }
-            } catch (\Exception $e) {
-                error($withdraw, 'book-withdraw-job-batch' . $e->getMessage());
-                $results[] = [
-                    'acct_num'   => $withdraw['acct_num'],
-                    'result_cd'  => 500,
-                    'result_msg' => '이체 예약 내부 처리 에러: ' . $e->getMessage(),
-                ];
-            }
+        else
+        {
+            return $this->apiResponse("0000", '이체 예약에 성공했습니다.', [
+                'total' => $counts,
+                'success' => $success,
+            ]);
         }
-        $failed_count = $rows->count() - $success_count;
-        $message = "총 {$rows->count()}건 중 {$success_count}건 성공";
-
-        return $this->extendResponse(1, $message, [
-            'total'   => $rows->count(),
-            'success' => $success_count,
-            'failed'  => $failed_count,
-            'details' => $results,
-        ]);
     }
 }

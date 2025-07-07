@@ -20,7 +20,7 @@ class WithdrawTest
     }
     
     static public function getTestownerCheckResult($data)
-    {
+    {   //TODO: 
         return [
             'result'    => "0000", 
             'message'   => '정상입니다.', 

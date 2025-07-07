@@ -68,7 +68,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
         
         $unkonwn_bank_accounts  = $datas->pluck('acct_num')->unique()->all();
         $exist_bank_accounts    = brandFilter(new BankAccount, $request)
-            ->whereIn('acct_num', $datas->pluck('acct_num')->all())
+            ->whereIn('acct_num', $unkonwn_bank_accounts)
             ->pluck('acct_num')
             ->all();
 
@@ -100,7 +100,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
      *
      * 운영자 이상 가능
      */
-    public function ownerCheck(BulkOwnerCheckRequest $request)
+    public function register(BulkOwnerCheckRequest $request)
     {
         [$news, $error] = $this->getNewAccounts($request);
         $ids = $this->addBankAccountObjects($request, collect($news));
