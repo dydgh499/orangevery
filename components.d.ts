@@ -52,7 +52,7 @@ declare module '@vue/runtime-core' {
     PasswordCheckDialog: typeof import('./resources/ts/layouts/dialogs/users/PasswordCheckDialog.vue')['default']
     PhoneNum2FAVertifyDialog: typeof import('./resources/ts/layouts/dialogs/users/PhoneNum2FAVertifyDialog.vue')['default']
     ProfileDialog: typeof import('./resources/ts/layouts/dialogs/users/ProfileDialog.vue')['default']
-    PVWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/PVWithdrawErrorCodeDialog.vue')['default']
+    PVWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/cms-transactions/PVWithdrawErrorCodeDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchFilterDialog: typeof import('./resources/ts/layouts/dialogs/utils/SearchFilterDialog.vue')['default']
@@ -60,6 +60,7 @@ declare module '@vue/runtime-core' {
     SettlementInformationDialog: typeof import('./resources/ts/layouts/dialogs/bulks/SettlementInformationDialog.vue')['default']
     TheCustomizer: typeof import('./resources/ts/@core/components/TheCustomizer.vue')['default']
     ThemeSwitcher: typeof import('./resources/ts/@core/components/ThemeSwitcher.vue')['default']
-    VanWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/virtual-accounts/finance-vans-error-codes/VanWithdrawErrorCodeDialog.vue')['default']
+    VanWithdrawErrorCodeDialog: typeof import('./resources/ts/layouts/dialogs/cms-transactions/finance-vans-error-codes/VanWithdrawErrorCodeDialog.vue')['default']
+    WithdrawHistoriesDialog: typeof import('./resources/ts/layouts/dialogs/cms-transactions/WithdrawHistoriesDialog.vue')['default']
   }
 }
