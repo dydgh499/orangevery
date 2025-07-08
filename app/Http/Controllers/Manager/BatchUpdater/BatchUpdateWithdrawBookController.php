@@ -32,6 +32,29 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
         $this->target = '이체 예약현황';
     }
 
+    public function getBookWithdrawParams($row, $request, $now)
+    {
+        return [
+                'brand_id'           => $request->user()->brand_id,
+                'fin_id'             => $row['fin_id'],
+                'oper_id'            => $request->user()->id,
+                'amount'             => $row['withdraw_amount'],
+                'withdraw_book_time' => $row['withdraw_book_time'],
+                'created_at'         => $now,
+                'updated_at'         => $now,
+        ];
+    }
+
+    public function getBankParams($account)
+    {
+        return [
+            'acct_name'         => $account['acct_name'],
+            'acct_num'          => $account['acct_num'],
+            'acct_bank_code'    => $account['acct_bank_code'],
+            'acct_bank_name'    => Bank::getBankName($account['acct_bank_code']),
+        ];
+    }
+
     public function bookWithdraw($request)
     {
         $datas = $request->data();
@@ -82,40 +105,16 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                     }
                 }
                 else
-                    $fails[] = ['acct_num' => $row['acct_num'], 'message' => '등록되지 않은 계좌'];
+                    $fails[] = array_merge(['acct_num' => $row['acct_num'], 'message' => '등록되지 않은 계좌']);
             }
             else
                 $fails[] = array_merge(['acct_num' => $row['acct_num']], ['message' => '유효하지 않은 금융정보']);
         }
         return [$success, $fails, $rows->count()];
     }
-
-    public function getBookWithdrawParams($row, $request, $now)
-    {
-        return [
-                'brand_id'           => $request->user()->brand_id,
-                'fin_id'             => $row['fin_id'],
-                'oper_id'            => $request->user()->id,
-                'amount'             => $row['withdraw_amount'],
-                'withdraw_book_time' => $row['withdraw_book_time'],
-                'created_at'         => $now,
-                'updated_at'         => $now,
-        ];
-    }
-
-    public function getBankParams($account)
-    {
-        return [
-            'acct_name'         => $account['acct_name'],
-            'acct_num'          => $account['acct_num'],
-            'acct_bank_code'    => $account['acct_bank_code'],
-            'acct_bank_name'    => Bank::getBankName($account['acct_bank_code']),
-        ];
-    }
-
     
     /**
-     * 계좌 출금 예약 테스트(등록되지 않은 계좌 있을시 출금 예약 실패)
+     * 계좌 출금 예약
      */
     public function register(BulkWithdrawBookRequest $request)
     {

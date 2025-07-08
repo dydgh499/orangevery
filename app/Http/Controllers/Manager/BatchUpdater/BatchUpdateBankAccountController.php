@@ -83,7 +83,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 {
                     $params = $this->getBankAccountParams($data);
                     $res = WithdrawAPI::ownerCheck($params);
-                    if($res['body']['result'] === 100)
+                    if($res['body']['result'] === '0000')
                         $news[] = $params;
                     else
                         $error = array_merge($res, ['acct_num' => $unkonwn_bank_account]);

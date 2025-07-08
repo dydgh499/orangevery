@@ -36,13 +36,10 @@ class CMSTransactionController extends Controller
     private function common($query, $request)
     {
         $search = $request->input('search', '');
-        $query = $query->leftJoin('cms_transaction_histories','cms_transactions.id','=','cms_transaction_histories.ct_id')
-            ->where('cms_transactions.brand_id', $request->user()->brand_id)
-            ->where('cms_transactions.created_at', '>=', $request->s_dt.' 00:00:00')
-            ->where('cms_transactions.created_at', '<=', $request->e_dt.' 23:59:59')
+        $query = brandfilter($query, $request)
             ->where(function ($query) use ($search) {
                 return $query->where('acct_num', 'like', "%$search%");
-            });;
+            });
 
         if($request->withdraw_status !== null)
         $query = $query->where('withdraw_status', $request->withdraw_status);
@@ -55,24 +52,10 @@ class CMSTransactionController extends Controller
      */
     public function index(Request $request)
     {
-        $page       = $request->input('page');
-        $page_size  = $request->input('page_size');
-        $res        = ['page'=>$page, 'page_size'=>$page_size];
-
-        $sp = ($page - 1) * $page_size;
-        $cols   = [
-            'cms_transactions.*',
-        ];
         $query = $this->common($this->cms_transactions, $request)->with(['withdraws']);
-
-        $res['total'] = $query->count();
-        $con_query = $query->orderBy('cms_transactions.id', 'desc')
-            ->offset($sp)
-            ->limit($page_size);
+        $data = $this->getIndexData($request, $query);
         
-        $res['content'] = count($cols) ? $con_query->get($cols) : $con_query->get();
-        
-        return $this->response(0, $res);
+        return $this->response(0, $data);
     }
 
     /**
