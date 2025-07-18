@@ -21,6 +21,9 @@ Route::prefix('v1')->group(function() {
         Route::prefix('bonaejas')->group(function() {
                 Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
                 Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);
+            Route::middleware(['auth:sanctum', 'log.route', 'auth.update'])->group(function () {
+                Route::post('mobile-code-head-office-issuence', [MessageController::class, 'headOfficeMobileCodeIssuence']);
+                });
             });        
         Route::prefix('auth')->group(function() {
             Route::post('sign-in', [AuthController::class, 'signin']);
