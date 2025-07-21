@@ -14,7 +14,7 @@ const item_per_page = ref(100)
 const page = ref(1)
 
 const error_message = ref('')
-const { ExcelFormatAddBankSheet, ExcelFormatV2, ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
+const { ExcelFormatAddBankSheet, ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
 const { bill_keys } = useStore()
 const snackbar = <any>(inject('snackbar'))
 const formatDate = <any>(inject('$formatDate'))

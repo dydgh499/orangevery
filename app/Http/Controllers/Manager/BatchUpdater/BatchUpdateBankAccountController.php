@@ -11,13 +11,11 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
-use App\Http\Requests\Manager\BulkRegister\BulkBankAccountRequest;
 use App\Http\Requests\Manager\BulkRegister\BulkOwnerCheckRequest;
 use App\Http\Controllers\Manager\Transaction\WithdrawAPI;
 
 
 use App\Http\Controllers\Ablilty\ActivityHistoryInterface;
-use App\Http\Controllers\Utils\Comm;
 use Illuminate\Http\Request;
 
 /**
@@ -83,7 +81,7 @@ class BatchUpdateBankAccountController extends BatchUpdateController
                 {
                     $params = $this->getBankAccountParams($data);
                     $res = WithdrawAPI::ownerCheck($params);
-                    if($res['body']['result'] === '0000')
+                    if($res['body']['result'] === 100)
                         $news[] = $params;
                     else
                         $error = array_merge($res, ['acct_num' => $unkonwn_bank_account]);
