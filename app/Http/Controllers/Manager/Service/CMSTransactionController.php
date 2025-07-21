@@ -9,10 +9,10 @@ use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Utils\Comm;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @group CMS Transaciton API
@@ -45,6 +45,18 @@ class CMSTransactionController extends Controller
         $query = $query->where('withdraw_status', $request->withdraw_status);
 
         return $query;
+    }
+
+    
+    public function chart(Request $request)
+    {
+        $data = $this->common($this->cms_transactions, $request)
+            ->first([
+                DB::raw("SUM(IF(withdraw_status = 1, amount, 0)) AS withdraw_amount"),
+                DB::raw("SUM(withdraw_status = 1) AS total_withdraw_count"),
+            ]);
+
+        return $this->response(0, $data);
     }
     
     /**

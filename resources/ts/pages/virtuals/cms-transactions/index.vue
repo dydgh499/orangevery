@@ -21,10 +21,7 @@ const { finance_vans } = useStore()
 const pvErrorCodeDialog = ref()
 const total = ref(<any>{
     withdraw_amount: 0,
-    total_realtime_withdraw_amount: 0,
-    total_collect_withdraw_amount: 0,
-    total_payment_agency_withdraw_amount: 0,
-    total_withdraw_amount: 0,
+    total_withdraw_count: 0,
 })
 const withdrawHistoriesDialog = ref()
 
@@ -56,11 +53,8 @@ onMounted(() => {
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
             const r = await store.getChartData()
+            total.value.total_withdraw_count = Number(r.data.total_withdraw_count)
             total.value.withdraw_amount = Number(r.data.withdraw_amount)
-            total.value.total_realtime_withdraw_amount = Number(r.data.total_realtime_withdraw_amount)
-            total.value.total_collect_withdraw_amount = Number(r.data.total_collect_withdraw_amount)
-            total.value.total_payment_agency_withdraw_amount = Number(r.data.total_payment_agency_withdraw_amount)
-            total.value.total_withdraw_amount = total.value.withdraw_amount + total.value.total_realtime_withdraw_amount + total.value.total_collect_withdraw_amount + total.value.total_payment_agency_withdraw_amount
         }
     })
     snackbar.value.show('거래모듈 및 입금정보는 2024-07-17부터 업데이트됩니다.', 'success')
@@ -78,15 +72,15 @@ onMounted(() => {
                             <VCol cols="12" sm="4">
                                 <table class="total-table">
                                     <tr>
-                                        <th>출금액 합계</th>
-                                        <td class="text-error"><b>{{ total.total_withdraw_amount.toLocaleString() }}</b> &#8361;</td>
+                                        <th>출금 건수</th>
+                                        <td class="text-error"><b>{{ total.total_withdraw_count.toLocaleString() }}</b> 건</td>
                                     </tr>
                                 </table>
                             </VCol>
                             <VCol cols="12" sm="4">
                                 <table class="total-table">
                                     <tr>
-                                        <th>수기출금</th>
+                                        <th>출금액 합계</th>
                                         <td class="text-error"><span>{{ total.withdraw_amount.toLocaleString() }}</span> &#8361;</td>
                                     </tr>
                                 </table>

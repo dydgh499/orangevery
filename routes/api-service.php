@@ -58,6 +58,7 @@ Route::middleware(['auth.update', 'is.operate', 'last.login.ip'])->group(functio
         Route::get('bank-accounts', [BankAccountController::class, 'index']);
         Route::delete('bank-accounts/{id}', [BankAccountController::class, 'destroy']);
 
+        Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
         Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
         Route::post('cms-transactions/cancel-job', [CMSTransactionController::class, 'cancelJob']);
 
