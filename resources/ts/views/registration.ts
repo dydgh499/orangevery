@@ -2,6 +2,7 @@ import { axios } from '@axios';
 import { Workbook } from 'exceljs';
 import * as XLSX from 'xlsx';
 import { ExcelStyle } from './excel';
+import { banks } from '@/views/users/useStore'
 
 export const Registration = () => {
     const alert = <any>(inject('alert'))
@@ -30,6 +31,44 @@ export const Registration = () => {
 
         //checkVisiable(worksheet)
         worksheet.views = [{ state: 'frozen', ySplit: 1 }];
+        try {
+            const buffer = await wb.xlsx.writeBuffer(); // 버퍼로 엑셀 데이터 생성
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            
+            // 파일 다운로드 링크 생성
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${file_name}_${date}.xlsx`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (err) {
+            console.error('Error creating Excel file:', err);
+        }
+    }
+    
+    const ExcelFormatAddBankSheet = async (file_name:string ,headers: any[]) => {
+        const date = new Date().toISOString().split('T')[0];
+        const wb = new Workbook();
+        const worksheet = wb.addWorksheet(file_name);
+
+        const key_names = headers.map(header => header.title) as string[]
+        const keys = headers.map(header => header.key) as string[]
+        ExcelStyle().setHeaderRows(worksheet, key_names, keys)
+        ExcelStyle().setHeaderStyle(worksheet.getRow(1));
+        worksheet.views = [{ state: 'frozen', ySplit: 1 }];
+        
+        const bank_sheet = wb.addWorksheet('은행목록');
+        bank_sheet.columns = [
+            { header: '코드', key: 'code', width: 10 },
+            { header: '은행명', key: 'title', width: 25 },
+        ];
+        banks.forEach(bank => {
+            bank_sheet.addRow({ code: bank.code, title: bank.title });
+        });
+        ExcelStyle().setHeaderStyle(bank_sheet.getRow(1)); // 스타일 적용
+        bank_sheet.views = [{ state: 'frozen', ySplit: 1 }];
+        
         try {
             const buffer = await wb.xlsx.writeBuffer(); // 버퍼로 엑셀 데이터 생성
             const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -98,6 +137,7 @@ export const Registration = () => {
     }
 
     return {
+        ExcelFormatAddBankSheet,
         ExcelFormatV2,
         ExcelReaderV2,
         isEmpty,

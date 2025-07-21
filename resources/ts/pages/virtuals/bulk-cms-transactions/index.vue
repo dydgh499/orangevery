@@ -14,7 +14,7 @@ const item_per_page = ref(100)
 const page = ref(1)
 
 const error_message = ref('')
-const { ExcelFormatV2, ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
+const { ExcelFormatAddBankSheet, ExcelFormatV2, ExcelReaderV2, openFilePicker, bulkRegister } = Registration()
 const { bill_keys } = useStore()
 const snackbar = <any>(inject('snackbar'))
 const formatDate = <any>(inject('$formatDate'))
@@ -184,7 +184,7 @@ watchEffect(async () => {
         </VRow>
         <VCard style="margin-top: 1em;">
             <VCol class="d-flex gap-4">
-                <VBtn color="secondary" variant="tonal" @click="ExcelFormatV2('대량출금 포멧', headers)" style="margin-left: auto;">
+                <VBtn color="secondary" variant="tonal" @click="ExcelFormatAddBankSheet('대량출금 포멧', headers)" style="margin-left: auto;">
                     양식 다운로드
                     <VIcon end icon="uiw-file-excel" />
                 </VBtn>
