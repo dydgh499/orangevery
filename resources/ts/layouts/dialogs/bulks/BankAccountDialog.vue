@@ -69,7 +69,7 @@ defineExpose({ show })
                             <p>
                                 모든 항목이 정상적으로 입력되었다면
                                 <VBtn size="x-small">
-                                    정산하기
+                                    출금 예약
                                     <VIcon end icon="tabler-pencil" />
                                 </VBtn>
                                 버튼이 활성화됩니다.
@@ -81,7 +81,7 @@ defineExpose({ show })
                         <h3 class="text-md font-semibold mb-2">2. 이체 실행</h3>
                         <div class="ml-4 leading-loose">
                             <p>
-                                <b>정산하기</b> 버튼을 누르면, 업로드된 엑셀을 기반으로 아래 과정이 자동으로 처리돼요:
+                                <b>출금 예약</b> 버튼을 누르면, 업로드된 엑셀을 기반으로 아래 과정이 자동으로 처리돼요:
                             </p>
                             <ol class="ml-4 list-decimal">
                                 <li><b>예금주 검증</b>: 엑셀의 계좌 정보로 예금주 검증</li>
