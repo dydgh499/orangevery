@@ -64,6 +64,7 @@ export const useRegisterStore = defineStore('virtualAccountRegisterStore', () =>
     const getHeaders = () => {
         return [
             { title: '이체모듈 타입(O)', key: 'fin_id'},
+            { title: '입금 업체명(X)', key: 'company_name'},
             { title: '입금 은행코드(O)', key: 'acct_bank_code'},
             { title: '입금 계좌번호(O)', key: 'acct_num'},
             { title: '예금주(O)', key: 'acct_name'},

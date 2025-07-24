@@ -18,7 +18,7 @@ class CMSTransactionValidate
         if($virtual_account['withdraw_type'] === 1)
         {   //즉시
             if(self::cancelValidate($history))
-                return ['PV484', '취소된 입금건으로 이체하지 않았습니다.'];
+                return ['OV484', '취소된 입금건으로 이체하지 않았습니다.'];
         }
         return ['0000', ''];
     }
@@ -31,7 +31,7 @@ class CMSTransactionValidate
     static public function acctBankCodeValidate($acct_bank_code)
     {
         if($acct_bank_code === null)
-            return ['PV485', '은행코드를 매칭할 수 없습니다.'];
+            return ['OV485', '은행코드를 매칭할 수 없습니다.'];
         else
             return ['0000', ''];
     }

@@ -35,10 +35,6 @@ export const useStore = defineStore('payGatewayStore', () => {
     ]
     const finance_companies = <Options[]>([
         {id:1, title:'쿠콘'},
-        {id:2, title:'헥토파이낸셜'},
-        {id:3, title:'웰컴페이먼츠'},
-        {id:4, title:'더즌'},
-        {id:5, title:'하이픈'},
     ])
     
     onMounted(async () => {
