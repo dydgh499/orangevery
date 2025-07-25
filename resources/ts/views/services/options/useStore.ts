@@ -22,7 +22,6 @@ export const module_types = <Options[]>([
 ])
 
 export const useStore = defineStore('payGatewayStore', () => {
-    const { get, post } = useRequestStore()
     const snackbar = <any>(inject('snackbar'))
     const pgs = ref<PayGateway[]>([])
     const pss = ref<PaySection[]>([])
@@ -59,7 +58,7 @@ export const useStore = defineStore('payGatewayStore', () => {
     }
 
     const getFinanceVan = async (finance_van: FinanceVan) => {
-        let res = await post('/api/v1/manager/services/cms-transactions/get-balance', finance_van, false)
+        let res = await axios.post('/api/v1/manager/services/cms-transactions/get-balance', finance_van, false)
         let data = res.data
         if(data.code == 1) {
             finance_van.balance = <number>(parseInt(data['data']['WDRW_CAN_AMT']))
