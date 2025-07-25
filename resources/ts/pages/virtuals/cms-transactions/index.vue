@@ -17,7 +17,7 @@ const alert = <any>(inject('alert'))
 const { post } = useRequestStore()
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { finance_vans } = useStore()
+const { finance_vans, updateFinanceVan } = useStore()
 const pvErrorCodeDialog = ref()
 const total = ref(<any>{
     withdraw_amount: 0,
@@ -90,6 +90,11 @@ onMounted(() => {
                                     <tr v-for="(finance_van, index) in finance_vans">
                                         <th>{{finance_van.nick_name}}</th>
                                         <td class="text-warning"><span>{{ finance_van.balance?.toLocaleString() }}</span> &#8361;</td>
+                                        <td>
+                                            <VBtn variant="text" color="secondary" size="xs-small" icon @click="updateFinanceVan(finance_van.id)">
+                                                <VIcon icon="tabler:refresh" size="20" />
+                                            </VBtn>
+                                        </td>
                                     </tr>
                                 </table>
                             </VCol>
