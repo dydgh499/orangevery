@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import CreateHalfVColV2 from '@/layouts/utils/CreateHalfVColV2.vue'
 import { useRequestStore } from '@/views/request'
@@ -141,6 +142,22 @@ onMounted(async () => {
                                         persistent-placeholder />
                                 </template>
                             </CreateHalfVColV2>
+                            <CreateHalfVColV2 :mdl="5" :mdr="7">
+                                <template #l_name>
+                                    <BaseQuestionTooltip :location="'top'" text="입금자 타입"
+                                            :content="`별칭 선택일 경우 해당 금융 VAN의 별칭으로 입금되며<br>예금주 선택일 경우 각 대상의 예금주(가맹점, 영업라인)으로 입금됩니다.`" />                                    
+                                </template>
+                                <template #l_input>
+                                    <BooleanRadio :radio="props.item.deposit_type" @update:radio="props.item.deposit_type = $event">
+                                        <template #true>예금주</template>
+                                        <template #false>별칭</template>
+                                    </BooleanRadio>
+                                </template>
+                                <template #r_name></template>
+                                <template #r_input>
+                                </template>
+                            </CreateHalfVColV2>
+                            
                             <VRow>
                                 <VCol class="pt-10" style="text-align: end;">
                                     <VBtn v-if="props.item.id"

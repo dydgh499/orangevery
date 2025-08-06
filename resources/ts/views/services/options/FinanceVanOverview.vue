@@ -21,6 +21,7 @@ const addNewFinanceVan = () => {
     _finance_vans.value.push(<FinanceVan>({
         id: 0,
         finance_company_num: null,
+        deposit_type: 0,
         bank_code: '000',
         api_key: '',
         sub_key: '',

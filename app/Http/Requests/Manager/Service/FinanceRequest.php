@@ -10,6 +10,7 @@ class FinanceRequest extends FormRequest
     use FormRequestTrait;
     public $keys = [
         'finance_company_num',
+        'deposit_type',
         'api_key',
         'sub_key',
         'enc_key',

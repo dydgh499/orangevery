@@ -137,7 +137,7 @@ export interface FinanceVan {
     enc_key: string,
     iv: string,
     nick_name: string,
-
+    deposit_type: number,
     corp_code: string,
     corp_name: string,
     bank_code: string,

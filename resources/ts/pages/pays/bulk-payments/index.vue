@@ -23,7 +23,6 @@ const items = ref<any[]>([])
 const is_clear = ref<boolean>(false)
 const settlementInformationDialog = ref()
 
-
 const validate = async () => {
     error_message.value = ''
     for (let i = 0; i < items.value.length; i++) {        

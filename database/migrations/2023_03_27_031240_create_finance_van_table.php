@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->tinyInteger('finance_company_num')->nullable()->comment('금융 VAN사 ID');
             $table->tinyInteger('balance_status')->default(5)->comment('잔고 상태(0=잔고없음, 5=충분함)');
+            $table->boolean('deposit_type')->default(false)->comment('예금주 타입');
             $table->string('api_key', 50)->nullable()->comment('API_KEY');
             $table->string('sub_key', 80)->nullable()->comment('SUB KEY');            
             $table->string('enc_key', 80)->nullable()->comment('ENC KEY');
