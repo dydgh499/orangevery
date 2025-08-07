@@ -148,8 +148,6 @@ class BillKeyController extends Controller
                     'mid'       => $pay_module->mid,
                     'ord_num'   => $request->ord_num,
                     'bill_key'  => $bill_key->bill_key,
-                    "buyer_name"    => "테스트",
-                    "buyer_phone"   => "01040065700"
                 ];
                 $res = TransactionAPI::billRemove($data, $pay_module->api_key);
                 if($res['body']['result_cd'] === '0000')

@@ -131,7 +131,7 @@ class TransactionAPI extends TransactionTest
         }
         else
         {
-            return Comm::post($url, $data, [
+            return Comm::destroy($url, $data, [
                 'Authorization' => $pay_key
             ]);
         }
