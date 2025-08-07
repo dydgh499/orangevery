@@ -1,6 +1,5 @@
 import { axios, getUserLevel } from '@/plugins/axios'
 import corp from '@/plugins/corp';
-import { useRequestStore } from '@/views/request'
 import type { BillKey, FinanceVan, Options, PayGateway, PayModule, PaySection } from '@/views/types'
 
 export const getDeliveryModeInfo = () => {
@@ -34,16 +33,17 @@ export const useStore = defineStore('payGatewayStore', () => {
     ]
     const finance_companies = <Options[]>([
         {id:1, title:'쿠콘'},
+        {id:2, title:'헥토파이낸셜'},
     ])
     
     onMounted(async () => {
         try {
             const r = await axios.get('/api/v1/manager/services/detail', {})
-            Object.assign(pgs.value, r.data.pay_gateways.sort((a:PayGateway, b:PayGateway) => a.pg_name.localeCompare(b.pg_name)))
-            Object.assign(pss.value, r.data.pay_sections.sort((a:PaySection, b:PaySection) => a.name.localeCompare(b.name)))
-            Object.assign(finance_vans.value, r.data.finance_vans.sort((a:FinanceVan, b:FinanceVan) => a.nick_name.localeCompare(b.nick_name)))
-            Object.assign(pay_modules.value, r.data.pay_modules.sort((a:FinanceVan, b:FinanceVan) => a.nick_name.localeCompare(b.nick_name)))
-            Object.assign(bill_keys.value, r.data.bill_keys.sort((a:FinanceVan, b:FinanceVan) => a.nick_name.localeCompare(b.nick_name)))
+            Object.assign(pgs.value, r.data.pay_gateways)
+            Object.assign(pss.value, r.data.pay_sections)
+            Object.assign(finance_vans.value, r.data.finance_vans)
+            Object.assign(pay_modules.value, r.data.pay_modules)
+            Object.assign(bill_keys.value, r.data.bill_keys)
             getFianaceVansBalance()
         }
         catch(e) {
