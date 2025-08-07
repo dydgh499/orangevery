@@ -138,10 +138,8 @@ class PaymentModuleController extends Controller
         if(Ablilty::isOperator($request))
         {
             $brand = BrandInfo::getBrandById($request->user()->brand_id);
-            if($brand['ov_options']['free']['use_tid_duplicate'] && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
+            if($isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
                 return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid' => $data['tid']]);
-            if($brand['ov_options']['free']['use_mid_duplicate'] && $data['mid'] != '' && $isDuplicateId($data['brand_id'], $id, 'mid', $data['mid']))
-                return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid' => $data['mid']]);
             
             $row = app(ActivityHistoryInterface::class)->update($this->target, $query, $data, 'note');
             if($row)
