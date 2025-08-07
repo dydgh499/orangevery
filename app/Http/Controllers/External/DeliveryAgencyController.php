@@ -67,7 +67,7 @@
                 'api_key'   => $request->pay_key,
                 'mid'       => $request->mid,
                 'tid'       => $request->tid,
-                'note'      => '빌키결제'
+                'note'      => "빌키결제(".$request->tid.")"
             ]);
         }
 
