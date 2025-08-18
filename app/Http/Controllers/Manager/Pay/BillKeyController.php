@@ -121,7 +121,7 @@ class BillKeyController extends Controller
             $data['buyer_name'] = $this->aes256_encode($data['buyer_name']);
             $data['buyer_phone'] = $this->aes256_encode($data['buyer_phone']);
             $this->bill_keys->where('id', $id)->update($data);
-            return $this->response(0);
+            return $this->response(1, $id);
         }
     }
 

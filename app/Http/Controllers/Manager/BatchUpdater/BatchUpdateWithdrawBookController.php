@@ -32,7 +32,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
         $this->target = '이체 예약현황';
     }
 
-    public function getBookWithdrawParams($row, $request, $now)
+    public function getBookWithdrawParams($row, $request)
     {
         return [
                 'brand_id'           => $request->user()->brand_id,
@@ -40,8 +40,7 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                 'oper_id'            => $request->user()->id,
                 'amount'             => $row['withdraw_amount'],
                 'withdraw_book_time' => $row['withdraw_book_time'],
-                'created_at'         => $now,
-                'updated_at'         => $now,
+                'company_name'       => $row['company_name'],
         ];
     }
 
@@ -57,14 +56,13 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
 
     public function bookWithdraw($request)
     {
-        $datas = $request->data();
-        $rows = collect($datas);
-        $now = now();
-        $finances = brandFilter(new FinanceVan, $request)
-            ->whereIn('id', $rows->pluck('fin_id'))
-            ->pluck('id')->all();
-        $accounts = brandFilter(new BankAccount, $request)
-            ->whereIn('acct_num', $rows->pluck('acct_num'))
+        $rows       = $request->data();
+        $finances   = brandFilter(new FinanceVan, $request)
+            ->whereIn('id', $rows->pluck('fin_id')->unique())
+            ->pluck('id')
+            ->all();
+        $accounts   = brandFilter(new BankAccount, $request)
+            ->whereIn('acct_num', $rows->pluck('acct_num')->unique())
             ->get();
         $account_valid = $accounts->pluck('acct_num')->all();
         
@@ -79,8 +77,8 @@ class BatchUpdateWithdrawBookController extends BatchUpdateController
                     try
                     {
                         $account = $accounts->firstWhere('acct_num', $row['acct_num']);
-                        $params = array_merge($this->getBankParams($account), $this->getBookWithdrawParams($row, $request, $now));
-                        $res = WithdrawAPI::bookWithdraw($params);
+                        $params = array_merge($this->getBankParams($account), $this->getBookWithdrawParams($row, $request));
+                        $res    = WithdrawAPI::bookWithdraw($params);
                         if ($res['code'] === 201)
                         {
                             if ($res['body']['result_cd'] === '0000')

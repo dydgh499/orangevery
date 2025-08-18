@@ -13,5 +13,4 @@ class BankAccount extends Model
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
     protected   $hidden     = [];
-
 }
