@@ -13,6 +13,7 @@ use App\Models\Pay\Transaction;
 class SettlementJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    public $timeout = 3600;
 
     protected $transactions;
 
@@ -53,7 +54,7 @@ class SettlementJob implements ShouldQueue
                     $fails[] = array_merge(['message' => $message], $transaction);
                 }
             }
-            catch(\Exception $ex)
+            catch(\Throwable $ex)
             {
                 error($transaction, 'settlement-job-batchPay'.$ex->getMessage());
                 $fails[] = array_merge(['message' => '내부 처리 에러'], $transaction);
@@ -121,7 +122,7 @@ class SettlementJob implements ShouldQueue
                     $fails[] = array_merge(['message' => $message], $transaction);
                 }
             }
-            catch(\Exception $ex)
+            catch(\Throwable $ex)
             {
                 error($transaction, 'settlement-job-batch-deposit'.$ex->getMessage());
                 $fails[] = array_merge(['message' => '내부 처리 에러'], $transaction);
