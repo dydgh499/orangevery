@@ -19,8 +19,6 @@ const _getVirtualMenu = () => {
 
 export const getVirtualMenu = () => {
     const menu = <any[]>[]
-    if (corp.ov_options.paid.yn_delivery_mode === false) {
-        menu.push(_getVirtualMenu())
-    }
+    menu.push(_getVirtualMenu())
     return menu
 }

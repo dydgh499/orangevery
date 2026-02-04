@@ -73,49 +73,38 @@
 
         public function signUp(SignUpRequest $request)
         {
-            // 접속 도메인 검증
-            if(BrandInfo::isDeliveryBrand())
-            {
-                $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
-                [$result, $msg] = AuthPasswordChange::registerValidate($request->user_name, $request->user_pw);
-                if($result === false)
-                    return $this->extendResponse(954, $msg, []);
-                else
-                {
-                    // 계정 추가(직원)
-                    $operator = $this->createOperator($request, $brand);
-                    if($operator)
-                    {
-                        // IP 추가
-                        $this->createOperatorIP($request, $brand, $operator);
-                        // 수수료율 연동      
-                        $pay_section = $this->createPsFee($request, $brand, $operator);
-                        $this->createPaymentModule($request, $brand, $operator, $pay_section);
-                        AuthOperatorIP::init($brand['id']);
-                        return $this->response(1);
-                    }
-                    else
-                        return $this->extendResponse(9999, '계정 생성 실패');  
-                }
-            }
+            $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
+            [$result, $msg] = AuthPasswordChange::registerValidate($request->user_name, $request->user_pw);
+            if($result === false)
+                return $this->extendResponse(954, $msg, []);
             else
-                return $this->extendResponse(9999, '대상 전산이 아닙니다.');  
+            {
+                // 계정 추가(직원)
+                $operator = $this->createOperator($request, $brand);
+                if($operator)
+                {
+                    // IP 추가
+                    $this->createOperatorIP($request, $brand, $operator);
+                    // 수수료율 연동      
+                    $pay_section = $this->createPsFee($request, $brand, $operator);
+                    $this->createPaymentModule($request, $brand, $operator, $pay_section);
+                    AuthOperatorIP::init($brand['id']);
+                    return $this->response(1);
+                }
+                else
+                    return $this->extendResponse(9999, '계정 생성 실패');  
+            }
         }
 
         public function signCheck(SignCheckRequest $request)
         {
-            if(BrandInfo::isDeliveryBrand())
-            {
-                $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
-                $is_signed = Operator::where('brand_id', $brand['id'])
-                    ->where('user_name', $request->user_name)
-                    ->exists();
-                if($is_signed)
-                    return $this->response(0); 
-                else
-                    return $this->extendResponse(9999, '가입되지 않은 회원입니다.');  
-            }
+            $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
+            $is_signed = Operator::where('brand_id', $brand['id'])
+                ->where('user_name', $request->user_name)
+                ->exists();
+            if($is_signed)
+                return $this->response(0); 
             else
-                return $this->extendResponse(9999, '대상 전산이 아닙니다.');  
+                return $this->extendResponse(9999, '가입되지 않은 회원입니다.');  
         }
 }

@@ -14,7 +14,7 @@
     {
         $table = $_table !== "" ? $_table."." : "";
         $query = $query->where($table.'brand_id', $request->user()->brand_id);
-        if(BrandInfo::isDeliveryBrand() && Ablilty::isEmployee($request))
+        if( Ablilty::isEmployee($request))
             $query = $query->where($table.'oper_id', $request->user()->id);
         return $query;
     }

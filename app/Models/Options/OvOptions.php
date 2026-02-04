@@ -32,7 +32,6 @@
 
     class PaidOption extends initOption
     {
-        public $yn_delivery_mode = false;
         public function __construct(array $source)
         {
             foreach ($source as $property => $value) 

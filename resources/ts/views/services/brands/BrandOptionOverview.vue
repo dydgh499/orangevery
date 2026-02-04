@@ -14,28 +14,5 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-    <VRow class="match-height" v-if="getUserLevel() === 50">
-        <VCol cols="12" md="6">
-            <VCard>
-                <VCardItem>
-                    <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="브랜드 옵션(유료)"
-                            :content="`개발사만 확인 가능한 정보입니다.`"/>
-                    </VCardTitle>
-                    <VCol>
-                        <VRow>
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>
-                                    배달대행전산 사용여부
-                                </template>
-                                <template #input>
-                                    <VSwitch hide-details v-model="props.item.paid.yn_delivery_mode" color="primary" />
-                                </template> 
-                            </CreateHalfVCol>
-                        </VRow>
-                    </VCol>
-                </VCardItem>
-            </VCard>
-        </VCol>
-  </VRow>
+    
 </template>

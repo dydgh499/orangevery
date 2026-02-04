@@ -26,9 +26,7 @@ export const getPaymentMenu = () => {
         icon: { icon: 'carbon:account' },
         to: 'virtuals-bank-accounts',
     })
-    if (corp.ov_options.paid.yn_delivery_mode) {
-        menu.push(_getPaymentMenu())
-    }
+    menu.push(_getPaymentMenu())
     return menu
 }
 
