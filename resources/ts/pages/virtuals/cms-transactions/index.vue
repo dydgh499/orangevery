@@ -57,7 +57,6 @@ onMounted(() => {
             total.value.withdraw_amount = Number(r.data.withdraw_amount)
         }
     })
-    snackbar.value.show('거래모듈 및 입금정보는 2024-07-17부터 업데이트됩니다.', 'success')
 })
 
 </script>

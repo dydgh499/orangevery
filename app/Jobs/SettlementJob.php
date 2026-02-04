@@ -155,6 +155,6 @@ class SettlementJob implements ShouldQueue
     {
         logging($this->transactions, 'settlement-job-start');
         [$pay_success, $pay_fails]          = $this->batchPay();
-        [$deposit_success, $deposit_fails]  = $this->batchDeposit($pay_success);
+        // [$deposit_success, $deposit_fails]  = $this->batchDeposit($pay_success);
     }
 }
