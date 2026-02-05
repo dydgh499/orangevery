@@ -46,7 +46,7 @@ class ActivityHistoryContoller extends Controller
             'operators.level',
         ]);
         $oper_query = ActivityHistoryViewer::operatorSelect($request);
-        if(BrandInfo::isDeliveryBrand() && Ablilty::isEmployee($request))
+        if(Ablilty::isEmployee($request))
             $oper_query = $oper_query->where('activity_histories.user_id', $request->user()->id);
         $oper_query = $oper_query->groupBy('activity_histories.user_id')->select($oper_cols);
         $query = $oper_query;

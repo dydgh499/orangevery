@@ -156,13 +156,6 @@ class PaymentGatewayController extends Controller
         ]);
         $query = $this->pay_gateways->where('is_delete', false)
                 ->where('brand_id', $request->user()->brand_id);
-        if(BrandInfo::isDeliveryBrand() && Ablilty::isEmployee($request))
-        {
-            $query = $query->where(function ($query) use ($request) {
-                return $query->where('oper_id', $request->user()->id)
-                    ->orWhere('id', 1);
-            });
-        }
         $pay_gateways = $query->get();
 
         $data = [

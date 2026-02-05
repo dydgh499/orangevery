@@ -42,7 +42,7 @@ class AbnormalConnectionController extends Controller
     {
         $search = $request->input('search', '');
         $query = $this->abnormal_connections;
-        if(BrandInfo::isDeliveryBrand() && Ablilty::isEmployee($request))
+        if(Ablilty::isEmployee($request))
             $query = $query->where('user_id', $request->user()->id);
         else
             $query = $query->where('brand_id', $request->user()->brand_id);

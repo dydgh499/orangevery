@@ -16,9 +16,6 @@ class FinanceVan extends Model
 
     public function scopeDelivery($query)
     {
-        if(BrandInfo::isDeliveryBrand())
-            return $query->where('id', env('ROUTEUP_FIN_ID', null));
-        else
-            return $query->where('brand_id', request()->user()->brand_id);
+        return $query->where('brand_id', request()->user()->brand_id);
     }
 }

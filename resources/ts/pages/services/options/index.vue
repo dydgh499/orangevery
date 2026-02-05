@@ -19,16 +19,11 @@ if(getUserLevel() >= 40) {
         { icon: 'tabler:cards', title: '빌키' },
         { icon: 'streamline:money-atm-card-2-deposit-money-payment-finance-atm-withdraw', title: '이체모듈' },
     )
-    tabs.push(
-        { icon: 'streamline:money-atm-card-2-deposit-money-payment-finance-atm-withdraw', title: '이체모듈' },
-    )
 }
 else {
     tabs.push(
         { icon: 'tabler:cash', title: '결제모듈' },
         { icon: 'tabler:cards', title: '빌키' },
-    )
-    tabs.push(
         { icon: 'streamline:money-atm-card-2-deposit-money-payment-finance-atm-withdraw', title: '이체모듈' },
     )
 }
