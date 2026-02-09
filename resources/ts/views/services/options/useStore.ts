@@ -58,14 +58,16 @@ export const useStore = defineStore('payGatewayStore', () => {
     }
 
     const getFinanceVan = async (finance_van: FinanceVan) => {
-        let res = await axios.post('/api/v1/manager/services/cms-transactions/get-balance', finance_van, false)
-        let data = res.data
-        if(data.code == 1) {
-            finance_van.balance = <number>(parseInt(data['data']['WDRW_CAN_AMT']))
-        } 
-        else {
+        try {
+            let res = await axios.post('/api/v1/manager/services/cms-transactions/get-balance', finance_van, false)
+            let data = res.data
+            if(data.code == 1) {
+                finance_van.balance = <number>(parseInt(data['data']['WDRW_CAN_AMT']))
+            } 
+        }
+        catch(e: any) {
+            const message = finance_van.nick_name+'의 잔고를 불러오는 도중 에러가 발생하였습니다.<br><br>'+e.response.data.message+'('+e.response.data.code+')'
             finance_van.balance = 0
-            const message = finance_van.nick_name+'의 잔고를 불러오는 도중 에러가 발생하였습니다.<br><br>'+data['message']+'('+data['code']+')'
             snackbar.value.show(message, 'error')
         }
     }
