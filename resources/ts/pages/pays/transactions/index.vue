@@ -50,7 +50,6 @@ const payCanceled = async (item: Transaction) => {
             }
         }
     }
-
 }
 
 provide('store', store)

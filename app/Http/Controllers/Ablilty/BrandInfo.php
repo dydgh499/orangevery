@@ -50,15 +50,4 @@ class BrandInfo
             return $default;
         }
     }
-
-    static public function isDeliveryBrand()
-    {
-        $brand = self::getBrandByDNS($_SERVER['HTTP_HOST']);
-        return $brand['ov_options']['paid']['yn_delivery_mode'];
-        /*
-            배달대행 전산일 경우
-                1. 한 브랜드 내에서 각기 다른 업체가 운영자로 존재
-                2. 각 운영자는 자신들의 거래건, 이체건만 확인 가능해야함
-        */
-    }
 }
