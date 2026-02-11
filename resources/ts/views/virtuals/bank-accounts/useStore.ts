@@ -2,7 +2,7 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 
-export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => {
+export const useSearchStore = defineStore('useBankAccountSearchStore', () => {
     const store = Searcher('virtuals/bank-accounts')
     const head = Header('virtuals/bank-accounts', '은행계좌 관리')
     const headers: Record<string, string> = {
