@@ -55,6 +55,9 @@ export const validateItems = (item: any, i: number, acct_nums: any) => {
         return [false, (i + 2) + '번째줄의 예금주는 필수로 입력해야합니다.']
     else if (isEmpty(item.withdraw_amount)) 
         return [false, (i + 2) + '번째줄의 출금 금액은 필수로 입력해야합니다.']
+    else if (isNaN(Number(item.withdraw_amount))) 
+        return [false, (i + 2) + '번째줄의 출금 금액포멧이 이상합니다.']
+
     else {
         return [true, '']
     }
